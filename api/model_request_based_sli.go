@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// RequestBasedSli Evaluate SLI using occurrences of successful events over compliance period.
+// RequestBasedSli struct for RequestBasedSli
 type RequestBasedSli struct {
+	Sli
 	// Compared against threshold query's raw data points to determine success.
 	Threshold *float32 `json:"threshold,omitempty"`
 	// Comparison function with threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
@@ -108,6 +109,14 @@ func (o *RequestBasedSli) SetOp(v string) {
 
 func (o RequestBasedSli) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	serializedSli, errSli := json.Marshal(o.Sli)
+	if errSli != nil {
+		return []byte{}, errSli
+	}
+	errSli = json.Unmarshal([]byte(serializedSli), &toSerialize)
+	if errSli != nil {
+		return []byte{}, errSli
+	}
 	if o.Threshold != nil {
 		toSerialize["threshold"] = o.Threshold
 	}

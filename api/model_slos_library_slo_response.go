@@ -12,6 +12,7 @@ package sumologic
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // SlosLibrarySloResponse struct for SlosLibrarySloResponse

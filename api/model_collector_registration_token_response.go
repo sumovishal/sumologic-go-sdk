@@ -12,6 +12,7 @@ package sumologic
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // CollectorRegistrationTokenResponse struct for CollectorRegistrationTokenResponse

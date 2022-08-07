@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// WindowBasedSli Evaluate SLI using successful or unsuccessful windows over compliance period.
+// WindowBasedSli struct for WindowBasedSli
 type WindowBasedSli struct {
+	Sli
 	// Threshold for classifying window as successful or unsuccessful.
 	Threshold float32 `json:"threshold"`
 	// Comparison function with window threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
@@ -155,6 +156,14 @@ func (o *WindowBasedSli) SetSize(v string) {
 
 func (o WindowBasedSli) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	serializedSli, errSli := json.Marshal(o.Sli)
+	if errSli != nil {
+		return []byte{}, errSli
+	}
+	errSli = json.Unmarshal([]byte(serializedSli), &toSerialize)
+	if errSli != nil {
+		return []byte{}, errSli
+	}
 	if true {
 		toSerialize["threshold"] = o.Threshold
 	}

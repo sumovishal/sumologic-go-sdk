@@ -12,6 +12,7 @@ package sumologic
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // MonitorsLibraryMonitorResponse struct for MonitorsLibraryMonitorResponse

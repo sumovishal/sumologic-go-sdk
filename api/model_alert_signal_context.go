@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// AlertSignalContext Details of the alert signal context.
+// AlertSignalContext struct for AlertSignalContext
 type AlertSignalContext struct {
+	SignalContext
 	// Alert Identifier.
 	AlertId string `json:"alertId"`
 }
@@ -65,6 +66,14 @@ func (o *AlertSignalContext) SetAlertId(v string) {
 
 func (o AlertSignalContext) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	serializedSignalContext, errSignalContext := json.Marshal(o.SignalContext)
+	if errSignalContext != nil {
+		return []byte{}, errSignalContext
+	}
+	errSignalContext = json.Unmarshal([]byte(serializedSignalContext), &toSerialize)
+	if errSignalContext != nil {
+		return []byte{}, errSignalContext
+	}
 	if true {
 		toSerialize["alertId"] = o.AlertId
 	}

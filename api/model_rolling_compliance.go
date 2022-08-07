@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// RollingCompliance Window for Rolling Compliance.
+// RollingCompliance struct for RollingCompliance
 type RollingCompliance struct {
+	Compliance
 	// Size of Rolling Window. Must be a multiple of days.
 	Size string `json:"size"`
 }
@@ -67,6 +68,14 @@ func (o *RollingCompliance) SetSize(v string) {
 
 func (o RollingCompliance) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	serializedCompliance, errCompliance := json.Marshal(o.Compliance)
+	if errCompliance != nil {
+		return []byte{}, errCompliance
+	}
+	errCompliance = json.Unmarshal([]byte(serializedCompliance), &toSerialize)
+	if errCompliance != nil {
+		return []byte{}, errCompliance
+	}
 	if true {
 		toSerialize["size"] = o.Size
 	}

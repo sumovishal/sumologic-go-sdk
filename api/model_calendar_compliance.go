@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// CalendarCompliance Window for Calendar Compliance.
+// CalendarCompliance struct for CalendarCompliance
 type CalendarCompliance struct {
+	Compliance
 	// Type of Calendar Window (week/month/quarter).
 	WindowType string `json:"windowType"`
 	// Start of the calendar window. For week, it would be the day of the week (for e.g Sunday, Monday etc). For month, it will always be the first day of the month (therefore not required to specify for monthly compliance). For quarter, it would be the first month of the quarter (for e.g January, February etc.)
@@ -101,6 +102,14 @@ func (o *CalendarCompliance) SetStartFrom(v string) {
 
 func (o CalendarCompliance) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	serializedCompliance, errCompliance := json.Marshal(o.Compliance)
+	if errCompliance != nil {
+		return []byte{}, errCompliance
+	}
+	errCompliance = json.Unmarshal([]byte(serializedCompliance), &toSerialize)
+	if errCompliance != nil {
+		return []byte{}, errCompliance
+	}
 	if true {
 		toSerialize["windowType"] = o.WindowType
 	}
