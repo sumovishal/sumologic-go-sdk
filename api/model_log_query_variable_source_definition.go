@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogQueryVariableSourceDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogQueryVariableSourceDefinition{}
 
 // LogQueryVariableSourceDefinition struct for LogQueryVariableSourceDefinition
 type LogQueryVariableSourceDefinition struct {
@@ -92,22 +95,26 @@ func (o *LogQueryVariableSourceDefinition) SetField(v string) {
 }
 
 func (o LogQueryVariableSourceDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LogQueryVariableSourceDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedVariableSourceDefinition, errVariableSourceDefinition := json.Marshal(o.VariableSourceDefinition)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
 	errVariableSourceDefinition = json.Unmarshal([]byte(serializedVariableSourceDefinition), &toSerialize)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["query"] = o.Query
+	toSerialize["field"] = o.Field
+	return toSerialize, nil
 }
 
 type NullableLogQueryVariableSourceDefinition struct {

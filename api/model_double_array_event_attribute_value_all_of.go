@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DoubleArrayEventAttributeValueAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DoubleArrayEventAttributeValueAllOf{}
 
 // DoubleArrayEventAttributeValueAllOf struct for DoubleArrayEventAttributeValueAllOf
 type DoubleArrayEventAttributeValueAllOf struct {
@@ -62,11 +65,17 @@ func (o *DoubleArrayEventAttributeValueAllOf) SetValues(v []float64) {
 }
 
 func (o DoubleArrayEventAttributeValueAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["values"] = o.Values
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DoubleArrayEventAttributeValueAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["values"] = o.Values
+	return toSerialize, nil
 }
 
 type NullableDoubleArrayEventAttributeValueAllOf struct {

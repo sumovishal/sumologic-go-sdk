@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OAuthRefreshFailedTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OAuthRefreshFailedTracker{}
 
 // OAuthRefreshFailedTracker struct for OAuthRefreshFailedTracker
 type OAuthRefreshFailedTracker struct {
@@ -45,7 +48,7 @@ func NewOAuthRefreshFailedTrackerWithDefaults() *OAuthRefreshFailedTracker {
 
 // GetExceptionType returns the ExceptionType field value if set, zero value otherwise.
 func (o *OAuthRefreshFailedTracker) GetExceptionType() string {
-	if o == nil || o.ExceptionType == nil {
+	if o == nil || IsNil(o.ExceptionType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *OAuthRefreshFailedTracker) GetExceptionType() string {
 // GetExceptionTypeOk returns a tuple with the ExceptionType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OAuthRefreshFailedTracker) GetExceptionTypeOk() (*string, bool) {
-	if o == nil || o.ExceptionType == nil {
+	if o == nil || IsNil(o.ExceptionType) {
 		return nil, false
 	}
 	return o.ExceptionType, true
@@ -63,7 +66,7 @@ func (o *OAuthRefreshFailedTracker) GetExceptionTypeOk() (*string, bool) {
 
 // HasExceptionType returns a boolean if a field has been set.
 func (o *OAuthRefreshFailedTracker) HasExceptionType() bool {
-	if o != nil && o.ExceptionType != nil {
+	if o != nil && !IsNil(o.ExceptionType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *OAuthRefreshFailedTracker) SetExceptionType(v string) {
 
 // GetExceptionMessage returns the ExceptionMessage field value if set, zero value otherwise.
 func (o *OAuthRefreshFailedTracker) GetExceptionMessage() string {
-	if o == nil || o.ExceptionMessage == nil {
+	if o == nil || IsNil(o.ExceptionMessage) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *OAuthRefreshFailedTracker) GetExceptionMessage() string {
 // GetExceptionMessageOk returns a tuple with the ExceptionMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OAuthRefreshFailedTracker) GetExceptionMessageOk() (*string, bool) {
-	if o == nil || o.ExceptionMessage == nil {
+	if o == nil || IsNil(o.ExceptionMessage) {
 		return nil, false
 	}
 	return o.ExceptionMessage, true
@@ -95,7 +98,7 @@ func (o *OAuthRefreshFailedTracker) GetExceptionMessageOk() (*string, bool) {
 
 // HasExceptionMessage returns a boolean if a field has been set.
 func (o *OAuthRefreshFailedTracker) HasExceptionMessage() bool {
-	if o != nil && o.ExceptionMessage != nil {
+	if o != nil && !IsNil(o.ExceptionMessage) {
 		return true
 	}
 
@@ -108,22 +111,30 @@ func (o *OAuthRefreshFailedTracker) SetExceptionMessage(v string) {
 }
 
 func (o OAuthRefreshFailedTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OAuthRefreshFailedTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.ExceptionType != nil {
+	if !IsNil(o.ExceptionType) {
 		toSerialize["exceptionType"] = o.ExceptionType
 	}
-	if o.ExceptionMessage != nil {
+	if !IsNil(o.ExceptionMessage) {
 		toSerialize["exceptionMessage"] = o.ExceptionMessage
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableOAuthRefreshFailedTracker struct {

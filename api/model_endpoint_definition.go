@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EndpointDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EndpointDefinition{}
 
 // EndpointDefinition Endpoint creation request object.
 type EndpointDefinition struct {
@@ -171,23 +174,21 @@ func (o *EndpointDefinition) SetHeaders(v string) {
 }
 
 func (o EndpointDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["inputSchema"] = o.InputSchema
-	}
-	if true {
-		toSerialize["outputSchema"] = o.OutputSchema
-	}
-	if true {
-		toSerialize["headers"] = o.Headers
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EndpointDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["url"] = o.Url
+	toSerialize["inputSchema"] = o.InputSchema
+	toSerialize["outputSchema"] = o.OutputSchema
+	toSerialize["headers"] = o.Headers
+	return toSerialize, nil
 }
 
 type NullableEndpointDefinition struct {

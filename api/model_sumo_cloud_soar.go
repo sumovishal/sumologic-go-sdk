@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SumoCloudSOAR type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SumoCloudSOAR{}
 
 // SumoCloudSOAR struct for SumoCloudSOAR
 type SumoCloudSOAR struct {
@@ -70,7 +73,7 @@ func (o *SumoCloudSOAR) SetConnectionId(v string) {
 
 // GetConnectionSubtype returns the ConnectionSubtype field value if set, zero value otherwise.
 func (o *SumoCloudSOAR) GetConnectionSubtype() string {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		var ret string
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *SumoCloudSOAR) GetConnectionSubtype() string {
 // GetConnectionSubtypeOk returns a tuple with the ConnectionSubtype field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoCloudSOAR) GetConnectionSubtypeOk() (*string, bool) {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		return nil, false
 	}
 	return o.ConnectionSubtype, true
@@ -88,7 +91,7 @@ func (o *SumoCloudSOAR) GetConnectionSubtypeOk() (*string, bool) {
 
 // HasConnectionSubtype returns a boolean if a field has been set.
 func (o *SumoCloudSOAR) HasConnectionSubtype() bool {
-	if o != nil && o.ConnectionSubtype != nil {
+	if o != nil && !IsNil(o.ConnectionSubtype) {
 		return true
 	}
 
@@ -102,7 +105,7 @@ func (o *SumoCloudSOAR) SetConnectionSubtype(v string) {
 
 // GetPayloadOverride returns the PayloadOverride field value if set, zero value otherwise.
 func (o *SumoCloudSOAR) GetPayloadOverride() string {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		var ret string
 		return ret
 	}
@@ -112,7 +115,7 @@ func (o *SumoCloudSOAR) GetPayloadOverride() string {
 // GetPayloadOverrideOk returns a tuple with the PayloadOverride field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoCloudSOAR) GetPayloadOverrideOk() (*string, bool) {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		return nil, false
 	}
 	return o.PayloadOverride, true
@@ -120,7 +123,7 @@ func (o *SumoCloudSOAR) GetPayloadOverrideOk() (*string, bool) {
 
 // HasPayloadOverride returns a boolean if a field has been set.
 func (o *SumoCloudSOAR) HasPayloadOverride() bool {
-	if o != nil && o.PayloadOverride != nil {
+	if o != nil && !IsNil(o.PayloadOverride) {
 		return true
 	}
 
@@ -133,25 +136,31 @@ func (o *SumoCloudSOAR) SetPayloadOverride(v string) {
 }
 
 func (o SumoCloudSOAR) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SumoCloudSOAR) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAction, errAction := json.Marshal(o.Action)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
 	errAction = json.Unmarshal([]byte(serializedAction), &toSerialize)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
-	if true {
-		toSerialize["connectionId"] = o.ConnectionId
-	}
-	if o.ConnectionSubtype != nil {
+	toSerialize["connectionId"] = o.ConnectionId
+	if !IsNil(o.ConnectionSubtype) {
 		toSerialize["connectionSubtype"] = o.ConnectionSubtype
 	}
-	if o.PayloadOverride != nil {
+	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSumoCloudSOAR struct {

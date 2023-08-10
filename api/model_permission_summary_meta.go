@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PermissionSummaryMeta type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PermissionSummaryMeta{}
 
 // PermissionSummaryMeta Permission Summary with additional information like inheritance, revocation, etc about the permission.
 type PermissionSummaryMeta struct {
@@ -198,26 +201,22 @@ func (o *PermissionSummaryMeta) SetIsSystemDefined(v bool) {
 }
 
 func (o PermissionSummaryMeta) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["isInherited"] = o.IsInherited
-	}
-	if true {
-		toSerialize["isExplicit"] = o.IsExplicit
-	}
-	if true {
-		toSerialize["isRevoked"] = o.IsRevoked
-	}
-	if true {
-		toSerialize["isRecursive"] = o.IsRecursive
-	}
-	if true {
-		toSerialize["isSystemDefined"] = o.IsSystemDefined
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PermissionSummaryMeta) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["isInherited"] = o.IsInherited
+	toSerialize["isExplicit"] = o.IsExplicit
+	toSerialize["isRevoked"] = o.IsRevoked
+	toSerialize["isRecursive"] = o.IsRecursive
+	toSerialize["isSystemDefined"] = o.IsSystemDefined
+	return toSerialize, nil
 }
 
 type NullablePermissionSummaryMeta struct {

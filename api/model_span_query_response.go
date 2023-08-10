@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryResponse{}
 
 // SpanQueryResponse struct for SpanQueryResponse
 type SpanQueryResponse struct {
@@ -98,7 +101,7 @@ func (o *SpanQueryResponse) SetQueryRows(v []SpanQueryRowResponse) {
 
 // GetHasErrors returns the HasErrors field value if set, zero value otherwise.
 func (o *SpanQueryResponse) GetHasErrors() bool {
-	if o == nil || o.HasErrors == nil {
+	if o == nil || IsNil(o.HasErrors) {
 		var ret bool
 		return ret
 	}
@@ -108,7 +111,7 @@ func (o *SpanQueryResponse) GetHasErrors() bool {
 // GetHasErrorsOk returns a tuple with the HasErrors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryResponse) GetHasErrorsOk() (*bool, bool) {
-	if o == nil || o.HasErrors == nil {
+	if o == nil || IsNil(o.HasErrors) {
 		return nil, false
 	}
 	return o.HasErrors, true
@@ -116,7 +119,7 @@ func (o *SpanQueryResponse) GetHasErrorsOk() (*bool, bool) {
 
 // HasHasErrors returns a boolean if a field has been set.
 func (o *SpanQueryResponse) HasHasErrors() bool {
-	if o != nil && o.HasErrors != nil {
+	if o != nil && !IsNil(o.HasErrors) {
 		return true
 	}
 
@@ -130,7 +133,7 @@ func (o *SpanQueryResponse) SetHasErrors(v bool) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *SpanQueryResponse) GetTimeRange() BeginBoundedTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret BeginBoundedTimeRange
 		return ret
 	}
@@ -140,7 +143,7 @@ func (o *SpanQueryResponse) GetTimeRange() BeginBoundedTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryResponse) GetTimeRangeOk() (*BeginBoundedTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -148,7 +151,7 @@ func (o *SpanQueryResponse) GetTimeRangeOk() (*BeginBoundedTimeRange, bool) {
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *SpanQueryResponse) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -161,20 +164,24 @@ func (o *SpanQueryResponse) SetTimeRange(v BeginBoundedTimeRange) {
 }
 
 func (o SpanQueryResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryId"] = o.QueryId
-	}
-	if true {
-		toSerialize["queryRows"] = o.QueryRows
-	}
-	if o.HasErrors != nil {
-		toSerialize["hasErrors"] = o.HasErrors
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryId"] = o.QueryId
+	toSerialize["queryRows"] = o.QueryRows
+	if !IsNil(o.HasErrors) {
+		toSerialize["hasErrors"] = o.HasErrors
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryResponse struct {

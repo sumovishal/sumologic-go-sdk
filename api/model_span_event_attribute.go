@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanEventAttribute type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanEventAttribute{}
 
 // SpanEventAttribute struct for SpanEventAttribute
 type SpanEventAttribute struct {
@@ -40,7 +43,7 @@ func NewSpanEventAttributeWithDefaults() *SpanEventAttribute {
 
 // GetAttributeName returns the AttributeName field value if set, zero value otherwise.
 func (o *SpanEventAttribute) GetAttributeName() string {
-	if o == nil || o.AttributeName == nil {
+	if o == nil || IsNil(o.AttributeName) {
 		var ret string
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *SpanEventAttribute) GetAttributeName() string {
 // GetAttributeNameOk returns a tuple with the AttributeName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanEventAttribute) GetAttributeNameOk() (*string, bool) {
-	if o == nil || o.AttributeName == nil {
+	if o == nil || IsNil(o.AttributeName) {
 		return nil, false
 	}
 	return o.AttributeName, true
@@ -58,7 +61,7 @@ func (o *SpanEventAttribute) GetAttributeNameOk() (*string, bool) {
 
 // HasAttributeName returns a boolean if a field has been set.
 func (o *SpanEventAttribute) HasAttributeName() bool {
-	if o != nil && o.AttributeName != nil {
+	if o != nil && !IsNil(o.AttributeName) {
 		return true
 	}
 
@@ -72,7 +75,7 @@ func (o *SpanEventAttribute) SetAttributeName(v string) {
 
 // GetAttributeValue returns the AttributeValue field value if set, zero value otherwise.
 func (o *SpanEventAttribute) GetAttributeValue() EventAttributeValue {
-	if o == nil || o.AttributeValue == nil {
+	if o == nil || IsNil(o.AttributeValue) {
 		var ret EventAttributeValue
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *SpanEventAttribute) GetAttributeValue() EventAttributeValue {
 // GetAttributeValueOk returns a tuple with the AttributeValue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanEventAttribute) GetAttributeValueOk() (*EventAttributeValue, bool) {
-	if o == nil || o.AttributeValue == nil {
+	if o == nil || IsNil(o.AttributeValue) {
 		return nil, false
 	}
 	return o.AttributeValue, true
@@ -90,7 +93,7 @@ func (o *SpanEventAttribute) GetAttributeValueOk() (*EventAttributeValue, bool) 
 
 // HasAttributeValue returns a boolean if a field has been set.
 func (o *SpanEventAttribute) HasAttributeValue() bool {
-	if o != nil && o.AttributeValue != nil {
+	if o != nil && !IsNil(o.AttributeValue) {
 		return true
 	}
 
@@ -103,14 +106,22 @@ func (o *SpanEventAttribute) SetAttributeValue(v EventAttributeValue) {
 }
 
 func (o SpanEventAttribute) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.AttributeName != nil {
-		toSerialize["attributeName"] = o.AttributeName
-	}
-	if o.AttributeValue != nil {
-		toSerialize["attributeValue"] = o.AttributeValue
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanEventAttribute) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AttributeName) {
+		toSerialize["attributeName"] = o.AttributeName
+	}
+	if !IsNil(o.AttributeValue) {
+		toSerialize["attributeValue"] = o.AttributeValue
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanEventAttribute struct {

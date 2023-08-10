@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TextEntriesAutoCompleteSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TextEntriesAutoCompleteSyncDefinitionAllOf{}
 
 // TextEntriesAutoCompleteSyncDefinitionAllOf struct for TextEntriesAutoCompleteSyncDefinitionAllOf
 type TextEntriesAutoCompleteSyncDefinitionAllOf struct {
@@ -63,11 +66,17 @@ func (o *TextEntriesAutoCompleteSyncDefinitionAllOf) SetAutoCompleteKey(v string
 }
 
 func (o TextEntriesAutoCompleteSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TextEntriesAutoCompleteSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	return toSerialize, nil
 }
 
 type NullableTextEntriesAutoCompleteSyncDefinitionAllOf struct {

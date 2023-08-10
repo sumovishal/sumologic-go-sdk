@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CustomFieldAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CustomFieldAllOf{}
 
 // CustomFieldAllOf struct for CustomFieldAllOf
 type CustomFieldAllOf struct {
@@ -117,17 +120,19 @@ func (o *CustomFieldAllOf) SetState(v string) {
 }
 
 func (o CustomFieldAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldId"] = o.FieldId
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["state"] = o.State
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CustomFieldAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldId"] = o.FieldId
+	toSerialize["dataType"] = o.DataType
+	toSerialize["state"] = o.State
+	return toSerialize, nil
 }
 
 type NullableCustomFieldAllOf struct {

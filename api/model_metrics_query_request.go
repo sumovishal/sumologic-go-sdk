@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsQueryRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryRequest{}
 
 // MetricsQueryRequest A list of metrics queries to run along with the time range for the query.
 type MetricsQueryRequest struct {
@@ -89,14 +92,18 @@ func (o *MetricsQueryRequest) SetTimeRange(v ResolvableTimeRange) {
 }
 
 func (o MetricsQueryRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queries"] = o.Queries
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queries"] = o.Queries
+	toSerialize["timeRange"] = o.TimeRange
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryRequest struct {

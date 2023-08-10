@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ConsumptionDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ConsumptionDetails{}
 
 // ConsumptionDetails List of entitlements consumption.
 type ConsumptionDetails struct {
@@ -117,17 +120,19 @@ func (o *ConsumptionDetails) SetEndDate(v string) {
 }
 
 func (o ConsumptionDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["entitlementConsumptions"] = o.EntitlementConsumptions
-	}
-	if true {
-		toSerialize["startDate"] = o.StartDate
-	}
-	if true {
-		toSerialize["endDate"] = o.EndDate
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ConsumptionDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["entitlementConsumptions"] = o.EntitlementConsumptions
+	toSerialize["startDate"] = o.StartDate
+	toSerialize["endDate"] = o.EndDate
+	return toSerialize, nil
 }
 
 type NullableConsumptionDetails struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Baselines type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Baselines{}
 
 // Baselines Details of consumable and its quantity.
 type Baselines struct {
@@ -103,7 +106,7 @@ func NewBaselinesWithDefaults() *Baselines {
 
 // GetContinuousIngest returns the ContinuousIngest field value if set, zero value otherwise.
 func (o *Baselines) GetContinuousIngest() int64 {
-	if o == nil || o.ContinuousIngest == nil {
+	if o == nil || IsNil(o.ContinuousIngest) {
 		var ret int64
 		return ret
 	}
@@ -113,7 +116,7 @@ func (o *Baselines) GetContinuousIngest() int64 {
 // GetContinuousIngestOk returns a tuple with the ContinuousIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetContinuousIngestOk() (*int64, bool) {
-	if o == nil || o.ContinuousIngest == nil {
+	if o == nil || IsNil(o.ContinuousIngest) {
 		return nil, false
 	}
 	return o.ContinuousIngest, true
@@ -121,7 +124,7 @@ func (o *Baselines) GetContinuousIngestOk() (*int64, bool) {
 
 // HasContinuousIngest returns a boolean if a field has been set.
 func (o *Baselines) HasContinuousIngest() bool {
-	if o != nil && o.ContinuousIngest != nil {
+	if o != nil && !IsNil(o.ContinuousIngest) {
 		return true
 	}
 
@@ -135,7 +138,7 @@ func (o *Baselines) SetContinuousIngest(v int64) {
 
 // GetContinuousStorage returns the ContinuousStorage field value if set, zero value otherwise.
 func (o *Baselines) GetContinuousStorage() int64 {
-	if o == nil || o.ContinuousStorage == nil {
+	if o == nil || IsNil(o.ContinuousStorage) {
 		var ret int64
 		return ret
 	}
@@ -145,7 +148,7 @@ func (o *Baselines) GetContinuousStorage() int64 {
 // GetContinuousStorageOk returns a tuple with the ContinuousStorage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetContinuousStorageOk() (*int64, bool) {
-	if o == nil || o.ContinuousStorage == nil {
+	if o == nil || IsNil(o.ContinuousStorage) {
 		return nil, false
 	}
 	return o.ContinuousStorage, true
@@ -153,7 +156,7 @@ func (o *Baselines) GetContinuousStorageOk() (*int64, bool) {
 
 // HasContinuousStorage returns a boolean if a field has been set.
 func (o *Baselines) HasContinuousStorage() bool {
-	if o != nil && o.ContinuousStorage != nil {
+	if o != nil && !IsNil(o.ContinuousStorage) {
 		return true
 	}
 
@@ -167,7 +170,7 @@ func (o *Baselines) SetContinuousStorage(v int64) {
 
 // GetFrequentIngest returns the FrequentIngest field value if set, zero value otherwise.
 func (o *Baselines) GetFrequentIngest() int64 {
-	if o == nil || o.FrequentIngest == nil {
+	if o == nil || IsNil(o.FrequentIngest) {
 		var ret int64
 		return ret
 	}
@@ -177,7 +180,7 @@ func (o *Baselines) GetFrequentIngest() int64 {
 // GetFrequentIngestOk returns a tuple with the FrequentIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetFrequentIngestOk() (*int64, bool) {
-	if o == nil || o.FrequentIngest == nil {
+	if o == nil || IsNil(o.FrequentIngest) {
 		return nil, false
 	}
 	return o.FrequentIngest, true
@@ -185,7 +188,7 @@ func (o *Baselines) GetFrequentIngestOk() (*int64, bool) {
 
 // HasFrequentIngest returns a boolean if a field has been set.
 func (o *Baselines) HasFrequentIngest() bool {
-	if o != nil && o.FrequentIngest != nil {
+	if o != nil && !IsNil(o.FrequentIngest) {
 		return true
 	}
 
@@ -199,7 +202,7 @@ func (o *Baselines) SetFrequentIngest(v int64) {
 
 // GetFrequentStorage returns the FrequentStorage field value if set, zero value otherwise.
 func (o *Baselines) GetFrequentStorage() int64 {
-	if o == nil || o.FrequentStorage == nil {
+	if o == nil || IsNil(o.FrequentStorage) {
 		var ret int64
 		return ret
 	}
@@ -209,7 +212,7 @@ func (o *Baselines) GetFrequentStorage() int64 {
 // GetFrequentStorageOk returns a tuple with the FrequentStorage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetFrequentStorageOk() (*int64, bool) {
-	if o == nil || o.FrequentStorage == nil {
+	if o == nil || IsNil(o.FrequentStorage) {
 		return nil, false
 	}
 	return o.FrequentStorage, true
@@ -217,7 +220,7 @@ func (o *Baselines) GetFrequentStorageOk() (*int64, bool) {
 
 // HasFrequentStorage returns a boolean if a field has been set.
 func (o *Baselines) HasFrequentStorage() bool {
-	if o != nil && o.FrequentStorage != nil {
+	if o != nil && !IsNil(o.FrequentStorage) {
 		return true
 	}
 
@@ -231,7 +234,7 @@ func (o *Baselines) SetFrequentStorage(v int64) {
 
 // GetInfrequentIngest returns the InfrequentIngest field value if set, zero value otherwise.
 func (o *Baselines) GetInfrequentIngest() int64 {
-	if o == nil || o.InfrequentIngest == nil {
+	if o == nil || IsNil(o.InfrequentIngest) {
 		var ret int64
 		return ret
 	}
@@ -241,7 +244,7 @@ func (o *Baselines) GetInfrequentIngest() int64 {
 // GetInfrequentIngestOk returns a tuple with the InfrequentIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetInfrequentIngestOk() (*int64, bool) {
-	if o == nil || o.InfrequentIngest == nil {
+	if o == nil || IsNil(o.InfrequentIngest) {
 		return nil, false
 	}
 	return o.InfrequentIngest, true
@@ -249,7 +252,7 @@ func (o *Baselines) GetInfrequentIngestOk() (*int64, bool) {
 
 // HasInfrequentIngest returns a boolean if a field has been set.
 func (o *Baselines) HasInfrequentIngest() bool {
-	if o != nil && o.InfrequentIngest != nil {
+	if o != nil && !IsNil(o.InfrequentIngest) {
 		return true
 	}
 
@@ -263,7 +266,7 @@ func (o *Baselines) SetInfrequentIngest(v int64) {
 
 // GetInfrequentStorage returns the InfrequentStorage field value if set, zero value otherwise.
 func (o *Baselines) GetInfrequentStorage() int64 {
-	if o == nil || o.InfrequentStorage == nil {
+	if o == nil || IsNil(o.InfrequentStorage) {
 		var ret int64
 		return ret
 	}
@@ -273,7 +276,7 @@ func (o *Baselines) GetInfrequentStorage() int64 {
 // GetInfrequentStorageOk returns a tuple with the InfrequentStorage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetInfrequentStorageOk() (*int64, bool) {
-	if o == nil || o.InfrequentStorage == nil {
+	if o == nil || IsNil(o.InfrequentStorage) {
 		return nil, false
 	}
 	return o.InfrequentStorage, true
@@ -281,7 +284,7 @@ func (o *Baselines) GetInfrequentStorageOk() (*int64, bool) {
 
 // HasInfrequentStorage returns a boolean if a field has been set.
 func (o *Baselines) HasInfrequentStorage() bool {
-	if o != nil && o.InfrequentStorage != nil {
+	if o != nil && !IsNil(o.InfrequentStorage) {
 		return true
 	}
 
@@ -295,7 +298,7 @@ func (o *Baselines) SetInfrequentStorage(v int64) {
 
 // GetInfrequentScan returns the InfrequentScan field value if set, zero value otherwise.
 func (o *Baselines) GetInfrequentScan() int64 {
-	if o == nil || o.InfrequentScan == nil {
+	if o == nil || IsNil(o.InfrequentScan) {
 		var ret int64
 		return ret
 	}
@@ -305,7 +308,7 @@ func (o *Baselines) GetInfrequentScan() int64 {
 // GetInfrequentScanOk returns a tuple with the InfrequentScan field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetInfrequentScanOk() (*int64, bool) {
-	if o == nil || o.InfrequentScan == nil {
+	if o == nil || IsNil(o.InfrequentScan) {
 		return nil, false
 	}
 	return o.InfrequentScan, true
@@ -313,7 +316,7 @@ func (o *Baselines) GetInfrequentScanOk() (*int64, bool) {
 
 // HasInfrequentScan returns a boolean if a field has been set.
 func (o *Baselines) HasInfrequentScan() bool {
-	if o != nil && o.InfrequentScan != nil {
+	if o != nil && !IsNil(o.InfrequentScan) {
 		return true
 	}
 
@@ -327,7 +330,7 @@ func (o *Baselines) SetInfrequentScan(v int64) {
 
 // GetMetrics returns the Metrics field value if set, zero value otherwise.
 func (o *Baselines) GetMetrics() int64 {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		var ret int64
 		return ret
 	}
@@ -337,7 +340,7 @@ func (o *Baselines) GetMetrics() int64 {
 // GetMetricsOk returns a tuple with the Metrics field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetMetricsOk() (*int64, bool) {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		return nil, false
 	}
 	return o.Metrics, true
@@ -345,7 +348,7 @@ func (o *Baselines) GetMetricsOk() (*int64, bool) {
 
 // HasMetrics returns a boolean if a field has been set.
 func (o *Baselines) HasMetrics() bool {
-	if o != nil && o.Metrics != nil {
+	if o != nil && !IsNil(o.Metrics) {
 		return true
 	}
 
@@ -359,7 +362,7 @@ func (o *Baselines) SetMetrics(v int64) {
 
 // GetCseIngest returns the CseIngest field value if set, zero value otherwise.
 func (o *Baselines) GetCseIngest() int64 {
-	if o == nil || o.CseIngest == nil {
+	if o == nil || IsNil(o.CseIngest) {
 		var ret int64
 		return ret
 	}
@@ -369,7 +372,7 @@ func (o *Baselines) GetCseIngest() int64 {
 // GetCseIngestOk returns a tuple with the CseIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetCseIngestOk() (*int64, bool) {
-	if o == nil || o.CseIngest == nil {
+	if o == nil || IsNil(o.CseIngest) {
 		return nil, false
 	}
 	return o.CseIngest, true
@@ -377,7 +380,7 @@ func (o *Baselines) GetCseIngestOk() (*int64, bool) {
 
 // HasCseIngest returns a boolean if a field has been set.
 func (o *Baselines) HasCseIngest() bool {
-	if o != nil && o.CseIngest != nil {
+	if o != nil && !IsNil(o.CseIngest) {
 		return true
 	}
 
@@ -391,7 +394,7 @@ func (o *Baselines) SetCseIngest(v int64) {
 
 // GetCseStorage returns the CseStorage field value if set, zero value otherwise.
 func (o *Baselines) GetCseStorage() int64 {
-	if o == nil || o.CseStorage == nil {
+	if o == nil || IsNil(o.CseStorage) {
 		var ret int64
 		return ret
 	}
@@ -401,7 +404,7 @@ func (o *Baselines) GetCseStorage() int64 {
 // GetCseStorageOk returns a tuple with the CseStorage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetCseStorageOk() (*int64, bool) {
-	if o == nil || o.CseStorage == nil {
+	if o == nil || IsNil(o.CseStorage) {
 		return nil, false
 	}
 	return o.CseStorage, true
@@ -409,7 +412,7 @@ func (o *Baselines) GetCseStorageOk() (*int64, bool) {
 
 // HasCseStorage returns a boolean if a field has been set.
 func (o *Baselines) HasCseStorage() bool {
-	if o != nil && o.CseStorage != nil {
+	if o != nil && !IsNil(o.CseStorage) {
 		return true
 	}
 
@@ -423,7 +426,7 @@ func (o *Baselines) SetCseStorage(v int64) {
 
 // GetTracingIngest returns the TracingIngest field value if set, zero value otherwise.
 func (o *Baselines) GetTracingIngest() int64 {
-	if o == nil || o.TracingIngest == nil {
+	if o == nil || IsNil(o.TracingIngest) {
 		var ret int64
 		return ret
 	}
@@ -433,7 +436,7 @@ func (o *Baselines) GetTracingIngest() int64 {
 // GetTracingIngestOk returns a tuple with the TracingIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Baselines) GetTracingIngestOk() (*int64, bool) {
-	if o == nil || o.TracingIngest == nil {
+	if o == nil || IsNil(o.TracingIngest) {
 		return nil, false
 	}
 	return o.TracingIngest, true
@@ -441,7 +444,7 @@ func (o *Baselines) GetTracingIngestOk() (*int64, bool) {
 
 // HasTracingIngest returns a boolean if a field has been set.
 func (o *Baselines) HasTracingIngest() bool {
-	if o != nil && o.TracingIngest != nil {
+	if o != nil && !IsNil(o.TracingIngest) {
 		return true
 	}
 
@@ -454,41 +457,49 @@ func (o *Baselines) SetTracingIngest(v int64) {
 }
 
 func (o Baselines) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ContinuousIngest != nil {
-		toSerialize["continuousIngest"] = o.ContinuousIngest
-	}
-	if o.ContinuousStorage != nil {
-		toSerialize["continuousStorage"] = o.ContinuousStorage
-	}
-	if o.FrequentIngest != nil {
-		toSerialize["frequentIngest"] = o.FrequentIngest
-	}
-	if o.FrequentStorage != nil {
-		toSerialize["frequentStorage"] = o.FrequentStorage
-	}
-	if o.InfrequentIngest != nil {
-		toSerialize["infrequentIngest"] = o.InfrequentIngest
-	}
-	if o.InfrequentStorage != nil {
-		toSerialize["infrequentStorage"] = o.InfrequentStorage
-	}
-	if o.InfrequentScan != nil {
-		toSerialize["infrequentScan"] = o.InfrequentScan
-	}
-	if o.Metrics != nil {
-		toSerialize["metrics"] = o.Metrics
-	}
-	if o.CseIngest != nil {
-		toSerialize["cseIngest"] = o.CseIngest
-	}
-	if o.CseStorage != nil {
-		toSerialize["cseStorage"] = o.CseStorage
-	}
-	if o.TracingIngest != nil {
-		toSerialize["tracingIngest"] = o.TracingIngest
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Baselines) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ContinuousIngest) {
+		toSerialize["continuousIngest"] = o.ContinuousIngest
+	}
+	if !IsNil(o.ContinuousStorage) {
+		toSerialize["continuousStorage"] = o.ContinuousStorage
+	}
+	if !IsNil(o.FrequentIngest) {
+		toSerialize["frequentIngest"] = o.FrequentIngest
+	}
+	if !IsNil(o.FrequentStorage) {
+		toSerialize["frequentStorage"] = o.FrequentStorage
+	}
+	if !IsNil(o.InfrequentIngest) {
+		toSerialize["infrequentIngest"] = o.InfrequentIngest
+	}
+	if !IsNil(o.InfrequentStorage) {
+		toSerialize["infrequentStorage"] = o.InfrequentStorage
+	}
+	if !IsNil(o.InfrequentScan) {
+		toSerialize["infrequentScan"] = o.InfrequentScan
+	}
+	if !IsNil(o.Metrics) {
+		toSerialize["metrics"] = o.Metrics
+	}
+	if !IsNil(o.CseIngest) {
+		toSerialize["cseIngest"] = o.CseIngest
+	}
+	if !IsNil(o.CseStorage) {
+		toSerialize["cseStorage"] = o.CseStorage
+	}
+	if !IsNil(o.TracingIngest) {
+		toSerialize["tracingIngest"] = o.TracingIngest
+	}
+	return toSerialize, nil
 }
 
 type NullableBaselines struct {

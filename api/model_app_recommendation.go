@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppRecommendation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppRecommendation{}
 
 // AppRecommendation App recommendation details
 type AppRecommendation struct {
@@ -171,23 +174,21 @@ func (o *AppRecommendation) SetConfidence(v float64) {
 }
 
 func (o AppRecommendation) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["uuid"] = o.Uuid
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["iconURL"] = o.IconURL
-	}
-	if true {
-		toSerialize["confidence"] = o.Confidence
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppRecommendation) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["uuid"] = o.Uuid
+	toSerialize["name"] = o.Name
+	toSerialize["description"] = o.Description
+	toSerialize["iconURL"] = o.IconURL
+	toSerialize["confidence"] = o.Confidence
+	return toSerialize, nil
 }
 
 type NullableAppRecommendation struct {

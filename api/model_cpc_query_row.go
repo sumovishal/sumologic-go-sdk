@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CpcQueryRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CpcQueryRow{}
 
 // CpcQueryRow struct for CpcQueryRow
 type CpcQueryRow struct {
@@ -89,14 +92,18 @@ func (o *CpcQueryRow) SetRowId(v string) {
 }
 
 func (o CpcQueryRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["rowId"] = o.RowId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CpcQueryRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["rowId"] = o.RowId
+	return toSerialize, nil
 }
 
 type NullableCpcQueryRow struct {

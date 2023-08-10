@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Content type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Content{}
 
 // Content struct for Content
 type Content struct {
@@ -280,35 +283,25 @@ func (o *Content) SetPermissions(v []string) {
 }
 
 func (o Content) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["itemType"] = o.ItemType
-	}
-	if true {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["permissions"] = o.Permissions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Content) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["itemType"] = o.ItemType
+	toSerialize["parentId"] = o.ParentId
+	toSerialize["permissions"] = o.Permissions
+	return toSerialize, nil
 }
 
 type NullableContent struct {

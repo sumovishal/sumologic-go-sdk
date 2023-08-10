@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Jira type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Jira{}
 
 // Jira struct for Jira
 type Jira struct {
@@ -68,7 +71,7 @@ func (o *Jira) SetConnectionId(v string) {
 
 // GetPayloadOverride returns the PayloadOverride field value if set, zero value otherwise.
 func (o *Jira) GetPayloadOverride() string {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		var ret string
 		return ret
 	}
@@ -78,7 +81,7 @@ func (o *Jira) GetPayloadOverride() string {
 // GetPayloadOverrideOk returns a tuple with the PayloadOverride field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Jira) GetPayloadOverrideOk() (*string, bool) {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		return nil, false
 	}
 	return o.PayloadOverride, true
@@ -86,7 +89,7 @@ func (o *Jira) GetPayloadOverrideOk() (*string, bool) {
 
 // HasPayloadOverride returns a boolean if a field has been set.
 func (o *Jira) HasPayloadOverride() bool {
-	if o != nil && o.PayloadOverride != nil {
+	if o != nil && !IsNil(o.PayloadOverride) {
 		return true
 	}
 
@@ -99,22 +102,28 @@ func (o *Jira) SetPayloadOverride(v string) {
 }
 
 func (o Jira) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Jira) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAction, errAction := json.Marshal(o.Action)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
 	errAction = json.Unmarshal([]byte(serializedAction), &toSerialize)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
-	if true {
-		toSerialize["connectionId"] = o.ConnectionId
-	}
-	if o.PayloadOverride != nil {
+	toSerialize["connectionId"] = o.ConnectionId
+	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableJira struct {

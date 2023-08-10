@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DroppedField type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DroppedField{}
 
 // DroppedField struct for DroppedField
 type DroppedField struct {
@@ -63,11 +66,17 @@ func (o *DroppedField) SetFieldName(v string) {
 }
 
 func (o DroppedField) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DroppedField) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	return toSerialize, nil
 }
 
 type NullableDroppedField struct {

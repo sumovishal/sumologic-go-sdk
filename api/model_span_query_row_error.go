@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryRowError type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryRowError{}
 
 // SpanQueryRowError struct for SpanQueryRowError
 type SpanQueryRowError struct {
@@ -93,7 +96,7 @@ func (o *SpanQueryRowError) SetMessage(v string) {
 
 // GetDetails returns the Details field value if set, zero value otherwise.
 func (o *SpanQueryRowError) GetDetails() string {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *SpanQueryRowError) GetDetails() string {
 // GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowError) GetDetailsOk() (*string, bool) {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
 	return o.Details, true
@@ -111,7 +114,7 @@ func (o *SpanQueryRowError) GetDetailsOk() (*string, bool) {
 
 // HasDetails returns a boolean if a field has been set.
 func (o *SpanQueryRowError) HasDetails() bool {
-	if o != nil && o.Details != nil {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *SpanQueryRowError) SetDetails(v string) {
 }
 
 func (o SpanQueryRowError) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["code"] = o.Code
-	}
-	if true {
-		toSerialize["message"] = o.Message
-	}
-	if o.Details != nil {
-		toSerialize["details"] = o.Details
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryRowError) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["code"] = o.Code
+	toSerialize["message"] = o.Message
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryRowError struct {

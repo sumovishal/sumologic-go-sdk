@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsStorageLimitExceededTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsStorageLimitExceededTracker{}
 
 // CSEWindowsStorageLimitExceededTracker struct for CSEWindowsStorageLimitExceededTracker
 type CSEWindowsStorageLimitExceededTracker struct {
@@ -59,7 +62,7 @@ func NewCSEWindowsStorageLimitExceededTrackerWithDefaults() *CSEWindowsStorageLi
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -69,7 +72,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -77,7 +80,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetEventTypeOk() (*string, bool)
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -91,7 +94,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetEventType(v string) {
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -101,7 +104,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -109,7 +112,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetSensorIdOk() (*string, bool) 
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -123,7 +126,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -133,7 +136,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetSensorHostname() string {
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -141,7 +144,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetSensorHostnameOk() (*string, 
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -155,7 +158,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetSensorHostname(v string) {
 
 // GetFolderPath returns the FolderPath field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetFolderPath() string {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		var ret string
 		return ret
 	}
@@ -165,7 +168,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetFolderPath() string {
 // GetFolderPathOk returns a tuple with the FolderPath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetFolderPathOk() (*string, bool) {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		return nil, false
 	}
 	return o.FolderPath, true
@@ -173,7 +176,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetFolderPathOk() (*string, bool
 
 // HasFolderPath returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasFolderPath() bool {
-	if o != nil && o.FolderPath != nil {
+	if o != nil && !IsNil(o.FolderPath) {
 		return true
 	}
 
@@ -187,7 +190,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetFolderPath(v string) {
 
 // GetFolderSizeLimit returns the FolderSizeLimit field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetFolderSizeLimit() string {
-	if o == nil || o.FolderSizeLimit == nil {
+	if o == nil || IsNil(o.FolderSizeLimit) {
 		var ret string
 		return ret
 	}
@@ -197,7 +200,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetFolderSizeLimit() string {
 // GetFolderSizeLimitOk returns a tuple with the FolderSizeLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetFolderSizeLimitOk() (*string, bool) {
-	if o == nil || o.FolderSizeLimit == nil {
+	if o == nil || IsNil(o.FolderSizeLimit) {
 		return nil, false
 	}
 	return o.FolderSizeLimit, true
@@ -205,7 +208,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetFolderSizeLimitOk() (*string,
 
 // HasFolderSizeLimit returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasFolderSizeLimit() bool {
-	if o != nil && o.FolderSizeLimit != nil {
+	if o != nil && !IsNil(o.FolderSizeLimit) {
 		return true
 	}
 
@@ -219,7 +222,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetFolderSizeLimit(v string) {
 
 // GetCurrentFolderSize returns the CurrentFolderSize field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentFolderSize() string {
-	if o == nil || o.CurrentFolderSize == nil {
+	if o == nil || IsNil(o.CurrentFolderSize) {
 		var ret string
 		return ret
 	}
@@ -229,7 +232,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentFolderSize() string {
 // GetCurrentFolderSizeOk returns a tuple with the CurrentFolderSize field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentFolderSizeOk() (*string, bool) {
-	if o == nil || o.CurrentFolderSize == nil {
+	if o == nil || IsNil(o.CurrentFolderSize) {
 		return nil, false
 	}
 	return o.CurrentFolderSize, true
@@ -237,7 +240,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentFolderSizeOk() (*strin
 
 // HasCurrentFolderSize returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasCurrentFolderSize() bool {
-	if o != nil && o.CurrentFolderSize != nil {
+	if o != nil && !IsNil(o.CurrentFolderSize) {
 		return true
 	}
 
@@ -251,7 +254,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetCurrentFolderSize(v string) {
 
 // GetPercentageAvailableDiskSpaceLimit returns the PercentageAvailableDiskSpaceLimit field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetPercentageAvailableDiskSpaceLimit() string {
-	if o == nil || o.PercentageAvailableDiskSpaceLimit == nil {
+	if o == nil || IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		var ret string
 		return ret
 	}
@@ -261,7 +264,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetPercentageAvailableDiskSpaceL
 // GetPercentageAvailableDiskSpaceLimitOk returns a tuple with the PercentageAvailableDiskSpaceLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetPercentageAvailableDiskSpaceLimitOk() (*string, bool) {
-	if o == nil || o.PercentageAvailableDiskSpaceLimit == nil {
+	if o == nil || IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		return nil, false
 	}
 	return o.PercentageAvailableDiskSpaceLimit, true
@@ -269,7 +272,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetPercentageAvailableDiskSpaceL
 
 // HasPercentageAvailableDiskSpaceLimit returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasPercentageAvailableDiskSpaceLimit() bool {
-	if o != nil && o.PercentageAvailableDiskSpaceLimit != nil {
+	if o != nil && !IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		return true
 	}
 
@@ -283,7 +286,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetPercentageAvailableDiskSpaceL
 
 // GetCurrentPercentageAvailableDiskSpace returns the CurrentPercentageAvailableDiskSpace field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentPercentageAvailableDiskSpace() string {
-	if o == nil || o.CurrentPercentageAvailableDiskSpace == nil {
+	if o == nil || IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		var ret string
 		return ret
 	}
@@ -293,7 +296,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentPercentageAvailableDis
 // GetCurrentPercentageAvailableDiskSpaceOk returns a tuple with the CurrentPercentageAvailableDiskSpace field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentPercentageAvailableDiskSpaceOk() (*string, bool) {
-	if o == nil || o.CurrentPercentageAvailableDiskSpace == nil {
+	if o == nil || IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		return nil, false
 	}
 	return o.CurrentPercentageAvailableDiskSpace, true
@@ -301,7 +304,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetCurrentPercentageAvailableDis
 
 // HasCurrentPercentageAvailableDiskSpace returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasCurrentPercentageAvailableDiskSpace() bool {
-	if o != nil && o.CurrentPercentageAvailableDiskSpace != nil {
+	if o != nil && !IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		return true
 	}
 
@@ -315,7 +318,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetCurrentPercentageAvailableDis
 
 // GetLastError returns the LastError field value if set, zero value otherwise.
 func (o *CSEWindowsStorageLimitExceededTracker) GetLastError() string {
-	if o == nil || o.LastError == nil {
+	if o == nil || IsNil(o.LastError) {
 		var ret string
 		return ret
 	}
@@ -325,7 +328,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetLastError() string {
 // GetLastErrorOk returns a tuple with the LastError field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) GetLastErrorOk() (*string, bool) {
-	if o == nil || o.LastError == nil {
+	if o == nil || IsNil(o.LastError) {
 		return nil, false
 	}
 	return o.LastError, true
@@ -333,7 +336,7 @@ func (o *CSEWindowsStorageLimitExceededTracker) GetLastErrorOk() (*string, bool)
 
 // HasLastError returns a boolean if a field has been set.
 func (o *CSEWindowsStorageLimitExceededTracker) HasLastError() bool {
-	if o != nil && o.LastError != nil {
+	if o != nil && !IsNil(o.LastError) {
 		return true
 	}
 
@@ -346,43 +349,51 @@ func (o *CSEWindowsStorageLimitExceededTracker) SetLastError(v string) {
 }
 
 func (o CSEWindowsStorageLimitExceededTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsStorageLimitExceededTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.SensorId != nil {
+	if !IsNil(o.SensorId) {
 		toSerialize["sensorId"] = o.SensorId
 	}
-	if o.SensorHostname != nil {
+	if !IsNil(o.SensorHostname) {
 		toSerialize["sensorHostname"] = o.SensorHostname
 	}
-	if o.FolderPath != nil {
+	if !IsNil(o.FolderPath) {
 		toSerialize["folderPath"] = o.FolderPath
 	}
-	if o.FolderSizeLimit != nil {
+	if !IsNil(o.FolderSizeLimit) {
 		toSerialize["folderSizeLimit"] = o.FolderSizeLimit
 	}
-	if o.CurrentFolderSize != nil {
+	if !IsNil(o.CurrentFolderSize) {
 		toSerialize["currentFolderSize"] = o.CurrentFolderSize
 	}
-	if o.PercentageAvailableDiskSpaceLimit != nil {
+	if !IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		toSerialize["percentageAvailableDiskSpaceLimit"] = o.PercentageAvailableDiskSpaceLimit
 	}
-	if o.CurrentPercentageAvailableDiskSpace != nil {
+	if !IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		toSerialize["currentPercentageAvailableDiskSpace"] = o.CurrentPercentageAvailableDiskSpace
 	}
-	if o.LastError != nil {
+	if !IsNil(o.LastError) {
 		toSerialize["lastError"] = o.LastError
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsStorageLimitExceededTracker struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceQueryRowStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceQueryRowStatus{}
 
 // TraceQueryRowStatus struct for TraceQueryRowStatus
 type TraceQueryRowStatus struct {
@@ -96,7 +99,7 @@ func (o *TraceQueryRowStatus) SetStatus(v string) {
 
 // GetStatusMessage returns the StatusMessage field value if set, zero value otherwise.
 func (o *TraceQueryRowStatus) GetStatusMessage() string {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *TraceQueryRowStatus) GetStatusMessage() string {
 // GetStatusMessageOk returns a tuple with the StatusMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceQueryRowStatus) GetStatusMessageOk() (*string, bool) {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		return nil, false
 	}
 	return o.StatusMessage, true
@@ -114,7 +117,7 @@ func (o *TraceQueryRowStatus) GetStatusMessageOk() (*string, bool) {
 
 // HasStatusMessage returns a boolean if a field has been set.
 func (o *TraceQueryRowStatus) HasStatusMessage() bool {
-	if o != nil && o.StatusMessage != nil {
+	if o != nil && !IsNil(o.StatusMessage) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *TraceQueryRowStatus) SetCount(v int64) {
 }
 
 func (o TraceQueryRowStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessage != nil {
-		toSerialize["statusMessage"] = o.StatusMessage
-	}
-	if true {
-		toSerialize["count"] = o.Count
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceQueryRowStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessage) {
+		toSerialize["statusMessage"] = o.StatusMessage
+	}
+	toSerialize["count"] = o.Count
+	return toSerialize, nil
 }
 
 type NullableTraceQueryRowStatus struct {

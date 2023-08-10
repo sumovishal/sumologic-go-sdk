@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AsyncTraceQueryRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AsyncTraceQueryRequest{}
 
 // AsyncTraceQueryRequest struct for AsyncTraceQueryRequest
 type AsyncTraceQueryRequest struct {
@@ -89,14 +92,18 @@ func (o *AsyncTraceQueryRequest) SetTimeRange(v ResolvableTimeRange) {
 }
 
 func (o AsyncTraceQueryRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryRows"] = o.QueryRows
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AsyncTraceQueryRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryRows"] = o.QueryRows
+	toSerialize["timeRange"] = o.TimeRange
+	return toSerialize, nil
 }
 
 type NullableAsyncTraceQueryRequest struct {

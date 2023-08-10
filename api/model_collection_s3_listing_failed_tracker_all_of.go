@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionS3ListingFailedTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionS3ListingFailedTrackerAllOf{}
 
 // CollectionS3ListingFailedTrackerAllOf struct for CollectionS3ListingFailedTrackerAllOf
 type CollectionS3ListingFailedTrackerAllOf struct {
@@ -39,7 +42,7 @@ func NewCollectionS3ListingFailedTrackerAllOfWithDefaults() *CollectionS3Listing
 
 // GetBucketName returns the BucketName field value if set, zero value otherwise.
 func (o *CollectionS3ListingFailedTrackerAllOf) GetBucketName() string {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *CollectionS3ListingFailedTrackerAllOf) GetBucketName() string {
 // GetBucketNameOk returns a tuple with the BucketName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3ListingFailedTrackerAllOf) GetBucketNameOk() (*string, bool) {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		return nil, false
 	}
 	return o.BucketName, true
@@ -57,7 +60,7 @@ func (o *CollectionS3ListingFailedTrackerAllOf) GetBucketNameOk() (*string, bool
 
 // HasBucketName returns a boolean if a field has been set.
 func (o *CollectionS3ListingFailedTrackerAllOf) HasBucketName() bool {
-	if o != nil && o.BucketName != nil {
+	if o != nil && !IsNil(o.BucketName) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *CollectionS3ListingFailedTrackerAllOf) SetBucketName(v string) {
 }
 
 func (o CollectionS3ListingFailedTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.BucketName != nil {
-		toSerialize["bucketName"] = o.BucketName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CollectionS3ListingFailedTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BucketName) {
+		toSerialize["bucketName"] = o.BucketName
+	}
+	return toSerialize, nil
 }
 
 type NullableCollectionS3ListingFailedTrackerAllOf struct {

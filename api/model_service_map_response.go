@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ServiceMapResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceMapResponse{}
 
 // ServiceMapResponse struct for ServiceMapResponse
 type ServiceMapResponse struct {
@@ -90,14 +93,18 @@ func (o *ServiceMapResponse) SetEdges(v []ServiceMapEdge) {
 }
 
 func (o ServiceMapResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["nodes"] = o.Nodes
-	}
-	if true {
-		toSerialize["edges"] = o.Edges
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceMapResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["nodes"] = o.Nodes
+	toSerialize["edges"] = o.Edges
+	return toSerialize, nil
 }
 
 type NullableServiceMapResponse struct {

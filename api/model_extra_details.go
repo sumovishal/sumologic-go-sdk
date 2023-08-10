@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,8 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the ExtraDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ExtraDetails{}
+
 // ExtraDetails struct for ExtraDetails
 type ExtraDetails struct {
+	// Additional data from Sumo Logic related to the Alert.
 	Details []KeyValuePair `json:"details,omitempty"`
 }
 
@@ -38,7 +42,7 @@ func NewExtraDetailsWithDefaults() *ExtraDetails {
 
 // GetDetails returns the Details field value if set, zero value otherwise.
 func (o *ExtraDetails) GetDetails() []KeyValuePair {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		var ret []KeyValuePair
 		return ret
 	}
@@ -48,7 +52,7 @@ func (o *ExtraDetails) GetDetails() []KeyValuePair {
 // GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ExtraDetails) GetDetailsOk() ([]KeyValuePair, bool) {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
 	return o.Details, true
@@ -56,7 +60,7 @@ func (o *ExtraDetails) GetDetailsOk() ([]KeyValuePair, bool) {
 
 // HasDetails returns a boolean if a field has been set.
 func (o *ExtraDetails) HasDetails() bool {
-	if o != nil && o.Details != nil {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
@@ -69,11 +73,19 @@ func (o *ExtraDetails) SetDetails(v []KeyValuePair) {
 }
 
 func (o ExtraDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Details != nil {
-		toSerialize["details"] = o.Details
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ExtraDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
+	return toSerialize, nil
 }
 
 type NullableExtraDetails struct {

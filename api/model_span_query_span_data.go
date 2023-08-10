@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the SpanQuerySpanData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQuerySpanData{}
 
 // SpanQuerySpanData struct for SpanQuerySpanData
 type SpanQuerySpanData struct {
@@ -63,7 +66,7 @@ func NewSpanQuerySpanDataWithDefaults() *SpanQuerySpanData {
 
 // GetSpanId returns the SpanId field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetSpanId() string {
-	if o == nil || o.SpanId == nil {
+	if o == nil || IsNil(o.SpanId) {
 		var ret string
 		return ret
 	}
@@ -73,7 +76,7 @@ func (o *SpanQuerySpanData) GetSpanId() string {
 // GetSpanIdOk returns a tuple with the SpanId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetSpanIdOk() (*string, bool) {
-	if o == nil || o.SpanId == nil {
+	if o == nil || IsNil(o.SpanId) {
 		return nil, false
 	}
 	return o.SpanId, true
@@ -81,7 +84,7 @@ func (o *SpanQuerySpanData) GetSpanIdOk() (*string, bool) {
 
 // HasSpanId returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasSpanId() bool {
-	if o != nil && o.SpanId != nil {
+	if o != nil && !IsNil(o.SpanId) {
 		return true
 	}
 
@@ -95,7 +98,7 @@ func (o *SpanQuerySpanData) SetSpanId(v string) {
 
 // GetTraceId returns the TraceId field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetTraceId() string {
-	if o == nil || o.TraceId == nil {
+	if o == nil || IsNil(o.TraceId) {
 		var ret string
 		return ret
 	}
@@ -105,7 +108,7 @@ func (o *SpanQuerySpanData) GetTraceId() string {
 // GetTraceIdOk returns a tuple with the TraceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetTraceIdOk() (*string, bool) {
-	if o == nil || o.TraceId == nil {
+	if o == nil || IsNil(o.TraceId) {
 		return nil, false
 	}
 	return o.TraceId, true
@@ -113,7 +116,7 @@ func (o *SpanQuerySpanData) GetTraceIdOk() (*string, bool) {
 
 // HasTraceId returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasTraceId() bool {
-	if o != nil && o.TraceId != nil {
+	if o != nil && !IsNil(o.TraceId) {
 		return true
 	}
 
@@ -127,7 +130,7 @@ func (o *SpanQuerySpanData) SetTraceId(v string) {
 
 // GetParentSpanId returns the ParentSpanId field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetParentSpanId() string {
-	if o == nil || o.ParentSpanId == nil {
+	if o == nil || IsNil(o.ParentSpanId) {
 		var ret string
 		return ret
 	}
@@ -137,7 +140,7 @@ func (o *SpanQuerySpanData) GetParentSpanId() string {
 // GetParentSpanIdOk returns a tuple with the ParentSpanId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetParentSpanIdOk() (*string, bool) {
-	if o == nil || o.ParentSpanId == nil {
+	if o == nil || IsNil(o.ParentSpanId) {
 		return nil, false
 	}
 	return o.ParentSpanId, true
@@ -145,7 +148,7 @@ func (o *SpanQuerySpanData) GetParentSpanIdOk() (*string, bool) {
 
 // HasParentSpanId returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasParentSpanId() bool {
-	if o != nil && o.ParentSpanId != nil {
+	if o != nil && !IsNil(o.ParentSpanId) {
 		return true
 	}
 
@@ -159,7 +162,7 @@ func (o *SpanQuerySpanData) SetParentSpanId(v string) {
 
 // GetOperationName returns the OperationName field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetOperationName() string {
-	if o == nil || o.OperationName == nil {
+	if o == nil || IsNil(o.OperationName) {
 		var ret string
 		return ret
 	}
@@ -169,7 +172,7 @@ func (o *SpanQuerySpanData) GetOperationName() string {
 // GetOperationNameOk returns a tuple with the OperationName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetOperationNameOk() (*string, bool) {
-	if o == nil || o.OperationName == nil {
+	if o == nil || IsNil(o.OperationName) {
 		return nil, false
 	}
 	return o.OperationName, true
@@ -177,7 +180,7 @@ func (o *SpanQuerySpanData) GetOperationNameOk() (*string, bool) {
 
 // HasOperationName returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasOperationName() bool {
-	if o != nil && o.OperationName != nil {
+	if o != nil && !IsNil(o.OperationName) {
 		return true
 	}
 
@@ -191,7 +194,7 @@ func (o *SpanQuerySpanData) SetOperationName(v string) {
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -201,7 +204,7 @@ func (o *SpanQuerySpanData) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -209,7 +212,7 @@ func (o *SpanQuerySpanData) GetServiceOk() (*string, bool) {
 
 // HasService returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -223,7 +226,7 @@ func (o *SpanQuerySpanData) SetService(v string) {
 
 // GetRemoteService returns the RemoteService field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetRemoteService() string {
-	if o == nil || o.RemoteService == nil {
+	if o == nil || IsNil(o.RemoteService) {
 		var ret string
 		return ret
 	}
@@ -233,7 +236,7 @@ func (o *SpanQuerySpanData) GetRemoteService() string {
 // GetRemoteServiceOk returns a tuple with the RemoteService field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetRemoteServiceOk() (*string, bool) {
-	if o == nil || o.RemoteService == nil {
+	if o == nil || IsNil(o.RemoteService) {
 		return nil, false
 	}
 	return o.RemoteService, true
@@ -241,7 +244,7 @@ func (o *SpanQuerySpanData) GetRemoteServiceOk() (*string, bool) {
 
 // HasRemoteService returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasRemoteService() bool {
-	if o != nil && o.RemoteService != nil {
+	if o != nil && !IsNil(o.RemoteService) {
 		return true
 	}
 
@@ -303,7 +306,7 @@ func (o *SpanQuerySpanData) SetStartedAt(v time.Time) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetStatus() TraceSpanStatus {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret TraceSpanStatus
 		return ret
 	}
@@ -313,7 +316,7 @@ func (o *SpanQuerySpanData) GetStatus() TraceSpanStatus {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetStatusOk() (*TraceSpanStatus, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -321,7 +324,7 @@ func (o *SpanQuerySpanData) GetStatusOk() (*TraceSpanStatus, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -335,7 +338,7 @@ func (o *SpanQuerySpanData) SetStatus(v TraceSpanStatus) {
 
 // GetKind returns the Kind field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetKind() string {
-	if o == nil || o.Kind == nil {
+	if o == nil || IsNil(o.Kind) {
 		var ret string
 		return ret
 	}
@@ -345,7 +348,7 @@ func (o *SpanQuerySpanData) GetKind() string {
 // GetKindOk returns a tuple with the Kind field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetKindOk() (*string, bool) {
-	if o == nil || o.Kind == nil {
+	if o == nil || IsNil(o.Kind) {
 		return nil, false
 	}
 	return o.Kind, true
@@ -353,7 +356,7 @@ func (o *SpanQuerySpanData) GetKindOk() (*string, bool) {
 
 // HasKind returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasKind() bool {
-	if o != nil && o.Kind != nil {
+	if o != nil && !IsNil(o.Kind) {
 		return true
 	}
 
@@ -367,7 +370,7 @@ func (o *SpanQuerySpanData) SetKind(v string) {
 
 // GetTagsJSON returns the TagsJSON field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetTagsJSON() string {
-	if o == nil || o.TagsJSON == nil {
+	if o == nil || IsNil(o.TagsJSON) {
 		var ret string
 		return ret
 	}
@@ -377,7 +380,7 @@ func (o *SpanQuerySpanData) GetTagsJSON() string {
 // GetTagsJSONOk returns a tuple with the TagsJSON field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetTagsJSONOk() (*string, bool) {
-	if o == nil || o.TagsJSON == nil {
+	if o == nil || IsNil(o.TagsJSON) {
 		return nil, false
 	}
 	return o.TagsJSON, true
@@ -385,7 +388,7 @@ func (o *SpanQuerySpanData) GetTagsJSONOk() (*string, bool) {
 
 // HasTagsJSON returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasTagsJSON() bool {
-	if o != nil && o.TagsJSON != nil {
+	if o != nil && !IsNil(o.TagsJSON) {
 		return true
 	}
 
@@ -399,7 +402,7 @@ func (o *SpanQuerySpanData) SetTagsJSON(v string) {
 
 // GetMetadata returns the Metadata field value if set, zero value otherwise.
 func (o *SpanQuerySpanData) GetMetadata() map[string]string {
-	if o == nil || o.Metadata == nil {
+	if o == nil || IsNil(o.Metadata) {
 		var ret map[string]string
 		return ret
 	}
@@ -409,7 +412,7 @@ func (o *SpanQuerySpanData) GetMetadata() map[string]string {
 // GetMetadataOk returns a tuple with the Metadata field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQuerySpanData) GetMetadataOk() (*map[string]string, bool) {
-	if o == nil || o.Metadata == nil {
+	if o == nil || IsNil(o.Metadata) {
 		return nil, false
 	}
 	return o.Metadata, true
@@ -417,7 +420,7 @@ func (o *SpanQuerySpanData) GetMetadataOk() (*map[string]string, bool) {
 
 // HasMetadata returns a boolean if a field has been set.
 func (o *SpanQuerySpanData) HasMetadata() bool {
-	if o != nil && o.Metadata != nil {
+	if o != nil && !IsNil(o.Metadata) {
 		return true
 	}
 
@@ -430,44 +433,48 @@ func (o *SpanQuerySpanData) SetMetadata(v map[string]string) {
 }
 
 func (o SpanQuerySpanData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SpanId != nil {
-		toSerialize["spanId"] = o.SpanId
-	}
-	if o.TraceId != nil {
-		toSerialize["traceId"] = o.TraceId
-	}
-	if o.ParentSpanId != nil {
-		toSerialize["parentSpanId"] = o.ParentSpanId
-	}
-	if o.OperationName != nil {
-		toSerialize["operationName"] = o.OperationName
-	}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.RemoteService != nil {
-		toSerialize["remoteService"] = o.RemoteService
-	}
-	if true {
-		toSerialize["duration"] = o.Duration
-	}
-	if true {
-		toSerialize["startedAt"] = o.StartedAt
-	}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if o.Kind != nil {
-		toSerialize["kind"] = o.Kind
-	}
-	if o.TagsJSON != nil {
-		toSerialize["tagsJSON"] = o.TagsJSON
-	}
-	if o.Metadata != nil {
-		toSerialize["metadata"] = o.Metadata
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQuerySpanData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SpanId) {
+		toSerialize["spanId"] = o.SpanId
+	}
+	if !IsNil(o.TraceId) {
+		toSerialize["traceId"] = o.TraceId
+	}
+	if !IsNil(o.ParentSpanId) {
+		toSerialize["parentSpanId"] = o.ParentSpanId
+	}
+	if !IsNil(o.OperationName) {
+		toSerialize["operationName"] = o.OperationName
+	}
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.RemoteService) {
+		toSerialize["remoteService"] = o.RemoteService
+	}
+	toSerialize["duration"] = o.Duration
+	toSerialize["startedAt"] = o.StartedAt
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.Kind) {
+		toSerialize["kind"] = o.Kind
+	}
+	if !IsNil(o.TagsJSON) {
+		toSerialize["tagsJSON"] = o.TagsJSON
+	}
+	if !IsNil(o.Metadata) {
+		toSerialize["metadata"] = o.Metadata
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQuerySpanData struct {

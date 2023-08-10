@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,8 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the AlertsListPageResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsListPageResponse{}
+
 // AlertsListPageResponse List of Alert list page objects.
 type AlertsListPageResponse struct {
+	// List of alerts summaries.
 	Data []AlertsListPageObject `json:"data,omitempty"`
 }
 
@@ -38,7 +42,7 @@ func NewAlertsListPageResponseWithDefaults() *AlertsListPageResponse {
 
 // GetData returns the Data field value if set, zero value otherwise.
 func (o *AlertsListPageResponse) GetData() []AlertsListPageObject {
-	if o == nil || o.Data == nil {
+	if o == nil || IsNil(o.Data) {
 		var ret []AlertsListPageObject
 		return ret
 	}
@@ -48,7 +52,7 @@ func (o *AlertsListPageResponse) GetData() []AlertsListPageObject {
 // GetDataOk returns a tuple with the Data field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageResponse) GetDataOk() ([]AlertsListPageObject, bool) {
-	if o == nil || o.Data == nil {
+	if o == nil || IsNil(o.Data) {
 		return nil, false
 	}
 	return o.Data, true
@@ -56,7 +60,7 @@ func (o *AlertsListPageResponse) GetDataOk() ([]AlertsListPageObject, bool) {
 
 // HasData returns a boolean if a field has been set.
 func (o *AlertsListPageResponse) HasData() bool {
-	if o != nil && o.Data != nil {
+	if o != nil && !IsNil(o.Data) {
 		return true
 	}
 
@@ -69,11 +73,19 @@ func (o *AlertsListPageResponse) SetData(v []AlertsListPageObject) {
 }
 
 func (o AlertsListPageResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Data != nil {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertsListPageResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Data) {
+		toSerialize["data"] = o.Data
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertsListPageResponse struct {

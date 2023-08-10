@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,11 @@ import (
 	"encoding/json"
 )
 
+// checks if the VisualOutlierData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualOutlierData{}
+
 // VisualOutlierData struct for VisualOutlierData
 type VisualOutlierData struct {
-	// A measure of how anomalous the data point is.
-	AnomalyScore float64 `json:"anomalyScore"`
 	// The estimated value of the data point.
 	Baseline float64 `json:"baseline"`
 	// The variation in the estimated value of the data point.
@@ -34,9 +35,8 @@ type VisualOutlierData struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVisualOutlierData(anomalyScore float64, baseline float64, unit float64, lowerBound float64, upperBound float64, isOutlier bool) *VisualOutlierData {
+func NewVisualOutlierData(baseline float64, unit float64, lowerBound float64, upperBound float64, isOutlier bool) *VisualOutlierData {
 	this := VisualOutlierData{}
-	this.AnomalyScore = anomalyScore
 	this.Baseline = baseline
 	this.Unit = unit
 	this.LowerBound = lowerBound
@@ -51,30 +51,6 @@ func NewVisualOutlierData(anomalyScore float64, baseline float64, unit float64, 
 func NewVisualOutlierDataWithDefaults() *VisualOutlierData {
 	this := VisualOutlierData{}
 	return &this
-}
-
-// GetAnomalyScore returns the AnomalyScore field value
-func (o *VisualOutlierData) GetAnomalyScore() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.AnomalyScore
-}
-
-// GetAnomalyScoreOk returns a tuple with the AnomalyScore field value
-// and a boolean to check if the value has been set.
-func (o *VisualOutlierData) GetAnomalyScoreOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.AnomalyScore, true
-}
-
-// SetAnomalyScore sets field value
-func (o *VisualOutlierData) SetAnomalyScore(v float64) {
-	o.AnomalyScore = v
 }
 
 // GetBaseline returns the Baseline field value
@@ -198,26 +174,21 @@ func (o *VisualOutlierData) SetIsOutlier(v bool) {
 }
 
 func (o VisualOutlierData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["anomalyScore"] = o.AnomalyScore
-	}
-	if true {
-		toSerialize["baseline"] = o.Baseline
-	}
-	if true {
-		toSerialize["unit"] = o.Unit
-	}
-	if true {
-		toSerialize["lowerBound"] = o.LowerBound
-	}
-	if true {
-		toSerialize["upperBound"] = o.UpperBound
-	}
-	if true {
-		toSerialize["isOutlier"] = o.IsOutlier
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualOutlierData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["baseline"] = o.Baseline
+	toSerialize["unit"] = o.Unit
+	toSerialize["lowerBound"] = o.LowerBound
+	toSerialize["upperBound"] = o.UpperBound
+	toSerialize["isOutlier"] = o.IsOutlier
+	return toSerialize, nil
 }
 
 type NullableVisualOutlierData struct {

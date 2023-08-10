@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the NoTraceFieldValuesReason type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &NoTraceFieldValuesReason{}
 
 // NoTraceFieldValuesReason struct for NoTraceFieldValuesReason
 type NoTraceFieldValuesReason struct {
@@ -90,14 +93,18 @@ func (o *NoTraceFieldValuesReason) SetMessage(v string) {
 }
 
 func (o NoTraceFieldValuesReason) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["code"] = o.Code
-	}
-	if true {
-		toSerialize["message"] = o.Message
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o NoTraceFieldValuesReason) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["code"] = o.Code
+	toSerialize["message"] = o.Message
+	return toSerialize, nil
 }
 
 type NullableNoTraceFieldValuesReason struct {

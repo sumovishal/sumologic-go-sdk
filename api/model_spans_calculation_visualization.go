@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansCalculationVisualization type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansCalculationVisualization{}
 
 // SpansCalculationVisualization struct for SpansCalculationVisualization
 type SpansCalculationVisualization struct {
@@ -92,22 +95,26 @@ func (o *SpansCalculationVisualization) SetAggregator(v SpanCalculationAggregato
 }
 
 func (o SpansCalculationVisualization) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpansCalculationVisualization) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpansVisualization, errSpansVisualization := json.Marshal(o.SpansVisualization)
 	if errSpansVisualization != nil {
-		return []byte{}, errSpansVisualization
+		return map[string]interface{}{}, errSpansVisualization
 	}
 	errSpansVisualization = json.Unmarshal([]byte(serializedSpansVisualization), &toSerialize)
 	if errSpansVisualization != nil {
-		return []byte{}, errSpansVisualization
+		return map[string]interface{}{}, errSpansVisualization
 	}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if true {
-		toSerialize["aggregator"] = o.Aggregator
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["field"] = o.Field
+	toSerialize["aggregator"] = o.Aggregator
+	return toSerialize, nil
 }
 
 type NullableSpansCalculationVisualization struct {

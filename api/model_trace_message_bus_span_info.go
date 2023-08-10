@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceMessageBusSpanInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceMessageBusSpanInfo{}
 
 // TraceMessageBusSpanInfo struct for TraceMessageBusSpanInfo
 type TraceMessageBusSpanInfo struct {
@@ -41,7 +44,7 @@ func NewTraceMessageBusSpanInfoWithDefaults() *TraceMessageBusSpanInfo {
 
 // GetDestination returns the Destination field value if set, zero value otherwise.
 func (o *TraceMessageBusSpanInfo) GetDestination() string {
-	if o == nil || o.Destination == nil {
+	if o == nil || IsNil(o.Destination) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *TraceMessageBusSpanInfo) GetDestination() string {
 // GetDestinationOk returns a tuple with the Destination field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceMessageBusSpanInfo) GetDestinationOk() (*string, bool) {
-	if o == nil || o.Destination == nil {
+	if o == nil || IsNil(o.Destination) {
 		return nil, false
 	}
 	return o.Destination, true
@@ -59,7 +62,7 @@ func (o *TraceMessageBusSpanInfo) GetDestinationOk() (*string, bool) {
 
 // HasDestination returns a boolean if a field has been set.
 func (o *TraceMessageBusSpanInfo) HasDestination() bool {
-	if o != nil && o.Destination != nil {
+	if o != nil && !IsNil(o.Destination) {
 		return true
 	}
 
@@ -72,19 +75,27 @@ func (o *TraceMessageBusSpanInfo) SetDestination(v string) {
 }
 
 func (o TraceMessageBusSpanInfo) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o TraceMessageBusSpanInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTraceSpanInfo, errTraceSpanInfo := json.Marshal(o.TraceSpanInfo)
 	if errTraceSpanInfo != nil {
-		return []byte{}, errTraceSpanInfo
+		return map[string]interface{}{}, errTraceSpanInfo
 	}
 	errTraceSpanInfo = json.Unmarshal([]byte(serializedTraceSpanInfo), &toSerialize)
 	if errTraceSpanInfo != nil {
-		return []byte{}, errTraceSpanInfo
+		return map[string]interface{}{}, errTraceSpanInfo
 	}
-	if o.Destination != nil {
+	if !IsNil(o.Destination) {
 		toSerialize["destination"] = o.Destination
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTraceMessageBusSpanInfo struct {

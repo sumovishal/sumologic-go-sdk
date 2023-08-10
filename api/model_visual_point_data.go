@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VisualPointData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualPointData{}
 
 // VisualPointData struct for VisualPointData
 type VisualPointData struct {
@@ -51,7 +54,7 @@ func NewVisualPointDataWithDefaults() *VisualPointData {
 
 // GetX returns the X field value if set, zero value otherwise.
 func (o *VisualPointData) GetX() float64 {
-	if o == nil || o.X == nil {
+	if o == nil || IsNil(o.X) {
 		var ret float64
 		return ret
 	}
@@ -61,7 +64,7 @@ func (o *VisualPointData) GetX() float64 {
 // GetXOk returns a tuple with the X field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualPointData) GetXOk() (*float64, bool) {
-	if o == nil || o.X == nil {
+	if o == nil || IsNil(o.X) {
 		return nil, false
 	}
 	return o.X, true
@@ -69,7 +72,7 @@ func (o *VisualPointData) GetXOk() (*float64, bool) {
 
 // HasX returns a boolean if a field has been set.
 func (o *VisualPointData) HasX() bool {
-	if o != nil && o.X != nil {
+	if o != nil && !IsNil(o.X) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *VisualPointData) SetY(v string) {
 
 // GetIsFilled returns the IsFilled field value if set, zero value otherwise.
 func (o *VisualPointData) GetIsFilled() bool {
-	if o == nil || o.IsFilled == nil {
+	if o == nil || IsNil(o.IsFilled) {
 		var ret bool
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *VisualPointData) GetIsFilled() bool {
 // GetIsFilledOk returns a tuple with the IsFilled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualPointData) GetIsFilledOk() (*bool, bool) {
-	if o == nil || o.IsFilled == nil {
+	if o == nil || IsNil(o.IsFilled) {
 		return nil, false
 	}
 	return o.IsFilled, true
@@ -125,7 +128,7 @@ func (o *VisualPointData) GetIsFilledOk() (*bool, bool) {
 
 // HasIsFilled returns a boolean if a field has been set.
 func (o *VisualPointData) HasIsFilled() bool {
-	if o != nil && o.IsFilled != nil {
+	if o != nil && !IsNil(o.IsFilled) {
 		return true
 	}
 
@@ -139,7 +142,7 @@ func (o *VisualPointData) SetIsFilled(v bool) {
 
 // GetXAxisValues returns the XAxisValues field value if set, zero value otherwise.
 func (o *VisualPointData) GetXAxisValues() map[string]string {
-	if o == nil || o.XAxisValues == nil {
+	if o == nil || IsNil(o.XAxisValues) {
 		var ret map[string]string
 		return ret
 	}
@@ -149,7 +152,7 @@ func (o *VisualPointData) GetXAxisValues() map[string]string {
 // GetXAxisValuesOk returns a tuple with the XAxisValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualPointData) GetXAxisValuesOk() (*map[string]string, bool) {
-	if o == nil || o.XAxisValues == nil {
+	if o == nil || IsNil(o.XAxisValues) {
 		return nil, false
 	}
 	return o.XAxisValues, true
@@ -157,7 +160,7 @@ func (o *VisualPointData) GetXAxisValuesOk() (*map[string]string, bool) {
 
 // HasXAxisValues returns a boolean if a field has been set.
 func (o *VisualPointData) HasXAxisValues() bool {
-	if o != nil && o.XAxisValues != nil {
+	if o != nil && !IsNil(o.XAxisValues) {
 		return true
 	}
 
@@ -171,7 +174,7 @@ func (o *VisualPointData) SetXAxisValues(v map[string]string) {
 
 // GetOutlierData returns the OutlierData field value if set, zero value otherwise.
 func (o *VisualPointData) GetOutlierData() VisualOutlierData {
-	if o == nil || o.OutlierData == nil {
+	if o == nil || IsNil(o.OutlierData) {
 		var ret VisualOutlierData
 		return ret
 	}
@@ -181,7 +184,7 @@ func (o *VisualPointData) GetOutlierData() VisualOutlierData {
 // GetOutlierDataOk returns a tuple with the OutlierData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualPointData) GetOutlierDataOk() (*VisualOutlierData, bool) {
-	if o == nil || o.OutlierData == nil {
+	if o == nil || IsNil(o.OutlierData) {
 		return nil, false
 	}
 	return o.OutlierData, true
@@ -189,7 +192,7 @@ func (o *VisualPointData) GetOutlierDataOk() (*VisualOutlierData, bool) {
 
 // HasOutlierData returns a boolean if a field has been set.
 func (o *VisualPointData) HasOutlierData() bool {
-	if o != nil && o.OutlierData != nil {
+	if o != nil && !IsNil(o.OutlierData) {
 		return true
 	}
 
@@ -202,23 +205,29 @@ func (o *VisualPointData) SetOutlierData(v VisualOutlierData) {
 }
 
 func (o VisualPointData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.X != nil {
-		toSerialize["x"] = o.X
-	}
-	if true {
-		toSerialize["y"] = o.Y
-	}
-	if o.IsFilled != nil {
-		toSerialize["isFilled"] = o.IsFilled
-	}
-	if o.XAxisValues != nil {
-		toSerialize["xAxisValues"] = o.XAxisValues
-	}
-	if o.OutlierData != nil {
-		toSerialize["outlierData"] = o.OutlierData
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualPointData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.X) {
+		toSerialize["x"] = o.X
+	}
+	toSerialize["y"] = o.Y
+	if !IsNil(o.IsFilled) {
+		toSerialize["isFilled"] = o.IsFilled
+	}
+	if !IsNil(o.XAxisValues) {
+		toSerialize["xAxisValues"] = o.XAxisValues
+	}
+	if !IsNil(o.OutlierData) {
+		toSerialize["outlierData"] = o.OutlierData
+	}
+	return toSerialize, nil
 }
 
 type NullableVisualPointData struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Iso8601TimeRange type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Iso8601TimeRange{}
 
 // Iso8601TimeRange A simple time range class, where the start and end points are specified in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format 
 type Iso8601TimeRange struct {
@@ -91,14 +94,18 @@ func (o *Iso8601TimeRange) SetEnd(v time.Time) {
 }
 
 func (o Iso8601TimeRange) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["start"] = o.Start
-	}
-	if true {
-		toSerialize["end"] = o.End
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Iso8601TimeRange) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["start"] = o.Start
+	toSerialize["end"] = o.End
+	return toSerialize, nil
 }
 
 type NullableIso8601TimeRange struct {

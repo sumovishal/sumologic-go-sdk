@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Metadata type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Metadata{}
 
 // Metadata struct for Metadata
 type Metadata struct {
@@ -144,20 +147,20 @@ func (o *Metadata) SetModifiedBy(v string) {
 }
 
 func (o Metadata) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Metadata) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	return toSerialize, nil
 }
 
 type NullableMetadata struct {

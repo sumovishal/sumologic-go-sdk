@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsInvalidConfigurationTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsInvalidConfigurationTrackerAllOf{}
 
 // CSEWindowsInvalidConfigurationTrackerAllOf struct for CSEWindowsInvalidConfigurationTrackerAllOf
 type CSEWindowsInvalidConfigurationTrackerAllOf struct {
@@ -43,7 +46,7 @@ func NewCSEWindowsInvalidConfigurationTrackerAllOfWithDefaults() *CSEWindowsInva
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -61,7 +64,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorIdOk() (*string, b
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorHostname() string 
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -93,7 +96,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorHostnameOk() (*str
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) SetSensorHostname(v string)
 
 // GetSensorUserName returns the SensorUserName field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorUserName() string {
-	if o == nil || o.SensorUserName == nil {
+	if o == nil || IsNil(o.SensorUserName) {
 		var ret string
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorUserName() string 
 // GetSensorUserNameOk returns a tuple with the SensorUserName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorUserNameOk() (*string, bool) {
-	if o == nil || o.SensorUserName == nil {
+	if o == nil || IsNil(o.SensorUserName) {
 		return nil, false
 	}
 	return o.SensorUserName, true
@@ -125,7 +128,7 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) GetSensorUserNameOk() (*str
 
 // HasSensorUserName returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidConfigurationTrackerAllOf) HasSensorUserName() bool {
-	if o != nil && o.SensorUserName != nil {
+	if o != nil && !IsNil(o.SensorUserName) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *CSEWindowsInvalidConfigurationTrackerAllOf) SetSensorUserName(v string)
 }
 
 func (o CSEWindowsInvalidConfigurationTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SensorId != nil {
-		toSerialize["sensorId"] = o.SensorId
-	}
-	if o.SensorHostname != nil {
-		toSerialize["sensorHostname"] = o.SensorHostname
-	}
-	if o.SensorUserName != nil {
-		toSerialize["sensorUserName"] = o.SensorUserName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsInvalidConfigurationTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SensorId) {
+		toSerialize["sensorId"] = o.SensorId
+	}
+	if !IsNil(o.SensorHostname) {
+		toSerialize["sensorHostname"] = o.SensorHostname
+	}
+	if !IsNil(o.SensorUserName) {
+		toSerialize["sensorUserName"] = o.SensorUserName
+	}
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsInvalidConfigurationTrackerAllOf struct {

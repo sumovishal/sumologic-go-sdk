@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the FolderSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FolderSyncDefinitionAllOf{}
 
 // FolderSyncDefinitionAllOf struct for FolderSyncDefinitionAllOf
 type FolderSyncDefinitionAllOf struct {
@@ -42,7 +45,7 @@ func NewFolderSyncDefinitionAllOfWithDefaults() *FolderSyncDefinitionAllOf {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *FolderSyncDefinitionAllOf) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *FolderSyncDefinitionAllOf) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *FolderSyncDefinitionAllOf) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -60,7 +63,7 @@ func (o *FolderSyncDefinitionAllOf) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *FolderSyncDefinitionAllOf) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *FolderSyncDefinitionAllOf) SetChildren(v []ContentSyncDefinition) {
 }
 
 func (o FolderSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o FolderSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["children"] = o.Children
+	return toSerialize, nil
 }
 
 type NullableFolderSyncDefinitionAllOf struct {

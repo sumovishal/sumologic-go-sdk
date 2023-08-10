@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EmailSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EmailSearchNotificationSyncDefinition{}
 
 // EmailSearchNotificationSyncDefinition struct for EmailSearchNotificationSyncDefinition
 type EmailSearchNotificationSyncDefinition struct {
@@ -92,7 +95,7 @@ func (o *EmailSearchNotificationSyncDefinition) SetToList(v []string) {
 
 // GetSubjectTemplate returns the SubjectTemplate field value if set, zero value otherwise.
 func (o *EmailSearchNotificationSyncDefinition) GetSubjectTemplate() string {
-	if o == nil || o.SubjectTemplate == nil {
+	if o == nil || IsNil(o.SubjectTemplate) {
 		var ret string
 		return ret
 	}
@@ -102,7 +105,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetSubjectTemplate() string {
 // GetSubjectTemplateOk returns a tuple with the SubjectTemplate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailSearchNotificationSyncDefinition) GetSubjectTemplateOk() (*string, bool) {
-	if o == nil || o.SubjectTemplate == nil {
+	if o == nil || IsNil(o.SubjectTemplate) {
 		return nil, false
 	}
 	return o.SubjectTemplate, true
@@ -110,7 +113,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetSubjectTemplateOk() (*string,
 
 // HasSubjectTemplate returns a boolean if a field has been set.
 func (o *EmailSearchNotificationSyncDefinition) HasSubjectTemplate() bool {
-	if o != nil && o.SubjectTemplate != nil {
+	if o != nil && !IsNil(o.SubjectTemplate) {
 		return true
 	}
 
@@ -124,7 +127,7 @@ func (o *EmailSearchNotificationSyncDefinition) SetSubjectTemplate(v string) {
 
 // GetIncludeQuery returns the IncludeQuery field value if set, zero value otherwise.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeQuery() bool {
-	if o == nil || o.IncludeQuery == nil {
+	if o == nil || IsNil(o.IncludeQuery) {
 		var ret bool
 		return ret
 	}
@@ -134,7 +137,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeQuery() bool {
 // GetIncludeQueryOk returns a tuple with the IncludeQuery field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeQueryOk() (*bool, bool) {
-	if o == nil || o.IncludeQuery == nil {
+	if o == nil || IsNil(o.IncludeQuery) {
 		return nil, false
 	}
 	return o.IncludeQuery, true
@@ -142,7 +145,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeQueryOk() (*bool, bool
 
 // HasIncludeQuery returns a boolean if a field has been set.
 func (o *EmailSearchNotificationSyncDefinition) HasIncludeQuery() bool {
-	if o != nil && o.IncludeQuery != nil {
+	if o != nil && !IsNil(o.IncludeQuery) {
 		return true
 	}
 
@@ -156,7 +159,7 @@ func (o *EmailSearchNotificationSyncDefinition) SetIncludeQuery(v bool) {
 
 // GetIncludeResultSet returns the IncludeResultSet field value if set, zero value otherwise.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeResultSet() bool {
-	if o == nil || o.IncludeResultSet == nil {
+	if o == nil || IsNil(o.IncludeResultSet) {
 		var ret bool
 		return ret
 	}
@@ -166,7 +169,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeResultSet() bool {
 // GetIncludeResultSetOk returns a tuple with the IncludeResultSet field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeResultSetOk() (*bool, bool) {
-	if o == nil || o.IncludeResultSet == nil {
+	if o == nil || IsNil(o.IncludeResultSet) {
 		return nil, false
 	}
 	return o.IncludeResultSet, true
@@ -174,7 +177,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeResultSetOk() (*bool, 
 
 // HasIncludeResultSet returns a boolean if a field has been set.
 func (o *EmailSearchNotificationSyncDefinition) HasIncludeResultSet() bool {
-	if o != nil && o.IncludeResultSet != nil {
+	if o != nil && !IsNil(o.IncludeResultSet) {
 		return true
 	}
 
@@ -188,7 +191,7 @@ func (o *EmailSearchNotificationSyncDefinition) SetIncludeResultSet(v bool) {
 
 // GetIncludeHistogram returns the IncludeHistogram field value if set, zero value otherwise.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeHistogram() bool {
-	if o == nil || o.IncludeHistogram == nil {
+	if o == nil || IsNil(o.IncludeHistogram) {
 		var ret bool
 		return ret
 	}
@@ -198,7 +201,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeHistogram() bool {
 // GetIncludeHistogramOk returns a tuple with the IncludeHistogram field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeHistogramOk() (*bool, bool) {
-	if o == nil || o.IncludeHistogram == nil {
+	if o == nil || IsNil(o.IncludeHistogram) {
 		return nil, false
 	}
 	return o.IncludeHistogram, true
@@ -206,7 +209,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeHistogramOk() (*bool, 
 
 // HasIncludeHistogram returns a boolean if a field has been set.
 func (o *EmailSearchNotificationSyncDefinition) HasIncludeHistogram() bool {
-	if o != nil && o.IncludeHistogram != nil {
+	if o != nil && !IsNil(o.IncludeHistogram) {
 		return true
 	}
 
@@ -220,7 +223,7 @@ func (o *EmailSearchNotificationSyncDefinition) SetIncludeHistogram(v bool) {
 
 // GetIncludeCsvAttachment returns the IncludeCsvAttachment field value if set, zero value otherwise.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeCsvAttachment() bool {
-	if o == nil || o.IncludeCsvAttachment == nil {
+	if o == nil || IsNil(o.IncludeCsvAttachment) {
 		var ret bool
 		return ret
 	}
@@ -230,7 +233,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeCsvAttachment() bool {
 // GetIncludeCsvAttachmentOk returns a tuple with the IncludeCsvAttachment field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailSearchNotificationSyncDefinition) GetIncludeCsvAttachmentOk() (*bool, bool) {
-	if o == nil || o.IncludeCsvAttachment == nil {
+	if o == nil || IsNil(o.IncludeCsvAttachment) {
 		return nil, false
 	}
 	return o.IncludeCsvAttachment, true
@@ -238,7 +241,7 @@ func (o *EmailSearchNotificationSyncDefinition) GetIncludeCsvAttachmentOk() (*bo
 
 // HasIncludeCsvAttachment returns a boolean if a field has been set.
 func (o *EmailSearchNotificationSyncDefinition) HasIncludeCsvAttachment() bool {
-	if o != nil && o.IncludeCsvAttachment != nil {
+	if o != nil && !IsNil(o.IncludeCsvAttachment) {
 		return true
 	}
 
@@ -251,34 +254,40 @@ func (o *EmailSearchNotificationSyncDefinition) SetIncludeCsvAttachment(v bool) 
 }
 
 func (o EmailSearchNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o EmailSearchNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedScheduleNotificationSyncDefinition, errScheduleNotificationSyncDefinition := json.Marshal(o.ScheduleNotificationSyncDefinition)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	errScheduleNotificationSyncDefinition = json.Unmarshal([]byte(serializedScheduleNotificationSyncDefinition), &toSerialize)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
-	if true {
-		toSerialize["toList"] = o.ToList
-	}
-	if o.SubjectTemplate != nil {
+	toSerialize["toList"] = o.ToList
+	if !IsNil(o.SubjectTemplate) {
 		toSerialize["subjectTemplate"] = o.SubjectTemplate
 	}
-	if o.IncludeQuery != nil {
+	if !IsNil(o.IncludeQuery) {
 		toSerialize["includeQuery"] = o.IncludeQuery
 	}
-	if o.IncludeResultSet != nil {
+	if !IsNil(o.IncludeResultSet) {
 		toSerialize["includeResultSet"] = o.IncludeResultSet
 	}
-	if o.IncludeHistogram != nil {
+	if !IsNil(o.IncludeHistogram) {
 		toSerialize["includeHistogram"] = o.IncludeHistogram
 	}
-	if o.IncludeCsvAttachment != nil {
+	if !IsNil(o.IncludeCsvAttachment) {
 		toSerialize["includeCsvAttachment"] = o.IncludeCsvAttachment
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableEmailSearchNotificationSyncDefinition struct {

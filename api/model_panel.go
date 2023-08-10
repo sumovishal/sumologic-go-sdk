@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Panel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Panel{}
 
 // Panel struct for Panel
 type Panel struct {
@@ -55,7 +58,7 @@ func NewPanelWithDefaults() *Panel {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *Panel) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -65,7 +68,7 @@ func (o *Panel) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Panel) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -73,7 +76,7 @@ func (o *Panel) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *Panel) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -111,7 +114,7 @@ func (o *Panel) SetKey(v string) {
 
 // GetTitle returns the Title field value if set, zero value otherwise.
 func (o *Panel) GetTitle() string {
-	if o == nil || o.Title == nil {
+	if o == nil || IsNil(o.Title) {
 		var ret string
 		return ret
 	}
@@ -121,7 +124,7 @@ func (o *Panel) GetTitle() string {
 // GetTitleOk returns a tuple with the Title field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Panel) GetTitleOk() (*string, bool) {
-	if o == nil || o.Title == nil {
+	if o == nil || IsNil(o.Title) {
 		return nil, false
 	}
 	return o.Title, true
@@ -129,7 +132,7 @@ func (o *Panel) GetTitleOk() (*string, bool) {
 
 // HasTitle returns a boolean if a field has been set.
 func (o *Panel) HasTitle() bool {
-	if o != nil && o.Title != nil {
+	if o != nil && !IsNil(o.Title) {
 		return true
 	}
 
@@ -143,7 +146,7 @@ func (o *Panel) SetTitle(v string) {
 
 // GetVisualSettings returns the VisualSettings field value if set, zero value otherwise.
 func (o *Panel) GetVisualSettings() string {
-	if o == nil || o.VisualSettings == nil {
+	if o == nil || IsNil(o.VisualSettings) {
 		var ret string
 		return ret
 	}
@@ -153,7 +156,7 @@ func (o *Panel) GetVisualSettings() string {
 // GetVisualSettingsOk returns a tuple with the VisualSettings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Panel) GetVisualSettingsOk() (*string, bool) {
-	if o == nil || o.VisualSettings == nil {
+	if o == nil || IsNil(o.VisualSettings) {
 		return nil, false
 	}
 	return o.VisualSettings, true
@@ -161,7 +164,7 @@ func (o *Panel) GetVisualSettingsOk() (*string, bool) {
 
 // HasVisualSettings returns a boolean if a field has been set.
 func (o *Panel) HasVisualSettings() bool {
-	if o != nil && o.VisualSettings != nil {
+	if o != nil && !IsNil(o.VisualSettings) {
 		return true
 	}
 
@@ -175,7 +178,7 @@ func (o *Panel) SetVisualSettings(v string) {
 
 // GetKeepVisualSettingsConsistentWithParent returns the KeepVisualSettingsConsistentWithParent field value if set, zero value otherwise.
 func (o *Panel) GetKeepVisualSettingsConsistentWithParent() bool {
-	if o == nil || o.KeepVisualSettingsConsistentWithParent == nil {
+	if o == nil || IsNil(o.KeepVisualSettingsConsistentWithParent) {
 		var ret bool
 		return ret
 	}
@@ -185,7 +188,7 @@ func (o *Panel) GetKeepVisualSettingsConsistentWithParent() bool {
 // GetKeepVisualSettingsConsistentWithParentOk returns a tuple with the KeepVisualSettingsConsistentWithParent field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Panel) GetKeepVisualSettingsConsistentWithParentOk() (*bool, bool) {
-	if o == nil || o.KeepVisualSettingsConsistentWithParent == nil {
+	if o == nil || IsNil(o.KeepVisualSettingsConsistentWithParent) {
 		return nil, false
 	}
 	return o.KeepVisualSettingsConsistentWithParent, true
@@ -193,7 +196,7 @@ func (o *Panel) GetKeepVisualSettingsConsistentWithParentOk() (*bool, bool) {
 
 // HasKeepVisualSettingsConsistentWithParent returns a boolean if a field has been set.
 func (o *Panel) HasKeepVisualSettingsConsistentWithParent() bool {
-	if o != nil && o.KeepVisualSettingsConsistentWithParent != nil {
+	if o != nil && !IsNil(o.KeepVisualSettingsConsistentWithParent) {
 		return true
 	}
 
@@ -230,26 +233,30 @@ func (o *Panel) SetPanelType(v string) {
 }
 
 func (o Panel) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["key"] = o.Key
-	}
-	if o.Title != nil {
-		toSerialize["title"] = o.Title
-	}
-	if o.VisualSettings != nil {
-		toSerialize["visualSettings"] = o.VisualSettings
-	}
-	if o.KeepVisualSettingsConsistentWithParent != nil {
-		toSerialize["keepVisualSettingsConsistentWithParent"] = o.KeepVisualSettingsConsistentWithParent
-	}
-	if true {
-		toSerialize["panelType"] = o.PanelType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Panel) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	toSerialize["key"] = o.Key
+	if !IsNil(o.Title) {
+		toSerialize["title"] = o.Title
+	}
+	if !IsNil(o.VisualSettings) {
+		toSerialize["visualSettings"] = o.VisualSettings
+	}
+	if !IsNil(o.KeepVisualSettingsConsistentWithParent) {
+		toSerialize["keepVisualSettingsConsistentWithParent"] = o.KeepVisualSettingsConsistentWithParent
+	}
+	toSerialize["panelType"] = o.PanelType
+	return toSerialize, nil
 }
 
 type NullablePanel struct {

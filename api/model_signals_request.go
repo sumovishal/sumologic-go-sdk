@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SignalsRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SignalsRequest{}
 
 // SignalsRequest Signal Request object.
 type SignalsRequest struct {
@@ -89,14 +92,18 @@ func (o *SignalsRequest) SetSignalContext(v SignalContext) {
 }
 
 func (o SignalsRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["signalTypes"] = o.SignalTypes
-	}
-	if true {
-		toSerialize["signalContext"] = o.SignalContext
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SignalsRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["signalTypes"] = o.SignalTypes
+	toSerialize["signalContext"] = o.SignalContext
+	return toSerialize, nil
 }
 
 type NullableSignalsRequest struct {

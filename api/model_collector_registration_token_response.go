@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,8 +12,10 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
+
+// checks if the CollectorRegistrationTokenResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectorRegistrationTokenResponse{}
 
 // CollectorRegistrationTokenResponse struct for CollectorRegistrationTokenResponse
 type CollectorRegistrationTokenResponse struct {
@@ -75,19 +77,25 @@ func (o *CollectorRegistrationTokenResponse) SetEncodedTokenAndUrl(v string) {
 }
 
 func (o CollectorRegistrationTokenResponse) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CollectorRegistrationTokenResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTokenBaseResponse, errTokenBaseResponse := json.Marshal(o.TokenBaseResponse)
 	if errTokenBaseResponse != nil {
-		return []byte{}, errTokenBaseResponse
+		return map[string]interface{}{}, errTokenBaseResponse
 	}
 	errTokenBaseResponse = json.Unmarshal([]byte(serializedTokenBaseResponse), &toSerialize)
 	if errTokenBaseResponse != nil {
-		return []byte{}, errTokenBaseResponse
+		return map[string]interface{}{}, errTokenBaseResponse
 	}
-	if true {
-		toSerialize["encodedTokenAndUrl"] = o.EncodedTokenAndUrl
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["encodedTokenAndUrl"] = o.EncodedTokenAndUrl
+	return toSerialize, nil
 }
 
 type NullableCollectorRegistrationTokenResponse struct {

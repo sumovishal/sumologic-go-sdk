@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,17 @@ import (
 	"encoding/json"
 )
 
+// checks if the DashboardAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardAllOf{}
+
 // DashboardAllOf struct for DashboardAllOf
 type DashboardAllOf struct {
 	// Unique identifier for the dashboard. This id is used to get detailed information about the dashboard, such as panels, variables and the layout. 
 	Id *string `json:"id,omitempty"`
 	// Content identifier for the dashboard. This id is used to connect to the Sumo Content Library and get general metadata about the dashboard. Use this id if you want to search for dashboards in Sumo folders. 
 	ContentId *string `json:"contentId,omitempty"`
+	// Scheduled report identifier for the dashboard. Only most recently modified report schedule is rerun per dashboard. This id is used to manage the schedule details through the scheduled report API. 
+	ScheduleId *string `json:"scheduleId,omitempty"`
 }
 
 // NewDashboardAllOf instantiates a new DashboardAllOf object
@@ -41,7 +46,7 @@ func NewDashboardAllOfWithDefaults() *DashboardAllOf {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *DashboardAllOf) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -51,7 +56,7 @@ func (o *DashboardAllOf) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardAllOf) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -59,7 +64,7 @@ func (o *DashboardAllOf) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *DashboardAllOf) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -73,7 +78,7 @@ func (o *DashboardAllOf) SetId(v string) {
 
 // GetContentId returns the ContentId field value if set, zero value otherwise.
 func (o *DashboardAllOf) GetContentId() string {
-	if o == nil || o.ContentId == nil {
+	if o == nil || IsNil(o.ContentId) {
 		var ret string
 		return ret
 	}
@@ -83,7 +88,7 @@ func (o *DashboardAllOf) GetContentId() string {
 // GetContentIdOk returns a tuple with the ContentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardAllOf) GetContentIdOk() (*string, bool) {
-	if o == nil || o.ContentId == nil {
+	if o == nil || IsNil(o.ContentId) {
 		return nil, false
 	}
 	return o.ContentId, true
@@ -91,7 +96,7 @@ func (o *DashboardAllOf) GetContentIdOk() (*string, bool) {
 
 // HasContentId returns a boolean if a field has been set.
 func (o *DashboardAllOf) HasContentId() bool {
-	if o != nil && o.ContentId != nil {
+	if o != nil && !IsNil(o.ContentId) {
 		return true
 	}
 
@@ -103,15 +108,58 @@ func (o *DashboardAllOf) SetContentId(v string) {
 	o.ContentId = &v
 }
 
-func (o DashboardAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
+// GetScheduleId returns the ScheduleId field value if set, zero value otherwise.
+func (o *DashboardAllOf) GetScheduleId() string {
+	if o == nil || IsNil(o.ScheduleId) {
+		var ret string
+		return ret
 	}
-	if o.ContentId != nil {
-		toSerialize["contentId"] = o.ContentId
+	return *o.ScheduleId
+}
+
+// GetScheduleIdOk returns a tuple with the ScheduleId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardAllOf) GetScheduleIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ScheduleId) {
+		return nil, false
+	}
+	return o.ScheduleId, true
+}
+
+// HasScheduleId returns a boolean if a field has been set.
+func (o *DashboardAllOf) HasScheduleId() bool {
+	if o != nil && !IsNil(o.ScheduleId) {
+		return true
+	}
+
+	return false
+}
+
+// SetScheduleId gets a reference to the given string and assigns it to the ScheduleId field.
+func (o *DashboardAllOf) SetScheduleId(v string) {
+	o.ScheduleId = &v
+}
+
+func (o DashboardAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.ContentId) {
+		toSerialize["contentId"] = o.ContentId
+	}
+	if !IsNil(o.ScheduleId) {
+		toSerialize["scheduleId"] = o.ScheduleId
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardAllOf struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the MetricsMissingDataCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsMissingDataCondition{}
+
 // MetricsMissingDataCondition struct for MetricsMissingDataCondition
 type MetricsMissingDataCondition struct {
 	TriggerCondition
 	// Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. `AllTimeSeries`: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is `Metrics`)   2. `AnyTimeSeries`: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is `Metrics`)   3. `AllResults`: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is `Logs`)
 	TriggerSource string `json:"triggerSource"`
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 }
 
@@ -94,22 +97,26 @@ func (o *MetricsMissingDataCondition) SetTimeRange(v string) {
 }
 
 func (o MetricsMissingDataCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetricsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
-		toSerialize["triggerSource"] = o.TriggerSource
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["triggerSource"] = o.TriggerSource
+	toSerialize["timeRange"] = o.TimeRange
+	return toSerialize, nil
 }
 
 type NullableMetricsMissingDataCondition struct {

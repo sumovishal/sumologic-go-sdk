@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertSearchNotificationSyncDefinition{}
 
 // AlertSearchNotificationSyncDefinition struct for AlertSearchNotificationSyncDefinition
 type AlertSearchNotificationSyncDefinition struct {
@@ -65,19 +68,25 @@ func (o *AlertSearchNotificationSyncDefinition) SetSourceId(v string) {
 }
 
 func (o AlertSearchNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AlertSearchNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedScheduleNotificationSyncDefinition, errScheduleNotificationSyncDefinition := json.Marshal(o.ScheduleNotificationSyncDefinition)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	errScheduleNotificationSyncDefinition = json.Unmarshal([]byte(serializedScheduleNotificationSyncDefinition), &toSerialize)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
-	if true {
-		toSerialize["sourceId"] = o.SourceId
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["sourceId"] = o.SourceId
+	return toSerialize, nil
 }
 
 type NullableAlertSearchNotificationSyncDefinition struct {

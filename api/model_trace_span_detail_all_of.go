@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceSpanDetailAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceSpanDetailAllOf{}
 
 // TraceSpanDetailAllOf struct for TraceSpanDetailAllOf
 type TraceSpanDetailAllOf struct {
@@ -48,7 +51,7 @@ func NewTraceSpanDetailAllOfWithDefaults() *TraceSpanDetailAllOf {
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetErrorMessage() string {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -58,7 +61,7 @@ func (o *TraceSpanDetailAllOf) GetErrorMessage() string {
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetErrorMessageOk() (*string, bool) {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		return nil, false
 	}
 	return o.ErrorMessage, true
@@ -66,7 +69,7 @@ func (o *TraceSpanDetailAllOf) GetErrorMessageOk() (*string, bool) {
 
 // HasErrorMessage returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasErrorMessage() bool {
-	if o != nil && o.ErrorMessage != nil {
+	if o != nil && !IsNil(o.ErrorMessage) {
 		return true
 	}
 
@@ -80,7 +83,7 @@ func (o *TraceSpanDetailAllOf) SetErrorMessage(v string) {
 
 // GetFields returns the Fields field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetFields() map[string]TracingValue {
-	if o == nil || o.Fields == nil {
+	if o == nil || IsNil(o.Fields) {
 		var ret map[string]TracingValue
 		return ret
 	}
@@ -90,7 +93,7 @@ func (o *TraceSpanDetailAllOf) GetFields() map[string]TracingValue {
 // GetFieldsOk returns a tuple with the Fields field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetFieldsOk() (*map[string]TracingValue, bool) {
-	if o == nil || o.Fields == nil {
+	if o == nil || IsNil(o.Fields) {
 		return nil, false
 	}
 	return o.Fields, true
@@ -98,7 +101,7 @@ func (o *TraceSpanDetailAllOf) GetFieldsOk() (*map[string]TracingValue, bool) {
 
 // HasFields returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasFields() bool {
-	if o != nil && o.Fields != nil {
+	if o != nil && !IsNil(o.Fields) {
 		return true
 	}
 
@@ -112,7 +115,7 @@ func (o *TraceSpanDetailAllOf) SetFields(v map[string]TracingValue) {
 
 // GetCriticalPathContribution returns the CriticalPathContribution field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetCriticalPathContribution() TraceSpanCriticalPathContribution {
-	if o == nil || o.CriticalPathContribution == nil {
+	if o == nil || IsNil(o.CriticalPathContribution) {
 		var ret TraceSpanCriticalPathContribution
 		return ret
 	}
@@ -122,7 +125,7 @@ func (o *TraceSpanDetailAllOf) GetCriticalPathContribution() TraceSpanCriticalPa
 // GetCriticalPathContributionOk returns a tuple with the CriticalPathContribution field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetCriticalPathContributionOk() (*TraceSpanCriticalPathContribution, bool) {
-	if o == nil || o.CriticalPathContribution == nil {
+	if o == nil || IsNil(o.CriticalPathContribution) {
 		return nil, false
 	}
 	return o.CriticalPathContribution, true
@@ -130,7 +133,7 @@ func (o *TraceSpanDetailAllOf) GetCriticalPathContributionOk() (*TraceSpanCritic
 
 // HasCriticalPathContribution returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasCriticalPathContribution() bool {
-	if o != nil && o.CriticalPathContribution != nil {
+	if o != nil && !IsNil(o.CriticalPathContribution) {
 		return true
 	}
 
@@ -144,7 +147,7 @@ func (o *TraceSpanDetailAllOf) SetCriticalPathContribution(v TraceSpanCriticalPa
 
 // GetLogs returns the Logs field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetLogs() []string {
-	if o == nil || o.Logs == nil {
+	if o == nil || IsNil(o.Logs) {
 		var ret []string
 		return ret
 	}
@@ -154,7 +157,7 @@ func (o *TraceSpanDetailAllOf) GetLogs() []string {
 // GetLogsOk returns a tuple with the Logs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetLogsOk() ([]string, bool) {
-	if o == nil || o.Logs == nil {
+	if o == nil || IsNil(o.Logs) {
 		return nil, false
 	}
 	return o.Logs, true
@@ -162,7 +165,7 @@ func (o *TraceSpanDetailAllOf) GetLogsOk() ([]string, bool) {
 
 // HasLogs returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasLogs() bool {
-	if o != nil && o.Logs != nil {
+	if o != nil && !IsNil(o.Logs) {
 		return true
 	}
 
@@ -176,7 +179,7 @@ func (o *TraceSpanDetailAllOf) SetLogs(v []string) {
 
 // GetEvents returns the Events field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetEvents() []SpanEvent {
-	if o == nil || o.Events == nil {
+	if o == nil || IsNil(o.Events) {
 		var ret []SpanEvent
 		return ret
 	}
@@ -186,7 +189,7 @@ func (o *TraceSpanDetailAllOf) GetEvents() []SpanEvent {
 // GetEventsOk returns a tuple with the Events field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetEventsOk() ([]SpanEvent, bool) {
-	if o == nil || o.Events == nil {
+	if o == nil || IsNil(o.Events) {
 		return nil, false
 	}
 	return o.Events, true
@@ -194,7 +197,7 @@ func (o *TraceSpanDetailAllOf) GetEventsOk() ([]SpanEvent, bool) {
 
 // HasEvents returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasEvents() bool {
-	if o != nil && o.Events != nil {
+	if o != nil && !IsNil(o.Events) {
 		return true
 	}
 
@@ -208,7 +211,7 @@ func (o *TraceSpanDetailAllOf) SetEvents(v []SpanEvent) {
 
 // GetLinks returns the Links field value if set, zero value otherwise.
 func (o *TraceSpanDetailAllOf) GetLinks() []SpanLink {
-	if o == nil || o.Links == nil {
+	if o == nil || IsNil(o.Links) {
 		var ret []SpanLink
 		return ret
 	}
@@ -218,7 +221,7 @@ func (o *TraceSpanDetailAllOf) GetLinks() []SpanLink {
 // GetLinksOk returns a tuple with the Links field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpanDetailAllOf) GetLinksOk() ([]SpanLink, bool) {
-	if o == nil || o.Links == nil {
+	if o == nil || IsNil(o.Links) {
 		return nil, false
 	}
 	return o.Links, true
@@ -226,7 +229,7 @@ func (o *TraceSpanDetailAllOf) GetLinksOk() ([]SpanLink, bool) {
 
 // HasLinks returns a boolean if a field has been set.
 func (o *TraceSpanDetailAllOf) HasLinks() bool {
-	if o != nil && o.Links != nil {
+	if o != nil && !IsNil(o.Links) {
 		return true
 	}
 
@@ -239,26 +242,34 @@ func (o *TraceSpanDetailAllOf) SetLinks(v []SpanLink) {
 }
 
 func (o TraceSpanDetailAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ErrorMessage != nil {
-		toSerialize["errorMessage"] = o.ErrorMessage
-	}
-	if o.Fields != nil {
-		toSerialize["fields"] = o.Fields
-	}
-	if o.CriticalPathContribution != nil {
-		toSerialize["criticalPathContribution"] = o.CriticalPathContribution
-	}
-	if o.Logs != nil {
-		toSerialize["logs"] = o.Logs
-	}
-	if o.Events != nil {
-		toSerialize["events"] = o.Events
-	}
-	if o.Links != nil {
-		toSerialize["links"] = o.Links
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceSpanDetailAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ErrorMessage) {
+		toSerialize["errorMessage"] = o.ErrorMessage
+	}
+	if !IsNil(o.Fields) {
+		toSerialize["fields"] = o.Fields
+	}
+	if !IsNil(o.CriticalPathContribution) {
+		toSerialize["criticalPathContribution"] = o.CriticalPathContribution
+	}
+	if !IsNil(o.Logs) {
+		toSerialize["logs"] = o.Logs
+	}
+	if !IsNil(o.Events) {
+		toSerialize["events"] = o.Events
+	}
+	if !IsNil(o.Links) {
+		toSerialize["links"] = o.Links
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceSpanDetailAllOf struct {

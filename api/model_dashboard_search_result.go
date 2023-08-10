@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardSearchResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardSearchResult{}
 
 // DashboardSearchResult struct for DashboardSearchResult
 type DashboardSearchResult struct {
@@ -27,6 +30,9 @@ type DashboardSearchResult struct {
 	RequestToken *string `json:"requestToken,omitempty"`
 	// The expected ordering of the column fields in tabular format. If null or empty, the ordering is unknown or indeterminate. 
 	FieldOrdering []string `json:"fieldOrdering,omitempty"`
+	// The total number of scanned bytes from infrequent tier data for the query in bytes.
+	InfrequentScannedBytes *float32 `json:"infrequentScannedBytes,omitempty"`
+	ScannedBytes *ScannedBytes `json:"scannedBytes,omitempty"`
 }
 
 // NewDashboardSearchResult instantiates a new DashboardSearchResult object
@@ -123,7 +129,7 @@ func (o *DashboardSearchResult) SetSeries(v []VisualDataSeries) {
 
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *DashboardSearchResult) GetErrors() []ErrorDescription {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		var ret []ErrorDescription
 		return ret
 	}
@@ -133,7 +139,7 @@ func (o *DashboardSearchResult) GetErrors() []ErrorDescription {
 // GetErrorsOk returns a tuple with the Errors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchResult) GetErrorsOk() ([]ErrorDescription, bool) {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		return nil, false
 	}
 	return o.Errors, true
@@ -141,7 +147,7 @@ func (o *DashboardSearchResult) GetErrorsOk() ([]ErrorDescription, bool) {
 
 // HasErrors returns a boolean if a field has been set.
 func (o *DashboardSearchResult) HasErrors() bool {
-	if o != nil && o.Errors != nil {
+	if o != nil && !IsNil(o.Errors) {
 		return true
 	}
 
@@ -155,7 +161,7 @@ func (o *DashboardSearchResult) SetErrors(v []ErrorDescription) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *DashboardSearchResult) GetTimeRange() BeginBoundedTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret BeginBoundedTimeRange
 		return ret
 	}
@@ -165,7 +171,7 @@ func (o *DashboardSearchResult) GetTimeRange() BeginBoundedTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchResult) GetTimeRangeOk() (*BeginBoundedTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -173,7 +179,7 @@ func (o *DashboardSearchResult) GetTimeRangeOk() (*BeginBoundedTimeRange, bool) 
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *DashboardSearchResult) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -187,7 +193,7 @@ func (o *DashboardSearchResult) SetTimeRange(v BeginBoundedTimeRange) {
 
 // GetRequestToken returns the RequestToken field value if set, zero value otherwise.
 func (o *DashboardSearchResult) GetRequestToken() string {
-	if o == nil || o.RequestToken == nil {
+	if o == nil || IsNil(o.RequestToken) {
 		var ret string
 		return ret
 	}
@@ -197,7 +203,7 @@ func (o *DashboardSearchResult) GetRequestToken() string {
 // GetRequestTokenOk returns a tuple with the RequestToken field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchResult) GetRequestTokenOk() (*string, bool) {
-	if o == nil || o.RequestToken == nil {
+	if o == nil || IsNil(o.RequestToken) {
 		return nil, false
 	}
 	return o.RequestToken, true
@@ -205,7 +211,7 @@ func (o *DashboardSearchResult) GetRequestTokenOk() (*string, bool) {
 
 // HasRequestToken returns a boolean if a field has been set.
 func (o *DashboardSearchResult) HasRequestToken() bool {
-	if o != nil && o.RequestToken != nil {
+	if o != nil && !IsNil(o.RequestToken) {
 		return true
 	}
 
@@ -219,7 +225,7 @@ func (o *DashboardSearchResult) SetRequestToken(v string) {
 
 // GetFieldOrdering returns the FieldOrdering field value if set, zero value otherwise.
 func (o *DashboardSearchResult) GetFieldOrdering() []string {
-	if o == nil || o.FieldOrdering == nil {
+	if o == nil || IsNil(o.FieldOrdering) {
 		var ret []string
 		return ret
 	}
@@ -229,7 +235,7 @@ func (o *DashboardSearchResult) GetFieldOrdering() []string {
 // GetFieldOrderingOk returns a tuple with the FieldOrdering field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchResult) GetFieldOrderingOk() ([]string, bool) {
-	if o == nil || o.FieldOrdering == nil {
+	if o == nil || IsNil(o.FieldOrdering) {
 		return nil, false
 	}
 	return o.FieldOrdering, true
@@ -237,7 +243,7 @@ func (o *DashboardSearchResult) GetFieldOrderingOk() ([]string, bool) {
 
 // HasFieldOrdering returns a boolean if a field has been set.
 func (o *DashboardSearchResult) HasFieldOrdering() bool {
-	if o != nil && o.FieldOrdering != nil {
+	if o != nil && !IsNil(o.FieldOrdering) {
 		return true
 	}
 
@@ -249,30 +255,102 @@ func (o *DashboardSearchResult) SetFieldOrdering(v []string) {
 	o.FieldOrdering = v
 }
 
+// GetInfrequentScannedBytes returns the InfrequentScannedBytes field value if set, zero value otherwise.
+func (o *DashboardSearchResult) GetInfrequentScannedBytes() float32 {
+	if o == nil || IsNil(o.InfrequentScannedBytes) {
+		var ret float32
+		return ret
+	}
+	return *o.InfrequentScannedBytes
+}
+
+// GetInfrequentScannedBytesOk returns a tuple with the InfrequentScannedBytes field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardSearchResult) GetInfrequentScannedBytesOk() (*float32, bool) {
+	if o == nil || IsNil(o.InfrequentScannedBytes) {
+		return nil, false
+	}
+	return o.InfrequentScannedBytes, true
+}
+
+// HasInfrequentScannedBytes returns a boolean if a field has been set.
+func (o *DashboardSearchResult) HasInfrequentScannedBytes() bool {
+	if o != nil && !IsNil(o.InfrequentScannedBytes) {
+		return true
+	}
+
+	return false
+}
+
+// SetInfrequentScannedBytes gets a reference to the given float32 and assigns it to the InfrequentScannedBytes field.
+func (o *DashboardSearchResult) SetInfrequentScannedBytes(v float32) {
+	o.InfrequentScannedBytes = &v
+}
+
+// GetScannedBytes returns the ScannedBytes field value if set, zero value otherwise.
+func (o *DashboardSearchResult) GetScannedBytes() ScannedBytes {
+	if o == nil || IsNil(o.ScannedBytes) {
+		var ret ScannedBytes
+		return ret
+	}
+	return *o.ScannedBytes
+}
+
+// GetScannedBytesOk returns a tuple with the ScannedBytes field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardSearchResult) GetScannedBytesOk() (*ScannedBytes, bool) {
+	if o == nil || IsNil(o.ScannedBytes) {
+		return nil, false
+	}
+	return o.ScannedBytes, true
+}
+
+// HasScannedBytes returns a boolean if a field has been set.
+func (o *DashboardSearchResult) HasScannedBytes() bool {
+	if o != nil && !IsNil(o.ScannedBytes) {
+		return true
+	}
+
+	return false
+}
+
+// SetScannedBytes gets a reference to the given ScannedBytes and assigns it to the ScannedBytes field.
+func (o *DashboardSearchResult) SetScannedBytes(v ScannedBytes) {
+	o.ScannedBytes = &v
+}
+
 func (o DashboardSearchResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["axes"] = o.Axes
-	}
-	if true {
-		toSerialize["series"] = o.Series
-	}
-	if o.Errors != nil {
-		toSerialize["errors"] = o.Errors
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.RequestToken != nil {
-		toSerialize["requestToken"] = o.RequestToken
-	}
-	if o.FieldOrdering != nil {
-		toSerialize["fieldOrdering"] = o.FieldOrdering
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardSearchResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["status"] = o.Status
+	toSerialize["axes"] = o.Axes
+	toSerialize["series"] = o.Series
+	if !IsNil(o.Errors) {
+		toSerialize["errors"] = o.Errors
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	if !IsNil(o.RequestToken) {
+		toSerialize["requestToken"] = o.RequestToken
+	}
+	if !IsNil(o.FieldOrdering) {
+		toSerialize["fieldOrdering"] = o.FieldOrdering
+	}
+	if !IsNil(o.InfrequentScannedBytes) {
+		toSerialize["infrequentScannedBytes"] = o.InfrequentScannedBytes
+	}
+	if !IsNil(o.ScannedBytes) {
+		toSerialize["scannedBytes"] = o.ScannedBytes
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardSearchResult struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ColoringThreshold type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ColoringThreshold{}
 
 // ColoringThreshold struct for ColoringThreshold
 type ColoringThreshold struct {
@@ -68,7 +71,7 @@ func (o *ColoringThreshold) SetColor(v string) {
 
 // GetMin returns the Min field value if set, zero value otherwise.
 func (o *ColoringThreshold) GetMin() float64 {
-	if o == nil || o.Min == nil {
+	if o == nil || IsNil(o.Min) {
 		var ret float64
 		return ret
 	}
@@ -78,7 +81,7 @@ func (o *ColoringThreshold) GetMin() float64 {
 // GetMinOk returns a tuple with the Min field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ColoringThreshold) GetMinOk() (*float64, bool) {
-	if o == nil || o.Min == nil {
+	if o == nil || IsNil(o.Min) {
 		return nil, false
 	}
 	return o.Min, true
@@ -86,7 +89,7 @@ func (o *ColoringThreshold) GetMinOk() (*float64, bool) {
 
 // HasMin returns a boolean if a field has been set.
 func (o *ColoringThreshold) HasMin() bool {
-	if o != nil && o.Min != nil {
+	if o != nil && !IsNil(o.Min) {
 		return true
 	}
 
@@ -100,7 +103,7 @@ func (o *ColoringThreshold) SetMin(v float64) {
 
 // GetMax returns the Max field value if set, zero value otherwise.
 func (o *ColoringThreshold) GetMax() float64 {
-	if o == nil || o.Max == nil {
+	if o == nil || IsNil(o.Max) {
 		var ret float64
 		return ret
 	}
@@ -110,7 +113,7 @@ func (o *ColoringThreshold) GetMax() float64 {
 // GetMaxOk returns a tuple with the Max field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ColoringThreshold) GetMaxOk() (*float64, bool) {
-	if o == nil || o.Max == nil {
+	if o == nil || IsNil(o.Max) {
 		return nil, false
 	}
 	return o.Max, true
@@ -118,7 +121,7 @@ func (o *ColoringThreshold) GetMaxOk() (*float64, bool) {
 
 // HasMax returns a boolean if a field has been set.
 func (o *ColoringThreshold) HasMax() bool {
-	if o != nil && o.Max != nil {
+	if o != nil && !IsNil(o.Max) {
 		return true
 	}
 
@@ -131,17 +134,23 @@ func (o *ColoringThreshold) SetMax(v float64) {
 }
 
 func (o ColoringThreshold) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["color"] = o.Color
-	}
-	if o.Min != nil {
-		toSerialize["min"] = o.Min
-	}
-	if o.Max != nil {
-		toSerialize["max"] = o.Max
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ColoringThreshold) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["color"] = o.Color
+	if !IsNil(o.Min) {
+		toSerialize["min"] = o.Min
+	}
+	if !IsNil(o.Max) {
+		toSerialize["max"] = o.Max
+	}
+	return toSerialize, nil
 }
 
 type NullableColoringThreshold struct {

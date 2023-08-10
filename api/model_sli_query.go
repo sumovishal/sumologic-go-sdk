@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SliQuery type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SliQuery{}
 
 // SliQuery Group of queries to allow for query arithmetic.
 type SliQuery struct {
@@ -120,7 +123,7 @@ func (o *SliQuery) SetUseRowCount(v bool) {
 
 // GetField returns the Field field value if set, zero value otherwise.
 func (o *SliQuery) GetField() string {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		var ret string
 		return ret
 	}
@@ -130,7 +133,7 @@ func (o *SliQuery) GetField() string {
 // GetFieldOk returns a tuple with the Field field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SliQuery) GetFieldOk() (*string, bool) {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		return nil, false
 	}
 	return o.Field, true
@@ -138,7 +141,7 @@ func (o *SliQuery) GetFieldOk() (*string, bool) {
 
 // HasField returns a boolean if a field has been set.
 func (o *SliQuery) HasField() bool {
-	if o != nil && o.Field != nil {
+	if o != nil && !IsNil(o.Field) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *SliQuery) SetField(v string) {
 }
 
 func (o SliQuery) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["useRowCount"] = o.UseRowCount
-	}
-	if o.Field != nil {
-		toSerialize["field"] = o.Field
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SliQuery) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["query"] = o.Query
+	toSerialize["useRowCount"] = o.UseRowCount
+	if !IsNil(o.Field) {
+		toSerialize["field"] = o.Field
+	}
+	return toSerialize, nil
 }
 
 type NullableSliQuery struct {

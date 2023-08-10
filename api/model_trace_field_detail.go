@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the TraceFieldDetail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceFieldDetail{}
+
 // TraceFieldDetail struct for TraceFieldDetail
 type TraceFieldDetail struct {
 	// Filter field name.
 	Field string `json:"field"`
+	// Indicates the kind of a field. Possible values: `SpanAttribute`, `SpanEventAttribute`.
+	FieldType string `json:"fieldType"`
 	// Indicates whether values for this field can be listed.
 	ValueListing *bool `json:"valueListing,omitempty"`
 	// Short description of the field.
@@ -31,9 +36,10 @@ type TraceFieldDetail struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTraceFieldDetail(field string, type_ string) *TraceFieldDetail {
+func NewTraceFieldDetail(field string, fieldType string, type_ string) *TraceFieldDetail {
 	this := TraceFieldDetail{}
 	this.Field = field
+	this.FieldType = fieldType
 	this.Type = type_
 	return &this
 }
@@ -43,6 +49,8 @@ func NewTraceFieldDetail(field string, type_ string) *TraceFieldDetail {
 // but it doesn't guarantee that properties required by API are set
 func NewTraceFieldDetailWithDefaults() *TraceFieldDetail {
 	this := TraceFieldDetail{}
+	var fieldType string = "SpanAttribute"
+	this.FieldType = fieldType
 	return &this
 }
 
@@ -70,9 +78,33 @@ func (o *TraceFieldDetail) SetField(v string) {
 	o.Field = v
 }
 
+// GetFieldType returns the FieldType field value
+func (o *TraceFieldDetail) GetFieldType() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.FieldType
+}
+
+// GetFieldTypeOk returns a tuple with the FieldType field value
+// and a boolean to check if the value has been set.
+func (o *TraceFieldDetail) GetFieldTypeOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.FieldType, true
+}
+
+// SetFieldType sets field value
+func (o *TraceFieldDetail) SetFieldType(v string) {
+	o.FieldType = v
+}
+
 // GetValueListing returns the ValueListing field value if set, zero value otherwise.
 func (o *TraceFieldDetail) GetValueListing() bool {
-	if o == nil || o.ValueListing == nil {
+	if o == nil || IsNil(o.ValueListing) {
 		var ret bool
 		return ret
 	}
@@ -82,7 +114,7 @@ func (o *TraceFieldDetail) GetValueListing() bool {
 // GetValueListingOk returns a tuple with the ValueListing field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceFieldDetail) GetValueListingOk() (*bool, bool) {
-	if o == nil || o.ValueListing == nil {
+	if o == nil || IsNil(o.ValueListing) {
 		return nil, false
 	}
 	return o.ValueListing, true
@@ -90,7 +122,7 @@ func (o *TraceFieldDetail) GetValueListingOk() (*bool, bool) {
 
 // HasValueListing returns a boolean if a field has been set.
 func (o *TraceFieldDetail) HasValueListing() bool {
-	if o != nil && o.ValueListing != nil {
+	if o != nil && !IsNil(o.ValueListing) {
 		return true
 	}
 
@@ -104,7 +136,7 @@ func (o *TraceFieldDetail) SetValueListing(v bool) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TraceFieldDetail) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -114,7 +146,7 @@ func (o *TraceFieldDetail) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceFieldDetail) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -122,7 +154,7 @@ func (o *TraceFieldDetail) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TraceFieldDetail) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -160,7 +192,7 @@ func (o *TraceFieldDetail) SetType(v string) {
 
 // GetNoValuesReason returns the NoValuesReason field value if set, zero value otherwise.
 func (o *TraceFieldDetail) GetNoValuesReason() NoTraceFieldValuesReason {
-	if o == nil || o.NoValuesReason == nil {
+	if o == nil || IsNil(o.NoValuesReason) {
 		var ret NoTraceFieldValuesReason
 		return ret
 	}
@@ -170,7 +202,7 @@ func (o *TraceFieldDetail) GetNoValuesReason() NoTraceFieldValuesReason {
 // GetNoValuesReasonOk returns a tuple with the NoValuesReason field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceFieldDetail) GetNoValuesReasonOk() (*NoTraceFieldValuesReason, bool) {
-	if o == nil || o.NoValuesReason == nil {
+	if o == nil || IsNil(o.NoValuesReason) {
 		return nil, false
 	}
 	return o.NoValuesReason, true
@@ -178,7 +210,7 @@ func (o *TraceFieldDetail) GetNoValuesReasonOk() (*NoTraceFieldValuesReason, boo
 
 // HasNoValuesReason returns a boolean if a field has been set.
 func (o *TraceFieldDetail) HasNoValuesReason() bool {
-	if o != nil && o.NoValuesReason != nil {
+	if o != nil && !IsNil(o.NoValuesReason) {
 		return true
 	}
 
@@ -191,23 +223,28 @@ func (o *TraceFieldDetail) SetNoValuesReason(v NoTraceFieldValuesReason) {
 }
 
 func (o TraceFieldDetail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if o.ValueListing != nil {
-		toSerialize["valueListing"] = o.ValueListing
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if o.NoValuesReason != nil {
-		toSerialize["noValuesReason"] = o.NoValuesReason
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceFieldDetail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["field"] = o.Field
+	toSerialize["fieldType"] = o.FieldType
+	if !IsNil(o.ValueListing) {
+		toSerialize["valueListing"] = o.ValueListing
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["type"] = o.Type
+	if !IsNil(o.NoValuesReason) {
+		toSerialize["noValuesReason"] = o.NoValuesReason
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceFieldDetail struct {

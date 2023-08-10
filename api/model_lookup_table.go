@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the LookupTable type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupTable{}
 
 // LookupTable Lookup table definition and metadata.
 type LookupTable struct {
@@ -252,7 +255,7 @@ func (o *LookupTable) SetPrimaryKeys(v []string) {
 
 // GetTtl returns the Ttl field value if set, zero value otherwise.
 func (o *LookupTable) GetTtl() int32 {
-	if o == nil || o.Ttl == nil {
+	if o == nil || IsNil(o.Ttl) {
 		var ret int32
 		return ret
 	}
@@ -262,7 +265,7 @@ func (o *LookupTable) GetTtl() int32 {
 // GetTtlOk returns a tuple with the Ttl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTable) GetTtlOk() (*int32, bool) {
-	if o == nil || o.Ttl == nil {
+	if o == nil || IsNil(o.Ttl) {
 		return nil, false
 	}
 	return o.Ttl, true
@@ -270,7 +273,7 @@ func (o *LookupTable) GetTtlOk() (*int32, bool) {
 
 // HasTtl returns a boolean if a field has been set.
 func (o *LookupTable) HasTtl() bool {
-	if o != nil && o.Ttl != nil {
+	if o != nil && !IsNil(o.Ttl) {
 		return true
 	}
 
@@ -284,7 +287,7 @@ func (o *LookupTable) SetTtl(v int32) {
 
 // GetSizeLimitAction returns the SizeLimitAction field value if set, zero value otherwise.
 func (o *LookupTable) GetSizeLimitAction() string {
-	if o == nil || o.SizeLimitAction == nil {
+	if o == nil || IsNil(o.SizeLimitAction) {
 		var ret string
 		return ret
 	}
@@ -294,7 +297,7 @@ func (o *LookupTable) GetSizeLimitAction() string {
 // GetSizeLimitActionOk returns a tuple with the SizeLimitAction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTable) GetSizeLimitActionOk() (*string, bool) {
-	if o == nil || o.SizeLimitAction == nil {
+	if o == nil || IsNil(o.SizeLimitAction) {
 		return nil, false
 	}
 	return o.SizeLimitAction, true
@@ -302,7 +305,7 @@ func (o *LookupTable) GetSizeLimitActionOk() (*string, bool) {
 
 // HasSizeLimitAction returns a boolean if a field has been set.
 func (o *LookupTable) HasSizeLimitAction() bool {
-	if o != nil && o.SizeLimitAction != nil {
+	if o != nil && !IsNil(o.SizeLimitAction) {
 		return true
 	}
 
@@ -388,7 +391,7 @@ func (o *LookupTable) SetId(v string) {
 
 // GetContentPath returns the ContentPath field value if set, zero value otherwise.
 func (o *LookupTable) GetContentPath() string {
-	if o == nil || o.ContentPath == nil {
+	if o == nil || IsNil(o.ContentPath) {
 		var ret string
 		return ret
 	}
@@ -398,7 +401,7 @@ func (o *LookupTable) GetContentPath() string {
 // GetContentPathOk returns a tuple with the ContentPath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTable) GetContentPathOk() (*string, bool) {
-	if o == nil || o.ContentPath == nil {
+	if o == nil || IsNil(o.ContentPath) {
 		return nil, false
 	}
 	return o.ContentPath, true
@@ -406,7 +409,7 @@ func (o *LookupTable) GetContentPathOk() (*string, bool) {
 
 // HasContentPath returns a boolean if a field has been set.
 func (o *LookupTable) HasContentPath() bool {
-	if o != nil && o.ContentPath != nil {
+	if o != nil && !IsNil(o.ContentPath) {
 		return true
 	}
 
@@ -420,7 +423,7 @@ func (o *LookupTable) SetContentPath(v string) {
 
 // GetSize returns the Size field value if set, zero value otherwise.
 func (o *LookupTable) GetSize() int64 {
-	if o == nil || o.Size == nil {
+	if o == nil || IsNil(o.Size) {
 		var ret int64
 		return ret
 	}
@@ -430,7 +433,7 @@ func (o *LookupTable) GetSize() int64 {
 // GetSizeOk returns a tuple with the Size field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTable) GetSizeOk() (*int64, bool) {
-	if o == nil || o.Size == nil {
+	if o == nil || IsNil(o.Size) {
 		return nil, false
 	}
 	return o.Size, true
@@ -438,7 +441,7 @@ func (o *LookupTable) GetSizeOk() (*int64, bool) {
 
 // HasSize returns a boolean if a field has been set.
 func (o *LookupTable) HasSize() bool {
-	if o != nil && o.Size != nil {
+	if o != nil && !IsNil(o.Size) {
 		return true
 	}
 
@@ -451,50 +454,38 @@ func (o *LookupTable) SetSize(v int64) {
 }
 
 func (o LookupTable) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["fields"] = o.Fields
-	}
-	if true {
-		toSerialize["primaryKeys"] = o.PrimaryKeys
-	}
-	if o.Ttl != nil {
-		toSerialize["ttl"] = o.Ttl
-	}
-	if o.SizeLimitAction != nil {
-		toSerialize["sizeLimitAction"] = o.SizeLimitAction
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["parentFolderId"] = o.ParentFolderId
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.ContentPath != nil {
-		toSerialize["contentPath"] = o.ContentPath
-	}
-	if o.Size != nil {
-		toSerialize["size"] = o.Size
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupTable) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["description"] = o.Description
+	toSerialize["fields"] = o.Fields
+	toSerialize["primaryKeys"] = o.PrimaryKeys
+	if !IsNil(o.Ttl) {
+		toSerialize["ttl"] = o.Ttl
+	}
+	if !IsNil(o.SizeLimitAction) {
+		toSerialize["sizeLimitAction"] = o.SizeLimitAction
+	}
+	toSerialize["name"] = o.Name
+	toSerialize["parentFolderId"] = o.ParentFolderId
+	toSerialize["id"] = o.Id
+	if !IsNil(o.ContentPath) {
+		toSerialize["contentPath"] = o.ContentPath
+	}
+	if !IsNil(o.Size) {
+		toSerialize["size"] = o.Size
+	}
+	return toSerialize, nil
 }
 
 type NullableLookupTable struct {

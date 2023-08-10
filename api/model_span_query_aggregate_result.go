@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryAggregateResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryAggregateResult{}
 
 // SpanQueryAggregateResult struct for SpanQueryAggregateResult
 type SpanQueryAggregateResult struct {
@@ -69,7 +72,7 @@ func (o *SpanQueryAggregateResult) SetStatus(v string) {
 
 // GetStatusMessage returns the StatusMessage field value if set, zero value otherwise.
 func (o *SpanQueryAggregateResult) GetStatusMessage() string {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		var ret string
 		return ret
 	}
@@ -79,7 +82,7 @@ func (o *SpanQueryAggregateResult) GetStatusMessage() string {
 // GetStatusMessageOk returns a tuple with the StatusMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateResult) GetStatusMessageOk() (*string, bool) {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		return nil, false
 	}
 	return o.StatusMessage, true
@@ -87,7 +90,7 @@ func (o *SpanQueryAggregateResult) GetStatusMessageOk() (*string, bool) {
 
 // HasStatusMessage returns a boolean if a field has been set.
 func (o *SpanQueryAggregateResult) HasStatusMessage() bool {
-	if o != nil && o.StatusMessage != nil {
+	if o != nil && !IsNil(o.StatusMessage) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *SpanQueryAggregateResult) SetSeries(v []SpanQueryAggregateDataSeries) {
 }
 
 func (o SpanQueryAggregateResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessage != nil {
-		toSerialize["statusMessage"] = o.StatusMessage
-	}
-	if true {
-		toSerialize["series"] = o.Series
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryAggregateResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessage) {
+		toSerialize["statusMessage"] = o.StatusMessage
+	}
+	toSerialize["series"] = o.Series
+	return toSerialize, nil
 }
 
 type NullableSpanQueryAggregateResult struct {

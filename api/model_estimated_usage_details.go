@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EstimatedUsageDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EstimatedUsageDetails{}
 
 // EstimatedUsageDetails struct for EstimatedUsageDetails
 type EstimatedUsageDetails struct {
@@ -39,7 +42,7 @@ func NewEstimatedUsageDetailsWithDefaults() *EstimatedUsageDetails {
 
 // GetDataScannedInBytes returns the DataScannedInBytes field value if set, zero value otherwise.
 func (o *EstimatedUsageDetails) GetDataScannedInBytes() int64 {
-	if o == nil || o.DataScannedInBytes == nil {
+	if o == nil || IsNil(o.DataScannedInBytes) {
 		var ret int64
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *EstimatedUsageDetails) GetDataScannedInBytes() int64 {
 // GetDataScannedInBytesOk returns a tuple with the DataScannedInBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EstimatedUsageDetails) GetDataScannedInBytesOk() (*int64, bool) {
-	if o == nil || o.DataScannedInBytes == nil {
+	if o == nil || IsNil(o.DataScannedInBytes) {
 		return nil, false
 	}
 	return o.DataScannedInBytes, true
@@ -57,7 +60,7 @@ func (o *EstimatedUsageDetails) GetDataScannedInBytesOk() (*int64, bool) {
 
 // HasDataScannedInBytes returns a boolean if a field has been set.
 func (o *EstimatedUsageDetails) HasDataScannedInBytes() bool {
-	if o != nil && o.DataScannedInBytes != nil {
+	if o != nil && !IsNil(o.DataScannedInBytes) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *EstimatedUsageDetails) SetDataScannedInBytes(v int64) {
 }
 
 func (o EstimatedUsageDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DataScannedInBytes != nil {
-		toSerialize["dataScannedInBytes"] = o.DataScannedInBytes
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EstimatedUsageDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DataScannedInBytes) {
+		toSerialize["dataScannedInBytes"] = o.DataScannedInBytes
+	}
+	return toSerialize, nil
 }
 
 type NullableEstimatedUsageDetails struct {

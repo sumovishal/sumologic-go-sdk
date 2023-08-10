@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionInvalidFilePathTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionInvalidFilePathTrackerAllOf{}
 
 // CollectionInvalidFilePathTrackerAllOf struct for CollectionInvalidFilePathTrackerAllOf
 type CollectionInvalidFilePathTrackerAllOf struct {
@@ -39,7 +42,7 @@ func NewCollectionInvalidFilePathTrackerAllOfWithDefaults() *CollectionInvalidFi
 
 // GetPath returns the Path field value if set, zero value otherwise.
 func (o *CollectionInvalidFilePathTrackerAllOf) GetPath() string {
-	if o == nil || o.Path == nil {
+	if o == nil || IsNil(o.Path) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *CollectionInvalidFilePathTrackerAllOf) GetPath() string {
 // GetPathOk returns a tuple with the Path field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionInvalidFilePathTrackerAllOf) GetPathOk() (*string, bool) {
-	if o == nil || o.Path == nil {
+	if o == nil || IsNil(o.Path) {
 		return nil, false
 	}
 	return o.Path, true
@@ -57,7 +60,7 @@ func (o *CollectionInvalidFilePathTrackerAllOf) GetPathOk() (*string, bool) {
 
 // HasPath returns a boolean if a field has been set.
 func (o *CollectionInvalidFilePathTrackerAllOf) HasPath() bool {
-	if o != nil && o.Path != nil {
+	if o != nil && !IsNil(o.Path) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *CollectionInvalidFilePathTrackerAllOf) SetPath(v string) {
 }
 
 func (o CollectionInvalidFilePathTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Path != nil {
-		toSerialize["path"] = o.Path
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CollectionInvalidFilePathTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Path) {
+		toSerialize["path"] = o.Path
+	}
+	return toSerialize, nil
 }
 
 type NullableCollectionInvalidFilePathTrackerAllOf struct {

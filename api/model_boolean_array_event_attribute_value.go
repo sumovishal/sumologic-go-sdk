@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BooleanArrayEventAttributeValue type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BooleanArrayEventAttributeValue{}
 
 // BooleanArrayEventAttributeValue struct for BooleanArrayEventAttributeValue
 type BooleanArrayEventAttributeValue struct {
@@ -64,19 +67,25 @@ func (o *BooleanArrayEventAttributeValue) SetValues(v []bool) {
 }
 
 func (o BooleanArrayEventAttributeValue) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BooleanArrayEventAttributeValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedEventAttributeValue, errEventAttributeValue := json.Marshal(o.EventAttributeValue)
 	if errEventAttributeValue != nil {
-		return []byte{}, errEventAttributeValue
+		return map[string]interface{}{}, errEventAttributeValue
 	}
 	errEventAttributeValue = json.Unmarshal([]byte(serializedEventAttributeValue), &toSerialize)
 	if errEventAttributeValue != nil {
-		return []byte{}, errEventAttributeValue
+		return map[string]interface{}{}, errEventAttributeValue
 	}
-	if true {
-		toSerialize["values"] = o.Values
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["values"] = o.Values
+	return toSerialize, nil
 }
 
 type NullableBooleanArrayEventAttributeValue struct {

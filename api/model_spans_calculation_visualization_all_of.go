@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansCalculationVisualizationAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansCalculationVisualizationAllOf{}
 
 // SpansCalculationVisualizationAllOf Represents the visualization type where a specific aggregation by a particular field is  applied to all spans / all grouped spans. 
 type SpansCalculationVisualizationAllOf struct {
@@ -89,14 +92,18 @@ func (o *SpansCalculationVisualizationAllOf) SetAggregator(v SpanCalculationAggr
 }
 
 func (o SpansCalculationVisualizationAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if true {
-		toSerialize["aggregator"] = o.Aggregator
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansCalculationVisualizationAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["field"] = o.Field
+	toSerialize["aggregator"] = o.Aggregator
+	return toSerialize, nil
 }
 
 type NullableSpansCalculationVisualizationAllOf struct {

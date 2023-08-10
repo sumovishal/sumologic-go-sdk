@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MonitorSubscription type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorSubscription{}
 
 // MonitorSubscription The monitor subscription. Alerts can be filtered by a monitor subscription status.
 type MonitorSubscription struct {
@@ -39,7 +42,7 @@ func NewMonitorSubscriptionWithDefaults() *MonitorSubscription {
 
 // GetTargetId returns the TargetId field value if set, zero value otherwise.
 func (o *MonitorSubscription) GetTargetId() string {
-	if o == nil || o.TargetId == nil {
+	if o == nil || IsNil(o.TargetId) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *MonitorSubscription) GetTargetId() string {
 // GetTargetIdOk returns a tuple with the TargetId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorSubscription) GetTargetIdOk() (*string, bool) {
-	if o == nil || o.TargetId == nil {
+	if o == nil || IsNil(o.TargetId) {
 		return nil, false
 	}
 	return o.TargetId, true
@@ -57,7 +60,7 @@ func (o *MonitorSubscription) GetTargetIdOk() (*string, bool) {
 
 // HasTargetId returns a boolean if a field has been set.
 func (o *MonitorSubscription) HasTargetId() bool {
-	if o != nil && o.TargetId != nil {
+	if o != nil && !IsNil(o.TargetId) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *MonitorSubscription) SetTargetId(v string) {
 }
 
 func (o MonitorSubscription) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.TargetId != nil {
-		toSerialize["targetId"] = o.TargetId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorSubscription) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.TargetId) {
+		toSerialize["targetId"] = o.TargetId
+	}
+	return toSerialize, nil
 }
 
 type NullableMonitorSubscription struct {

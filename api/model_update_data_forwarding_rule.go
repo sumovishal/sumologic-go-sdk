@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the UpdateDataForwardingRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateDataForwardingRule{}
+
 // UpdateDataForwardingRule struct for UpdateDataForwardingRule
 type UpdateDataForwardingRule struct {
 	// Data forwarding destination id.
@@ -22,6 +25,8 @@ type UpdateDataForwardingRule struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// Specify the path prefix to a directory in the S3 bucket and how to format the file name.
 	FileFormat *string `json:"fileFormat,omitempty"`
+	// Format of the payload.
+	Format *string `json:"format,omitempty"`
 }
 
 // NewUpdateDataForwardingRule instantiates a new UpdateDataForwardingRule object
@@ -30,6 +35,8 @@ type UpdateDataForwardingRule struct {
 // will change when the set of required properties is changed
 func NewUpdateDataForwardingRule() *UpdateDataForwardingRule {
 	this := UpdateDataForwardingRule{}
+	var format string = "csv"
+	this.Format = &format
 	return &this
 }
 
@@ -38,12 +45,14 @@ func NewUpdateDataForwardingRule() *UpdateDataForwardingRule {
 // but it doesn't guarantee that properties required by API are set
 func NewUpdateDataForwardingRuleWithDefaults() *UpdateDataForwardingRule {
 	this := UpdateDataForwardingRule{}
+	var format string = "csv"
+	this.Format = &format
 	return &this
 }
 
 // GetDestinationId returns the DestinationId field value if set, zero value otherwise.
 func (o *UpdateDataForwardingRule) GetDestinationId() string {
-	if o == nil || o.DestinationId == nil {
+	if o == nil || IsNil(o.DestinationId) {
 		var ret string
 		return ret
 	}
@@ -53,7 +62,7 @@ func (o *UpdateDataForwardingRule) GetDestinationId() string {
 // GetDestinationIdOk returns a tuple with the DestinationId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateDataForwardingRule) GetDestinationIdOk() (*string, bool) {
-	if o == nil || o.DestinationId == nil {
+	if o == nil || IsNil(o.DestinationId) {
 		return nil, false
 	}
 	return o.DestinationId, true
@@ -61,7 +70,7 @@ func (o *UpdateDataForwardingRule) GetDestinationIdOk() (*string, bool) {
 
 // HasDestinationId returns a boolean if a field has been set.
 func (o *UpdateDataForwardingRule) HasDestinationId() bool {
-	if o != nil && o.DestinationId != nil {
+	if o != nil && !IsNil(o.DestinationId) {
 		return true
 	}
 
@@ -75,7 +84,7 @@ func (o *UpdateDataForwardingRule) SetDestinationId(v string) {
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *UpdateDataForwardingRule) GetEnabled() bool {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		var ret bool
 		return ret
 	}
@@ -85,7 +94,7 @@ func (o *UpdateDataForwardingRule) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateDataForwardingRule) GetEnabledOk() (*bool, bool) {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		return nil, false
 	}
 	return o.Enabled, true
@@ -93,7 +102,7 @@ func (o *UpdateDataForwardingRule) GetEnabledOk() (*bool, bool) {
 
 // HasEnabled returns a boolean if a field has been set.
 func (o *UpdateDataForwardingRule) HasEnabled() bool {
-	if o != nil && o.Enabled != nil {
+	if o != nil && !IsNil(o.Enabled) {
 		return true
 	}
 
@@ -107,7 +116,7 @@ func (o *UpdateDataForwardingRule) SetEnabled(v bool) {
 
 // GetFileFormat returns the FileFormat field value if set, zero value otherwise.
 func (o *UpdateDataForwardingRule) GetFileFormat() string {
-	if o == nil || o.FileFormat == nil {
+	if o == nil || IsNil(o.FileFormat) {
 		var ret string
 		return ret
 	}
@@ -117,7 +126,7 @@ func (o *UpdateDataForwardingRule) GetFileFormat() string {
 // GetFileFormatOk returns a tuple with the FileFormat field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateDataForwardingRule) GetFileFormatOk() (*string, bool) {
-	if o == nil || o.FileFormat == nil {
+	if o == nil || IsNil(o.FileFormat) {
 		return nil, false
 	}
 	return o.FileFormat, true
@@ -125,7 +134,7 @@ func (o *UpdateDataForwardingRule) GetFileFormatOk() (*string, bool) {
 
 // HasFileFormat returns a boolean if a field has been set.
 func (o *UpdateDataForwardingRule) HasFileFormat() bool {
-	if o != nil && o.FileFormat != nil {
+	if o != nil && !IsNil(o.FileFormat) {
 		return true
 	}
 
@@ -137,18 +146,61 @@ func (o *UpdateDataForwardingRule) SetFileFormat(v string) {
 	o.FileFormat = &v
 }
 
+// GetFormat returns the Format field value if set, zero value otherwise.
+func (o *UpdateDataForwardingRule) GetFormat() string {
+	if o == nil || IsNil(o.Format) {
+		var ret string
+		return ret
+	}
+	return *o.Format
+}
+
+// GetFormatOk returns a tuple with the Format field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateDataForwardingRule) GetFormatOk() (*string, bool) {
+	if o == nil || IsNil(o.Format) {
+		return nil, false
+	}
+	return o.Format, true
+}
+
+// HasFormat returns a boolean if a field has been set.
+func (o *UpdateDataForwardingRule) HasFormat() bool {
+	if o != nil && !IsNil(o.Format) {
+		return true
+	}
+
+	return false
+}
+
+// SetFormat gets a reference to the given string and assigns it to the Format field.
+func (o *UpdateDataForwardingRule) SetFormat(v string) {
+	o.Format = &v
+}
+
 func (o UpdateDataForwardingRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DestinationId != nil {
-		toSerialize["destinationId"] = o.DestinationId
-	}
-	if o.Enabled != nil {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if o.FileFormat != nil {
-		toSerialize["fileFormat"] = o.FileFormat
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateDataForwardingRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DestinationId) {
+		toSerialize["destinationId"] = o.DestinationId
+	}
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
+	if !IsNil(o.FileFormat) {
+		toSerialize["fileFormat"] = o.FileFormat
+	}
+	if !IsNil(o.Format) {
+		toSerialize["format"] = o.Format
+	}
+	return toSerialize, nil
 }
 
 type NullableUpdateDataForwardingRule struct {

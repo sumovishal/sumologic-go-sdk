@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the WebhookSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WebhookSearchNotificationSyncDefinition{}
 
 // WebhookSearchNotificationSyncDefinition struct for WebhookSearchNotificationSyncDefinition
 type WebhookSearchNotificationSyncDefinition struct {
@@ -76,7 +79,7 @@ func (o *WebhookSearchNotificationSyncDefinition) SetWebhookId(v string) {
 
 // GetPayload returns the Payload field value if set, zero value otherwise.
 func (o *WebhookSearchNotificationSyncDefinition) GetPayload() string {
-	if o == nil || o.Payload == nil {
+	if o == nil || IsNil(o.Payload) {
 		var ret string
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetPayload() string {
 // GetPayloadOk returns a tuple with the Payload field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookSearchNotificationSyncDefinition) GetPayloadOk() (*string, bool) {
-	if o == nil || o.Payload == nil {
+	if o == nil || IsNil(o.Payload) {
 		return nil, false
 	}
 	return o.Payload, true
@@ -94,7 +97,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetPayloadOk() (*string, bool)
 
 // HasPayload returns a boolean if a field has been set.
 func (o *WebhookSearchNotificationSyncDefinition) HasPayload() bool {
-	if o != nil && o.Payload != nil {
+	if o != nil && !IsNil(o.Payload) {
 		return true
 	}
 
@@ -108,7 +111,7 @@ func (o *WebhookSearchNotificationSyncDefinition) SetPayload(v string) {
 
 // GetItemizeAlerts returns the ItemizeAlerts field value if set, zero value otherwise.
 func (o *WebhookSearchNotificationSyncDefinition) GetItemizeAlerts() bool {
-	if o == nil || o.ItemizeAlerts == nil {
+	if o == nil || IsNil(o.ItemizeAlerts) {
 		var ret bool
 		return ret
 	}
@@ -118,7 +121,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetItemizeAlerts() bool {
 // GetItemizeAlertsOk returns a tuple with the ItemizeAlerts field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookSearchNotificationSyncDefinition) GetItemizeAlertsOk() (*bool, bool) {
-	if o == nil || o.ItemizeAlerts == nil {
+	if o == nil || IsNil(o.ItemizeAlerts) {
 		return nil, false
 	}
 	return o.ItemizeAlerts, true
@@ -126,7 +129,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetItemizeAlertsOk() (*bool, b
 
 // HasItemizeAlerts returns a boolean if a field has been set.
 func (o *WebhookSearchNotificationSyncDefinition) HasItemizeAlerts() bool {
-	if o != nil && o.ItemizeAlerts != nil {
+	if o != nil && !IsNil(o.ItemizeAlerts) {
 		return true
 	}
 
@@ -140,7 +143,7 @@ func (o *WebhookSearchNotificationSyncDefinition) SetItemizeAlerts(v bool) {
 
 // GetMaxItemizedAlerts returns the MaxItemizedAlerts field value if set, zero value otherwise.
 func (o *WebhookSearchNotificationSyncDefinition) GetMaxItemizedAlerts() int32 {
-	if o == nil || o.MaxItemizedAlerts == nil {
+	if o == nil || IsNil(o.MaxItemizedAlerts) {
 		var ret int32
 		return ret
 	}
@@ -150,7 +153,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetMaxItemizedAlerts() int32 {
 // GetMaxItemizedAlertsOk returns a tuple with the MaxItemizedAlerts field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookSearchNotificationSyncDefinition) GetMaxItemizedAlertsOk() (*int32, bool) {
-	if o == nil || o.MaxItemizedAlerts == nil {
+	if o == nil || IsNil(o.MaxItemizedAlerts) {
 		return nil, false
 	}
 	return o.MaxItemizedAlerts, true
@@ -158,7 +161,7 @@ func (o *WebhookSearchNotificationSyncDefinition) GetMaxItemizedAlertsOk() (*int
 
 // HasMaxItemizedAlerts returns a boolean if a field has been set.
 func (o *WebhookSearchNotificationSyncDefinition) HasMaxItemizedAlerts() bool {
-	if o != nil && o.MaxItemizedAlerts != nil {
+	if o != nil && !IsNil(o.MaxItemizedAlerts) {
 		return true
 	}
 
@@ -171,28 +174,34 @@ func (o *WebhookSearchNotificationSyncDefinition) SetMaxItemizedAlerts(v int32) 
 }
 
 func (o WebhookSearchNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o WebhookSearchNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedScheduleNotificationSyncDefinition, errScheduleNotificationSyncDefinition := json.Marshal(o.ScheduleNotificationSyncDefinition)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	errScheduleNotificationSyncDefinition = json.Unmarshal([]byte(serializedScheduleNotificationSyncDefinition), &toSerialize)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
-	if true {
-		toSerialize["webhookId"] = o.WebhookId
-	}
-	if o.Payload != nil {
+	toSerialize["webhookId"] = o.WebhookId
+	if !IsNil(o.Payload) {
 		toSerialize["payload"] = o.Payload
 	}
-	if o.ItemizeAlerts != nil {
+	if !IsNil(o.ItemizeAlerts) {
 		toSerialize["itemizeAlerts"] = o.ItemizeAlerts
 	}
-	if o.MaxItemizedAlerts != nil {
+	if !IsNil(o.MaxItemizedAlerts) {
 		toSerialize["maxItemizedAlerts"] = o.MaxItemizedAlerts
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableWebhookSearchNotificationSyncDefinition struct {

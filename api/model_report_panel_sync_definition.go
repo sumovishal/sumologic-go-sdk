@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ReportPanelSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ReportPanelSyncDefinition{}
 
 // ReportPanelSyncDefinition struct for ReportPanelSyncDefinition
 type ReportPanelSyncDefinition struct {
@@ -366,7 +369,7 @@ func (o *ReportPanelSyncDefinition) SetId(v string) {
 
 // GetDesiredQuantizationInSecs returns the DesiredQuantizationInSecs field value if set, zero value otherwise.
 func (o *ReportPanelSyncDefinition) GetDesiredQuantizationInSecs() int32 {
-	if o == nil || o.DesiredQuantizationInSecs == nil {
+	if o == nil || IsNil(o.DesiredQuantizationInSecs) {
 		var ret int32
 		return ret
 	}
@@ -376,7 +379,7 @@ func (o *ReportPanelSyncDefinition) GetDesiredQuantizationInSecs() int32 {
 // GetDesiredQuantizationInSecsOk returns a tuple with the DesiredQuantizationInSecs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ReportPanelSyncDefinition) GetDesiredQuantizationInSecsOk() (*int32, bool) {
-	if o == nil || o.DesiredQuantizationInSecs == nil {
+	if o == nil || IsNil(o.DesiredQuantizationInSecs) {
 		return nil, false
 	}
 	return o.DesiredQuantizationInSecs, true
@@ -384,7 +387,7 @@ func (o *ReportPanelSyncDefinition) GetDesiredQuantizationInSecsOk() (*int32, bo
 
 // HasDesiredQuantizationInSecs returns a boolean if a field has been set.
 func (o *ReportPanelSyncDefinition) HasDesiredQuantizationInSecs() bool {
-	if o != nil && o.DesiredQuantizationInSecs != nil {
+	if o != nil && !IsNil(o.DesiredQuantizationInSecs) {
 		return true
 	}
 
@@ -422,7 +425,7 @@ func (o *ReportPanelSyncDefinition) SetQueryParameters(v []QueryParameterSyncDef
 
 // GetAutoParsingInfo returns the AutoParsingInfo field value if set, zero value otherwise.
 func (o *ReportPanelSyncDefinition) GetAutoParsingInfo() ReportAutoParsingInfo {
-	if o == nil || o.AutoParsingInfo == nil {
+	if o == nil || IsNil(o.AutoParsingInfo) {
 		var ret ReportAutoParsingInfo
 		return ret
 	}
@@ -432,7 +435,7 @@ func (o *ReportPanelSyncDefinition) GetAutoParsingInfo() ReportAutoParsingInfo {
 // GetAutoParsingInfoOk returns a tuple with the AutoParsingInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ReportPanelSyncDefinition) GetAutoParsingInfoOk() (*ReportAutoParsingInfo, bool) {
-	if o == nil || o.AutoParsingInfo == nil {
+	if o == nil || IsNil(o.AutoParsingInfo) {
 		return nil, false
 	}
 	return o.AutoParsingInfo, true
@@ -440,7 +443,7 @@ func (o *ReportPanelSyncDefinition) GetAutoParsingInfoOk() (*ReportAutoParsingIn
 
 // HasAutoParsingInfo returns a boolean if a field has been set.
 func (o *ReportPanelSyncDefinition) HasAutoParsingInfo() bool {
-	if o != nil && o.AutoParsingInfo != nil {
+	if o != nil && !IsNil(o.AutoParsingInfo) {
 		return true
 	}
 
@@ -453,53 +456,35 @@ func (o *ReportPanelSyncDefinition) SetAutoParsingInfo(v ReportAutoParsingInfo) 
 }
 
 func (o ReportPanelSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["viewerType"] = o.ViewerType
-	}
-	if true {
-		toSerialize["detailLevel"] = o.DetailLevel
-	}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["metricsQueries"] = o.MetricsQueries
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if true {
-		toSerialize["x"] = o.X
-	}
-	if true {
-		toSerialize["y"] = o.Y
-	}
-	if true {
-		toSerialize["width"] = o.Width
-	}
-	if true {
-		toSerialize["height"] = o.Height
-	}
-	if true {
-		toSerialize["properties"] = o.Properties
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.DesiredQuantizationInSecs != nil {
-		toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
-	}
-	if true {
-		toSerialize["queryParameters"] = o.QueryParameters
-	}
-	if o.AutoParsingInfo != nil {
-		toSerialize["autoParsingInfo"] = o.AutoParsingInfo
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ReportPanelSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["viewerType"] = o.ViewerType
+	toSerialize["detailLevel"] = o.DetailLevel
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["metricsQueries"] = o.MetricsQueries
+	toSerialize["timeRange"] = o.TimeRange
+	toSerialize["x"] = o.X
+	toSerialize["y"] = o.Y
+	toSerialize["width"] = o.Width
+	toSerialize["height"] = o.Height
+	toSerialize["properties"] = o.Properties
+	toSerialize["id"] = o.Id
+	if !IsNil(o.DesiredQuantizationInSecs) {
+		toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
+	}
+	toSerialize["queryParameters"] = o.QueryParameters
+	if !IsNil(o.AutoParsingInfo) {
+		toSerialize["autoParsingInfo"] = o.AutoParsingInfo
+	}
+	return toSerialize, nil
 }
 
 type NullableReportPanelSyncDefinition struct {

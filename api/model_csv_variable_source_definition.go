@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CsvVariableSourceDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CsvVariableSourceDefinition{}
 
 // CsvVariableSourceDefinition struct for CsvVariableSourceDefinition
 type CsvVariableSourceDefinition struct {
@@ -65,19 +68,25 @@ func (o *CsvVariableSourceDefinition) SetValues(v string) {
 }
 
 func (o CsvVariableSourceDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CsvVariableSourceDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedVariableSourceDefinition, errVariableSourceDefinition := json.Marshal(o.VariableSourceDefinition)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
 	errVariableSourceDefinition = json.Unmarshal([]byte(serializedVariableSourceDefinition), &toSerialize)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
-	if true {
-		toSerialize["values"] = o.Values
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["values"] = o.Values
+	return toSerialize, nil
 }
 
 type NullableCsvVariableSourceDefinition struct {

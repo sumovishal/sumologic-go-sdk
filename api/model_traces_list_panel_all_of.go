@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TracesListPanelAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TracesListPanelAllOf{}
 
 // TracesListPanelAllOf A panel for traces list
 type TracesListPanelAllOf struct {
@@ -40,7 +43,7 @@ func NewTracesListPanelAllOfWithDefaults() *TracesListPanelAllOf {
 
 // GetQueries returns the Queries field value if set, zero value otherwise.
 func (o *TracesListPanelAllOf) GetQueries() []Query {
-	if o == nil || o.Queries == nil {
+	if o == nil || IsNil(o.Queries) {
 		var ret []Query
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *TracesListPanelAllOf) GetQueries() []Query {
 // GetQueriesOk returns a tuple with the Queries field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TracesListPanelAllOf) GetQueriesOk() ([]Query, bool) {
-	if o == nil || o.Queries == nil {
+	if o == nil || IsNil(o.Queries) {
 		return nil, false
 	}
 	return o.Queries, true
@@ -58,7 +61,7 @@ func (o *TracesListPanelAllOf) GetQueriesOk() ([]Query, bool) {
 
 // HasQueries returns a boolean if a field has been set.
 func (o *TracesListPanelAllOf) HasQueries() bool {
-	if o != nil && o.Queries != nil {
+	if o != nil && !IsNil(o.Queries) {
 		return true
 	}
 
@@ -72,7 +75,7 @@ func (o *TracesListPanelAllOf) SetQueries(v []Query) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *TracesListPanelAllOf) GetTimeRange() ResolvableTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret ResolvableTimeRange
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *TracesListPanelAllOf) GetTimeRange() ResolvableTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TracesListPanelAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -90,7 +93,7 @@ func (o *TracesListPanelAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *TracesListPanelAllOf) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -103,14 +106,22 @@ func (o *TracesListPanelAllOf) SetTimeRange(v ResolvableTimeRange) {
 }
 
 func (o TracesListPanelAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Queries != nil {
-		toSerialize["queries"] = o.Queries
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TracesListPanelAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Queries) {
+		toSerialize["queries"] = o.Queries
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	return toSerialize, nil
 }
 
 type NullableTracesListPanelAllOf struct {

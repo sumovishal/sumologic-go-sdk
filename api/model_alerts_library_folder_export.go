@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertsLibraryFolderExport type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsLibraryFolderExport{}
 
 // AlertsLibraryFolderExport struct for AlertsLibraryFolderExport
 type AlertsLibraryFolderExport struct {
@@ -42,7 +45,7 @@ func NewAlertsLibraryFolderExportWithDefaults() *AlertsLibraryFolderExport {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *AlertsLibraryFolderExport) GetChildren() []AlertsLibraryBaseExport {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []AlertsLibraryBaseExport
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *AlertsLibraryFolderExport) GetChildren() []AlertsLibraryBaseExport {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryFolderExport) GetChildrenOk() ([]AlertsLibraryBaseExport, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -60,7 +63,7 @@ func (o *AlertsLibraryFolderExport) GetChildrenOk() ([]AlertsLibraryBaseExport, 
 
 // HasChildren returns a boolean if a field has been set.
 func (o *AlertsLibraryFolderExport) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -73,19 +76,27 @@ func (o *AlertsLibraryFolderExport) SetChildren(v []AlertsLibraryBaseExport) {
 }
 
 func (o AlertsLibraryFolderExport) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AlertsLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAlertsLibraryBaseExport, errAlertsLibraryBaseExport := json.Marshal(o.AlertsLibraryBaseExport)
 	if errAlertsLibraryBaseExport != nil {
-		return []byte{}, errAlertsLibraryBaseExport
+		return map[string]interface{}{}, errAlertsLibraryBaseExport
 	}
 	errAlertsLibraryBaseExport = json.Unmarshal([]byte(serializedAlertsLibraryBaseExport), &toSerialize)
 	if errAlertsLibraryBaseExport != nil {
-		return []byte{}, errAlertsLibraryBaseExport
+		return map[string]interface{}{}, errAlertsLibraryBaseExport
 	}
-	if o.Children != nil {
+	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableAlertsLibraryFolderExport struct {

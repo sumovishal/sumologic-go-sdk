@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the IngestBudget type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudget{}
 
 // IngestBudget struct for IngestBudget
 type IngestBudget struct {
@@ -199,7 +202,7 @@ func (o *IngestBudget) SetResetTime(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *IngestBudget) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -209,7 +212,7 @@ func (o *IngestBudget) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudget) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -217,7 +220,7 @@ func (o *IngestBudget) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *IngestBudget) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -255,7 +258,7 @@ func (o *IngestBudget) SetAction(v string) {
 
 // GetAuditThreshold returns the AuditThreshold field value if set, zero value otherwise.
 func (o *IngestBudget) GetAuditThreshold() int32 {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		var ret int32
 		return ret
 	}
@@ -265,7 +268,7 @@ func (o *IngestBudget) GetAuditThreshold() int32 {
 // GetAuditThresholdOk returns a tuple with the AuditThreshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudget) GetAuditThresholdOk() (*int32, bool) {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		return nil, false
 	}
 	return o.AuditThreshold, true
@@ -273,7 +276,7 @@ func (o *IngestBudget) GetAuditThresholdOk() (*int32, bool) {
 
 // HasAuditThreshold returns a boolean if a field has been set.
 func (o *IngestBudget) HasAuditThreshold() bool {
-	if o != nil && o.AuditThreshold != nil {
+	if o != nil && !IsNil(o.AuditThreshold) {
 		return true
 	}
 
@@ -411,7 +414,7 @@ func (o *IngestBudget) SetId(v string) {
 
 // GetUsageBytes returns the UsageBytes field value if set, zero value otherwise.
 func (o *IngestBudget) GetUsageBytes() int64 {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		var ret int64
 		return ret
 	}
@@ -421,7 +424,7 @@ func (o *IngestBudget) GetUsageBytes() int64 {
 // GetUsageBytesOk returns a tuple with the UsageBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudget) GetUsageBytesOk() (*int64, bool) {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		return nil, false
 	}
 	return o.UsageBytes, true
@@ -429,7 +432,7 @@ func (o *IngestBudget) GetUsageBytesOk() (*int64, bool) {
 
 // HasUsageBytes returns a boolean if a field has been set.
 func (o *IngestBudget) HasUsageBytes() bool {
-	if o != nil && o.UsageBytes != nil {
+	if o != nil && !IsNil(o.UsageBytes) {
 		return true
 	}
 
@@ -443,7 +446,7 @@ func (o *IngestBudget) SetUsageBytes(v int64) {
 
 // GetUsageStatus returns the UsageStatus field value if set, zero value otherwise.
 func (o *IngestBudget) GetUsageStatus() string {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		var ret string
 		return ret
 	}
@@ -453,7 +456,7 @@ func (o *IngestBudget) GetUsageStatus() string {
 // GetUsageStatusOk returns a tuple with the UsageStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudget) GetUsageStatusOk() (*string, bool) {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		return nil, false
 	}
 	return o.UsageStatus, true
@@ -461,7 +464,7 @@ func (o *IngestBudget) GetUsageStatusOk() (*string, bool) {
 
 // HasUsageStatus returns a boolean if a field has been set.
 func (o *IngestBudget) HasUsageStatus() bool {
-	if o != nil && o.UsageStatus != nil {
+	if o != nil && !IsNil(o.UsageStatus) {
 		return true
 	}
 
@@ -475,7 +478,7 @@ func (o *IngestBudget) SetUsageStatus(v string) {
 
 // GetNumberOfCollectors returns the NumberOfCollectors field value if set, zero value otherwise.
 func (o *IngestBudget) GetNumberOfCollectors() int64 {
-	if o == nil || o.NumberOfCollectors == nil {
+	if o == nil || IsNil(o.NumberOfCollectors) {
 		var ret int64
 		return ret
 	}
@@ -485,7 +488,7 @@ func (o *IngestBudget) GetNumberOfCollectors() int64 {
 // GetNumberOfCollectorsOk returns a tuple with the NumberOfCollectors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudget) GetNumberOfCollectorsOk() (*int64, bool) {
-	if o == nil || o.NumberOfCollectors == nil {
+	if o == nil || IsNil(o.NumberOfCollectors) {
 		return nil, false
 	}
 	return o.NumberOfCollectors, true
@@ -493,7 +496,7 @@ func (o *IngestBudget) GetNumberOfCollectorsOk() (*int64, bool) {
 
 // HasNumberOfCollectors returns a boolean if a field has been set.
 func (o *IngestBudget) HasNumberOfCollectors() bool {
-	if o != nil && o.NumberOfCollectors != nil {
+	if o != nil && !IsNil(o.NumberOfCollectors) {
 		return true
 	}
 
@@ -506,56 +509,42 @@ func (o *IngestBudget) SetNumberOfCollectors(v int64) {
 }
 
 func (o IngestBudget) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
-	}
-	if true {
-		toSerialize["capacityBytes"] = o.CapacityBytes
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
-	}
-	if true {
-		toSerialize["resetTime"] = o.ResetTime
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["action"] = o.Action
-	}
-	if o.AuditThreshold != nil {
-		toSerialize["auditThreshold"] = o.AuditThreshold
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt.Get()
-	}
-	if true {
-		toSerialize["createdByUser"] = o.CreatedByUser
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt.Get()
-	}
-	if true {
-		toSerialize["modifiedByUser"] = o.ModifiedByUser
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.UsageBytes != nil {
-		toSerialize["usageBytes"] = o.UsageBytes
-	}
-	if o.UsageStatus != nil {
-		toSerialize["usageStatus"] = o.UsageStatus
-	}
-	if o.NumberOfCollectors != nil {
-		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudget) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["fieldValue"] = o.FieldValue
+	toSerialize["capacityBytes"] = o.CapacityBytes
+	toSerialize["timezone"] = o.Timezone
+	toSerialize["resetTime"] = o.ResetTime
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["action"] = o.Action
+	if !IsNil(o.AuditThreshold) {
+		toSerialize["auditThreshold"] = o.AuditThreshold
+	}
+	toSerialize["createdAt"] = o.CreatedAt.Get()
+	toSerialize["createdByUser"] = o.CreatedByUser
+	toSerialize["modifiedAt"] = o.ModifiedAt.Get()
+	toSerialize["modifiedByUser"] = o.ModifiedByUser
+	toSerialize["id"] = o.Id
+	if !IsNil(o.UsageBytes) {
+		toSerialize["usageBytes"] = o.UsageBytes
+	}
+	if !IsNil(o.UsageStatus) {
+		toSerialize["usageStatus"] = o.UsageStatus
+	}
+	if !IsNil(o.NumberOfCollectors) {
+		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudget struct {

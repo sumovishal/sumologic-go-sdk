@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EmailAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EmailAllOf{}
 
 // EmailAllOf struct for EmailAllOf
 type EmailAllOf struct {
@@ -96,7 +99,7 @@ func (o *EmailAllOf) SetSubject(v string) {
 
 // GetMessageBody returns the MessageBody field value if set, zero value otherwise.
 func (o *EmailAllOf) GetMessageBody() string {
-	if o == nil || o.MessageBody == nil {
+	if o == nil || IsNil(o.MessageBody) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *EmailAllOf) GetMessageBody() string {
 // GetMessageBodyOk returns a tuple with the MessageBody field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EmailAllOf) GetMessageBodyOk() (*string, bool) {
-	if o == nil || o.MessageBody == nil {
+	if o == nil || IsNil(o.MessageBody) {
 		return nil, false
 	}
 	return o.MessageBody, true
@@ -114,7 +117,7 @@ func (o *EmailAllOf) GetMessageBodyOk() (*string, bool) {
 
 // HasMessageBody returns a boolean if a field has been set.
 func (o *EmailAllOf) HasMessageBody() bool {
-	if o != nil && o.MessageBody != nil {
+	if o != nil && !IsNil(o.MessageBody) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *EmailAllOf) SetTimeZone(v string) {
 }
 
 func (o EmailAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["recipients"] = o.Recipients
-	}
-	if true {
-		toSerialize["subject"] = o.Subject
-	}
-	if o.MessageBody != nil {
-		toSerialize["messageBody"] = o.MessageBody
-	}
-	if true {
-		toSerialize["timeZone"] = o.TimeZone
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EmailAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["recipients"] = o.Recipients
+	toSerialize["subject"] = o.Subject
+	if !IsNil(o.MessageBody) {
+		toSerialize["messageBody"] = o.MessageBody
+	}
+	toSerialize["timeZone"] = o.TimeZone
+	return toSerialize, nil
 }
 
 type NullableEmailAllOf struct {

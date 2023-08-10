@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AsyncTraceQueryRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AsyncTraceQueryRow{}
 
 // AsyncTraceQueryRow struct for AsyncTraceQueryRow
 type AsyncTraceQueryRow struct {
@@ -91,7 +94,7 @@ func (o *AsyncTraceQueryRow) SetRowId(v string) {
 
 // GetOrderBy returns the OrderBy field value if set, zero value otherwise.
 func (o *AsyncTraceQueryRow) GetOrderBy() OrderBy {
-	if o == nil || o.OrderBy == nil {
+	if o == nil || IsNil(o.OrderBy) {
 		var ret OrderBy
 		return ret
 	}
@@ -101,7 +104,7 @@ func (o *AsyncTraceQueryRow) GetOrderBy() OrderBy {
 // GetOrderByOk returns a tuple with the OrderBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AsyncTraceQueryRow) GetOrderByOk() (*OrderBy, bool) {
-	if o == nil || o.OrderBy == nil {
+	if o == nil || IsNil(o.OrderBy) {
 		return nil, false
 	}
 	return o.OrderBy, true
@@ -109,7 +112,7 @@ func (o *AsyncTraceQueryRow) GetOrderByOk() (*OrderBy, bool) {
 
 // HasOrderBy returns a boolean if a field has been set.
 func (o *AsyncTraceQueryRow) HasOrderBy() bool {
-	if o != nil && o.OrderBy != nil {
+	if o != nil && !IsNil(o.OrderBy) {
 		return true
 	}
 
@@ -122,17 +125,21 @@ func (o *AsyncTraceQueryRow) SetOrderBy(v OrderBy) {
 }
 
 func (o AsyncTraceQueryRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if o.OrderBy != nil {
-		toSerialize["orderBy"] = o.OrderBy
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AsyncTraceQueryRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["rowId"] = o.RowId
+	if !IsNil(o.OrderBy) {
+		toSerialize["orderBy"] = o.OrderBy
+	}
+	return toSerialize, nil
 }
 
 type NullableAsyncTraceQueryRow struct {

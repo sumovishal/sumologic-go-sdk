@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ChartDataRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ChartDataRequest{}
 
 // ChartDataRequest Request payload for monitor chart data visualization.
 type ChartDataRequest struct {
@@ -94,7 +97,7 @@ func (o *ChartDataRequest) SetQueries(v []MonitorQuery) {
 
 // GetTriggers returns the Triggers field value if set, zero value otherwise.
 func (o *ChartDataRequest) GetTriggers() []TriggerCondition {
-	if o == nil || o.Triggers == nil {
+	if o == nil || IsNil(o.Triggers) {
 		var ret []TriggerCondition
 		return ret
 	}
@@ -104,7 +107,7 @@ func (o *ChartDataRequest) GetTriggers() []TriggerCondition {
 // GetTriggersOk returns a tuple with the Triggers field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ChartDataRequest) GetTriggersOk() ([]TriggerCondition, bool) {
-	if o == nil || o.Triggers == nil {
+	if o == nil || IsNil(o.Triggers) {
 		return nil, false
 	}
 	return o.Triggers, true
@@ -112,7 +115,7 @@ func (o *ChartDataRequest) GetTriggersOk() ([]TriggerCondition, bool) {
 
 // HasTriggers returns a boolean if a field has been set.
 func (o *ChartDataRequest) HasTriggers() bool {
-	if o != nil && o.Triggers != nil {
+	if o != nil && !IsNil(o.Triggers) {
 		return true
 	}
 
@@ -126,7 +129,7 @@ func (o *ChartDataRequest) SetTriggers(v []TriggerCondition) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *ChartDataRequest) GetTimeRange() ResolvableTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret ResolvableTimeRange
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *ChartDataRequest) GetTimeRange() ResolvableTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ChartDataRequest) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -144,7 +147,7 @@ func (o *ChartDataRequest) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *ChartDataRequest) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -157,20 +160,24 @@ func (o *ChartDataRequest) SetTimeRange(v ResolvableTimeRange) {
 }
 
 func (o ChartDataRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["monitorType"] = o.MonitorType
-	}
-	if true {
-		toSerialize["queries"] = o.Queries
-	}
-	if o.Triggers != nil {
-		toSerialize["triggers"] = o.Triggers
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ChartDataRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["monitorType"] = o.MonitorType
+	toSerialize["queries"] = o.Queries
+	if !IsNil(o.Triggers) {
+		toSerialize["triggers"] = o.Triggers
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	return toSerialize, nil
 }
 
 type NullableChartDataRequest struct {

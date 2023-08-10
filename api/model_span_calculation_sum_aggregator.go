@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanCalculationSumAggregator type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanCalculationSumAggregator{}
 
 // SpanCalculationSumAggregator struct for SpanCalculationSumAggregator
 type SpanCalculationSumAggregator struct {
@@ -38,16 +41,24 @@ func NewSpanCalculationSumAggregatorWithDefaults() *SpanCalculationSumAggregator
 }
 
 func (o SpanCalculationSumAggregator) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpanCalculationSumAggregator) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpanCalculationAggregator, errSpanCalculationAggregator := json.Marshal(o.SpanCalculationAggregator)
 	if errSpanCalculationAggregator != nil {
-		return []byte{}, errSpanCalculationAggregator
+		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
 	errSpanCalculationAggregator = json.Unmarshal([]byte(serializedSpanCalculationAggregator), &toSerialize)
 	if errSpanCalculationAggregator != nil {
-		return []byte{}, errSpanCalculationAggregator
+		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSpanCalculationSumAggregator struct {

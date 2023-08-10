@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsInvalidUserPermissionsTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsInvalidUserPermissionsTrackerAllOf{}
 
 // CSEWindowsInvalidUserPermissionsTrackerAllOf struct for CSEWindowsInvalidUserPermissionsTrackerAllOf
 type CSEWindowsInvalidUserPermissionsTrackerAllOf struct {
@@ -49,7 +52,7 @@ func NewCSEWindowsInvalidUserPermissionsTrackerAllOfWithDefaults() *CSEWindowsIn
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -59,7 +62,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -67,7 +70,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorIdOk() (*string,
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -81,7 +84,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -91,7 +94,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorHostname() strin
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -99,7 +102,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorHostnameOk() (*s
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -113,7 +116,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetSensorHostname(v strin
 
 // GetSensorUserName returns the SensorUserName field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorUserName() string {
-	if o == nil || o.SensorUserName == nil {
+	if o == nil || IsNil(o.SensorUserName) {
 		var ret string
 		return ret
 	}
@@ -123,7 +126,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorUserName() strin
 // GetSensorUserNameOk returns a tuple with the SensorUserName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorUserNameOk() (*string, bool) {
-	if o == nil || o.SensorUserName == nil {
+	if o == nil || IsNil(o.SensorUserName) {
 		return nil, false
 	}
 	return o.SensorUserName, true
@@ -131,7 +134,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSensorUserNameOk() (*s
 
 // HasSensorUserName returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasSensorUserName() bool {
-	if o != nil && o.SensorUserName != nil {
+	if o != nil && !IsNil(o.SensorUserName) {
 		return true
 	}
 
@@ -145,7 +148,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetSensorUserName(v strin
 
 // GetFolderPath returns the FolderPath field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFolderPath() string {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		var ret string
 		return ret
 	}
@@ -155,7 +158,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFolderPath() string {
 // GetFolderPathOk returns a tuple with the FolderPath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFolderPathOk() (*string, bool) {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		return nil, false
 	}
 	return o.FolderPath, true
@@ -163,7 +166,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFolderPathOk() (*strin
 
 // HasFolderPath returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasFolderPath() bool {
-	if o != nil && o.FolderPath != nil {
+	if o != nil && !IsNil(o.FolderPath) {
 		return true
 	}
 
@@ -177,7 +180,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetFolderPath(v string) {
 
 // GetFilePath returns the FilePath field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFilePath() string {
-	if o == nil || o.FilePath == nil {
+	if o == nil || IsNil(o.FilePath) {
 		var ret string
 		return ret
 	}
@@ -187,7 +190,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFilePath() string {
 // GetFilePathOk returns a tuple with the FilePath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFilePathOk() (*string, bool) {
-	if o == nil || o.FilePath == nil {
+	if o == nil || IsNil(o.FilePath) {
 		return nil, false
 	}
 	return o.FilePath, true
@@ -195,7 +198,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetFilePathOk() (*string,
 
 // HasFilePath returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasFilePath() bool {
-	if o != nil && o.FilePath != nil {
+	if o != nil && !IsNil(o.FilePath) {
 		return true
 	}
 
@@ -209,7 +212,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetFilePath(v string) {
 
 // GetSource returns the Source field value if set, zero value otherwise.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSource() string {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		var ret string
 		return ret
 	}
@@ -219,7 +222,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSource() string {
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSourceOk() (*string, bool) {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		return nil, false
 	}
 	return o.Source, true
@@ -227,7 +230,7 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) GetSourceOk() (*string, b
 
 // HasSource returns a boolean if a field has been set.
 func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) HasSource() bool {
-	if o != nil && o.Source != nil {
+	if o != nil && !IsNil(o.Source) {
 		return true
 	}
 
@@ -240,26 +243,34 @@ func (o *CSEWindowsInvalidUserPermissionsTrackerAllOf) SetSource(v string) {
 }
 
 func (o CSEWindowsInvalidUserPermissionsTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SensorId != nil {
-		toSerialize["sensorId"] = o.SensorId
-	}
-	if o.SensorHostname != nil {
-		toSerialize["sensorHostname"] = o.SensorHostname
-	}
-	if o.SensorUserName != nil {
-		toSerialize["sensorUserName"] = o.SensorUserName
-	}
-	if o.FolderPath != nil {
-		toSerialize["folderPath"] = o.FolderPath
-	}
-	if o.FilePath != nil {
-		toSerialize["filePath"] = o.FilePath
-	}
-	if o.Source != nil {
-		toSerialize["source"] = o.Source
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsInvalidUserPermissionsTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SensorId) {
+		toSerialize["sensorId"] = o.SensorId
+	}
+	if !IsNil(o.SensorHostname) {
+		toSerialize["sensorHostname"] = o.SensorHostname
+	}
+	if !IsNil(o.SensorUserName) {
+		toSerialize["sensorUserName"] = o.SensorUserName
+	}
+	if !IsNil(o.FolderPath) {
+		toSerialize["folderPath"] = o.FolderPath
+	}
+	if !IsNil(o.FilePath) {
+		toSerialize["filePath"] = o.FilePath
+	}
+	if !IsNil(o.Source) {
+		toSerialize["source"] = o.Source
+	}
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsInvalidUserPermissionsTrackerAllOf struct {

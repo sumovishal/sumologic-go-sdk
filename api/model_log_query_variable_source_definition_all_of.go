@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogQueryVariableSourceDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogQueryVariableSourceDefinitionAllOf{}
 
 // LogQueryVariableSourceDefinitionAllOf Variable with values that are powered by a log query.
 type LogQueryVariableSourceDefinitionAllOf struct {
@@ -90,14 +93,18 @@ func (o *LogQueryVariableSourceDefinitionAllOf) SetField(v string) {
 }
 
 func (o LogQueryVariableSourceDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["field"] = o.Field
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogQueryVariableSourceDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["field"] = o.Field
+	return toSerialize, nil
 }
 
 type NullableLogQueryVariableSourceDefinitionAllOf struct {

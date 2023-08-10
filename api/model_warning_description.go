@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the WarningDescription type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WarningDescription{}
 
 // WarningDescription Warning description
 type WarningDescription struct {
@@ -66,7 +69,7 @@ func (o *WarningDescription) SetMessage(v string) {
 
 // GetCause returns the Cause field value if set, zero value otherwise.
 func (o *WarningDescription) GetCause() string {
-	if o == nil || o.Cause == nil {
+	if o == nil || IsNil(o.Cause) {
 		var ret string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *WarningDescription) GetCause() string {
 // GetCauseOk returns a tuple with the Cause field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WarningDescription) GetCauseOk() (*string, bool) {
-	if o == nil || o.Cause == nil {
+	if o == nil || IsNil(o.Cause) {
 		return nil, false
 	}
 	return o.Cause, true
@@ -84,7 +87,7 @@ func (o *WarningDescription) GetCauseOk() (*string, bool) {
 
 // HasCause returns a boolean if a field has been set.
 func (o *WarningDescription) HasCause() bool {
-	if o != nil && o.Cause != nil {
+	if o != nil && !IsNil(o.Cause) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *WarningDescription) SetCause(v string) {
 }
 
 func (o WarningDescription) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["message"] = o.Message
-	}
-	if o.Cause != nil {
-		toSerialize["cause"] = o.Cause
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o WarningDescription) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["message"] = o.Message
+	if !IsNil(o.Cause) {
+		toSerialize["cause"] = o.Cause
+	}
+	return toSerialize, nil
 }
 
 type NullableWarningDescription struct {

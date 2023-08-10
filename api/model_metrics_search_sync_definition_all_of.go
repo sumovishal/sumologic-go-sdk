@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsSearchSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsSearchSyncDefinitionAllOf{}
 
 // MetricsSearchSyncDefinitionAllOf struct for MetricsSearchSyncDefinitionAllOf
 type MetricsSearchSyncDefinitionAllOf struct {
@@ -70,7 +73,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) SetTimeRange(v ResolvableTimeRange) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *MetricsSearchSyncDefinitionAllOf) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchSyncDefinitionAllOf) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -88,7 +91,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *MetricsSearchSyncDefinitionAllOf) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -126,7 +129,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) SetQueries(v []Query) {
 
 // GetVisualSettings returns the VisualSettings field value if set, zero value otherwise.
 func (o *MetricsSearchSyncDefinitionAllOf) GetVisualSettings() string {
-	if o == nil || o.VisualSettings == nil {
+	if o == nil || IsNil(o.VisualSettings) {
 		var ret string
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) GetVisualSettings() string {
 // GetVisualSettingsOk returns a tuple with the VisualSettings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchSyncDefinitionAllOf) GetVisualSettingsOk() (*string, bool) {
-	if o == nil || o.VisualSettings == nil {
+	if o == nil || IsNil(o.VisualSettings) {
 		return nil, false
 	}
 	return o.VisualSettings, true
@@ -144,7 +147,7 @@ func (o *MetricsSearchSyncDefinitionAllOf) GetVisualSettingsOk() (*string, bool)
 
 // HasVisualSettings returns a boolean if a field has been set.
 func (o *MetricsSearchSyncDefinitionAllOf) HasVisualSettings() bool {
-	if o != nil && o.VisualSettings != nil {
+	if o != nil && !IsNil(o.VisualSettings) {
 		return true
 	}
 
@@ -157,20 +160,24 @@ func (o *MetricsSearchSyncDefinitionAllOf) SetVisualSettings(v string) {
 }
 
 func (o MetricsSearchSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["queries"] = o.Queries
-	}
-	if o.VisualSettings != nil {
-		toSerialize["visualSettings"] = o.VisualSettings
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsSearchSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["queries"] = o.Queries
+	if !IsNil(o.VisualSettings) {
+		toSerialize["visualSettings"] = o.VisualSettings
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsSearchSyncDefinitionAllOf struct {

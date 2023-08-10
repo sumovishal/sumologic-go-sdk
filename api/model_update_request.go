@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UpdateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateRequest{}
 
 // UpdateRequest Update request for the account.
 type UpdateRequest struct {
@@ -123,7 +126,7 @@ func (o *UpdateRequest) SetBaselines(v SelfServiceCreditsBaselines) {
 
 // GetImmediate returns the Immediate field value if set, zero value otherwise.
 func (o *UpdateRequest) GetImmediate() bool {
-	if o == nil || o.Immediate == nil {
+	if o == nil || IsNil(o.Immediate) {
 		var ret bool
 		return ret
 	}
@@ -133,7 +136,7 @@ func (o *UpdateRequest) GetImmediate() bool {
 // GetImmediateOk returns a tuple with the Immediate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateRequest) GetImmediateOk() (*bool, bool) {
-	if o == nil || o.Immediate == nil {
+	if o == nil || IsNil(o.Immediate) {
 		return nil, false
 	}
 	return o.Immediate, true
@@ -141,7 +144,7 @@ func (o *UpdateRequest) GetImmediateOk() (*bool, bool) {
 
 // HasImmediate returns a boolean if a field has been set.
 func (o *UpdateRequest) HasImmediate() bool {
-	if o != nil && o.Immediate != nil {
+	if o != nil && !IsNil(o.Immediate) {
 		return true
 	}
 
@@ -154,20 +157,22 @@ func (o *UpdateRequest) SetImmediate(v bool) {
 }
 
 func (o UpdateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["productId"] = o.ProductId
-	}
-	if true {
-		toSerialize["billingFrequency"] = o.BillingFrequency
-	}
-	if true {
-		toSerialize["baselines"] = o.Baselines
-	}
-	if o.Immediate != nil {
-		toSerialize["immediate"] = o.Immediate
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["productId"] = o.ProductId
+	toSerialize["billingFrequency"] = o.BillingFrequency
+	toSerialize["baselines"] = o.Baselines
+	if !IsNil(o.Immediate) {
+		toSerialize["immediate"] = o.Immediate
+	}
+	return toSerialize, nil
 }
 
 type NullableUpdateRequest struct {

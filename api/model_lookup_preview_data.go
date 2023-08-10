@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LookupPreviewData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupPreviewData{}
 
 // LookupPreviewData The preview data of the lookup table.
 type LookupPreviewData struct {
@@ -41,7 +44,7 @@ func NewLookupPreviewDataWithDefaults() *LookupPreviewData {
 
 // GetFieldProperties returns the FieldProperties field value if set, zero value otherwise.
 func (o *LookupPreviewData) GetFieldProperties() []PreviewLookupTableField {
-	if o == nil || o.FieldProperties == nil {
+	if o == nil || IsNil(o.FieldProperties) {
 		var ret []PreviewLookupTableField
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *LookupPreviewData) GetFieldProperties() []PreviewLookupTableField {
 // GetFieldPropertiesOk returns a tuple with the FieldProperties field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupPreviewData) GetFieldPropertiesOk() ([]PreviewLookupTableField, bool) {
-	if o == nil || o.FieldProperties == nil {
+	if o == nil || IsNil(o.FieldProperties) {
 		return nil, false
 	}
 	return o.FieldProperties, true
@@ -59,7 +62,7 @@ func (o *LookupPreviewData) GetFieldPropertiesOk() ([]PreviewLookupTableField, b
 
 // HasFieldProperties returns a boolean if a field has been set.
 func (o *LookupPreviewData) HasFieldProperties() bool {
-	if o != nil && o.FieldProperties != nil {
+	if o != nil && !IsNil(o.FieldProperties) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *LookupPreviewData) SetFieldProperties(v []PreviewLookupTableField) {
 
 // GetFieldValueMapList returns the FieldValueMapList field value if set, zero value otherwise.
 func (o *LookupPreviewData) GetFieldValueMapList() []map[string]string {
-	if o == nil || o.FieldValueMapList == nil {
+	if o == nil || IsNil(o.FieldValueMapList) {
 		var ret []map[string]string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *LookupPreviewData) GetFieldValueMapList() []map[string]string {
 // GetFieldValueMapListOk returns a tuple with the FieldValueMapList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupPreviewData) GetFieldValueMapListOk() ([]map[string]string, bool) {
-	if o == nil || o.FieldValueMapList == nil {
+	if o == nil || IsNil(o.FieldValueMapList) {
 		return nil, false
 	}
 	return o.FieldValueMapList, true
@@ -91,7 +94,7 @@ func (o *LookupPreviewData) GetFieldValueMapListOk() ([]map[string]string, bool)
 
 // HasFieldValueMapList returns a boolean if a field has been set.
 func (o *LookupPreviewData) HasFieldValueMapList() bool {
-	if o != nil && o.FieldValueMapList != nil {
+	if o != nil && !IsNil(o.FieldValueMapList) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *LookupPreviewData) SetFieldValueMapList(v []map[string]string) {
 }
 
 func (o LookupPreviewData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.FieldProperties != nil {
-		toSerialize["fieldProperties"] = o.FieldProperties
-	}
-	if o.FieldValueMapList != nil {
-		toSerialize["fieldValueMapList"] = o.FieldValueMapList
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupPreviewData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.FieldProperties) {
+		toSerialize["fieldProperties"] = o.FieldProperties
+	}
+	if !IsNil(o.FieldValueMapList) {
+		toSerialize["fieldValueMapList"] = o.FieldValueMapList
+	}
+	return toSerialize, nil
 }
 
 type NullableLookupPreviewData struct {

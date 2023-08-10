@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SaveMetricsSearchRequestAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SaveMetricsSearchRequestAllOf{}
 
 // SaveMetricsSearchRequestAllOf struct for SaveMetricsSearchRequestAllOf
 type SaveMetricsSearchRequestAllOf struct {
@@ -63,11 +66,17 @@ func (o *SaveMetricsSearchRequestAllOf) SetParentId(v string) {
 }
 
 func (o SaveMetricsSearchRequestAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["parentId"] = o.ParentId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SaveMetricsSearchRequestAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["parentId"] = o.ParentId
+	return toSerialize, nil
 }
 
 type NullableSaveMetricsSearchRequestAllOf struct {

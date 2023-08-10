@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LabelValueLookupAutoCompleteSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LabelValueLookupAutoCompleteSyncDefinitionAllOf{}
 
 // LabelValueLookupAutoCompleteSyncDefinitionAllOf struct for LabelValueLookupAutoCompleteSyncDefinitionAllOf
 type LabelValueLookupAutoCompleteSyncDefinitionAllOf struct {
@@ -144,20 +147,20 @@ func (o *LabelValueLookupAutoCompleteSyncDefinitionAllOf) SetLookupValueColumn(v
 }
 
 func (o LabelValueLookupAutoCompleteSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
-	}
-	if true {
-		toSerialize["lookupFileName"] = o.LookupFileName
-	}
-	if true {
-		toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
-	}
-	if true {
-		toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LabelValueLookupAutoCompleteSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	toSerialize["lookupFileName"] = o.LookupFileName
+	toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
+	toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	return toSerialize, nil
 }
 
 type NullableLabelValueLookupAutoCompleteSyncDefinitionAllOf struct {

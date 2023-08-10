@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ServiceNowSearchNotificationSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceNowSearchNotificationSyncDefinitionAllOf{}
 
 // ServiceNowSearchNotificationSyncDefinitionAllOf struct for ServiceNowSearchNotificationSyncDefinitionAllOf
 type ServiceNowSearchNotificationSyncDefinitionAllOf struct {
@@ -65,7 +68,7 @@ func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) SetExternalId(v string
 
 // GetFields returns the Fields field value if set, zero value otherwise.
 func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) GetFields() ServiceNowFieldsSyncDefinition {
-	if o == nil || o.Fields == nil {
+	if o == nil || IsNil(o.Fields) {
 		var ret ServiceNowFieldsSyncDefinition
 		return ret
 	}
@@ -75,7 +78,7 @@ func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) GetFields() ServiceNow
 // GetFieldsOk returns a tuple with the Fields field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) GetFieldsOk() (*ServiceNowFieldsSyncDefinition, bool) {
-	if o == nil || o.Fields == nil {
+	if o == nil || IsNil(o.Fields) {
 		return nil, false
 	}
 	return o.Fields, true
@@ -83,7 +86,7 @@ func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) GetFieldsOk() (*Servic
 
 // HasFields returns a boolean if a field has been set.
 func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) HasFields() bool {
-	if o != nil && o.Fields != nil {
+	if o != nil && !IsNil(o.Fields) {
 		return true
 	}
 
@@ -96,14 +99,20 @@ func (o *ServiceNowSearchNotificationSyncDefinitionAllOf) SetFields(v ServiceNow
 }
 
 func (o ServiceNowSearchNotificationSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["externalId"] = o.ExternalId
-	}
-	if o.Fields != nil {
-		toSerialize["fields"] = o.Fields
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceNowSearchNotificationSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["externalId"] = o.ExternalId
+	if !IsNil(o.Fields) {
+		toSerialize["fields"] = o.Fields
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceNowSearchNotificationSyncDefinitionAllOf struct {

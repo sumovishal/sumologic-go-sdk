@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsOldestRecordTimestampExceedsThresholdTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsOldestRecordTimestampExceedsThresholdTracker{}
 
 // CSEWindowsOldestRecordTimestampExceedsThresholdTracker struct for CSEWindowsOldestRecordTimestampExceedsThresholdTracker
 type CSEWindowsOldestRecordTimestampExceedsThresholdTracker struct {
@@ -55,7 +58,7 @@ func NewCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithDefaults() *CS
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -65,7 +68,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetEventType() 
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -73,7 +76,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetEventTypeOk(
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -87,7 +90,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetEventType(v 
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -97,7 +100,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorId() s
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -105,7 +108,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorIdOk()
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -119,7 +122,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetSensorId(v s
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -129,7 +132,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorHostna
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -137,7 +140,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSensorHostna
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -151,7 +154,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetSensorHostna
 
 // GetSource returns the Source field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSource() string {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		var ret string
 		return ret
 	}
@@ -161,7 +164,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSource() str
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSourceOk() (*string, bool) {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		return nil, false
 	}
 	return o.Source, true
@@ -169,7 +172,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetSourceOk() (
 
 // HasSource returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasSource() bool {
-	if o != nil && o.Source != nil {
+	if o != nil && !IsNil(o.Source) {
 		return true
 	}
 
@@ -183,7 +186,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetSource(v str
 
 // GetLastErrorMessage returns the LastErrorMessage field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetLastErrorMessage() string {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -193,7 +196,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetLastErrorMes
 // GetLastErrorMessageOk returns a tuple with the LastErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetLastErrorMessageOk() (*string, bool) {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		return nil, false
 	}
 	return o.LastErrorMessage, true
@@ -201,7 +204,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetLastErrorMes
 
 // HasLastErrorMessage returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasLastErrorMessage() bool {
-	if o != nil && o.LastErrorMessage != nil {
+	if o != nil && !IsNil(o.LastErrorMessage) {
 		return true
 	}
 
@@ -215,7 +218,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetLastErrorMes
 
 // GetNumberOfFilesPending returns the NumberOfFilesPending field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetNumberOfFilesPending() string {
-	if o == nil || o.NumberOfFilesPending == nil {
+	if o == nil || IsNil(o.NumberOfFilesPending) {
 		var ret string
 		return ret
 	}
@@ -225,7 +228,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetNumberOfFile
 // GetNumberOfFilesPendingOk returns a tuple with the NumberOfFilesPending field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetNumberOfFilesPendingOk() (*string, bool) {
-	if o == nil || o.NumberOfFilesPending == nil {
+	if o == nil || IsNil(o.NumberOfFilesPending) {
 		return nil, false
 	}
 	return o.NumberOfFilesPending, true
@@ -233,7 +236,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetNumberOfFile
 
 // HasNumberOfFilesPending returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasNumberOfFilesPending() bool {
-	if o != nil && o.NumberOfFilesPending != nil {
+	if o != nil && !IsNil(o.NumberOfFilesPending) {
 		return true
 	}
 
@@ -247,7 +250,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetNumberOfFile
 
 // GetOldestTimestampInQueue returns the OldestTimestampInQueue field value if set, zero value otherwise.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetOldestTimestampInQueue() string {
-	if o == nil || o.OldestTimestampInQueue == nil {
+	if o == nil || IsNil(o.OldestTimestampInQueue) {
 		var ret string
 		return ret
 	}
@@ -257,7 +260,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetOldestTimest
 // GetOldestTimestampInQueueOk returns a tuple with the OldestTimestampInQueue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetOldestTimestampInQueueOk() (*string, bool) {
-	if o == nil || o.OldestTimestampInQueue == nil {
+	if o == nil || IsNil(o.OldestTimestampInQueue) {
 		return nil, false
 	}
 	return o.OldestTimestampInQueue, true
@@ -265,7 +268,7 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) GetOldestTimest
 
 // HasOldestTimestampInQueue returns a boolean if a field has been set.
 func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) HasOldestTimestampInQueue() bool {
-	if o != nil && o.OldestTimestampInQueue != nil {
+	if o != nil && !IsNil(o.OldestTimestampInQueue) {
 		return true
 	}
 
@@ -278,37 +281,45 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) SetOldestTimest
 }
 
 func (o CSEWindowsOldestRecordTimestampExceedsThresholdTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsOldestRecordTimestampExceedsThresholdTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.SensorId != nil {
+	if !IsNil(o.SensorId) {
 		toSerialize["sensorId"] = o.SensorId
 	}
-	if o.SensorHostname != nil {
+	if !IsNil(o.SensorHostname) {
 		toSerialize["sensorHostname"] = o.SensorHostname
 	}
-	if o.Source != nil {
+	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
-	if o.LastErrorMessage != nil {
+	if !IsNil(o.LastErrorMessage) {
 		toSerialize["lastErrorMessage"] = o.LastErrorMessage
 	}
-	if o.NumberOfFilesPending != nil {
+	if !IsNil(o.NumberOfFilesPending) {
 		toSerialize["numberOfFilesPending"] = o.NumberOfFilesPending
 	}
-	if o.OldestTimestampInQueue != nil {
+	if !IsNil(o.OldestTimestampInQueue) {
 		toSerialize["oldestTimestampInQueue"] = o.OldestTimestampInQueue
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsOldestRecordTimestampExceedsThresholdTracker struct {

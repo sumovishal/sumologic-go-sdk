@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Compliance type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Compliance{}
 
 // Compliance struct for Compliance
 type Compliance struct {
@@ -117,17 +120,19 @@ func (o *Compliance) SetTimezone(v string) {
 }
 
 func (o Compliance) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["complianceType"] = o.ComplianceType
-	}
-	if true {
-		toSerialize["target"] = o.Target
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Compliance) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["complianceType"] = o.ComplianceType
+	toSerialize["target"] = o.Target
+	toSerialize["timezone"] = o.Timezone
+	return toSerialize, nil
 }
 
 type NullableCompliance struct {

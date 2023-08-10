@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UpdateScheduledViewDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateScheduledViewDefinition{}
 
 // UpdateScheduledViewDefinition struct for UpdateScheduledViewDefinition
 type UpdateScheduledViewDefinition struct {
@@ -51,7 +54,7 @@ func NewUpdateScheduledViewDefinitionWithDefaults() *UpdateScheduledViewDefiniti
 
 // GetDataForwardingId returns the DataForwardingId field value if set, zero value otherwise.
 func (o *UpdateScheduledViewDefinition) GetDataForwardingId() string {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		var ret string
 		return ret
 	}
@@ -61,7 +64,7 @@ func (o *UpdateScheduledViewDefinition) GetDataForwardingId() string {
 // GetDataForwardingIdOk returns a tuple with the DataForwardingId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateScheduledViewDefinition) GetDataForwardingIdOk() (*string, bool) {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		return nil, false
 	}
 	return o.DataForwardingId, true
@@ -69,7 +72,7 @@ func (o *UpdateScheduledViewDefinition) GetDataForwardingIdOk() (*string, bool) 
 
 // HasDataForwardingId returns a boolean if a field has been set.
 func (o *UpdateScheduledViewDefinition) HasDataForwardingId() bool {
-	if o != nil && o.DataForwardingId != nil {
+	if o != nil && !IsNil(o.DataForwardingId) {
 		return true
 	}
 
@@ -83,7 +86,7 @@ func (o *UpdateScheduledViewDefinition) SetDataForwardingId(v string) {
 
 // GetRetentionPeriod returns the RetentionPeriod field value if set, zero value otherwise.
 func (o *UpdateScheduledViewDefinition) GetRetentionPeriod() int32 {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -93,7 +96,7 @@ func (o *UpdateScheduledViewDefinition) GetRetentionPeriod() int32 {
 // GetRetentionPeriodOk returns a tuple with the RetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateScheduledViewDefinition) GetRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		return nil, false
 	}
 	return o.RetentionPeriod, true
@@ -101,7 +104,7 @@ func (o *UpdateScheduledViewDefinition) GetRetentionPeriodOk() (*int32, bool) {
 
 // HasRetentionPeriod returns a boolean if a field has been set.
 func (o *UpdateScheduledViewDefinition) HasRetentionPeriod() bool {
-	if o != nil && o.RetentionPeriod != nil {
+	if o != nil && !IsNil(o.RetentionPeriod) {
 		return true
 	}
 
@@ -115,7 +118,7 @@ func (o *UpdateScheduledViewDefinition) SetRetentionPeriod(v int32) {
 
 // GetReduceRetentionPeriodImmediately returns the ReduceRetentionPeriodImmediately field value if set, zero value otherwise.
 func (o *UpdateScheduledViewDefinition) GetReduceRetentionPeriodImmediately() bool {
-	if o == nil || o.ReduceRetentionPeriodImmediately == nil {
+	if o == nil || IsNil(o.ReduceRetentionPeriodImmediately) {
 		var ret bool
 		return ret
 	}
@@ -125,7 +128,7 @@ func (o *UpdateScheduledViewDefinition) GetReduceRetentionPeriodImmediately() bo
 // GetReduceRetentionPeriodImmediatelyOk returns a tuple with the ReduceRetentionPeriodImmediately field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateScheduledViewDefinition) GetReduceRetentionPeriodImmediatelyOk() (*bool, bool) {
-	if o == nil || o.ReduceRetentionPeriodImmediately == nil {
+	if o == nil || IsNil(o.ReduceRetentionPeriodImmediately) {
 		return nil, false
 	}
 	return o.ReduceRetentionPeriodImmediately, true
@@ -133,7 +136,7 @@ func (o *UpdateScheduledViewDefinition) GetReduceRetentionPeriodImmediatelyOk() 
 
 // HasReduceRetentionPeriodImmediately returns a boolean if a field has been set.
 func (o *UpdateScheduledViewDefinition) HasReduceRetentionPeriodImmediately() bool {
-	if o != nil && o.ReduceRetentionPeriodImmediately != nil {
+	if o != nil && !IsNil(o.ReduceRetentionPeriodImmediately) {
 		return true
 	}
 
@@ -146,17 +149,25 @@ func (o *UpdateScheduledViewDefinition) SetReduceRetentionPeriodImmediately(v bo
 }
 
 func (o UpdateScheduledViewDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DataForwardingId != nil {
-		toSerialize["dataForwardingId"] = o.DataForwardingId
-	}
-	if o.RetentionPeriod != nil {
-		toSerialize["retentionPeriod"] = o.RetentionPeriod
-	}
-	if o.ReduceRetentionPeriodImmediately != nil {
-		toSerialize["reduceRetentionPeriodImmediately"] = o.ReduceRetentionPeriodImmediately
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateScheduledViewDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DataForwardingId) {
+		toSerialize["dataForwardingId"] = o.DataForwardingId
+	}
+	if !IsNil(o.RetentionPeriod) {
+		toSerialize["retentionPeriod"] = o.RetentionPeriod
+	}
+	if !IsNil(o.ReduceRetentionPeriodImmediately) {
+		toSerialize["reduceRetentionPeriodImmediately"] = o.ReduceRetentionPeriodImmediately
+	}
+	return toSerialize, nil
 }
 
 type NullableUpdateScheduledViewDefinition struct {

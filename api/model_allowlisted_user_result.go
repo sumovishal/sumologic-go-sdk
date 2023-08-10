@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the AllowlistedUserResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AllowlistedUserResult{}
 
 // AllowlistedUserResult struct for AllowlistedUserResult
 type AllowlistedUserResult struct {
@@ -226,29 +229,23 @@ func (o *AllowlistedUserResult) SetLastLogin(v time.Time) {
 }
 
 func (o AllowlistedUserResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["userId"] = o.UserId
-	}
-	if true {
-		toSerialize["firstName"] = o.FirstName
-	}
-	if true {
-		toSerialize["lastName"] = o.LastName
-	}
-	if true {
-		toSerialize["email"] = o.Email
-	}
-	if true {
-		toSerialize["canManageSaml"] = o.CanManageSaml
-	}
-	if true {
-		toSerialize["isActive"] = o.IsActive
-	}
-	if true {
-		toSerialize["lastLogin"] = o.LastLogin
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AllowlistedUserResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["userId"] = o.UserId
+	toSerialize["firstName"] = o.FirstName
+	toSerialize["lastName"] = o.LastName
+	toSerialize["email"] = o.Email
+	toSerialize["canManageSaml"] = o.CanManageSaml
+	toSerialize["isActive"] = o.IsActive
+	toSerialize["lastLogin"] = o.LastLogin
+	return toSerialize, nil
 }
 
 type NullableAllowlistedUserResult struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansQueryData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansQueryData{}
 
 // SpansQueryData The data format describing a basic spans query.
 type SpansQueryData struct {
@@ -144,20 +147,20 @@ func (o *SpansQueryData) SetLimit(v []SpansLimitItem) {
 }
 
 func (o SpansQueryData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["filters"] = o.Filters
-	}
-	if true {
-		toSerialize["visualizations"] = o.Visualizations
-	}
-	if true {
-		toSerialize["groupBy"] = o.GroupBy
-	}
-	if true {
-		toSerialize["limit"] = o.Limit
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansQueryData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["filters"] = o.Filters
+	toSerialize["visualizations"] = o.Visualizations
+	toSerialize["groupBy"] = o.GroupBy
+	toSerialize["limit"] = o.Limit
+	return toSerialize, nil
 }
 
 type NullableSpansQueryData struct {

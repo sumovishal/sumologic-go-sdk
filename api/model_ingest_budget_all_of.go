@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the IngestBudgetAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudgetAllOf{}
 
 // IngestBudgetAllOf struct for IngestBudgetAllOf
 type IngestBudgetAllOf struct {
@@ -70,7 +73,7 @@ func (o *IngestBudgetAllOf) SetId(v string) {
 
 // GetUsageBytes returns the UsageBytes field value if set, zero value otherwise.
 func (o *IngestBudgetAllOf) GetUsageBytes() int64 {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		var ret int64
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *IngestBudgetAllOf) GetUsageBytes() int64 {
 // GetUsageBytesOk returns a tuple with the UsageBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetAllOf) GetUsageBytesOk() (*int64, bool) {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		return nil, false
 	}
 	return o.UsageBytes, true
@@ -88,7 +91,7 @@ func (o *IngestBudgetAllOf) GetUsageBytesOk() (*int64, bool) {
 
 // HasUsageBytes returns a boolean if a field has been set.
 func (o *IngestBudgetAllOf) HasUsageBytes() bool {
-	if o != nil && o.UsageBytes != nil {
+	if o != nil && !IsNil(o.UsageBytes) {
 		return true
 	}
 
@@ -102,7 +105,7 @@ func (o *IngestBudgetAllOf) SetUsageBytes(v int64) {
 
 // GetUsageStatus returns the UsageStatus field value if set, zero value otherwise.
 func (o *IngestBudgetAllOf) GetUsageStatus() string {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		var ret string
 		return ret
 	}
@@ -112,7 +115,7 @@ func (o *IngestBudgetAllOf) GetUsageStatus() string {
 // GetUsageStatusOk returns a tuple with the UsageStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetAllOf) GetUsageStatusOk() (*string, bool) {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		return nil, false
 	}
 	return o.UsageStatus, true
@@ -120,7 +123,7 @@ func (o *IngestBudgetAllOf) GetUsageStatusOk() (*string, bool) {
 
 // HasUsageStatus returns a boolean if a field has been set.
 func (o *IngestBudgetAllOf) HasUsageStatus() bool {
-	if o != nil && o.UsageStatus != nil {
+	if o != nil && !IsNil(o.UsageStatus) {
 		return true
 	}
 
@@ -134,7 +137,7 @@ func (o *IngestBudgetAllOf) SetUsageStatus(v string) {
 
 // GetNumberOfCollectors returns the NumberOfCollectors field value if set, zero value otherwise.
 func (o *IngestBudgetAllOf) GetNumberOfCollectors() int64 {
-	if o == nil || o.NumberOfCollectors == nil {
+	if o == nil || IsNil(o.NumberOfCollectors) {
 		var ret int64
 		return ret
 	}
@@ -144,7 +147,7 @@ func (o *IngestBudgetAllOf) GetNumberOfCollectors() int64 {
 // GetNumberOfCollectorsOk returns a tuple with the NumberOfCollectors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetAllOf) GetNumberOfCollectorsOk() (*int64, bool) {
-	if o == nil || o.NumberOfCollectors == nil {
+	if o == nil || IsNil(o.NumberOfCollectors) {
 		return nil, false
 	}
 	return o.NumberOfCollectors, true
@@ -152,7 +155,7 @@ func (o *IngestBudgetAllOf) GetNumberOfCollectorsOk() (*int64, bool) {
 
 // HasNumberOfCollectors returns a boolean if a field has been set.
 func (o *IngestBudgetAllOf) HasNumberOfCollectors() bool {
-	if o != nil && o.NumberOfCollectors != nil {
+	if o != nil && !IsNil(o.NumberOfCollectors) {
 		return true
 	}
 
@@ -165,20 +168,26 @@ func (o *IngestBudgetAllOf) SetNumberOfCollectors(v int64) {
 }
 
 func (o IngestBudgetAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.UsageBytes != nil {
-		toSerialize["usageBytes"] = o.UsageBytes
-	}
-	if o.UsageStatus != nil {
-		toSerialize["usageStatus"] = o.UsageStatus
-	}
-	if o.NumberOfCollectors != nil {
-		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudgetAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.UsageBytes) {
+		toSerialize["usageBytes"] = o.UsageBytes
+	}
+	if !IsNil(o.UsageStatus) {
+		toSerialize["usageStatus"] = o.UsageStatus
+	}
+	if !IsNil(o.NumberOfCollectors) {
+		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudgetAllOf struct {

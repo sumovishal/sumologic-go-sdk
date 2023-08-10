@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the MetricsStaticCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsStaticCondition{}
+
 // MetricsStaticCondition struct for MetricsStaticCondition
 type MetricsStaticCondition struct {
 	TriggerCondition
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold float64 `json:"threshold"`
@@ -25,6 +28,8 @@ type MetricsStaticCondition struct {
 	ThresholdType string `json:"thresholdType"`
 	// The criteria to evaluate the threshold and thresholdType in the given time range. Valid values:   1. `AtLeastOnce`: Trigger if the threshold is met at least once. (NOTE: This is the only valid value if monitorType is `Metrics`.)   2. `Always`: Trigger if the threshold is met continuously. (NOTE: This is the only valid value if monitorType is `Metrics`.)   3. `ResultCount`: Trigger if the threshold is met against the count of results. (NOTE: This is the only valid value if monitorType is `Logs`.)   4. `MissingData`: Trigger if the data is missing. (NOTE: This is valid for both `Logs` and `Metrics` monitorTypes)
 	OccurrenceType string `json:"occurrenceType"`
+	// The minimum number of data points required for the monitor to alert or resolve within the time range specified. This field will always be set to 1 for `AtleastOnce` occurrence type and for `Always`, if not specified by user it will default to 2.
+	MinDataPoints *int32 `json:"minDataPoints,omitempty"`
 }
 
 // NewMetricsStaticCondition instantiates a new MetricsStaticCondition object
@@ -151,29 +156,64 @@ func (o *MetricsStaticCondition) SetOccurrenceType(v string) {
 	o.OccurrenceType = v
 }
 
+// GetMinDataPoints returns the MinDataPoints field value if set, zero value otherwise.
+func (o *MetricsStaticCondition) GetMinDataPoints() int32 {
+	if o == nil || IsNil(o.MinDataPoints) {
+		var ret int32
+		return ret
+	}
+	return *o.MinDataPoints
+}
+
+// GetMinDataPointsOk returns a tuple with the MinDataPoints field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MetricsStaticCondition) GetMinDataPointsOk() (*int32, bool) {
+	if o == nil || IsNil(o.MinDataPoints) {
+		return nil, false
+	}
+	return o.MinDataPoints, true
+}
+
+// HasMinDataPoints returns a boolean if a field has been set.
+func (o *MetricsStaticCondition) HasMinDataPoints() bool {
+	if o != nil && !IsNil(o.MinDataPoints) {
+		return true
+	}
+
+	return false
+}
+
+// SetMinDataPoints gets a reference to the given int32 and assigns it to the MinDataPoints field.
+func (o *MetricsStaticCondition) SetMinDataPoints(v int32) {
+	o.MinDataPoints = &v
+}
+
 func (o MetricsStaticCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetricsStaticCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize["timeRange"] = o.TimeRange
+	toSerialize["threshold"] = o.Threshold
+	toSerialize["thresholdType"] = o.ThresholdType
+	toSerialize["occurrenceType"] = o.OccurrenceType
+	if !IsNil(o.MinDataPoints) {
+		toSerialize["minDataPoints"] = o.MinDataPoints
 	}
-	if true {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if true {
-		toSerialize["thresholdType"] = o.ThresholdType
-	}
-	if true {
-		toSerialize["occurrenceType"] = o.OccurrenceType
-	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMetricsStaticCondition struct {

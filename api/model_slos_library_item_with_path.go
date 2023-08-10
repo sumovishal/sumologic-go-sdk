@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SlosLibraryItemWithPath type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibraryItemWithPath{}
 
 // SlosLibraryItemWithPath struct for SlosLibraryItemWithPath
 type SlosLibraryItemWithPath struct {
@@ -89,14 +92,18 @@ func (o *SlosLibraryItemWithPath) SetPath(v string) {
 }
 
 func (o SlosLibraryItemWithPath) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["item"] = o.Item
-	}
-	if true {
-		toSerialize["path"] = o.Path
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibraryItemWithPath) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["item"] = o.Item
+	toSerialize["path"] = o.Path
+	return toSerialize, nil
 }
 
 type NullableSlosLibraryItemWithPath struct {

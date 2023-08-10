@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,17 +14,20 @@ import (
 	"encoding/json"
 )
 
-// SliStatus Object containing status of SLI computation in the system, SLI value, error budget remaining.
+// checks if the SliStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SliStatus{}
+
+// SliStatus Status of the SLI computation. If the status is successful, also contains the SLI value and error budget remaining for the current compliance period.
 type SliStatus struct {
-	// Status showing whether the SLI related metrics for the SLO were successfully computed or had an irrecoverable error during calculation or computation is in progress.
+	// Whether the SLI computation is complete / had an error / is in progress.
 	Status string `json:"status"`
-	// SLI percentage for the compliance period.
+	// SLI percentage for the compliance period. Available if `status` is `Success`.
 	SliPercentage *float64 `json:"sliPercentage,omitempty"`
-	// A string representing the error budget remaining in percentage.
+	// Percentage of error budget remaining for the compliance period. Available if `status` is `Success`.
 	ErrorBudgetRemainingPercentage *float64 `json:"errorBudgetRemainingPercentage,omitempty"`
-	// A string representing the absolute error budget remaining in terms of time or number of requests.
+	// Formatted string for the absolute error budget remaining (time duration for window-based SLIs, request count for request-based SLIs). Available if `status` is `Success`.
 	AbsoluteErrorBudgetRemaining *string `json:"absoluteErrorBudgetRemaining,omitempty"`
-	// The percentage progress of SLI metrics calculation in the system if SLI metrics are currently being computed.
+	// SLI computation progress.
 	ProgressPercentage *float64 `json:"progressPercentage,omitempty"`
 }
 
@@ -72,7 +75,7 @@ func (o *SliStatus) SetStatus(v string) {
 
 // GetSliPercentage returns the SliPercentage field value if set, zero value otherwise.
 func (o *SliStatus) GetSliPercentage() float64 {
-	if o == nil || o.SliPercentage == nil {
+	if o == nil || IsNil(o.SliPercentage) {
 		var ret float64
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *SliStatus) GetSliPercentage() float64 {
 // GetSliPercentageOk returns a tuple with the SliPercentage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SliStatus) GetSliPercentageOk() (*float64, bool) {
-	if o == nil || o.SliPercentage == nil {
+	if o == nil || IsNil(o.SliPercentage) {
 		return nil, false
 	}
 	return o.SliPercentage, true
@@ -90,7 +93,7 @@ func (o *SliStatus) GetSliPercentageOk() (*float64, bool) {
 
 // HasSliPercentage returns a boolean if a field has been set.
 func (o *SliStatus) HasSliPercentage() bool {
-	if o != nil && o.SliPercentage != nil {
+	if o != nil && !IsNil(o.SliPercentage) {
 		return true
 	}
 
@@ -104,7 +107,7 @@ func (o *SliStatus) SetSliPercentage(v float64) {
 
 // GetErrorBudgetRemainingPercentage returns the ErrorBudgetRemainingPercentage field value if set, zero value otherwise.
 func (o *SliStatus) GetErrorBudgetRemainingPercentage() float64 {
-	if o == nil || o.ErrorBudgetRemainingPercentage == nil {
+	if o == nil || IsNil(o.ErrorBudgetRemainingPercentage) {
 		var ret float64
 		return ret
 	}
@@ -114,7 +117,7 @@ func (o *SliStatus) GetErrorBudgetRemainingPercentage() float64 {
 // GetErrorBudgetRemainingPercentageOk returns a tuple with the ErrorBudgetRemainingPercentage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SliStatus) GetErrorBudgetRemainingPercentageOk() (*float64, bool) {
-	if o == nil || o.ErrorBudgetRemainingPercentage == nil {
+	if o == nil || IsNil(o.ErrorBudgetRemainingPercentage) {
 		return nil, false
 	}
 	return o.ErrorBudgetRemainingPercentage, true
@@ -122,7 +125,7 @@ func (o *SliStatus) GetErrorBudgetRemainingPercentageOk() (*float64, bool) {
 
 // HasErrorBudgetRemainingPercentage returns a boolean if a field has been set.
 func (o *SliStatus) HasErrorBudgetRemainingPercentage() bool {
-	if o != nil && o.ErrorBudgetRemainingPercentage != nil {
+	if o != nil && !IsNil(o.ErrorBudgetRemainingPercentage) {
 		return true
 	}
 
@@ -136,7 +139,7 @@ func (o *SliStatus) SetErrorBudgetRemainingPercentage(v float64) {
 
 // GetAbsoluteErrorBudgetRemaining returns the AbsoluteErrorBudgetRemaining field value if set, zero value otherwise.
 func (o *SliStatus) GetAbsoluteErrorBudgetRemaining() string {
-	if o == nil || o.AbsoluteErrorBudgetRemaining == nil {
+	if o == nil || IsNil(o.AbsoluteErrorBudgetRemaining) {
 		var ret string
 		return ret
 	}
@@ -146,7 +149,7 @@ func (o *SliStatus) GetAbsoluteErrorBudgetRemaining() string {
 // GetAbsoluteErrorBudgetRemainingOk returns a tuple with the AbsoluteErrorBudgetRemaining field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SliStatus) GetAbsoluteErrorBudgetRemainingOk() (*string, bool) {
-	if o == nil || o.AbsoluteErrorBudgetRemaining == nil {
+	if o == nil || IsNil(o.AbsoluteErrorBudgetRemaining) {
 		return nil, false
 	}
 	return o.AbsoluteErrorBudgetRemaining, true
@@ -154,7 +157,7 @@ func (o *SliStatus) GetAbsoluteErrorBudgetRemainingOk() (*string, bool) {
 
 // HasAbsoluteErrorBudgetRemaining returns a boolean if a field has been set.
 func (o *SliStatus) HasAbsoluteErrorBudgetRemaining() bool {
-	if o != nil && o.AbsoluteErrorBudgetRemaining != nil {
+	if o != nil && !IsNil(o.AbsoluteErrorBudgetRemaining) {
 		return true
 	}
 
@@ -168,7 +171,7 @@ func (o *SliStatus) SetAbsoluteErrorBudgetRemaining(v string) {
 
 // GetProgressPercentage returns the ProgressPercentage field value if set, zero value otherwise.
 func (o *SliStatus) GetProgressPercentage() float64 {
-	if o == nil || o.ProgressPercentage == nil {
+	if o == nil || IsNil(o.ProgressPercentage) {
 		var ret float64
 		return ret
 	}
@@ -178,7 +181,7 @@ func (o *SliStatus) GetProgressPercentage() float64 {
 // GetProgressPercentageOk returns a tuple with the ProgressPercentage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SliStatus) GetProgressPercentageOk() (*float64, bool) {
-	if o == nil || o.ProgressPercentage == nil {
+	if o == nil || IsNil(o.ProgressPercentage) {
 		return nil, false
 	}
 	return o.ProgressPercentage, true
@@ -186,7 +189,7 @@ func (o *SliStatus) GetProgressPercentageOk() (*float64, bool) {
 
 // HasProgressPercentage returns a boolean if a field has been set.
 func (o *SliStatus) HasProgressPercentage() bool {
-	if o != nil && o.ProgressPercentage != nil {
+	if o != nil && !IsNil(o.ProgressPercentage) {
 		return true
 	}
 
@@ -199,23 +202,29 @@ func (o *SliStatus) SetProgressPercentage(v float64) {
 }
 
 func (o SliStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.SliPercentage != nil {
-		toSerialize["sliPercentage"] = o.SliPercentage
-	}
-	if o.ErrorBudgetRemainingPercentage != nil {
-		toSerialize["errorBudgetRemainingPercentage"] = o.ErrorBudgetRemainingPercentage
-	}
-	if o.AbsoluteErrorBudgetRemaining != nil {
-		toSerialize["absoluteErrorBudgetRemaining"] = o.AbsoluteErrorBudgetRemaining
-	}
-	if o.ProgressPercentage != nil {
-		toSerialize["progressPercentage"] = o.ProgressPercentage
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SliStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["status"] = o.Status
+	if !IsNil(o.SliPercentage) {
+		toSerialize["sliPercentage"] = o.SliPercentage
+	}
+	if !IsNil(o.ErrorBudgetRemainingPercentage) {
+		toSerialize["errorBudgetRemainingPercentage"] = o.ErrorBudgetRemainingPercentage
+	}
+	if !IsNil(o.AbsoluteErrorBudgetRemaining) {
+		toSerialize["absoluteErrorBudgetRemaining"] = o.AbsoluteErrorBudgetRemaining
+	}
+	if !IsNil(o.ProgressPercentage) {
+		toSerialize["progressPercentage"] = o.ProgressPercentage
+	}
+	return toSerialize, nil
 }
 
 type NullableSliStatus struct {

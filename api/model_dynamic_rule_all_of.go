@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DynamicRuleAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DynamicRuleAllOf{}
 
 // DynamicRuleAllOf struct for DynamicRuleAllOf
 type DynamicRuleAllOf struct {
@@ -90,14 +93,18 @@ func (o *DynamicRuleAllOf) SetIsSystemRule(v bool) {
 }
 
 func (o DynamicRuleAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["isSystemRule"] = o.IsSystemRule
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DynamicRuleAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["isSystemRule"] = o.IsSystemRule
+	return toSerialize, nil
 }
 
 type NullableDynamicRuleAllOf struct {

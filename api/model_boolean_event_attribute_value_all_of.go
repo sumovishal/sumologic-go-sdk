@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BooleanEventAttributeValueAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BooleanEventAttributeValueAllOf{}
 
 // BooleanEventAttributeValueAllOf struct for BooleanEventAttributeValueAllOf
 type BooleanEventAttributeValueAllOf struct {
@@ -62,11 +65,17 @@ func (o *BooleanEventAttributeValueAllOf) SetValue(v bool) {
 }
 
 func (o BooleanEventAttributeValueAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["value"] = o.Value
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BooleanEventAttributeValueAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["value"] = o.Value
+	return toSerialize, nil
 }
 
 type NullableBooleanEventAttributeValueAllOf struct {

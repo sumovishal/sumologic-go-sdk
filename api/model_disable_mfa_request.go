@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DisableMfaRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DisableMfaRequest{}
 
 // DisableMfaRequest struct for DisableMfaRequest
 type DisableMfaRequest struct {
@@ -90,14 +93,18 @@ func (o *DisableMfaRequest) SetPassword(v string) {
 }
 
 func (o DisableMfaRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["email"] = o.Email
-	}
-	if true {
-		toSerialize["password"] = o.Password
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DisableMfaRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["email"] = o.Email
+	toSerialize["password"] = o.Password
+	return toSerialize, nil
 }
 
 type NullableDisableMfaRequest struct {

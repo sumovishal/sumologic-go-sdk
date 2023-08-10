@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AllowlistingStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AllowlistingStatus{}
 
 // AllowlistingStatus The status of service allowlisting for Content and Login.
 type AllowlistingStatus struct {
@@ -90,14 +93,18 @@ func (o *AllowlistingStatus) SetLoginEnabled(v bool) {
 }
 
 func (o AllowlistingStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["contentEnabled"] = o.ContentEnabled
-	}
-	if true {
-		toSerialize["loginEnabled"] = o.LoginEnabled
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AllowlistingStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["contentEnabled"] = o.ContentEnabled
+	toSerialize["loginEnabled"] = o.LoginEnabled
+	return toSerialize, nil
 }
 
 type NullableAllowlistingStatus struct {

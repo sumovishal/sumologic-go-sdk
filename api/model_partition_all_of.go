@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PartitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PartitionAllOf{}
 
 // PartitionAllOf struct for PartitionAllOf
 type PartitionAllOf struct {
@@ -97,7 +100,7 @@ func (o *PartitionAllOf) SetTotalBytes(v int64) {
 
 // GetIsActive returns the IsActive field value if set, zero value otherwise.
 func (o *PartitionAllOf) GetIsActive() bool {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		var ret bool
 		return ret
 	}
@@ -107,7 +110,7 @@ func (o *PartitionAllOf) GetIsActive() bool {
 // GetIsActiveOk returns a tuple with the IsActive field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PartitionAllOf) GetIsActiveOk() (*bool, bool) {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		return nil, false
 	}
 	return o.IsActive, true
@@ -115,7 +118,7 @@ func (o *PartitionAllOf) GetIsActiveOk() (*bool, bool) {
 
 // HasIsActive returns a boolean if a field has been set.
 func (o *PartitionAllOf) HasIsActive() bool {
-	if o != nil && o.IsActive != nil {
+	if o != nil && !IsNil(o.IsActive) {
 		return true
 	}
 
@@ -129,7 +132,7 @@ func (o *PartitionAllOf) SetIsActive(v bool) {
 
 // GetIndexType returns the IndexType field value if set, zero value otherwise.
 func (o *PartitionAllOf) GetIndexType() string {
-	if o == nil || o.IndexType == nil {
+	if o == nil || IsNil(o.IndexType) {
 		var ret string
 		return ret
 	}
@@ -139,7 +142,7 @@ func (o *PartitionAllOf) GetIndexType() string {
 // GetIndexTypeOk returns a tuple with the IndexType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PartitionAllOf) GetIndexTypeOk() (*string, bool) {
-	if o == nil || o.IndexType == nil {
+	if o == nil || IsNil(o.IndexType) {
 		return nil, false
 	}
 	return o.IndexType, true
@@ -147,7 +150,7 @@ func (o *PartitionAllOf) GetIndexTypeOk() (*string, bool) {
 
 // HasIndexType returns a boolean if a field has been set.
 func (o *PartitionAllOf) HasIndexType() bool {
-	if o != nil && o.IndexType != nil {
+	if o != nil && !IsNil(o.IndexType) {
 		return true
 	}
 
@@ -161,7 +164,7 @@ func (o *PartitionAllOf) SetIndexType(v string) {
 
 // GetDataForwardingId returns the DataForwardingId field value if set, zero value otherwise.
 func (o *PartitionAllOf) GetDataForwardingId() string {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		var ret string
 		return ret
 	}
@@ -171,7 +174,7 @@ func (o *PartitionAllOf) GetDataForwardingId() string {
 // GetDataForwardingIdOk returns a tuple with the DataForwardingId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PartitionAllOf) GetDataForwardingIdOk() (*string, bool) {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		return nil, false
 	}
 	return o.DataForwardingId, true
@@ -179,7 +182,7 @@ func (o *PartitionAllOf) GetDataForwardingIdOk() (*string, bool) {
 
 // HasDataForwardingId returns a boolean if a field has been set.
 func (o *PartitionAllOf) HasDataForwardingId() bool {
-	if o != nil && o.DataForwardingId != nil {
+	if o != nil && !IsNil(o.DataForwardingId) {
 		return true
 	}
 
@@ -192,23 +195,27 @@ func (o *PartitionAllOf) SetDataForwardingId(v string) {
 }
 
 func (o PartitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["totalBytes"] = o.TotalBytes
-	}
-	if o.IsActive != nil {
-		toSerialize["isActive"] = o.IsActive
-	}
-	if o.IndexType != nil {
-		toSerialize["indexType"] = o.IndexType
-	}
-	if o.DataForwardingId != nil {
-		toSerialize["dataForwardingId"] = o.DataForwardingId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PartitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["totalBytes"] = o.TotalBytes
+	if !IsNil(o.IsActive) {
+		toSerialize["isActive"] = o.IsActive
+	}
+	if !IsNil(o.IndexType) {
+		toSerialize["indexType"] = o.IndexType
+	}
+	if !IsNil(o.DataForwardingId) {
+		toSerialize["dataForwardingId"] = o.DataForwardingId
+	}
+	return toSerialize, nil
 }
 
 type NullablePartitionAllOf struct {

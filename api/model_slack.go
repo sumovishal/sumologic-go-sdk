@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Slack type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Slack{}
+
 // Slack struct for Slack
 type Slack struct {
 	Action
@@ -21,6 +24,8 @@ type Slack struct {
 	ConnectionId string `json:"connectionId"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	// The override of the resolution JSON payload of the connection. Should be in JSON format.
+	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
 }
 
 // NewSlack instantiates a new Slack object
@@ -68,7 +73,7 @@ func (o *Slack) SetConnectionId(v string) {
 
 // GetPayloadOverride returns the PayloadOverride field value if set, zero value otherwise.
 func (o *Slack) GetPayloadOverride() string {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		var ret string
 		return ret
 	}
@@ -78,7 +83,7 @@ func (o *Slack) GetPayloadOverride() string {
 // GetPayloadOverrideOk returns a tuple with the PayloadOverride field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Slack) GetPayloadOverrideOk() (*string, bool) {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		return nil, false
 	}
 	return o.PayloadOverride, true
@@ -86,7 +91,7 @@ func (o *Slack) GetPayloadOverrideOk() (*string, bool) {
 
 // HasPayloadOverride returns a boolean if a field has been set.
 func (o *Slack) HasPayloadOverride() bool {
-	if o != nil && o.PayloadOverride != nil {
+	if o != nil && !IsNil(o.PayloadOverride) {
 		return true
 	}
 
@@ -98,23 +103,64 @@ func (o *Slack) SetPayloadOverride(v string) {
 	o.PayloadOverride = &v
 }
 
+// GetResolutionPayloadOverride returns the ResolutionPayloadOverride field value if set, zero value otherwise.
+func (o *Slack) GetResolutionPayloadOverride() string {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		var ret string
+		return ret
+	}
+	return *o.ResolutionPayloadOverride
+}
+
+// GetResolutionPayloadOverrideOk returns a tuple with the ResolutionPayloadOverride field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Slack) GetResolutionPayloadOverrideOk() (*string, bool) {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		return nil, false
+	}
+	return o.ResolutionPayloadOverride, true
+}
+
+// HasResolutionPayloadOverride returns a boolean if a field has been set.
+func (o *Slack) HasResolutionPayloadOverride() bool {
+	if o != nil && !IsNil(o.ResolutionPayloadOverride) {
+		return true
+	}
+
+	return false
+}
+
+// SetResolutionPayloadOverride gets a reference to the given string and assigns it to the ResolutionPayloadOverride field.
+func (o *Slack) SetResolutionPayloadOverride(v string) {
+	o.ResolutionPayloadOverride = &v
+}
+
 func (o Slack) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Slack) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAction, errAction := json.Marshal(o.Action)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
 	errAction = json.Unmarshal([]byte(serializedAction), &toSerialize)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
-	if true {
-		toSerialize["connectionId"] = o.ConnectionId
-	}
-	if o.PayloadOverride != nil {
+	toSerialize["connectionId"] = o.ConnectionId
+	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
-	return json.Marshal(toSerialize)
+	if !IsNil(o.ResolutionPayloadOverride) {
+		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
+	}
+	return toSerialize, nil
 }
 
 type NullableSlack struct {

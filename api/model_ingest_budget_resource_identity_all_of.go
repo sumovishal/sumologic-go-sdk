@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,17 @@ import (
 	"encoding/json"
 )
 
+// checks if the IngestBudgetResourceIdentityAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudgetResourceIdentityAllOf{}
+
 // IngestBudgetResourceIdentityAllOf struct for IngestBudgetResourceIdentityAllOf
 type IngestBudgetResourceIdentityAllOf struct {
 	// The unique field value of the ingest budget v1. This will be empty for v2 budgets.
 	IngestBudgetFieldValue *string `json:"ingestBudgetFieldValue,omitempty"`
 	// The scope of the ingest budget v2. This will be empty for v1 budgets.
 	Scope *string `json:"scope,omitempty"`
+	// The type of budget. Supported values are:  * `dailyVolume` * `minuteVolume`
+	BudgetType *string `json:"budgetType,omitempty"`
 }
 
 // NewIngestBudgetResourceIdentityAllOf instantiates a new IngestBudgetResourceIdentityAllOf object
@@ -49,7 +54,7 @@ func NewIngestBudgetResourceIdentityAllOfWithDefaults() *IngestBudgetResourceIde
 
 // GetIngestBudgetFieldValue returns the IngestBudgetFieldValue field value if set, zero value otherwise.
 func (o *IngestBudgetResourceIdentityAllOf) GetIngestBudgetFieldValue() string {
-	if o == nil || o.IngestBudgetFieldValue == nil {
+	if o == nil || IsNil(o.IngestBudgetFieldValue) {
 		var ret string
 		return ret
 	}
@@ -59,7 +64,7 @@ func (o *IngestBudgetResourceIdentityAllOf) GetIngestBudgetFieldValue() string {
 // GetIngestBudgetFieldValueOk returns a tuple with the IngestBudgetFieldValue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetResourceIdentityAllOf) GetIngestBudgetFieldValueOk() (*string, bool) {
-	if o == nil || o.IngestBudgetFieldValue == nil {
+	if o == nil || IsNil(o.IngestBudgetFieldValue) {
 		return nil, false
 	}
 	return o.IngestBudgetFieldValue, true
@@ -67,7 +72,7 @@ func (o *IngestBudgetResourceIdentityAllOf) GetIngestBudgetFieldValueOk() (*stri
 
 // HasIngestBudgetFieldValue returns a boolean if a field has been set.
 func (o *IngestBudgetResourceIdentityAllOf) HasIngestBudgetFieldValue() bool {
-	if o != nil && o.IngestBudgetFieldValue != nil {
+	if o != nil && !IsNil(o.IngestBudgetFieldValue) {
 		return true
 	}
 
@@ -81,7 +86,7 @@ func (o *IngestBudgetResourceIdentityAllOf) SetIngestBudgetFieldValue(v string) 
 
 // GetScope returns the Scope field value if set, zero value otherwise.
 func (o *IngestBudgetResourceIdentityAllOf) GetScope() string {
-	if o == nil || o.Scope == nil {
+	if o == nil || IsNil(o.Scope) {
 		var ret string
 		return ret
 	}
@@ -91,7 +96,7 @@ func (o *IngestBudgetResourceIdentityAllOf) GetScope() string {
 // GetScopeOk returns a tuple with the Scope field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetResourceIdentityAllOf) GetScopeOk() (*string, bool) {
-	if o == nil || o.Scope == nil {
+	if o == nil || IsNil(o.Scope) {
 		return nil, false
 	}
 	return o.Scope, true
@@ -99,7 +104,7 @@ func (o *IngestBudgetResourceIdentityAllOf) GetScopeOk() (*string, bool) {
 
 // HasScope returns a boolean if a field has been set.
 func (o *IngestBudgetResourceIdentityAllOf) HasScope() bool {
-	if o != nil && o.Scope != nil {
+	if o != nil && !IsNil(o.Scope) {
 		return true
 	}
 
@@ -111,15 +116,58 @@ func (o *IngestBudgetResourceIdentityAllOf) SetScope(v string) {
 	o.Scope = &v
 }
 
-func (o IngestBudgetResourceIdentityAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.IngestBudgetFieldValue != nil {
-		toSerialize["ingestBudgetFieldValue"] = o.IngestBudgetFieldValue
+// GetBudgetType returns the BudgetType field value if set, zero value otherwise.
+func (o *IngestBudgetResourceIdentityAllOf) GetBudgetType() string {
+	if o == nil || IsNil(o.BudgetType) {
+		var ret string
+		return ret
 	}
-	if o.Scope != nil {
-		toSerialize["scope"] = o.Scope
+	return *o.BudgetType
+}
+
+// GetBudgetTypeOk returns a tuple with the BudgetType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *IngestBudgetResourceIdentityAllOf) GetBudgetTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.BudgetType) {
+		return nil, false
+	}
+	return o.BudgetType, true
+}
+
+// HasBudgetType returns a boolean if a field has been set.
+func (o *IngestBudgetResourceIdentityAllOf) HasBudgetType() bool {
+	if o != nil && !IsNil(o.BudgetType) {
+		return true
+	}
+
+	return false
+}
+
+// SetBudgetType gets a reference to the given string and assigns it to the BudgetType field.
+func (o *IngestBudgetResourceIdentityAllOf) SetBudgetType(v string) {
+	o.BudgetType = &v
+}
+
+func (o IngestBudgetResourceIdentityAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudgetResourceIdentityAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.IngestBudgetFieldValue) {
+		toSerialize["ingestBudgetFieldValue"] = o.IngestBudgetFieldValue
+	}
+	if !IsNil(o.Scope) {
+		toSerialize["scope"] = o.Scope
+	}
+	if !IsNil(o.BudgetType) {
+		toSerialize["budgetType"] = o.BudgetType
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudgetResourceIdentityAllOf struct {

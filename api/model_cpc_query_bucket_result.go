@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the CpcQueryBucketResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CpcQueryBucketResult{}
 
 // CpcQueryBucketResult struct for CpcQueryBucketResult
 type CpcQueryBucketResult struct {
@@ -30,13 +33,14 @@ type CpcQueryBucketResult struct {
 	// The summary of aggregated Critical Path Contribution data on a per service basis.  Each element of the array corresponds to a summary for a specific service.
 	PerServiceCpcSummaries []CpcServiceSummary `json:"perServiceCpcSummaries"`
 	OtherServicesCpcSummary CpcSummary `json:"otherServicesCpcSummary"`
+	IdleTimeCpcSummary CpcSummary `json:"idleTimeCpcSummary"`
 }
 
 // NewCpcQueryBucketResult instantiates a new CpcQueryBucketResult object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCpcQueryBucketResult(bucketId string, startTimestamp time.Time, length int64, totalNumOfTraces int64, avgTraceDuration float64, perServiceCpcSummaries []CpcServiceSummary, otherServicesCpcSummary CpcSummary) *CpcQueryBucketResult {
+func NewCpcQueryBucketResult(bucketId string, startTimestamp time.Time, length int64, totalNumOfTraces int64, avgTraceDuration float64, perServiceCpcSummaries []CpcServiceSummary, otherServicesCpcSummary CpcSummary, idleTimeCpcSummary CpcSummary) *CpcQueryBucketResult {
 	this := CpcQueryBucketResult{}
 	this.BucketId = bucketId
 	this.StartTimestamp = startTimestamp
@@ -45,6 +49,7 @@ func NewCpcQueryBucketResult(bucketId string, startTimestamp time.Time, length i
 	this.AvgTraceDuration = avgTraceDuration
 	this.PerServiceCpcSummaries = perServiceCpcSummaries
 	this.OtherServicesCpcSummary = otherServicesCpcSummary
+	this.IdleTimeCpcSummary = idleTimeCpcSummary
 	return &this
 }
 
@@ -224,30 +229,49 @@ func (o *CpcQueryBucketResult) SetOtherServicesCpcSummary(v CpcSummary) {
 	o.OtherServicesCpcSummary = v
 }
 
+// GetIdleTimeCpcSummary returns the IdleTimeCpcSummary field value
+func (o *CpcQueryBucketResult) GetIdleTimeCpcSummary() CpcSummary {
+	if o == nil {
+		var ret CpcSummary
+		return ret
+	}
+
+	return o.IdleTimeCpcSummary
+}
+
+// GetIdleTimeCpcSummaryOk returns a tuple with the IdleTimeCpcSummary field value
+// and a boolean to check if the value has been set.
+func (o *CpcQueryBucketResult) GetIdleTimeCpcSummaryOk() (*CpcSummary, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IdleTimeCpcSummary, true
+}
+
+// SetIdleTimeCpcSummary sets field value
+func (o *CpcQueryBucketResult) SetIdleTimeCpcSummary(v CpcSummary) {
+	o.IdleTimeCpcSummary = v
+}
+
 func (o CpcQueryBucketResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["bucketId"] = o.BucketId
-	}
-	if true {
-		toSerialize["startTimestamp"] = o.StartTimestamp
-	}
-	if true {
-		toSerialize["length"] = o.Length
-	}
-	if true {
-		toSerialize["totalNumOfTraces"] = o.TotalNumOfTraces
-	}
-	if true {
-		toSerialize["avgTraceDuration"] = o.AvgTraceDuration
-	}
-	if true {
-		toSerialize["perServiceCpcSummaries"] = o.PerServiceCpcSummaries
-	}
-	if true {
-		toSerialize["otherServicesCpcSummary"] = o.OtherServicesCpcSummary
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CpcQueryBucketResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["bucketId"] = o.BucketId
+	toSerialize["startTimestamp"] = o.StartTimestamp
+	toSerialize["length"] = o.Length
+	toSerialize["totalNumOfTraces"] = o.TotalNumOfTraces
+	toSerialize["avgTraceDuration"] = o.AvgTraceDuration
+	toSerialize["perServiceCpcSummaries"] = o.PerServiceCpcSummaries
+	toSerialize["otherServicesCpcSummary"] = o.OtherServicesCpcSummary
+	toSerialize["idleTimeCpcSummary"] = o.IdleTimeCpcSummary
+	return toSerialize, nil
 }
 
 type NullableCpcQueryBucketResult struct {

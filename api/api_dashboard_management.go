@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -108,9 +108,9 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -126,7 +126,8 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -183,7 +184,7 @@ func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashbo
 	}
 
 	localVarPath := localBasePath + "/v2/dashboards/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -216,9 +217,9 @@ func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashbo
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -234,7 +235,8 @@ func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashbo
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 
@@ -326,9 +328,9 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -344,7 +346,8 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -366,7 +369,7 @@ type ApiGetAsyncReportGenerationResultRequest struct {
 	jobId string
 }
 
-func (r ApiGetAsyncReportGenerationResultRequest) Execute() (**os.File, *http.Response, error) {
+func (r ApiGetAsyncReportGenerationResultRequest) Execute() (*os.File, *http.Response, error) {
 	return r.ApiService.GetAsyncReportGenerationResultExecute(r)
 }
 
@@ -389,12 +392,12 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResult(ctx conte
 
 // Execute executes the request
 //  @return *os.File
-func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (**os.File, *http.Response, error) {
+func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (*os.File, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  **os.File
+		localVarReturnValue  *os.File
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetAsyncReportGenerationResult")
@@ -403,7 +406,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 	}
 
 	localVarPath := localBasePath + "/v2/dashboards/reportJobs/{jobId}/result"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -436,9 +439,9 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -454,7 +457,8 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -513,7 +517,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 	}
 
 	localVarPath := localBasePath + "/v2/dashboards/reportJobs/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -546,9 +550,9 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -564,7 +568,8 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -623,7 +628,7 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 	}
 
 	localVarPath := localBasePath + "/v2/dashboards/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -656,9 +661,9 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -674,7 +679,230 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetDashboardMigrationResultRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementApiService
+	jobId string
+}
+
+func (r ApiGetDashboardMigrationResultRequest) Execute() (*DashboardMigrationResult, *http.Response, error) {
+	return r.ApiService.GetDashboardMigrationResultExecute(r)
+}
+
+/*
+GetDashboardMigrationResult Get dashboard migration result.
+
+Get the result of an asynchronous Dashboard Migration request for the given job identifier.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param jobId The identifier of the asynchronous Dashboard Migration job.
+ @return ApiGetDashboardMigrationResultRequest
+*/
+func (a *DashboardManagementApiService) GetDashboardMigrationResult(ctx context.Context, jobId string) ApiGetDashboardMigrationResultRequest {
+	return ApiGetDashboardMigrationResultRequest{
+		ApiService: a,
+		ctx: ctx,
+		jobId: jobId,
+	}
+}
+
+// Execute executes the request
+//  @return DashboardMigrationResult
+func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r ApiGetDashboardMigrationResultRequest) (*DashboardMigrationResult, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DashboardMigrationResult
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationResult")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v2/dashboards/migrate/{jobId}/result"
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetDashboardMigrationStatusRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementApiService
+	jobId string
+}
+
+func (r ApiGetDashboardMigrationStatusRequest) Execute() (*AsyncJobStatus, *http.Response, error) {
+	return r.ApiService.GetDashboardMigrationStatusExecute(r)
+}
+
+/*
+GetDashboardMigrationStatus Get dashboard migration status.
+
+Get the status of an asynchronous Dashboard Migration job for the given job identifier. If job succeeds, use Dashboard Migration Result endpoint to see results of the migration.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param jobId The identifier of the asynchronous Dashboard Migration job.
+ @return ApiGetDashboardMigrationStatusRequest
+*/
+func (a *DashboardManagementApiService) GetDashboardMigrationStatus(ctx context.Context, jobId string) ApiGetDashboardMigrationStatusRequest {
+	return ApiGetDashboardMigrationStatusRequest{
+		ApiService: a,
+		ctx: ctx,
+		jobId: jobId,
+	}
+}
+
+// Execute executes the request
+//  @return AsyncJobStatus
+func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r ApiGetDashboardMigrationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AsyncJobStatus
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationStatus")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v2/dashboards/migrate/{jobId}/status"
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -695,6 +923,7 @@ type ApiListDashboardsRequest struct {
 	ApiService *DashboardManagementApiService
 	limit *int32
 	token *string
+	mode *string
 }
 
 // Limit the number of dashboard returned in the response. The number of dashboards returned may be less than the &#x60;limit&#x60;.
@@ -709,6 +938,12 @@ func (r ApiListDashboardsRequest) Token(token string) ApiListDashboardsRequest {
 	return r
 }
 
+// whether to list all viewable dashboards under the folders
+func (r ApiListDashboardsRequest) Mode(mode string) ApiListDashboardsRequest {
+	r.mode = &mode
+	return r
+}
+
 func (r ApiListDashboardsRequest) Execute() (*PaginatedDashboards, *http.Response, error) {
 	return r.ApiService.ListDashboardsExecute(r)
 }
@@ -716,7 +951,7 @@ func (r ApiListDashboardsRequest) Execute() (*PaginatedDashboards, *http.Respons
 /*
 ListDashboards List all dashboards.
 
-List all dashboards under the Personal folder created by the user.
+List all dashboards under the Personal folder created by the user or under folders viewable by user.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDashboardsRequest
@@ -750,10 +985,13 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
+	}
+	if r.mode != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mode", r.mode, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -782,9 +1020,9 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -800,7 +1038,248 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiMigrateReportToDashboardRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementApiService
+	dashboardMigrationRequest *DashboardMigrationRequest
+}
+
+// List of legacy dashboard content identifiers.
+func (r ApiMigrateReportToDashboardRequest) DashboardMigrationRequest(dashboardMigrationRequest DashboardMigrationRequest) ApiMigrateReportToDashboardRequest {
+	r.dashboardMigrationRequest = &dashboardMigrationRequest
+	return r
+}
+
+func (r ApiMigrateReportToDashboardRequest) Execute() (*BeginAsyncJobResponseV2, *http.Response, error) {
+	return r.ApiService.MigrateReportToDashboardExecute(r)
+}
+
+/*
+MigrateReportToDashboard Migrate Legacy Dashboards to Dashboards(New)
+
+Schedule an asynchronous job to migrate a list of legacy Dashboards to Dashboard(New). Once migration is finished, the migrated dashboards will be in the same folder as the corresponding legacy Dashboard.
+Note: This feature is in beta and may not support all existing features of legacy dashboards.
+
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiMigrateReportToDashboardRequest
+*/
+func (a *DashboardManagementApiService) MigrateReportToDashboard(ctx context.Context) ApiMigrateReportToDashboardRequest {
+	return ApiMigrateReportToDashboardRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return BeginAsyncJobResponseV2
+func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMigrateReportToDashboardRequest) (*BeginAsyncJobResponseV2, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *BeginAsyncJobResponseV2
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.MigrateReportToDashboard")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v2/dashboards/migrate"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.dashboardMigrationRequest == nil {
+		return localVarReturnValue, nil, reportError("dashboardMigrationRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.dashboardMigrationRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPreviewMigrateReportToDashboardRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementApiService
+	dashboardMigrationRequest *DashboardMigrationRequest
+}
+
+// List of content identifiers. Can be folders or classic dashboard.
+func (r ApiPreviewMigrateReportToDashboardRequest) DashboardMigrationRequest(dashboardMigrationRequest DashboardMigrationRequest) ApiPreviewMigrateReportToDashboardRequest {
+	r.dashboardMigrationRequest = &dashboardMigrationRequest
+	return r
+}
+
+func (r ApiPreviewMigrateReportToDashboardRequest) Execute() (*MigrationPreviewResponse, *http.Response, error) {
+	return r.ApiService.PreviewMigrateReportToDashboardExecute(r)
+}
+
+/*
+PreviewMigrateReportToDashboard Preview of Migrating Legacy Dashboards to Dashboards(New)
+
+Get a preview of migrating Legacy Dashboards to Dashboard(New)
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPreviewMigrateReportToDashboardRequest
+*/
+func (a *DashboardManagementApiService) PreviewMigrateReportToDashboard(ctx context.Context) ApiPreviewMigrateReportToDashboardRequest {
+	return ApiPreviewMigrateReportToDashboardRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return MigrationPreviewResponse
+func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r ApiPreviewMigrateReportToDashboardRequest) (*MigrationPreviewResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *MigrationPreviewResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.PreviewMigrateReportToDashboard")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v2/dashboards/migrate/preview"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.dashboardMigrationRequest == nil {
+		return localVarReturnValue, nil, reportError("dashboardMigrationRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.dashboardMigrationRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -866,7 +1345,7 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 	}
 
 	localVarPath := localBasePath + "/v2/dashboards/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -904,9 +1383,9 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -922,7 +1401,8 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

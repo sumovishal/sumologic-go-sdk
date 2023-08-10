@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the UpdateRoleDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateRoleDefinition{}
+
 // UpdateRoleDefinition struct for UpdateRoleDefinition
 type UpdateRoleDefinition struct {
 	// Name of the role.
@@ -24,7 +27,7 @@ type UpdateRoleDefinition struct {
 	FilterPredicate string `json:"filterPredicate"`
 	// List of user identifiers to assign the role to.
 	Users []string `json:"users"`
-	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
+	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - manageApps   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens   - downloadSearchResults  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
 	Capabilities []string `json:"capabilities"`
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
@@ -178,7 +181,7 @@ func (o *UpdateRoleDefinition) SetCapabilities(v []string) {
 
 // GetAutofillDependencies returns the AutofillDependencies field value if set, zero value otherwise.
 func (o *UpdateRoleDefinition) GetAutofillDependencies() bool {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		var ret bool
 		return ret
 	}
@@ -188,7 +191,7 @@ func (o *UpdateRoleDefinition) GetAutofillDependencies() bool {
 // GetAutofillDependenciesOk returns a tuple with the AutofillDependencies field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdateRoleDefinition) GetAutofillDependenciesOk() (*bool, bool) {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		return nil, false
 	}
 	return o.AutofillDependencies, true
@@ -196,7 +199,7 @@ func (o *UpdateRoleDefinition) GetAutofillDependenciesOk() (*bool, bool) {
 
 // HasAutofillDependencies returns a boolean if a field has been set.
 func (o *UpdateRoleDefinition) HasAutofillDependencies() bool {
-	if o != nil && o.AutofillDependencies != nil {
+	if o != nil && !IsNil(o.AutofillDependencies) {
 		return true
 	}
 
@@ -209,26 +212,24 @@ func (o *UpdateRoleDefinition) SetAutofillDependencies(v bool) {
 }
 
 func (o UpdateRoleDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["filterPredicate"] = o.FilterPredicate
-	}
-	if true {
-		toSerialize["users"] = o.Users
-	}
-	if true {
-		toSerialize["capabilities"] = o.Capabilities
-	}
-	if o.AutofillDependencies != nil {
-		toSerialize["autofillDependencies"] = o.AutofillDependencies
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateRoleDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["description"] = o.Description
+	toSerialize["filterPredicate"] = o.FilterPredicate
+	toSerialize["users"] = o.Users
+	toSerialize["capabilities"] = o.Capabilities
+	if !IsNil(o.AutofillDependencies) {
+		toSerialize["autofillDependencies"] = o.AutofillDependencies
+	}
+	return toSerialize, nil
 }
 
 type NullableUpdateRoleDefinition struct {

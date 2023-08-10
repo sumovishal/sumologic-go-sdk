@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the MonitorsLibraryMonitorResponseAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorsLibraryMonitorResponseAllOf{}
+
 // MonitorsLibraryMonitorResponseAllOf struct for MonitorsLibraryMonitorResponseAllOf
 type MonitorsLibraryMonitorResponseAllOf struct {
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.   3. `Slo`: A SLO based monitor. Currently SLO based monitor is available in closed beta (Notify your Sumo Logic representative in order to get the early access).
@@ -22,6 +25,9 @@ type MonitorsLibraryMonitorResponseAllOf struct {
 	EvaluationDelay *string `json:"evaluationDelay,omitempty"`
 	// The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified.
 	AlertName *string `json:"alertName,omitempty"`
+	RunAs *MonitorsLibraryMonitorAllOfRunAs `json:"runAs,omitempty"`
+	// The set of fields to be used to group alert notifications for a monitor. The value of this field will be considered only when 'groupNotifications' is true. The fields with very high cardinality such as `_raw`, `_messagetime`, `_receipttime`, and `_messageid` are not allowed for Alert Grouping.
+	NotificationGroupFields []string `json:"notificationGroupFields,omitempty"`
 	// All queries from the monitor.
 	Queries []MonitorQuery `json:"queries"`
 	// Defines the conditions of when to send notifications.
@@ -38,6 +44,10 @@ type MonitorsLibraryMonitorResponseAllOf struct {
 	Warnings *map[string]string `json:"warnings,omitempty"`
 	// Notes such as links and instruction to help you resolve alerts triggered by this monitor. {{Markdown}} supported. It will be enabled only if available for your organization. Please contact your Sumo Logic account team to learn more.
 	Playbook *string `json:"playbook,omitempty"`
+	// Identifier of the SLO definition for the monitor. This is only applicable for SLO type monitors.
+	SloId *string `json:"sloId,omitempty"`
+	// The set of automated playbook ids for a monitor.
+	AutomatedPlaybookIds []string `json:"automatedPlaybookIds,omitempty"`
 }
 
 // NewMonitorsLibraryMonitorResponseAllOf instantiates a new MonitorsLibraryMonitorResponseAllOf object
@@ -102,7 +112,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetMonitorType(v string) {
 
 // GetEvaluationDelay returns the EvaluationDelay field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetEvaluationDelay() string {
-	if o == nil || o.EvaluationDelay == nil {
+	if o == nil || IsNil(o.EvaluationDelay) {
 		var ret string
 		return ret
 	}
@@ -112,7 +122,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetEvaluationDelay() string {
 // GetEvaluationDelayOk returns a tuple with the EvaluationDelay field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetEvaluationDelayOk() (*string, bool) {
-	if o == nil || o.EvaluationDelay == nil {
+	if o == nil || IsNil(o.EvaluationDelay) {
 		return nil, false
 	}
 	return o.EvaluationDelay, true
@@ -120,7 +130,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetEvaluationDelayOk() (*string, b
 
 // HasEvaluationDelay returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasEvaluationDelay() bool {
-	if o != nil && o.EvaluationDelay != nil {
+	if o != nil && !IsNil(o.EvaluationDelay) {
 		return true
 	}
 
@@ -134,7 +144,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetEvaluationDelay(v string) {
 
 // GetAlertName returns the AlertName field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetAlertName() string {
-	if o == nil || o.AlertName == nil {
+	if o == nil || IsNil(o.AlertName) {
 		var ret string
 		return ret
 	}
@@ -144,7 +154,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetAlertName() string {
 // GetAlertNameOk returns a tuple with the AlertName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetAlertNameOk() (*string, bool) {
-	if o == nil || o.AlertName == nil {
+	if o == nil || IsNil(o.AlertName) {
 		return nil, false
 	}
 	return o.AlertName, true
@@ -152,7 +162,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetAlertNameOk() (*string, bool) {
 
 // HasAlertName returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasAlertName() bool {
-	if o != nil && o.AlertName != nil {
+	if o != nil && !IsNil(o.AlertName) {
 		return true
 	}
 
@@ -162,6 +172,70 @@ func (o *MonitorsLibraryMonitorResponseAllOf) HasAlertName() bool {
 // SetAlertName gets a reference to the given string and assigns it to the AlertName field.
 func (o *MonitorsLibraryMonitorResponseAllOf) SetAlertName(v string) {
 	o.AlertName = &v
+}
+
+// GetRunAs returns the RunAs field value if set, zero value otherwise.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetRunAs() MonitorsLibraryMonitorAllOfRunAs {
+	if o == nil || IsNil(o.RunAs) {
+		var ret MonitorsLibraryMonitorAllOfRunAs
+		return ret
+	}
+	return *o.RunAs
+}
+
+// GetRunAsOk returns a tuple with the RunAs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetRunAsOk() (*MonitorsLibraryMonitorAllOfRunAs, bool) {
+	if o == nil || IsNil(o.RunAs) {
+		return nil, false
+	}
+	return o.RunAs, true
+}
+
+// HasRunAs returns a boolean if a field has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) HasRunAs() bool {
+	if o != nil && !IsNil(o.RunAs) {
+		return true
+	}
+
+	return false
+}
+
+// SetRunAs gets a reference to the given MonitorsLibraryMonitorAllOfRunAs and assigns it to the RunAs field.
+func (o *MonitorsLibraryMonitorResponseAllOf) SetRunAs(v MonitorsLibraryMonitorAllOfRunAs) {
+	o.RunAs = &v
+}
+
+// GetNotificationGroupFields returns the NotificationGroupFields field value if set, zero value otherwise.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetNotificationGroupFields() []string {
+	if o == nil || IsNil(o.NotificationGroupFields) {
+		var ret []string
+		return ret
+	}
+	return o.NotificationGroupFields
+}
+
+// GetNotificationGroupFieldsOk returns a tuple with the NotificationGroupFields field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetNotificationGroupFieldsOk() ([]string, bool) {
+	if o == nil || IsNil(o.NotificationGroupFields) {
+		return nil, false
+	}
+	return o.NotificationGroupFields, true
+}
+
+// HasNotificationGroupFields returns a boolean if a field has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) HasNotificationGroupFields() bool {
+	if o != nil && !IsNil(o.NotificationGroupFields) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationGroupFields gets a reference to the given []string and assigns it to the NotificationGroupFields field.
+func (o *MonitorsLibraryMonitorResponseAllOf) SetNotificationGroupFields(v []string) {
+	o.NotificationGroupFields = v
 }
 
 // GetQueries returns the Queries field value
@@ -214,7 +288,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetTriggers(v []TriggerCondition) 
 
 // GetNotifications returns the Notifications field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetNotifications() []MonitorNotification {
-	if o == nil || o.Notifications == nil {
+	if o == nil || IsNil(o.Notifications) {
 		var ret []MonitorNotification
 		return ret
 	}
@@ -224,7 +298,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetNotifications() []MonitorNotifi
 // GetNotificationsOk returns a tuple with the Notifications field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetNotificationsOk() ([]MonitorNotification, bool) {
-	if o == nil || o.Notifications == nil {
+	if o == nil || IsNil(o.Notifications) {
 		return nil, false
 	}
 	return o.Notifications, true
@@ -232,7 +306,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetNotificationsOk() ([]MonitorNot
 
 // HasNotifications returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasNotifications() bool {
-	if o != nil && o.Notifications != nil {
+	if o != nil && !IsNil(o.Notifications) {
 		return true
 	}
 
@@ -246,7 +320,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetNotifications(v []MonitorNotifi
 
 // GetIsDisabled returns the IsDisabled field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetIsDisabled() bool {
-	if o == nil || o.IsDisabled == nil {
+	if o == nil || IsNil(o.IsDisabled) {
 		var ret bool
 		return ret
 	}
@@ -256,7 +330,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetIsDisabled() bool {
 // GetIsDisabledOk returns a tuple with the IsDisabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetIsDisabledOk() (*bool, bool) {
-	if o == nil || o.IsDisabled == nil {
+	if o == nil || IsNil(o.IsDisabled) {
 		return nil, false
 	}
 	return o.IsDisabled, true
@@ -264,7 +338,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetIsDisabledOk() (*bool, bool) {
 
 // HasIsDisabled returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasIsDisabled() bool {
-	if o != nil && o.IsDisabled != nil {
+	if o != nil && !IsNil(o.IsDisabled) {
 		return true
 	}
 
@@ -278,7 +352,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetIsDisabled(v bool) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetStatus() []string {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret []string
 		return ret
 	}
@@ -288,7 +362,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetStatus() []string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetStatusOk() ([]string, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -296,7 +370,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetStatusOk() ([]string, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -310,7 +384,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetStatus(v []string) {
 
 // GetGroupNotifications returns the GroupNotifications field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetGroupNotifications() bool {
-	if o == nil || o.GroupNotifications == nil {
+	if o == nil || IsNil(o.GroupNotifications) {
 		var ret bool
 		return ret
 	}
@@ -320,7 +394,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetGroupNotifications() bool {
 // GetGroupNotificationsOk returns a tuple with the GroupNotifications field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetGroupNotificationsOk() (*bool, bool) {
-	if o == nil || o.GroupNotifications == nil {
+	if o == nil || IsNil(o.GroupNotifications) {
 		return nil, false
 	}
 	return o.GroupNotifications, true
@@ -328,7 +402,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetGroupNotificationsOk() (*bool, 
 
 // HasGroupNotifications returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasGroupNotifications() bool {
-	if o != nil && o.GroupNotifications != nil {
+	if o != nil && !IsNil(o.GroupNotifications) {
 		return true
 	}
 
@@ -342,7 +416,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetGroupNotifications(v bool) {
 
 // GetWarnings returns the Warnings field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetWarnings() map[string]string {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		var ret map[string]string
 		return ret
 	}
@@ -352,7 +426,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetWarnings() map[string]string {
 // GetWarningsOk returns a tuple with the Warnings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetWarningsOk() (*map[string]string, bool) {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		return nil, false
 	}
 	return o.Warnings, true
@@ -360,7 +434,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetWarningsOk() (*map[string]strin
 
 // HasWarnings returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasWarnings() bool {
-	if o != nil && o.Warnings != nil {
+	if o != nil && !IsNil(o.Warnings) {
 		return true
 	}
 
@@ -374,7 +448,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetWarnings(v map[string]string) {
 
 // GetPlaybook returns the Playbook field value if set, zero value otherwise.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetPlaybook() string {
-	if o == nil || o.Playbook == nil {
+	if o == nil || IsNil(o.Playbook) {
 		var ret string
 		return ret
 	}
@@ -384,7 +458,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetPlaybook() string {
 // GetPlaybookOk returns a tuple with the Playbook field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) GetPlaybookOk() (*string, bool) {
-	if o == nil || o.Playbook == nil {
+	if o == nil || IsNil(o.Playbook) {
 		return nil, false
 	}
 	return o.Playbook, true
@@ -392,7 +466,7 @@ func (o *MonitorsLibraryMonitorResponseAllOf) GetPlaybookOk() (*string, bool) {
 
 // HasPlaybook returns a boolean if a field has been set.
 func (o *MonitorsLibraryMonitorResponseAllOf) HasPlaybook() bool {
-	if o != nil && o.Playbook != nil {
+	if o != nil && !IsNil(o.Playbook) {
 		return true
 	}
 
@@ -404,42 +478,120 @@ func (o *MonitorsLibraryMonitorResponseAllOf) SetPlaybook(v string) {
 	o.Playbook = &v
 }
 
+// GetSloId returns the SloId field value if set, zero value otherwise.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetSloId() string {
+	if o == nil || IsNil(o.SloId) {
+		var ret string
+		return ret
+	}
+	return *o.SloId
+}
+
+// GetSloIdOk returns a tuple with the SloId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetSloIdOk() (*string, bool) {
+	if o == nil || IsNil(o.SloId) {
+		return nil, false
+	}
+	return o.SloId, true
+}
+
+// HasSloId returns a boolean if a field has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) HasSloId() bool {
+	if o != nil && !IsNil(o.SloId) {
+		return true
+	}
+
+	return false
+}
+
+// SetSloId gets a reference to the given string and assigns it to the SloId field.
+func (o *MonitorsLibraryMonitorResponseAllOf) SetSloId(v string) {
+	o.SloId = &v
+}
+
+// GetAutomatedPlaybookIds returns the AutomatedPlaybookIds field value if set, zero value otherwise.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetAutomatedPlaybookIds() []string {
+	if o == nil || IsNil(o.AutomatedPlaybookIds) {
+		var ret []string
+		return ret
+	}
+	return o.AutomatedPlaybookIds
+}
+
+// GetAutomatedPlaybookIdsOk returns a tuple with the AutomatedPlaybookIds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) GetAutomatedPlaybookIdsOk() ([]string, bool) {
+	if o == nil || IsNil(o.AutomatedPlaybookIds) {
+		return nil, false
+	}
+	return o.AutomatedPlaybookIds, true
+}
+
+// HasAutomatedPlaybookIds returns a boolean if a field has been set.
+func (o *MonitorsLibraryMonitorResponseAllOf) HasAutomatedPlaybookIds() bool {
+	if o != nil && !IsNil(o.AutomatedPlaybookIds) {
+		return true
+	}
+
+	return false
+}
+
+// SetAutomatedPlaybookIds gets a reference to the given []string and assigns it to the AutomatedPlaybookIds field.
+func (o *MonitorsLibraryMonitorResponseAllOf) SetAutomatedPlaybookIds(v []string) {
+	o.AutomatedPlaybookIds = v
+}
+
 func (o MonitorsLibraryMonitorResponseAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["monitorType"] = o.MonitorType
-	}
-	if o.EvaluationDelay != nil {
-		toSerialize["evaluationDelay"] = o.EvaluationDelay
-	}
-	if o.AlertName != nil {
-		toSerialize["alertName"] = o.AlertName
-	}
-	if true {
-		toSerialize["queries"] = o.Queries
-	}
-	if true {
-		toSerialize["triggers"] = o.Triggers
-	}
-	if o.Notifications != nil {
-		toSerialize["notifications"] = o.Notifications
-	}
-	if o.IsDisabled != nil {
-		toSerialize["isDisabled"] = o.IsDisabled
-	}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if o.GroupNotifications != nil {
-		toSerialize["groupNotifications"] = o.GroupNotifications
-	}
-	if o.Warnings != nil {
-		toSerialize["warnings"] = o.Warnings
-	}
-	if o.Playbook != nil {
-		toSerialize["playbook"] = o.Playbook
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorsLibraryMonitorResponseAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["monitorType"] = o.MonitorType
+	if !IsNil(o.EvaluationDelay) {
+		toSerialize["evaluationDelay"] = o.EvaluationDelay
+	}
+	if !IsNil(o.AlertName) {
+		toSerialize["alertName"] = o.AlertName
+	}
+	if !IsNil(o.RunAs) {
+		toSerialize["runAs"] = o.RunAs
+	}
+	if !IsNil(o.NotificationGroupFields) {
+		toSerialize["notificationGroupFields"] = o.NotificationGroupFields
+	}
+	toSerialize["queries"] = o.Queries
+	toSerialize["triggers"] = o.Triggers
+	if !IsNil(o.Notifications) {
+		toSerialize["notifications"] = o.Notifications
+	}
+	if !IsNil(o.IsDisabled) {
+		toSerialize["isDisabled"] = o.IsDisabled
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.GroupNotifications) {
+		toSerialize["groupNotifications"] = o.GroupNotifications
+	}
+	if !IsNil(o.Warnings) {
+		toSerialize["warnings"] = o.Warnings
+	}
+	if !IsNil(o.Playbook) {
+		toSerialize["playbook"] = o.Playbook
+	}
+	if !IsNil(o.SloId) {
+		toSerialize["sloId"] = o.SloId
+	}
+	if !IsNil(o.AutomatedPlaybookIds) {
+		toSerialize["automatedPlaybookIds"] = o.AutomatedPlaybookIds
+	}
+	return toSerialize, nil
 }
 
 type NullableMonitorsLibraryMonitorResponseAllOf struct {

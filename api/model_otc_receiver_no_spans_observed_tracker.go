@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCReceiverNoSpansObservedTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCReceiverNoSpansObservedTracker{}
 
 // OTCReceiverNoSpansObservedTracker struct for OTCReceiverNoSpansObservedTracker
 type OTCReceiverNoSpansObservedTracker struct {
@@ -49,7 +52,7 @@ func NewOTCReceiverNoSpansObservedTrackerWithDefaults() *OTCReceiverNoSpansObser
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -59,7 +62,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -67,7 +70,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -81,7 +84,7 @@ func (o *OTCReceiverNoSpansObservedTracker) SetEventType(v string) {
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTracker) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -91,7 +94,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTracker) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -99,7 +102,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetInstanceIdOk() (*string, bool) {
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTracker) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -113,7 +116,7 @@ func (o *OTCReceiverNoSpansObservedTracker) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTracker) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -123,7 +126,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetInstanceAddress() string {
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTracker) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -131,7 +134,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetInstanceAddressOk() (*string, boo
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTracker) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -145,7 +148,7 @@ func (o *OTCReceiverNoSpansObservedTracker) SetInstanceAddress(v string) {
 
 // GetReceiverId returns the ReceiverId field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTracker) GetReceiverId() string {
-	if o == nil || o.ReceiverId == nil {
+	if o == nil || IsNil(o.ReceiverId) {
 		var ret string
 		return ret
 	}
@@ -155,7 +158,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetReceiverId() string {
 // GetReceiverIdOk returns a tuple with the ReceiverId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTracker) GetReceiverIdOk() (*string, bool) {
-	if o == nil || o.ReceiverId == nil {
+	if o == nil || IsNil(o.ReceiverId) {
 		return nil, false
 	}
 	return o.ReceiverId, true
@@ -163,7 +166,7 @@ func (o *OTCReceiverNoSpansObservedTracker) GetReceiverIdOk() (*string, bool) {
 
 // HasReceiverId returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTracker) HasReceiverId() bool {
-	if o != nil && o.ReceiverId != nil {
+	if o != nil && !IsNil(o.ReceiverId) {
 		return true
 	}
 
@@ -176,28 +179,36 @@ func (o *OTCReceiverNoSpansObservedTracker) SetReceiverId(v string) {
 }
 
 func (o OTCReceiverNoSpansObservedTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OTCReceiverNoSpansObservedTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.InstanceId != nil {
+	if !IsNil(o.InstanceId) {
 		toSerialize["instanceId"] = o.InstanceId
 	}
-	if o.InstanceAddress != nil {
+	if !IsNil(o.InstanceAddress) {
 		toSerialize["instanceAddress"] = o.InstanceAddress
 	}
-	if o.ReceiverId != nil {
+	if !IsNil(o.ReceiverId) {
 		toSerialize["receiverId"] = o.ReceiverId
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableOTCReceiverNoSpansObservedTracker struct {

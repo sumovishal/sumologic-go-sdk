@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TagValueReversedIndex type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TagValueReversedIndex{}
 
 // TagValueReversedIndex struct for TagValueReversedIndex
 type TagValueReversedIndex struct {
@@ -90,14 +93,18 @@ func (o *TagValueReversedIndex) SetSpanIds(v []string) {
 }
 
 func (o TagValueReversedIndex) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["tagValue"] = o.TagValue
-	}
-	if true {
-		toSerialize["spanIds"] = o.SpanIds
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TagValueReversedIndex) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["tagValue"] = o.TagValue
+	toSerialize["spanIds"] = o.SpanIds
+	return toSerialize, nil
 }
 
 type NullableTagValueReversedIndex struct {

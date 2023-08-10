@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,19 +14,25 @@ import (
 	"encoding/json"
 )
 
+// checks if the CriticalPathServiceBreakdownResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CriticalPathServiceBreakdownResponse{}
+
 // CriticalPathServiceBreakdownResponse struct for CriticalPathServiceBreakdownResponse
 type CriticalPathServiceBreakdownResponse struct {
 	// List of elements representing the critical path service breakdown.
 	Elements []CriticalPathServiceBreakdownElementDetail `json:"elements"`
+	// Overall time in nanoseconds when no particular operation was in progress.
+	IdleTime int64 `json:"idleTime"`
 }
 
 // NewCriticalPathServiceBreakdownResponse instantiates a new CriticalPathServiceBreakdownResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCriticalPathServiceBreakdownResponse(elements []CriticalPathServiceBreakdownElementDetail) *CriticalPathServiceBreakdownResponse {
+func NewCriticalPathServiceBreakdownResponse(elements []CriticalPathServiceBreakdownElementDetail, idleTime int64) *CriticalPathServiceBreakdownResponse {
 	this := CriticalPathServiceBreakdownResponse{}
 	this.Elements = elements
+	this.IdleTime = idleTime
 	return &this
 }
 
@@ -62,12 +68,43 @@ func (o *CriticalPathServiceBreakdownResponse) SetElements(v []CriticalPathServi
 	o.Elements = v
 }
 
+// GetIdleTime returns the IdleTime field value
+func (o *CriticalPathServiceBreakdownResponse) GetIdleTime() int64 {
+	if o == nil {
+		var ret int64
+		return ret
+	}
+
+	return o.IdleTime
+}
+
+// GetIdleTimeOk returns a tuple with the IdleTime field value
+// and a boolean to check if the value has been set.
+func (o *CriticalPathServiceBreakdownResponse) GetIdleTimeOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IdleTime, true
+}
+
+// SetIdleTime sets field value
+func (o *CriticalPathServiceBreakdownResponse) SetIdleTime(v int64) {
+	o.IdleTime = v
+}
+
 func (o CriticalPathServiceBreakdownResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["elements"] = o.Elements
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CriticalPathServiceBreakdownResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["elements"] = o.Elements
+	toSerialize["idleTime"] = o.IdleTime
+	return toSerialize, nil
 }
 
 type NullableCriticalPathServiceBreakdownResponse struct {

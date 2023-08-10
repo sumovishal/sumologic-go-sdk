@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CriticalPathServiceBreakdownElementDetail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CriticalPathServiceBreakdownElementDetail{}
 
 // CriticalPathServiceBreakdownElementDetail struct for CriticalPathServiceBreakdownElementDetail
 type CriticalPathServiceBreakdownElementDetail struct {
@@ -50,7 +53,7 @@ func NewCriticalPathServiceBreakdownElementDetailWithDefaults() *CriticalPathSer
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *CriticalPathServiceBreakdownElementDetail) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -60,7 +63,7 @@ func (o *CriticalPathServiceBreakdownElementDetail) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CriticalPathServiceBreakdownElementDetail) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -68,7 +71,7 @@ func (o *CriticalPathServiceBreakdownElementDetail) GetServiceOk() (*string, boo
 
 // HasService returns a boolean if a field has been set.
 func (o *CriticalPathServiceBreakdownElementDetail) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -82,7 +85,7 @@ func (o *CriticalPathServiceBreakdownElementDetail) SetService(v string) {
 
 // GetServiceColor returns the ServiceColor field value if set, zero value otherwise.
 func (o *CriticalPathServiceBreakdownElementDetail) GetServiceColor() string {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		var ret string
 		return ret
 	}
@@ -92,7 +95,7 @@ func (o *CriticalPathServiceBreakdownElementDetail) GetServiceColor() string {
 // GetServiceColorOk returns a tuple with the ServiceColor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CriticalPathServiceBreakdownElementDetail) GetServiceColorOk() (*string, bool) {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		return nil, false
 	}
 	return o.ServiceColor, true
@@ -100,7 +103,7 @@ func (o *CriticalPathServiceBreakdownElementDetail) GetServiceColorOk() (*string
 
 // HasServiceColor returns a boolean if a field has been set.
 func (o *CriticalPathServiceBreakdownElementDetail) HasServiceColor() bool {
-	if o != nil && o.ServiceColor != nil {
+	if o != nil && !IsNil(o.ServiceColor) {
 		return true
 	}
 
@@ -185,23 +188,25 @@ func (o *CriticalPathServiceBreakdownElementDetail) SetLongestSegmentDuration(v 
 }
 
 func (o CriticalPathServiceBreakdownElementDetail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.ServiceColor != nil {
-		toSerialize["serviceColor"] = o.ServiceColor
-	}
-	if true {
-		toSerialize["duration"] = o.Duration
-	}
-	if true {
-		toSerialize["numSpans"] = o.NumSpans
-	}
-	if true {
-		toSerialize["longestSegmentDuration"] = o.LongestSegmentDuration
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CriticalPathServiceBreakdownElementDetail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.ServiceColor) {
+		toSerialize["serviceColor"] = o.ServiceColor
+	}
+	toSerialize["duration"] = o.Duration
+	toSerialize["numSpans"] = o.NumSpans
+	toSerialize["longestSegmentDuration"] = o.LongestSegmentDuration
+	return toSerialize, nil
 }
 
 type NullableCriticalPathServiceBreakdownElementDetail struct {

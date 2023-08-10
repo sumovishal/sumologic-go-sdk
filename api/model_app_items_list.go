@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppItemsList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppItemsList{}
 
 // AppItemsList struct for AppItemsList
 type AppItemsList struct {
@@ -63,11 +66,17 @@ func (o *AppItemsList) SetItems(v []AppListItem) {
 }
 
 func (o AppItemsList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["items"] = o.Items
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppItemsList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["items"] = o.Items
+	return toSerialize, nil
 }
 
 type NullableAppItemsList struct {

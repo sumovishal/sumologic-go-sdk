@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CustomFieldUsage type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CustomFieldUsage{}
 
 // CustomFieldUsage struct for CustomFieldUsage
 type CustomFieldUsage struct {
@@ -155,7 +158,7 @@ func (o *CustomFieldUsage) SetState(v string) {
 
 // GetFieldExtractionRules returns the FieldExtractionRules field value if set, zero value otherwise.
 func (o *CustomFieldUsage) GetFieldExtractionRules() []string {
-	if o == nil || o.FieldExtractionRules == nil {
+	if o == nil || IsNil(o.FieldExtractionRules) {
 		var ret []string
 		return ret
 	}
@@ -165,7 +168,7 @@ func (o *CustomFieldUsage) GetFieldExtractionRules() []string {
 // GetFieldExtractionRulesOk returns a tuple with the FieldExtractionRules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CustomFieldUsage) GetFieldExtractionRulesOk() ([]string, bool) {
-	if o == nil || o.FieldExtractionRules == nil {
+	if o == nil || IsNil(o.FieldExtractionRules) {
 		return nil, false
 	}
 	return o.FieldExtractionRules, true
@@ -173,7 +176,7 @@ func (o *CustomFieldUsage) GetFieldExtractionRulesOk() ([]string, bool) {
 
 // HasFieldExtractionRules returns a boolean if a field has been set.
 func (o *CustomFieldUsage) HasFieldExtractionRules() bool {
-	if o != nil && o.FieldExtractionRules != nil {
+	if o != nil && !IsNil(o.FieldExtractionRules) {
 		return true
 	}
 
@@ -187,7 +190,7 @@ func (o *CustomFieldUsage) SetFieldExtractionRules(v []string) {
 
 // GetRoles returns the Roles field value if set, zero value otherwise.
 func (o *CustomFieldUsage) GetRoles() []string {
-	if o == nil || o.Roles == nil {
+	if o == nil || IsNil(o.Roles) {
 		var ret []string
 		return ret
 	}
@@ -197,7 +200,7 @@ func (o *CustomFieldUsage) GetRoles() []string {
 // GetRolesOk returns a tuple with the Roles field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CustomFieldUsage) GetRolesOk() ([]string, bool) {
-	if o == nil || o.Roles == nil {
+	if o == nil || IsNil(o.Roles) {
 		return nil, false
 	}
 	return o.Roles, true
@@ -205,7 +208,7 @@ func (o *CustomFieldUsage) GetRolesOk() ([]string, bool) {
 
 // HasRoles returns a boolean if a field has been set.
 func (o *CustomFieldUsage) HasRoles() bool {
-	if o != nil && o.Roles != nil {
+	if o != nil && !IsNil(o.Roles) {
 		return true
 	}
 
@@ -219,7 +222,7 @@ func (o *CustomFieldUsage) SetRoles(v []string) {
 
 // GetPartitions returns the Partitions field value if set, zero value otherwise.
 func (o *CustomFieldUsage) GetPartitions() []string {
-	if o == nil || o.Partitions == nil {
+	if o == nil || IsNil(o.Partitions) {
 		var ret []string
 		return ret
 	}
@@ -229,7 +232,7 @@ func (o *CustomFieldUsage) GetPartitions() []string {
 // GetPartitionsOk returns a tuple with the Partitions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CustomFieldUsage) GetPartitionsOk() ([]string, bool) {
-	if o == nil || o.Partitions == nil {
+	if o == nil || IsNil(o.Partitions) {
 		return nil, false
 	}
 	return o.Partitions, true
@@ -237,7 +240,7 @@ func (o *CustomFieldUsage) GetPartitionsOk() ([]string, bool) {
 
 // HasPartitions returns a boolean if a field has been set.
 func (o *CustomFieldUsage) HasPartitions() bool {
-	if o != nil && o.Partitions != nil {
+	if o != nil && !IsNil(o.Partitions) {
 		return true
 	}
 
@@ -251,7 +254,7 @@ func (o *CustomFieldUsage) SetPartitions(v []string) {
 
 // GetCollectorsCount returns the CollectorsCount field value if set, zero value otherwise.
 func (o *CustomFieldUsage) GetCollectorsCount() int32 {
-	if o == nil || o.CollectorsCount == nil {
+	if o == nil || IsNil(o.CollectorsCount) {
 		var ret int32
 		return ret
 	}
@@ -261,7 +264,7 @@ func (o *CustomFieldUsage) GetCollectorsCount() int32 {
 // GetCollectorsCountOk returns a tuple with the CollectorsCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CustomFieldUsage) GetCollectorsCountOk() (*int32, bool) {
-	if o == nil || o.CollectorsCount == nil {
+	if o == nil || IsNil(o.CollectorsCount) {
 		return nil, false
 	}
 	return o.CollectorsCount, true
@@ -269,7 +272,7 @@ func (o *CustomFieldUsage) GetCollectorsCountOk() (*int32, bool) {
 
 // HasCollectorsCount returns a boolean if a field has been set.
 func (o *CustomFieldUsage) HasCollectorsCount() bool {
-	if o != nil && o.CollectorsCount != nil {
+	if o != nil && !IsNil(o.CollectorsCount) {
 		return true
 	}
 
@@ -283,7 +286,7 @@ func (o *CustomFieldUsage) SetCollectorsCount(v int32) {
 
 // GetSourcesCount returns the SourcesCount field value if set, zero value otherwise.
 func (o *CustomFieldUsage) GetSourcesCount() int32 {
-	if o == nil || o.SourcesCount == nil {
+	if o == nil || IsNil(o.SourcesCount) {
 		var ret int32
 		return ret
 	}
@@ -293,7 +296,7 @@ func (o *CustomFieldUsage) GetSourcesCount() int32 {
 // GetSourcesCountOk returns a tuple with the SourcesCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CustomFieldUsage) GetSourcesCountOk() (*int32, bool) {
-	if o == nil || o.SourcesCount == nil {
+	if o == nil || IsNil(o.SourcesCount) {
 		return nil, false
 	}
 	return o.SourcesCount, true
@@ -301,7 +304,7 @@ func (o *CustomFieldUsage) GetSourcesCountOk() (*int32, bool) {
 
 // HasSourcesCount returns a boolean if a field has been set.
 func (o *CustomFieldUsage) HasSourcesCount() bool {
-	if o != nil && o.SourcesCount != nil {
+	if o != nil && !IsNil(o.SourcesCount) {
 		return true
 	}
 
@@ -314,35 +317,35 @@ func (o *CustomFieldUsage) SetSourcesCount(v int32) {
 }
 
 func (o CustomFieldUsage) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["fieldId"] = o.FieldId
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["state"] = o.State
-	}
-	if o.FieldExtractionRules != nil {
-		toSerialize["fieldExtractionRules"] = o.FieldExtractionRules
-	}
-	if o.Roles != nil {
-		toSerialize["roles"] = o.Roles
-	}
-	if o.Partitions != nil {
-		toSerialize["partitions"] = o.Partitions
-	}
-	if o.CollectorsCount != nil {
-		toSerialize["collectorsCount"] = o.CollectorsCount
-	}
-	if o.SourcesCount != nil {
-		toSerialize["sourcesCount"] = o.SourcesCount
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CustomFieldUsage) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["fieldId"] = o.FieldId
+	toSerialize["dataType"] = o.DataType
+	toSerialize["state"] = o.State
+	if !IsNil(o.FieldExtractionRules) {
+		toSerialize["fieldExtractionRules"] = o.FieldExtractionRules
+	}
+	if !IsNil(o.Roles) {
+		toSerialize["roles"] = o.Roles
+	}
+	if !IsNil(o.Partitions) {
+		toSerialize["partitions"] = o.Partitions
+	}
+	if !IsNil(o.CollectorsCount) {
+		toSerialize["collectorsCount"] = o.CollectorsCount
+	}
+	if !IsNil(o.SourcesCount) {
+		toSerialize["sourcesCount"] = o.SourcesCount
+	}
+	return toSerialize, nil
 }
 
 type NullableCustomFieldUsage struct {

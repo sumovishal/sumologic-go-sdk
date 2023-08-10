@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogsStaticCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogsStaticCondition{}
+
 // LogsStaticCondition struct for LogsStaticCondition
 type LogsStaticCondition struct {
 	TriggerCondition
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold float64 `json:"threshold"`
@@ -128,7 +131,7 @@ func (o *LogsStaticCondition) SetThresholdType(v string) {
 
 // GetField returns the Field field value if set, zero value otherwise.
 func (o *LogsStaticCondition) GetField() string {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		var ret string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *LogsStaticCondition) GetField() string {
 // GetFieldOk returns a tuple with the Field field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsStaticCondition) GetFieldOk() (*string, bool) {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		return nil, false
 	}
 	return o.Field, true
@@ -146,7 +149,7 @@ func (o *LogsStaticCondition) GetFieldOk() (*string, bool) {
 
 // HasField returns a boolean if a field has been set.
 func (o *LogsStaticCondition) HasField() bool {
-	if o != nil && o.Field != nil {
+	if o != nil && !IsNil(o.Field) {
 		return true
 	}
 
@@ -159,28 +162,30 @@ func (o *LogsStaticCondition) SetField(v string) {
 }
 
 func (o LogsStaticCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LogsStaticCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if true {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if true {
-		toSerialize["thresholdType"] = o.ThresholdType
-	}
-	if o.Field != nil {
+	toSerialize["timeRange"] = o.TimeRange
+	toSerialize["threshold"] = o.Threshold
+	toSerialize["thresholdType"] = o.ThresholdType
+	if !IsNil(o.Field) {
 		toSerialize["field"] = o.Field
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableLogsStaticCondition struct {

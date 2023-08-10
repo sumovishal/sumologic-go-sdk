@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogSearchEstimatedUsageDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchEstimatedUsageDefinitionAllOf{}
 
 // LogSearchEstimatedUsageDefinitionAllOf struct for LogSearchEstimatedUsageDefinitionAllOf
 type LogSearchEstimatedUsageDefinitionAllOf struct {
@@ -62,11 +65,17 @@ func (o *LogSearchEstimatedUsageDefinitionAllOf) SetEstimatedUsageDetails(v Esti
 }
 
 func (o LogSearchEstimatedUsageDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["estimatedUsageDetails"] = o.EstimatedUsageDetails
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchEstimatedUsageDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["estimatedUsageDetails"] = o.EstimatedUsageDetails
+	return toSerialize, nil
 }
 
 type NullableLogSearchEstimatedUsageDefinitionAllOf struct {

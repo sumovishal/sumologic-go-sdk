@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PermissionIdentifier type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PermissionIdentifier{}
 
 // PermissionIdentifier struct for PermissionIdentifier
 type PermissionIdentifier struct {
@@ -117,17 +120,19 @@ func (o *PermissionIdentifier) SetTargetId(v string) {
 }
 
 func (o PermissionIdentifier) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["subjectType"] = o.SubjectType
-	}
-	if true {
-		toSerialize["subjectId"] = o.SubjectId
-	}
-	if true {
-		toSerialize["targetId"] = o.TargetId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PermissionIdentifier) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["subjectType"] = o.SubjectType
+	toSerialize["subjectId"] = o.SubjectId
+	toSerialize["targetId"] = o.TargetId
+	return toSerialize, nil
 }
 
 type NullablePermissionIdentifier struct {

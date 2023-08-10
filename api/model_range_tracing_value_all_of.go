@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RangeTracingValueAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RangeTracingValueAllOf{}
 
 // RangeTracingValueAllOf struct for RangeTracingValueAllOf
 type RangeTracingValueAllOf struct {
@@ -88,14 +91,18 @@ func (o *RangeTracingValueAllOf) SetTo(v TracingValue) {
 }
 
 func (o RangeTracingValueAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["from"] = o.From
-	}
-	if true {
-		toSerialize["to"] = o.To
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RangeTracingValueAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["from"] = o.From
+	toSerialize["to"] = o.To
+	return toSerialize, nil
 }
 
 type NullableRangeTracingValueAllOf struct {

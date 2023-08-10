@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ExtractionRuleAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ExtractionRuleAllOf{}
 
 // ExtractionRuleAllOf struct for ExtractionRuleAllOf
 type ExtractionRuleAllOf struct {
@@ -66,7 +69,7 @@ func (o *ExtractionRuleAllOf) SetId(v string) {
 
 // GetFieldNames returns the FieldNames field value if set, zero value otherwise.
 func (o *ExtractionRuleAllOf) GetFieldNames() []string {
-	if o == nil || o.FieldNames == nil {
+	if o == nil || IsNil(o.FieldNames) {
 		var ret []string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *ExtractionRuleAllOf) GetFieldNames() []string {
 // GetFieldNamesOk returns a tuple with the FieldNames field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ExtractionRuleAllOf) GetFieldNamesOk() ([]string, bool) {
-	if o == nil || o.FieldNames == nil {
+	if o == nil || IsNil(o.FieldNames) {
 		return nil, false
 	}
 	return o.FieldNames, true
@@ -84,7 +87,7 @@ func (o *ExtractionRuleAllOf) GetFieldNamesOk() ([]string, bool) {
 
 // HasFieldNames returns a boolean if a field has been set.
 func (o *ExtractionRuleAllOf) HasFieldNames() bool {
-	if o != nil && o.FieldNames != nil {
+	if o != nil && !IsNil(o.FieldNames) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *ExtractionRuleAllOf) SetFieldNames(v []string) {
 }
 
 func (o ExtractionRuleAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.FieldNames != nil {
-		toSerialize["fieldNames"] = o.FieldNames
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ExtractionRuleAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.FieldNames) {
+		toSerialize["fieldNames"] = o.FieldNames
+	}
+	return toSerialize, nil
 }
 
 type NullableExtractionRuleAllOf struct {

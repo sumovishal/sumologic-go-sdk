@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LookupTableSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupTableSyncDefinition{}
 
 // LookupTableSyncDefinition struct for LookupTableSyncDefinition
 type LookupTableSyncDefinition struct {
@@ -133,7 +136,7 @@ func (o *LookupTableSyncDefinition) SetPrimaryKeys(v []string) {
 
 // GetTtl returns the Ttl field value if set, zero value otherwise.
 func (o *LookupTableSyncDefinition) GetTtl() int32 {
-	if o == nil || o.Ttl == nil {
+	if o == nil || IsNil(o.Ttl) {
 		var ret int32
 		return ret
 	}
@@ -143,7 +146,7 @@ func (o *LookupTableSyncDefinition) GetTtl() int32 {
 // GetTtlOk returns a tuple with the Ttl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableSyncDefinition) GetTtlOk() (*int32, bool) {
-	if o == nil || o.Ttl == nil {
+	if o == nil || IsNil(o.Ttl) {
 		return nil, false
 	}
 	return o.Ttl, true
@@ -151,7 +154,7 @@ func (o *LookupTableSyncDefinition) GetTtlOk() (*int32, bool) {
 
 // HasTtl returns a boolean if a field has been set.
 func (o *LookupTableSyncDefinition) HasTtl() bool {
-	if o != nil && o.Ttl != nil {
+	if o != nil && !IsNil(o.Ttl) {
 		return true
 	}
 
@@ -165,7 +168,7 @@ func (o *LookupTableSyncDefinition) SetTtl(v int32) {
 
 // GetSizeLimitAction returns the SizeLimitAction field value if set, zero value otherwise.
 func (o *LookupTableSyncDefinition) GetSizeLimitAction() string {
-	if o == nil || o.SizeLimitAction == nil {
+	if o == nil || IsNil(o.SizeLimitAction) {
 		var ret string
 		return ret
 	}
@@ -175,7 +178,7 @@ func (o *LookupTableSyncDefinition) GetSizeLimitAction() string {
 // GetSizeLimitActionOk returns a tuple with the SizeLimitAction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableSyncDefinition) GetSizeLimitActionOk() (*string, bool) {
-	if o == nil || o.SizeLimitAction == nil {
+	if o == nil || IsNil(o.SizeLimitAction) {
 		return nil, false
 	}
 	return o.SizeLimitAction, true
@@ -183,7 +186,7 @@ func (o *LookupTableSyncDefinition) GetSizeLimitActionOk() (*string, bool) {
 
 // HasSizeLimitAction returns a boolean if a field has been set.
 func (o *LookupTableSyncDefinition) HasSizeLimitAction() bool {
-	if o != nil && o.SizeLimitAction != nil {
+	if o != nil && !IsNil(o.SizeLimitAction) {
 		return true
 	}
 
@@ -196,31 +199,33 @@ func (o *LookupTableSyncDefinition) SetSizeLimitAction(v string) {
 }
 
 func (o LookupTableSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LookupTableSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedContentSyncDefinition, errContentSyncDefinition := json.Marshal(o.ContentSyncDefinition)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
 	errContentSyncDefinition = json.Unmarshal([]byte(serializedContentSyncDefinition), &toSerialize)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["fields"] = o.Fields
-	}
-	if true {
-		toSerialize["primaryKeys"] = o.PrimaryKeys
-	}
-	if o.Ttl != nil {
+	toSerialize["description"] = o.Description
+	toSerialize["fields"] = o.Fields
+	toSerialize["primaryKeys"] = o.PrimaryKeys
+	if !IsNil(o.Ttl) {
 		toSerialize["ttl"] = o.Ttl
 	}
-	if o.SizeLimitAction != nil {
+	if !IsNil(o.SizeLimitAction) {
 		toSerialize["sizeLimitAction"] = o.SizeLimitAction
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableLookupTableSyncDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ResourceIdentity type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ResourceIdentity{}
 
 // ResourceIdentity struct for ResourceIdentity
 type ResourceIdentity struct {
@@ -73,7 +76,7 @@ func (o *ResourceIdentity) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *ResourceIdentity) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *ResourceIdentity) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ResourceIdentity) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -91,7 +94,7 @@ func (o *ResourceIdentity) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *ResourceIdentity) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -128,17 +131,21 @@ func (o *ResourceIdentity) SetType(v string) {
 }
 
 func (o ResourceIdentity) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["type"] = o.Type
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ResourceIdentity) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	toSerialize["type"] = o.Type
+	return toSerialize, nil
 }
 
 type NullableResourceIdentity struct {

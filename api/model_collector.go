@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Collector type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Collector{}
 
 // Collector struct for Collector
 type Collector struct {
@@ -90,14 +93,18 @@ func (o *Collector) SetCollectorName(v string) {
 }
 
 func (o Collector) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["collectorId"] = o.CollectorId
-	}
-	if true {
-		toSerialize["collectorName"] = o.CollectorName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Collector) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["collectorId"] = o.CollectorId
+	toSerialize["collectorName"] = o.CollectorName
+	return toSerialize, nil
 }
 
 type NullableCollector struct {

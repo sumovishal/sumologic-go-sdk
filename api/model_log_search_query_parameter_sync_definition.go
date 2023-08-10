@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,13 +14,16 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogSearchQueryParameterSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchQueryParameterSyncDefinition{}
+
 // LogSearchQueryParameterSyncDefinition struct for LogSearchQueryParameterSyncDefinition
 type LogSearchQueryParameterSyncDefinition struct {
 	// The name of the parameter.
 	Name string `json:"name"`
 	// A description of the parameter.
 	Description *string `json:"description,omitempty"`
-	// The data type of the parameter. Supported values are:   1. `NUMBER`   2. `STRING`   3. `QUERY_FRAGMENT`   4. `SEARCH_KEYWORD`
+	// The data type of the parameter. Supported values are:   1. `NUMBER`   2. `STRING`   3. `ANY`   4. `KEYWORD`
 	DataType string `json:"dataType"`
 	// A value for the parameter. Should be compatible with the type set in dataType field.
 	Value string `json:"value"`
@@ -74,7 +77,7 @@ func (o *LogSearchQueryParameterSyncDefinition) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *LogSearchQueryParameterSyncDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -84,7 +87,7 @@ func (o *LogSearchQueryParameterSyncDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchQueryParameterSyncDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -92,7 +95,7 @@ func (o *LogSearchQueryParameterSyncDefinition) GetDescriptionOk() (*string, boo
 
 // HasDescription returns a boolean if a field has been set.
 func (o *LogSearchQueryParameterSyncDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -177,23 +180,23 @@ func (o *LogSearchQueryParameterSyncDefinition) SetAutoComplete(v LogSearchParam
 }
 
 func (o LogSearchQueryParameterSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if true {
-		toSerialize["autoComplete"] = o.AutoComplete
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchQueryParameterSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["dataType"] = o.DataType
+	toSerialize["value"] = o.Value
+	toSerialize["autoComplete"] = o.AutoComplete
+	return toSerialize, nil
 }
 
 type NullableLogSearchQueryParameterSyncDefinition struct {

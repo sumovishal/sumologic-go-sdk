@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ScheduleNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScheduleNotificationSyncDefinition{}
 
 // ScheduleNotificationSyncDefinition struct for ScheduleNotificationSyncDefinition
 type ScheduleNotificationSyncDefinition struct {
@@ -63,11 +66,17 @@ func (o *ScheduleNotificationSyncDefinition) SetTaskType(v string) {
 }
 
 func (o ScheduleNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["taskType"] = o.TaskType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ScheduleNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["taskType"] = o.TaskType
+	return toSerialize, nil
 }
 
 type NullableScheduleNotificationSyncDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansTimeGroupByAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansTimeGroupByAllOf{}
 
 // SpansTimeGroupByAllOf A representation of a group-by clause where results are bucketed based on a fixed interval are  created, e.g. five-minute buckets. 
 type SpansTimeGroupByAllOf struct {
@@ -63,11 +66,17 @@ func (o *SpansTimeGroupByAllOf) SetFieldValue(v string) {
 }
 
 func (o SpansTimeGroupByAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansTimeGroupByAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldValue"] = o.FieldValue
+	return toSerialize, nil
 }
 
 type NullableSpansTimeGroupByAllOf struct {

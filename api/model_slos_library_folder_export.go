@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SlosLibraryFolderExport type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibraryFolderExport{}
 
 // SlosLibraryFolderExport struct for SlosLibraryFolderExport
 type SlosLibraryFolderExport struct {
@@ -42,7 +45,7 @@ func NewSlosLibraryFolderExportWithDefaults() *SlosLibraryFolderExport {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *SlosLibraryFolderExport) GetChildren() []SlosLibraryBaseExport {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []SlosLibraryBaseExport
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *SlosLibraryFolderExport) GetChildren() []SlosLibraryBaseExport {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SlosLibraryFolderExport) GetChildrenOk() ([]SlosLibraryBaseExport, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -60,7 +63,7 @@ func (o *SlosLibraryFolderExport) GetChildrenOk() ([]SlosLibraryBaseExport, bool
 
 // HasChildren returns a boolean if a field has been set.
 func (o *SlosLibraryFolderExport) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -73,19 +76,27 @@ func (o *SlosLibraryFolderExport) SetChildren(v []SlosLibraryBaseExport) {
 }
 
 func (o SlosLibraryFolderExport) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSlosLibraryBaseExport, errSlosLibraryBaseExport := json.Marshal(o.SlosLibraryBaseExport)
 	if errSlosLibraryBaseExport != nil {
-		return []byte{}, errSlosLibraryBaseExport
+		return map[string]interface{}{}, errSlosLibraryBaseExport
 	}
 	errSlosLibraryBaseExport = json.Unmarshal([]byte(serializedSlosLibraryBaseExport), &toSerialize)
 	if errSlosLibraryBaseExport != nil {
-		return []byte{}, errSlosLibraryBaseExport
+		return map[string]interface{}{}, errSlosLibraryBaseExport
 	}
-	if o.Children != nil {
+	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSlosLibraryFolderExport struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,11 @@ import (
 	"encoding/json"
 )
 
-// AlertSignalContext struct for AlertSignalContext
+// checks if the AlertSignalContext type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertSignalContext{}
+
+// AlertSignalContext Details of the alert signal context.
 type AlertSignalContext struct {
-	SignalContext
 	// Alert Identifier.
 	AlertId string `json:"alertId"`
 }
@@ -65,19 +67,17 @@ func (o *AlertSignalContext) SetAlertId(v string) {
 }
 
 func (o AlertSignalContext) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	serializedSignalContext, errSignalContext := json.Marshal(o.SignalContext)
-	if errSignalContext != nil {
-		return []byte{}, errSignalContext
-	}
-	errSignalContext = json.Unmarshal([]byte(serializedSignalContext), &toSerialize)
-	if errSignalContext != nil {
-		return []byte{}, errSignalContext
-	}
-	if true {
-		toSerialize["alertId"] = o.AlertId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertSignalContext) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["alertId"] = o.AlertId
+	return toSerialize, nil
 }
 
 type NullableAlertSignalContext struct {

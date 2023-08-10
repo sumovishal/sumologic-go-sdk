@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceExistsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceExistsResponse{}
 
 // TraceExistsResponse struct for TraceExistsResponse
 type TraceExistsResponse struct {
@@ -66,7 +69,7 @@ func (o *TraceExistsResponse) SetExists(v bool) {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *TraceExistsResponse) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *TraceExistsResponse) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceExistsResponse) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -84,7 +87,7 @@ func (o *TraceExistsResponse) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *TraceExistsResponse) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *TraceExistsResponse) SetUrl(v string) {
 }
 
 func (o TraceExistsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["exists"] = o.Exists
-	}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceExistsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["exists"] = o.Exists
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceExistsResponse struct {

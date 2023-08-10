@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CpcQueryBucketStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CpcQueryBucketStatus{}
 
 // CpcQueryBucketStatus struct for CpcQueryBucketStatus
 type CpcQueryBucketStatus struct {
@@ -93,7 +96,7 @@ func (o *CpcQueryBucketStatus) SetStatus(v string) {
 
 // GetStatusMessage returns the StatusMessage field value if set, zero value otherwise.
 func (o *CpcQueryBucketStatus) GetStatusMessage() string {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *CpcQueryBucketStatus) GetStatusMessage() string {
 // GetStatusMessageOk returns a tuple with the StatusMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CpcQueryBucketStatus) GetStatusMessageOk() (*string, bool) {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		return nil, false
 	}
 	return o.StatusMessage, true
@@ -111,7 +114,7 @@ func (o *CpcQueryBucketStatus) GetStatusMessageOk() (*string, bool) {
 
 // HasStatusMessage returns a boolean if a field has been set.
 func (o *CpcQueryBucketStatus) HasStatusMessage() bool {
-	if o != nil && o.StatusMessage != nil {
+	if o != nil && !IsNil(o.StatusMessage) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *CpcQueryBucketStatus) SetStatusMessage(v string) {
 }
 
 func (o CpcQueryBucketStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["bucketId"] = o.BucketId
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessage != nil {
-		toSerialize["statusMessage"] = o.StatusMessage
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CpcQueryBucketStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["bucketId"] = o.BucketId
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessage) {
+		toSerialize["statusMessage"] = o.StatusMessage
+	}
+	return toSerialize, nil
 }
 
 type NullableCpcQueryBucketStatus struct {

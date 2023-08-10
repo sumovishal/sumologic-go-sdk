@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the AccessKeyPublic type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccessKeyPublic{}
 
 // AccessKeyPublic struct for AccessKeyPublic
 type AccessKeyPublic struct {
@@ -31,6 +34,8 @@ type AccessKeyPublic struct {
 	CreatedBy string `json:"createdBy"`
 	// Last modification timestamp in UTC.
 	ModifiedAt time.Time `json:"modifiedAt"`
+	// Last used timestamp in UTC.  <br> **Note:** Property not in use, it is part of an upcoming feature.
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
 }
 
 // NewAccessKeyPublic instantiates a new AccessKeyPublic object
@@ -106,7 +111,7 @@ func (o *AccessKeyPublic) SetLabel(v string) {
 
 // GetCorsHeaders returns the CorsHeaders field value if set, zero value otherwise.
 func (o *AccessKeyPublic) GetCorsHeaders() []string {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		var ret []string
 		return ret
 	}
@@ -116,7 +121,7 @@ func (o *AccessKeyPublic) GetCorsHeaders() []string {
 // GetCorsHeadersOk returns a tuple with the CorsHeaders field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccessKeyPublic) GetCorsHeadersOk() ([]string, bool) {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		return nil, false
 	}
 	return o.CorsHeaders, true
@@ -124,7 +129,7 @@ func (o *AccessKeyPublic) GetCorsHeadersOk() ([]string, bool) {
 
 // HasCorsHeaders returns a boolean if a field has been set.
 func (o *AccessKeyPublic) HasCorsHeaders() bool {
-	if o != nil && o.CorsHeaders != nil {
+	if o != nil && !IsNil(o.CorsHeaders) {
 		return true
 	}
 
@@ -232,30 +237,61 @@ func (o *AccessKeyPublic) SetModifiedAt(v time.Time) {
 	o.ModifiedAt = v
 }
 
+// GetLastUsed returns the LastUsed field value if set, zero value otherwise.
+func (o *AccessKeyPublic) GetLastUsed() time.Time {
+	if o == nil || IsNil(o.LastUsed) {
+		var ret time.Time
+		return ret
+	}
+	return *o.LastUsed
+}
+
+// GetLastUsedOk returns a tuple with the LastUsed field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccessKeyPublic) GetLastUsedOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.LastUsed) {
+		return nil, false
+	}
+	return o.LastUsed, true
+}
+
+// HasLastUsed returns a boolean if a field has been set.
+func (o *AccessKeyPublic) HasLastUsed() bool {
+	if o != nil && !IsNil(o.LastUsed) {
+		return true
+	}
+
+	return false
+}
+
+// SetLastUsed gets a reference to the given time.Time and assigns it to the LastUsed field.
+func (o *AccessKeyPublic) SetLastUsed(v time.Time) {
+	o.LastUsed = &v
+}
+
 func (o AccessKeyPublic) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if o.CorsHeaders != nil {
-		toSerialize["corsHeaders"] = o.CorsHeaders
-	}
-	if true {
-		toSerialize["disabled"] = o.Disabled
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccessKeyPublic) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["label"] = o.Label
+	if !IsNil(o.CorsHeaders) {
+		toSerialize["corsHeaders"] = o.CorsHeaders
+	}
+	toSerialize["disabled"] = o.Disabled
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	if !IsNil(o.LastUsed) {
+		toSerialize["lastUsed"] = o.LastUsed
+	}
+	return toSerialize, nil
 }
 
 type NullableAccessKeyPublic struct {

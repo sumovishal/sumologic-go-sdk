@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionS3ListingFailedTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionS3ListingFailedTracker{}
 
 // CollectionS3ListingFailedTracker struct for CollectionS3ListingFailedTracker
 type CollectionS3ListingFailedTracker struct {
@@ -45,7 +48,7 @@ func NewCollectionS3ListingFailedTrackerWithDefaults() *CollectionS3ListingFaile
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CollectionS3ListingFailedTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *CollectionS3ListingFailedTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3ListingFailedTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -63,7 +66,7 @@ func (o *CollectionS3ListingFailedTracker) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CollectionS3ListingFailedTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *CollectionS3ListingFailedTracker) SetEventType(v string) {
 
 // GetBucketName returns the BucketName field value if set, zero value otherwise.
 func (o *CollectionS3ListingFailedTracker) GetBucketName() string {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *CollectionS3ListingFailedTracker) GetBucketName() string {
 // GetBucketNameOk returns a tuple with the BucketName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3ListingFailedTracker) GetBucketNameOk() (*string, bool) {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		return nil, false
 	}
 	return o.BucketName, true
@@ -95,7 +98,7 @@ func (o *CollectionS3ListingFailedTracker) GetBucketNameOk() (*string, bool) {
 
 // HasBucketName returns a boolean if a field has been set.
 func (o *CollectionS3ListingFailedTracker) HasBucketName() bool {
-	if o != nil && o.BucketName != nil {
+	if o != nil && !IsNil(o.BucketName) {
 		return true
 	}
 
@@ -108,22 +111,30 @@ func (o *CollectionS3ListingFailedTracker) SetBucketName(v string) {
 }
 
 func (o CollectionS3ListingFailedTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CollectionS3ListingFailedTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.BucketName != nil {
+	if !IsNil(o.BucketName) {
 		toSerialize["bucketName"] = o.BucketName
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCollectionS3ListingFailedTracker struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceLightEventsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceLightEventsResponse{}
 
 // TraceLightEventsResponse struct for TraceLightEventsResponse
 type TraceLightEventsResponse struct {
@@ -41,7 +44,7 @@ func NewTraceLightEventsResponseWithDefaults() *TraceLightEventsResponse {
 
 // GetSpanEvents returns the SpanEvents field value if set, zero value otherwise.
 func (o *TraceLightEventsResponse) GetSpanEvents() map[string][]LightSpanEvent {
-	if o == nil || o.SpanEvents == nil {
+	if o == nil || IsNil(o.SpanEvents) {
 		var ret map[string][]LightSpanEvent
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *TraceLightEventsResponse) GetSpanEvents() map[string][]LightSpanEvent {
 // GetSpanEventsOk returns a tuple with the SpanEvents field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceLightEventsResponse) GetSpanEventsOk() (*map[string][]LightSpanEvent, bool) {
-	if o == nil || o.SpanEvents == nil {
+	if o == nil || IsNil(o.SpanEvents) {
 		return nil, false
 	}
 	return o.SpanEvents, true
@@ -59,7 +62,7 @@ func (o *TraceLightEventsResponse) GetSpanEventsOk() (*map[string][]LightSpanEve
 
 // HasSpanEvents returns a boolean if a field has been set.
 func (o *TraceLightEventsResponse) HasSpanEvents() bool {
-	if o != nil && o.SpanEvents != nil {
+	if o != nil && !IsNil(o.SpanEvents) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *TraceLightEventsResponse) SetSpanEvents(v map[string][]LightSpanEvent) 
 
 // GetNext returns the Next field value if set, zero value otherwise.
 func (o *TraceLightEventsResponse) GetNext() string {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *TraceLightEventsResponse) GetNext() string {
 // GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceLightEventsResponse) GetNextOk() (*string, bool) {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		return nil, false
 	}
 	return o.Next, true
@@ -91,7 +94,7 @@ func (o *TraceLightEventsResponse) GetNextOk() (*string, bool) {
 
 // HasNext returns a boolean if a field has been set.
 func (o *TraceLightEventsResponse) HasNext() bool {
-	if o != nil && o.Next != nil {
+	if o != nil && !IsNil(o.Next) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *TraceLightEventsResponse) SetNext(v string) {
 }
 
 func (o TraceLightEventsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SpanEvents != nil {
-		toSerialize["spanEvents"] = o.SpanEvents
-	}
-	if o.Next != nil {
-		toSerialize["next"] = o.Next
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceLightEventsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SpanEvents) {
+		toSerialize["spanEvents"] = o.SpanEvents
+	}
+	if !IsNil(o.Next) {
+		toSerialize["next"] = o.Next
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceLightEventsResponse struct {

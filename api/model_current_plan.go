@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CurrentPlan type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CurrentPlan{}
 
 // CurrentPlan Current plan of the account.
 type CurrentPlan struct {
@@ -134,7 +137,7 @@ func (o *CurrentPlan) SetBillingFrequency(v string) {
 
 // GetConsumables returns the Consumables field value if set, zero value otherwise.
 func (o *CurrentPlan) GetConsumables() []Consumable {
-	if o == nil || o.Consumables == nil {
+	if o == nil || IsNil(o.Consumables) {
 		var ret []Consumable
 		return ret
 	}
@@ -144,7 +147,7 @@ func (o *CurrentPlan) GetConsumables() []Consumable {
 // GetConsumablesOk returns a tuple with the Consumables field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetConsumablesOk() ([]Consumable, bool) {
-	if o == nil || o.Consumables == nil {
+	if o == nil || IsNil(o.Consumables) {
 		return nil, false
 	}
 	return o.Consumables, true
@@ -152,7 +155,7 @@ func (o *CurrentPlan) GetConsumablesOk() ([]Consumable, bool) {
 
 // HasConsumables returns a boolean if a field has been set.
 func (o *CurrentPlan) HasConsumables() bool {
-	if o != nil && o.Consumables != nil {
+	if o != nil && !IsNil(o.Consumables) {
 		return true
 	}
 
@@ -166,7 +169,7 @@ func (o *CurrentPlan) SetConsumables(v []Consumable) {
 
 // GetPlanType returns the PlanType field value if set, zero value otherwise.
 func (o *CurrentPlan) GetPlanType() string {
-	if o == nil || o.PlanType == nil {
+	if o == nil || IsNil(o.PlanType) {
 		var ret string
 		return ret
 	}
@@ -176,7 +179,7 @@ func (o *CurrentPlan) GetPlanType() string {
 // GetPlanTypeOk returns a tuple with the PlanType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetPlanTypeOk() (*string, bool) {
-	if o == nil || o.PlanType == nil {
+	if o == nil || IsNil(o.PlanType) {
 		return nil, false
 	}
 	return o.PlanType, true
@@ -184,7 +187,7 @@ func (o *CurrentPlan) GetPlanTypeOk() (*string, bool) {
 
 // HasPlanType returns a boolean if a field has been set.
 func (o *CurrentPlan) HasPlanType() bool {
-	if o != nil && o.PlanType != nil {
+	if o != nil && !IsNil(o.PlanType) {
 		return true
 	}
 
@@ -198,7 +201,7 @@ func (o *CurrentPlan) SetPlanType(v string) {
 
 // GetPlanName returns the PlanName field value if set, zero value otherwise.
 func (o *CurrentPlan) GetPlanName() string {
-	if o == nil || o.PlanName == nil {
+	if o == nil || IsNil(o.PlanName) {
 		var ret string
 		return ret
 	}
@@ -208,7 +211,7 @@ func (o *CurrentPlan) GetPlanName() string {
 // GetPlanNameOk returns a tuple with the PlanName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetPlanNameOk() (*string, bool) {
-	if o == nil || o.PlanName == nil {
+	if o == nil || IsNil(o.PlanName) {
 		return nil, false
 	}
 	return o.PlanName, true
@@ -216,7 +219,7 @@ func (o *CurrentPlan) GetPlanNameOk() (*string, bool) {
 
 // HasPlanName returns a boolean if a field has been set.
 func (o *CurrentPlan) HasPlanName() bool {
-	if o != nil && o.PlanName != nil {
+	if o != nil && !IsNil(o.PlanName) {
 		return true
 	}
 
@@ -230,7 +233,7 @@ func (o *CurrentPlan) SetPlanName(v string) {
 
 // GetDiscountAmount returns the DiscountAmount field value if set, zero value otherwise.
 func (o *CurrentPlan) GetDiscountAmount() int32 {
-	if o == nil || o.DiscountAmount == nil {
+	if o == nil || IsNil(o.DiscountAmount) {
 		var ret int32
 		return ret
 	}
@@ -240,7 +243,7 @@ func (o *CurrentPlan) GetDiscountAmount() int32 {
 // GetDiscountAmountOk returns a tuple with the DiscountAmount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetDiscountAmountOk() (*int32, bool) {
-	if o == nil || o.DiscountAmount == nil {
+	if o == nil || IsNil(o.DiscountAmount) {
 		return nil, false
 	}
 	return o.DiscountAmount, true
@@ -248,7 +251,7 @@ func (o *CurrentPlan) GetDiscountAmountOk() (*int32, bool) {
 
 // HasDiscountAmount returns a boolean if a field has been set.
 func (o *CurrentPlan) HasDiscountAmount() bool {
-	if o != nil && o.DiscountAmount != nil {
+	if o != nil && !IsNil(o.DiscountAmount) {
 		return true
 	}
 
@@ -262,7 +265,7 @@ func (o *CurrentPlan) SetDiscountAmount(v int32) {
 
 // GetContractPeriod returns the ContractPeriod field value if set, zero value otherwise.
 func (o *CurrentPlan) GetContractPeriod() ContractPeriod {
-	if o == nil || o.ContractPeriod == nil {
+	if o == nil || IsNil(o.ContractPeriod) {
 		var ret ContractPeriod
 		return ret
 	}
@@ -272,7 +275,7 @@ func (o *CurrentPlan) GetContractPeriod() ContractPeriod {
 // GetContractPeriodOk returns a tuple with the ContractPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetContractPeriodOk() (*ContractPeriod, bool) {
-	if o == nil || o.ContractPeriod == nil {
+	if o == nil || IsNil(o.ContractPeriod) {
 		return nil, false
 	}
 	return o.ContractPeriod, true
@@ -280,7 +283,7 @@ func (o *CurrentPlan) GetContractPeriodOk() (*ContractPeriod, bool) {
 
 // HasContractPeriod returns a boolean if a field has been set.
 func (o *CurrentPlan) HasContractPeriod() bool {
-	if o != nil && o.ContractPeriod != nil {
+	if o != nil && !IsNil(o.ContractPeriod) {
 		return true
 	}
 
@@ -294,7 +297,7 @@ func (o *CurrentPlan) SetContractPeriod(v ContractPeriod) {
 
 // GetCurrentBillingPeriod returns the CurrentBillingPeriod field value if set, zero value otherwise.
 func (o *CurrentPlan) GetCurrentBillingPeriod() CurrentBillingPeriod {
-	if o == nil || o.CurrentBillingPeriod == nil {
+	if o == nil || IsNil(o.CurrentBillingPeriod) {
 		var ret CurrentBillingPeriod
 		return ret
 	}
@@ -304,7 +307,7 @@ func (o *CurrentPlan) GetCurrentBillingPeriod() CurrentBillingPeriod {
 // GetCurrentBillingPeriodOk returns a tuple with the CurrentBillingPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetCurrentBillingPeriodOk() (*CurrentBillingPeriod, bool) {
-	if o == nil || o.CurrentBillingPeriod == nil {
+	if o == nil || IsNil(o.CurrentBillingPeriod) {
 		return nil, false
 	}
 	return o.CurrentBillingPeriod, true
@@ -312,7 +315,7 @@ func (o *CurrentPlan) GetCurrentBillingPeriodOk() (*CurrentBillingPeriod, bool) 
 
 // HasCurrentBillingPeriod returns a boolean if a field has been set.
 func (o *CurrentPlan) HasCurrentBillingPeriod() bool {
-	if o != nil && o.CurrentBillingPeriod != nil {
+	if o != nil && !IsNil(o.CurrentBillingPeriod) {
 		return true
 	}
 
@@ -326,7 +329,7 @@ func (o *CurrentPlan) SetCurrentBillingPeriod(v CurrentBillingPeriod) {
 
 // GetCredits returns the Credits field value if set, zero value otherwise.
 func (o *CurrentPlan) GetCredits() int64 {
-	if o == nil || o.Credits == nil {
+	if o == nil || IsNil(o.Credits) {
 		var ret int64
 		return ret
 	}
@@ -336,7 +339,7 @@ func (o *CurrentPlan) GetCredits() int64 {
 // GetCreditsOk returns a tuple with the Credits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetCreditsOk() (*int64, bool) {
-	if o == nil || o.Credits == nil {
+	if o == nil || IsNil(o.Credits) {
 		return nil, false
 	}
 	return o.Credits, true
@@ -344,7 +347,7 @@ func (o *CurrentPlan) GetCreditsOk() (*int64, bool) {
 
 // HasCredits returns a boolean if a field has been set.
 func (o *CurrentPlan) HasCredits() bool {
-	if o != nil && o.Credits != nil {
+	if o != nil && !IsNil(o.Credits) {
 		return true
 	}
 
@@ -358,7 +361,7 @@ func (o *CurrentPlan) SetCredits(v int64) {
 
 // GetBaselines returns the Baselines field value if set, zero value otherwise.
 func (o *CurrentPlan) GetBaselines() Baselines {
-	if o == nil || o.Baselines == nil {
+	if o == nil || IsNil(o.Baselines) {
 		var ret Baselines
 		return ret
 	}
@@ -368,7 +371,7 @@ func (o *CurrentPlan) GetBaselines() Baselines {
 // GetBaselinesOk returns a tuple with the Baselines field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetBaselinesOk() (*Baselines, bool) {
-	if o == nil || o.Baselines == nil {
+	if o == nil || IsNil(o.Baselines) {
 		return nil, false
 	}
 	return o.Baselines, true
@@ -376,7 +379,7 @@ func (o *CurrentPlan) GetBaselinesOk() (*Baselines, bool) {
 
 // HasBaselines returns a boolean if a field has been set.
 func (o *CurrentPlan) HasBaselines() bool {
-	if o != nil && o.Baselines != nil {
+	if o != nil && !IsNil(o.Baselines) {
 		return true
 	}
 
@@ -390,7 +393,7 @@ func (o *CurrentPlan) SetBaselines(v Baselines) {
 
 // GetPendingUpdateRequest returns the PendingUpdateRequest field value if set, zero value otherwise.
 func (o *CurrentPlan) GetPendingUpdateRequest() bool {
-	if o == nil || o.PendingUpdateRequest == nil {
+	if o == nil || IsNil(o.PendingUpdateRequest) {
 		var ret bool
 		return ret
 	}
@@ -400,7 +403,7 @@ func (o *CurrentPlan) GetPendingUpdateRequest() bool {
 // GetPendingUpdateRequestOk returns a tuple with the PendingUpdateRequest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetPendingUpdateRequestOk() (*bool, bool) {
-	if o == nil || o.PendingUpdateRequest == nil {
+	if o == nil || IsNil(o.PendingUpdateRequest) {
 		return nil, false
 	}
 	return o.PendingUpdateRequest, true
@@ -408,7 +411,7 @@ func (o *CurrentPlan) GetPendingUpdateRequestOk() (*bool, bool) {
 
 // HasPendingUpdateRequest returns a boolean if a field has been set.
 func (o *CurrentPlan) HasPendingUpdateRequest() bool {
-	if o != nil && o.PendingUpdateRequest != nil {
+	if o != nil && !IsNil(o.PendingUpdateRequest) {
 		return true
 	}
 
@@ -422,7 +425,7 @@ func (o *CurrentPlan) SetPendingUpdateRequest(v bool) {
 
 // GetProrationDetails returns the ProrationDetails field value if set, zero value otherwise.
 func (o *CurrentPlan) GetProrationDetails() ProrationDetails {
-	if o == nil || o.ProrationDetails == nil {
+	if o == nil || IsNil(o.ProrationDetails) {
 		var ret ProrationDetails
 		return ret
 	}
@@ -432,7 +435,7 @@ func (o *CurrentPlan) GetProrationDetails() ProrationDetails {
 // GetProrationDetailsOk returns a tuple with the ProrationDetails field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CurrentPlan) GetProrationDetailsOk() (*ProrationDetails, bool) {
-	if o == nil || o.ProrationDetails == nil {
+	if o == nil || IsNil(o.ProrationDetails) {
 		return nil, false
 	}
 	return o.ProrationDetails, true
@@ -440,7 +443,7 @@ func (o *CurrentPlan) GetProrationDetailsOk() (*ProrationDetails, bool) {
 
 // HasProrationDetails returns a boolean if a field has been set.
 func (o *CurrentPlan) HasProrationDetails() bool {
-	if o != nil && o.ProrationDetails != nil {
+	if o != nil && !IsNil(o.ProrationDetails) {
 		return true
 	}
 
@@ -453,47 +456,49 @@ func (o *CurrentPlan) SetProrationDetails(v ProrationDetails) {
 }
 
 func (o CurrentPlan) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["productId"] = o.ProductId
-	}
-	if true {
-		toSerialize["planCost"] = o.PlanCost
-	}
-	if true {
-		toSerialize["billingFrequency"] = o.BillingFrequency
-	}
-	if o.Consumables != nil {
-		toSerialize["consumables"] = o.Consumables
-	}
-	if o.PlanType != nil {
-		toSerialize["planType"] = o.PlanType
-	}
-	if o.PlanName != nil {
-		toSerialize["planName"] = o.PlanName
-	}
-	if o.DiscountAmount != nil {
-		toSerialize["discountAmount"] = o.DiscountAmount
-	}
-	if o.ContractPeriod != nil {
-		toSerialize["contractPeriod"] = o.ContractPeriod
-	}
-	if o.CurrentBillingPeriod != nil {
-		toSerialize["currentBillingPeriod"] = o.CurrentBillingPeriod
-	}
-	if o.Credits != nil {
-		toSerialize["credits"] = o.Credits
-	}
-	if o.Baselines != nil {
-		toSerialize["baselines"] = o.Baselines
-	}
-	if o.PendingUpdateRequest != nil {
-		toSerialize["pendingUpdateRequest"] = o.PendingUpdateRequest
-	}
-	if o.ProrationDetails != nil {
-		toSerialize["prorationDetails"] = o.ProrationDetails
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CurrentPlan) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["productId"] = o.ProductId
+	toSerialize["planCost"] = o.PlanCost
+	toSerialize["billingFrequency"] = o.BillingFrequency
+	if !IsNil(o.Consumables) {
+		toSerialize["consumables"] = o.Consumables
+	}
+	if !IsNil(o.PlanType) {
+		toSerialize["planType"] = o.PlanType
+	}
+	if !IsNil(o.PlanName) {
+		toSerialize["planName"] = o.PlanName
+	}
+	if !IsNil(o.DiscountAmount) {
+		toSerialize["discountAmount"] = o.DiscountAmount
+	}
+	if !IsNil(o.ContractPeriod) {
+		toSerialize["contractPeriod"] = o.ContractPeriod
+	}
+	if !IsNil(o.CurrentBillingPeriod) {
+		toSerialize["currentBillingPeriod"] = o.CurrentBillingPeriod
+	}
+	if !IsNil(o.Credits) {
+		toSerialize["credits"] = o.Credits
+	}
+	if !IsNil(o.Baselines) {
+		toSerialize["baselines"] = o.Baselines
+	}
+	if !IsNil(o.PendingUpdateRequest) {
+		toSerialize["pendingUpdateRequest"] = o.PendingUpdateRequest
+	}
+	if !IsNil(o.ProrationDetails) {
+		toSerialize["prorationDetails"] = o.ProrationDetails
+	}
+	return toSerialize, nil
 }
 
 type NullableCurrentPlan struct {

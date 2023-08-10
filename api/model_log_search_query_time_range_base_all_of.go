@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogSearchQueryTimeRangeBaseAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchQueryTimeRangeBaseAllOf{}
 
 // LogSearchQueryTimeRangeBaseAllOf struct for LogSearchQueryTimeRangeBaseAllOf
 type LogSearchQueryTimeRangeBaseAllOf struct {
@@ -43,7 +46,7 @@ func NewLogSearchQueryTimeRangeBaseAllOfWithDefaults() *LogSearchQueryTimeRangeB
 
 // GetParsingMode returns the ParsingMode field value if set, zero value otherwise.
 func (o *LogSearchQueryTimeRangeBaseAllOf) GetParsingMode() string {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *LogSearchQueryTimeRangeBaseAllOf) GetParsingMode() string {
 // GetParsingModeOk returns a tuple with the ParsingMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchQueryTimeRangeBaseAllOf) GetParsingModeOk() (*string, bool) {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		return nil, false
 	}
 	return o.ParsingMode, true
@@ -61,7 +64,7 @@ func (o *LogSearchQueryTimeRangeBaseAllOf) GetParsingModeOk() (*string, bool) {
 
 // HasParsingMode returns a boolean if a field has been set.
 func (o *LogSearchQueryTimeRangeBaseAllOf) HasParsingMode() bool {
-	if o != nil && o.ParsingMode != nil {
+	if o != nil && !IsNil(o.ParsingMode) {
 		return true
 	}
 
@@ -74,11 +77,19 @@ func (o *LogSearchQueryTimeRangeBaseAllOf) SetParsingMode(v string) {
 }
 
 func (o LogSearchQueryTimeRangeBaseAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ParsingMode != nil {
-		toSerialize["parsingMode"] = o.ParsingMode
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchQueryTimeRangeBaseAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ParsingMode) {
+		toSerialize["parsingMode"] = o.ParsingMode
+	}
+	return toSerialize, nil
 }
 
 type NullableLogSearchQueryTimeRangeBaseAllOf struct {

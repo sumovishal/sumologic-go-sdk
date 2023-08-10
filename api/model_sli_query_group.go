@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,14 @@ import (
 	"encoding/json"
 )
 
+// checks if the SliQueryGroup type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SliQueryGroup{}
+
 // SliQueryGroup struct for SliQueryGroup
 type SliQueryGroup struct {
 	// Type of Query (successful/unsuccessful/total/threshold).
 	QueryGroupType string `json:"queryGroupType"`
+	// Group of queries to allow for query arithmetic.
 	QueryGroup []SliQuery `json:"queryGroup"`
 }
 
@@ -89,14 +93,18 @@ func (o *SliQueryGroup) SetQueryGroup(v []SliQuery) {
 }
 
 func (o SliQueryGroup) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryGroupType"] = o.QueryGroupType
-	}
-	if true {
-		toSerialize["queryGroup"] = o.QueryGroup
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SliQueryGroup) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryGroupType"] = o.QueryGroupType
+	toSerialize["queryGroup"] = o.QueryGroup
+	return toSerialize, nil
 }
 
 type NullableSliQueryGroup struct {

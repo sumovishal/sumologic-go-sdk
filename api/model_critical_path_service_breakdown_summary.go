@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,22 +14,28 @@ import (
 	"encoding/json"
 )
 
+// checks if the CriticalPathServiceBreakdownSummary type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CriticalPathServiceBreakdownSummary{}
+
 // CriticalPathServiceBreakdownSummary struct for CriticalPathServiceBreakdownSummary
 type CriticalPathServiceBreakdownSummary struct {
 	// List of the elements representing the critical path service duration breakdown - contains the first few services with the longest overall duration of the spans contributing to the critical path.
 	Elements []CriticalPathServiceBreakdownElementBase `json:"elements"`
 	// Overall processing time in nanoseconds consumed by the rest of the spans in the critical path (a sum of the duration times of the spans' critical path segments).
 	OtherServicesDuration int64 `json:"otherServicesDuration"`
+	// Overall time in nanoseconds when no particular operation was in progress.
+	IdleTime int64 `json:"idleTime"`
 }
 
 // NewCriticalPathServiceBreakdownSummary instantiates a new CriticalPathServiceBreakdownSummary object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCriticalPathServiceBreakdownSummary(elements []CriticalPathServiceBreakdownElementBase, otherServicesDuration int64) *CriticalPathServiceBreakdownSummary {
+func NewCriticalPathServiceBreakdownSummary(elements []CriticalPathServiceBreakdownElementBase, otherServicesDuration int64, idleTime int64) *CriticalPathServiceBreakdownSummary {
 	this := CriticalPathServiceBreakdownSummary{}
 	this.Elements = elements
 	this.OtherServicesDuration = otherServicesDuration
+	this.IdleTime = idleTime
 	return &this
 }
 
@@ -89,15 +95,44 @@ func (o *CriticalPathServiceBreakdownSummary) SetOtherServicesDuration(v int64) 
 	o.OtherServicesDuration = v
 }
 
-func (o CriticalPathServiceBreakdownSummary) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["elements"] = o.Elements
+// GetIdleTime returns the IdleTime field value
+func (o *CriticalPathServiceBreakdownSummary) GetIdleTime() int64 {
+	if o == nil {
+		var ret int64
+		return ret
 	}
-	if true {
-		toSerialize["otherServicesDuration"] = o.OtherServicesDuration
+
+	return o.IdleTime
+}
+
+// GetIdleTimeOk returns a tuple with the IdleTime field value
+// and a boolean to check if the value has been set.
+func (o *CriticalPathServiceBreakdownSummary) GetIdleTimeOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IdleTime, true
+}
+
+// SetIdleTime sets field value
+func (o *CriticalPathServiceBreakdownSummary) SetIdleTime(v int64) {
+	o.IdleTime = v
+}
+
+func (o CriticalPathServiceBreakdownSummary) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CriticalPathServiceBreakdownSummary) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["elements"] = o.Elements
+	toSerialize["otherServicesDuration"] = o.OtherServicesDuration
+	toSerialize["idleTime"] = o.IdleTime
+	return toSerialize, nil
 }
 
 type NullableCriticalPathServiceBreakdownSummary struct {

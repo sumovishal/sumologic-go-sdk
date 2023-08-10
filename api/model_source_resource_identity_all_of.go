@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SourceResourceIdentityAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SourceResourceIdentityAllOf{}
 
 // SourceResourceIdentityAllOf struct for SourceResourceIdentityAllOf
 type SourceResourceIdentityAllOf struct {
@@ -49,7 +52,7 @@ func NewSourceResourceIdentityAllOfWithDefaults() *SourceResourceIdentityAllOf {
 
 // GetCollectorId returns the CollectorId field value if set, zero value otherwise.
 func (o *SourceResourceIdentityAllOf) GetCollectorId() string {
-	if o == nil || o.CollectorId == nil {
+	if o == nil || IsNil(o.CollectorId) {
 		var ret string
 		return ret
 	}
@@ -59,7 +62,7 @@ func (o *SourceResourceIdentityAllOf) GetCollectorId() string {
 // GetCollectorIdOk returns a tuple with the CollectorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SourceResourceIdentityAllOf) GetCollectorIdOk() (*string, bool) {
-	if o == nil || o.CollectorId == nil {
+	if o == nil || IsNil(o.CollectorId) {
 		return nil, false
 	}
 	return o.CollectorId, true
@@ -67,7 +70,7 @@ func (o *SourceResourceIdentityAllOf) GetCollectorIdOk() (*string, bool) {
 
 // HasCollectorId returns a boolean if a field has been set.
 func (o *SourceResourceIdentityAllOf) HasCollectorId() bool {
-	if o != nil && o.CollectorId != nil {
+	if o != nil && !IsNil(o.CollectorId) {
 		return true
 	}
 
@@ -81,7 +84,7 @@ func (o *SourceResourceIdentityAllOf) SetCollectorId(v string) {
 
 // GetCollectorName returns the CollectorName field value if set, zero value otherwise.
 func (o *SourceResourceIdentityAllOf) GetCollectorName() string {
-	if o == nil || o.CollectorName == nil {
+	if o == nil || IsNil(o.CollectorName) {
 		var ret string
 		return ret
 	}
@@ -91,7 +94,7 @@ func (o *SourceResourceIdentityAllOf) GetCollectorName() string {
 // GetCollectorNameOk returns a tuple with the CollectorName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SourceResourceIdentityAllOf) GetCollectorNameOk() (*string, bool) {
-	if o == nil || o.CollectorName == nil {
+	if o == nil || IsNil(o.CollectorName) {
 		return nil, false
 	}
 	return o.CollectorName, true
@@ -99,7 +102,7 @@ func (o *SourceResourceIdentityAllOf) GetCollectorNameOk() (*string, bool) {
 
 // HasCollectorName returns a boolean if a field has been set.
 func (o *SourceResourceIdentityAllOf) HasCollectorName() bool {
-	if o != nil && o.CollectorName != nil {
+	if o != nil && !IsNil(o.CollectorName) {
 		return true
 	}
 
@@ -112,14 +115,22 @@ func (o *SourceResourceIdentityAllOf) SetCollectorName(v string) {
 }
 
 func (o SourceResourceIdentityAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.CollectorId != nil {
-		toSerialize["collectorId"] = o.CollectorId
-	}
-	if o.CollectorName != nil {
-		toSerialize["collectorName"] = o.CollectorName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SourceResourceIdentityAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.CollectorId) {
+		toSerialize["collectorId"] = o.CollectorId
+	}
+	if !IsNil(o.CollectorName) {
+		toSerialize["collectorName"] = o.CollectorName
+	}
+	return toSerialize, nil
 }
 
 type NullableSourceResourceIdentityAllOf struct {

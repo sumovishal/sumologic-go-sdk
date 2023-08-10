@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ValueOnlyLookupAutoCompleteSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ValueOnlyLookupAutoCompleteSyncDefinitionAllOf{}
 
 // ValueOnlyLookupAutoCompleteSyncDefinitionAllOf struct for ValueOnlyLookupAutoCompleteSyncDefinitionAllOf
 type ValueOnlyLookupAutoCompleteSyncDefinitionAllOf struct {
@@ -117,17 +120,19 @@ func (o *ValueOnlyLookupAutoCompleteSyncDefinitionAllOf) SetLookupValueColumn(v 
 }
 
 func (o ValueOnlyLookupAutoCompleteSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
-	}
-	if true {
-		toSerialize["lookupFileName"] = o.LookupFileName
-	}
-	if true {
-		toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ValueOnlyLookupAutoCompleteSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	toSerialize["lookupFileName"] = o.LookupFileName
+	toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	return toSerialize, nil
 }
 
 type NullableValueOnlyLookupAutoCompleteSyncDefinitionAllOf struct {

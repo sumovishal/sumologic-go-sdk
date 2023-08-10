@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PlansCatalog type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PlansCatalog{}
 
 // PlansCatalog Plans available for the account to update.
 type PlansCatalog struct {
@@ -63,11 +66,17 @@ func (o *PlansCatalog) SetPlans(v []SelfServicePlan) {
 }
 
 func (o PlansCatalog) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["plans"] = o.Plans
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PlansCatalog) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["plans"] = o.Plans
+	return toSerialize, nil
 }
 
 type NullablePlansCatalog struct {

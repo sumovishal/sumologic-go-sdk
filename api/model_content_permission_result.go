@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContentPermissionResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentPermissionResult{}
 
 // ContentPermissionResult struct for ContentPermissionResult
 type ContentPermissionResult struct {
@@ -66,7 +69,7 @@ func (o *ContentPermissionResult) SetExplicitPermissions(v []ContentPermissionAs
 
 // GetImplicitPermissions returns the ImplicitPermissions field value if set, zero value otherwise.
 func (o *ContentPermissionResult) GetImplicitPermissions() []ContentPermissionAssignment {
-	if o == nil || o.ImplicitPermissions == nil {
+	if o == nil || IsNil(o.ImplicitPermissions) {
 		var ret []ContentPermissionAssignment
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *ContentPermissionResult) GetImplicitPermissions() []ContentPermissionAs
 // GetImplicitPermissionsOk returns a tuple with the ImplicitPermissions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ContentPermissionResult) GetImplicitPermissionsOk() ([]ContentPermissionAssignment, bool) {
-	if o == nil || o.ImplicitPermissions == nil {
+	if o == nil || IsNil(o.ImplicitPermissions) {
 		return nil, false
 	}
 	return o.ImplicitPermissions, true
@@ -84,7 +87,7 @@ func (o *ContentPermissionResult) GetImplicitPermissionsOk() ([]ContentPermissio
 
 // HasImplicitPermissions returns a boolean if a field has been set.
 func (o *ContentPermissionResult) HasImplicitPermissions() bool {
-	if o != nil && o.ImplicitPermissions != nil {
+	if o != nil && !IsNil(o.ImplicitPermissions) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *ContentPermissionResult) SetImplicitPermissions(v []ContentPermissionAs
 }
 
 func (o ContentPermissionResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["explicitPermissions"] = o.ExplicitPermissions
-	}
-	if o.ImplicitPermissions != nil {
-		toSerialize["implicitPermissions"] = o.ImplicitPermissions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentPermissionResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["explicitPermissions"] = o.ExplicitPermissions
+	if !IsNil(o.ImplicitPermissions) {
+		toSerialize["implicitPermissions"] = o.ImplicitPermissions
+	}
+	return toSerialize, nil
 }
 
 type NullableContentPermissionResult struct {

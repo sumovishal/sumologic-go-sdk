@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EntitlementConsumption type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EntitlementConsumption{}
 
 // EntitlementConsumption struct for EntitlementConsumption
 type EntitlementConsumption struct {
@@ -72,7 +75,7 @@ func (o *EntitlementConsumption) SetEntitlementType(v string) {
 
 // GetDatapoints returns the Datapoints field value if set, zero value otherwise.
 func (o *EntitlementConsumption) GetDatapoints() []DataPoints {
-	if o == nil || o.Datapoints == nil {
+	if o == nil || IsNil(o.Datapoints) {
 		var ret []DataPoints
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *EntitlementConsumption) GetDatapoints() []DataPoints {
 // GetDatapointsOk returns a tuple with the Datapoints field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *EntitlementConsumption) GetDatapointsOk() ([]DataPoints, bool) {
-	if o == nil || o.Datapoints == nil {
+	if o == nil || IsNil(o.Datapoints) {
 		return nil, false
 	}
 	return o.Datapoints, true
@@ -90,7 +93,7 @@ func (o *EntitlementConsumption) GetDatapointsOk() ([]DataPoints, bool) {
 
 // HasDatapoints returns a boolean if a field has been set.
 func (o *EntitlementConsumption) HasDatapoints() bool {
-	if o != nil && o.Datapoints != nil {
+	if o != nil && !IsNil(o.Datapoints) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *EntitlementConsumption) SetContractType(v string) {
 }
 
 func (o EntitlementConsumption) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["entitlementType"] = o.EntitlementType
-	}
-	if o.Datapoints != nil {
-		toSerialize["datapoints"] = o.Datapoints
-	}
-	if true {
-		toSerialize["operators"] = o.Operators
-	}
-	if true {
-		toSerialize["contractType"] = o.ContractType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EntitlementConsumption) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["entitlementType"] = o.EntitlementType
+	if !IsNil(o.Datapoints) {
+		toSerialize["datapoints"] = o.Datapoints
+	}
+	toSerialize["operators"] = o.Operators
+	toSerialize["contractType"] = o.ContractType
+	return toSerialize, nil
 }
 
 type NullableEntitlementConsumption struct {

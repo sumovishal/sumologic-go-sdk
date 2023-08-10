@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ServiceNowDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceNowDefinition{}
 
 // ServiceNowDefinition struct for ServiceNowDefinition
 type ServiceNowDefinition struct {
@@ -122,25 +125,27 @@ func (o *ServiceNowDefinition) SetPassword(v string) {
 }
 
 func (o ServiceNowDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ServiceNowDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedConnectionDefinition, errConnectionDefinition := json.Marshal(o.ConnectionDefinition)
 	if errConnectionDefinition != nil {
-		return []byte{}, errConnectionDefinition
+		return map[string]interface{}{}, errConnectionDefinition
 	}
 	errConnectionDefinition = json.Unmarshal([]byte(serializedConnectionDefinition), &toSerialize)
 	if errConnectionDefinition != nil {
-		return []byte{}, errConnectionDefinition
+		return map[string]interface{}{}, errConnectionDefinition
 	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["username"] = o.Username
-	}
-	if true {
-		toSerialize["password"] = o.Password
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["url"] = o.Url
+	toSerialize["username"] = o.Username
+	toSerialize["password"] = o.Password
+	return toSerialize, nil
 }
 
 type NullableServiceNowDefinition struct {

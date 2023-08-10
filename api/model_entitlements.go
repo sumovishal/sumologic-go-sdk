@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Entitlements type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Entitlements{}
 
 // Entitlements struct for Entitlements
 type Entitlements struct {
@@ -146,7 +149,7 @@ func (o *Entitlements) SetCapacity(v Capacity) {
 
 // GetCapacities returns the Capacities field value if set, zero value otherwise.
 func (o *Entitlements) GetCapacities() []Capacity {
-	if o == nil || o.Capacities == nil {
+	if o == nil || IsNil(o.Capacities) {
 		var ret []Capacity
 		return ret
 	}
@@ -156,7 +159,7 @@ func (o *Entitlements) GetCapacities() []Capacity {
 // GetCapacitiesOk returns a tuple with the Capacities field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Entitlements) GetCapacitiesOk() ([]Capacity, bool) {
-	if o == nil || o.Capacities == nil {
+	if o == nil || IsNil(o.Capacities) {
 		return nil, false
 	}
 	return o.Capacities, true
@@ -164,7 +167,7 @@ func (o *Entitlements) GetCapacitiesOk() ([]Capacity, bool) {
 
 // HasCapacities returns a boolean if a field has been set.
 func (o *Entitlements) HasCapacities() bool {
-	if o != nil && o.Capacities != nil {
+	if o != nil && !IsNil(o.Capacities) {
 		return true
 	}
 
@@ -177,23 +180,23 @@ func (o *Entitlements) SetCapacities(v []Capacity) {
 }
 
 func (o Entitlements) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["contractType"] = o.ContractType
-	}
-	if true {
-		toSerialize["entitlementType"] = o.EntitlementType
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if true {
-		toSerialize["capacity"] = o.Capacity
-	}
-	if o.Capacities != nil {
-		toSerialize["capacities"] = o.Capacities
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Entitlements) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["contractType"] = o.ContractType
+	toSerialize["entitlementType"] = o.EntitlementType
+	toSerialize["label"] = o.Label
+	toSerialize["capacity"] = o.Capacity
+	if !IsNil(o.Capacities) {
+		toSerialize["capacities"] = o.Capacities
+	}
+	return toSerialize, nil
 }
 
 type NullableEntitlements struct {

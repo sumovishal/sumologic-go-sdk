@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,23 @@ import (
 	"encoding/json"
 )
 
+// checks if the ProductGroup type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProductGroup{}
+
 // ProductGroup Details of product group and its quantity.
 type ProductGroup struct {
 	// Name of the Product group: 
 	ProductGroupName string `json:"productGroupName"`
+	// Id of the Product group
+	ProductGroupId *string `json:"productGroupId,omitempty"`
 	// Different product variables of the product group
 	ProductVariables []ProductVariable `json:"productVariables"`
+	// Is provisioning supported on this Product Group. This is applicable for product variables which are not enabled by default.
+	ProvisioningSupported *bool `json:"provisioningSupported,omitempty"`
+	// Description about the Product group
+	Description *string `json:"description,omitempty"`
+	// Link to learn more about the Product group
+	LearnMoreLink *string `json:"learnMoreLink,omitempty"`
 }
 
 // NewProductGroup instantiates a new ProductGroup object
@@ -65,6 +76,38 @@ func (o *ProductGroup) SetProductGroupName(v string) {
 	o.ProductGroupName = v
 }
 
+// GetProductGroupId returns the ProductGroupId field value if set, zero value otherwise.
+func (o *ProductGroup) GetProductGroupId() string {
+	if o == nil || IsNil(o.ProductGroupId) {
+		var ret string
+		return ret
+	}
+	return *o.ProductGroupId
+}
+
+// GetProductGroupIdOk returns a tuple with the ProductGroupId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductGroup) GetProductGroupIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ProductGroupId) {
+		return nil, false
+	}
+	return o.ProductGroupId, true
+}
+
+// HasProductGroupId returns a boolean if a field has been set.
+func (o *ProductGroup) HasProductGroupId() bool {
+	if o != nil && !IsNil(o.ProductGroupId) {
+		return true
+	}
+
+	return false
+}
+
+// SetProductGroupId gets a reference to the given string and assigns it to the ProductGroupId field.
+func (o *ProductGroup) SetProductGroupId(v string) {
+	o.ProductGroupId = &v
+}
+
 // GetProductVariables returns the ProductVariables field value
 func (o *ProductGroup) GetProductVariables() []ProductVariable {
 	if o == nil {
@@ -89,15 +132,127 @@ func (o *ProductGroup) SetProductVariables(v []ProductVariable) {
 	o.ProductVariables = v
 }
 
-func (o ProductGroup) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["productGroupName"] = o.ProductGroupName
+// GetProvisioningSupported returns the ProvisioningSupported field value if set, zero value otherwise.
+func (o *ProductGroup) GetProvisioningSupported() bool {
+	if o == nil || IsNil(o.ProvisioningSupported) {
+		var ret bool
+		return ret
 	}
-	if true {
-		toSerialize["productVariables"] = o.ProductVariables
+	return *o.ProvisioningSupported
+}
+
+// GetProvisioningSupportedOk returns a tuple with the ProvisioningSupported field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductGroup) GetProvisioningSupportedOk() (*bool, bool) {
+	if o == nil || IsNil(o.ProvisioningSupported) {
+		return nil, false
+	}
+	return o.ProvisioningSupported, true
+}
+
+// HasProvisioningSupported returns a boolean if a field has been set.
+func (o *ProductGroup) HasProvisioningSupported() bool {
+	if o != nil && !IsNil(o.ProvisioningSupported) {
+		return true
+	}
+
+	return false
+}
+
+// SetProvisioningSupported gets a reference to the given bool and assigns it to the ProvisioningSupported field.
+func (o *ProductGroup) SetProvisioningSupported(v bool) {
+	o.ProvisioningSupported = &v
+}
+
+// GetDescription returns the Description field value if set, zero value otherwise.
+func (o *ProductGroup) GetDescription() string {
+	if o == nil || IsNil(o.Description) {
+		var ret string
+		return ret
+	}
+	return *o.Description
+}
+
+// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductGroup) GetDescriptionOk() (*string, bool) {
+	if o == nil || IsNil(o.Description) {
+		return nil, false
+	}
+	return o.Description, true
+}
+
+// HasDescription returns a boolean if a field has been set.
+func (o *ProductGroup) HasDescription() bool {
+	if o != nil && !IsNil(o.Description) {
+		return true
+	}
+
+	return false
+}
+
+// SetDescription gets a reference to the given string and assigns it to the Description field.
+func (o *ProductGroup) SetDescription(v string) {
+	o.Description = &v
+}
+
+// GetLearnMoreLink returns the LearnMoreLink field value if set, zero value otherwise.
+func (o *ProductGroup) GetLearnMoreLink() string {
+	if o == nil || IsNil(o.LearnMoreLink) {
+		var ret string
+		return ret
+	}
+	return *o.LearnMoreLink
+}
+
+// GetLearnMoreLinkOk returns a tuple with the LearnMoreLink field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductGroup) GetLearnMoreLinkOk() (*string, bool) {
+	if o == nil || IsNil(o.LearnMoreLink) {
+		return nil, false
+	}
+	return o.LearnMoreLink, true
+}
+
+// HasLearnMoreLink returns a boolean if a field has been set.
+func (o *ProductGroup) HasLearnMoreLink() bool {
+	if o != nil && !IsNil(o.LearnMoreLink) {
+		return true
+	}
+
+	return false
+}
+
+// SetLearnMoreLink gets a reference to the given string and assigns it to the LearnMoreLink field.
+func (o *ProductGroup) SetLearnMoreLink(v string) {
+	o.LearnMoreLink = &v
+}
+
+func (o ProductGroup) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ProductGroup) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["productGroupName"] = o.ProductGroupName
+	if !IsNil(o.ProductGroupId) {
+		toSerialize["productGroupId"] = o.ProductGroupId
+	}
+	toSerialize["productVariables"] = o.ProductVariables
+	if !IsNil(o.ProvisioningSupported) {
+		toSerialize["provisioningSupported"] = o.ProvisioningSupported
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.LearnMoreLink) {
+		toSerialize["learnMoreLink"] = o.LearnMoreLink
+	}
+	return toSerialize, nil
 }
 
 type NullableProductGroup struct {

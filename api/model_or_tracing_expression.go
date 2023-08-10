@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OrTracingExpression type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OrTracingExpression{}
 
 // OrTracingExpression Evaluates to true, if at least one expression evaluates to true, otherwise evaluates to false.
 type OrTracingExpression struct {
@@ -64,19 +67,25 @@ func (o *OrTracingExpression) SetExpressions(v []TraceQueryExpression) {
 }
 
 func (o OrTracingExpression) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OrTracingExpression) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTraceQueryExpression, errTraceQueryExpression := json.Marshal(o.TraceQueryExpression)
 	if errTraceQueryExpression != nil {
-		return []byte{}, errTraceQueryExpression
+		return map[string]interface{}{}, errTraceQueryExpression
 	}
 	errTraceQueryExpression = json.Unmarshal([]byte(serializedTraceQueryExpression), &toSerialize)
 	if errTraceQueryExpression != nil {
-		return []byte{}, errTraceQueryExpression
+		return map[string]interface{}{}, errTraceQueryExpression
 	}
-	if true {
-		toSerialize["expressions"] = o.Expressions
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["expressions"] = o.Expressions
+	return toSerialize, nil
 }
 
 type NullableOrTracingExpression struct {

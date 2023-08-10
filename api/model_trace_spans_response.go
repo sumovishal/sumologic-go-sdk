@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceSpansResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceSpansResponse{}
 
 // TraceSpansResponse struct for TraceSpansResponse
 type TraceSpansResponse struct {
@@ -44,7 +47,7 @@ func NewTraceSpansResponseWithDefaults() *TraceSpansResponse {
 
 // GetSpanPage returns the SpanPage field value if set, zero value otherwise.
 func (o *TraceSpansResponse) GetSpanPage() []TraceSpan {
-	if o == nil || o.SpanPage == nil {
+	if o == nil || IsNil(o.SpanPage) {
 		var ret []TraceSpan
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *TraceSpansResponse) GetSpanPage() []TraceSpan {
 // GetSpanPageOk returns a tuple with the SpanPage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpansResponse) GetSpanPageOk() ([]TraceSpan, bool) {
-	if o == nil || o.SpanPage == nil {
+	if o == nil || IsNil(o.SpanPage) {
 		return nil, false
 	}
 	return o.SpanPage, true
@@ -62,7 +65,7 @@ func (o *TraceSpansResponse) GetSpanPageOk() ([]TraceSpan, bool) {
 
 // HasSpanPage returns a boolean if a field has been set.
 func (o *TraceSpansResponse) HasSpanPage() bool {
-	if o != nil && o.SpanPage != nil {
+	if o != nil && !IsNil(o.SpanPage) {
 		return true
 	}
 
@@ -100,7 +103,7 @@ func (o *TraceSpansResponse) SetTotalCount(v int64) {
 
 // GetNext returns the Next field value if set, zero value otherwise.
 func (o *TraceSpansResponse) GetNext() string {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		var ret string
 		return ret
 	}
@@ -110,7 +113,7 @@ func (o *TraceSpansResponse) GetNext() string {
 // GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpansResponse) GetNextOk() (*string, bool) {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		return nil, false
 	}
 	return o.Next, true
@@ -118,7 +121,7 @@ func (o *TraceSpansResponse) GetNextOk() (*string, bool) {
 
 // HasNext returns a boolean if a field has been set.
 func (o *TraceSpansResponse) HasNext() bool {
-	if o != nil && o.Next != nil {
+	if o != nil && !IsNil(o.Next) {
 		return true
 	}
 
@@ -131,17 +134,23 @@ func (o *TraceSpansResponse) SetNext(v string) {
 }
 
 func (o TraceSpansResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SpanPage != nil {
-		toSerialize["spanPage"] = o.SpanPage
-	}
-	if true {
-		toSerialize["totalCount"] = o.TotalCount
-	}
-	if o.Next != nil {
-		toSerialize["next"] = o.Next
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceSpansResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SpanPage) {
+		toSerialize["spanPage"] = o.SpanPage
+	}
+	toSerialize["totalCount"] = o.TotalCount
+	if !IsNil(o.Next) {
+		toSerialize["next"] = o.Next
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceSpansResponse struct {

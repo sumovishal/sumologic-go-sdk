@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the TransformationRuleResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TransformationRuleResponse{}
 
 // TransformationRuleResponse A generic response for transformation rule.
 type TransformationRuleResponse struct {
@@ -225,29 +228,23 @@ func (o *TransformationRuleResponse) SetId(v string) {
 }
 
 func (o TransformationRuleResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["ruleDefinition"] = o.RuleDefinition
-	}
-	if true {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TransformationRuleResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["ruleDefinition"] = o.RuleDefinition
+	toSerialize["enabled"] = o.Enabled
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	return toSerialize, nil
 }
 
 type NullableTransformationRuleResponse struct {

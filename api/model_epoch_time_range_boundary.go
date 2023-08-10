@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EpochTimeRangeBoundary type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EpochTimeRangeBoundary{}
 
 // EpochTimeRangeBoundary struct for EpochTimeRangeBoundary
 type EpochTimeRangeBoundary struct {
@@ -65,19 +68,25 @@ func (o *EpochTimeRangeBoundary) SetEpochMillis(v int64) {
 }
 
 func (o EpochTimeRangeBoundary) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o EpochTimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTimeRangeBoundary, errTimeRangeBoundary := json.Marshal(o.TimeRangeBoundary)
 	if errTimeRangeBoundary != nil {
-		return []byte{}, errTimeRangeBoundary
+		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	errTimeRangeBoundary = json.Unmarshal([]byte(serializedTimeRangeBoundary), &toSerialize)
 	if errTimeRangeBoundary != nil {
-		return []byte{}, errTimeRangeBoundary
+		return map[string]interface{}{}, errTimeRangeBoundary
 	}
-	if true {
-		toSerialize["epochMillis"] = o.EpochMillis
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["epochMillis"] = o.EpochMillis
+	return toSerialize, nil
 }
 
 type NullableEpochTimeRangeBoundary struct {

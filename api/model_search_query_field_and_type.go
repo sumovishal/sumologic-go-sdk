@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SearchQueryFieldAndType type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SearchQueryFieldAndType{}
 
 // SearchQueryFieldAndType A log field and its associated type
 type SearchQueryFieldAndType struct {
@@ -43,7 +46,7 @@ func NewSearchQueryFieldAndTypeWithDefaults() *SearchQueryFieldAndType {
 
 // GetFieldName returns the FieldName field value if set, zero value otherwise.
 func (o *SearchQueryFieldAndType) GetFieldName() string {
-	if o == nil || o.FieldName == nil {
+	if o == nil || IsNil(o.FieldName) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *SearchQueryFieldAndType) GetFieldName() string {
 // GetFieldNameOk returns a tuple with the FieldName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SearchQueryFieldAndType) GetFieldNameOk() (*string, bool) {
-	if o == nil || o.FieldName == nil {
+	if o == nil || IsNil(o.FieldName) {
 		return nil, false
 	}
 	return o.FieldName, true
@@ -61,7 +64,7 @@ func (o *SearchQueryFieldAndType) GetFieldNameOk() (*string, bool) {
 
 // HasFieldName returns a boolean if a field has been set.
 func (o *SearchQueryFieldAndType) HasFieldName() bool {
-	if o != nil && o.FieldName != nil {
+	if o != nil && !IsNil(o.FieldName) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *SearchQueryFieldAndType) SetFieldName(v string) {
 
 // GetFieldType returns the FieldType field value if set, zero value otherwise.
 func (o *SearchQueryFieldAndType) GetFieldType() string {
-	if o == nil || o.FieldType == nil {
+	if o == nil || IsNil(o.FieldType) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *SearchQueryFieldAndType) GetFieldType() string {
 // GetFieldTypeOk returns a tuple with the FieldType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SearchQueryFieldAndType) GetFieldTypeOk() (*string, bool) {
-	if o == nil || o.FieldType == nil {
+	if o == nil || IsNil(o.FieldType) {
 		return nil, false
 	}
 	return o.FieldType, true
@@ -93,7 +96,7 @@ func (o *SearchQueryFieldAndType) GetFieldTypeOk() (*string, bool) {
 
 // HasFieldType returns a boolean if a field has been set.
 func (o *SearchQueryFieldAndType) HasFieldType() bool {
-	if o != nil && o.FieldType != nil {
+	if o != nil && !IsNil(o.FieldType) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *SearchQueryFieldAndType) SetFieldType(v string) {
 
 // GetIsImplicitField returns the IsImplicitField field value if set, zero value otherwise.
 func (o *SearchQueryFieldAndType) GetIsImplicitField() bool {
-	if o == nil || o.IsImplicitField == nil {
+	if o == nil || IsNil(o.IsImplicitField) {
 		var ret bool
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *SearchQueryFieldAndType) GetIsImplicitField() bool {
 // GetIsImplicitFieldOk returns a tuple with the IsImplicitField field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SearchQueryFieldAndType) GetIsImplicitFieldOk() (*bool, bool) {
-	if o == nil || o.IsImplicitField == nil {
+	if o == nil || IsNil(o.IsImplicitField) {
 		return nil, false
 	}
 	return o.IsImplicitField, true
@@ -125,7 +128,7 @@ func (o *SearchQueryFieldAndType) GetIsImplicitFieldOk() (*bool, bool) {
 
 // HasIsImplicitField returns a boolean if a field has been set.
 func (o *SearchQueryFieldAndType) HasIsImplicitField() bool {
-	if o != nil && o.IsImplicitField != nil {
+	if o != nil && !IsNil(o.IsImplicitField) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *SearchQueryFieldAndType) SetIsImplicitField(v bool) {
 }
 
 func (o SearchQueryFieldAndType) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.FieldName != nil {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if o.FieldType != nil {
-		toSerialize["fieldType"] = o.FieldType
-	}
-	if o.IsImplicitField != nil {
-		toSerialize["isImplicitField"] = o.IsImplicitField
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SearchQueryFieldAndType) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.FieldName) {
+		toSerialize["fieldName"] = o.FieldName
+	}
+	if !IsNil(o.FieldType) {
+		toSerialize["fieldType"] = o.FieldType
+	}
+	if !IsNil(o.IsImplicitField) {
+		toSerialize["isImplicitField"] = o.IsImplicitField
+	}
+	return toSerialize, nil
 }
 
 type NullableSearchQueryFieldAndType struct {

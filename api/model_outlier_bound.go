@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OutlierBound type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OutlierBound{}
 
 // OutlierBound The upper and lower bound of outlier/baseline.
 type OutlierBound struct {
@@ -41,7 +44,7 @@ func NewOutlierBoundWithDefaults() *OutlierBound {
 
 // GetLower returns the Lower field value if set, zero value otherwise.
 func (o *OutlierBound) GetLower() float64 {
-	if o == nil || o.Lower == nil {
+	if o == nil || IsNil(o.Lower) {
 		var ret float64
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *OutlierBound) GetLower() float64 {
 // GetLowerOk returns a tuple with the Lower field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierBound) GetLowerOk() (*float64, bool) {
-	if o == nil || o.Lower == nil {
+	if o == nil || IsNil(o.Lower) {
 		return nil, false
 	}
 	return o.Lower, true
@@ -59,7 +62,7 @@ func (o *OutlierBound) GetLowerOk() (*float64, bool) {
 
 // HasLower returns a boolean if a field has been set.
 func (o *OutlierBound) HasLower() bool {
-	if o != nil && o.Lower != nil {
+	if o != nil && !IsNil(o.Lower) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *OutlierBound) SetLower(v float64) {
 
 // GetUpper returns the Upper field value if set, zero value otherwise.
 func (o *OutlierBound) GetUpper() float64 {
-	if o == nil || o.Upper == nil {
+	if o == nil || IsNil(o.Upper) {
 		var ret float64
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *OutlierBound) GetUpper() float64 {
 // GetUpperOk returns a tuple with the Upper field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierBound) GetUpperOk() (*float64, bool) {
-	if o == nil || o.Upper == nil {
+	if o == nil || IsNil(o.Upper) {
 		return nil, false
 	}
 	return o.Upper, true
@@ -91,7 +94,7 @@ func (o *OutlierBound) GetUpperOk() (*float64, bool) {
 
 // HasUpper returns a boolean if a field has been set.
 func (o *OutlierBound) HasUpper() bool {
-	if o != nil && o.Upper != nil {
+	if o != nil && !IsNil(o.Upper) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *OutlierBound) SetUpper(v float64) {
 }
 
 func (o OutlierBound) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Lower != nil {
-		toSerialize["lower"] = o.Lower
-	}
-	if o.Upper != nil {
-		toSerialize["upper"] = o.Upper
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OutlierBound) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Lower) {
+		toSerialize["lower"] = o.Lower
+	}
+	if !IsNil(o.Upper) {
+		toSerialize["upper"] = o.Upper
+	}
+	return toSerialize, nil
 }
 
 type NullableOutlierBound struct {

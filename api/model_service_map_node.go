@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -15,10 +15,15 @@ import (
 	"time"
 )
 
+// checks if the ServiceMapNode type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceMapNode{}
+
 // ServiceMapNode struct for ServiceMapNode
 type ServiceMapNode struct {
 	// Name of a service in a service map.
 	ServiceName string `json:"serviceName"`
+	// Color hex code assigned to the service.
+	ServiceColor *string `json:"serviceColor,omitempty"`
 	// The last time in UTC a service has been seen. Formatted as defined by date-time - RFC3339.
 	LastSeenAt time.Time `json:"lastSeenAt"`
 	// Indicates whether node comes from inferred remote service or instrumented one.
@@ -70,6 +75,38 @@ func (o *ServiceMapNode) GetServiceNameOk() (*string, bool) {
 // SetServiceName sets field value
 func (o *ServiceMapNode) SetServiceName(v string) {
 	o.ServiceName = v
+}
+
+// GetServiceColor returns the ServiceColor field value if set, zero value otherwise.
+func (o *ServiceMapNode) GetServiceColor() string {
+	if o == nil || IsNil(o.ServiceColor) {
+		var ret string
+		return ret
+	}
+	return *o.ServiceColor
+}
+
+// GetServiceColorOk returns a tuple with the ServiceColor field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceMapNode) GetServiceColorOk() (*string, bool) {
+	if o == nil || IsNil(o.ServiceColor) {
+		return nil, false
+	}
+	return o.ServiceColor, true
+}
+
+// HasServiceColor returns a boolean if a field has been set.
+func (o *ServiceMapNode) HasServiceColor() bool {
+	if o != nil && !IsNil(o.ServiceColor) {
+		return true
+	}
+
+	return false
+}
+
+// SetServiceColor gets a reference to the given string and assigns it to the ServiceColor field.
+func (o *ServiceMapNode) SetServiceColor(v string) {
+	o.ServiceColor = &v
 }
 
 // GetLastSeenAt returns the LastSeenAt field value
@@ -145,20 +182,23 @@ func (o *ServiceMapNode) SetServiceType(v string) {
 }
 
 func (o ServiceMapNode) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["serviceName"] = o.ServiceName
-	}
-	if true {
-		toSerialize["lastSeenAt"] = o.LastSeenAt
-	}
-	if true {
-		toSerialize["isRemote"] = o.IsRemote
-	}
-	if true {
-		toSerialize["serviceType"] = o.ServiceType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceMapNode) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["serviceName"] = o.ServiceName
+	if !IsNil(o.ServiceColor) {
+		toSerialize["serviceColor"] = o.ServiceColor
+	}
+	toSerialize["lastSeenAt"] = o.LastSeenAt
+	toSerialize["isRemote"] = o.IsRemote
+	toSerialize["serviceType"] = o.ServiceType
+	return toSerialize, nil
 }
 
 type NullableServiceMapNode struct {

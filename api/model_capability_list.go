@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CapabilityList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CapabilityList{}
 
 // CapabilityList struct for CapabilityList
 type CapabilityList struct {
@@ -63,11 +66,17 @@ func (o *CapabilityList) SetData(v []CapabilityDefinition) {
 }
 
 func (o CapabilityList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CapabilityList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableCapabilityList struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EventsOfInterestScatterPanel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EventsOfInterestScatterPanel{}
 
 // EventsOfInterestScatterPanel struct for EventsOfInterestScatterPanel
 type EventsOfInterestScatterPanel struct {
@@ -41,16 +44,24 @@ func NewEventsOfInterestScatterPanelWithDefaults() *EventsOfInterestScatterPanel
 }
 
 func (o EventsOfInterestScatterPanel) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o EventsOfInterestScatterPanel) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedPanel, errPanel := json.Marshal(o.Panel)
 	if errPanel != nil {
-		return []byte{}, errPanel
+		return map[string]interface{}{}, errPanel
 	}
 	errPanel = json.Unmarshal([]byte(serializedPanel), &toSerialize)
 	if errPanel != nil {
-		return []byte{}, errPanel
+		return map[string]interface{}{}, errPanel
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableEventsOfInterestScatterPanel struct {

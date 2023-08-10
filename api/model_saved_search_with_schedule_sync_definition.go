@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SavedSearchWithScheduleSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SavedSearchWithScheduleSyncDefinition{}
 
 // SavedSearchWithScheduleSyncDefinition struct for SavedSearchWithScheduleSyncDefinition
 type SavedSearchWithScheduleSyncDefinition struct {
@@ -70,7 +73,7 @@ func (o *SavedSearchWithScheduleSyncDefinition) SetSearch(v SavedSearchSyncDefin
 
 // GetSearchSchedule returns the SearchSchedule field value if set, zero value otherwise.
 func (o *SavedSearchWithScheduleSyncDefinition) GetSearchSchedule() SearchScheduleSyncDefinition {
-	if o == nil || o.SearchSchedule == nil {
+	if o == nil || IsNil(o.SearchSchedule) {
 		var ret SearchScheduleSyncDefinition
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *SavedSearchWithScheduleSyncDefinition) GetSearchSchedule() SearchSchedu
 // GetSearchScheduleOk returns a tuple with the SearchSchedule field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SavedSearchWithScheduleSyncDefinition) GetSearchScheduleOk() (*SearchScheduleSyncDefinition, bool) {
-	if o == nil || o.SearchSchedule == nil {
+	if o == nil || IsNil(o.SearchSchedule) {
 		return nil, false
 	}
 	return o.SearchSchedule, true
@@ -88,7 +91,7 @@ func (o *SavedSearchWithScheduleSyncDefinition) GetSearchScheduleOk() (*SearchSc
 
 // HasSearchSchedule returns a boolean if a field has been set.
 func (o *SavedSearchWithScheduleSyncDefinition) HasSearchSchedule() bool {
-	if o != nil && o.SearchSchedule != nil {
+	if o != nil && !IsNil(o.SearchSchedule) {
 		return true
 	}
 
@@ -125,25 +128,29 @@ func (o *SavedSearchWithScheduleSyncDefinition) SetDescription(v string) {
 }
 
 func (o SavedSearchWithScheduleSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SavedSearchWithScheduleSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedContentSyncDefinition, errContentSyncDefinition := json.Marshal(o.ContentSyncDefinition)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
 	errContentSyncDefinition = json.Unmarshal([]byte(serializedContentSyncDefinition), &toSerialize)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
-	if true {
-		toSerialize["search"] = o.Search
-	}
-	if o.SearchSchedule != nil {
+	toSerialize["search"] = o.Search
+	if !IsNil(o.SearchSchedule) {
 		toSerialize["searchSchedule"] = o.SearchSchedule
 	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["description"] = o.Description
+	return toSerialize, nil
 }
 
 type NullableSavedSearchWithScheduleSyncDefinition struct {

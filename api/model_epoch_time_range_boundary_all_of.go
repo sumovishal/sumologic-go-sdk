@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EpochTimeRangeBoundaryAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EpochTimeRangeBoundaryAllOf{}
 
 // EpochTimeRangeBoundaryAllOf struct for EpochTimeRangeBoundaryAllOf
 type EpochTimeRangeBoundaryAllOf struct {
@@ -63,11 +66,17 @@ func (o *EpochTimeRangeBoundaryAllOf) SetEpochMillis(v int64) {
 }
 
 func (o EpochTimeRangeBoundaryAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["epochMillis"] = o.EpochMillis
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EpochTimeRangeBoundaryAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["epochMillis"] = o.EpochMillis
+	return toSerialize, nil
 }
 
 type NullableEpochTimeRangeBoundaryAllOf struct {

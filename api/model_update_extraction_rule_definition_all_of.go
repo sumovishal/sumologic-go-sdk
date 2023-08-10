@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UpdateExtractionRuleDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateExtractionRuleDefinitionAllOf{}
 
 // UpdateExtractionRuleDefinitionAllOf struct for UpdateExtractionRuleDefinitionAllOf
 type UpdateExtractionRuleDefinitionAllOf struct {
@@ -63,11 +66,17 @@ func (o *UpdateExtractionRuleDefinitionAllOf) SetEnabled(v bool) {
 }
 
 func (o UpdateExtractionRuleDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["enabled"] = o.Enabled
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateExtractionRuleDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["enabled"] = o.Enabled
+	return toSerialize, nil
 }
 
 type NullableUpdateExtractionRuleDefinitionAllOf struct {

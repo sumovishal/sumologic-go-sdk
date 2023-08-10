@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ListFieldNamesResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ListFieldNamesResponse{}
 
 // ListFieldNamesResponse struct for ListFieldNamesResponse
 type ListFieldNamesResponse struct {
@@ -63,11 +66,17 @@ func (o *ListFieldNamesResponse) SetData(v []FieldName) {
 }
 
 func (o ListFieldNamesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ListFieldNamesResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableListFieldNamesResponse struct {

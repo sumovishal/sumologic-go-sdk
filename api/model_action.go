@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Action type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Action{}
 
 // Action The base class of all connection types.
 type Action struct {
@@ -63,11 +66,17 @@ func (o *Action) SetConnectionType(v string) {
 }
 
 func (o Action) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["connectionType"] = o.ConnectionType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Action) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["connectionType"] = o.ConnectionType
+	return toSerialize, nil
 }
 
 type NullableAction struct {

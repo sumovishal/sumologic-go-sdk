@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CreditsBreakdown type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreditsBreakdown{}
 
 // CreditsBreakdown Breakdown of the credits.
 type CreditsBreakdown struct {
@@ -90,14 +93,18 @@ func (o *CreditsBreakdown) SetAllocatedCredits(v float64) {
 }
 
 func (o CreditsBreakdown) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["deploymentChargeCredits"] = o.DeploymentChargeCredits
-	}
-	if true {
-		toSerialize["allocatedCredits"] = o.AllocatedCredits
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreditsBreakdown) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["deploymentChargeCredits"] = o.DeploymentChargeCredits
+	toSerialize["allocatedCredits"] = o.AllocatedCredits
+	return toSerialize, nil
 }
 
 type NullableCreditsBreakdown struct {

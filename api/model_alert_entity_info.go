@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,21 @@ import (
 	"encoding/json"
 )
 
+// checks if the AlertEntityInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertEntityInfo{}
+
 // AlertEntityInfo An entity's name and Id.
 type AlertEntityInfo struct {
 	// Identifier of the entity.
 	EntityId *string `json:"entityId,omitempty"`
 	// Name of the entity.
 	EntityName *string `json:"entityName,omitempty"`
+	// Entity type ID or empty if unknown.
+	EntityTypeId *string `json:"entityTypeId,omitempty"`
+	// Whether entity is the most specific entity within its domain for that alert.
+	IsPrimaryWithinDomain *bool `json:"isPrimaryWithinDomain,omitempty"`
+	// Whether entity is from the most accurate domain found for this alert.
+	IsPrimaryDomain *bool `json:"isPrimaryDomain,omitempty"`
 }
 
 // NewAlertEntityInfo instantiates a new AlertEntityInfo object
@@ -28,6 +37,12 @@ type AlertEntityInfo struct {
 // will change when the set of required properties is changed
 func NewAlertEntityInfo() *AlertEntityInfo {
 	this := AlertEntityInfo{}
+	var entityTypeId string = ""
+	this.EntityTypeId = &entityTypeId
+	var isPrimaryWithinDomain bool = true
+	this.IsPrimaryWithinDomain = &isPrimaryWithinDomain
+	var isPrimaryDomain bool = true
+	this.IsPrimaryDomain = &isPrimaryDomain
 	return &this
 }
 
@@ -36,12 +51,18 @@ func NewAlertEntityInfo() *AlertEntityInfo {
 // but it doesn't guarantee that properties required by API are set
 func NewAlertEntityInfoWithDefaults() *AlertEntityInfo {
 	this := AlertEntityInfo{}
+	var entityTypeId string = ""
+	this.EntityTypeId = &entityTypeId
+	var isPrimaryWithinDomain bool = true
+	this.IsPrimaryWithinDomain = &isPrimaryWithinDomain
+	var isPrimaryDomain bool = true
+	this.IsPrimaryDomain = &isPrimaryDomain
 	return &this
 }
 
 // GetEntityId returns the EntityId field value if set, zero value otherwise.
 func (o *AlertEntityInfo) GetEntityId() string {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		var ret string
 		return ret
 	}
@@ -51,7 +72,7 @@ func (o *AlertEntityInfo) GetEntityId() string {
 // GetEntityIdOk returns a tuple with the EntityId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertEntityInfo) GetEntityIdOk() (*string, bool) {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		return nil, false
 	}
 	return o.EntityId, true
@@ -59,7 +80,7 @@ func (o *AlertEntityInfo) GetEntityIdOk() (*string, bool) {
 
 // HasEntityId returns a boolean if a field has been set.
 func (o *AlertEntityInfo) HasEntityId() bool {
-	if o != nil && o.EntityId != nil {
+	if o != nil && !IsNil(o.EntityId) {
 		return true
 	}
 
@@ -73,7 +94,7 @@ func (o *AlertEntityInfo) SetEntityId(v string) {
 
 // GetEntityName returns the EntityName field value if set, zero value otherwise.
 func (o *AlertEntityInfo) GetEntityName() string {
-	if o == nil || o.EntityName == nil {
+	if o == nil || IsNil(o.EntityName) {
 		var ret string
 		return ret
 	}
@@ -83,7 +104,7 @@ func (o *AlertEntityInfo) GetEntityName() string {
 // GetEntityNameOk returns a tuple with the EntityName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertEntityInfo) GetEntityNameOk() (*string, bool) {
-	if o == nil || o.EntityName == nil {
+	if o == nil || IsNil(o.EntityName) {
 		return nil, false
 	}
 	return o.EntityName, true
@@ -91,7 +112,7 @@ func (o *AlertEntityInfo) GetEntityNameOk() (*string, bool) {
 
 // HasEntityName returns a boolean if a field has been set.
 func (o *AlertEntityInfo) HasEntityName() bool {
-	if o != nil && o.EntityName != nil {
+	if o != nil && !IsNil(o.EntityName) {
 		return true
 	}
 
@@ -103,15 +124,128 @@ func (o *AlertEntityInfo) SetEntityName(v string) {
 	o.EntityName = &v
 }
 
-func (o AlertEntityInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.EntityId != nil {
-		toSerialize["entityId"] = o.EntityId
+// GetEntityTypeId returns the EntityTypeId field value if set, zero value otherwise.
+func (o *AlertEntityInfo) GetEntityTypeId() string {
+	if o == nil || IsNil(o.EntityTypeId) {
+		var ret string
+		return ret
 	}
-	if o.EntityName != nil {
-		toSerialize["entityName"] = o.EntityName
+	return *o.EntityTypeId
+}
+
+// GetEntityTypeIdOk returns a tuple with the EntityTypeId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertEntityInfo) GetEntityTypeIdOk() (*string, bool) {
+	if o == nil || IsNil(o.EntityTypeId) {
+		return nil, false
+	}
+	return o.EntityTypeId, true
+}
+
+// HasEntityTypeId returns a boolean if a field has been set.
+func (o *AlertEntityInfo) HasEntityTypeId() bool {
+	if o != nil && !IsNil(o.EntityTypeId) {
+		return true
+	}
+
+	return false
+}
+
+// SetEntityTypeId gets a reference to the given string and assigns it to the EntityTypeId field.
+func (o *AlertEntityInfo) SetEntityTypeId(v string) {
+	o.EntityTypeId = &v
+}
+
+// GetIsPrimaryWithinDomain returns the IsPrimaryWithinDomain field value if set, zero value otherwise.
+func (o *AlertEntityInfo) GetIsPrimaryWithinDomain() bool {
+	if o == nil || IsNil(o.IsPrimaryWithinDomain) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPrimaryWithinDomain
+}
+
+// GetIsPrimaryWithinDomainOk returns a tuple with the IsPrimaryWithinDomain field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertEntityInfo) GetIsPrimaryWithinDomainOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPrimaryWithinDomain) {
+		return nil, false
+	}
+	return o.IsPrimaryWithinDomain, true
+}
+
+// HasIsPrimaryWithinDomain returns a boolean if a field has been set.
+func (o *AlertEntityInfo) HasIsPrimaryWithinDomain() bool {
+	if o != nil && !IsNil(o.IsPrimaryWithinDomain) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPrimaryWithinDomain gets a reference to the given bool and assigns it to the IsPrimaryWithinDomain field.
+func (o *AlertEntityInfo) SetIsPrimaryWithinDomain(v bool) {
+	o.IsPrimaryWithinDomain = &v
+}
+
+// GetIsPrimaryDomain returns the IsPrimaryDomain field value if set, zero value otherwise.
+func (o *AlertEntityInfo) GetIsPrimaryDomain() bool {
+	if o == nil || IsNil(o.IsPrimaryDomain) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPrimaryDomain
+}
+
+// GetIsPrimaryDomainOk returns a tuple with the IsPrimaryDomain field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertEntityInfo) GetIsPrimaryDomainOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPrimaryDomain) {
+		return nil, false
+	}
+	return o.IsPrimaryDomain, true
+}
+
+// HasIsPrimaryDomain returns a boolean if a field has been set.
+func (o *AlertEntityInfo) HasIsPrimaryDomain() bool {
+	if o != nil && !IsNil(o.IsPrimaryDomain) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPrimaryDomain gets a reference to the given bool and assigns it to the IsPrimaryDomain field.
+func (o *AlertEntityInfo) SetIsPrimaryDomain(v bool) {
+	o.IsPrimaryDomain = &v
+}
+
+func (o AlertEntityInfo) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertEntityInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.EntityId) {
+		toSerialize["entityId"] = o.EntityId
+	}
+	if !IsNil(o.EntityName) {
+		toSerialize["entityName"] = o.EntityName
+	}
+	if !IsNil(o.EntityTypeId) {
+		toSerialize["entityTypeId"] = o.EntityTypeId
+	}
+	if !IsNil(o.IsPrimaryWithinDomain) {
+		toSerialize["isPrimaryWithinDomain"] = o.IsPrimaryWithinDomain
+	}
+	if !IsNil(o.IsPrimaryDomain) {
+		toSerialize["isPrimaryDomain"] = o.IsPrimaryDomain
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertEntityInfo struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardReportModeTemplate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardReportModeTemplate{}
 
 // DashboardReportModeTemplate struct for DashboardReportModeTemplate
 type DashboardReportModeTemplate struct {
@@ -39,16 +42,24 @@ func NewDashboardReportModeTemplateWithDefaults() *DashboardReportModeTemplate {
 }
 
 func (o DashboardReportModeTemplate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o DashboardReportModeTemplate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedDashboardTemplate, errDashboardTemplate := json.Marshal(o.DashboardTemplate)
 	if errDashboardTemplate != nil {
-		return []byte{}, errDashboardTemplate
+		return map[string]interface{}{}, errDashboardTemplate
 	}
 	errDashboardTemplate = json.Unmarshal([]byte(serializedDashboardTemplate), &toSerialize)
 	if errDashboardTemplate != nil {
-		return []byte{}, errDashboardTemplate
+		return map[string]interface{}{}, errDashboardTemplate
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableDashboardReportModeTemplate struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the MonitorsLibraryBaseResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorsLibraryBaseResponse{}
 
 // MonitorsLibraryBaseResponse struct for MonitorsLibraryBaseResponse
 type MonitorsLibraryBaseResponse struct {
@@ -391,7 +394,7 @@ func (o *MonitorsLibraryBaseResponse) SetIsMutable(v bool) {
 
 // GetPermissions returns the Permissions field value if set, zero value otherwise.
 func (o *MonitorsLibraryBaseResponse) GetPermissions() []string {
-	if o == nil || o.Permissions == nil {
+	if o == nil || IsNil(o.Permissions) {
 		var ret []string
 		return ret
 	}
@@ -401,7 +404,7 @@ func (o *MonitorsLibraryBaseResponse) GetPermissions() []string {
 // GetPermissionsOk returns a tuple with the Permissions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryBaseResponse) GetPermissionsOk() ([]string, bool) {
-	if o == nil || o.Permissions == nil {
+	if o == nil || IsNil(o.Permissions) {
 		return nil, false
 	}
 	return o.Permissions, true
@@ -409,7 +412,7 @@ func (o *MonitorsLibraryBaseResponse) GetPermissionsOk() ([]string, bool) {
 
 // HasPermissions returns a boolean if a field has been set.
 func (o *MonitorsLibraryBaseResponse) HasPermissions() bool {
-	if o != nil && o.Permissions != nil {
+	if o != nil && !IsNil(o.Permissions) {
 		return true
 	}
 
@@ -422,50 +425,32 @@ func (o *MonitorsLibraryBaseResponse) SetPermissions(v []string) {
 }
 
 func (o MonitorsLibraryBaseResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["version"] = o.Version
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["contentType"] = o.ContentType
-	}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["isSystem"] = o.IsSystem
-	}
-	if true {
-		toSerialize["isMutable"] = o.IsMutable
-	}
-	if o.Permissions != nil {
-		toSerialize["permissions"] = o.Permissions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorsLibraryBaseResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["description"] = o.Description
+	toSerialize["version"] = o.Version
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["parentId"] = o.ParentId
+	toSerialize["contentType"] = o.ContentType
+	toSerialize["type"] = o.Type
+	toSerialize["isSystem"] = o.IsSystem
+	toSerialize["isMutable"] = o.IsMutable
+	if !IsNil(o.Permissions) {
+		toSerialize["permissions"] = o.Permissions
+	}
+	return toSerialize, nil
 }
 
 type NullableMonitorsLibraryBaseResponse struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,14 @@ import (
 	"encoding/json"
 )
 
+// checks if the CompliancePeriods type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CompliancePeriods{}
+
 // CompliancePeriods Compliance periods along with SLO data availability progress.
 type CompliancePeriods struct {
 	// Time zone for the compliance periods as per the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
+	// List of CompliancePeriodProgress.
 	Periods []CompliancePeriodProgress `json:"periods"`
 }
 
@@ -89,14 +93,18 @@ func (o *CompliancePeriods) SetPeriods(v []CompliancePeriodProgress) {
 }
 
 func (o CompliancePeriods) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timezone"] = o.Timezone
-	}
-	if true {
-		toSerialize["periods"] = o.Periods
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CompliancePeriods) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timezone"] = o.Timezone
+	toSerialize["periods"] = o.Periods
+	return toSerialize, nil
 }
 
 type NullableCompliancePeriods struct {

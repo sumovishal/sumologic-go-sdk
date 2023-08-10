@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,38 +14,37 @@ import (
 	"encoding/json"
 )
 
-// RequestBasedSli struct for RequestBasedSli
-type RequestBasedSli struct {
-	Sli
+// checks if the RequestAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RequestAllOf{}
+
+// RequestAllOf struct for RequestAllOf
+type RequestAllOf struct {
 	// Compared against threshold query's raw data points to determine success.
 	Threshold *float32 `json:"threshold,omitempty"`
 	// Comparison function with threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
 	Op *string `json:"op,omitempty"`
 }
 
-// NewRequestBasedSli instantiates a new RequestBasedSli object
+// NewRequestAllOf instantiates a new RequestAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRequestBasedSli(evaluationType string, queryType string, queries []SliQueryGroup) *RequestBasedSli {
-	this := RequestBasedSli{}
-	this.EvaluationType = evaluationType
-	this.QueryType = queryType
-	this.Queries = queries
+func NewRequestAllOf() *RequestAllOf {
+	this := RequestAllOf{}
 	return &this
 }
 
-// NewRequestBasedSliWithDefaults instantiates a new RequestBasedSli object
+// NewRequestAllOfWithDefaults instantiates a new RequestAllOf object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRequestBasedSliWithDefaults() *RequestBasedSli {
-	this := RequestBasedSli{}
+func NewRequestAllOfWithDefaults() *RequestAllOf {
+	this := RequestAllOf{}
 	return &this
 }
 
 // GetThreshold returns the Threshold field value if set, zero value otherwise.
-func (o *RequestBasedSli) GetThreshold() float32 {
-	if o == nil || o.Threshold == nil {
+func (o *RequestAllOf) GetThreshold() float32 {
+	if o == nil || IsNil(o.Threshold) {
 		var ret float32
 		return ret
 	}
@@ -54,16 +53,16 @@ func (o *RequestBasedSli) GetThreshold() float32 {
 
 // GetThresholdOk returns a tuple with the Threshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RequestBasedSli) GetThresholdOk() (*float32, bool) {
-	if o == nil || o.Threshold == nil {
+func (o *RequestAllOf) GetThresholdOk() (*float32, bool) {
+	if o == nil || IsNil(o.Threshold) {
 		return nil, false
 	}
 	return o.Threshold, true
 }
 
 // HasThreshold returns a boolean if a field has been set.
-func (o *RequestBasedSli) HasThreshold() bool {
-	if o != nil && o.Threshold != nil {
+func (o *RequestAllOf) HasThreshold() bool {
+	if o != nil && !IsNil(o.Threshold) {
 		return true
 	}
 
@@ -71,13 +70,13 @@ func (o *RequestBasedSli) HasThreshold() bool {
 }
 
 // SetThreshold gets a reference to the given float32 and assigns it to the Threshold field.
-func (o *RequestBasedSli) SetThreshold(v float32) {
+func (o *RequestAllOf) SetThreshold(v float32) {
 	o.Threshold = &v
 }
 
 // GetOp returns the Op field value if set, zero value otherwise.
-func (o *RequestBasedSli) GetOp() string {
-	if o == nil || o.Op == nil {
+func (o *RequestAllOf) GetOp() string {
+	if o == nil || IsNil(o.Op) {
 		var ret string
 		return ret
 	}
@@ -86,16 +85,16 @@ func (o *RequestBasedSli) GetOp() string {
 
 // GetOpOk returns a tuple with the Op field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RequestBasedSli) GetOpOk() (*string, bool) {
-	if o == nil || o.Op == nil {
+func (o *RequestAllOf) GetOpOk() (*string, bool) {
+	if o == nil || IsNil(o.Op) {
 		return nil, false
 	}
 	return o.Op, true
 }
 
 // HasOp returns a boolean if a field has been set.
-func (o *RequestBasedSli) HasOp() bool {
-	if o != nil && o.Op != nil {
+func (o *RequestAllOf) HasOp() bool {
+	if o != nil && !IsNil(o.Op) {
 		return true
 	}
 
@@ -103,61 +102,61 @@ func (o *RequestBasedSli) HasOp() bool {
 }
 
 // SetOp gets a reference to the given string and assigns it to the Op field.
-func (o *RequestBasedSli) SetOp(v string) {
+func (o *RequestAllOf) SetOp(v string) {
 	o.Op = &v
 }
 
-func (o RequestBasedSli) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	serializedSli, errSli := json.Marshal(o.Sli)
-	if errSli != nil {
-		return []byte{}, errSli
-	}
-	errSli = json.Unmarshal([]byte(serializedSli), &toSerialize)
-	if errSli != nil {
-		return []byte{}, errSli
-	}
-	if o.Threshold != nil {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if o.Op != nil {
-		toSerialize["op"] = o.Op
+func (o RequestAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableRequestBasedSli struct {
-	value *RequestBasedSli
+func (o RequestAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Threshold) {
+		toSerialize["threshold"] = o.Threshold
+	}
+	if !IsNil(o.Op) {
+		toSerialize["op"] = o.Op
+	}
+	return toSerialize, nil
+}
+
+type NullableRequestAllOf struct {
+	value *RequestAllOf
 	isSet bool
 }
 
-func (v NullableRequestBasedSli) Get() *RequestBasedSli {
+func (v NullableRequestAllOf) Get() *RequestAllOf {
 	return v.value
 }
 
-func (v *NullableRequestBasedSli) Set(val *RequestBasedSli) {
+func (v *NullableRequestAllOf) Set(val *RequestAllOf) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRequestBasedSli) IsSet() bool {
+func (v NullableRequestAllOf) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRequestBasedSli) Unset() {
+func (v *NullableRequestAllOf) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRequestBasedSli(val *RequestBasedSli) *NullableRequestBasedSli {
-	return &NullableRequestBasedSli{value: val, isSet: true}
+func NewNullableRequestAllOf(val *RequestAllOf) *NullableRequestAllOf {
+	return &NullableRequestAllOf{value: val, isSet: true}
 }
 
-func (v NullableRequestBasedSli) MarshalJSON() ([]byte, error) {
+func (v NullableRequestAllOf) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRequestBasedSli) UnmarshalJSON(src []byte) error {
+func (v *NullableRequestAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

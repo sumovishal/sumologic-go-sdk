@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TableRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TableRow{}
 
 // TableRow Lookup table row column and column value.
 type TableRow struct {
@@ -90,14 +93,18 @@ func (o *TableRow) SetColumnValue(v string) {
 }
 
 func (o TableRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["columnName"] = o.ColumnName
-	}
-	if true {
-		toSerialize["columnValue"] = o.ColumnValue
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TableRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["columnName"] = o.ColumnName
+	toSerialize["columnValue"] = o.ColumnValue
+	return toSerialize, nil
 }
 
 type NullableTableRow struct {

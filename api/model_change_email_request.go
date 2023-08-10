@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ChangeEmailRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ChangeEmailRequest{}
 
 // ChangeEmailRequest struct for ChangeEmailRequest
 type ChangeEmailRequest struct {
@@ -63,11 +66,17 @@ func (o *ChangeEmailRequest) SetEmail(v string) {
 }
 
 func (o ChangeEmailRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["email"] = o.Email
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ChangeEmailRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["email"] = o.Email
+	return toSerialize, nil
 }
 
 type NullableChangeEmailRequest struct {

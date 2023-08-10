@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the ViewRetentionProperties type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ViewRetentionProperties{}
 
 // ViewRetentionProperties struct for ViewRetentionProperties
 type ViewRetentionProperties struct {
@@ -42,7 +45,7 @@ func NewViewRetentionPropertiesWithDefaults() *ViewRetentionProperties {
 
 // GetNewRetentionPeriod returns the NewRetentionPeriod field value if set, zero value otherwise.
 func (o *ViewRetentionProperties) GetNewRetentionPeriod() int32 {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *ViewRetentionProperties) GetNewRetentionPeriod() int32 {
 // GetNewRetentionPeriodOk returns a tuple with the NewRetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ViewRetentionProperties) GetNewRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		return nil, false
 	}
 	return o.NewRetentionPeriod, true
@@ -60,7 +63,7 @@ func (o *ViewRetentionProperties) GetNewRetentionPeriodOk() (*int32, bool) {
 
 // HasNewRetentionPeriod returns a boolean if a field has been set.
 func (o *ViewRetentionProperties) HasNewRetentionPeriod() bool {
-	if o != nil && o.NewRetentionPeriod != nil {
+	if o != nil && !IsNil(o.NewRetentionPeriod) {
 		return true
 	}
 
@@ -74,7 +77,7 @@ func (o *ViewRetentionProperties) SetNewRetentionPeriod(v int32) {
 
 // GetRetentionEffectiveAt returns the RetentionEffectiveAt field value if set, zero value otherwise.
 func (o *ViewRetentionProperties) GetRetentionEffectiveAt() time.Time {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		var ret time.Time
 		return ret
 	}
@@ -84,7 +87,7 @@ func (o *ViewRetentionProperties) GetRetentionEffectiveAt() time.Time {
 // GetRetentionEffectiveAtOk returns a tuple with the RetentionEffectiveAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ViewRetentionProperties) GetRetentionEffectiveAtOk() (*time.Time, bool) {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		return nil, false
 	}
 	return o.RetentionEffectiveAt, true
@@ -92,7 +95,7 @@ func (o *ViewRetentionProperties) GetRetentionEffectiveAtOk() (*time.Time, bool)
 
 // HasRetentionEffectiveAt returns a boolean if a field has been set.
 func (o *ViewRetentionProperties) HasRetentionEffectiveAt() bool {
-	if o != nil && o.RetentionEffectiveAt != nil {
+	if o != nil && !IsNil(o.RetentionEffectiveAt) {
 		return true
 	}
 
@@ -105,14 +108,22 @@ func (o *ViewRetentionProperties) SetRetentionEffectiveAt(v time.Time) {
 }
 
 func (o ViewRetentionProperties) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.NewRetentionPeriod != nil {
-		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
-	}
-	if o.RetentionEffectiveAt != nil {
-		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ViewRetentionProperties) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.NewRetentionPeriod) {
+		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
+	}
+	if !IsNil(o.RetentionEffectiveAt) {
+		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
+	}
+	return toSerialize, nil
 }
 
 type NullableViewRetentionProperties struct {

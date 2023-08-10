@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,11 +14,18 @@ import (
 	"encoding/json"
 )
 
+// checks if the SliQueries type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SliQueries{}
+
 // SliQueries struct for SliQueries
 type SliQueries struct {
 	QueryGroup SliQueryGroup `json:"queryGroup"`
 	// Type of queries for SLI (Logs/Metrics).
 	QueryType string `json:"queryType"`
+	// SLI evaluation type.
+	EvaluationType *string `json:"evaluationType,omitempty"`
+	// Size of the SLI aggregation window (valid only for `Window` evaluation type).
+	WindowSize *string `json:"windowSize,omitempty"`
 }
 
 // NewSliQueries instantiates a new SliQueries object
@@ -88,15 +95,89 @@ func (o *SliQueries) SetQueryType(v string) {
 	o.QueryType = v
 }
 
-func (o SliQueries) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryGroup"] = o.QueryGroup
+// GetEvaluationType returns the EvaluationType field value if set, zero value otherwise.
+func (o *SliQueries) GetEvaluationType() string {
+	if o == nil || IsNil(o.EvaluationType) {
+		var ret string
+		return ret
 	}
-	if true {
-		toSerialize["queryType"] = o.QueryType
+	return *o.EvaluationType
+}
+
+// GetEvaluationTypeOk returns a tuple with the EvaluationType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SliQueries) GetEvaluationTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.EvaluationType) {
+		return nil, false
+	}
+	return o.EvaluationType, true
+}
+
+// HasEvaluationType returns a boolean if a field has been set.
+func (o *SliQueries) HasEvaluationType() bool {
+	if o != nil && !IsNil(o.EvaluationType) {
+		return true
+	}
+
+	return false
+}
+
+// SetEvaluationType gets a reference to the given string and assigns it to the EvaluationType field.
+func (o *SliQueries) SetEvaluationType(v string) {
+	o.EvaluationType = &v
+}
+
+// GetWindowSize returns the WindowSize field value if set, zero value otherwise.
+func (o *SliQueries) GetWindowSize() string {
+	if o == nil || IsNil(o.WindowSize) {
+		var ret string
+		return ret
+	}
+	return *o.WindowSize
+}
+
+// GetWindowSizeOk returns a tuple with the WindowSize field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SliQueries) GetWindowSizeOk() (*string, bool) {
+	if o == nil || IsNil(o.WindowSize) {
+		return nil, false
+	}
+	return o.WindowSize, true
+}
+
+// HasWindowSize returns a boolean if a field has been set.
+func (o *SliQueries) HasWindowSize() bool {
+	if o != nil && !IsNil(o.WindowSize) {
+		return true
+	}
+
+	return false
+}
+
+// SetWindowSize gets a reference to the given string and assigns it to the WindowSize field.
+func (o *SliQueries) SetWindowSize(v string) {
+	o.WindowSize = &v
+}
+
+func (o SliQueries) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SliQueries) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryGroup"] = o.QueryGroup
+	toSerialize["queryType"] = o.QueryType
+	if !IsNil(o.EvaluationType) {
+		toSerialize["evaluationType"] = o.EvaluationType
+	}
+	if !IsNil(o.WindowSize) {
+		toSerialize["windowSize"] = o.WindowSize
+	}
+	return toSerialize, nil
 }
 
 type NullableSliQueries struct {

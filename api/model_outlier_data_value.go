@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OutlierDataValue type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OutlierDataValue{}
 
 // OutlierDataValue Data value and bounds of outlier data point.
 type OutlierDataValue struct {
@@ -44,7 +47,7 @@ func NewOutlierDataValueWithDefaults() *OutlierDataValue {
 
 // GetBaseline returns the Baseline field value if set, zero value otherwise.
 func (o *OutlierDataValue) GetBaseline() OutlierBound {
-	if o == nil || o.Baseline == nil {
+	if o == nil || IsNil(o.Baseline) {
 		var ret OutlierBound
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *OutlierDataValue) GetBaseline() OutlierBound {
 // GetBaselineOk returns a tuple with the Baseline field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierDataValue) GetBaselineOk() (*OutlierBound, bool) {
-	if o == nil || o.Baseline == nil {
+	if o == nil || IsNil(o.Baseline) {
 		return nil, false
 	}
 	return o.Baseline, true
@@ -62,7 +65,7 @@ func (o *OutlierDataValue) GetBaselineOk() (*OutlierBound, bool) {
 
 // HasBaseline returns a boolean if a field has been set.
 func (o *OutlierDataValue) HasBaseline() bool {
-	if o != nil && o.Baseline != nil {
+	if o != nil && !IsNil(o.Baseline) {
 		return true
 	}
 
@@ -76,7 +79,7 @@ func (o *OutlierDataValue) SetBaseline(v OutlierBound) {
 
 // GetCritical returns the Critical field value if set, zero value otherwise.
 func (o *OutlierDataValue) GetCritical() OutlierBound {
-	if o == nil || o.Critical == nil {
+	if o == nil || IsNil(o.Critical) {
 		var ret OutlierBound
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *OutlierDataValue) GetCritical() OutlierBound {
 // GetCriticalOk returns a tuple with the Critical field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierDataValue) GetCriticalOk() (*OutlierBound, bool) {
-	if o == nil || o.Critical == nil {
+	if o == nil || IsNil(o.Critical) {
 		return nil, false
 	}
 	return o.Critical, true
@@ -94,7 +97,7 @@ func (o *OutlierDataValue) GetCriticalOk() (*OutlierBound, bool) {
 
 // HasCritical returns a boolean if a field has been set.
 func (o *OutlierDataValue) HasCritical() bool {
-	if o != nil && o.Critical != nil {
+	if o != nil && !IsNil(o.Critical) {
 		return true
 	}
 
@@ -108,7 +111,7 @@ func (o *OutlierDataValue) SetCritical(v OutlierBound) {
 
 // GetWarning returns the Warning field value if set, zero value otherwise.
 func (o *OutlierDataValue) GetWarning() OutlierBound {
-	if o == nil || o.Warning == nil {
+	if o == nil || IsNil(o.Warning) {
 		var ret OutlierBound
 		return ret
 	}
@@ -118,7 +121,7 @@ func (o *OutlierDataValue) GetWarning() OutlierBound {
 // GetWarningOk returns a tuple with the Warning field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierDataValue) GetWarningOk() (*OutlierBound, bool) {
-	if o == nil || o.Warning == nil {
+	if o == nil || IsNil(o.Warning) {
 		return nil, false
 	}
 	return o.Warning, true
@@ -126,7 +129,7 @@ func (o *OutlierDataValue) GetWarningOk() (*OutlierBound, bool) {
 
 // HasWarning returns a boolean if a field has been set.
 func (o *OutlierDataValue) HasWarning() bool {
-	if o != nil && o.Warning != nil {
+	if o != nil && !IsNil(o.Warning) {
 		return true
 	}
 
@@ -140,7 +143,7 @@ func (o *OutlierDataValue) SetWarning(v OutlierBound) {
 
 // GetValue returns the Value field value if set, zero value otherwise.
 func (o *OutlierDataValue) GetValue() float64 {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		var ret float64
 		return ret
 	}
@@ -150,7 +153,7 @@ func (o *OutlierDataValue) GetValue() float64 {
 // GetValueOk returns a tuple with the Value field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierDataValue) GetValueOk() (*float64, bool) {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		return nil, false
 	}
 	return o.Value, true
@@ -158,7 +161,7 @@ func (o *OutlierDataValue) GetValueOk() (*float64, bool) {
 
 // HasValue returns a boolean if a field has been set.
 func (o *OutlierDataValue) HasValue() bool {
-	if o != nil && o.Value != nil {
+	if o != nil && !IsNil(o.Value) {
 		return true
 	}
 
@@ -172,7 +175,7 @@ func (o *OutlierDataValue) SetValue(v float64) {
 
 // GetViolation returns the Violation field value if set, zero value otherwise.
 func (o *OutlierDataValue) GetViolation() string {
-	if o == nil || o.Violation == nil {
+	if o == nil || IsNil(o.Violation) {
 		var ret string
 		return ret
 	}
@@ -182,7 +185,7 @@ func (o *OutlierDataValue) GetViolation() string {
 // GetViolationOk returns a tuple with the Violation field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OutlierDataValue) GetViolationOk() (*string, bool) {
-	if o == nil || o.Violation == nil {
+	if o == nil || IsNil(o.Violation) {
 		return nil, false
 	}
 	return o.Violation, true
@@ -190,7 +193,7 @@ func (o *OutlierDataValue) GetViolationOk() (*string, bool) {
 
 // HasViolation returns a boolean if a field has been set.
 func (o *OutlierDataValue) HasViolation() bool {
-	if o != nil && o.Violation != nil {
+	if o != nil && !IsNil(o.Violation) {
 		return true
 	}
 
@@ -203,23 +206,31 @@ func (o *OutlierDataValue) SetViolation(v string) {
 }
 
 func (o OutlierDataValue) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Baseline != nil {
-		toSerialize["baseline"] = o.Baseline
-	}
-	if o.Critical != nil {
-		toSerialize["critical"] = o.Critical
-	}
-	if o.Warning != nil {
-		toSerialize["warning"] = o.Warning
-	}
-	if o.Value != nil {
-		toSerialize["value"] = o.Value
-	}
-	if o.Violation != nil {
-		toSerialize["violation"] = o.Violation
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OutlierDataValue) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Baseline) {
+		toSerialize["baseline"] = o.Baseline
+	}
+	if !IsNil(o.Critical) {
+		toSerialize["critical"] = o.Critical
+	}
+	if !IsNil(o.Warning) {
+		toSerialize["warning"] = o.Warning
+	}
+	if !IsNil(o.Value) {
+		toSerialize["value"] = o.Value
+	}
+	if !IsNil(o.Violation) {
+		toSerialize["violation"] = o.Violation
+	}
+	return toSerialize, nil
 }
 
 type NullableOutlierDataValue struct {

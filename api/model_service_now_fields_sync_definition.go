@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ServiceNowFieldsSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceNowFieldsSyncDefinition{}
 
 // ServiceNowFieldsSyncDefinition struct for ServiceNowFieldsSyncDefinition
 type ServiceNowFieldsSyncDefinition struct {
@@ -45,7 +48,7 @@ func NewServiceNowFieldsSyncDefinitionWithDefaults() *ServiceNowFieldsSyncDefini
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *ServiceNowFieldsSyncDefinition) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNowFieldsSyncDefinition) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -63,7 +66,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *ServiceNowFieldsSyncDefinition) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *ServiceNowFieldsSyncDefinition) SetEventType(v string) {
 
 // GetSeverity returns the Severity field value if set, zero value otherwise.
 func (o *ServiceNowFieldsSyncDefinition) GetSeverity() int32 {
-	if o == nil || o.Severity == nil {
+	if o == nil || IsNil(o.Severity) {
 		var ret int32
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetSeverity() int32 {
 // GetSeverityOk returns a tuple with the Severity field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNowFieldsSyncDefinition) GetSeverityOk() (*int32, bool) {
-	if o == nil || o.Severity == nil {
+	if o == nil || IsNil(o.Severity) {
 		return nil, false
 	}
 	return o.Severity, true
@@ -95,7 +98,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetSeverityOk() (*int32, bool) {
 
 // HasSeverity returns a boolean if a field has been set.
 func (o *ServiceNowFieldsSyncDefinition) HasSeverity() bool {
-	if o != nil && o.Severity != nil {
+	if o != nil && !IsNil(o.Severity) {
 		return true
 	}
 
@@ -109,7 +112,7 @@ func (o *ServiceNowFieldsSyncDefinition) SetSeverity(v int32) {
 
 // GetResource returns the Resource field value if set, zero value otherwise.
 func (o *ServiceNowFieldsSyncDefinition) GetResource() string {
-	if o == nil || o.Resource == nil {
+	if o == nil || IsNil(o.Resource) {
 		var ret string
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetResource() string {
 // GetResourceOk returns a tuple with the Resource field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNowFieldsSyncDefinition) GetResourceOk() (*string, bool) {
-	if o == nil || o.Resource == nil {
+	if o == nil || IsNil(o.Resource) {
 		return nil, false
 	}
 	return o.Resource, true
@@ -127,7 +130,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetResourceOk() (*string, bool) {
 
 // HasResource returns a boolean if a field has been set.
 func (o *ServiceNowFieldsSyncDefinition) HasResource() bool {
-	if o != nil && o.Resource != nil {
+	if o != nil && !IsNil(o.Resource) {
 		return true
 	}
 
@@ -141,7 +144,7 @@ func (o *ServiceNowFieldsSyncDefinition) SetResource(v string) {
 
 // GetNode returns the Node field value if set, zero value otherwise.
 func (o *ServiceNowFieldsSyncDefinition) GetNode() string {
-	if o == nil || o.Node == nil {
+	if o == nil || IsNil(o.Node) {
 		var ret string
 		return ret
 	}
@@ -151,7 +154,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetNode() string {
 // GetNodeOk returns a tuple with the Node field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNowFieldsSyncDefinition) GetNodeOk() (*string, bool) {
-	if o == nil || o.Node == nil {
+	if o == nil || IsNil(o.Node) {
 		return nil, false
 	}
 	return o.Node, true
@@ -159,7 +162,7 @@ func (o *ServiceNowFieldsSyncDefinition) GetNodeOk() (*string, bool) {
 
 // HasNode returns a boolean if a field has been set.
 func (o *ServiceNowFieldsSyncDefinition) HasNode() bool {
-	if o != nil && o.Node != nil {
+	if o != nil && !IsNil(o.Node) {
 		return true
 	}
 
@@ -172,20 +175,28 @@ func (o *ServiceNowFieldsSyncDefinition) SetNode(v string) {
 }
 
 func (o ServiceNowFieldsSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.EventType != nil {
-		toSerialize["eventType"] = o.EventType
-	}
-	if o.Severity != nil {
-		toSerialize["severity"] = o.Severity
-	}
-	if o.Resource != nil {
-		toSerialize["resource"] = o.Resource
-	}
-	if o.Node != nil {
-		toSerialize["node"] = o.Node
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceNowFieldsSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.EventType) {
+		toSerialize["eventType"] = o.EventType
+	}
+	if !IsNil(o.Severity) {
+		toSerialize["severity"] = o.Severity
+	}
+	if !IsNil(o.Resource) {
+		toSerialize["resource"] = o.Resource
+	}
+	if !IsNil(o.Node) {
+		toSerialize["node"] = o.Node
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceNowFieldsSyncDefinition struct {

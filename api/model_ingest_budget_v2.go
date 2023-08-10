@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -15,18 +15,21 @@ import (
 	"time"
 )
 
+// checks if the IngestBudgetV2 type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudgetV2{}
+
 // IngestBudgetV2 struct for IngestBudgetV2
 type IngestBudgetV2 struct {
 	// Display name of the ingest budget.
 	Name string `json:"name"`
 	// A scope is a constraint that will be used to identify the messages on which budget needs to be applied. A scope is consists of key and value separated by =. The field must be enabled in the fields table. Value supports wildcard. e.g. _sourceCategory=*prod*payment*, cluster=kafka. If the scope is defined _sourceCategory=*nginx* in this budget will be applied on messages having fields _sourceCategory=prod/nginx, _sourceCategory=dev/nginx, or _sourceCategory=dev/nginx/error
 	Scope string `json:"scope"`
-	// Capacity of the ingest budget, in bytes. It takes a few minutes for Collectors to stop collecting when capacity is reached. We recommend setting a soft limit that is lower than your needed hard limit.
+	// Capacity of the ingest budget, in bytes. It takes a few minutes for Collectors to stop collecting when capacity is reached. We recommend setting a soft limit that is lower than your needed hard limit. The capacity bytes unit varies based on the budgetType field. For `dailyVolume` budgetType the capacity specified is in bytes/day whereas for `minuteVolume` budgetType its bytes/min.
 	CapacityBytes int64 `json:"capacityBytes"`
 	// Time zone of the reset time for the ingest budget. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
-	Timezone string `json:"timezone"`
+	Timezone *string `json:"timezone,omitempty"`
 	// Reset time of the ingest budget in HH:MM format.
-	ResetTime string `json:"resetTime"`
+	ResetTime *string `json:"resetTime,omitempty"`
 	// Description of the ingest budget.
 	Description *string `json:"description,omitempty"`
 	// Action to take when ingest budget's capacity is reached. All actions are audited. Supported values are:   * `stopCollecting`   * `keepCollecting`
@@ -55,13 +58,15 @@ type IngestBudgetV2 struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewIngestBudgetV2(name string, scope string, capacityBytes int64, timezone string, resetTime string, action string, id string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string) *IngestBudgetV2 {
+func NewIngestBudgetV2(name string, scope string, capacityBytes int64, action string, id string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string) *IngestBudgetV2 {
 	this := IngestBudgetV2{}
 	this.Name = name
 	this.Scope = scope
 	this.CapacityBytes = capacityBytes
-	this.Timezone = timezone
-	this.ResetTime = resetTime
+	var timezone string = "Etc/UTC"
+	this.Timezone = &timezone
+	var resetTime string = "00:00"
+	this.ResetTime = &resetTime
 	this.Action = action
 	this.Id = id
 	this.CreatedAt = createdAt
@@ -76,6 +81,10 @@ func NewIngestBudgetV2(name string, scope string, capacityBytes int64, timezone 
 // but it doesn't guarantee that properties required by API are set
 func NewIngestBudgetV2WithDefaults() *IngestBudgetV2 {
 	this := IngestBudgetV2{}
+	var timezone string = "Etc/UTC"
+	this.Timezone = &timezone
+	var resetTime string = "00:00"
+	this.ResetTime = &resetTime
 	return &this
 }
 
@@ -151,57 +160,73 @@ func (o *IngestBudgetV2) SetCapacityBytes(v int64) {
 	o.CapacityBytes = v
 }
 
-// GetTimezone returns the Timezone field value
+// GetTimezone returns the Timezone field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetTimezone() string {
-	if o == nil {
+	if o == nil || IsNil(o.Timezone) {
 		var ret string
 		return ret
 	}
-
-	return o.Timezone
+	return *o.Timezone
 }
 
-// GetTimezoneOk returns a tuple with the Timezone field value
+// GetTimezoneOk returns a tuple with the Timezone field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetTimezoneOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Timezone) {
 		return nil, false
 	}
-	return &o.Timezone, true
+	return o.Timezone, true
 }
 
-// SetTimezone sets field value
+// HasTimezone returns a boolean if a field has been set.
+func (o *IngestBudgetV2) HasTimezone() bool {
+	if o != nil && !IsNil(o.Timezone) {
+		return true
+	}
+
+	return false
+}
+
+// SetTimezone gets a reference to the given string and assigns it to the Timezone field.
 func (o *IngestBudgetV2) SetTimezone(v string) {
-	o.Timezone = v
+	o.Timezone = &v
 }
 
-// GetResetTime returns the ResetTime field value
+// GetResetTime returns the ResetTime field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetResetTime() string {
-	if o == nil {
+	if o == nil || IsNil(o.ResetTime) {
 		var ret string
 		return ret
 	}
-
-	return o.ResetTime
+	return *o.ResetTime
 }
 
-// GetResetTimeOk returns a tuple with the ResetTime field value
+// GetResetTimeOk returns a tuple with the ResetTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetResetTimeOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.ResetTime) {
 		return nil, false
 	}
-	return &o.ResetTime, true
+	return o.ResetTime, true
 }
 
-// SetResetTime sets field value
+// HasResetTime returns a boolean if a field has been set.
+func (o *IngestBudgetV2) HasResetTime() bool {
+	if o != nil && !IsNil(o.ResetTime) {
+		return true
+	}
+
+	return false
+}
+
+// SetResetTime gets a reference to the given string and assigns it to the ResetTime field.
 func (o *IngestBudgetV2) SetResetTime(v string) {
-	o.ResetTime = v
+	o.ResetTime = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -211,7 +236,7 @@ func (o *IngestBudgetV2) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -219,7 +244,7 @@ func (o *IngestBudgetV2) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *IngestBudgetV2) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -257,7 +282,7 @@ func (o *IngestBudgetV2) SetAction(v string) {
 
 // GetAuditThreshold returns the AuditThreshold field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetAuditThreshold() int32 {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		var ret int32
 		return ret
 	}
@@ -267,7 +292,7 @@ func (o *IngestBudgetV2) GetAuditThreshold() int32 {
 // GetAuditThresholdOk returns a tuple with the AuditThreshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetAuditThresholdOk() (*int32, bool) {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		return nil, false
 	}
 	return o.AuditThreshold, true
@@ -275,7 +300,7 @@ func (o *IngestBudgetV2) GetAuditThresholdOk() (*int32, bool) {
 
 // HasAuditThreshold returns a boolean if a field has been set.
 func (o *IngestBudgetV2) HasAuditThreshold() bool {
-	if o != nil && o.AuditThreshold != nil {
+	if o != nil && !IsNil(o.AuditThreshold) {
 		return true
 	}
 
@@ -313,7 +338,7 @@ func (o *IngestBudgetV2) SetId(v string) {
 
 // GetUsageBytes returns the UsageBytes field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetUsageBytes() int64 {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		var ret int64
 		return ret
 	}
@@ -323,7 +348,7 @@ func (o *IngestBudgetV2) GetUsageBytes() int64 {
 // GetUsageBytesOk returns a tuple with the UsageBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetUsageBytesOk() (*int64, bool) {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		return nil, false
 	}
 	return o.UsageBytes, true
@@ -331,7 +356,7 @@ func (o *IngestBudgetV2) GetUsageBytesOk() (*int64, bool) {
 
 // HasUsageBytes returns a boolean if a field has been set.
 func (o *IngestBudgetV2) HasUsageBytes() bool {
-	if o != nil && o.UsageBytes != nil {
+	if o != nil && !IsNil(o.UsageBytes) {
 		return true
 	}
 
@@ -345,7 +370,7 @@ func (o *IngestBudgetV2) SetUsageBytes(v int64) {
 
 // GetUsageStatus returns the UsageStatus field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetUsageStatus() string {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		var ret string
 		return ret
 	}
@@ -355,7 +380,7 @@ func (o *IngestBudgetV2) GetUsageStatus() string {
 // GetUsageStatusOk returns a tuple with the UsageStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetUsageStatusOk() (*string, bool) {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		return nil, false
 	}
 	return o.UsageStatus, true
@@ -363,7 +388,7 @@ func (o *IngestBudgetV2) GetUsageStatusOk() (*string, bool) {
 
 // HasUsageStatus returns a boolean if a field has been set.
 func (o *IngestBudgetV2) HasUsageStatus() bool {
-	if o != nil && o.UsageStatus != nil {
+	if o != nil && !IsNil(o.UsageStatus) {
 		return true
 	}
 
@@ -473,7 +498,7 @@ func (o *IngestBudgetV2) SetModifiedBy(v string) {
 
 // GetBudgetVersion returns the BudgetVersion field value if set, zero value otherwise.
 func (o *IngestBudgetV2) GetBudgetVersion() int32 {
-	if o == nil || o.BudgetVersion == nil {
+	if o == nil || IsNil(o.BudgetVersion) {
 		var ret int32
 		return ret
 	}
@@ -483,7 +508,7 @@ func (o *IngestBudgetV2) GetBudgetVersion() int32 {
 // GetBudgetVersionOk returns a tuple with the BudgetVersion field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2) GetBudgetVersionOk() (*int32, bool) {
-	if o == nil || o.BudgetVersion == nil {
+	if o == nil || IsNil(o.BudgetVersion) {
 		return nil, false
 	}
 	return o.BudgetVersion, true
@@ -491,7 +516,7 @@ func (o *IngestBudgetV2) GetBudgetVersionOk() (*int32, bool) {
 
 // HasBudgetVersion returns a boolean if a field has been set.
 func (o *IngestBudgetV2) HasBudgetVersion() bool {
-	if o != nil && o.BudgetVersion != nil {
+	if o != nil && !IsNil(o.BudgetVersion) {
 		return true
 	}
 
@@ -504,56 +529,46 @@ func (o *IngestBudgetV2) SetBudgetVersion(v int32) {
 }
 
 func (o IngestBudgetV2) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["scope"] = o.Scope
-	}
-	if true {
-		toSerialize["capacityBytes"] = o.CapacityBytes
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
-	}
-	if true {
-		toSerialize["resetTime"] = o.ResetTime
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["action"] = o.Action
-	}
-	if o.AuditThreshold != nil {
-		toSerialize["auditThreshold"] = o.AuditThreshold
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.UsageBytes != nil {
-		toSerialize["usageBytes"] = o.UsageBytes
-	}
-	if o.UsageStatus != nil {
-		toSerialize["usageStatus"] = o.UsageStatus
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if o.BudgetVersion != nil {
-		toSerialize["budgetVersion"] = o.BudgetVersion
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudgetV2) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["scope"] = o.Scope
+	toSerialize["capacityBytes"] = o.CapacityBytes
+	if !IsNil(o.Timezone) {
+		toSerialize["timezone"] = o.Timezone
+	}
+	if !IsNil(o.ResetTime) {
+		toSerialize["resetTime"] = o.ResetTime
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["action"] = o.Action
+	if !IsNil(o.AuditThreshold) {
+		toSerialize["auditThreshold"] = o.AuditThreshold
+	}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.UsageBytes) {
+		toSerialize["usageBytes"] = o.UsageBytes
+	}
+	if !IsNil(o.UsageStatus) {
+		toSerialize["usageStatus"] = o.UsageStatus
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	if !IsNil(o.BudgetVersion) {
+		toSerialize["budgetVersion"] = o.BudgetVersion
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudgetV2 struct {

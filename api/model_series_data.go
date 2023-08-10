@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SeriesData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SeriesData{}
 
 // SeriesData The data for visualizing monitor chart.
 type SeriesData struct {
@@ -119,7 +122,7 @@ func (o *SeriesData) SetSeriesAxisRange(v SeriesAxisRange) {
 
 // GetAggregateInfo returns the AggregateInfo field value if set, zero value otherwise.
 func (o *SeriesData) GetAggregateInfo() VisualAggregateData {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		var ret VisualAggregateData
 		return ret
 	}
@@ -129,7 +132,7 @@ func (o *SeriesData) GetAggregateInfo() VisualAggregateData {
 // GetAggregateInfoOk returns a tuple with the AggregateInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SeriesData) GetAggregateInfoOk() (*VisualAggregateData, bool) {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		return nil, false
 	}
 	return o.AggregateInfo, true
@@ -137,7 +140,7 @@ func (o *SeriesData) GetAggregateInfoOk() (*VisualAggregateData, bool) {
 
 // HasAggregateInfo returns a boolean if a field has been set.
 func (o *SeriesData) HasAggregateInfo() bool {
-	if o != nil && o.AggregateInfo != nil {
+	if o != nil && !IsNil(o.AggregateInfo) {
 		return true
 	}
 
@@ -151,7 +154,7 @@ func (o *SeriesData) SetAggregateInfo(v VisualAggregateData) {
 
 // GetSeriesMetadata returns the SeriesMetadata field value if set, zero value otherwise.
 func (o *SeriesData) GetSeriesMetadata() SeriesMetadata {
-	if o == nil || o.SeriesMetadata == nil {
+	if o == nil || IsNil(o.SeriesMetadata) {
 		var ret SeriesMetadata
 		return ret
 	}
@@ -161,7 +164,7 @@ func (o *SeriesData) GetSeriesMetadata() SeriesMetadata {
 // GetSeriesMetadataOk returns a tuple with the SeriesMetadata field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SeriesData) GetSeriesMetadataOk() (*SeriesMetadata, bool) {
-	if o == nil || o.SeriesMetadata == nil {
+	if o == nil || IsNil(o.SeriesMetadata) {
 		return nil, false
 	}
 	return o.SeriesMetadata, true
@@ -169,7 +172,7 @@ func (o *SeriesData) GetSeriesMetadataOk() (*SeriesMetadata, bool) {
 
 // HasSeriesMetadata returns a boolean if a field has been set.
 func (o *SeriesData) HasSeriesMetadata() bool {
-	if o != nil && o.SeriesMetadata != nil {
+	if o != nil && !IsNil(o.SeriesMetadata) {
 		return true
 	}
 
@@ -182,23 +185,25 @@ func (o *SeriesData) SetSeriesMetadata(v SeriesMetadata) {
 }
 
 func (o SeriesData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["dataPoints"] = o.DataPoints
-	}
-	if true {
-		toSerialize["seriesAxisRange"] = o.SeriesAxisRange
-	}
-	if o.AggregateInfo != nil {
-		toSerialize["aggregateInfo"] = o.AggregateInfo
-	}
-	if o.SeriesMetadata != nil {
-		toSerialize["seriesMetadata"] = o.SeriesMetadata
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SeriesData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["dataPoints"] = o.DataPoints
+	toSerialize["seriesAxisRange"] = o.SeriesAxisRange
+	if !IsNil(o.AggregateInfo) {
+		toSerialize["aggregateInfo"] = o.AggregateInfo
+	}
+	if !IsNil(o.SeriesMetadata) {
+		toSerialize["seriesMetadata"] = o.SeriesMetadata
+	}
+	return toSerialize, nil
 }
 
 type NullableSeriesData struct {

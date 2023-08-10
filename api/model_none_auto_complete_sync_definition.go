@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the NoneAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &NoneAutoCompleteSyncDefinition{}
 
 // NoneAutoCompleteSyncDefinition struct for NoneAutoCompleteSyncDefinition
 type NoneAutoCompleteSyncDefinition struct {
@@ -38,16 +41,24 @@ func NewNoneAutoCompleteSyncDefinitionWithDefaults() *NoneAutoCompleteSyncDefini
 }
 
 func (o NoneAutoCompleteSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o NoneAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedLogSearchParameterAutoCompleteSyncDefinition, errLogSearchParameterAutoCompleteSyncDefinition := json.Marshal(o.LogSearchParameterAutoCompleteSyncDefinition)
 	if errLogSearchParameterAutoCompleteSyncDefinition != nil {
-		return []byte{}, errLogSearchParameterAutoCompleteSyncDefinition
+		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
 	errLogSearchParameterAutoCompleteSyncDefinition = json.Unmarshal([]byte(serializedLogSearchParameterAutoCompleteSyncDefinition), &toSerialize)
 	if errLogSearchParameterAutoCompleteSyncDefinition != nil {
-		return []byte{}, errLogSearchParameterAutoCompleteSyncDefinition
+		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableNoneAutoCompleteSyncDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ScheduleSearchParameterSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScheduleSearchParameterSyncDefinition{}
 
 // ScheduleSearchParameterSyncDefinition struct for ScheduleSearchParameterSyncDefinition
 type ScheduleSearchParameterSyncDefinition struct {
@@ -90,14 +93,18 @@ func (o *ScheduleSearchParameterSyncDefinition) SetValue(v string) {
 }
 
 func (o ScheduleSearchParameterSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["value"] = o.Value
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ScheduleSearchParameterSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["value"] = o.Value
+	return toSerialize, nil
 }
 
 type NullableScheduleSearchParameterSyncDefinition struct {

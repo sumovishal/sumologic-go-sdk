@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RoleModelAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RoleModelAllOf{}
 
 // RoleModelAllOf struct for RoleModelAllOf
 type RoleModelAllOf struct {
@@ -66,7 +69,7 @@ func (o *RoleModelAllOf) SetId(v string) {
 
 // GetSystemDefined returns the SystemDefined field value if set, zero value otherwise.
 func (o *RoleModelAllOf) GetSystemDefined() bool {
-	if o == nil || o.SystemDefined == nil {
+	if o == nil || IsNil(o.SystemDefined) {
 		var ret bool
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *RoleModelAllOf) GetSystemDefined() bool {
 // GetSystemDefinedOk returns a tuple with the SystemDefined field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModelAllOf) GetSystemDefinedOk() (*bool, bool) {
-	if o == nil || o.SystemDefined == nil {
+	if o == nil || IsNil(o.SystemDefined) {
 		return nil, false
 	}
 	return o.SystemDefined, true
@@ -84,7 +87,7 @@ func (o *RoleModelAllOf) GetSystemDefinedOk() (*bool, bool) {
 
 // HasSystemDefined returns a boolean if a field has been set.
 func (o *RoleModelAllOf) HasSystemDefined() bool {
-	if o != nil && o.SystemDefined != nil {
+	if o != nil && !IsNil(o.SystemDefined) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *RoleModelAllOf) SetSystemDefined(v bool) {
 }
 
 func (o RoleModelAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.SystemDefined != nil {
-		toSerialize["systemDefined"] = o.SystemDefined
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RoleModelAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.SystemDefined) {
+		toSerialize["systemDefined"] = o.SystemDefined
+	}
+	return toSerialize, nil
 }
 
 type NullableRoleModelAllOf struct {

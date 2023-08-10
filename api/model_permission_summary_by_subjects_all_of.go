@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PermissionSummaryBySubjectsAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PermissionSummaryBySubjectsAllOf{}
 
 // PermissionSummaryBySubjectsAllOf struct for PermissionSummaryBySubjectsAllOf
 type PermissionSummaryBySubjectsAllOf struct {
@@ -62,11 +65,17 @@ func (o *PermissionSummaryBySubjectsAllOf) SetPermissionSummaries(v []Permission
 }
 
 func (o PermissionSummaryBySubjectsAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["permissionSummaries"] = o.PermissionSummaries
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PermissionSummaryBySubjectsAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["permissionSummaries"] = o.PermissionSummaries
+	return toSerialize, nil
 }
 
 type NullablePermissionSummaryBySubjectsAllOf struct {

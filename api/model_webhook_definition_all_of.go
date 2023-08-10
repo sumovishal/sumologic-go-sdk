@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the WebhookDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WebhookDefinitionAllOf{}
 
 // WebhookDefinitionAllOf struct for WebhookDefinitionAllOf
 type WebhookDefinitionAllOf struct {
@@ -28,6 +31,8 @@ type WebhookDefinitionAllOf struct {
 	WebhookType *string `json:"webhookType,omitempty"`
 	// The subtype of the connection. Valid values are `Event` or `Incident`.
 	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
+	// Resolution payload of the webhook.
+	ResolutionPayload *string `json:"resolutionPayload,omitempty"`
 }
 
 // NewWebhookDefinitionAllOf instantiates a new WebhookDefinitionAllOf object
@@ -75,7 +80,7 @@ func (o *WebhookDefinitionAllOf) SetUrl(v string) {
 
 // GetHeaders returns the Headers field value if set, zero value otherwise.
 func (o *WebhookDefinitionAllOf) GetHeaders() []Header {
-	if o == nil || o.Headers == nil {
+	if o == nil || IsNil(o.Headers) {
 		var ret []Header
 		return ret
 	}
@@ -85,7 +90,7 @@ func (o *WebhookDefinitionAllOf) GetHeaders() []Header {
 // GetHeadersOk returns a tuple with the Headers field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookDefinitionAllOf) GetHeadersOk() ([]Header, bool) {
-	if o == nil || o.Headers == nil {
+	if o == nil || IsNil(o.Headers) {
 		return nil, false
 	}
 	return o.Headers, true
@@ -93,7 +98,7 @@ func (o *WebhookDefinitionAllOf) GetHeadersOk() ([]Header, bool) {
 
 // HasHeaders returns a boolean if a field has been set.
 func (o *WebhookDefinitionAllOf) HasHeaders() bool {
-	if o != nil && o.Headers != nil {
+	if o != nil && !IsNil(o.Headers) {
 		return true
 	}
 
@@ -107,7 +112,7 @@ func (o *WebhookDefinitionAllOf) SetHeaders(v []Header) {
 
 // GetCustomHeaders returns the CustomHeaders field value if set, zero value otherwise.
 func (o *WebhookDefinitionAllOf) GetCustomHeaders() []Header {
-	if o == nil || o.CustomHeaders == nil {
+	if o == nil || IsNil(o.CustomHeaders) {
 		var ret []Header
 		return ret
 	}
@@ -117,7 +122,7 @@ func (o *WebhookDefinitionAllOf) GetCustomHeaders() []Header {
 // GetCustomHeadersOk returns a tuple with the CustomHeaders field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookDefinitionAllOf) GetCustomHeadersOk() ([]Header, bool) {
-	if o == nil || o.CustomHeaders == nil {
+	if o == nil || IsNil(o.CustomHeaders) {
 		return nil, false
 	}
 	return o.CustomHeaders, true
@@ -125,7 +130,7 @@ func (o *WebhookDefinitionAllOf) GetCustomHeadersOk() ([]Header, bool) {
 
 // HasCustomHeaders returns a boolean if a field has been set.
 func (o *WebhookDefinitionAllOf) HasCustomHeaders() bool {
-	if o != nil && o.CustomHeaders != nil {
+	if o != nil && !IsNil(o.CustomHeaders) {
 		return true
 	}
 
@@ -163,7 +168,7 @@ func (o *WebhookDefinitionAllOf) SetDefaultPayload(v string) {
 
 // GetWebhookType returns the WebhookType field value if set, zero value otherwise.
 func (o *WebhookDefinitionAllOf) GetWebhookType() string {
-	if o == nil || o.WebhookType == nil {
+	if o == nil || IsNil(o.WebhookType) {
 		var ret string
 		return ret
 	}
@@ -173,7 +178,7 @@ func (o *WebhookDefinitionAllOf) GetWebhookType() string {
 // GetWebhookTypeOk returns a tuple with the WebhookType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookDefinitionAllOf) GetWebhookTypeOk() (*string, bool) {
-	if o == nil || o.WebhookType == nil {
+	if o == nil || IsNil(o.WebhookType) {
 		return nil, false
 	}
 	return o.WebhookType, true
@@ -181,7 +186,7 @@ func (o *WebhookDefinitionAllOf) GetWebhookTypeOk() (*string, bool) {
 
 // HasWebhookType returns a boolean if a field has been set.
 func (o *WebhookDefinitionAllOf) HasWebhookType() bool {
-	if o != nil && o.WebhookType != nil {
+	if o != nil && !IsNil(o.WebhookType) {
 		return true
 	}
 
@@ -195,7 +200,7 @@ func (o *WebhookDefinitionAllOf) SetWebhookType(v string) {
 
 // GetConnectionSubtype returns the ConnectionSubtype field value if set, zero value otherwise.
 func (o *WebhookDefinitionAllOf) GetConnectionSubtype() string {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		var ret string
 		return ret
 	}
@@ -205,7 +210,7 @@ func (o *WebhookDefinitionAllOf) GetConnectionSubtype() string {
 // GetConnectionSubtypeOk returns a tuple with the ConnectionSubtype field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookDefinitionAllOf) GetConnectionSubtypeOk() (*string, bool) {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		return nil, false
 	}
 	return o.ConnectionSubtype, true
@@ -213,7 +218,7 @@ func (o *WebhookDefinitionAllOf) GetConnectionSubtypeOk() (*string, bool) {
 
 // HasConnectionSubtype returns a boolean if a field has been set.
 func (o *WebhookDefinitionAllOf) HasConnectionSubtype() bool {
-	if o != nil && o.ConnectionSubtype != nil {
+	if o != nil && !IsNil(o.ConnectionSubtype) {
 		return true
 	}
 
@@ -225,27 +230,66 @@ func (o *WebhookDefinitionAllOf) SetConnectionSubtype(v string) {
 	o.ConnectionSubtype = &v
 }
 
+// GetResolutionPayload returns the ResolutionPayload field value if set, zero value otherwise.
+func (o *WebhookDefinitionAllOf) GetResolutionPayload() string {
+	if o == nil || IsNil(o.ResolutionPayload) {
+		var ret string
+		return ret
+	}
+	return *o.ResolutionPayload
+}
+
+// GetResolutionPayloadOk returns a tuple with the ResolutionPayload field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WebhookDefinitionAllOf) GetResolutionPayloadOk() (*string, bool) {
+	if o == nil || IsNil(o.ResolutionPayload) {
+		return nil, false
+	}
+	return o.ResolutionPayload, true
+}
+
+// HasResolutionPayload returns a boolean if a field has been set.
+func (o *WebhookDefinitionAllOf) HasResolutionPayload() bool {
+	if o != nil && !IsNil(o.ResolutionPayload) {
+		return true
+	}
+
+	return false
+}
+
+// SetResolutionPayload gets a reference to the given string and assigns it to the ResolutionPayload field.
+func (o *WebhookDefinitionAllOf) SetResolutionPayload(v string) {
+	o.ResolutionPayload = &v
+}
+
 func (o WebhookDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if o.Headers != nil {
-		toSerialize["headers"] = o.Headers
-	}
-	if o.CustomHeaders != nil {
-		toSerialize["customHeaders"] = o.CustomHeaders
-	}
-	if true {
-		toSerialize["defaultPayload"] = o.DefaultPayload
-	}
-	if o.WebhookType != nil {
-		toSerialize["webhookType"] = o.WebhookType
-	}
-	if o.ConnectionSubtype != nil {
-		toSerialize["connectionSubtype"] = o.ConnectionSubtype
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o WebhookDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	if !IsNil(o.Headers) {
+		toSerialize["headers"] = o.Headers
+	}
+	if !IsNil(o.CustomHeaders) {
+		toSerialize["customHeaders"] = o.CustomHeaders
+	}
+	toSerialize["defaultPayload"] = o.DefaultPayload
+	if !IsNil(o.WebhookType) {
+		toSerialize["webhookType"] = o.WebhookType
+	}
+	if !IsNil(o.ConnectionSubtype) {
+		toSerialize["connectionSubtype"] = o.ConnectionSubtype
+	}
+	if !IsNil(o.ResolutionPayload) {
+		toSerialize["resolutionPayload"] = o.ResolutionPayload
+	}
+	return toSerialize, nil
 }
 
 type NullableWebhookDefinitionAllOf struct {

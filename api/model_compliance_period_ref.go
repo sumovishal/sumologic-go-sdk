@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CompliancePeriodRef type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CompliancePeriodRef{}
 
 // CompliancePeriodRef Reference to the compliance period of the SLO.
 type CompliancePeriodRef struct {
@@ -66,7 +69,7 @@ func (o *CompliancePeriodRef) SetComplianceRefType(v string) {
 
 // GetRelativeShift returns the RelativeShift field value if set, zero value otherwise.
 func (o *CompliancePeriodRef) GetRelativeShift() int32 {
-	if o == nil || o.RelativeShift == nil {
+	if o == nil || IsNil(o.RelativeShift) {
 		var ret int32
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *CompliancePeriodRef) GetRelativeShift() int32 {
 // GetRelativeShiftOk returns a tuple with the RelativeShift field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CompliancePeriodRef) GetRelativeShiftOk() (*int32, bool) {
-	if o == nil || o.RelativeShift == nil {
+	if o == nil || IsNil(o.RelativeShift) {
 		return nil, false
 	}
 	return o.RelativeShift, true
@@ -84,7 +87,7 @@ func (o *CompliancePeriodRef) GetRelativeShiftOk() (*int32, bool) {
 
 // HasRelativeShift returns a boolean if a field has been set.
 func (o *CompliancePeriodRef) HasRelativeShift() bool {
-	if o != nil && o.RelativeShift != nil {
+	if o != nil && !IsNil(o.RelativeShift) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *CompliancePeriodRef) SetRelativeShift(v int32) {
 }
 
 func (o CompliancePeriodRef) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["complianceRefType"] = o.ComplianceRefType
-	}
-	if o.RelativeShift != nil {
-		toSerialize["relativeShift"] = o.RelativeShift
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CompliancePeriodRef) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["complianceRefType"] = o.ComplianceRefType
+	if !IsNil(o.RelativeShift) {
+		toSerialize["relativeShift"] = o.RelativeShift
+	}
+	return toSerialize, nil
 }
 
 type NullableCompliancePeriodRef struct {

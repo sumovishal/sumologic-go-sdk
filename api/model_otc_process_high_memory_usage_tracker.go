@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCProcessHighMemoryUsageTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCProcessHighMemoryUsageTracker{}
 
 // OTCProcessHighMemoryUsageTracker struct for OTCProcessHighMemoryUsageTracker
 type OTCProcessHighMemoryUsageTracker struct {
@@ -51,7 +54,7 @@ func NewOTCProcessHighMemoryUsageTrackerWithDefaults() *OTCProcessHighMemoryUsag
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *OTCProcessHighMemoryUsageTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -61,7 +64,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessHighMemoryUsageTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -69,7 +72,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *OTCProcessHighMemoryUsageTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -83,7 +86,7 @@ func (o *OTCProcessHighMemoryUsageTracker) SetEventType(v string) {
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCProcessHighMemoryUsageTracker) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -93,7 +96,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessHighMemoryUsageTracker) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -101,7 +104,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetInstanceIdOk() (*string, bool) {
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCProcessHighMemoryUsageTracker) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -115,7 +118,7 @@ func (o *OTCProcessHighMemoryUsageTracker) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCProcessHighMemoryUsageTracker) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -125,7 +128,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetInstanceAddress() string {
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessHighMemoryUsageTracker) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -133,7 +136,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetInstanceAddressOk() (*string, bool
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCProcessHighMemoryUsageTracker) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -147,7 +150,7 @@ func (o *OTCProcessHighMemoryUsageTracker) SetInstanceAddress(v string) {
 
 // GetMemoryUsage returns the MemoryUsage field value if set, zero value otherwise.
 func (o *OTCProcessHighMemoryUsageTracker) GetMemoryUsage() string {
-	if o == nil || o.MemoryUsage == nil {
+	if o == nil || IsNil(o.MemoryUsage) {
 		var ret string
 		return ret
 	}
@@ -157,7 +160,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetMemoryUsage() string {
 // GetMemoryUsageOk returns a tuple with the MemoryUsage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessHighMemoryUsageTracker) GetMemoryUsageOk() (*string, bool) {
-	if o == nil || o.MemoryUsage == nil {
+	if o == nil || IsNil(o.MemoryUsage) {
 		return nil, false
 	}
 	return o.MemoryUsage, true
@@ -165,7 +168,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetMemoryUsageOk() (*string, bool) {
 
 // HasMemoryUsage returns a boolean if a field has been set.
 func (o *OTCProcessHighMemoryUsageTracker) HasMemoryUsage() bool {
-	if o != nil && o.MemoryUsage != nil {
+	if o != nil && !IsNil(o.MemoryUsage) {
 		return true
 	}
 
@@ -179,7 +182,7 @@ func (o *OTCProcessHighMemoryUsageTracker) SetMemoryUsage(v string) {
 
 // GetMemoryLimit returns the MemoryLimit field value if set, zero value otherwise.
 func (o *OTCProcessHighMemoryUsageTracker) GetMemoryLimit() string {
-	if o == nil || o.MemoryLimit == nil {
+	if o == nil || IsNil(o.MemoryLimit) {
 		var ret string
 		return ret
 	}
@@ -189,7 +192,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetMemoryLimit() string {
 // GetMemoryLimitOk returns a tuple with the MemoryLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessHighMemoryUsageTracker) GetMemoryLimitOk() (*string, bool) {
-	if o == nil || o.MemoryLimit == nil {
+	if o == nil || IsNil(o.MemoryLimit) {
 		return nil, false
 	}
 	return o.MemoryLimit, true
@@ -197,7 +200,7 @@ func (o *OTCProcessHighMemoryUsageTracker) GetMemoryLimitOk() (*string, bool) {
 
 // HasMemoryLimit returns a boolean if a field has been set.
 func (o *OTCProcessHighMemoryUsageTracker) HasMemoryLimit() bool {
-	if o != nil && o.MemoryLimit != nil {
+	if o != nil && !IsNil(o.MemoryLimit) {
 		return true
 	}
 
@@ -210,31 +213,39 @@ func (o *OTCProcessHighMemoryUsageTracker) SetMemoryLimit(v string) {
 }
 
 func (o OTCProcessHighMemoryUsageTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OTCProcessHighMemoryUsageTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.InstanceId != nil {
+	if !IsNil(o.InstanceId) {
 		toSerialize["instanceId"] = o.InstanceId
 	}
-	if o.InstanceAddress != nil {
+	if !IsNil(o.InstanceAddress) {
 		toSerialize["instanceAddress"] = o.InstanceAddress
 	}
-	if o.MemoryUsage != nil {
+	if !IsNil(o.MemoryUsage) {
 		toSerialize["memoryUsage"] = o.MemoryUsage
 	}
-	if o.MemoryLimit != nil {
+	if !IsNil(o.MemoryLimit) {
 		toSerialize["memoryLimit"] = o.MemoryLimit
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableOTCProcessHighMemoryUsageTracker struct {

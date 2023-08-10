@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SamlIdentityProviderAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SamlIdentityProviderAllOf{}
 
 // SamlIdentityProviderAllOf struct for SamlIdentityProviderAllOf
 type SamlIdentityProviderAllOf struct {
@@ -76,7 +79,7 @@ func (o *SamlIdentityProviderAllOf) SetId(v string) {
 
 // GetAssertionConsumerUrl returns the AssertionConsumerUrl field value if set, zero value otherwise.
 func (o *SamlIdentityProviderAllOf) GetAssertionConsumerUrl() string {
-	if o == nil || o.AssertionConsumerUrl == nil {
+	if o == nil || IsNil(o.AssertionConsumerUrl) {
 		var ret string
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *SamlIdentityProviderAllOf) GetAssertionConsumerUrl() string {
 // GetAssertionConsumerUrlOk returns a tuple with the AssertionConsumerUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProviderAllOf) GetAssertionConsumerUrlOk() (*string, bool) {
-	if o == nil || o.AssertionConsumerUrl == nil {
+	if o == nil || IsNil(o.AssertionConsumerUrl) {
 		return nil, false
 	}
 	return o.AssertionConsumerUrl, true
@@ -94,7 +97,7 @@ func (o *SamlIdentityProviderAllOf) GetAssertionConsumerUrlOk() (*string, bool) 
 
 // HasAssertionConsumerUrl returns a boolean if a field has been set.
 func (o *SamlIdentityProviderAllOf) HasAssertionConsumerUrl() bool {
-	if o != nil && o.AssertionConsumerUrl != nil {
+	if o != nil && !IsNil(o.AssertionConsumerUrl) {
 		return true
 	}
 
@@ -108,7 +111,7 @@ func (o *SamlIdentityProviderAllOf) SetAssertionConsumerUrl(v string) {
 
 // GetEntityId returns the EntityId field value if set, zero value otherwise.
 func (o *SamlIdentityProviderAllOf) GetEntityId() string {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		var ret string
 		return ret
 	}
@@ -118,7 +121,7 @@ func (o *SamlIdentityProviderAllOf) GetEntityId() string {
 // GetEntityIdOk returns a tuple with the EntityId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProviderAllOf) GetEntityIdOk() (*string, bool) {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		return nil, false
 	}
 	return o.EntityId, true
@@ -126,7 +129,7 @@ func (o *SamlIdentityProviderAllOf) GetEntityIdOk() (*string, bool) {
 
 // HasEntityId returns a boolean if a field has been set.
 func (o *SamlIdentityProviderAllOf) HasEntityId() bool {
-	if o != nil && o.EntityId != nil {
+	if o != nil && !IsNil(o.EntityId) {
 		return true
 	}
 
@@ -139,17 +142,23 @@ func (o *SamlIdentityProviderAllOf) SetEntityId(v string) {
 }
 
 func (o SamlIdentityProviderAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.AssertionConsumerUrl != nil {
-		toSerialize["assertionConsumerUrl"] = o.AssertionConsumerUrl
-	}
-	if o.EntityId != nil {
-		toSerialize["entityId"] = o.EntityId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SamlIdentityProviderAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.AssertionConsumerUrl) {
+		toSerialize["assertionConsumerUrl"] = o.AssertionConsumerUrl
+	}
+	if !IsNil(o.EntityId) {
+		toSerialize["entityId"] = o.EntityId
+	}
+	return toSerialize, nil
 }
 
 type NullableSamlIdentityProviderAllOf struct {

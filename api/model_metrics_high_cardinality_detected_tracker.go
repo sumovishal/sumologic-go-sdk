@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsHighCardinalityDetectedTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsHighCardinalityDetectedTracker{}
 
 // MetricsHighCardinalityDetectedTracker struct for MetricsHighCardinalityDetectedTracker
 type MetricsHighCardinalityDetectedTracker struct {
@@ -43,7 +46,7 @@ func NewMetricsHighCardinalityDetectedTrackerWithDefaults() *MetricsHighCardinal
 
 // GetRetention returns the Retention field value if set, zero value otherwise.
 func (o *MetricsHighCardinalityDetectedTracker) GetRetention() string {
-	if o == nil || o.Retention == nil {
+	if o == nil || IsNil(o.Retention) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *MetricsHighCardinalityDetectedTracker) GetRetention() string {
 // GetRetentionOk returns a tuple with the Retention field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsHighCardinalityDetectedTracker) GetRetentionOk() (*string, bool) {
-	if o == nil || o.Retention == nil {
+	if o == nil || IsNil(o.Retention) {
 		return nil, false
 	}
 	return o.Retention, true
@@ -61,7 +64,7 @@ func (o *MetricsHighCardinalityDetectedTracker) GetRetentionOk() (*string, bool)
 
 // HasRetention returns a boolean if a field has been set.
 func (o *MetricsHighCardinalityDetectedTracker) HasRetention() bool {
-	if o != nil && o.Retention != nil {
+	if o != nil && !IsNil(o.Retention) {
 		return true
 	}
 
@@ -74,19 +77,27 @@ func (o *MetricsHighCardinalityDetectedTracker) SetRetention(v string) {
 }
 
 func (o MetricsHighCardinalityDetectedTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetricsHighCardinalityDetectedTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.Retention != nil {
+	if !IsNil(o.Retention) {
 		toSerialize["retention"] = o.Retention
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMetricsHighCardinalityDetectedTracker struct {

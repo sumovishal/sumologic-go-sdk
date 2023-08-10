@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VisualAxisData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualAxisData{}
 
 // VisualAxisData struct for VisualAxisData
 type VisualAxisData struct {
@@ -39,7 +42,7 @@ func NewVisualAxisDataWithDefaults() *VisualAxisData {
 
 // GetIndex returns the Index field value if set, zero value otherwise.
 func (o *VisualAxisData) GetIndex() int32 {
-	if o == nil || o.Index == nil {
+	if o == nil || IsNil(o.Index) {
 		var ret int32
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *VisualAxisData) GetIndex() int32 {
 // GetIndexOk returns a tuple with the Index field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualAxisData) GetIndexOk() (*int32, bool) {
-	if o == nil || o.Index == nil {
+	if o == nil || IsNil(o.Index) {
 		return nil, false
 	}
 	return o.Index, true
@@ -57,7 +60,7 @@ func (o *VisualAxisData) GetIndexOk() (*int32, bool) {
 
 // HasIndex returns a boolean if a field has been set.
 func (o *VisualAxisData) HasIndex() bool {
-	if o != nil && o.Index != nil {
+	if o != nil && !IsNil(o.Index) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *VisualAxisData) SetIndex(v int32) {
 }
 
 func (o VisualAxisData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Index != nil {
-		toSerialize["index"] = o.Index
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualAxisData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Index) {
+		toSerialize["index"] = o.Index
+	}
+	return toSerialize, nil
 }
 
 type NullableVisualAxisData struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ServiceNow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceNow{}
+
 // ServiceNow struct for ServiceNow
 type ServiceNow struct {
 	Action
@@ -23,6 +26,8 @@ type ServiceNow struct {
 	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	// The override of the resolution JSON payload of the connection. Should be in JSON format.
+	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
 }
 
 // NewServiceNow instantiates a new ServiceNow object
@@ -70,7 +75,7 @@ func (o *ServiceNow) SetConnectionId(v string) {
 
 // GetConnectionSubtype returns the ConnectionSubtype field value if set, zero value otherwise.
 func (o *ServiceNow) GetConnectionSubtype() string {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		var ret string
 		return ret
 	}
@@ -80,7 +85,7 @@ func (o *ServiceNow) GetConnectionSubtype() string {
 // GetConnectionSubtypeOk returns a tuple with the ConnectionSubtype field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNow) GetConnectionSubtypeOk() (*string, bool) {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		return nil, false
 	}
 	return o.ConnectionSubtype, true
@@ -88,7 +93,7 @@ func (o *ServiceNow) GetConnectionSubtypeOk() (*string, bool) {
 
 // HasConnectionSubtype returns a boolean if a field has been set.
 func (o *ServiceNow) HasConnectionSubtype() bool {
-	if o != nil && o.ConnectionSubtype != nil {
+	if o != nil && !IsNil(o.ConnectionSubtype) {
 		return true
 	}
 
@@ -102,7 +107,7 @@ func (o *ServiceNow) SetConnectionSubtype(v string) {
 
 // GetPayloadOverride returns the PayloadOverride field value if set, zero value otherwise.
 func (o *ServiceNow) GetPayloadOverride() string {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		var ret string
 		return ret
 	}
@@ -112,7 +117,7 @@ func (o *ServiceNow) GetPayloadOverride() string {
 // GetPayloadOverrideOk returns a tuple with the PayloadOverride field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceNow) GetPayloadOverrideOk() (*string, bool) {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		return nil, false
 	}
 	return o.PayloadOverride, true
@@ -120,7 +125,7 @@ func (o *ServiceNow) GetPayloadOverrideOk() (*string, bool) {
 
 // HasPayloadOverride returns a boolean if a field has been set.
 func (o *ServiceNow) HasPayloadOverride() bool {
-	if o != nil && o.PayloadOverride != nil {
+	if o != nil && !IsNil(o.PayloadOverride) {
 		return true
 	}
 
@@ -132,26 +137,67 @@ func (o *ServiceNow) SetPayloadOverride(v string) {
 	o.PayloadOverride = &v
 }
 
+// GetResolutionPayloadOverride returns the ResolutionPayloadOverride field value if set, zero value otherwise.
+func (o *ServiceNow) GetResolutionPayloadOverride() string {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		var ret string
+		return ret
+	}
+	return *o.ResolutionPayloadOverride
+}
+
+// GetResolutionPayloadOverrideOk returns a tuple with the ResolutionPayloadOverride field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceNow) GetResolutionPayloadOverrideOk() (*string, bool) {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		return nil, false
+	}
+	return o.ResolutionPayloadOverride, true
+}
+
+// HasResolutionPayloadOverride returns a boolean if a field has been set.
+func (o *ServiceNow) HasResolutionPayloadOverride() bool {
+	if o != nil && !IsNil(o.ResolutionPayloadOverride) {
+		return true
+	}
+
+	return false
+}
+
+// SetResolutionPayloadOverride gets a reference to the given string and assigns it to the ResolutionPayloadOverride field.
+func (o *ServiceNow) SetResolutionPayloadOverride(v string) {
+	o.ResolutionPayloadOverride = &v
+}
+
 func (o ServiceNow) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ServiceNow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAction, errAction := json.Marshal(o.Action)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
 	errAction = json.Unmarshal([]byte(serializedAction), &toSerialize)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
-	if true {
-		toSerialize["connectionId"] = o.ConnectionId
-	}
-	if o.ConnectionSubtype != nil {
+	toSerialize["connectionId"] = o.ConnectionId
+	if !IsNil(o.ConnectionSubtype) {
 		toSerialize["connectionSubtype"] = o.ConnectionSubtype
 	}
-	if o.PayloadOverride != nil {
+	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
-	return json.Marshal(toSerialize)
+	if !IsNil(o.ResolutionPayloadOverride) {
+		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceNow struct {

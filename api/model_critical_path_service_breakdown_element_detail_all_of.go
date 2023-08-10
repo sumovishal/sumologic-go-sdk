@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CriticalPathServiceBreakdownElementDetailAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CriticalPathServiceBreakdownElementDetailAllOf{}
 
 // CriticalPathServiceBreakdownElementDetailAllOf struct for CriticalPathServiceBreakdownElementDetailAllOf
 type CriticalPathServiceBreakdownElementDetailAllOf struct {
@@ -90,14 +93,18 @@ func (o *CriticalPathServiceBreakdownElementDetailAllOf) SetLongestSegmentDurati
 }
 
 func (o CriticalPathServiceBreakdownElementDetailAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["numSpans"] = o.NumSpans
-	}
-	if true {
-		toSerialize["longestSegmentDuration"] = o.LongestSegmentDuration
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CriticalPathServiceBreakdownElementDetailAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["numSpans"] = o.NumSpans
+	toSerialize["longestSegmentDuration"] = o.LongestSegmentDuration
+	return toSerialize, nil
 }
 
 type NullableCriticalPathServiceBreakdownElementDetailAllOf struct {

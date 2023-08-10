@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the SamlIdentityProvider type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SamlIdentityProvider{}
 
 // SamlIdentityProvider struct for SamlIdentityProvider
 type SamlIdentityProvider struct {
@@ -158,7 +161,7 @@ func NewSamlIdentityProviderWithDefaults() *SamlIdentityProvider {
 // GetSpInitiatedLoginPath returns the SpInitiatedLoginPath field value if set, zero value otherwise.
 // Deprecated
 func (o *SamlIdentityProvider) GetSpInitiatedLoginPath() string {
-	if o == nil || o.SpInitiatedLoginPath == nil {
+	if o == nil || IsNil(o.SpInitiatedLoginPath) {
 		var ret string
 		return ret
 	}
@@ -169,7 +172,7 @@ func (o *SamlIdentityProvider) GetSpInitiatedLoginPath() string {
 // and a boolean to check if the value has been set.
 // Deprecated
 func (o *SamlIdentityProvider) GetSpInitiatedLoginPathOk() (*string, bool) {
-	if o == nil || o.SpInitiatedLoginPath == nil {
+	if o == nil || IsNil(o.SpInitiatedLoginPath) {
 		return nil, false
 	}
 	return o.SpInitiatedLoginPath, true
@@ -177,7 +180,7 @@ func (o *SamlIdentityProvider) GetSpInitiatedLoginPathOk() (*string, bool) {
 
 // HasSpInitiatedLoginPath returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasSpInitiatedLoginPath() bool {
-	if o != nil && o.SpInitiatedLoginPath != nil {
+	if o != nil && !IsNil(o.SpInitiatedLoginPath) {
 		return true
 	}
 
@@ -240,7 +243,7 @@ func (o *SamlIdentityProvider) SetIssuer(v string) {
 
 // GetSpInitiatedLoginEnabled returns the SpInitiatedLoginEnabled field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetSpInitiatedLoginEnabled() bool {
-	if o == nil || o.SpInitiatedLoginEnabled == nil {
+	if o == nil || IsNil(o.SpInitiatedLoginEnabled) {
 		var ret bool
 		return ret
 	}
@@ -250,7 +253,7 @@ func (o *SamlIdentityProvider) GetSpInitiatedLoginEnabled() bool {
 // GetSpInitiatedLoginEnabledOk returns a tuple with the SpInitiatedLoginEnabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetSpInitiatedLoginEnabledOk() (*bool, bool) {
-	if o == nil || o.SpInitiatedLoginEnabled == nil {
+	if o == nil || IsNil(o.SpInitiatedLoginEnabled) {
 		return nil, false
 	}
 	return o.SpInitiatedLoginEnabled, true
@@ -258,7 +261,7 @@ func (o *SamlIdentityProvider) GetSpInitiatedLoginEnabledOk() (*bool, bool) {
 
 // HasSpInitiatedLoginEnabled returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasSpInitiatedLoginEnabled() bool {
-	if o != nil && o.SpInitiatedLoginEnabled != nil {
+	if o != nil && !IsNil(o.SpInitiatedLoginEnabled) {
 		return true
 	}
 
@@ -272,7 +275,7 @@ func (o *SamlIdentityProvider) SetSpInitiatedLoginEnabled(v bool) {
 
 // GetAuthnRequestUrl returns the AuthnRequestUrl field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetAuthnRequestUrl() string {
-	if o == nil || o.AuthnRequestUrl == nil {
+	if o == nil || IsNil(o.AuthnRequestUrl) {
 		var ret string
 		return ret
 	}
@@ -282,7 +285,7 @@ func (o *SamlIdentityProvider) GetAuthnRequestUrl() string {
 // GetAuthnRequestUrlOk returns a tuple with the AuthnRequestUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetAuthnRequestUrlOk() (*string, bool) {
-	if o == nil || o.AuthnRequestUrl == nil {
+	if o == nil || IsNil(o.AuthnRequestUrl) {
 		return nil, false
 	}
 	return o.AuthnRequestUrl, true
@@ -290,7 +293,7 @@ func (o *SamlIdentityProvider) GetAuthnRequestUrlOk() (*string, bool) {
 
 // HasAuthnRequestUrl returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasAuthnRequestUrl() bool {
-	if o != nil && o.AuthnRequestUrl != nil {
+	if o != nil && !IsNil(o.AuthnRequestUrl) {
 		return true
 	}
 
@@ -328,7 +331,7 @@ func (o *SamlIdentityProvider) SetX509cert1(v string) {
 
 // GetX509cert2 returns the X509cert2 field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetX509cert2() string {
-	if o == nil || o.X509cert2 == nil {
+	if o == nil || IsNil(o.X509cert2) {
 		var ret string
 		return ret
 	}
@@ -338,7 +341,7 @@ func (o *SamlIdentityProvider) GetX509cert2() string {
 // GetX509cert2Ok returns a tuple with the X509cert2 field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetX509cert2Ok() (*string, bool) {
-	if o == nil || o.X509cert2 == nil {
+	if o == nil || IsNil(o.X509cert2) {
 		return nil, false
 	}
 	return o.X509cert2, true
@@ -346,7 +349,7 @@ func (o *SamlIdentityProvider) GetX509cert2Ok() (*string, bool) {
 
 // HasX509cert2 returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasX509cert2() bool {
-	if o != nil && o.X509cert2 != nil {
+	if o != nil && !IsNil(o.X509cert2) {
 		return true
 	}
 
@@ -360,7 +363,7 @@ func (o *SamlIdentityProvider) SetX509cert2(v string) {
 
 // GetX509cert3 returns the X509cert3 field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetX509cert3() string {
-	if o == nil || o.X509cert3 == nil {
+	if o == nil || IsNil(o.X509cert3) {
 		var ret string
 		return ret
 	}
@@ -370,7 +373,7 @@ func (o *SamlIdentityProvider) GetX509cert3() string {
 // GetX509cert3Ok returns a tuple with the X509cert3 field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetX509cert3Ok() (*string, bool) {
-	if o == nil || o.X509cert3 == nil {
+	if o == nil || IsNil(o.X509cert3) {
 		return nil, false
 	}
 	return o.X509cert3, true
@@ -378,7 +381,7 @@ func (o *SamlIdentityProvider) GetX509cert3Ok() (*string, bool) {
 
 // HasX509cert3 returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasX509cert3() bool {
-	if o != nil && o.X509cert3 != nil {
+	if o != nil && !IsNil(o.X509cert3) {
 		return true
 	}
 
@@ -392,7 +395,7 @@ func (o *SamlIdentityProvider) SetX509cert3(v string) {
 
 // GetOnDemandProvisioningEnabled returns the OnDemandProvisioningEnabled field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetOnDemandProvisioningEnabled() OnDemandProvisioningInfo {
-	if o == nil || o.OnDemandProvisioningEnabled == nil {
+	if o == nil || IsNil(o.OnDemandProvisioningEnabled) {
 		var ret OnDemandProvisioningInfo
 		return ret
 	}
@@ -402,7 +405,7 @@ func (o *SamlIdentityProvider) GetOnDemandProvisioningEnabled() OnDemandProvisio
 // GetOnDemandProvisioningEnabledOk returns a tuple with the OnDemandProvisioningEnabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetOnDemandProvisioningEnabledOk() (*OnDemandProvisioningInfo, bool) {
-	if o == nil || o.OnDemandProvisioningEnabled == nil {
+	if o == nil || IsNil(o.OnDemandProvisioningEnabled) {
 		return nil, false
 	}
 	return o.OnDemandProvisioningEnabled, true
@@ -410,7 +413,7 @@ func (o *SamlIdentityProvider) GetOnDemandProvisioningEnabledOk() (*OnDemandProv
 
 // HasOnDemandProvisioningEnabled returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasOnDemandProvisioningEnabled() bool {
-	if o != nil && o.OnDemandProvisioningEnabled != nil {
+	if o != nil && !IsNil(o.OnDemandProvisioningEnabled) {
 		return true
 	}
 
@@ -424,7 +427,7 @@ func (o *SamlIdentityProvider) SetOnDemandProvisioningEnabled(v OnDemandProvisio
 
 // GetRolesAttribute returns the RolesAttribute field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetRolesAttribute() string {
-	if o == nil || o.RolesAttribute == nil {
+	if o == nil || IsNil(o.RolesAttribute) {
 		var ret string
 		return ret
 	}
@@ -434,7 +437,7 @@ func (o *SamlIdentityProvider) GetRolesAttribute() string {
 // GetRolesAttributeOk returns a tuple with the RolesAttribute field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetRolesAttributeOk() (*string, bool) {
-	if o == nil || o.RolesAttribute == nil {
+	if o == nil || IsNil(o.RolesAttribute) {
 		return nil, false
 	}
 	return o.RolesAttribute, true
@@ -442,7 +445,7 @@ func (o *SamlIdentityProvider) GetRolesAttributeOk() (*string, bool) {
 
 // HasRolesAttribute returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasRolesAttribute() bool {
-	if o != nil && o.RolesAttribute != nil {
+	if o != nil && !IsNil(o.RolesAttribute) {
 		return true
 	}
 
@@ -456,7 +459,7 @@ func (o *SamlIdentityProvider) SetRolesAttribute(v string) {
 
 // GetLogoutEnabled returns the LogoutEnabled field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetLogoutEnabled() bool {
-	if o == nil || o.LogoutEnabled == nil {
+	if o == nil || IsNil(o.LogoutEnabled) {
 		var ret bool
 		return ret
 	}
@@ -466,7 +469,7 @@ func (o *SamlIdentityProvider) GetLogoutEnabled() bool {
 // GetLogoutEnabledOk returns a tuple with the LogoutEnabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetLogoutEnabledOk() (*bool, bool) {
-	if o == nil || o.LogoutEnabled == nil {
+	if o == nil || IsNil(o.LogoutEnabled) {
 		return nil, false
 	}
 	return o.LogoutEnabled, true
@@ -474,7 +477,7 @@ func (o *SamlIdentityProvider) GetLogoutEnabledOk() (*bool, bool) {
 
 // HasLogoutEnabled returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasLogoutEnabled() bool {
-	if o != nil && o.LogoutEnabled != nil {
+	if o != nil && !IsNil(o.LogoutEnabled) {
 		return true
 	}
 
@@ -488,7 +491,7 @@ func (o *SamlIdentityProvider) SetLogoutEnabled(v bool) {
 
 // GetLogoutUrl returns the LogoutUrl field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetLogoutUrl() string {
-	if o == nil || o.LogoutUrl == nil {
+	if o == nil || IsNil(o.LogoutUrl) {
 		var ret string
 		return ret
 	}
@@ -498,7 +501,7 @@ func (o *SamlIdentityProvider) GetLogoutUrl() string {
 // GetLogoutUrlOk returns a tuple with the LogoutUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetLogoutUrlOk() (*string, bool) {
-	if o == nil || o.LogoutUrl == nil {
+	if o == nil || IsNil(o.LogoutUrl) {
 		return nil, false
 	}
 	return o.LogoutUrl, true
@@ -506,7 +509,7 @@ func (o *SamlIdentityProvider) GetLogoutUrlOk() (*string, bool) {
 
 // HasLogoutUrl returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasLogoutUrl() bool {
-	if o != nil && o.LogoutUrl != nil {
+	if o != nil && !IsNil(o.LogoutUrl) {
 		return true
 	}
 
@@ -520,7 +523,7 @@ func (o *SamlIdentityProvider) SetLogoutUrl(v string) {
 
 // GetEmailAttribute returns the EmailAttribute field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetEmailAttribute() string {
-	if o == nil || o.EmailAttribute == nil {
+	if o == nil || IsNil(o.EmailAttribute) {
 		var ret string
 		return ret
 	}
@@ -530,7 +533,7 @@ func (o *SamlIdentityProvider) GetEmailAttribute() string {
 // GetEmailAttributeOk returns a tuple with the EmailAttribute field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetEmailAttributeOk() (*string, bool) {
-	if o == nil || o.EmailAttribute == nil {
+	if o == nil || IsNil(o.EmailAttribute) {
 		return nil, false
 	}
 	return o.EmailAttribute, true
@@ -538,7 +541,7 @@ func (o *SamlIdentityProvider) GetEmailAttributeOk() (*string, bool) {
 
 // HasEmailAttribute returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasEmailAttribute() bool {
-	if o != nil && o.EmailAttribute != nil {
+	if o != nil && !IsNil(o.EmailAttribute) {
 		return true
 	}
 
@@ -552,7 +555,7 @@ func (o *SamlIdentityProvider) SetEmailAttribute(v string) {
 
 // GetDebugMode returns the DebugMode field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetDebugMode() bool {
-	if o == nil || o.DebugMode == nil {
+	if o == nil || IsNil(o.DebugMode) {
 		var ret bool
 		return ret
 	}
@@ -562,7 +565,7 @@ func (o *SamlIdentityProvider) GetDebugMode() bool {
 // GetDebugModeOk returns a tuple with the DebugMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetDebugModeOk() (*bool, bool) {
-	if o == nil || o.DebugMode == nil {
+	if o == nil || IsNil(o.DebugMode) {
 		return nil, false
 	}
 	return o.DebugMode, true
@@ -570,7 +573,7 @@ func (o *SamlIdentityProvider) GetDebugModeOk() (*bool, bool) {
 
 // HasDebugMode returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasDebugMode() bool {
-	if o != nil && o.DebugMode != nil {
+	if o != nil && !IsNil(o.DebugMode) {
 		return true
 	}
 
@@ -584,7 +587,7 @@ func (o *SamlIdentityProvider) SetDebugMode(v bool) {
 
 // GetSignAuthnRequest returns the SignAuthnRequest field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetSignAuthnRequest() bool {
-	if o == nil || o.SignAuthnRequest == nil {
+	if o == nil || IsNil(o.SignAuthnRequest) {
 		var ret bool
 		return ret
 	}
@@ -594,7 +597,7 @@ func (o *SamlIdentityProvider) GetSignAuthnRequest() bool {
 // GetSignAuthnRequestOk returns a tuple with the SignAuthnRequest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetSignAuthnRequestOk() (*bool, bool) {
-	if o == nil || o.SignAuthnRequest == nil {
+	if o == nil || IsNil(o.SignAuthnRequest) {
 		return nil, false
 	}
 	return o.SignAuthnRequest, true
@@ -602,7 +605,7 @@ func (o *SamlIdentityProvider) GetSignAuthnRequestOk() (*bool, bool) {
 
 // HasSignAuthnRequest returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasSignAuthnRequest() bool {
-	if o != nil && o.SignAuthnRequest != nil {
+	if o != nil && !IsNil(o.SignAuthnRequest) {
 		return true
 	}
 
@@ -616,7 +619,7 @@ func (o *SamlIdentityProvider) SetSignAuthnRequest(v bool) {
 
 // GetDisableRequestedAuthnContext returns the DisableRequestedAuthnContext field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetDisableRequestedAuthnContext() bool {
-	if o == nil || o.DisableRequestedAuthnContext == nil {
+	if o == nil || IsNil(o.DisableRequestedAuthnContext) {
 		var ret bool
 		return ret
 	}
@@ -626,7 +629,7 @@ func (o *SamlIdentityProvider) GetDisableRequestedAuthnContext() bool {
 // GetDisableRequestedAuthnContextOk returns a tuple with the DisableRequestedAuthnContext field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetDisableRequestedAuthnContextOk() (*bool, bool) {
-	if o == nil || o.DisableRequestedAuthnContext == nil {
+	if o == nil || IsNil(o.DisableRequestedAuthnContext) {
 		return nil, false
 	}
 	return o.DisableRequestedAuthnContext, true
@@ -634,7 +637,7 @@ func (o *SamlIdentityProvider) GetDisableRequestedAuthnContextOk() (*bool, bool)
 
 // HasDisableRequestedAuthnContext returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasDisableRequestedAuthnContext() bool {
-	if o != nil && o.DisableRequestedAuthnContext != nil {
+	if o != nil && !IsNil(o.DisableRequestedAuthnContext) {
 		return true
 	}
 
@@ -648,7 +651,7 @@ func (o *SamlIdentityProvider) SetDisableRequestedAuthnContext(v bool) {
 
 // GetIsRedirectBinding returns the IsRedirectBinding field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetIsRedirectBinding() bool {
-	if o == nil || o.IsRedirectBinding == nil {
+	if o == nil || IsNil(o.IsRedirectBinding) {
 		var ret bool
 		return ret
 	}
@@ -658,7 +661,7 @@ func (o *SamlIdentityProvider) GetIsRedirectBinding() bool {
 // GetIsRedirectBindingOk returns a tuple with the IsRedirectBinding field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetIsRedirectBindingOk() (*bool, bool) {
-	if o == nil || o.IsRedirectBinding == nil {
+	if o == nil || IsNil(o.IsRedirectBinding) {
 		return nil, false
 	}
 	return o.IsRedirectBinding, true
@@ -666,7 +669,7 @@ func (o *SamlIdentityProvider) GetIsRedirectBindingOk() (*bool, bool) {
 
 // HasIsRedirectBinding returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasIsRedirectBinding() bool {
-	if o != nil && o.IsRedirectBinding != nil {
+	if o != nil && !IsNil(o.IsRedirectBinding) {
 		return true
 	}
 
@@ -824,7 +827,7 @@ func (o *SamlIdentityProvider) SetId(v string) {
 
 // GetAssertionConsumerUrl returns the AssertionConsumerUrl field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetAssertionConsumerUrl() string {
-	if o == nil || o.AssertionConsumerUrl == nil {
+	if o == nil || IsNil(o.AssertionConsumerUrl) {
 		var ret string
 		return ret
 	}
@@ -834,7 +837,7 @@ func (o *SamlIdentityProvider) GetAssertionConsumerUrl() string {
 // GetAssertionConsumerUrlOk returns a tuple with the AssertionConsumerUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetAssertionConsumerUrlOk() (*string, bool) {
-	if o == nil || o.AssertionConsumerUrl == nil {
+	if o == nil || IsNil(o.AssertionConsumerUrl) {
 		return nil, false
 	}
 	return o.AssertionConsumerUrl, true
@@ -842,7 +845,7 @@ func (o *SamlIdentityProvider) GetAssertionConsumerUrlOk() (*string, bool) {
 
 // HasAssertionConsumerUrl returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasAssertionConsumerUrl() bool {
-	if o != nil && o.AssertionConsumerUrl != nil {
+	if o != nil && !IsNil(o.AssertionConsumerUrl) {
 		return true
 	}
 
@@ -856,7 +859,7 @@ func (o *SamlIdentityProvider) SetAssertionConsumerUrl(v string) {
 
 // GetEntityId returns the EntityId field value if set, zero value otherwise.
 func (o *SamlIdentityProvider) GetEntityId() string {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		var ret string
 		return ret
 	}
@@ -866,7 +869,7 @@ func (o *SamlIdentityProvider) GetEntityId() string {
 // GetEntityIdOk returns a tuple with the EntityId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SamlIdentityProvider) GetEntityIdOk() (*string, bool) {
-	if o == nil || o.EntityId == nil {
+	if o == nil || IsNil(o.EntityId) {
 		return nil, false
 	}
 	return o.EntityId, true
@@ -874,7 +877,7 @@ func (o *SamlIdentityProvider) GetEntityIdOk() (*string, bool) {
 
 // HasEntityId returns a boolean if a field has been set.
 func (o *SamlIdentityProvider) HasEntityId() bool {
-	if o != nil && o.EntityId != nil {
+	if o != nil && !IsNil(o.EntityId) {
 		return true
 	}
 
@@ -887,83 +890,73 @@ func (o *SamlIdentityProvider) SetEntityId(v string) {
 }
 
 func (o SamlIdentityProvider) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.SpInitiatedLoginPath != nil {
-		toSerialize["spInitiatedLoginPath"] = o.SpInitiatedLoginPath
-	}
-	if true {
-		toSerialize["configurationName"] = o.ConfigurationName
-	}
-	if true {
-		toSerialize["issuer"] = o.Issuer
-	}
-	if o.SpInitiatedLoginEnabled != nil {
-		toSerialize["spInitiatedLoginEnabled"] = o.SpInitiatedLoginEnabled
-	}
-	if o.AuthnRequestUrl != nil {
-		toSerialize["authnRequestUrl"] = o.AuthnRequestUrl
-	}
-	if true {
-		toSerialize["x509cert1"] = o.X509cert1
-	}
-	if o.X509cert2 != nil {
-		toSerialize["x509cert2"] = o.X509cert2
-	}
-	if o.X509cert3 != nil {
-		toSerialize["x509cert3"] = o.X509cert3
-	}
-	if o.OnDemandProvisioningEnabled != nil {
-		toSerialize["onDemandProvisioningEnabled"] = o.OnDemandProvisioningEnabled
-	}
-	if o.RolesAttribute != nil {
-		toSerialize["rolesAttribute"] = o.RolesAttribute
-	}
-	if o.LogoutEnabled != nil {
-		toSerialize["logoutEnabled"] = o.LogoutEnabled
-	}
-	if o.LogoutUrl != nil {
-		toSerialize["logoutUrl"] = o.LogoutUrl
-	}
-	if o.EmailAttribute != nil {
-		toSerialize["emailAttribute"] = o.EmailAttribute
-	}
-	if o.DebugMode != nil {
-		toSerialize["debugMode"] = o.DebugMode
-	}
-	if o.SignAuthnRequest != nil {
-		toSerialize["signAuthnRequest"] = o.SignAuthnRequest
-	}
-	if o.DisableRequestedAuthnContext != nil {
-		toSerialize["disableRequestedAuthnContext"] = o.DisableRequestedAuthnContext
-	}
-	if o.IsRedirectBinding != nil {
-		toSerialize["isRedirectBinding"] = o.IsRedirectBinding
-	}
-	if true {
-		toSerialize["certificate"] = o.Certificate
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.AssertionConsumerUrl != nil {
-		toSerialize["assertionConsumerUrl"] = o.AssertionConsumerUrl
-	}
-	if o.EntityId != nil {
-		toSerialize["entityId"] = o.EntityId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SamlIdentityProvider) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.SpInitiatedLoginPath) {
+		toSerialize["spInitiatedLoginPath"] = o.SpInitiatedLoginPath
+	}
+	toSerialize["configurationName"] = o.ConfigurationName
+	toSerialize["issuer"] = o.Issuer
+	if !IsNil(o.SpInitiatedLoginEnabled) {
+		toSerialize["spInitiatedLoginEnabled"] = o.SpInitiatedLoginEnabled
+	}
+	if !IsNil(o.AuthnRequestUrl) {
+		toSerialize["authnRequestUrl"] = o.AuthnRequestUrl
+	}
+	toSerialize["x509cert1"] = o.X509cert1
+	if !IsNil(o.X509cert2) {
+		toSerialize["x509cert2"] = o.X509cert2
+	}
+	if !IsNil(o.X509cert3) {
+		toSerialize["x509cert3"] = o.X509cert3
+	}
+	if !IsNil(o.OnDemandProvisioningEnabled) {
+		toSerialize["onDemandProvisioningEnabled"] = o.OnDemandProvisioningEnabled
+	}
+	if !IsNil(o.RolesAttribute) {
+		toSerialize["rolesAttribute"] = o.RolesAttribute
+	}
+	if !IsNil(o.LogoutEnabled) {
+		toSerialize["logoutEnabled"] = o.LogoutEnabled
+	}
+	if !IsNil(o.LogoutUrl) {
+		toSerialize["logoutUrl"] = o.LogoutUrl
+	}
+	if !IsNil(o.EmailAttribute) {
+		toSerialize["emailAttribute"] = o.EmailAttribute
+	}
+	if !IsNil(o.DebugMode) {
+		toSerialize["debugMode"] = o.DebugMode
+	}
+	if !IsNil(o.SignAuthnRequest) {
+		toSerialize["signAuthnRequest"] = o.SignAuthnRequest
+	}
+	if !IsNil(o.DisableRequestedAuthnContext) {
+		toSerialize["disableRequestedAuthnContext"] = o.DisableRequestedAuthnContext
+	}
+	if !IsNil(o.IsRedirectBinding) {
+		toSerialize["isRedirectBinding"] = o.IsRedirectBinding
+	}
+	toSerialize["certificate"] = o.Certificate
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	if !IsNil(o.AssertionConsumerUrl) {
+		toSerialize["assertionConsumerUrl"] = o.AssertionConsumerUrl
+	}
+	if !IsNil(o.EntityId) {
+		toSerialize["entityId"] = o.EntityId
+	}
+	return toSerialize, nil
 }
 
 type NullableSamlIdentityProvider struct {

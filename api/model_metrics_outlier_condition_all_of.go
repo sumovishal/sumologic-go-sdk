@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsOutlierConditionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsOutlierConditionAllOf{}
 
 // MetricsOutlierConditionAllOf A rule that defines how metrics monitor should evaluate outlier data and trigger notifications.
 type MetricsOutlierConditionAllOf struct {
@@ -55,7 +58,7 @@ func NewMetricsOutlierConditionAllOfWithDefaults() *MetricsOutlierConditionAllOf
 
 // GetBaselineWindow returns the BaselineWindow field value if set, zero value otherwise.
 func (o *MetricsOutlierConditionAllOf) GetBaselineWindow() string {
-	if o == nil || o.BaselineWindow == nil {
+	if o == nil || IsNil(o.BaselineWindow) {
 		var ret string
 		return ret
 	}
@@ -65,7 +68,7 @@ func (o *MetricsOutlierConditionAllOf) GetBaselineWindow() string {
 // GetBaselineWindowOk returns a tuple with the BaselineWindow field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsOutlierConditionAllOf) GetBaselineWindowOk() (*string, bool) {
-	if o == nil || o.BaselineWindow == nil {
+	if o == nil || IsNil(o.BaselineWindow) {
 		return nil, false
 	}
 	return o.BaselineWindow, true
@@ -73,7 +76,7 @@ func (o *MetricsOutlierConditionAllOf) GetBaselineWindowOk() (*string, bool) {
 
 // HasBaselineWindow returns a boolean if a field has been set.
 func (o *MetricsOutlierConditionAllOf) HasBaselineWindow() bool {
-	if o != nil && o.BaselineWindow != nil {
+	if o != nil && !IsNil(o.BaselineWindow) {
 		return true
 	}
 
@@ -87,7 +90,7 @@ func (o *MetricsOutlierConditionAllOf) SetBaselineWindow(v string) {
 
 // GetDirection returns the Direction field value if set, zero value otherwise.
 func (o *MetricsOutlierConditionAllOf) GetDirection() string {
-	if o == nil || o.Direction == nil {
+	if o == nil || IsNil(o.Direction) {
 		var ret string
 		return ret
 	}
@@ -97,7 +100,7 @@ func (o *MetricsOutlierConditionAllOf) GetDirection() string {
 // GetDirectionOk returns a tuple with the Direction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsOutlierConditionAllOf) GetDirectionOk() (*string, bool) {
-	if o == nil || o.Direction == nil {
+	if o == nil || IsNil(o.Direction) {
 		return nil, false
 	}
 	return o.Direction, true
@@ -105,7 +108,7 @@ func (o *MetricsOutlierConditionAllOf) GetDirectionOk() (*string, bool) {
 
 // HasDirection returns a boolean if a field has been set.
 func (o *MetricsOutlierConditionAllOf) HasDirection() bool {
-	if o != nil && o.Direction != nil {
+	if o != nil && !IsNil(o.Direction) {
 		return true
 	}
 
@@ -119,7 +122,7 @@ func (o *MetricsOutlierConditionAllOf) SetDirection(v string) {
 
 // GetThreshold returns the Threshold field value if set, zero value otherwise.
 func (o *MetricsOutlierConditionAllOf) GetThreshold() float64 {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		var ret float64
 		return ret
 	}
@@ -129,7 +132,7 @@ func (o *MetricsOutlierConditionAllOf) GetThreshold() float64 {
 // GetThresholdOk returns a tuple with the Threshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsOutlierConditionAllOf) GetThresholdOk() (*float64, bool) {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		return nil, false
 	}
 	return o.Threshold, true
@@ -137,7 +140,7 @@ func (o *MetricsOutlierConditionAllOf) GetThresholdOk() (*float64, bool) {
 
 // HasThreshold returns a boolean if a field has been set.
 func (o *MetricsOutlierConditionAllOf) HasThreshold() bool {
-	if o != nil && o.Threshold != nil {
+	if o != nil && !IsNil(o.Threshold) {
 		return true
 	}
 
@@ -150,17 +153,25 @@ func (o *MetricsOutlierConditionAllOf) SetThreshold(v float64) {
 }
 
 func (o MetricsOutlierConditionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.BaselineWindow != nil {
-		toSerialize["baselineWindow"] = o.BaselineWindow
-	}
-	if o.Direction != nil {
-		toSerialize["direction"] = o.Direction
-	}
-	if o.Threshold != nil {
-		toSerialize["threshold"] = o.Threshold
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsOutlierConditionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BaselineWindow) {
+		toSerialize["baselineWindow"] = o.BaselineWindow
+	}
+	if !IsNil(o.Direction) {
+		toSerialize["direction"] = o.Direction
+	}
+	if !IsNil(o.Threshold) {
+		toSerialize["threshold"] = o.Threshold
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsOutlierConditionAllOf struct {

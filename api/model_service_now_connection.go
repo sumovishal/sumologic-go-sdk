@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,8 +12,10 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
+
+// checks if the ServiceNowConnection type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceNowConnection{}
 
 // ServiceNowConnection struct for ServiceNowConnection
 type ServiceNowConnection struct {
@@ -100,22 +102,26 @@ func (o *ServiceNowConnection) SetUsername(v string) {
 }
 
 func (o ServiceNowConnection) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ServiceNowConnection) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedConnection, errConnection := json.Marshal(o.Connection)
 	if errConnection != nil {
-		return []byte{}, errConnection
+		return map[string]interface{}{}, errConnection
 	}
 	errConnection = json.Unmarshal([]byte(serializedConnection), &toSerialize)
 	if errConnection != nil {
-		return []byte{}, errConnection
+		return map[string]interface{}{}, errConnection
 	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["username"] = o.Username
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["url"] = o.Url
+	toSerialize["username"] = o.Username
+	return toSerialize, nil
 }
 
 type NullableServiceNowConnection struct {

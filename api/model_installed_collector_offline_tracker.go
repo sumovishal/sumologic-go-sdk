@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the InstalledCollectorOfflineTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &InstalledCollectorOfflineTracker{}
 
 // InstalledCollectorOfflineTracker struct for InstalledCollectorOfflineTracker
 type InstalledCollectorOfflineTracker struct {
@@ -43,7 +46,7 @@ func NewInstalledCollectorOfflineTrackerWithDefaults() *InstalledCollectorOfflin
 
 // GetMinutesSinceLastHeartbeat returns the MinutesSinceLastHeartbeat field value if set, zero value otherwise.
 func (o *InstalledCollectorOfflineTracker) GetMinutesSinceLastHeartbeat() string {
-	if o == nil || o.MinutesSinceLastHeartbeat == nil {
+	if o == nil || IsNil(o.MinutesSinceLastHeartbeat) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *InstalledCollectorOfflineTracker) GetMinutesSinceLastHeartbeat() string
 // GetMinutesSinceLastHeartbeatOk returns a tuple with the MinutesSinceLastHeartbeat field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *InstalledCollectorOfflineTracker) GetMinutesSinceLastHeartbeatOk() (*string, bool) {
-	if o == nil || o.MinutesSinceLastHeartbeat == nil {
+	if o == nil || IsNil(o.MinutesSinceLastHeartbeat) {
 		return nil, false
 	}
 	return o.MinutesSinceLastHeartbeat, true
@@ -61,7 +64,7 @@ func (o *InstalledCollectorOfflineTracker) GetMinutesSinceLastHeartbeatOk() (*st
 
 // HasMinutesSinceLastHeartbeat returns a boolean if a field has been set.
 func (o *InstalledCollectorOfflineTracker) HasMinutesSinceLastHeartbeat() bool {
-	if o != nil && o.MinutesSinceLastHeartbeat != nil {
+	if o != nil && !IsNil(o.MinutesSinceLastHeartbeat) {
 		return true
 	}
 
@@ -74,19 +77,27 @@ func (o *InstalledCollectorOfflineTracker) SetMinutesSinceLastHeartbeat(v string
 }
 
 func (o InstalledCollectorOfflineTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o InstalledCollectorOfflineTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.MinutesSinceLastHeartbeat != nil {
+	if !IsNil(o.MinutesSinceLastHeartbeat) {
 		toSerialize["minutesSinceLastHeartbeat"] = o.MinutesSinceLastHeartbeat
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableInstalledCollectorOfflineTracker struct {

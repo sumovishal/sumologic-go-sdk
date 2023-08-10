@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContentPermissionUpdateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentPermissionUpdateRequest{}
 
 // ContentPermissionUpdateRequest struct for ContentPermissionUpdateRequest
 type ContentPermissionUpdateRequest struct {
@@ -117,17 +120,19 @@ func (o *ContentPermissionUpdateRequest) SetNotificationMessage(v string) {
 }
 
 func (o ContentPermissionUpdateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["contentPermissionAssignments"] = o.ContentPermissionAssignments
-	}
-	if true {
-		toSerialize["notifyRecipients"] = o.NotifyRecipients
-	}
-	if true {
-		toSerialize["notificationMessage"] = o.NotificationMessage
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentPermissionUpdateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["contentPermissionAssignments"] = o.ContentPermissionAssignments
+	toSerialize["notifyRecipients"] = o.NotifyRecipients
+	toSerialize["notificationMessage"] = o.NotificationMessage
+	return toSerialize, nil
 }
 
 type NullableContentPermissionUpdateRequest struct {

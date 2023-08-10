@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardSearchStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardSearchStatus{}
 
 // DashboardSearchStatus struct for DashboardSearchStatus
 type DashboardSearchStatus struct {
@@ -66,7 +69,7 @@ func (o *DashboardSearchStatus) SetState(v string) {
 
 // GetPercentCompleted returns the PercentCompleted field value if set, zero value otherwise.
 func (o *DashboardSearchStatus) GetPercentCompleted() int32 {
-	if o == nil || o.PercentCompleted == nil {
+	if o == nil || IsNil(o.PercentCompleted) {
 		var ret int32
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *DashboardSearchStatus) GetPercentCompleted() int32 {
 // GetPercentCompletedOk returns a tuple with the PercentCompleted field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchStatus) GetPercentCompletedOk() (*int32, bool) {
-	if o == nil || o.PercentCompleted == nil {
+	if o == nil || IsNil(o.PercentCompleted) {
 		return nil, false
 	}
 	return o.PercentCompleted, true
@@ -84,7 +87,7 @@ func (o *DashboardSearchStatus) GetPercentCompletedOk() (*int32, bool) {
 
 // HasPercentCompleted returns a boolean if a field has been set.
 func (o *DashboardSearchStatus) HasPercentCompleted() bool {
-	if o != nil && o.PercentCompleted != nil {
+	if o != nil && !IsNil(o.PercentCompleted) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *DashboardSearchStatus) SetPercentCompleted(v int32) {
 }
 
 func (o DashboardSearchStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["state"] = o.State
-	}
-	if o.PercentCompleted != nil {
-		toSerialize["percentCompleted"] = o.PercentCompleted
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardSearchStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["state"] = o.State
+	if !IsNil(o.PercentCompleted) {
+		toSerialize["percentCompleted"] = o.PercentCompleted
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardSearchStatus struct {

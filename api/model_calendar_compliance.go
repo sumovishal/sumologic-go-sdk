@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,11 @@ import (
 	"encoding/json"
 )
 
-// CalendarCompliance struct for CalendarCompliance
+// checks if the CalendarCompliance type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CalendarCompliance{}
+
+// CalendarCompliance Window for Calendar Compliance.
 type CalendarCompliance struct {
-	Compliance
 	// Type of Calendar Window (week/month/quarter).
 	WindowType string `json:"windowType"`
 	// Start of the calendar window. For week, it would be the day of the week (for e.g Sunday, Monday etc). For month, it will always be the first day of the month (therefore not required to specify for monthly compliance). For quarter, it would be the first month of the quarter (for e.g January, February etc.)
@@ -70,7 +72,7 @@ func (o *CalendarCompliance) SetWindowType(v string) {
 
 // GetStartFrom returns the StartFrom field value if set, zero value otherwise.
 func (o *CalendarCompliance) GetStartFrom() string {
-	if o == nil || o.StartFrom == nil {
+	if o == nil || IsNil(o.StartFrom) {
 		var ret string
 		return ret
 	}
@@ -80,7 +82,7 @@ func (o *CalendarCompliance) GetStartFrom() string {
 // GetStartFromOk returns a tuple with the StartFrom field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalendarCompliance) GetStartFromOk() (*string, bool) {
-	if o == nil || o.StartFrom == nil {
+	if o == nil || IsNil(o.StartFrom) {
 		return nil, false
 	}
 	return o.StartFrom, true
@@ -88,7 +90,7 @@ func (o *CalendarCompliance) GetStartFromOk() (*string, bool) {
 
 // HasStartFrom returns a boolean if a field has been set.
 func (o *CalendarCompliance) HasStartFrom() bool {
-	if o != nil && o.StartFrom != nil {
+	if o != nil && !IsNil(o.StartFrom) {
 		return true
 	}
 
@@ -101,22 +103,20 @@ func (o *CalendarCompliance) SetStartFrom(v string) {
 }
 
 func (o CalendarCompliance) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	serializedCompliance, errCompliance := json.Marshal(o.Compliance)
-	if errCompliance != nil {
-		return []byte{}, errCompliance
-	}
-	errCompliance = json.Unmarshal([]byte(serializedCompliance), &toSerialize)
-	if errCompliance != nil {
-		return []byte{}, errCompliance
-	}
-	if true {
-		toSerialize["windowType"] = o.WindowType
-	}
-	if o.StartFrom != nil {
-		toSerialize["startFrom"] = o.StartFrom
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CalendarCompliance) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["windowType"] = o.WindowType
+	if !IsNil(o.StartFrom) {
+		toSerialize["startFrom"] = o.StartFrom
+	}
+	return toSerialize, nil
 }
 
 type NullableCalendarCompliance struct {

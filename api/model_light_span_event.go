@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the LightSpanEvent type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LightSpanEvent{}
 
 // LightSpanEvent Light version of Span Event, without the attributes.
 type LightSpanEvent struct {
@@ -91,14 +94,18 @@ func (o *LightSpanEvent) SetName(v string) {
 }
 
 func (o LightSpanEvent) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timestamp"] = o.Timestamp
-	}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LightSpanEvent) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timestamp"] = o.Timestamp
+	toSerialize["name"] = o.Name
+	return toSerialize, nil
 }
 
 type NullableLightSpanEvent struct {

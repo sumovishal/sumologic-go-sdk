@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the MetricsSearchInstance type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsSearchInstance{}
 
 // MetricsSearchInstance struct for MetricsSearchInstance
 type MetricsSearchInstance struct {
@@ -148,7 +151,7 @@ func (o *MetricsSearchInstance) SetTimeRange(v ResolvableTimeRange) {
 
 // GetLogQuery returns the LogQuery field value if set, zero value otherwise.
 func (o *MetricsSearchInstance) GetLogQuery() string {
-	if o == nil || o.LogQuery == nil {
+	if o == nil || IsNil(o.LogQuery) {
 		var ret string
 		return ret
 	}
@@ -158,7 +161,7 @@ func (o *MetricsSearchInstance) GetLogQuery() string {
 // GetLogQueryOk returns a tuple with the LogQuery field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchInstance) GetLogQueryOk() (*string, bool) {
-	if o == nil || o.LogQuery == nil {
+	if o == nil || IsNil(o.LogQuery) {
 		return nil, false
 	}
 	return o.LogQuery, true
@@ -166,7 +169,7 @@ func (o *MetricsSearchInstance) GetLogQueryOk() (*string, bool) {
 
 // HasLogQuery returns a boolean if a field has been set.
 func (o *MetricsSearchInstance) HasLogQuery() bool {
-	if o != nil && o.LogQuery != nil {
+	if o != nil && !IsNil(o.LogQuery) {
 		return true
 	}
 
@@ -204,7 +207,7 @@ func (o *MetricsSearchInstance) SetMetricsQueries(v []MetricsSearchQuery) {
 
 // GetDesiredQuantizationInSecs returns the DesiredQuantizationInSecs field value if set, zero value otherwise.
 func (o *MetricsSearchInstance) GetDesiredQuantizationInSecs() int32 {
-	if o == nil || o.DesiredQuantizationInSecs == nil {
+	if o == nil || IsNil(o.DesiredQuantizationInSecs) {
 		var ret int32
 		return ret
 	}
@@ -214,7 +217,7 @@ func (o *MetricsSearchInstance) GetDesiredQuantizationInSecs() int32 {
 // GetDesiredQuantizationInSecsOk returns a tuple with the DesiredQuantizationInSecs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchInstance) GetDesiredQuantizationInSecsOk() (*int32, bool) {
-	if o == nil || o.DesiredQuantizationInSecs == nil {
+	if o == nil || IsNil(o.DesiredQuantizationInSecs) {
 		return nil, false
 	}
 	return o.DesiredQuantizationInSecs, true
@@ -222,7 +225,7 @@ func (o *MetricsSearchInstance) GetDesiredQuantizationInSecsOk() (*int32, bool) 
 
 // HasDesiredQuantizationInSecs returns a boolean if a field has been set.
 func (o *MetricsSearchInstance) HasDesiredQuantizationInSecs() bool {
-	if o != nil && o.DesiredQuantizationInSecs != nil {
+	if o != nil && !IsNil(o.DesiredQuantizationInSecs) {
 		return true
 	}
 
@@ -236,7 +239,7 @@ func (o *MetricsSearchInstance) SetDesiredQuantizationInSecs(v int32) {
 
 // GetProperties returns the Properties field value if set, zero value otherwise.
 func (o *MetricsSearchInstance) GetProperties() string {
-	if o == nil || o.Properties == nil {
+	if o == nil || IsNil(o.Properties) {
 		var ret string
 		return ret
 	}
@@ -246,7 +249,7 @@ func (o *MetricsSearchInstance) GetProperties() string {
 // GetPropertiesOk returns a tuple with the Properties field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchInstance) GetPropertiesOk() (*string, bool) {
-	if o == nil || o.Properties == nil {
+	if o == nil || IsNil(o.Properties) {
 		return nil, false
 	}
 	return o.Properties, true
@@ -254,7 +257,7 @@ func (o *MetricsSearchInstance) GetPropertiesOk() (*string, bool) {
 
 // HasProperties returns a boolean if a field has been set.
 func (o *MetricsSearchInstance) HasProperties() bool {
-	if o != nil && o.Properties != nil {
+	if o != nil && !IsNil(o.Properties) {
 		return true
 	}
 
@@ -388,7 +391,7 @@ func (o *MetricsSearchInstance) SetId(v string) {
 
 // GetParentId returns the ParentId field value if set, zero value otherwise.
 func (o *MetricsSearchInstance) GetParentId() string {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		var ret string
 		return ret
 	}
@@ -398,7 +401,7 @@ func (o *MetricsSearchInstance) GetParentId() string {
 // GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchInstance) GetParentIdOk() (*string, bool) {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		return nil, false
 	}
 	return o.ParentId, true
@@ -406,7 +409,7 @@ func (o *MetricsSearchInstance) GetParentIdOk() (*string, bool) {
 
 // HasParentId returns a boolean if a field has been set.
 func (o *MetricsSearchInstance) HasParentId() bool {
-	if o != nil && o.ParentId != nil {
+	if o != nil && !IsNil(o.ParentId) {
 		return true
 	}
 
@@ -419,47 +422,37 @@ func (o *MetricsSearchInstance) SetParentId(v string) {
 }
 
 func (o MetricsSearchInstance) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["title"] = o.Title
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.LogQuery != nil {
-		toSerialize["logQuery"] = o.LogQuery
-	}
-	if true {
-		toSerialize["metricsQueries"] = o.MetricsQueries
-	}
-	if o.DesiredQuantizationInSecs != nil {
-		toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
-	}
-	if o.Properties != nil {
-		toSerialize["properties"] = o.Properties
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.ParentId != nil {
-		toSerialize["parentId"] = o.ParentId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsSearchInstance) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["title"] = o.Title
+	toSerialize["description"] = o.Description
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.LogQuery) {
+		toSerialize["logQuery"] = o.LogQuery
+	}
+	toSerialize["metricsQueries"] = o.MetricsQueries
+	if !IsNil(o.DesiredQuantizationInSecs) {
+		toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
+	}
+	if !IsNil(o.Properties) {
+		toSerialize["properties"] = o.Properties
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsSearchInstance struct {

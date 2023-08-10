@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Source type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Source{}
 
 // Source struct for Source
 type Source struct {
@@ -90,14 +93,18 @@ func (o *Source) SetSourceName(v string) {
 }
 
 func (o Source) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["sourceId"] = o.SourceId
-	}
-	if true {
-		toSerialize["sourceName"] = o.SourceName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Source) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["sourceId"] = o.SourceId
+	toSerialize["sourceName"] = o.SourceName
+	return toSerialize, nil
 }
 
 type NullableSource struct {

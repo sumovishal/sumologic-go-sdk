@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the TraceSpan type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceSpan{}
 
 // TraceSpan struct for TraceSpan
 type TraceSpan struct {
@@ -97,7 +100,7 @@ func (o *TraceSpan) SetId(v string) {
 
 // GetParentId returns the ParentId field value if set, zero value otherwise.
 func (o *TraceSpan) GetParentId() string {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		var ret string
 		return ret
 	}
@@ -107,7 +110,7 @@ func (o *TraceSpan) GetParentId() string {
 // GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetParentIdOk() (*string, bool) {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		return nil, false
 	}
 	return o.ParentId, true
@@ -115,7 +118,7 @@ func (o *TraceSpan) GetParentIdOk() (*string, bool) {
 
 // HasParentId returns a boolean if a field has been set.
 func (o *TraceSpan) HasParentId() bool {
-	if o != nil && o.ParentId != nil {
+	if o != nil && !IsNil(o.ParentId) {
 		return true
 	}
 
@@ -153,7 +156,7 @@ func (o *TraceSpan) SetOperationName(v string) {
 
 // GetResource returns the Resource field value if set, zero value otherwise.
 func (o *TraceSpan) GetResource() string {
-	if o == nil || o.Resource == nil {
+	if o == nil || IsNil(o.Resource) {
 		var ret string
 		return ret
 	}
@@ -163,7 +166,7 @@ func (o *TraceSpan) GetResource() string {
 // GetResourceOk returns a tuple with the Resource field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetResourceOk() (*string, bool) {
-	if o == nil || o.Resource == nil {
+	if o == nil || IsNil(o.Resource) {
 		return nil, false
 	}
 	return o.Resource, true
@@ -171,7 +174,7 @@ func (o *TraceSpan) GetResourceOk() (*string, bool) {
 
 // HasResource returns a boolean if a field has been set.
 func (o *TraceSpan) HasResource() bool {
-	if o != nil && o.Resource != nil {
+	if o != nil && !IsNil(o.Resource) {
 		return true
 	}
 
@@ -185,7 +188,7 @@ func (o *TraceSpan) SetResource(v string) {
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *TraceSpan) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -195,7 +198,7 @@ func (o *TraceSpan) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -203,7 +206,7 @@ func (o *TraceSpan) GetServiceOk() (*string, bool) {
 
 // HasService returns a boolean if a field has been set.
 func (o *TraceSpan) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -217,7 +220,7 @@ func (o *TraceSpan) SetService(v string) {
 
 // GetServiceColor returns the ServiceColor field value if set, zero value otherwise.
 func (o *TraceSpan) GetServiceColor() string {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		var ret string
 		return ret
 	}
@@ -227,7 +230,7 @@ func (o *TraceSpan) GetServiceColor() string {
 // GetServiceColorOk returns a tuple with the ServiceColor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetServiceColorOk() (*string, bool) {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		return nil, false
 	}
 	return o.ServiceColor, true
@@ -235,7 +238,7 @@ func (o *TraceSpan) GetServiceColorOk() (*string, bool) {
 
 // HasServiceColor returns a boolean if a field has been set.
 func (o *TraceSpan) HasServiceColor() bool {
-	if o != nil && o.ServiceColor != nil {
+	if o != nil && !IsNil(o.ServiceColor) {
 		return true
 	}
 
@@ -249,7 +252,7 @@ func (o *TraceSpan) SetServiceColor(v string) {
 
 // GetServiceType returns the ServiceType field value if set, zero value otherwise.
 func (o *TraceSpan) GetServiceType() string {
-	if o == nil || o.ServiceType == nil {
+	if o == nil || IsNil(o.ServiceType) {
 		var ret string
 		return ret
 	}
@@ -259,7 +262,7 @@ func (o *TraceSpan) GetServiceType() string {
 // GetServiceTypeOk returns a tuple with the ServiceType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetServiceTypeOk() (*string, bool) {
-	if o == nil || o.ServiceType == nil {
+	if o == nil || IsNil(o.ServiceType) {
 		return nil, false
 	}
 	return o.ServiceType, true
@@ -267,7 +270,7 @@ func (o *TraceSpan) GetServiceTypeOk() (*string, bool) {
 
 // HasServiceType returns a boolean if a field has been set.
 func (o *TraceSpan) HasServiceType() bool {
-	if o != nil && o.ServiceType != nil {
+	if o != nil && !IsNil(o.ServiceType) {
 		return true
 	}
 
@@ -353,7 +356,7 @@ func (o *TraceSpan) SetStatus(v TraceSpanStatus) {
 
 // GetKind returns the Kind field value if set, zero value otherwise.
 func (o *TraceSpan) GetKind() string {
-	if o == nil || o.Kind == nil {
+	if o == nil || IsNil(o.Kind) {
 		var ret string
 		return ret
 	}
@@ -363,7 +366,7 @@ func (o *TraceSpan) GetKind() string {
 // GetKindOk returns a tuple with the Kind field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetKindOk() (*string, bool) {
-	if o == nil || o.Kind == nil {
+	if o == nil || IsNil(o.Kind) {
 		return nil, false
 	}
 	return o.Kind, true
@@ -371,7 +374,7 @@ func (o *TraceSpan) GetKindOk() (*string, bool) {
 
 // HasKind returns a boolean if a field has been set.
 func (o *TraceSpan) HasKind() bool {
-	if o != nil && o.Kind != nil {
+	if o != nil && !IsNil(o.Kind) {
 		return true
 	}
 
@@ -385,7 +388,7 @@ func (o *TraceSpan) SetKind(v string) {
 
 // GetRemoteService returns the RemoteService field value if set, zero value otherwise.
 func (o *TraceSpan) GetRemoteService() string {
-	if o == nil || o.RemoteService == nil {
+	if o == nil || IsNil(o.RemoteService) {
 		var ret string
 		return ret
 	}
@@ -395,7 +398,7 @@ func (o *TraceSpan) GetRemoteService() string {
 // GetRemoteServiceOk returns a tuple with the RemoteService field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetRemoteServiceOk() (*string, bool) {
-	if o == nil || o.RemoteService == nil {
+	if o == nil || IsNil(o.RemoteService) {
 		return nil, false
 	}
 	return o.RemoteService, true
@@ -403,7 +406,7 @@ func (o *TraceSpan) GetRemoteServiceOk() (*string, bool) {
 
 // HasRemoteService returns a boolean if a field has been set.
 func (o *TraceSpan) HasRemoteService() bool {
-	if o != nil && o.RemoteService != nil {
+	if o != nil && !IsNil(o.RemoteService) {
 		return true
 	}
 
@@ -417,7 +420,7 @@ func (o *TraceSpan) SetRemoteService(v string) {
 
 // GetRemoteServiceColor returns the RemoteServiceColor field value if set, zero value otherwise.
 func (o *TraceSpan) GetRemoteServiceColor() string {
-	if o == nil || o.RemoteServiceColor == nil {
+	if o == nil || IsNil(o.RemoteServiceColor) {
 		var ret string
 		return ret
 	}
@@ -427,7 +430,7 @@ func (o *TraceSpan) GetRemoteServiceColor() string {
 // GetRemoteServiceColorOk returns a tuple with the RemoteServiceColor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetRemoteServiceColorOk() (*string, bool) {
-	if o == nil || o.RemoteServiceColor == nil {
+	if o == nil || IsNil(o.RemoteServiceColor) {
 		return nil, false
 	}
 	return o.RemoteServiceColor, true
@@ -435,7 +438,7 @@ func (o *TraceSpan) GetRemoteServiceColorOk() (*string, bool) {
 
 // HasRemoteServiceColor returns a boolean if a field has been set.
 func (o *TraceSpan) HasRemoteServiceColor() bool {
-	if o != nil && o.RemoteServiceColor != nil {
+	if o != nil && !IsNil(o.RemoteServiceColor) {
 		return true
 	}
 
@@ -449,7 +452,7 @@ func (o *TraceSpan) SetRemoteServiceColor(v string) {
 
 // GetRemoteServiceType returns the RemoteServiceType field value if set, zero value otherwise.
 func (o *TraceSpan) GetRemoteServiceType() string {
-	if o == nil || o.RemoteServiceType == nil {
+	if o == nil || IsNil(o.RemoteServiceType) {
 		var ret string
 		return ret
 	}
@@ -459,7 +462,7 @@ func (o *TraceSpan) GetRemoteServiceType() string {
 // GetRemoteServiceTypeOk returns a tuple with the RemoteServiceType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetRemoteServiceTypeOk() (*string, bool) {
-	if o == nil || o.RemoteServiceType == nil {
+	if o == nil || IsNil(o.RemoteServiceType) {
 		return nil, false
 	}
 	return o.RemoteServiceType, true
@@ -467,7 +470,7 @@ func (o *TraceSpan) GetRemoteServiceTypeOk() (*string, bool) {
 
 // HasRemoteServiceType returns a boolean if a field has been set.
 func (o *TraceSpan) HasRemoteServiceType() bool {
-	if o != nil && o.RemoteServiceType != nil {
+	if o != nil && !IsNil(o.RemoteServiceType) {
 		return true
 	}
 
@@ -481,7 +484,7 @@ func (o *TraceSpan) SetRemoteServiceType(v string) {
 
 // GetInfo returns the Info field value if set, zero value otherwise.
 func (o *TraceSpan) GetInfo() TraceSpanInfo {
-	if o == nil || o.Info == nil {
+	if o == nil || IsNil(o.Info) {
 		var ret TraceSpanInfo
 		return ret
 	}
@@ -491,7 +494,7 @@ func (o *TraceSpan) GetInfo() TraceSpanInfo {
 // GetInfoOk returns a tuple with the Info field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetInfoOk() (*TraceSpanInfo, bool) {
-	if o == nil || o.Info == nil {
+	if o == nil || IsNil(o.Info) {
 		return nil, false
 	}
 	return o.Info, true
@@ -499,7 +502,7 @@ func (o *TraceSpan) GetInfoOk() (*TraceSpanInfo, bool) {
 
 // HasInfo returns a boolean if a field has been set.
 func (o *TraceSpan) HasInfo() bool {
-	if o != nil && o.Info != nil {
+	if o != nil && !IsNil(o.Info) {
 		return true
 	}
 
@@ -513,7 +516,7 @@ func (o *TraceSpan) SetInfo(v TraceSpanInfo) {
 
 // GetNumberOfLinks returns the NumberOfLinks field value if set, zero value otherwise.
 func (o *TraceSpan) GetNumberOfLinks() int32 {
-	if o == nil || o.NumberOfLinks == nil {
+	if o == nil || IsNil(o.NumberOfLinks) {
 		var ret int32
 		return ret
 	}
@@ -523,7 +526,7 @@ func (o *TraceSpan) GetNumberOfLinks() int32 {
 // GetNumberOfLinksOk returns a tuple with the NumberOfLinks field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceSpan) GetNumberOfLinksOk() (*int32, bool) {
-	if o == nil || o.NumberOfLinks == nil {
+	if o == nil || IsNil(o.NumberOfLinks) {
 		return nil, false
 	}
 	return o.NumberOfLinks, true
@@ -531,7 +534,7 @@ func (o *TraceSpan) GetNumberOfLinksOk() (*int32, bool) {
 
 // HasNumberOfLinks returns a boolean if a field has been set.
 func (o *TraceSpan) HasNumberOfLinks() bool {
-	if o != nil && o.NumberOfLinks != nil {
+	if o != nil && !IsNil(o.NumberOfLinks) {
 		return true
 	}
 
@@ -544,56 +547,54 @@ func (o *TraceSpan) SetNumberOfLinks(v int32) {
 }
 
 func (o TraceSpan) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.ParentId != nil {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["operationName"] = o.OperationName
-	}
-	if o.Resource != nil {
-		toSerialize["resource"] = o.Resource
-	}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.ServiceColor != nil {
-		toSerialize["serviceColor"] = o.ServiceColor
-	}
-	if o.ServiceType != nil {
-		toSerialize["serviceType"] = o.ServiceType
-	}
-	if true {
-		toSerialize["duration"] = o.Duration
-	}
-	if true {
-		toSerialize["startedAt"] = o.StartedAt
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.Kind != nil {
-		toSerialize["kind"] = o.Kind
-	}
-	if o.RemoteService != nil {
-		toSerialize["remoteService"] = o.RemoteService
-	}
-	if o.RemoteServiceColor != nil {
-		toSerialize["remoteServiceColor"] = o.RemoteServiceColor
-	}
-	if o.RemoteServiceType != nil {
-		toSerialize["remoteServiceType"] = o.RemoteServiceType
-	}
-	if o.Info != nil {
-		toSerialize["info"] = o.Info
-	}
-	if o.NumberOfLinks != nil {
-		toSerialize["numberOfLinks"] = o.NumberOfLinks
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceSpan) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
+	toSerialize["operationName"] = o.OperationName
+	if !IsNil(o.Resource) {
+		toSerialize["resource"] = o.Resource
+	}
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.ServiceColor) {
+		toSerialize["serviceColor"] = o.ServiceColor
+	}
+	if !IsNil(o.ServiceType) {
+		toSerialize["serviceType"] = o.ServiceType
+	}
+	toSerialize["duration"] = o.Duration
+	toSerialize["startedAt"] = o.StartedAt
+	toSerialize["status"] = o.Status
+	if !IsNil(o.Kind) {
+		toSerialize["kind"] = o.Kind
+	}
+	if !IsNil(o.RemoteService) {
+		toSerialize["remoteService"] = o.RemoteService
+	}
+	if !IsNil(o.RemoteServiceColor) {
+		toSerialize["remoteServiceColor"] = o.RemoteServiceColor
+	}
+	if !IsNil(o.RemoteServiceType) {
+		toSerialize["remoteServiceType"] = o.RemoteServiceType
+	}
+	if !IsNil(o.Info) {
+		toSerialize["info"] = o.Info
+	}
+	if !IsNil(o.NumberOfLinks) {
+		toSerialize["numberOfLinks"] = o.NumberOfLinks
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceSpan struct {

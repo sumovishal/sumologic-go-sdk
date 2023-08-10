@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsSearchInstanceAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsSearchInstanceAllOf{}
 
 // MetricsSearchInstanceAllOf struct for MetricsSearchInstanceAllOf
 type MetricsSearchInstanceAllOf struct {
@@ -66,7 +69,7 @@ func (o *MetricsSearchInstanceAllOf) SetId(v string) {
 
 // GetParentId returns the ParentId field value if set, zero value otherwise.
 func (o *MetricsSearchInstanceAllOf) GetParentId() string {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		var ret string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *MetricsSearchInstanceAllOf) GetParentId() string {
 // GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSearchInstanceAllOf) GetParentIdOk() (*string, bool) {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		return nil, false
 	}
 	return o.ParentId, true
@@ -84,7 +87,7 @@ func (o *MetricsSearchInstanceAllOf) GetParentIdOk() (*string, bool) {
 
 // HasParentId returns a boolean if a field has been set.
 func (o *MetricsSearchInstanceAllOf) HasParentId() bool {
-	if o != nil && o.ParentId != nil {
+	if o != nil && !IsNil(o.ParentId) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *MetricsSearchInstanceAllOf) SetParentId(v string) {
 }
 
 func (o MetricsSearchInstanceAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.ParentId != nil {
-		toSerialize["parentId"] = o.ParentId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsSearchInstanceAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsSearchInstanceAllOf struct {

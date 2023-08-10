@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,17 @@ import (
 	"encoding/json"
 )
 
+// checks if the PartitionInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PartitionInfo{}
+
 // PartitionInfo struct for PartitionInfo
 type PartitionInfo struct {
 	// The name of the partition.
 	Name string `json:"name"`
 	// The Data Tier where the data in the partition will reside. Possible values are:               1. `continuous`               2. `frequent`               3. `infrequent` Note: The \"infrequent\" and \"frequent\" tiers are only available to Cloud Flex Credits Enterprise Suite accounts.
 	AnalyticsTier *string `json:"analyticsTier,omitempty"`
+	// The Data Filter Group to which this parition belongs to. Possible values are :               1. `LOGS`               2. `SECURITY`               3. `AUDIT`
+	DataFilterGroup *string `json:"dataFilterGroup,omitempty"`
 }
 
 // NewPartitionInfo instantiates a new PartitionInfo object
@@ -29,8 +34,6 @@ type PartitionInfo struct {
 func NewPartitionInfo(name string) *PartitionInfo {
 	this := PartitionInfo{}
 	this.Name = name
-	var analyticsTier string = "continuous"
-	this.AnalyticsTier = &analyticsTier
 	return &this
 }
 
@@ -39,8 +42,6 @@ func NewPartitionInfo(name string) *PartitionInfo {
 // but it doesn't guarantee that properties required by API are set
 func NewPartitionInfoWithDefaults() *PartitionInfo {
 	this := PartitionInfo{}
-	var analyticsTier string = "continuous"
-	this.AnalyticsTier = &analyticsTier
 	return &this
 }
 
@@ -70,7 +71,7 @@ func (o *PartitionInfo) SetName(v string) {
 
 // GetAnalyticsTier returns the AnalyticsTier field value if set, zero value otherwise.
 func (o *PartitionInfo) GetAnalyticsTier() string {
-	if o == nil || o.AnalyticsTier == nil {
+	if o == nil || IsNil(o.AnalyticsTier) {
 		var ret string
 		return ret
 	}
@@ -80,7 +81,7 @@ func (o *PartitionInfo) GetAnalyticsTier() string {
 // GetAnalyticsTierOk returns a tuple with the AnalyticsTier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PartitionInfo) GetAnalyticsTierOk() (*string, bool) {
-	if o == nil || o.AnalyticsTier == nil {
+	if o == nil || IsNil(o.AnalyticsTier) {
 		return nil, false
 	}
 	return o.AnalyticsTier, true
@@ -88,7 +89,7 @@ func (o *PartitionInfo) GetAnalyticsTierOk() (*string, bool) {
 
 // HasAnalyticsTier returns a boolean if a field has been set.
 func (o *PartitionInfo) HasAnalyticsTier() bool {
-	if o != nil && o.AnalyticsTier != nil {
+	if o != nil && !IsNil(o.AnalyticsTier) {
 		return true
 	}
 
@@ -100,15 +101,56 @@ func (o *PartitionInfo) SetAnalyticsTier(v string) {
 	o.AnalyticsTier = &v
 }
 
-func (o PartitionInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
+// GetDataFilterGroup returns the DataFilterGroup field value if set, zero value otherwise.
+func (o *PartitionInfo) GetDataFilterGroup() string {
+	if o == nil || IsNil(o.DataFilterGroup) {
+		var ret string
+		return ret
 	}
-	if o.AnalyticsTier != nil {
-		toSerialize["analyticsTier"] = o.AnalyticsTier
+	return *o.DataFilterGroup
+}
+
+// GetDataFilterGroupOk returns a tuple with the DataFilterGroup field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PartitionInfo) GetDataFilterGroupOk() (*string, bool) {
+	if o == nil || IsNil(o.DataFilterGroup) {
+		return nil, false
+	}
+	return o.DataFilterGroup, true
+}
+
+// HasDataFilterGroup returns a boolean if a field has been set.
+func (o *PartitionInfo) HasDataFilterGroup() bool {
+	if o != nil && !IsNil(o.DataFilterGroup) {
+		return true
+	}
+
+	return false
+}
+
+// SetDataFilterGroup gets a reference to the given string and assigns it to the DataFilterGroup field.
+func (o *PartitionInfo) SetDataFilterGroup(v string) {
+	o.DataFilterGroup = &v
+}
+
+func (o PartitionInfo) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PartitionInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.AnalyticsTier) {
+		toSerialize["analyticsTier"] = o.AnalyticsTier
+	}
+	if !IsNil(o.DataFilterGroup) {
+		toSerialize["dataFilterGroup"] = o.DataFilterGroup
+	}
+	return toSerialize, nil
 }
 
 type NullablePartitionInfo struct {

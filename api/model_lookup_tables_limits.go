@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LookupTablesLimits type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupTablesLimits{}
 
 // LookupTablesLimits Properties related to lookup tables being allowed and created.
 type LookupTablesLimits struct {
@@ -43,7 +46,7 @@ func NewLookupTablesLimitsWithDefaults() *LookupTablesLimits {
 
 // GetTablesCreated returns the TablesCreated field value if set, zero value otherwise.
 func (o *LookupTablesLimits) GetTablesCreated() int32 {
-	if o == nil || o.TablesCreated == nil {
+	if o == nil || IsNil(o.TablesCreated) {
 		var ret int32
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *LookupTablesLimits) GetTablesCreated() int32 {
 // GetTablesCreatedOk returns a tuple with the TablesCreated field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTablesLimits) GetTablesCreatedOk() (*int32, bool) {
-	if o == nil || o.TablesCreated == nil {
+	if o == nil || IsNil(o.TablesCreated) {
 		return nil, false
 	}
 	return o.TablesCreated, true
@@ -61,7 +64,7 @@ func (o *LookupTablesLimits) GetTablesCreatedOk() (*int32, bool) {
 
 // HasTablesCreated returns a boolean if a field has been set.
 func (o *LookupTablesLimits) HasTablesCreated() bool {
-	if o != nil && o.TablesCreated != nil {
+	if o != nil && !IsNil(o.TablesCreated) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *LookupTablesLimits) SetTablesCreated(v int32) {
 
 // GetTableCapacityRemaining returns the TableCapacityRemaining field value if set, zero value otherwise.
 func (o *LookupTablesLimits) GetTableCapacityRemaining() int32 {
-	if o == nil || o.TableCapacityRemaining == nil {
+	if o == nil || IsNil(o.TableCapacityRemaining) {
 		var ret int32
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *LookupTablesLimits) GetTableCapacityRemaining() int32 {
 // GetTableCapacityRemainingOk returns a tuple with the TableCapacityRemaining field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTablesLimits) GetTableCapacityRemainingOk() (*int32, bool) {
-	if o == nil || o.TableCapacityRemaining == nil {
+	if o == nil || IsNil(o.TableCapacityRemaining) {
 		return nil, false
 	}
 	return o.TableCapacityRemaining, true
@@ -93,7 +96,7 @@ func (o *LookupTablesLimits) GetTableCapacityRemainingOk() (*int32, bool) {
 
 // HasTableCapacityRemaining returns a boolean if a field has been set.
 func (o *LookupTablesLimits) HasTableCapacityRemaining() bool {
-	if o != nil && o.TableCapacityRemaining != nil {
+	if o != nil && !IsNil(o.TableCapacityRemaining) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *LookupTablesLimits) SetTableCapacityRemaining(v int32) {
 
 // GetTotalTableCapacity returns the TotalTableCapacity field value if set, zero value otherwise.
 func (o *LookupTablesLimits) GetTotalTableCapacity() int32 {
-	if o == nil || o.TotalTableCapacity == nil {
+	if o == nil || IsNil(o.TotalTableCapacity) {
 		var ret int32
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *LookupTablesLimits) GetTotalTableCapacity() int32 {
 // GetTotalTableCapacityOk returns a tuple with the TotalTableCapacity field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTablesLimits) GetTotalTableCapacityOk() (*int32, bool) {
-	if o == nil || o.TotalTableCapacity == nil {
+	if o == nil || IsNil(o.TotalTableCapacity) {
 		return nil, false
 	}
 	return o.TotalTableCapacity, true
@@ -125,7 +128,7 @@ func (o *LookupTablesLimits) GetTotalTableCapacityOk() (*int32, bool) {
 
 // HasTotalTableCapacity returns a boolean if a field has been set.
 func (o *LookupTablesLimits) HasTotalTableCapacity() bool {
-	if o != nil && o.TotalTableCapacity != nil {
+	if o != nil && !IsNil(o.TotalTableCapacity) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *LookupTablesLimits) SetTotalTableCapacity(v int32) {
 }
 
 func (o LookupTablesLimits) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.TablesCreated != nil {
-		toSerialize["tablesCreated"] = o.TablesCreated
-	}
-	if o.TableCapacityRemaining != nil {
-		toSerialize["tableCapacityRemaining"] = o.TableCapacityRemaining
-	}
-	if o.TotalTableCapacity != nil {
-		toSerialize["totalTableCapacity"] = o.TotalTableCapacity
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupTablesLimits) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.TablesCreated) {
+		toSerialize["tablesCreated"] = o.TablesCreated
+	}
+	if !IsNil(o.TableCapacityRemaining) {
+		toSerialize["tableCapacityRemaining"] = o.TableCapacityRemaining
+	}
+	if !IsNil(o.TotalTableCapacity) {
+		toSerialize["totalTableCapacity"] = o.TotalTableCapacity
+	}
+	return toSerialize, nil
 }
 
 type NullableLookupTablesLimits struct {

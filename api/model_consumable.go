@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Consumable type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Consumable{}
 
 // Consumable Details of consumable and its quantity.
 type Consumable struct {
@@ -89,14 +92,18 @@ func (o *Consumable) SetQuantity(v Quantity) {
 }
 
 func (o Consumable) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["consumableId"] = o.ConsumableId
-	}
-	if true {
-		toSerialize["quantity"] = o.Quantity
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Consumable) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["consumableId"] = o.ConsumableId
+	toSerialize["quantity"] = o.Quantity
+	return toSerialize, nil
 }
 
 type NullableConsumable struct {

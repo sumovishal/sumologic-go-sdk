@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Partition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Partition{}
 
 // Partition struct for Partition
 type Partition struct {
@@ -59,8 +62,6 @@ func NewPartition(name string, routingExpression string, createdAt time.Time, cr
 	this := Partition{}
 	this.Name = name
 	this.RoutingExpression = routingExpression
-	var analyticsTier string = "continuous"
-	this.AnalyticsTier = &analyticsTier
 	var retentionPeriod int32 = -1
 	this.RetentionPeriod = &retentionPeriod
 	var isCompliant bool = false
@@ -79,8 +80,6 @@ func NewPartition(name string, routingExpression string, createdAt time.Time, cr
 // but it doesn't guarantee that properties required by API are set
 func NewPartitionWithDefaults() *Partition {
 	this := Partition{}
-	var analyticsTier string = "continuous"
-	this.AnalyticsTier = &analyticsTier
 	var retentionPeriod int32 = -1
 	this.RetentionPeriod = &retentionPeriod
 	var isCompliant bool = false
@@ -138,7 +137,7 @@ func (o *Partition) SetRoutingExpression(v string) {
 
 // GetAnalyticsTier returns the AnalyticsTier field value if set, zero value otherwise.
 func (o *Partition) GetAnalyticsTier() string {
-	if o == nil || o.AnalyticsTier == nil {
+	if o == nil || IsNil(o.AnalyticsTier) {
 		var ret string
 		return ret
 	}
@@ -148,7 +147,7 @@ func (o *Partition) GetAnalyticsTier() string {
 // GetAnalyticsTierOk returns a tuple with the AnalyticsTier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetAnalyticsTierOk() (*string, bool) {
-	if o == nil || o.AnalyticsTier == nil {
+	if o == nil || IsNil(o.AnalyticsTier) {
 		return nil, false
 	}
 	return o.AnalyticsTier, true
@@ -156,7 +155,7 @@ func (o *Partition) GetAnalyticsTierOk() (*string, bool) {
 
 // HasAnalyticsTier returns a boolean if a field has been set.
 func (o *Partition) HasAnalyticsTier() bool {
-	if o != nil && o.AnalyticsTier != nil {
+	if o != nil && !IsNil(o.AnalyticsTier) {
 		return true
 	}
 
@@ -170,7 +169,7 @@ func (o *Partition) SetAnalyticsTier(v string) {
 
 // GetRetentionPeriod returns the RetentionPeriod field value if set, zero value otherwise.
 func (o *Partition) GetRetentionPeriod() int32 {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -180,7 +179,7 @@ func (o *Partition) GetRetentionPeriod() int32 {
 // GetRetentionPeriodOk returns a tuple with the RetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		return nil, false
 	}
 	return o.RetentionPeriod, true
@@ -188,7 +187,7 @@ func (o *Partition) GetRetentionPeriodOk() (*int32, bool) {
 
 // HasRetentionPeriod returns a boolean if a field has been set.
 func (o *Partition) HasRetentionPeriod() bool {
-	if o != nil && o.RetentionPeriod != nil {
+	if o != nil && !IsNil(o.RetentionPeriod) {
 		return true
 	}
 
@@ -202,7 +201,7 @@ func (o *Partition) SetRetentionPeriod(v int32) {
 
 // GetIsCompliant returns the IsCompliant field value if set, zero value otherwise.
 func (o *Partition) GetIsCompliant() bool {
-	if o == nil || o.IsCompliant == nil {
+	if o == nil || IsNil(o.IsCompliant) {
 		var ret bool
 		return ret
 	}
@@ -212,7 +211,7 @@ func (o *Partition) GetIsCompliant() bool {
 // GetIsCompliantOk returns a tuple with the IsCompliant field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetIsCompliantOk() (*bool, bool) {
-	if o == nil || o.IsCompliant == nil {
+	if o == nil || IsNil(o.IsCompliant) {
 		return nil, false
 	}
 	return o.IsCompliant, true
@@ -220,7 +219,7 @@ func (o *Partition) GetIsCompliantOk() (*bool, bool) {
 
 // HasIsCompliant returns a boolean if a field has been set.
 func (o *Partition) HasIsCompliant() bool {
-	if o != nil && o.IsCompliant != nil {
+	if o != nil && !IsNil(o.IsCompliant) {
 		return true
 	}
 
@@ -234,7 +233,7 @@ func (o *Partition) SetIsCompliant(v bool) {
 
 // GetNewRetentionPeriod returns the NewRetentionPeriod field value if set, zero value otherwise.
 func (o *Partition) GetNewRetentionPeriod() int32 {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -244,7 +243,7 @@ func (o *Partition) GetNewRetentionPeriod() int32 {
 // GetNewRetentionPeriodOk returns a tuple with the NewRetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetNewRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		return nil, false
 	}
 	return o.NewRetentionPeriod, true
@@ -252,7 +251,7 @@ func (o *Partition) GetNewRetentionPeriodOk() (*int32, bool) {
 
 // HasNewRetentionPeriod returns a boolean if a field has been set.
 func (o *Partition) HasNewRetentionPeriod() bool {
-	if o != nil && o.NewRetentionPeriod != nil {
+	if o != nil && !IsNil(o.NewRetentionPeriod) {
 		return true
 	}
 
@@ -266,7 +265,7 @@ func (o *Partition) SetNewRetentionPeriod(v int32) {
 
 // GetRetentionEffectiveAt returns the RetentionEffectiveAt field value if set, zero value otherwise.
 func (o *Partition) GetRetentionEffectiveAt() time.Time {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		var ret time.Time
 		return ret
 	}
@@ -276,7 +275,7 @@ func (o *Partition) GetRetentionEffectiveAt() time.Time {
 // GetRetentionEffectiveAtOk returns a tuple with the RetentionEffectiveAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetRetentionEffectiveAtOk() (*time.Time, bool) {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		return nil, false
 	}
 	return o.RetentionEffectiveAt, true
@@ -284,7 +283,7 @@ func (o *Partition) GetRetentionEffectiveAtOk() (*time.Time, bool) {
 
 // HasRetentionEffectiveAt returns a boolean if a field has been set.
 func (o *Partition) HasRetentionEffectiveAt() bool {
-	if o != nil && o.RetentionEffectiveAt != nil {
+	if o != nil && !IsNil(o.RetentionEffectiveAt) {
 		return true
 	}
 
@@ -442,7 +441,7 @@ func (o *Partition) SetTotalBytes(v int64) {
 
 // GetIsActive returns the IsActive field value if set, zero value otherwise.
 func (o *Partition) GetIsActive() bool {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		var ret bool
 		return ret
 	}
@@ -452,7 +451,7 @@ func (o *Partition) GetIsActive() bool {
 // GetIsActiveOk returns a tuple with the IsActive field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetIsActiveOk() (*bool, bool) {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		return nil, false
 	}
 	return o.IsActive, true
@@ -460,7 +459,7 @@ func (o *Partition) GetIsActiveOk() (*bool, bool) {
 
 // HasIsActive returns a boolean if a field has been set.
 func (o *Partition) HasIsActive() bool {
-	if o != nil && o.IsActive != nil {
+	if o != nil && !IsNil(o.IsActive) {
 		return true
 	}
 
@@ -474,7 +473,7 @@ func (o *Partition) SetIsActive(v bool) {
 
 // GetIndexType returns the IndexType field value if set, zero value otherwise.
 func (o *Partition) GetIndexType() string {
-	if o == nil || o.IndexType == nil {
+	if o == nil || IsNil(o.IndexType) {
 		var ret string
 		return ret
 	}
@@ -484,7 +483,7 @@ func (o *Partition) GetIndexType() string {
 // GetIndexTypeOk returns a tuple with the IndexType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetIndexTypeOk() (*string, bool) {
-	if o == nil || o.IndexType == nil {
+	if o == nil || IsNil(o.IndexType) {
 		return nil, false
 	}
 	return o.IndexType, true
@@ -492,7 +491,7 @@ func (o *Partition) GetIndexTypeOk() (*string, bool) {
 
 // HasIndexType returns a boolean if a field has been set.
 func (o *Partition) HasIndexType() bool {
-	if o != nil && o.IndexType != nil {
+	if o != nil && !IsNil(o.IndexType) {
 		return true
 	}
 
@@ -506,7 +505,7 @@ func (o *Partition) SetIndexType(v string) {
 
 // GetDataForwardingId returns the DataForwardingId field value if set, zero value otherwise.
 func (o *Partition) GetDataForwardingId() string {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		var ret string
 		return ret
 	}
@@ -516,7 +515,7 @@ func (o *Partition) GetDataForwardingId() string {
 // GetDataForwardingIdOk returns a tuple with the DataForwardingId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Partition) GetDataForwardingIdOk() (*string, bool) {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		return nil, false
 	}
 	return o.DataForwardingId, true
@@ -524,7 +523,7 @@ func (o *Partition) GetDataForwardingIdOk() (*string, bool) {
 
 // HasDataForwardingId returns a boolean if a field has been set.
 func (o *Partition) HasDataForwardingId() bool {
-	if o != nil && o.DataForwardingId != nil {
+	if o != nil && !IsNil(o.DataForwardingId) {
 		return true
 	}
 
@@ -537,56 +536,48 @@ func (o *Partition) SetDataForwardingId(v string) {
 }
 
 func (o Partition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["routingExpression"] = o.RoutingExpression
-	}
-	if o.AnalyticsTier != nil {
-		toSerialize["analyticsTier"] = o.AnalyticsTier
-	}
-	if o.RetentionPeriod != nil {
-		toSerialize["retentionPeriod"] = o.RetentionPeriod
-	}
-	if o.IsCompliant != nil {
-		toSerialize["isCompliant"] = o.IsCompliant
-	}
-	if o.NewRetentionPeriod != nil {
-		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
-	}
-	if o.RetentionEffectiveAt != nil {
-		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["totalBytes"] = o.TotalBytes
-	}
-	if o.IsActive != nil {
-		toSerialize["isActive"] = o.IsActive
-	}
-	if o.IndexType != nil {
-		toSerialize["indexType"] = o.IndexType
-	}
-	if o.DataForwardingId != nil {
-		toSerialize["dataForwardingId"] = o.DataForwardingId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Partition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["routingExpression"] = o.RoutingExpression
+	if !IsNil(o.AnalyticsTier) {
+		toSerialize["analyticsTier"] = o.AnalyticsTier
+	}
+	if !IsNil(o.RetentionPeriod) {
+		toSerialize["retentionPeriod"] = o.RetentionPeriod
+	}
+	if !IsNil(o.IsCompliant) {
+		toSerialize["isCompliant"] = o.IsCompliant
+	}
+	if !IsNil(o.NewRetentionPeriod) {
+		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
+	}
+	if !IsNil(o.RetentionEffectiveAt) {
+		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	toSerialize["totalBytes"] = o.TotalBytes
+	if !IsNil(o.IsActive) {
+		toSerialize["isActive"] = o.IsActive
+	}
+	if !IsNil(o.IndexType) {
+		toSerialize["indexType"] = o.IndexType
+	}
+	if !IsNil(o.DataForwardingId) {
+		toSerialize["dataForwardingId"] = o.DataForwardingId
+	}
+	return toSerialize, nil
 }
 
 type NullablePartition struct {

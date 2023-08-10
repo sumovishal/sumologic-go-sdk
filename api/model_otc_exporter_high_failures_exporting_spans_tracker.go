@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCExporterHighFailuresExportingSpansTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCExporterHighFailuresExportingSpansTracker{}
 
 // OTCExporterHighFailuresExportingSpansTracker struct for OTCExporterHighFailuresExportingSpansTracker
 type OTCExporterHighFailuresExportingSpansTracker struct {
@@ -51,7 +54,7 @@ func NewOTCExporterHighFailuresExportingSpansTrackerWithDefaults() *OTCExporterH
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -61,7 +64,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -69,7 +72,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetEventTypeOk() (*string
 
 // HasEventType returns a boolean if a field has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -83,7 +86,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) SetEventType(v string) {
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -93,7 +96,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -101,7 +104,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceIdOk() (*strin
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -115,7 +118,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -125,7 +128,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceAddress() stri
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -133,7 +136,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetInstanceAddressOk() (*
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -147,7 +150,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) SetInstanceAddress(v stri
 
 // GetExporterId returns the ExporterId field value if set, zero value otherwise.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetExporterId() string {
-	if o == nil || o.ExporterId == nil {
+	if o == nil || IsNil(o.ExporterId) {
 		var ret string
 		return ret
 	}
@@ -157,7 +160,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetExporterId() string {
 // GetExporterIdOk returns a tuple with the ExporterId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetExporterIdOk() (*string, bool) {
-	if o == nil || o.ExporterId == nil {
+	if o == nil || IsNil(o.ExporterId) {
 		return nil, false
 	}
 	return o.ExporterId, true
@@ -165,7 +168,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetExporterIdOk() (*strin
 
 // HasExporterId returns a boolean if a field has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) HasExporterId() bool {
-	if o != nil && o.ExporterId != nil {
+	if o != nil && !IsNil(o.ExporterId) {
 		return true
 	}
 
@@ -179,7 +182,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) SetExporterId(v string) {
 
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetCount() string {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		var ret string
 		return ret
 	}
@@ -189,7 +192,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetCount() string {
 // GetCountOk returns a tuple with the Count field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) GetCountOk() (*string, bool) {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		return nil, false
 	}
 	return o.Count, true
@@ -197,7 +200,7 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) GetCountOk() (*string, bo
 
 // HasCount returns a boolean if a field has been set.
 func (o *OTCExporterHighFailuresExportingSpansTracker) HasCount() bool {
-	if o != nil && o.Count != nil {
+	if o != nil && !IsNil(o.Count) {
 		return true
 	}
 
@@ -210,31 +213,39 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) SetCount(v string) {
 }
 
 func (o OTCExporterHighFailuresExportingSpansTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OTCExporterHighFailuresExportingSpansTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.InstanceId != nil {
+	if !IsNil(o.InstanceId) {
 		toSerialize["instanceId"] = o.InstanceId
 	}
-	if o.InstanceAddress != nil {
+	if !IsNil(o.InstanceAddress) {
 		toSerialize["instanceAddress"] = o.InstanceAddress
 	}
-	if o.ExporterId != nil {
+	if !IsNil(o.ExporterId) {
 		toSerialize["exporterId"] = o.ExporterId
 	}
-	if o.Count != nil {
+	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableOTCExporterHighFailuresExportingSpansTracker struct {

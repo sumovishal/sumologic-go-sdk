@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the IngestThrottlingTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestThrottlingTrackerAllOf{}
 
 // IngestThrottlingTrackerAllOf struct for IngestThrottlingTrackerAllOf
 type IngestThrottlingTrackerAllOf struct {
@@ -39,7 +42,7 @@ func NewIngestThrottlingTrackerAllOfWithDefaults() *IngestThrottlingTrackerAllOf
 
 // GetDataType returns the DataType field value if set, zero value otherwise.
 func (o *IngestThrottlingTrackerAllOf) GetDataType() string {
-	if o == nil || o.DataType == nil {
+	if o == nil || IsNil(o.DataType) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *IngestThrottlingTrackerAllOf) GetDataType() string {
 // GetDataTypeOk returns a tuple with the DataType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestThrottlingTrackerAllOf) GetDataTypeOk() (*string, bool) {
-	if o == nil || o.DataType == nil {
+	if o == nil || IsNil(o.DataType) {
 		return nil, false
 	}
 	return o.DataType, true
@@ -57,7 +60,7 @@ func (o *IngestThrottlingTrackerAllOf) GetDataTypeOk() (*string, bool) {
 
 // HasDataType returns a boolean if a field has been set.
 func (o *IngestThrottlingTrackerAllOf) HasDataType() bool {
-	if o != nil && o.DataType != nil {
+	if o != nil && !IsNil(o.DataType) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *IngestThrottlingTrackerAllOf) SetDataType(v string) {
 }
 
 func (o IngestThrottlingTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DataType != nil {
-		toSerialize["dataType"] = o.DataType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestThrottlingTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DataType) {
+		toSerialize["dataType"] = o.DataType
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestThrottlingTrackerAllOf struct {

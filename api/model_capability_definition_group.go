@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CapabilityDefinitionGroup type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CapabilityDefinitionGroup{}
 
 // CapabilityDefinitionGroup The group that the capability belongs to.
 type CapabilityDefinitionGroup struct {
@@ -93,7 +96,7 @@ func (o *CapabilityDefinitionGroup) SetLabel(v string) {
 
 // GetParentId returns the ParentId field value if set, zero value otherwise.
 func (o *CapabilityDefinitionGroup) GetParentId() string {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *CapabilityDefinitionGroup) GetParentId() string {
 // GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CapabilityDefinitionGroup) GetParentIdOk() (*string, bool) {
-	if o == nil || o.ParentId == nil {
+	if o == nil || IsNil(o.ParentId) {
 		return nil, false
 	}
 	return o.ParentId, true
@@ -111,7 +114,7 @@ func (o *CapabilityDefinitionGroup) GetParentIdOk() (*string, bool) {
 
 // HasParentId returns a boolean if a field has been set.
 func (o *CapabilityDefinitionGroup) HasParentId() bool {
-	if o != nil && o.ParentId != nil {
+	if o != nil && !IsNil(o.ParentId) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *CapabilityDefinitionGroup) SetParentId(v string) {
 }
 
 func (o CapabilityDefinitionGroup) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if o.ParentId != nil {
-		toSerialize["parentId"] = o.ParentId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CapabilityDefinitionGroup) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["label"] = o.Label
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
+	return toSerialize, nil
 }
 
 type NullableCapabilityDefinitionGroup struct {

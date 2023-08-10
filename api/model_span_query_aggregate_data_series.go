@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryAggregateDataSeries type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryAggregateDataSeries{}
 
 // SpanQueryAggregateDataSeries struct for SpanQueryAggregateDataSeries
 type SpanQueryAggregateDataSeries struct {
@@ -126,7 +129,7 @@ func (o *SpanQueryAggregateDataSeries) SetDataPoints(v []SpanQueryAggregatePoint
 
 // GetAggregateInfo returns the AggregateInfo field value if set, zero value otherwise.
 func (o *SpanQueryAggregateDataSeries) GetAggregateInfo() SpanQueryAggregateAggregateData {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		var ret SpanQueryAggregateAggregateData
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *SpanQueryAggregateDataSeries) GetAggregateInfo() SpanQueryAggregateAggr
 // GetAggregateInfoOk returns a tuple with the AggregateInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateDataSeries) GetAggregateInfoOk() (*SpanQueryAggregateAggregateData, bool) {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		return nil, false
 	}
 	return o.AggregateInfo, true
@@ -144,7 +147,7 @@ func (o *SpanQueryAggregateDataSeries) GetAggregateInfoOk() (*SpanQueryAggregate
 
 // HasAggregateInfo returns a boolean if a field has been set.
 func (o *SpanQueryAggregateDataSeries) HasAggregateInfo() bool {
-	if o != nil && o.AggregateInfo != nil {
+	if o != nil && !IsNil(o.AggregateInfo) {
 		return true
 	}
 
@@ -158,7 +161,7 @@ func (o *SpanQueryAggregateDataSeries) SetAggregateInfo(v SpanQueryAggregateAggr
 
 // GetMetaData returns the MetaData field value if set, zero value otherwise.
 func (o *SpanQueryAggregateDataSeries) GetMetaData() SpanQueryAggregateMetaData {
-	if o == nil || o.MetaData == nil {
+	if o == nil || IsNil(o.MetaData) {
 		var ret SpanQueryAggregateMetaData
 		return ret
 	}
@@ -168,7 +171,7 @@ func (o *SpanQueryAggregateDataSeries) GetMetaData() SpanQueryAggregateMetaData 
 // GetMetaDataOk returns a tuple with the MetaData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateDataSeries) GetMetaDataOk() (*SpanQueryAggregateMetaData, bool) {
-	if o == nil || o.MetaData == nil {
+	if o == nil || IsNil(o.MetaData) {
 		return nil, false
 	}
 	return o.MetaData, true
@@ -176,7 +179,7 @@ func (o *SpanQueryAggregateDataSeries) GetMetaDataOk() (*SpanQueryAggregateMetaD
 
 // HasMetaData returns a boolean if a field has been set.
 func (o *SpanQueryAggregateDataSeries) HasMetaData() bool {
-	if o != nil && o.MetaData != nil {
+	if o != nil && !IsNil(o.MetaData) {
 		return true
 	}
 
@@ -190,7 +193,7 @@ func (o *SpanQueryAggregateDataSeries) SetMetaData(v SpanQueryAggregateMetaData)
 
 // GetSeriesType returns the SeriesType field value if set, zero value otherwise.
 func (o *SpanQueryAggregateDataSeries) GetSeriesType() string {
-	if o == nil || o.SeriesType == nil {
+	if o == nil || IsNil(o.SeriesType) {
 		var ret string
 		return ret
 	}
@@ -200,7 +203,7 @@ func (o *SpanQueryAggregateDataSeries) GetSeriesType() string {
 // GetSeriesTypeOk returns a tuple with the SeriesType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateDataSeries) GetSeriesTypeOk() (*string, bool) {
-	if o == nil || o.SeriesType == nil {
+	if o == nil || IsNil(o.SeriesType) {
 		return nil, false
 	}
 	return o.SeriesType, true
@@ -208,7 +211,7 @@ func (o *SpanQueryAggregateDataSeries) GetSeriesTypeOk() (*string, bool) {
 
 // HasSeriesType returns a boolean if a field has been set.
 func (o *SpanQueryAggregateDataSeries) HasSeriesType() bool {
-	if o != nil && o.SeriesType != nil {
+	if o != nil && !IsNil(o.SeriesType) {
 		return true
 	}
 
@@ -222,7 +225,7 @@ func (o *SpanQueryAggregateDataSeries) SetSeriesType(v string) {
 
 // GetXAxisKeys returns the XAxisKeys field value if set, zero value otherwise.
 func (o *SpanQueryAggregateDataSeries) GetXAxisKeys() []string {
-	if o == nil || o.XAxisKeys == nil {
+	if o == nil || IsNil(o.XAxisKeys) {
 		var ret []string
 		return ret
 	}
@@ -232,7 +235,7 @@ func (o *SpanQueryAggregateDataSeries) GetXAxisKeys() []string {
 // GetXAxisKeysOk returns a tuple with the XAxisKeys field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateDataSeries) GetXAxisKeysOk() ([]string, bool) {
-	if o == nil || o.XAxisKeys == nil {
+	if o == nil || IsNil(o.XAxisKeys) {
 		return nil, false
 	}
 	return o.XAxisKeys, true
@@ -240,7 +243,7 @@ func (o *SpanQueryAggregateDataSeries) GetXAxisKeysOk() ([]string, bool) {
 
 // HasXAxisKeys returns a boolean if a field has been set.
 func (o *SpanQueryAggregateDataSeries) HasXAxisKeys() bool {
-	if o != nil && o.XAxisKeys != nil {
+	if o != nil && !IsNil(o.XAxisKeys) {
 		return true
 	}
 
@@ -254,7 +257,7 @@ func (o *SpanQueryAggregateDataSeries) SetXAxisKeys(v []string) {
 
 // GetValueType returns the ValueType field value if set, zero value otherwise.
 func (o *SpanQueryAggregateDataSeries) GetValueType() string {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		var ret string
 		return ret
 	}
@@ -264,7 +267,7 @@ func (o *SpanQueryAggregateDataSeries) GetValueType() string {
 // GetValueTypeOk returns a tuple with the ValueType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryAggregateDataSeries) GetValueTypeOk() (*string, bool) {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		return nil, false
 	}
 	return o.ValueType, true
@@ -272,7 +275,7 @@ func (o *SpanQueryAggregateDataSeries) GetValueTypeOk() (*string, bool) {
 
 // HasValueType returns a boolean if a field has been set.
 func (o *SpanQueryAggregateDataSeries) HasValueType() bool {
-	if o != nil && o.ValueType != nil {
+	if o != nil && !IsNil(o.ValueType) {
 		return true
 	}
 
@@ -285,32 +288,34 @@ func (o *SpanQueryAggregateDataSeries) SetValueType(v string) {
 }
 
 func (o SpanQueryAggregateDataSeries) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryId"] = o.QueryId
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["dataPoints"] = o.DataPoints
-	}
-	if o.AggregateInfo != nil {
-		toSerialize["aggregateInfo"] = o.AggregateInfo
-	}
-	if o.MetaData != nil {
-		toSerialize["metaData"] = o.MetaData
-	}
-	if o.SeriesType != nil {
-		toSerialize["seriesType"] = o.SeriesType
-	}
-	if o.XAxisKeys != nil {
-		toSerialize["xAxisKeys"] = o.XAxisKeys
-	}
-	if o.ValueType != nil {
-		toSerialize["valueType"] = o.ValueType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryAggregateDataSeries) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryId"] = o.QueryId
+	toSerialize["name"] = o.Name
+	toSerialize["dataPoints"] = o.DataPoints
+	if !IsNil(o.AggregateInfo) {
+		toSerialize["aggregateInfo"] = o.AggregateInfo
+	}
+	if !IsNil(o.MetaData) {
+		toSerialize["metaData"] = o.MetaData
+	}
+	if !IsNil(o.SeriesType) {
+		toSerialize["seriesType"] = o.SeriesType
+	}
+	if !IsNil(o.XAxisKeys) {
+		toSerialize["xAxisKeys"] = o.XAxisKeys
+	}
+	if !IsNil(o.ValueType) {
+		toSerialize["valueType"] = o.ValueType
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryAggregateDataSeries struct {

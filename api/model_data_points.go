@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DataPoints type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DataPoints{}
 
 // DataPoints Denotes the data points as a result of the groupBy function performed on the usage data.
 type DataPoints struct {
@@ -65,7 +68,7 @@ func (o *DataPoints) SetTimeRange(v BeginBoundedTimeRange) {
 
 // GetValues returns the Values field value if set, zero value otherwise.
 func (o *DataPoints) GetValues() []DataValue {
-	if o == nil || o.Values == nil {
+	if o == nil || IsNil(o.Values) {
 		var ret []DataValue
 		return ret
 	}
@@ -75,7 +78,7 @@ func (o *DataPoints) GetValues() []DataValue {
 // GetValuesOk returns a tuple with the Values field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DataPoints) GetValuesOk() ([]DataValue, bool) {
-	if o == nil || o.Values == nil {
+	if o == nil || IsNil(o.Values) {
 		return nil, false
 	}
 	return o.Values, true
@@ -83,7 +86,7 @@ func (o *DataPoints) GetValuesOk() ([]DataValue, bool) {
 
 // HasValues returns a boolean if a field has been set.
 func (o *DataPoints) HasValues() bool {
-	if o != nil && o.Values != nil {
+	if o != nil && !IsNil(o.Values) {
 		return true
 	}
 
@@ -96,14 +99,20 @@ func (o *DataPoints) SetValues(v []DataValue) {
 }
 
 func (o DataPoints) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.Values != nil {
-		toSerialize["values"] = o.Values
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DataPoints) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.Values) {
+		toSerialize["values"] = o.Values
+	}
+	return toSerialize, nil
 }
 
 type NullableDataPoints struct {

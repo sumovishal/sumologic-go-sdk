@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionAffectedDueToIngestBudgetTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionAffectedDueToIngestBudgetTrackerAllOf{}
 
 // CollectionAffectedDueToIngestBudgetTrackerAllOf struct for CollectionAffectedDueToIngestBudgetTrackerAllOf
 type CollectionAffectedDueToIngestBudgetTrackerAllOf struct {
@@ -39,7 +42,7 @@ func NewCollectionAffectedDueToIngestBudgetTrackerAllOfWithDefaults() *Collectio
 
 // GetAssociatedBudgetNames returns the AssociatedBudgetNames field value if set, zero value otherwise.
 func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) GetAssociatedBudgetNames() string {
-	if o == nil || o.AssociatedBudgetNames == nil {
+	if o == nil || IsNil(o.AssociatedBudgetNames) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) GetAssociatedBudgetNam
 // GetAssociatedBudgetNamesOk returns a tuple with the AssociatedBudgetNames field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) GetAssociatedBudgetNamesOk() (*string, bool) {
-	if o == nil || o.AssociatedBudgetNames == nil {
+	if o == nil || IsNil(o.AssociatedBudgetNames) {
 		return nil, false
 	}
 	return o.AssociatedBudgetNames, true
@@ -57,7 +60,7 @@ func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) GetAssociatedBudgetNam
 
 // HasAssociatedBudgetNames returns a boolean if a field has been set.
 func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) HasAssociatedBudgetNames() bool {
-	if o != nil && o.AssociatedBudgetNames != nil {
+	if o != nil && !IsNil(o.AssociatedBudgetNames) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *CollectionAffectedDueToIngestBudgetTrackerAllOf) SetAssociatedBudgetNam
 }
 
 func (o CollectionAffectedDueToIngestBudgetTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.AssociatedBudgetNames != nil {
-		toSerialize["associatedBudgetNames"] = o.AssociatedBudgetNames
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CollectionAffectedDueToIngestBudgetTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AssociatedBudgetNames) {
+		toSerialize["associatedBudgetNames"] = o.AssociatedBudgetNames
+	}
+	return toSerialize, nil
 }
 
 type NullableCollectionAffectedDueToIngestBudgetTrackerAllOf struct {

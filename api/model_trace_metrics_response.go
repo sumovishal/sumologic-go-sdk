@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceMetricsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceMetricsResponse{}
 
 // TraceMetricsResponse struct for TraceMetricsResponse
 type TraceMetricsResponse struct {
@@ -63,11 +66,17 @@ func (o *TraceMetricsResponse) SetMetrics(v []TraceMetricDetail) {
 }
 
 func (o TraceMetricsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["metrics"] = o.Metrics
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceMetricsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["metrics"] = o.Metrics
+	return toSerialize, nil
 }
 
 type NullableTraceMetricsResponse struct {

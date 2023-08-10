@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AndTracingExpressionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AndTracingExpressionAllOf{}
 
 // AndTracingExpressionAllOf struct for AndTracingExpressionAllOf
 type AndTracingExpressionAllOf struct {
@@ -63,11 +66,17 @@ func (o *AndTracingExpressionAllOf) SetExpressions(v []TraceQueryExpression) {
 }
 
 func (o AndTracingExpressionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["expressions"] = o.Expressions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AndTracingExpressionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["expressions"] = o.Expressions
+	return toSerialize, nil
 }
 
 type NullableAndTracingExpressionAllOf struct {

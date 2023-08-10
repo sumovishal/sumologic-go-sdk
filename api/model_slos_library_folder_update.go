@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SlosLibraryFolderUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibraryFolderUpdate{}
 
 // SlosLibraryFolderUpdate struct for SlosLibraryFolderUpdate
 type SlosLibraryFolderUpdate struct {
@@ -42,16 +45,24 @@ func NewSlosLibraryFolderUpdateWithDefaults() *SlosLibraryFolderUpdate {
 }
 
 func (o SlosLibraryFolderUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibraryFolderUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSlosLibraryBaseUpdate, errSlosLibraryBaseUpdate := json.Marshal(o.SlosLibraryBaseUpdate)
 	if errSlosLibraryBaseUpdate != nil {
-		return []byte{}, errSlosLibraryBaseUpdate
+		return map[string]interface{}{}, errSlosLibraryBaseUpdate
 	}
 	errSlosLibraryBaseUpdate = json.Unmarshal([]byte(serializedSlosLibraryBaseUpdate), &toSerialize)
 	if errSlosLibraryBaseUpdate != nil {
-		return []byte{}, errSlosLibraryBaseUpdate
+		return map[string]interface{}{}, errSlosLibraryBaseUpdate
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSlosLibraryFolderUpdate struct {

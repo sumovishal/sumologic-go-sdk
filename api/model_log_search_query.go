@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogSearchQuery type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchQuery{}
 
 // LogSearchQuery Query for which to get log fields.
 type LogSearchQuery struct {
@@ -63,11 +66,17 @@ func (o *LogSearchQuery) SetQueryString(v string) {
 }
 
 func (o LogSearchQuery) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchQuery) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	return toSerialize, nil
 }
 
 type NullableLogSearchQuery struct {

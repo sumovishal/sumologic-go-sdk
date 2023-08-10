@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LookupTableAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupTableAllOf{}
 
 // LookupTableAllOf struct for LookupTableAllOf
 type LookupTableAllOf struct {
@@ -43,7 +46,7 @@ func NewLookupTableAllOfWithDefaults() *LookupTableAllOf {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *LookupTableAllOf) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *LookupTableAllOf) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableAllOf) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -61,7 +64,7 @@ func (o *LookupTableAllOf) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *LookupTableAllOf) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *LookupTableAllOf) SetId(v string) {
 
 // GetContentPath returns the ContentPath field value if set, zero value otherwise.
 func (o *LookupTableAllOf) GetContentPath() string {
-	if o == nil || o.ContentPath == nil {
+	if o == nil || IsNil(o.ContentPath) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *LookupTableAllOf) GetContentPath() string {
 // GetContentPathOk returns a tuple with the ContentPath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableAllOf) GetContentPathOk() (*string, bool) {
-	if o == nil || o.ContentPath == nil {
+	if o == nil || IsNil(o.ContentPath) {
 		return nil, false
 	}
 	return o.ContentPath, true
@@ -93,7 +96,7 @@ func (o *LookupTableAllOf) GetContentPathOk() (*string, bool) {
 
 // HasContentPath returns a boolean if a field has been set.
 func (o *LookupTableAllOf) HasContentPath() bool {
-	if o != nil && o.ContentPath != nil {
+	if o != nil && !IsNil(o.ContentPath) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *LookupTableAllOf) SetContentPath(v string) {
 
 // GetSize returns the Size field value if set, zero value otherwise.
 func (o *LookupTableAllOf) GetSize() int64 {
-	if o == nil || o.Size == nil {
+	if o == nil || IsNil(o.Size) {
 		var ret int64
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *LookupTableAllOf) GetSize() int64 {
 // GetSizeOk returns a tuple with the Size field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableAllOf) GetSizeOk() (*int64, bool) {
-	if o == nil || o.Size == nil {
+	if o == nil || IsNil(o.Size) {
 		return nil, false
 	}
 	return o.Size, true
@@ -125,7 +128,7 @@ func (o *LookupTableAllOf) GetSizeOk() (*int64, bool) {
 
 // HasSize returns a boolean if a field has been set.
 func (o *LookupTableAllOf) HasSize() bool {
-	if o != nil && o.Size != nil {
+	if o != nil && !IsNil(o.Size) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *LookupTableAllOf) SetSize(v int64) {
 }
 
 func (o LookupTableAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.ContentPath != nil {
-		toSerialize["contentPath"] = o.ContentPath
-	}
-	if o.Size != nil {
-		toSerialize["size"] = o.Size
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupTableAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.ContentPath) {
+		toSerialize["contentPath"] = o.ContentPath
+	}
+	if !IsNil(o.Size) {
+		toSerialize["size"] = o.Size
+	}
+	return toSerialize, nil
 }
 
 type NullableLookupTableAllOf struct {

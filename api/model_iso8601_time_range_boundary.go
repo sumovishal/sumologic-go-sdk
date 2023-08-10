@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Iso8601TimeRangeBoundary type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Iso8601TimeRangeBoundary{}
 
 // Iso8601TimeRangeBoundary struct for Iso8601TimeRangeBoundary
 type Iso8601TimeRangeBoundary struct {
@@ -66,19 +69,25 @@ func (o *Iso8601TimeRangeBoundary) SetIso8601Time(v time.Time) {
 }
 
 func (o Iso8601TimeRangeBoundary) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Iso8601TimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTimeRangeBoundary, errTimeRangeBoundary := json.Marshal(o.TimeRangeBoundary)
 	if errTimeRangeBoundary != nil {
-		return []byte{}, errTimeRangeBoundary
+		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	errTimeRangeBoundary = json.Unmarshal([]byte(serializedTimeRangeBoundary), &toSerialize)
 	if errTimeRangeBoundary != nil {
-		return []byte{}, errTimeRangeBoundary
+		return map[string]interface{}{}, errTimeRangeBoundary
 	}
-	if true {
-		toSerialize["iso8601Time"] = o.Iso8601Time
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["iso8601Time"] = o.Iso8601Time
+	return toSerialize, nil
 }
 
 type NullableIso8601TimeRangeBoundary struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ChartDataResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ChartDataResult{}
 
 // ChartDataResult Response for monitor chart data visualization.
 type ChartDataResult struct {
@@ -41,7 +44,7 @@ func NewChartDataResultWithDefaults() *ChartDataResult {
 
 // GetWarnings returns the Warnings field value if set, zero value otherwise.
 func (o *ChartDataResult) GetWarnings() []ErrorDescription {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		var ret []ErrorDescription
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *ChartDataResult) GetWarnings() []ErrorDescription {
 // GetWarningsOk returns a tuple with the Warnings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ChartDataResult) GetWarningsOk() ([]ErrorDescription, bool) {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		return nil, false
 	}
 	return o.Warnings, true
@@ -59,7 +62,7 @@ func (o *ChartDataResult) GetWarningsOk() ([]ErrorDescription, bool) {
 
 // HasWarnings returns a boolean if a field has been set.
 func (o *ChartDataResult) HasWarnings() bool {
-	if o != nil && o.Warnings != nil {
+	if o != nil && !IsNil(o.Warnings) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *ChartDataResult) SetWarnings(v []ErrorDescription) {
 
 // GetSeries returns the Series field value if set, zero value otherwise.
 func (o *ChartDataResult) GetSeries() []SeriesData {
-	if o == nil || o.Series == nil {
+	if o == nil || IsNil(o.Series) {
 		var ret []SeriesData
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *ChartDataResult) GetSeries() []SeriesData {
 // GetSeriesOk returns a tuple with the Series field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ChartDataResult) GetSeriesOk() ([]SeriesData, bool) {
-	if o == nil || o.Series == nil {
+	if o == nil || IsNil(o.Series) {
 		return nil, false
 	}
 	return o.Series, true
@@ -91,7 +94,7 @@ func (o *ChartDataResult) GetSeriesOk() ([]SeriesData, bool) {
 
 // HasSeries returns a boolean if a field has been set.
 func (o *ChartDataResult) HasSeries() bool {
-	if o != nil && o.Series != nil {
+	if o != nil && !IsNil(o.Series) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *ChartDataResult) SetSeries(v []SeriesData) {
 }
 
 func (o ChartDataResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Warnings != nil {
-		toSerialize["warnings"] = o.Warnings
-	}
-	if o.Series != nil {
-		toSerialize["series"] = o.Series
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ChartDataResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Warnings) {
+		toSerialize["warnings"] = o.Warnings
+	}
+	if !IsNil(o.Series) {
+		toSerialize["series"] = o.Series
+	}
+	return toSerialize, nil
 }
 
 type NullableChartDataResult struct {

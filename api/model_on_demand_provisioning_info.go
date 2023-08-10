@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OnDemandProvisioningInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OnDemandProvisioningInfo{}
 
 // OnDemandProvisioningInfo struct for OnDemandProvisioningInfo
 type OnDemandProvisioningInfo struct {
@@ -52,7 +55,7 @@ func NewOnDemandProvisioningInfoWithDefaults() *OnDemandProvisioningInfo {
 
 // GetFirstNameAttribute returns the FirstNameAttribute field value if set, zero value otherwise.
 func (o *OnDemandProvisioningInfo) GetFirstNameAttribute() string {
-	if o == nil || o.FirstNameAttribute == nil {
+	if o == nil || IsNil(o.FirstNameAttribute) {
 		var ret string
 		return ret
 	}
@@ -62,7 +65,7 @@ func (o *OnDemandProvisioningInfo) GetFirstNameAttribute() string {
 // GetFirstNameAttributeOk returns a tuple with the FirstNameAttribute field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OnDemandProvisioningInfo) GetFirstNameAttributeOk() (*string, bool) {
-	if o == nil || o.FirstNameAttribute == nil {
+	if o == nil || IsNil(o.FirstNameAttribute) {
 		return nil, false
 	}
 	return o.FirstNameAttribute, true
@@ -70,7 +73,7 @@ func (o *OnDemandProvisioningInfo) GetFirstNameAttributeOk() (*string, bool) {
 
 // HasFirstNameAttribute returns a boolean if a field has been set.
 func (o *OnDemandProvisioningInfo) HasFirstNameAttribute() bool {
-	if o != nil && o.FirstNameAttribute != nil {
+	if o != nil && !IsNil(o.FirstNameAttribute) {
 		return true
 	}
 
@@ -84,7 +87,7 @@ func (o *OnDemandProvisioningInfo) SetFirstNameAttribute(v string) {
 
 // GetLastNameAttribute returns the LastNameAttribute field value if set, zero value otherwise.
 func (o *OnDemandProvisioningInfo) GetLastNameAttribute() string {
-	if o == nil || o.LastNameAttribute == nil {
+	if o == nil || IsNil(o.LastNameAttribute) {
 		var ret string
 		return ret
 	}
@@ -94,7 +97,7 @@ func (o *OnDemandProvisioningInfo) GetLastNameAttribute() string {
 // GetLastNameAttributeOk returns a tuple with the LastNameAttribute field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OnDemandProvisioningInfo) GetLastNameAttributeOk() (*string, bool) {
-	if o == nil || o.LastNameAttribute == nil {
+	if o == nil || IsNil(o.LastNameAttribute) {
 		return nil, false
 	}
 	return o.LastNameAttribute, true
@@ -102,7 +105,7 @@ func (o *OnDemandProvisioningInfo) GetLastNameAttributeOk() (*string, bool) {
 
 // HasLastNameAttribute returns a boolean if a field has been set.
 func (o *OnDemandProvisioningInfo) HasLastNameAttribute() bool {
-	if o != nil && o.LastNameAttribute != nil {
+	if o != nil && !IsNil(o.LastNameAttribute) {
 		return true
 	}
 
@@ -139,17 +142,23 @@ func (o *OnDemandProvisioningInfo) SetOnDemandProvisioningRoles(v []string) {
 }
 
 func (o OnDemandProvisioningInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.FirstNameAttribute != nil {
-		toSerialize["firstNameAttribute"] = o.FirstNameAttribute
-	}
-	if o.LastNameAttribute != nil {
-		toSerialize["lastNameAttribute"] = o.LastNameAttribute
-	}
-	if true {
-		toSerialize["onDemandProvisioningRoles"] = o.OnDemandProvisioningRoles
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OnDemandProvisioningInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.FirstNameAttribute) {
+		toSerialize["firstNameAttribute"] = o.FirstNameAttribute
+	}
+	if !IsNil(o.LastNameAttribute) {
+		toSerialize["lastNameAttribute"] = o.LastNameAttribute
+	}
+	toSerialize["onDemandProvisioningRoles"] = o.OnDemandProvisioningRoles
+	return toSerialize, nil
 }
 
 type NullableOnDemandProvisioningInfo struct {

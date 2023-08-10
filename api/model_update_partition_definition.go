@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UpdatePartitionDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdatePartitionDefinition{}
 
 // UpdatePartitionDefinition struct for UpdatePartitionDefinition
 type UpdatePartitionDefinition struct {
@@ -53,7 +56,7 @@ func NewUpdatePartitionDefinitionWithDefaults() *UpdatePartitionDefinition {
 
 // GetRetentionPeriod returns the RetentionPeriod field value if set, zero value otherwise.
 func (o *UpdatePartitionDefinition) GetRetentionPeriod() int32 {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -63,7 +66,7 @@ func (o *UpdatePartitionDefinition) GetRetentionPeriod() int32 {
 // GetRetentionPeriodOk returns a tuple with the RetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdatePartitionDefinition) GetRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		return nil, false
 	}
 	return o.RetentionPeriod, true
@@ -71,7 +74,7 @@ func (o *UpdatePartitionDefinition) GetRetentionPeriodOk() (*int32, bool) {
 
 // HasRetentionPeriod returns a boolean if a field has been set.
 func (o *UpdatePartitionDefinition) HasRetentionPeriod() bool {
-	if o != nil && o.RetentionPeriod != nil {
+	if o != nil && !IsNil(o.RetentionPeriod) {
 		return true
 	}
 
@@ -85,7 +88,7 @@ func (o *UpdatePartitionDefinition) SetRetentionPeriod(v int32) {
 
 // GetReduceRetentionPeriodImmediately returns the ReduceRetentionPeriodImmediately field value if set, zero value otherwise.
 func (o *UpdatePartitionDefinition) GetReduceRetentionPeriodImmediately() bool {
-	if o == nil || o.ReduceRetentionPeriodImmediately == nil {
+	if o == nil || IsNil(o.ReduceRetentionPeriodImmediately) {
 		var ret bool
 		return ret
 	}
@@ -95,7 +98,7 @@ func (o *UpdatePartitionDefinition) GetReduceRetentionPeriodImmediately() bool {
 // GetReduceRetentionPeriodImmediatelyOk returns a tuple with the ReduceRetentionPeriodImmediately field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdatePartitionDefinition) GetReduceRetentionPeriodImmediatelyOk() (*bool, bool) {
-	if o == nil || o.ReduceRetentionPeriodImmediately == nil {
+	if o == nil || IsNil(o.ReduceRetentionPeriodImmediately) {
 		return nil, false
 	}
 	return o.ReduceRetentionPeriodImmediately, true
@@ -103,7 +106,7 @@ func (o *UpdatePartitionDefinition) GetReduceRetentionPeriodImmediatelyOk() (*bo
 
 // HasReduceRetentionPeriodImmediately returns a boolean if a field has been set.
 func (o *UpdatePartitionDefinition) HasReduceRetentionPeriodImmediately() bool {
-	if o != nil && o.ReduceRetentionPeriodImmediately != nil {
+	if o != nil && !IsNil(o.ReduceRetentionPeriodImmediately) {
 		return true
 	}
 
@@ -117,7 +120,7 @@ func (o *UpdatePartitionDefinition) SetReduceRetentionPeriodImmediately(v bool) 
 
 // GetIsCompliant returns the IsCompliant field value if set, zero value otherwise.
 func (o *UpdatePartitionDefinition) GetIsCompliant() bool {
-	if o == nil || o.IsCompliant == nil {
+	if o == nil || IsNil(o.IsCompliant) {
 		var ret bool
 		return ret
 	}
@@ -127,7 +130,7 @@ func (o *UpdatePartitionDefinition) GetIsCompliant() bool {
 // GetIsCompliantOk returns a tuple with the IsCompliant field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdatePartitionDefinition) GetIsCompliantOk() (*bool, bool) {
-	if o == nil || o.IsCompliant == nil {
+	if o == nil || IsNil(o.IsCompliant) {
 		return nil, false
 	}
 	return o.IsCompliant, true
@@ -135,7 +138,7 @@ func (o *UpdatePartitionDefinition) GetIsCompliantOk() (*bool, bool) {
 
 // HasIsCompliant returns a boolean if a field has been set.
 func (o *UpdatePartitionDefinition) HasIsCompliant() bool {
-	if o != nil && o.IsCompliant != nil {
+	if o != nil && !IsNil(o.IsCompliant) {
 		return true
 	}
 
@@ -149,7 +152,7 @@ func (o *UpdatePartitionDefinition) SetIsCompliant(v bool) {
 
 // GetRoutingExpression returns the RoutingExpression field value if set, zero value otherwise.
 func (o *UpdatePartitionDefinition) GetRoutingExpression() string {
-	if o == nil || o.RoutingExpression == nil {
+	if o == nil || IsNil(o.RoutingExpression) {
 		var ret string
 		return ret
 	}
@@ -159,7 +162,7 @@ func (o *UpdatePartitionDefinition) GetRoutingExpression() string {
 // GetRoutingExpressionOk returns a tuple with the RoutingExpression field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UpdatePartitionDefinition) GetRoutingExpressionOk() (*string, bool) {
-	if o == nil || o.RoutingExpression == nil {
+	if o == nil || IsNil(o.RoutingExpression) {
 		return nil, false
 	}
 	return o.RoutingExpression, true
@@ -167,7 +170,7 @@ func (o *UpdatePartitionDefinition) GetRoutingExpressionOk() (*string, bool) {
 
 // HasRoutingExpression returns a boolean if a field has been set.
 func (o *UpdatePartitionDefinition) HasRoutingExpression() bool {
-	if o != nil && o.RoutingExpression != nil {
+	if o != nil && !IsNil(o.RoutingExpression) {
 		return true
 	}
 
@@ -180,20 +183,28 @@ func (o *UpdatePartitionDefinition) SetRoutingExpression(v string) {
 }
 
 func (o UpdatePartitionDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.RetentionPeriod != nil {
-		toSerialize["retentionPeriod"] = o.RetentionPeriod
-	}
-	if o.ReduceRetentionPeriodImmediately != nil {
-		toSerialize["reduceRetentionPeriodImmediately"] = o.ReduceRetentionPeriodImmediately
-	}
-	if o.IsCompliant != nil {
-		toSerialize["isCompliant"] = o.IsCompliant
-	}
-	if o.RoutingExpression != nil {
-		toSerialize["routingExpression"] = o.RoutingExpression
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdatePartitionDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.RetentionPeriod) {
+		toSerialize["retentionPeriod"] = o.RetentionPeriod
+	}
+	if !IsNil(o.ReduceRetentionPeriodImmediately) {
+		toSerialize["reduceRetentionPeriodImmediately"] = o.ReduceRetentionPeriodImmediately
+	}
+	if !IsNil(o.IsCompliant) {
+		toSerialize["isCompliant"] = o.IsCompliant
+	}
+	if !IsNil(o.RoutingExpression) {
+		toSerialize["routingExpression"] = o.RoutingExpression
+	}
+	return toSerialize, nil
 }
 
 type NullableUpdatePartitionDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the CompliancePeriodProgress type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CompliancePeriodProgress{}
 
 // CompliancePeriodProgress SLO data availability progress of a compliance period.
 type CompliancePeriodProgress struct {
@@ -172,23 +175,21 @@ func (o *CompliancePeriodProgress) SetIrrecoverableError(v bool) {
 }
 
 func (o CompliancePeriodProgress) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["relativeReference"] = o.RelativeReference
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
-	}
-	if true {
-		toSerialize["progress"] = o.Progress
-	}
-	if true {
-		toSerialize["irrecoverableError"] = o.IrrecoverableError
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CompliancePeriodProgress) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["relativeReference"] = o.RelativeReference
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	toSerialize["progress"] = o.Progress
+	toSerialize["irrecoverableError"] = o.IrrecoverableError
+	return toSerialize, nil
 }
 
 type NullableCompliancePeriodProgress struct {

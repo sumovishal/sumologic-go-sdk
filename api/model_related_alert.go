@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RelatedAlert type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RelatedAlert{}
 
 // RelatedAlert An alert and how it is related to the given alert
 type RelatedAlert struct {
@@ -40,7 +43,7 @@ func NewRelatedAlertWithDefaults() *RelatedAlert {
 
 // GetAlert returns the Alert field value if set, zero value otherwise.
 func (o *RelatedAlert) GetAlert() AlertsLibraryAlertResponse {
-	if o == nil || o.Alert == nil {
+	if o == nil || IsNil(o.Alert) {
 		var ret AlertsLibraryAlertResponse
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *RelatedAlert) GetAlert() AlertsLibraryAlertResponse {
 // GetAlertOk returns a tuple with the Alert field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RelatedAlert) GetAlertOk() (*AlertsLibraryAlertResponse, bool) {
-	if o == nil || o.Alert == nil {
+	if o == nil || IsNil(o.Alert) {
 		return nil, false
 	}
 	return o.Alert, true
@@ -58,7 +61,7 @@ func (o *RelatedAlert) GetAlertOk() (*AlertsLibraryAlertResponse, bool) {
 
 // HasAlert returns a boolean if a field has been set.
 func (o *RelatedAlert) HasAlert() bool {
-	if o != nil && o.Alert != nil {
+	if o != nil && !IsNil(o.Alert) {
 		return true
 	}
 
@@ -72,7 +75,7 @@ func (o *RelatedAlert) SetAlert(v AlertsLibraryAlertResponse) {
 
 // GetRelations returns the Relations field value if set, zero value otherwise.
 func (o *RelatedAlert) GetRelations() []string {
-	if o == nil || o.Relations == nil {
+	if o == nil || IsNil(o.Relations) {
 		var ret []string
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *RelatedAlert) GetRelations() []string {
 // GetRelationsOk returns a tuple with the Relations field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RelatedAlert) GetRelationsOk() ([]string, bool) {
-	if o == nil || o.Relations == nil {
+	if o == nil || IsNil(o.Relations) {
 		return nil, false
 	}
 	return o.Relations, true
@@ -90,7 +93,7 @@ func (o *RelatedAlert) GetRelationsOk() ([]string, bool) {
 
 // HasRelations returns a boolean if a field has been set.
 func (o *RelatedAlert) HasRelations() bool {
-	if o != nil && o.Relations != nil {
+	if o != nil && !IsNil(o.Relations) {
 		return true
 	}
 
@@ -103,14 +106,22 @@ func (o *RelatedAlert) SetRelations(v []string) {
 }
 
 func (o RelatedAlert) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Alert != nil {
-		toSerialize["alert"] = o.Alert
-	}
-	if o.Relations != nil {
-		toSerialize["relations"] = o.Relations
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RelatedAlert) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Alert) {
+		toSerialize["alert"] = o.Alert
+	}
+	if !IsNil(o.Relations) {
+		toSerialize["relations"] = o.Relations
+	}
+	return toSerialize, nil
 }
 
 type NullableRelatedAlert struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Capacity type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Capacity{}
 
 // Capacity Amount of entitlement provided by Sumo Logic for the entitlement type of the account.
 type Capacity struct {
@@ -93,7 +96,7 @@ func (o *Capacity) SetUnit(v string) {
 
 // GetCapacityType returns the CapacityType field value if set, zero value otherwise.
 func (o *Capacity) GetCapacityType() string {
-	if o == nil || o.CapacityType == nil {
+	if o == nil || IsNil(o.CapacityType) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *Capacity) GetCapacityType() string {
 // GetCapacityTypeOk returns a tuple with the CapacityType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Capacity) GetCapacityTypeOk() (*string, bool) {
-	if o == nil || o.CapacityType == nil {
+	if o == nil || IsNil(o.CapacityType) {
 		return nil, false
 	}
 	return o.CapacityType, true
@@ -111,7 +114,7 @@ func (o *Capacity) GetCapacityTypeOk() (*string, bool) {
 
 // HasCapacityType returns a boolean if a field has been set.
 func (o *Capacity) HasCapacityType() bool {
-	if o != nil && o.CapacityType != nil {
+	if o != nil && !IsNil(o.CapacityType) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *Capacity) SetCapacityType(v string) {
 }
 
 func (o Capacity) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if true {
-		toSerialize["unit"] = o.Unit
-	}
-	if o.CapacityType != nil {
-		toSerialize["capacityType"] = o.CapacityType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Capacity) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["value"] = o.Value
+	toSerialize["unit"] = o.Unit
+	if !IsNil(o.CapacityType) {
+		toSerialize["capacityType"] = o.CapacityType
+	}
+	return toSerialize, nil
 }
 
 type NullableCapacity struct {

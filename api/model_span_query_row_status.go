@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the SpanQueryRowStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryRowStatus{}
+
 // SpanQueryRowStatus struct for SpanQueryRowStatus
 type SpanQueryRowStatus struct {
 	// A unique identifier of the query.
@@ -22,7 +25,7 @@ type SpanQueryRowStatus struct {
 	Status string `json:"status"`
 	// Descriptive message of the status.
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// Number of restuls matching the query
+	// Number of results matching the query
 	Count int64 `json:"count"`
 	// Indicates whether facet field cardinality counts are approximated or not.
 	ApproximatedFieldCounts *bool `json:"approximatedFieldCounts,omitempty"`
@@ -100,7 +103,7 @@ func (o *SpanQueryRowStatus) SetStatus(v string) {
 
 // GetStatusMessage returns the StatusMessage field value if set, zero value otherwise.
 func (o *SpanQueryRowStatus) GetStatusMessage() string {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		var ret string
 		return ret
 	}
@@ -110,7 +113,7 @@ func (o *SpanQueryRowStatus) GetStatusMessage() string {
 // GetStatusMessageOk returns a tuple with the StatusMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowStatus) GetStatusMessageOk() (*string, bool) {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		return nil, false
 	}
 	return o.StatusMessage, true
@@ -118,7 +121,7 @@ func (o *SpanQueryRowStatus) GetStatusMessageOk() (*string, bool) {
 
 // HasStatusMessage returns a boolean if a field has been set.
 func (o *SpanQueryRowStatus) HasStatusMessage() bool {
-	if o != nil && o.StatusMessage != nil {
+	if o != nil && !IsNil(o.StatusMessage) {
 		return true
 	}
 
@@ -156,7 +159,7 @@ func (o *SpanQueryRowStatus) SetCount(v int64) {
 
 // GetApproximatedFieldCounts returns the ApproximatedFieldCounts field value if set, zero value otherwise.
 func (o *SpanQueryRowStatus) GetApproximatedFieldCounts() bool {
-	if o == nil || o.ApproximatedFieldCounts == nil {
+	if o == nil || IsNil(o.ApproximatedFieldCounts) {
 		var ret bool
 		return ret
 	}
@@ -166,7 +169,7 @@ func (o *SpanQueryRowStatus) GetApproximatedFieldCounts() bool {
 // GetApproximatedFieldCountsOk returns a tuple with the ApproximatedFieldCounts field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowStatus) GetApproximatedFieldCountsOk() (*bool, bool) {
-	if o == nil || o.ApproximatedFieldCounts == nil {
+	if o == nil || IsNil(o.ApproximatedFieldCounts) {
 		return nil, false
 	}
 	return o.ApproximatedFieldCounts, true
@@ -174,7 +177,7 @@ func (o *SpanQueryRowStatus) GetApproximatedFieldCountsOk() (*bool, bool) {
 
 // HasApproximatedFieldCounts returns a boolean if a field has been set.
 func (o *SpanQueryRowStatus) HasApproximatedFieldCounts() bool {
-	if o != nil && o.ApproximatedFieldCounts != nil {
+	if o != nil && !IsNil(o.ApproximatedFieldCounts) {
 		return true
 	}
 
@@ -188,7 +191,7 @@ func (o *SpanQueryRowStatus) SetApproximatedFieldCounts(v bool) {
 
 // GetFacetsCompleted returns the FacetsCompleted field value if set, zero value otherwise.
 func (o *SpanQueryRowStatus) GetFacetsCompleted() bool {
-	if o == nil || o.FacetsCompleted == nil {
+	if o == nil || IsNil(o.FacetsCompleted) {
 		var ret bool
 		return ret
 	}
@@ -198,7 +201,7 @@ func (o *SpanQueryRowStatus) GetFacetsCompleted() bool {
 // GetFacetsCompletedOk returns a tuple with the FacetsCompleted field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowStatus) GetFacetsCompletedOk() (*bool, bool) {
-	if o == nil || o.FacetsCompleted == nil {
+	if o == nil || IsNil(o.FacetsCompleted) {
 		return nil, false
 	}
 	return o.FacetsCompleted, true
@@ -206,7 +209,7 @@ func (o *SpanQueryRowStatus) GetFacetsCompletedOk() (*bool, bool) {
 
 // HasFacetsCompleted returns a boolean if a field has been set.
 func (o *SpanQueryRowStatus) HasFacetsCompleted() bool {
-	if o != nil && o.FacetsCompleted != nil {
+	if o != nil && !IsNil(o.FacetsCompleted) {
 		return true
 	}
 
@@ -219,26 +222,28 @@ func (o *SpanQueryRowStatus) SetFacetsCompleted(v bool) {
 }
 
 func (o SpanQueryRowStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessage != nil {
-		toSerialize["statusMessage"] = o.StatusMessage
-	}
-	if true {
-		toSerialize["count"] = o.Count
-	}
-	if o.ApproximatedFieldCounts != nil {
-		toSerialize["approximatedFieldCounts"] = o.ApproximatedFieldCounts
-	}
-	if o.FacetsCompleted != nil {
-		toSerialize["facetsCompleted"] = o.FacetsCompleted
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryRowStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessage) {
+		toSerialize["statusMessage"] = o.StatusMessage
+	}
+	toSerialize["count"] = o.Count
+	if !IsNil(o.ApproximatedFieldCounts) {
+		toSerialize["approximatedFieldCounts"] = o.ApproximatedFieldCounts
+	}
+	if !IsNil(o.FacetsCompleted) {
+		toSerialize["facetsCompleted"] = o.FacetsCompleted
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryRowStatus struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TransformationRuleRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TransformationRuleRequest{}
 
 // TransformationRuleRequest A request for creating or updating a transformation rule.
 type TransformationRuleRequest struct {
@@ -89,14 +92,18 @@ func (o *TransformationRuleRequest) SetEnabled(v bool) {
 }
 
 func (o TransformationRuleRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["ruleDefinition"] = o.RuleDefinition
-	}
-	if true {
-		toSerialize["enabled"] = o.Enabled
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TransformationRuleRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["ruleDefinition"] = o.RuleDefinition
+	toSerialize["enabled"] = o.Enabled
+	return toSerialize, nil
 }
 
 type NullableTransformationRuleRequest struct {

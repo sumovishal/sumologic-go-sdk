@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PreviewLookupTableField type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PreviewLookupTableField{}
 
 // PreviewLookupTableField The properties of the field.
 type PreviewLookupTableField struct {
@@ -117,17 +120,19 @@ func (o *PreviewLookupTableField) SetFieldId(v string) {
 }
 
 func (o PreviewLookupTableField) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["fieldType"] = o.FieldType
-	}
-	if true {
-		toSerialize["fieldId"] = o.FieldId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PreviewLookupTableField) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["fieldType"] = o.FieldType
+	toSerialize["fieldId"] = o.FieldId
+	return toSerialize, nil
 }
 
 type NullablePreviewLookupTableField struct {

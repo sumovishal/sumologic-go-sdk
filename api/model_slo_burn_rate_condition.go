@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,26 +14,27 @@ import (
 	"encoding/json"
 )
 
+// checks if the SloBurnRateCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SloBurnRateCondition{}
+
 // SloBurnRateCondition struct for SloBurnRateCondition
 type SloBurnRateCondition struct {
 	TriggerCondition
-	// The burn rate percentage.
-	BurnRateThreshold float64 `json:"burnRateThreshold"`
-	// The relative time range for the burn rate percentage evaluation.
-	TimeRange string `json:"timeRange"`
+	// The error budget depletion percentage.
+	BurnRateThreshold *float64 `json:"burnRateThreshold,omitempty"`
+	// The relative time range for measuring error budget depletion.
+	TimeRange *string `json:"timeRange,omitempty"`
 }
 
 // NewSloBurnRateCondition instantiates a new SloBurnRateCondition object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSloBurnRateCondition(burnRateThreshold float64, timeRange string, triggerType string) *SloBurnRateCondition {
+func NewSloBurnRateCondition(triggerType string) *SloBurnRateCondition {
 	this := SloBurnRateCondition{}
 	var detectionMethod string = "StaticCondition"
 	this.DetectionMethod = &detectionMethod
 	this.TriggerType = triggerType
-	this.BurnRateThreshold = burnRateThreshold
-	this.TimeRange = timeRange
 	return &this
 }
 
@@ -45,71 +46,95 @@ func NewSloBurnRateConditionWithDefaults() *SloBurnRateCondition {
 	return &this
 }
 
-// GetBurnRateThreshold returns the BurnRateThreshold field value
+// GetBurnRateThreshold returns the BurnRateThreshold field value if set, zero value otherwise.
 func (o *SloBurnRateCondition) GetBurnRateThreshold() float64 {
-	if o == nil {
+	if o == nil || IsNil(o.BurnRateThreshold) {
 		var ret float64
 		return ret
 	}
-
-	return o.BurnRateThreshold
+	return *o.BurnRateThreshold
 }
 
-// GetBurnRateThresholdOk returns a tuple with the BurnRateThreshold field value
+// GetBurnRateThresholdOk returns a tuple with the BurnRateThreshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SloBurnRateCondition) GetBurnRateThresholdOk() (*float64, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.BurnRateThreshold) {
 		return nil, false
 	}
-	return &o.BurnRateThreshold, true
+	return o.BurnRateThreshold, true
 }
 
-// SetBurnRateThreshold sets field value
+// HasBurnRateThreshold returns a boolean if a field has been set.
+func (o *SloBurnRateCondition) HasBurnRateThreshold() bool {
+	if o != nil && !IsNil(o.BurnRateThreshold) {
+		return true
+	}
+
+	return false
+}
+
+// SetBurnRateThreshold gets a reference to the given float64 and assigns it to the BurnRateThreshold field.
 func (o *SloBurnRateCondition) SetBurnRateThreshold(v float64) {
-	o.BurnRateThreshold = v
+	o.BurnRateThreshold = &v
 }
 
-// GetTimeRange returns the TimeRange field value
+// GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *SloBurnRateCondition) GetTimeRange() string {
-	if o == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret string
 		return ret
 	}
-
-	return o.TimeRange
+	return *o.TimeRange
 }
 
-// GetTimeRangeOk returns a tuple with the TimeRange field value
+// GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SloBurnRateCondition) GetTimeRangeOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
-	return &o.TimeRange, true
+	return o.TimeRange, true
 }
 
-// SetTimeRange sets field value
+// HasTimeRange returns a boolean if a field has been set.
+func (o *SloBurnRateCondition) HasTimeRange() bool {
+	if o != nil && !IsNil(o.TimeRange) {
+		return true
+	}
+
+	return false
+}
+
+// SetTimeRange gets a reference to the given string and assigns it to the TimeRange field.
 func (o *SloBurnRateCondition) SetTimeRange(v string) {
-	o.TimeRange = v
+	o.TimeRange = &v
 }
 
 func (o SloBurnRateCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SloBurnRateCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
+	if !IsNil(o.BurnRateThreshold) {
 		toSerialize["burnRateThreshold"] = o.BurnRateThreshold
 	}
-	if true {
+	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSloBurnRateCondition struct {

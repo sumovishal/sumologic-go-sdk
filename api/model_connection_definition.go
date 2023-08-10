@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,11 +14,14 @@ import (
 	"encoding/json"
 )
 
+// checks if the ConnectionDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ConnectionDefinition{}
+
 // ConnectionDefinition struct for ConnectionDefinition
 type ConnectionDefinition struct {
 	// Type of connection. Valid values are `WebhookDefinition`, `ServiceNowDefinition`.
 	Type string `json:"type"`
-	// Name of connection. Name should be a valid alphanumeric value.
+	// Name of the connection.
 	Name string `json:"name"`
 	// Description of the connection.
 	Description *string `json:"description,omitempty"`
@@ -97,7 +100,7 @@ func (o *ConnectionDefinition) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ConnectionDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -107,7 +110,7 @@ func (o *ConnectionDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ConnectionDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -115,7 +118,7 @@ func (o *ConnectionDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ConnectionDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -128,17 +131,21 @@ func (o *ConnectionDefinition) SetDescription(v string) {
 }
 
 func (o ConnectionDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ConnectionDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["type"] = o.Type
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	return toSerialize, nil
 }
 
 type NullableConnectionDefinition struct {

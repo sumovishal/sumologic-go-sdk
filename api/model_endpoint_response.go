@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the EndpointResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &EndpointResponse{}
 
 // EndpointResponse Endpoint response object.
 type EndpointResponse struct {
@@ -171,23 +174,21 @@ func (o *EndpointResponse) SetOutputSchema(v string) {
 }
 
 func (o EndpointResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["inputSchema"] = o.InputSchema
-	}
-	if true {
-		toSerialize["outputSchema"] = o.OutputSchema
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o EndpointResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["url"] = o.Url
+	toSerialize["inputSchema"] = o.InputSchema
+	toSerialize["outputSchema"] = o.OutputSchema
+	return toSerialize, nil
 }
 
 type NullableEndpointResponse struct {

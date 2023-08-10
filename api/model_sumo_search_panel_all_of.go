@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SumoSearchPanelAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SumoSearchPanelAllOf{}
 
 // SumoSearchPanelAllOf A panel that has logs and metrics search queries.
 type SumoSearchPanelAllOf struct {
@@ -71,7 +74,7 @@ func (o *SumoSearchPanelAllOf) SetQueries(v []Query) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *SumoSearchPanelAllOf) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -81,7 +84,7 @@ func (o *SumoSearchPanelAllOf) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoSearchPanelAllOf) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -89,7 +92,7 @@ func (o *SumoSearchPanelAllOf) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *SumoSearchPanelAllOf) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -103,7 +106,7 @@ func (o *SumoSearchPanelAllOf) SetDescription(v string) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *SumoSearchPanelAllOf) GetTimeRange() ResolvableTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret ResolvableTimeRange
 		return ret
 	}
@@ -113,7 +116,7 @@ func (o *SumoSearchPanelAllOf) GetTimeRange() ResolvableTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoSearchPanelAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -121,7 +124,7 @@ func (o *SumoSearchPanelAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *SumoSearchPanelAllOf) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -135,7 +138,7 @@ func (o *SumoSearchPanelAllOf) SetTimeRange(v ResolvableTimeRange) {
 
 // GetColoringRules returns the ColoringRules field value if set, zero value otherwise.
 func (o *SumoSearchPanelAllOf) GetColoringRules() []ColoringRule {
-	if o == nil || o.ColoringRules == nil {
+	if o == nil || IsNil(o.ColoringRules) {
 		var ret []ColoringRule
 		return ret
 	}
@@ -145,7 +148,7 @@ func (o *SumoSearchPanelAllOf) GetColoringRules() []ColoringRule {
 // GetColoringRulesOk returns a tuple with the ColoringRules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoSearchPanelAllOf) GetColoringRulesOk() ([]ColoringRule, bool) {
-	if o == nil || o.ColoringRules == nil {
+	if o == nil || IsNil(o.ColoringRules) {
 		return nil, false
 	}
 	return o.ColoringRules, true
@@ -153,7 +156,7 @@ func (o *SumoSearchPanelAllOf) GetColoringRulesOk() ([]ColoringRule, bool) {
 
 // HasColoringRules returns a boolean if a field has been set.
 func (o *SumoSearchPanelAllOf) HasColoringRules() bool {
-	if o != nil && o.ColoringRules != nil {
+	if o != nil && !IsNil(o.ColoringRules) {
 		return true
 	}
 
@@ -167,7 +170,7 @@ func (o *SumoSearchPanelAllOf) SetColoringRules(v []ColoringRule) {
 
 // GetLinkedDashboards returns the LinkedDashboards field value if set, zero value otherwise.
 func (o *SumoSearchPanelAllOf) GetLinkedDashboards() []LinkedDashboard {
-	if o == nil || o.LinkedDashboards == nil {
+	if o == nil || IsNil(o.LinkedDashboards) {
 		var ret []LinkedDashboard
 		return ret
 	}
@@ -177,7 +180,7 @@ func (o *SumoSearchPanelAllOf) GetLinkedDashboards() []LinkedDashboard {
 // GetLinkedDashboardsOk returns a tuple with the LinkedDashboards field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SumoSearchPanelAllOf) GetLinkedDashboardsOk() ([]LinkedDashboard, bool) {
-	if o == nil || o.LinkedDashboards == nil {
+	if o == nil || IsNil(o.LinkedDashboards) {
 		return nil, false
 	}
 	return o.LinkedDashboards, true
@@ -185,7 +188,7 @@ func (o *SumoSearchPanelAllOf) GetLinkedDashboardsOk() ([]LinkedDashboard, bool)
 
 // HasLinkedDashboards returns a boolean if a field has been set.
 func (o *SumoSearchPanelAllOf) HasLinkedDashboards() bool {
-	if o != nil && o.LinkedDashboards != nil {
+	if o != nil && !IsNil(o.LinkedDashboards) {
 		return true
 	}
 
@@ -198,23 +201,29 @@ func (o *SumoSearchPanelAllOf) SetLinkedDashboards(v []LinkedDashboard) {
 }
 
 func (o SumoSearchPanelAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queries"] = o.Queries
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.ColoringRules != nil {
-		toSerialize["coloringRules"] = o.ColoringRules
-	}
-	if o.LinkedDashboards != nil {
-		toSerialize["linkedDashboards"] = o.LinkedDashboards
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SumoSearchPanelAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queries"] = o.Queries
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	if !IsNil(o.ColoringRules) {
+		toSerialize["coloringRules"] = o.ColoringRules
+	}
+	if !IsNil(o.LinkedDashboards) {
+		toSerialize["linkedDashboards"] = o.LinkedDashboards
+	}
+	return toSerialize, nil
 }
 
 type NullableSumoSearchPanelAllOf struct {

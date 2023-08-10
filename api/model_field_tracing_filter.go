@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the FieldTracingFilter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FieldTracingFilter{}
 
 // FieldTracingFilter struct for FieldTracingFilter
 type FieldTracingFilter struct {
@@ -94,7 +97,7 @@ func (o *FieldTracingFilter) SetOperator(v string) {
 
 // GetValue returns the Value field value if set, zero value otherwise.
 func (o *FieldTracingFilter) GetValue() TracingValue {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		var ret TracingValue
 		return ret
 	}
@@ -104,7 +107,7 @@ func (o *FieldTracingFilter) GetValue() TracingValue {
 // GetValueOk returns a tuple with the Value field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *FieldTracingFilter) GetValueOk() (*TracingValue, bool) {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		return nil, false
 	}
 	return o.Value, true
@@ -112,7 +115,7 @@ func (o *FieldTracingFilter) GetValueOk() (*TracingValue, bool) {
 
 // HasValue returns a boolean if a field has been set.
 func (o *FieldTracingFilter) HasValue() bool {
-	if o != nil && o.Value != nil {
+	if o != nil && !IsNil(o.Value) {
 		return true
 	}
 
@@ -125,25 +128,29 @@ func (o *FieldTracingFilter) SetValue(v TracingValue) {
 }
 
 func (o FieldTracingFilter) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o FieldTracingFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTraceQueryExpression, errTraceQueryExpression := json.Marshal(o.TraceQueryExpression)
 	if errTraceQueryExpression != nil {
-		return []byte{}, errTraceQueryExpression
+		return map[string]interface{}{}, errTraceQueryExpression
 	}
 	errTraceQueryExpression = json.Unmarshal([]byte(serializedTraceQueryExpression), &toSerialize)
 	if errTraceQueryExpression != nil {
-		return []byte{}, errTraceQueryExpression
+		return map[string]interface{}{}, errTraceQueryExpression
 	}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if true {
-		toSerialize["operator"] = o.Operator
-	}
-	if o.Value != nil {
+	toSerialize["field"] = o.Field
+	toSerialize["operator"] = o.Operator
+	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableFieldTracingFilter struct {

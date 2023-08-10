@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the HighCardinalityDimensionDroppedTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &HighCardinalityDimensionDroppedTracker{}
 
 // HighCardinalityDimensionDroppedTracker struct for HighCardinalityDimensionDroppedTracker
 type HighCardinalityDimensionDroppedTracker struct {
@@ -43,7 +46,7 @@ func NewHighCardinalityDimensionDroppedTrackerWithDefaults() *HighCardinalityDim
 
 // GetDimension returns the Dimension field value if set, zero value otherwise.
 func (o *HighCardinalityDimensionDroppedTracker) GetDimension() string {
-	if o == nil || o.Dimension == nil {
+	if o == nil || IsNil(o.Dimension) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *HighCardinalityDimensionDroppedTracker) GetDimension() string {
 // GetDimensionOk returns a tuple with the Dimension field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *HighCardinalityDimensionDroppedTracker) GetDimensionOk() (*string, bool) {
-	if o == nil || o.Dimension == nil {
+	if o == nil || IsNil(o.Dimension) {
 		return nil, false
 	}
 	return o.Dimension, true
@@ -61,7 +64,7 @@ func (o *HighCardinalityDimensionDroppedTracker) GetDimensionOk() (*string, bool
 
 // HasDimension returns a boolean if a field has been set.
 func (o *HighCardinalityDimensionDroppedTracker) HasDimension() bool {
-	if o != nil && o.Dimension != nil {
+	if o != nil && !IsNil(o.Dimension) {
 		return true
 	}
 
@@ -74,19 +77,27 @@ func (o *HighCardinalityDimensionDroppedTracker) SetDimension(v string) {
 }
 
 func (o HighCardinalityDimensionDroppedTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o HighCardinalityDimensionDroppedTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.Dimension != nil {
+	if !IsNil(o.Dimension) {
 		toSerialize["dimension"] = o.Dimension
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableHighCardinalityDimensionDroppedTracker struct {

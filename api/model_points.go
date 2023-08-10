@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Points type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Points{}
 
 // Points The `values` and `timestamps` are of the same length, and points are sorted by time ascending.
 type Points struct {
@@ -90,14 +93,18 @@ func (o *Points) SetValues(v []float64) {
 }
 
 func (o Points) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timestamps"] = o.Timestamps
-	}
-	if true {
-		toSerialize["values"] = o.Values
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Points) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timestamps"] = o.Timestamps
+	toSerialize["values"] = o.Values
+	return toSerialize, nil
 }
 
 type NullablePoints struct {

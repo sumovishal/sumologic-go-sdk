@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DirectDownloadReportAction type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DirectDownloadReportAction{}
 
 // DirectDownloadReportAction struct for DirectDownloadReportAction
 type DirectDownloadReportAction struct {
@@ -38,16 +41,24 @@ func NewDirectDownloadReportActionWithDefaults() *DirectDownloadReportAction {
 }
 
 func (o DirectDownloadReportAction) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o DirectDownloadReportAction) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedReportAction, errReportAction := json.Marshal(o.ReportAction)
 	if errReportAction != nil {
-		return []byte{}, errReportAction
+		return map[string]interface{}{}, errReportAction
 	}
 	errReportAction = json.Unmarshal([]byte(serializedReportAction), &toSerialize)
 	if errReportAction != nil {
-		return []byte{}, errReportAction
+		return map[string]interface{}{}, errReportAction
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableDirectDownloadReportAction struct {

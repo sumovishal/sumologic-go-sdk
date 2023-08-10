@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RollingComplianceAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RollingComplianceAllOf{}
 
 // RollingComplianceAllOf struct for RollingComplianceAllOf
 type RollingComplianceAllOf struct {
@@ -63,11 +66,17 @@ func (o *RollingComplianceAllOf) SetSize(v string) {
 }
 
 func (o RollingComplianceAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["size"] = o.Size
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RollingComplianceAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["size"] = o.Size
+	return toSerialize, nil
 }
 
 type NullableRollingComplianceAllOf struct {

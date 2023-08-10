@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContentSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentSyncDefinition{}
 
 // ContentSyncDefinition struct for ContentSyncDefinition
 type ContentSyncDefinition struct {
@@ -90,14 +93,18 @@ func (o *ContentSyncDefinition) SetName(v string) {
 }
 
 func (o ContentSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["type"] = o.Type
+	toSerialize["name"] = o.Name
+	return toSerialize, nil
 }
 
 type NullableContentSyncDefinition struct {

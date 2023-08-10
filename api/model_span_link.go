@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanLink type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanLink{}
 
 // SpanLink Details of the linked span.
 type SpanLink struct {
@@ -90,14 +93,18 @@ func (o *SpanLink) SetSpanId(v string) {
 }
 
 func (o SpanLink) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["traceId"] = o.TraceId
-	}
-	if true {
-		toSerialize["spanId"] = o.SpanId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanLink) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["traceId"] = o.TraceId
+	toSerialize["spanId"] = o.SpanId
+	return toSerialize, nil
 }
 
 type NullableSpanLink struct {

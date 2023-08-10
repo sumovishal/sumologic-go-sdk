@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,8 +12,10 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
+
+// checks if the WebhookConnection type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WebhookConnection{}
 
 // WebhookConnection struct for WebhookConnection
 type WebhookConnection struct {
@@ -30,6 +32,8 @@ type WebhookConnection struct {
 	WebhookType string `json:"webhookType"`
 	// The subtype of the connection. Valid values are `Event` or `Incident`.
 	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
+	// Resolution payload of the webhook.
+	ResolutionPayload *string `json:"resolutionPayload,omitempty"`
 	// Webhook endpoint warning for incorrect variable names and syntax.
 	Warnings []string `json:"warnings,omitempty"`
 }
@@ -186,7 +190,7 @@ func (o *WebhookConnection) SetWebhookType(v string) {
 
 // GetConnectionSubtype returns the ConnectionSubtype field value if set, zero value otherwise.
 func (o *WebhookConnection) GetConnectionSubtype() string {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		var ret string
 		return ret
 	}
@@ -196,7 +200,7 @@ func (o *WebhookConnection) GetConnectionSubtype() string {
 // GetConnectionSubtypeOk returns a tuple with the ConnectionSubtype field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookConnection) GetConnectionSubtypeOk() (*string, bool) {
-	if o == nil || o.ConnectionSubtype == nil {
+	if o == nil || IsNil(o.ConnectionSubtype) {
 		return nil, false
 	}
 	return o.ConnectionSubtype, true
@@ -204,7 +208,7 @@ func (o *WebhookConnection) GetConnectionSubtypeOk() (*string, bool) {
 
 // HasConnectionSubtype returns a boolean if a field has been set.
 func (o *WebhookConnection) HasConnectionSubtype() bool {
-	if o != nil && o.ConnectionSubtype != nil {
+	if o != nil && !IsNil(o.ConnectionSubtype) {
 		return true
 	}
 
@@ -216,9 +220,41 @@ func (o *WebhookConnection) SetConnectionSubtype(v string) {
 	o.ConnectionSubtype = &v
 }
 
+// GetResolutionPayload returns the ResolutionPayload field value if set, zero value otherwise.
+func (o *WebhookConnection) GetResolutionPayload() string {
+	if o == nil || IsNil(o.ResolutionPayload) {
+		var ret string
+		return ret
+	}
+	return *o.ResolutionPayload
+}
+
+// GetResolutionPayloadOk returns a tuple with the ResolutionPayload field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *WebhookConnection) GetResolutionPayloadOk() (*string, bool) {
+	if o == nil || IsNil(o.ResolutionPayload) {
+		return nil, false
+	}
+	return o.ResolutionPayload, true
+}
+
+// HasResolutionPayload returns a boolean if a field has been set.
+func (o *WebhookConnection) HasResolutionPayload() bool {
+	if o != nil && !IsNil(o.ResolutionPayload) {
+		return true
+	}
+
+	return false
+}
+
+// SetResolutionPayload gets a reference to the given string and assigns it to the ResolutionPayload field.
+func (o *WebhookConnection) SetResolutionPayload(v string) {
+	o.ResolutionPayload = &v
+}
+
 // GetWarnings returns the Warnings field value if set, zero value otherwise.
 func (o *WebhookConnection) GetWarnings() []string {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		var ret []string
 		return ret
 	}
@@ -228,7 +264,7 @@ func (o *WebhookConnection) GetWarnings() []string {
 // GetWarningsOk returns a tuple with the Warnings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *WebhookConnection) GetWarningsOk() ([]string, bool) {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		return nil, false
 	}
 	return o.Warnings, true
@@ -236,7 +272,7 @@ func (o *WebhookConnection) GetWarningsOk() ([]string, bool) {
 
 // HasWarnings returns a boolean if a field has been set.
 func (o *WebhookConnection) HasWarnings() bool {
-	if o != nil && o.Warnings != nil {
+	if o != nil && !IsNil(o.Warnings) {
 		return true
 	}
 
@@ -249,37 +285,38 @@ func (o *WebhookConnection) SetWarnings(v []string) {
 }
 
 func (o WebhookConnection) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o WebhookConnection) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedConnection, errConnection := json.Marshal(o.Connection)
 	if errConnection != nil {
-		return []byte{}, errConnection
+		return map[string]interface{}{}, errConnection
 	}
 	errConnection = json.Unmarshal([]byte(serializedConnection), &toSerialize)
 	if errConnection != nil {
-		return []byte{}, errConnection
+		return map[string]interface{}{}, errConnection
 	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["headers"] = o.Headers
-	}
-	if true {
-		toSerialize["customHeaders"] = o.CustomHeaders
-	}
-	if true {
-		toSerialize["defaultPayload"] = o.DefaultPayload
-	}
-	if true {
-		toSerialize["webhookType"] = o.WebhookType
-	}
-	if o.ConnectionSubtype != nil {
+	toSerialize["url"] = o.Url
+	toSerialize["headers"] = o.Headers
+	toSerialize["customHeaders"] = o.CustomHeaders
+	toSerialize["defaultPayload"] = o.DefaultPayload
+	toSerialize["webhookType"] = o.WebhookType
+	if !IsNil(o.ConnectionSubtype) {
 		toSerialize["connectionSubtype"] = o.ConnectionSubtype
 	}
-	if o.Warnings != nil {
+	if !IsNil(o.ResolutionPayload) {
+		toSerialize["resolutionPayload"] = o.ResolutionPayload
+	}
+	if !IsNil(o.Warnings) {
 		toSerialize["warnings"] = o.Warnings
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableWebhookConnection struct {

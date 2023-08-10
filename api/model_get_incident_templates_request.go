@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the GetIncidentTemplatesRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GetIncidentTemplatesRequest{}
 
 // GetIncidentTemplatesRequest struct for GetIncidentTemplatesRequest
 type GetIncidentTemplatesRequest struct {
@@ -43,7 +46,7 @@ func NewGetIncidentTemplatesRequestWithDefaults() *GetIncidentTemplatesRequest {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *GetIncidentTemplatesRequest) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *GetIncidentTemplatesRequest) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetIncidentTemplatesRequest) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -61,7 +64,7 @@ func (o *GetIncidentTemplatesRequest) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *GetIncidentTemplatesRequest) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *GetIncidentTemplatesRequest) SetUrl(v string) {
 
 // GetAuthHeader returns the AuthHeader field value if set, zero value otherwise.
 func (o *GetIncidentTemplatesRequest) GetAuthHeader() string {
-	if o == nil || o.AuthHeader == nil {
+	if o == nil || IsNil(o.AuthHeader) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *GetIncidentTemplatesRequest) GetAuthHeader() string {
 // GetAuthHeaderOk returns a tuple with the AuthHeader field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetIncidentTemplatesRequest) GetAuthHeaderOk() (*string, bool) {
-	if o == nil || o.AuthHeader == nil {
+	if o == nil || IsNil(o.AuthHeader) {
 		return nil, false
 	}
 	return o.AuthHeader, true
@@ -93,7 +96,7 @@ func (o *GetIncidentTemplatesRequest) GetAuthHeaderOk() (*string, bool) {
 
 // HasAuthHeader returns a boolean if a field has been set.
 func (o *GetIncidentTemplatesRequest) HasAuthHeader() bool {
-	if o != nil && o.AuthHeader != nil {
+	if o != nil && !IsNil(o.AuthHeader) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *GetIncidentTemplatesRequest) SetAuthHeader(v string) {
 
 // GetConnectionId returns the ConnectionId field value if set, zero value otherwise.
 func (o *GetIncidentTemplatesRequest) GetConnectionId() string {
-	if o == nil || o.ConnectionId == nil {
+	if o == nil || IsNil(o.ConnectionId) {
 		var ret string
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *GetIncidentTemplatesRequest) GetConnectionId() string {
 // GetConnectionIdOk returns a tuple with the ConnectionId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetIncidentTemplatesRequest) GetConnectionIdOk() (*string, bool) {
-	if o == nil || o.ConnectionId == nil {
+	if o == nil || IsNil(o.ConnectionId) {
 		return nil, false
 	}
 	return o.ConnectionId, true
@@ -125,7 +128,7 @@ func (o *GetIncidentTemplatesRequest) GetConnectionIdOk() (*string, bool) {
 
 // HasConnectionId returns a boolean if a field has been set.
 func (o *GetIncidentTemplatesRequest) HasConnectionId() bool {
-	if o != nil && o.ConnectionId != nil {
+	if o != nil && !IsNil(o.ConnectionId) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *GetIncidentTemplatesRequest) SetConnectionId(v string) {
 }
 
 func (o GetIncidentTemplatesRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.AuthHeader != nil {
-		toSerialize["authHeader"] = o.AuthHeader
-	}
-	if o.ConnectionId != nil {
-		toSerialize["connectionId"] = o.ConnectionId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GetIncidentTemplatesRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.AuthHeader) {
+		toSerialize["authHeader"] = o.AuthHeader
+	}
+	if !IsNil(o.ConnectionId) {
+		toSerialize["connectionId"] = o.ConnectionId
+	}
+	return toSerialize, nil
 }
 
 type NullableGetIncidentTemplatesRequest struct {

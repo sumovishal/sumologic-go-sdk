@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CseInsightConfidenceRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CseInsightConfidenceRequest{}
 
 // CseInsightConfidenceRequest CSE insight JSON object.
 type CseInsightConfidenceRequest struct {
@@ -63,11 +66,17 @@ func (o *CseInsightConfidenceRequest) SetCseInsight(v string) {
 }
 
 func (o CseInsightConfidenceRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["cseInsight"] = o.CseInsight
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CseInsightConfidenceRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["cseInsight"] = o.CseInsight
+	return toSerialize, nil
 }
 
 type NullableCseInsightConfidenceRequest struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogsStaticConditionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogsStaticConditionAllOf{}
+
 // LogsStaticConditionAllOf A rule that defines how logs monitor should evaluate static data and trigger notifications.
 type LogsStaticConditionAllOf struct {
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold float64 `json:"threshold"`
@@ -124,7 +127,7 @@ func (o *LogsStaticConditionAllOf) SetThresholdType(v string) {
 
 // GetField returns the Field field value if set, zero value otherwise.
 func (o *LogsStaticConditionAllOf) GetField() string {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		var ret string
 		return ret
 	}
@@ -134,7 +137,7 @@ func (o *LogsStaticConditionAllOf) GetField() string {
 // GetFieldOk returns a tuple with the Field field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsStaticConditionAllOf) GetFieldOk() (*string, bool) {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		return nil, false
 	}
 	return o.Field, true
@@ -142,7 +145,7 @@ func (o *LogsStaticConditionAllOf) GetFieldOk() (*string, bool) {
 
 // HasField returns a boolean if a field has been set.
 func (o *LogsStaticConditionAllOf) HasField() bool {
-	if o != nil && o.Field != nil {
+	if o != nil && !IsNil(o.Field) {
 		return true
 	}
 
@@ -155,20 +158,22 @@ func (o *LogsStaticConditionAllOf) SetField(v string) {
 }
 
 func (o LogsStaticConditionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if true {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if true {
-		toSerialize["thresholdType"] = o.ThresholdType
-	}
-	if o.Field != nil {
-		toSerialize["field"] = o.Field
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogsStaticConditionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeRange"] = o.TimeRange
+	toSerialize["threshold"] = o.Threshold
+	toSerialize["thresholdType"] = o.ThresholdType
+	if !IsNil(o.Field) {
+		toSerialize["field"] = o.Field
+	}
+	return toSerialize, nil
 }
 
 type NullableLogsStaticConditionAllOf struct {

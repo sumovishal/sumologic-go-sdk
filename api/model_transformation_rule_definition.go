@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TransformationRuleDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TransformationRuleDefinition{}
 
 // TransformationRuleDefinition The properties that define a transformation rule.
 type TransformationRuleDefinition struct {
@@ -104,7 +107,7 @@ func (o *TransformationRuleDefinition) SetSelector(v string) {
 
 // GetDimensionTransformations returns the DimensionTransformations field value if set, zero value otherwise.
 func (o *TransformationRuleDefinition) GetDimensionTransformations() []DimensionTransformation {
-	if o == nil || o.DimensionTransformations == nil {
+	if o == nil || IsNil(o.DimensionTransformations) {
 		var ret []DimensionTransformation
 		return ret
 	}
@@ -114,7 +117,7 @@ func (o *TransformationRuleDefinition) GetDimensionTransformations() []Dimension
 // GetDimensionTransformationsOk returns a tuple with the DimensionTransformations field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransformationRuleDefinition) GetDimensionTransformationsOk() ([]DimensionTransformation, bool) {
-	if o == nil || o.DimensionTransformations == nil {
+	if o == nil || IsNil(o.DimensionTransformations) {
 		return nil, false
 	}
 	return o.DimensionTransformations, true
@@ -122,7 +125,7 @@ func (o *TransformationRuleDefinition) GetDimensionTransformationsOk() ([]Dimens
 
 // HasDimensionTransformations returns a boolean if a field has been set.
 func (o *TransformationRuleDefinition) HasDimensionTransformations() bool {
-	if o != nil && o.DimensionTransformations != nil {
+	if o != nil && !IsNil(o.DimensionTransformations) {
 		return true
 	}
 
@@ -136,7 +139,7 @@ func (o *TransformationRuleDefinition) SetDimensionTransformations(v []Dimension
 
 // GetTransformedMetricsRetention returns the TransformedMetricsRetention field value if set, zero value otherwise.
 func (o *TransformationRuleDefinition) GetTransformedMetricsRetention() int64 {
-	if o == nil || o.TransformedMetricsRetention == nil {
+	if o == nil || IsNil(o.TransformedMetricsRetention) {
 		var ret int64
 		return ret
 	}
@@ -146,7 +149,7 @@ func (o *TransformationRuleDefinition) GetTransformedMetricsRetention() int64 {
 // GetTransformedMetricsRetentionOk returns a tuple with the TransformedMetricsRetention field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransformationRuleDefinition) GetTransformedMetricsRetentionOk() (*int64, bool) {
-	if o == nil || o.TransformedMetricsRetention == nil {
+	if o == nil || IsNil(o.TransformedMetricsRetention) {
 		return nil, false
 	}
 	return o.TransformedMetricsRetention, true
@@ -154,7 +157,7 @@ func (o *TransformationRuleDefinition) GetTransformedMetricsRetentionOk() (*int6
 
 // HasTransformedMetricsRetention returns a boolean if a field has been set.
 func (o *TransformationRuleDefinition) HasTransformedMetricsRetention() bool {
-	if o != nil && o.TransformedMetricsRetention != nil {
+	if o != nil && !IsNil(o.TransformedMetricsRetention) {
 		return true
 	}
 
@@ -191,23 +194,25 @@ func (o *TransformationRuleDefinition) SetRetention(v int64) {
 }
 
 func (o TransformationRuleDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["selector"] = o.Selector
-	}
-	if o.DimensionTransformations != nil {
-		toSerialize["dimensionTransformations"] = o.DimensionTransformations
-	}
-	if o.TransformedMetricsRetention != nil {
-		toSerialize["transformedMetricsRetention"] = o.TransformedMetricsRetention
-	}
-	if true {
-		toSerialize["retention"] = o.Retention
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TransformationRuleDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["selector"] = o.Selector
+	if !IsNil(o.DimensionTransformations) {
+		toSerialize["dimensionTransformations"] = o.DimensionTransformations
+	}
+	if !IsNil(o.TransformedMetricsRetention) {
+		toSerialize["transformedMetricsRetention"] = o.TransformedMetricsRetention
+	}
+	toSerialize["retention"] = o.Retention
+	return toSerialize, nil
 }
 
 type NullableTransformationRuleDefinition struct {

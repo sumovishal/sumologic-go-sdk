@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ListDynamicRulesResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ListDynamicRulesResponse{}
 
 // ListDynamicRulesResponse struct for ListDynamicRulesResponse
 type ListDynamicRulesResponse struct {
@@ -66,7 +69,7 @@ func (o *ListDynamicRulesResponse) SetData(v []DynamicRule) {
 
 // GetNext returns the Next field value if set, zero value otherwise.
 func (o *ListDynamicRulesResponse) GetNext() string {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		var ret string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *ListDynamicRulesResponse) GetNext() string {
 // GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ListDynamicRulesResponse) GetNextOk() (*string, bool) {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		return nil, false
 	}
 	return o.Next, true
@@ -84,7 +87,7 @@ func (o *ListDynamicRulesResponse) GetNextOk() (*string, bool) {
 
 // HasNext returns a boolean if a field has been set.
 func (o *ListDynamicRulesResponse) HasNext() bool {
-	if o != nil && o.Next != nil {
+	if o != nil && !IsNil(o.Next) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *ListDynamicRulesResponse) SetNext(v string) {
 }
 
 func (o ListDynamicRulesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
-	}
-	if o.Next != nil {
-		toSerialize["next"] = o.Next
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ListDynamicRulesResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	if !IsNil(o.Next) {
+		toSerialize["next"] = o.Next
+	}
+	return toSerialize, nil
 }
 
 type NullableListDynamicRulesResponse struct {

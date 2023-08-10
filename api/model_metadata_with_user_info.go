@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the MetadataWithUserInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetadataWithUserInfo{}
 
 // MetadataWithUserInfo struct for MetadataWithUserInfo
 type MetadataWithUserInfo struct {
@@ -147,20 +150,20 @@ func (o *MetadataWithUserInfo) SetModifiedByUser(v UserInfo) {
 }
 
 func (o MetadataWithUserInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt.Get()
-	}
-	if true {
-		toSerialize["createdByUser"] = o.CreatedByUser
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt.Get()
-	}
-	if true {
-		toSerialize["modifiedByUser"] = o.ModifiedByUser
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetadataWithUserInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt.Get()
+	toSerialize["createdByUser"] = o.CreatedByUser
+	toSerialize["modifiedAt"] = o.ModifiedAt.Get()
+	toSerialize["modifiedByUser"] = o.ModifiedByUser
+	return toSerialize, nil
 }
 
 type NullableMetadataWithUserInfo struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PasswordPolicy type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PasswordPolicy{}
 
 // PasswordPolicy Password Policy
 type PasswordPolicy struct {
@@ -115,7 +118,7 @@ func NewPasswordPolicyWithDefaults() *PasswordPolicy {
 
 // GetMinLength returns the MinLength field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMinLength() int32 {
-	if o == nil || o.MinLength == nil {
+	if o == nil || IsNil(o.MinLength) {
 		var ret int32
 		return ret
 	}
@@ -125,7 +128,7 @@ func (o *PasswordPolicy) GetMinLength() int32 {
 // GetMinLengthOk returns a tuple with the MinLength field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMinLengthOk() (*int32, bool) {
-	if o == nil || o.MinLength == nil {
+	if o == nil || IsNil(o.MinLength) {
 		return nil, false
 	}
 	return o.MinLength, true
@@ -133,7 +136,7 @@ func (o *PasswordPolicy) GetMinLengthOk() (*int32, bool) {
 
 // HasMinLength returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMinLength() bool {
-	if o != nil && o.MinLength != nil {
+	if o != nil && !IsNil(o.MinLength) {
 		return true
 	}
 
@@ -147,7 +150,7 @@ func (o *PasswordPolicy) SetMinLength(v int32) {
 
 // GetMaxLength returns the MaxLength field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMaxLength() int32 {
-	if o == nil || o.MaxLength == nil {
+	if o == nil || IsNil(o.MaxLength) {
 		var ret int32
 		return ret
 	}
@@ -157,7 +160,7 @@ func (o *PasswordPolicy) GetMaxLength() int32 {
 // GetMaxLengthOk returns a tuple with the MaxLength field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMaxLengthOk() (*int32, bool) {
-	if o == nil || o.MaxLength == nil {
+	if o == nil || IsNil(o.MaxLength) {
 		return nil, false
 	}
 	return o.MaxLength, true
@@ -165,7 +168,7 @@ func (o *PasswordPolicy) GetMaxLengthOk() (*int32, bool) {
 
 // HasMaxLength returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMaxLength() bool {
-	if o != nil && o.MaxLength != nil {
+	if o != nil && !IsNil(o.MaxLength) {
 		return true
 	}
 
@@ -179,7 +182,7 @@ func (o *PasswordPolicy) SetMaxLength(v int32) {
 
 // GetMustContainLowercase returns the MustContainLowercase field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMustContainLowercase() bool {
-	if o == nil || o.MustContainLowercase == nil {
+	if o == nil || IsNil(o.MustContainLowercase) {
 		var ret bool
 		return ret
 	}
@@ -189,7 +192,7 @@ func (o *PasswordPolicy) GetMustContainLowercase() bool {
 // GetMustContainLowercaseOk returns a tuple with the MustContainLowercase field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMustContainLowercaseOk() (*bool, bool) {
-	if o == nil || o.MustContainLowercase == nil {
+	if o == nil || IsNil(o.MustContainLowercase) {
 		return nil, false
 	}
 	return o.MustContainLowercase, true
@@ -197,7 +200,7 @@ func (o *PasswordPolicy) GetMustContainLowercaseOk() (*bool, bool) {
 
 // HasMustContainLowercase returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMustContainLowercase() bool {
-	if o != nil && o.MustContainLowercase != nil {
+	if o != nil && !IsNil(o.MustContainLowercase) {
 		return true
 	}
 
@@ -211,7 +214,7 @@ func (o *PasswordPolicy) SetMustContainLowercase(v bool) {
 
 // GetMustContainUppercase returns the MustContainUppercase field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMustContainUppercase() bool {
-	if o == nil || o.MustContainUppercase == nil {
+	if o == nil || IsNil(o.MustContainUppercase) {
 		var ret bool
 		return ret
 	}
@@ -221,7 +224,7 @@ func (o *PasswordPolicy) GetMustContainUppercase() bool {
 // GetMustContainUppercaseOk returns a tuple with the MustContainUppercase field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMustContainUppercaseOk() (*bool, bool) {
-	if o == nil || o.MustContainUppercase == nil {
+	if o == nil || IsNil(o.MustContainUppercase) {
 		return nil, false
 	}
 	return o.MustContainUppercase, true
@@ -229,7 +232,7 @@ func (o *PasswordPolicy) GetMustContainUppercaseOk() (*bool, bool) {
 
 // HasMustContainUppercase returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMustContainUppercase() bool {
-	if o != nil && o.MustContainUppercase != nil {
+	if o != nil && !IsNil(o.MustContainUppercase) {
 		return true
 	}
 
@@ -243,7 +246,7 @@ func (o *PasswordPolicy) SetMustContainUppercase(v bool) {
 
 // GetMustContainDigits returns the MustContainDigits field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMustContainDigits() bool {
-	if o == nil || o.MustContainDigits == nil {
+	if o == nil || IsNil(o.MustContainDigits) {
 		var ret bool
 		return ret
 	}
@@ -253,7 +256,7 @@ func (o *PasswordPolicy) GetMustContainDigits() bool {
 // GetMustContainDigitsOk returns a tuple with the MustContainDigits field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMustContainDigitsOk() (*bool, bool) {
-	if o == nil || o.MustContainDigits == nil {
+	if o == nil || IsNil(o.MustContainDigits) {
 		return nil, false
 	}
 	return o.MustContainDigits, true
@@ -261,7 +264,7 @@ func (o *PasswordPolicy) GetMustContainDigitsOk() (*bool, bool) {
 
 // HasMustContainDigits returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMustContainDigits() bool {
-	if o != nil && o.MustContainDigits != nil {
+	if o != nil && !IsNil(o.MustContainDigits) {
 		return true
 	}
 
@@ -275,7 +278,7 @@ func (o *PasswordPolicy) SetMustContainDigits(v bool) {
 
 // GetMustContainSpecialChars returns the MustContainSpecialChars field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMustContainSpecialChars() bool {
-	if o == nil || o.MustContainSpecialChars == nil {
+	if o == nil || IsNil(o.MustContainSpecialChars) {
 		var ret bool
 		return ret
 	}
@@ -285,7 +288,7 @@ func (o *PasswordPolicy) GetMustContainSpecialChars() bool {
 // GetMustContainSpecialCharsOk returns a tuple with the MustContainSpecialChars field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMustContainSpecialCharsOk() (*bool, bool) {
-	if o == nil || o.MustContainSpecialChars == nil {
+	if o == nil || IsNil(o.MustContainSpecialChars) {
 		return nil, false
 	}
 	return o.MustContainSpecialChars, true
@@ -293,7 +296,7 @@ func (o *PasswordPolicy) GetMustContainSpecialCharsOk() (*bool, bool) {
 
 // HasMustContainSpecialChars returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMustContainSpecialChars() bool {
-	if o != nil && o.MustContainSpecialChars != nil {
+	if o != nil && !IsNil(o.MustContainSpecialChars) {
 		return true
 	}
 
@@ -307,7 +310,7 @@ func (o *PasswordPolicy) SetMustContainSpecialChars(v bool) {
 
 // GetMaxPasswordAgeInDays returns the MaxPasswordAgeInDays field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMaxPasswordAgeInDays() int32 {
-	if o == nil || o.MaxPasswordAgeInDays == nil {
+	if o == nil || IsNil(o.MaxPasswordAgeInDays) {
 		var ret int32
 		return ret
 	}
@@ -317,7 +320,7 @@ func (o *PasswordPolicy) GetMaxPasswordAgeInDays() int32 {
 // GetMaxPasswordAgeInDaysOk returns a tuple with the MaxPasswordAgeInDays field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMaxPasswordAgeInDaysOk() (*int32, bool) {
-	if o == nil || o.MaxPasswordAgeInDays == nil {
+	if o == nil || IsNil(o.MaxPasswordAgeInDays) {
 		return nil, false
 	}
 	return o.MaxPasswordAgeInDays, true
@@ -325,7 +328,7 @@ func (o *PasswordPolicy) GetMaxPasswordAgeInDaysOk() (*int32, bool) {
 
 // HasMaxPasswordAgeInDays returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMaxPasswordAgeInDays() bool {
-	if o != nil && o.MaxPasswordAgeInDays != nil {
+	if o != nil && !IsNil(o.MaxPasswordAgeInDays) {
 		return true
 	}
 
@@ -339,7 +342,7 @@ func (o *PasswordPolicy) SetMaxPasswordAgeInDays(v int32) {
 
 // GetMinUniquePasswords returns the MinUniquePasswords field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetMinUniquePasswords() int32 {
-	if o == nil || o.MinUniquePasswords == nil {
+	if o == nil || IsNil(o.MinUniquePasswords) {
 		var ret int32
 		return ret
 	}
@@ -349,7 +352,7 @@ func (o *PasswordPolicy) GetMinUniquePasswords() int32 {
 // GetMinUniquePasswordsOk returns a tuple with the MinUniquePasswords field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetMinUniquePasswordsOk() (*int32, bool) {
-	if o == nil || o.MinUniquePasswords == nil {
+	if o == nil || IsNil(o.MinUniquePasswords) {
 		return nil, false
 	}
 	return o.MinUniquePasswords, true
@@ -357,7 +360,7 @@ func (o *PasswordPolicy) GetMinUniquePasswordsOk() (*int32, bool) {
 
 // HasMinUniquePasswords returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasMinUniquePasswords() bool {
-	if o != nil && o.MinUniquePasswords != nil {
+	if o != nil && !IsNil(o.MinUniquePasswords) {
 		return true
 	}
 
@@ -371,7 +374,7 @@ func (o *PasswordPolicy) SetMinUniquePasswords(v int32) {
 
 // GetAccountLockoutThreshold returns the AccountLockoutThreshold field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetAccountLockoutThreshold() int32 {
-	if o == nil || o.AccountLockoutThreshold == nil {
+	if o == nil || IsNil(o.AccountLockoutThreshold) {
 		var ret int32
 		return ret
 	}
@@ -381,7 +384,7 @@ func (o *PasswordPolicy) GetAccountLockoutThreshold() int32 {
 // GetAccountLockoutThresholdOk returns a tuple with the AccountLockoutThreshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetAccountLockoutThresholdOk() (*int32, bool) {
-	if o == nil || o.AccountLockoutThreshold == nil {
+	if o == nil || IsNil(o.AccountLockoutThreshold) {
 		return nil, false
 	}
 	return o.AccountLockoutThreshold, true
@@ -389,7 +392,7 @@ func (o *PasswordPolicy) GetAccountLockoutThresholdOk() (*int32, bool) {
 
 // HasAccountLockoutThreshold returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasAccountLockoutThreshold() bool {
-	if o != nil && o.AccountLockoutThreshold != nil {
+	if o != nil && !IsNil(o.AccountLockoutThreshold) {
 		return true
 	}
 
@@ -403,7 +406,7 @@ func (o *PasswordPolicy) SetAccountLockoutThreshold(v int32) {
 
 // GetFailedLoginResetDurationInMins returns the FailedLoginResetDurationInMins field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetFailedLoginResetDurationInMins() int32 {
-	if o == nil || o.FailedLoginResetDurationInMins == nil {
+	if o == nil || IsNil(o.FailedLoginResetDurationInMins) {
 		var ret int32
 		return ret
 	}
@@ -413,7 +416,7 @@ func (o *PasswordPolicy) GetFailedLoginResetDurationInMins() int32 {
 // GetFailedLoginResetDurationInMinsOk returns a tuple with the FailedLoginResetDurationInMins field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetFailedLoginResetDurationInMinsOk() (*int32, bool) {
-	if o == nil || o.FailedLoginResetDurationInMins == nil {
+	if o == nil || IsNil(o.FailedLoginResetDurationInMins) {
 		return nil, false
 	}
 	return o.FailedLoginResetDurationInMins, true
@@ -421,7 +424,7 @@ func (o *PasswordPolicy) GetFailedLoginResetDurationInMinsOk() (*int32, bool) {
 
 // HasFailedLoginResetDurationInMins returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasFailedLoginResetDurationInMins() bool {
-	if o != nil && o.FailedLoginResetDurationInMins != nil {
+	if o != nil && !IsNil(o.FailedLoginResetDurationInMins) {
 		return true
 	}
 
@@ -435,7 +438,7 @@ func (o *PasswordPolicy) SetFailedLoginResetDurationInMins(v int32) {
 
 // GetAccountLockoutDurationInMins returns the AccountLockoutDurationInMins field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetAccountLockoutDurationInMins() int32 {
-	if o == nil || o.AccountLockoutDurationInMins == nil {
+	if o == nil || IsNil(o.AccountLockoutDurationInMins) {
 		var ret int32
 		return ret
 	}
@@ -445,7 +448,7 @@ func (o *PasswordPolicy) GetAccountLockoutDurationInMins() int32 {
 // GetAccountLockoutDurationInMinsOk returns a tuple with the AccountLockoutDurationInMins field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetAccountLockoutDurationInMinsOk() (*int32, bool) {
-	if o == nil || o.AccountLockoutDurationInMins == nil {
+	if o == nil || IsNil(o.AccountLockoutDurationInMins) {
 		return nil, false
 	}
 	return o.AccountLockoutDurationInMins, true
@@ -453,7 +456,7 @@ func (o *PasswordPolicy) GetAccountLockoutDurationInMinsOk() (*int32, bool) {
 
 // HasAccountLockoutDurationInMins returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasAccountLockoutDurationInMins() bool {
-	if o != nil && o.AccountLockoutDurationInMins != nil {
+	if o != nil && !IsNil(o.AccountLockoutDurationInMins) {
 		return true
 	}
 
@@ -467,7 +470,7 @@ func (o *PasswordPolicy) SetAccountLockoutDurationInMins(v int32) {
 
 // GetRequireMfa returns the RequireMfa field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetRequireMfa() bool {
-	if o == nil || o.RequireMfa == nil {
+	if o == nil || IsNil(o.RequireMfa) {
 		var ret bool
 		return ret
 	}
@@ -477,7 +480,7 @@ func (o *PasswordPolicy) GetRequireMfa() bool {
 // GetRequireMfaOk returns a tuple with the RequireMfa field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetRequireMfaOk() (*bool, bool) {
-	if o == nil || o.RequireMfa == nil {
+	if o == nil || IsNil(o.RequireMfa) {
 		return nil, false
 	}
 	return o.RequireMfa, true
@@ -485,7 +488,7 @@ func (o *PasswordPolicy) GetRequireMfaOk() (*bool, bool) {
 
 // HasRequireMfa returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasRequireMfa() bool {
-	if o != nil && o.RequireMfa != nil {
+	if o != nil && !IsNil(o.RequireMfa) {
 		return true
 	}
 
@@ -499,7 +502,7 @@ func (o *PasswordPolicy) SetRequireMfa(v bool) {
 
 // GetRememberMfa returns the RememberMfa field value if set, zero value otherwise.
 func (o *PasswordPolicy) GetRememberMfa() bool {
-	if o == nil || o.RememberMfa == nil {
+	if o == nil || IsNil(o.RememberMfa) {
 		var ret bool
 		return ret
 	}
@@ -509,7 +512,7 @@ func (o *PasswordPolicy) GetRememberMfa() bool {
 // GetRememberMfaOk returns a tuple with the RememberMfa field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PasswordPolicy) GetRememberMfaOk() (*bool, bool) {
-	if o == nil || o.RememberMfa == nil {
+	if o == nil || IsNil(o.RememberMfa) {
 		return nil, false
 	}
 	return o.RememberMfa, true
@@ -517,7 +520,7 @@ func (o *PasswordPolicy) GetRememberMfaOk() (*bool, bool) {
 
 // HasRememberMfa returns a boolean if a field has been set.
 func (o *PasswordPolicy) HasRememberMfa() bool {
-	if o != nil && o.RememberMfa != nil {
+	if o != nil && !IsNil(o.RememberMfa) {
 		return true
 	}
 
@@ -530,47 +533,55 @@ func (o *PasswordPolicy) SetRememberMfa(v bool) {
 }
 
 func (o PasswordPolicy) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.MinLength != nil {
-		toSerialize["minLength"] = o.MinLength
-	}
-	if o.MaxLength != nil {
-		toSerialize["maxLength"] = o.MaxLength
-	}
-	if o.MustContainLowercase != nil {
-		toSerialize["mustContainLowercase"] = o.MustContainLowercase
-	}
-	if o.MustContainUppercase != nil {
-		toSerialize["mustContainUppercase"] = o.MustContainUppercase
-	}
-	if o.MustContainDigits != nil {
-		toSerialize["mustContainDigits"] = o.MustContainDigits
-	}
-	if o.MustContainSpecialChars != nil {
-		toSerialize["mustContainSpecialChars"] = o.MustContainSpecialChars
-	}
-	if o.MaxPasswordAgeInDays != nil {
-		toSerialize["maxPasswordAgeInDays"] = o.MaxPasswordAgeInDays
-	}
-	if o.MinUniquePasswords != nil {
-		toSerialize["minUniquePasswords"] = o.MinUniquePasswords
-	}
-	if o.AccountLockoutThreshold != nil {
-		toSerialize["accountLockoutThreshold"] = o.AccountLockoutThreshold
-	}
-	if o.FailedLoginResetDurationInMins != nil {
-		toSerialize["failedLoginResetDurationInMins"] = o.FailedLoginResetDurationInMins
-	}
-	if o.AccountLockoutDurationInMins != nil {
-		toSerialize["accountLockoutDurationInMins"] = o.AccountLockoutDurationInMins
-	}
-	if o.RequireMfa != nil {
-		toSerialize["requireMfa"] = o.RequireMfa
-	}
-	if o.RememberMfa != nil {
-		toSerialize["rememberMfa"] = o.RememberMfa
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PasswordPolicy) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.MinLength) {
+		toSerialize["minLength"] = o.MinLength
+	}
+	if !IsNil(o.MaxLength) {
+		toSerialize["maxLength"] = o.MaxLength
+	}
+	if !IsNil(o.MustContainLowercase) {
+		toSerialize["mustContainLowercase"] = o.MustContainLowercase
+	}
+	if !IsNil(o.MustContainUppercase) {
+		toSerialize["mustContainUppercase"] = o.MustContainUppercase
+	}
+	if !IsNil(o.MustContainDigits) {
+		toSerialize["mustContainDigits"] = o.MustContainDigits
+	}
+	if !IsNil(o.MustContainSpecialChars) {
+		toSerialize["mustContainSpecialChars"] = o.MustContainSpecialChars
+	}
+	if !IsNil(o.MaxPasswordAgeInDays) {
+		toSerialize["maxPasswordAgeInDays"] = o.MaxPasswordAgeInDays
+	}
+	if !IsNil(o.MinUniquePasswords) {
+		toSerialize["minUniquePasswords"] = o.MinUniquePasswords
+	}
+	if !IsNil(o.AccountLockoutThreshold) {
+		toSerialize["accountLockoutThreshold"] = o.AccountLockoutThreshold
+	}
+	if !IsNil(o.FailedLoginResetDurationInMins) {
+		toSerialize["failedLoginResetDurationInMins"] = o.FailedLoginResetDurationInMins
+	}
+	if !IsNil(o.AccountLockoutDurationInMins) {
+		toSerialize["accountLockoutDurationInMins"] = o.AccountLockoutDurationInMins
+	}
+	if !IsNil(o.RequireMfa) {
+		toSerialize["requireMfa"] = o.RequireMfa
+	}
+	if !IsNil(o.RememberMfa) {
+		toSerialize["rememberMfa"] = o.RememberMfa
+	}
+	return toSerialize, nil
 }
 
 type NullablePasswordPolicy struct {

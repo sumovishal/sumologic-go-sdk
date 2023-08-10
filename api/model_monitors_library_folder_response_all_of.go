@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MonitorsLibraryFolderResponseAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorsLibraryFolderResponseAllOf{}
 
 // MonitorsLibraryFolderResponseAllOf struct for MonitorsLibraryFolderResponseAllOf
 type MonitorsLibraryFolderResponseAllOf struct {
@@ -90,14 +93,18 @@ func (o *MonitorsLibraryFolderResponseAllOf) SetChildren(v []MonitorsLibraryBase
 }
 
 func (o MonitorsLibraryFolderResponseAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["permissions"] = o.Permissions
-	}
-	if true {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorsLibraryFolderResponseAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["permissions"] = o.Permissions
+	toSerialize["children"] = o.Children
+	return toSerialize, nil
 }
 
 type NullableMonitorsLibraryFolderResponseAllOf struct {

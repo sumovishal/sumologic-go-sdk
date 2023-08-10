@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TopologyLabelMap type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TopologyLabelMap{}
 
 // TopologyLabelMap Map of the topology labels. Each label has a key and a list of values. If a value is `*`, it means the label will match content for all values of its key. 
 type TopologyLabelMap struct {
@@ -63,11 +66,17 @@ func (o *TopologyLabelMap) SetData(v map[string][]string) {
 }
 
 func (o TopologyLabelMap) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TopologyLabelMap) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableTopologyLabelMap struct {

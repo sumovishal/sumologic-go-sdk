@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansCountVisualization type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansCountVisualization{}
 
 // SpansCountVisualization struct for SpansCountVisualization
 type SpansCountVisualization struct {
@@ -42,7 +45,7 @@ func NewSpansCountVisualizationWithDefaults() *SpansCountVisualization {
 
 // GetDistinctBy returns the DistinctBy field value if set, zero value otherwise.
 func (o *SpansCountVisualization) GetDistinctBy() string {
-	if o == nil || o.DistinctBy == nil {
+	if o == nil || IsNil(o.DistinctBy) {
 		var ret string
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *SpansCountVisualization) GetDistinctBy() string {
 // GetDistinctByOk returns a tuple with the DistinctBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpansCountVisualization) GetDistinctByOk() (*string, bool) {
-	if o == nil || o.DistinctBy == nil {
+	if o == nil || IsNil(o.DistinctBy) {
 		return nil, false
 	}
 	return o.DistinctBy, true
@@ -60,7 +63,7 @@ func (o *SpansCountVisualization) GetDistinctByOk() (*string, bool) {
 
 // HasDistinctBy returns a boolean if a field has been set.
 func (o *SpansCountVisualization) HasDistinctBy() bool {
-	if o != nil && o.DistinctBy != nil {
+	if o != nil && !IsNil(o.DistinctBy) {
 		return true
 	}
 
@@ -73,19 +76,27 @@ func (o *SpansCountVisualization) SetDistinctBy(v string) {
 }
 
 func (o SpansCountVisualization) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpansCountVisualization) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpansVisualization, errSpansVisualization := json.Marshal(o.SpansVisualization)
 	if errSpansVisualization != nil {
-		return []byte{}, errSpansVisualization
+		return map[string]interface{}{}, errSpansVisualization
 	}
 	errSpansVisualization = json.Unmarshal([]byte(serializedSpansVisualization), &toSerialize)
 	if errSpansVisualization != nil {
-		return []byte{}, errSpansVisualization
+		return map[string]interface{}{}, errSpansVisualization
 	}
-	if o.DistinctBy != nil {
+	if !IsNil(o.DistinctBy) {
 		toSerialize["distinctBy"] = o.DistinctBy
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSpansCountVisualization struct {

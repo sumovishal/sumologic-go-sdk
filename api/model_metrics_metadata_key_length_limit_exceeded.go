@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsMetadataKeyLengthLimitExceeded type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsMetadataKeyLengthLimitExceeded{}
 
 // MetricsMetadataKeyLengthLimitExceeded struct for MetricsMetadataKeyLengthLimitExceeded
 type MetricsMetadataKeyLengthLimitExceeded struct {
@@ -43,7 +46,7 @@ func NewMetricsMetadataKeyLengthLimitExceededWithDefaults() *MetricsMetadataKeyL
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *MetricsMetadataKeyLengthLimitExceeded) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *MetricsMetadataKeyLengthLimitExceeded) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsMetadataKeyLengthLimitExceeded) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -61,7 +64,7 @@ func (o *MetricsMetadataKeyLengthLimitExceeded) GetEventTypeOk() (*string, bool)
 
 // HasEventType returns a boolean if a field has been set.
 func (o *MetricsMetadataKeyLengthLimitExceeded) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -74,19 +77,27 @@ func (o *MetricsMetadataKeyLengthLimitExceeded) SetEventType(v string) {
 }
 
 func (o MetricsMetadataKeyLengthLimitExceeded) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetricsMetadataKeyLengthLimitExceeded) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMetricsMetadataKeyLengthLimitExceeded struct {

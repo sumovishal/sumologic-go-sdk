@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ListPermissionsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ListPermissionsResponse{}
 
 // ListPermissionsResponse struct for ListPermissionsResponse
 type ListPermissionsResponse struct {
@@ -63,11 +66,17 @@ func (o *ListPermissionsResponse) SetPermissionStatements(v []PermissionStatemen
 }
 
 func (o ListPermissionsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["permissionStatements"] = o.PermissionStatements
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ListPermissionsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["permissionStatements"] = o.PermissionStatements
+	return toSerialize, nil
 }
 
 type NullableListPermissionsResponse struct {

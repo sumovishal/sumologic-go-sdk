@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CompleteLiteralTimeRangeAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CompleteLiteralTimeRangeAllOf{}
 
 // CompleteLiteralTimeRangeAllOf struct for CompleteLiteralTimeRangeAllOf
 type CompleteLiteralTimeRangeAllOf struct {
@@ -63,11 +66,17 @@ func (o *CompleteLiteralTimeRangeAllOf) SetRangeName(v string) {
 }
 
 func (o CompleteLiteralTimeRangeAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rangeName"] = o.RangeName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CompleteLiteralTimeRangeAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rangeName"] = o.RangeName
+	return toSerialize, nil
 }
 
 type NullableCompleteLiteralTimeRangeAllOf struct {

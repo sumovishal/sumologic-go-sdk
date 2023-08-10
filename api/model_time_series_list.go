@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TimeSeriesList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TimeSeriesList{}
+
 // TimeSeriesList struct for TimeSeriesList
 type TimeSeriesList struct {
 	// A list of timeseries returned by corresponding query.
@@ -22,6 +25,7 @@ type TimeSeriesList struct {
 	Unit *string `json:"unit,omitempty"`
 	// Time shift value if specified in request in human readable format.
 	TimeShiftLabel *string `json:"timeShiftLabel,omitempty"`
+	ResultContext *MetricsQueryResultContext `json:"resultContext,omitempty"`
 }
 
 // NewTimeSeriesList instantiates a new TimeSeriesList object
@@ -68,7 +72,7 @@ func (o *TimeSeriesList) SetTimeSeries(v []TimeSeries) {
 
 // GetUnit returns the Unit field value if set, zero value otherwise.
 func (o *TimeSeriesList) GetUnit() string {
-	if o == nil || o.Unit == nil {
+	if o == nil || IsNil(o.Unit) {
 		var ret string
 		return ret
 	}
@@ -78,7 +82,7 @@ func (o *TimeSeriesList) GetUnit() string {
 // GetUnitOk returns a tuple with the Unit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TimeSeriesList) GetUnitOk() (*string, bool) {
-	if o == nil || o.Unit == nil {
+	if o == nil || IsNil(o.Unit) {
 		return nil, false
 	}
 	return o.Unit, true
@@ -86,7 +90,7 @@ func (o *TimeSeriesList) GetUnitOk() (*string, bool) {
 
 // HasUnit returns a boolean if a field has been set.
 func (o *TimeSeriesList) HasUnit() bool {
-	if o != nil && o.Unit != nil {
+	if o != nil && !IsNil(o.Unit) {
 		return true
 	}
 
@@ -100,7 +104,7 @@ func (o *TimeSeriesList) SetUnit(v string) {
 
 // GetTimeShiftLabel returns the TimeShiftLabel field value if set, zero value otherwise.
 func (o *TimeSeriesList) GetTimeShiftLabel() string {
-	if o == nil || o.TimeShiftLabel == nil {
+	if o == nil || IsNil(o.TimeShiftLabel) {
 		var ret string
 		return ret
 	}
@@ -110,7 +114,7 @@ func (o *TimeSeriesList) GetTimeShiftLabel() string {
 // GetTimeShiftLabelOk returns a tuple with the TimeShiftLabel field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TimeSeriesList) GetTimeShiftLabelOk() (*string, bool) {
-	if o == nil || o.TimeShiftLabel == nil {
+	if o == nil || IsNil(o.TimeShiftLabel) {
 		return nil, false
 	}
 	return o.TimeShiftLabel, true
@@ -118,7 +122,7 @@ func (o *TimeSeriesList) GetTimeShiftLabelOk() (*string, bool) {
 
 // HasTimeShiftLabel returns a boolean if a field has been set.
 func (o *TimeSeriesList) HasTimeShiftLabel() bool {
-	if o != nil && o.TimeShiftLabel != nil {
+	if o != nil && !IsNil(o.TimeShiftLabel) {
 		return true
 	}
 
@@ -130,18 +134,59 @@ func (o *TimeSeriesList) SetTimeShiftLabel(v string) {
 	o.TimeShiftLabel = &v
 }
 
+// GetResultContext returns the ResultContext field value if set, zero value otherwise.
+func (o *TimeSeriesList) GetResultContext() MetricsQueryResultContext {
+	if o == nil || IsNil(o.ResultContext) {
+		var ret MetricsQueryResultContext
+		return ret
+	}
+	return *o.ResultContext
+}
+
+// GetResultContextOk returns a tuple with the ResultContext field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TimeSeriesList) GetResultContextOk() (*MetricsQueryResultContext, bool) {
+	if o == nil || IsNil(o.ResultContext) {
+		return nil, false
+	}
+	return o.ResultContext, true
+}
+
+// HasResultContext returns a boolean if a field has been set.
+func (o *TimeSeriesList) HasResultContext() bool {
+	if o != nil && !IsNil(o.ResultContext) {
+		return true
+	}
+
+	return false
+}
+
+// SetResultContext gets a reference to the given MetricsQueryResultContext and assigns it to the ResultContext field.
+func (o *TimeSeriesList) SetResultContext(v MetricsQueryResultContext) {
+	o.ResultContext = &v
+}
+
 func (o TimeSeriesList) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeSeries"] = o.TimeSeries
-	}
-	if o.Unit != nil {
-		toSerialize["unit"] = o.Unit
-	}
-	if o.TimeShiftLabel != nil {
-		toSerialize["timeShiftLabel"] = o.TimeShiftLabel
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TimeSeriesList) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeSeries"] = o.TimeSeries
+	if !IsNil(o.Unit) {
+		toSerialize["unit"] = o.Unit
+	}
+	if !IsNil(o.TimeShiftLabel) {
+		toSerialize["timeShiftLabel"] = o.TimeShiftLabel
+	}
+	if !IsNil(o.ResultContext) {
+		toSerialize["resultContext"] = o.ResultContext
+	}
+	return toSerialize, nil
 }
 
 type NullableTimeSeriesList struct {

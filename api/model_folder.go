@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Folder type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Folder{}
 
 // Folder struct for Folder
 type Folder struct {
@@ -285,7 +288,7 @@ func (o *Folder) SetPermissions(v []string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Folder) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -295,7 +298,7 @@ func (o *Folder) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Folder) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -303,7 +306,7 @@ func (o *Folder) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Folder) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -317,7 +320,7 @@ func (o *Folder) SetDescription(v string) {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *Folder) GetChildren() []Content {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []Content
 		return ret
 	}
@@ -327,7 +330,7 @@ func (o *Folder) GetChildren() []Content {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Folder) GetChildrenOk() ([]Content, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -335,7 +338,7 @@ func (o *Folder) GetChildrenOk() ([]Content, bool) {
 
 // HasChildren returns a boolean if a field has been set.
 func (o *Folder) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -348,41 +351,31 @@ func (o *Folder) SetChildren(v []Content) {
 }
 
 func (o Folder) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["itemType"] = o.ItemType
-	}
-	if true {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["permissions"] = o.Permissions
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Children != nil {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Folder) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["itemType"] = o.ItemType
+	toSerialize["parentId"] = o.ParentId
+	toSerialize["permissions"] = o.Permissions
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Children) {
+		toSerialize["children"] = o.Children
+	}
+	return toSerialize, nil
 }
 
 type NullableFolder struct {

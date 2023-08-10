@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the TriggerCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TriggerCondition{}
+
 // TriggerCondition struct for TriggerCondition
 type TriggerCondition struct {
-	// Detection method of the trigger condition. Valid values:   1. `StaticCondition`: A condition that triggers based off of a static threshold.   2. `LogsStaticCondition`: A logs condition that triggers based off of a static threshold.   3. `MetricsStaticCondition`: A metrics condition that triggers based off of a static threshold.   4. `LogsOutlierCondition`: A logs condition that triggers based off of a dynamic outlier threshold.   5. `MetricsOutlierCondition`: A metrics condition that triggers based off of a dynamic outlier threshold.   6. `LogsMissingDataCondition`: A logs missing data condition that triggers based off of no data available.   7. `MetricsMissingDataCondition`: A metrics missing data condition that triggers based off of no data available.   8. `SloSliCondition`: A SLO condition that triggers based off the remaining error budget. Currently SloSliCondition is available in closed beta (Notify your Sumo Logic representative in order to get the early access).   9. `SloBurnRateCondition`: A SLO condition that triggers based off error budget. Currently SloBurnRateCondition is available in closed beta (Notify your Sumo Logic representative in order to get the early access).
+	// Detection method of the trigger condition. Valid values:   1. `StaticCondition`: A condition that triggers based off of a static threshold. This `detectionMethod` is deprecated, it is recommended to use other ones instead.   2. `LogsStaticCondition`: A logs condition that triggers based off of a static threshold.   3. `MetricsStaticCondition`: A metrics condition that triggers based off of a static threshold.   4. `LogsOutlierCondition`: A logs condition that triggers based off of a dynamic outlier threshold.   5. `MetricsOutlierCondition`: A metrics condition that triggers based off of a dynamic outlier threshold.   6. `LogsMissingDataCondition`: A logs missing data condition that triggers based off of no data available.   7. `MetricsMissingDataCondition`: A metrics missing data condition that triggers based off of no data available.   8. `SloSliCondition`: An SLO condition that triggers based off of current SLI value.   9. `SloBurnRateCondition`: An SLO condition that triggers based off of error budget burn rate.
 	DetectionMethod *string `json:"detectionMethod,omitempty"`
 	// The type of trigger condition. Valid values:   1. `Critical`: A critical condition to trigger on.   2. `Warning`: A warning condition to trigger on.   3. `MissingData`: A condition that indicates data is missing.   4. `ResolvedCritical`: A condition to resolve a Critical trigger on.   5. `ResolvedWarning`: A condition to resolve a Warning trigger on.   6. `ResolvedMissingData`: A condition to resolve a MissingData trigger.
 	TriggerType string `json:"triggerType"`
@@ -48,7 +51,7 @@ func NewTriggerConditionWithDefaults() *TriggerCondition {
 
 // GetDetectionMethod returns the DetectionMethod field value if set, zero value otherwise.
 func (o *TriggerCondition) GetDetectionMethod() string {
-	if o == nil || o.DetectionMethod == nil {
+	if o == nil || IsNil(o.DetectionMethod) {
 		var ret string
 		return ret
 	}
@@ -58,7 +61,7 @@ func (o *TriggerCondition) GetDetectionMethod() string {
 // GetDetectionMethodOk returns a tuple with the DetectionMethod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TriggerCondition) GetDetectionMethodOk() (*string, bool) {
-	if o == nil || o.DetectionMethod == nil {
+	if o == nil || IsNil(o.DetectionMethod) {
 		return nil, false
 	}
 	return o.DetectionMethod, true
@@ -66,7 +69,7 @@ func (o *TriggerCondition) GetDetectionMethodOk() (*string, bool) {
 
 // HasDetectionMethod returns a boolean if a field has been set.
 func (o *TriggerCondition) HasDetectionMethod() bool {
-	if o != nil && o.DetectionMethod != nil {
+	if o != nil && !IsNil(o.DetectionMethod) {
 		return true
 	}
 
@@ -104,7 +107,7 @@ func (o *TriggerCondition) SetTriggerType(v string) {
 
 // GetResolutionWindow returns the ResolutionWindow field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TriggerCondition) GetResolutionWindow() string {
-	if o == nil || o.ResolutionWindow.Get() == nil {
+	if o == nil || IsNil(o.ResolutionWindow.Get()) {
 		var ret string
 		return ret
 	}
@@ -145,17 +148,23 @@ func (o *TriggerCondition) UnsetResolutionWindow() {
 }
 
 func (o TriggerCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o TriggerCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.DetectionMethod != nil {
+	if !IsNil(o.DetectionMethod) {
 		toSerialize["detectionMethod"] = o.DetectionMethod
 	}
-	if true {
-		toSerialize["triggerType"] = o.TriggerType
-	}
+	toSerialize["triggerType"] = o.TriggerType
 	if o.ResolutionWindow.IsSet() {
 		toSerialize["resolutionWindow"] = o.ResolutionWindow.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTriggerCondition struct {

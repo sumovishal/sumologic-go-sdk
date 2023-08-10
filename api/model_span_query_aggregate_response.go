@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryAggregateResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryAggregateResponse{}
 
 // SpanQueryAggregateResponse struct for SpanQueryAggregateResponse
 type SpanQueryAggregateResponse struct {
@@ -62,11 +65,17 @@ func (o *SpanQueryAggregateResponse) SetResult(v SpanQueryAggregateResult) {
 }
 
 func (o SpanQueryAggregateResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["result"] = o.Result
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryAggregateResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["result"] = o.Result
+	return toSerialize, nil
 }
 
 type NullableSpanQueryAggregateResponse struct {

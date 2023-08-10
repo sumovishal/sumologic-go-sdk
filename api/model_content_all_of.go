@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContentAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentAllOf{}
 
 // ContentAllOf struct for ContentAllOf
 type ContentAllOf struct {
@@ -171,23 +174,21 @@ func (o *ContentAllOf) SetPermissions(v []string) {
 }
 
 func (o ContentAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["itemType"] = o.ItemType
-	}
-	if true {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["permissions"] = o.Permissions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["itemType"] = o.ItemType
+	toSerialize["parentId"] = o.ParentId
+	toSerialize["permissions"] = o.Permissions
+	return toSerialize, nil
 }
 
 type NullableContentAllOf struct {

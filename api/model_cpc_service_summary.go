@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CpcServiceSummary type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CpcServiceSummary{}
 
 // CpcServiceSummary struct for CpcServiceSummary
 type CpcServiceSummary struct {
@@ -116,17 +119,19 @@ func (o *CpcServiceSummary) SetCpcSummary(v CpcSummary) {
 }
 
 func (o CpcServiceSummary) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["service"] = o.Service
-	}
-	if true {
-		toSerialize["color"] = o.Color
-	}
-	if true {
-		toSerialize["cpcSummary"] = o.CpcSummary
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CpcServiceSummary) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["service"] = o.Service
+	toSerialize["color"] = o.Color
+	toSerialize["cpcSummary"] = o.CpcSummary
+	return toSerialize, nil
 }
 
 type NullableCpcServiceSummary struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AttributeValueReversedIndex type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AttributeValueReversedIndex{}
 
 // AttributeValueReversedIndex struct for AttributeValueReversedIndex
 type AttributeValueReversedIndex struct {
@@ -90,14 +93,18 @@ func (o *AttributeValueReversedIndex) SetSpanIds(v []string) {
 }
 
 func (o AttributeValueReversedIndex) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["attributeValue"] = o.AttributeValue
-	}
-	if true {
-		toSerialize["spanIds"] = o.SpanIds
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AttributeValueReversedIndex) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["attributeValue"] = o.AttributeValue
+	toSerialize["spanIds"] = o.SpanIds
+	return toSerialize, nil
 }
 
 type NullableAttributeValueReversedIndex struct {

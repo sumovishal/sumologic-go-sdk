@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,19 +14,25 @@ import (
 	"encoding/json"
 )
 
+// checks if the GroupFieldsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GroupFieldsResponse{}
+
 // GroupFieldsResponse Group fields for the monitor
 type GroupFieldsResponse struct {
 	// List of group fields
 	GroupFields []string `json:"groupFields"`
+	// Whether or not the queries are aggregate.
+	IsQueryAggregate bool `json:"isQueryAggregate"`
 }
 
 // NewGroupFieldsResponse instantiates a new GroupFieldsResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGroupFieldsResponse(groupFields []string) *GroupFieldsResponse {
+func NewGroupFieldsResponse(groupFields []string, isQueryAggregate bool) *GroupFieldsResponse {
 	this := GroupFieldsResponse{}
 	this.GroupFields = groupFields
+	this.IsQueryAggregate = isQueryAggregate
 	return &this
 }
 
@@ -35,6 +41,8 @@ func NewGroupFieldsResponse(groupFields []string) *GroupFieldsResponse {
 // but it doesn't guarantee that properties required by API are set
 func NewGroupFieldsResponseWithDefaults() *GroupFieldsResponse {
 	this := GroupFieldsResponse{}
+	var isQueryAggregate bool = false
+	this.IsQueryAggregate = isQueryAggregate
 	return &this
 }
 
@@ -62,12 +70,43 @@ func (o *GroupFieldsResponse) SetGroupFields(v []string) {
 	o.GroupFields = v
 }
 
+// GetIsQueryAggregate returns the IsQueryAggregate field value
+func (o *GroupFieldsResponse) GetIsQueryAggregate() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IsQueryAggregate
+}
+
+// GetIsQueryAggregateOk returns a tuple with the IsQueryAggregate field value
+// and a boolean to check if the value has been set.
+func (o *GroupFieldsResponse) GetIsQueryAggregateOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IsQueryAggregate, true
+}
+
+// SetIsQueryAggregate sets field value
+func (o *GroupFieldsResponse) SetIsQueryAggregate(v bool) {
+	o.IsQueryAggregate = v
+}
+
 func (o GroupFieldsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["groupFields"] = o.GroupFields
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GroupFieldsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["groupFields"] = o.GroupFields
+	toSerialize["isQueryAggregate"] = o.IsQueryAggregate
+	return toSerialize, nil
 }
 
 type NullableGroupFieldsResponse struct {

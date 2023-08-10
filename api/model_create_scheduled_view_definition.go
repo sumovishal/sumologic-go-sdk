@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the CreateScheduledViewDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateScheduledViewDefinition{}
 
 // CreateScheduledViewDefinition struct for CreateScheduledViewDefinition
 type CreateScheduledViewDefinition struct {
@@ -133,7 +136,7 @@ func (o *CreateScheduledViewDefinition) SetStartTime(v time.Time) {
 
 // GetRetentionPeriod returns the RetentionPeriod field value if set, zero value otherwise.
 func (o *CreateScheduledViewDefinition) GetRetentionPeriod() int32 {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -143,7 +146,7 @@ func (o *CreateScheduledViewDefinition) GetRetentionPeriod() int32 {
 // GetRetentionPeriodOk returns a tuple with the RetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateScheduledViewDefinition) GetRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		return nil, false
 	}
 	return o.RetentionPeriod, true
@@ -151,7 +154,7 @@ func (o *CreateScheduledViewDefinition) GetRetentionPeriodOk() (*int32, bool) {
 
 // HasRetentionPeriod returns a boolean if a field has been set.
 func (o *CreateScheduledViewDefinition) HasRetentionPeriod() bool {
-	if o != nil && o.RetentionPeriod != nil {
+	if o != nil && !IsNil(o.RetentionPeriod) {
 		return true
 	}
 
@@ -165,7 +168,7 @@ func (o *CreateScheduledViewDefinition) SetRetentionPeriod(v int32) {
 
 // GetDataForwardingId returns the DataForwardingId field value if set, zero value otherwise.
 func (o *CreateScheduledViewDefinition) GetDataForwardingId() string {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		var ret string
 		return ret
 	}
@@ -175,7 +178,7 @@ func (o *CreateScheduledViewDefinition) GetDataForwardingId() string {
 // GetDataForwardingIdOk returns a tuple with the DataForwardingId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateScheduledViewDefinition) GetDataForwardingIdOk() (*string, bool) {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		return nil, false
 	}
 	return o.DataForwardingId, true
@@ -183,7 +186,7 @@ func (o *CreateScheduledViewDefinition) GetDataForwardingIdOk() (*string, bool) 
 
 // HasDataForwardingId returns a boolean if a field has been set.
 func (o *CreateScheduledViewDefinition) HasDataForwardingId() bool {
-	if o != nil && o.DataForwardingId != nil {
+	if o != nil && !IsNil(o.DataForwardingId) {
 		return true
 	}
 
@@ -197,7 +200,7 @@ func (o *CreateScheduledViewDefinition) SetDataForwardingId(v string) {
 
 // GetParsingMode returns the ParsingMode field value if set, zero value otherwise.
 func (o *CreateScheduledViewDefinition) GetParsingMode() string {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		var ret string
 		return ret
 	}
@@ -207,7 +210,7 @@ func (o *CreateScheduledViewDefinition) GetParsingMode() string {
 // GetParsingModeOk returns a tuple with the ParsingMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateScheduledViewDefinition) GetParsingModeOk() (*string, bool) {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		return nil, false
 	}
 	return o.ParsingMode, true
@@ -215,7 +218,7 @@ func (o *CreateScheduledViewDefinition) GetParsingModeOk() (*string, bool) {
 
 // HasParsingMode returns a boolean if a field has been set.
 func (o *CreateScheduledViewDefinition) HasParsingMode() bool {
-	if o != nil && o.ParsingMode != nil {
+	if o != nil && !IsNil(o.ParsingMode) {
 		return true
 	}
 
@@ -228,26 +231,28 @@ func (o *CreateScheduledViewDefinition) SetParsingMode(v string) {
 }
 
 func (o CreateScheduledViewDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["indexName"] = o.IndexName
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if o.RetentionPeriod != nil {
-		toSerialize["retentionPeriod"] = o.RetentionPeriod
-	}
-	if o.DataForwardingId != nil {
-		toSerialize["dataForwardingId"] = o.DataForwardingId
-	}
-	if o.ParsingMode != nil {
-		toSerialize["parsingMode"] = o.ParsingMode
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreateScheduledViewDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["indexName"] = o.IndexName
+	toSerialize["startTime"] = o.StartTime
+	if !IsNil(o.RetentionPeriod) {
+		toSerialize["retentionPeriod"] = o.RetentionPeriod
+	}
+	if !IsNil(o.DataForwardingId) {
+		toSerialize["dataForwardingId"] = o.DataForwardingId
+	}
+	if !IsNil(o.ParsingMode) {
+		toSerialize["parsingMode"] = o.ParsingMode
+	}
+	return toSerialize, nil
 }
 
 type NullableCreateScheduledViewDefinition struct {

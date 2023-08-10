@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AsyncJobStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AsyncJobStatus{}
 
 // AsyncJobStatus struct for AsyncJobStatus
 type AsyncJobStatus struct {
@@ -67,7 +70,7 @@ func (o *AsyncJobStatus) SetStatus(v string) {
 
 // GetStatusMessage returns the StatusMessage field value if set, zero value otherwise.
 func (o *AsyncJobStatus) GetStatusMessage() string {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		var ret string
 		return ret
 	}
@@ -77,7 +80,7 @@ func (o *AsyncJobStatus) GetStatusMessage() string {
 // GetStatusMessageOk returns a tuple with the StatusMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AsyncJobStatus) GetStatusMessageOk() (*string, bool) {
-	if o == nil || o.StatusMessage == nil {
+	if o == nil || IsNil(o.StatusMessage) {
 		return nil, false
 	}
 	return o.StatusMessage, true
@@ -85,7 +88,7 @@ func (o *AsyncJobStatus) GetStatusMessageOk() (*string, bool) {
 
 // HasStatusMessage returns a boolean if a field has been set.
 func (o *AsyncJobStatus) HasStatusMessage() bool {
-	if o != nil && o.StatusMessage != nil {
+	if o != nil && !IsNil(o.StatusMessage) {
 		return true
 	}
 
@@ -99,7 +102,7 @@ func (o *AsyncJobStatus) SetStatusMessage(v string) {
 
 // GetError returns the Error field value if set, zero value otherwise.
 func (o *AsyncJobStatus) GetError() ErrorDescription {
-	if o == nil || o.Error == nil {
+	if o == nil || IsNil(o.Error) {
 		var ret ErrorDescription
 		return ret
 	}
@@ -109,7 +112,7 @@ func (o *AsyncJobStatus) GetError() ErrorDescription {
 // GetErrorOk returns a tuple with the Error field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AsyncJobStatus) GetErrorOk() (*ErrorDescription, bool) {
-	if o == nil || o.Error == nil {
+	if o == nil || IsNil(o.Error) {
 		return nil, false
 	}
 	return o.Error, true
@@ -117,7 +120,7 @@ func (o *AsyncJobStatus) GetErrorOk() (*ErrorDescription, bool) {
 
 // HasError returns a boolean if a field has been set.
 func (o *AsyncJobStatus) HasError() bool {
-	if o != nil && o.Error != nil {
+	if o != nil && !IsNil(o.Error) {
 		return true
 	}
 
@@ -130,17 +133,23 @@ func (o *AsyncJobStatus) SetError(v ErrorDescription) {
 }
 
 func (o AsyncJobStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessage != nil {
-		toSerialize["statusMessage"] = o.StatusMessage
-	}
-	if o.Error != nil {
-		toSerialize["error"] = o.Error
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AsyncJobStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessage) {
+		toSerialize["statusMessage"] = o.StatusMessage
+	}
+	if !IsNil(o.Error) {
+		toSerialize["error"] = o.Error
+	}
+	return toSerialize, nil
 }
 
 type NullableAsyncJobStatus struct {

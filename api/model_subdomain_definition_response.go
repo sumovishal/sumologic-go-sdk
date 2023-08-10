@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the SubdomainDefinitionResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SubdomainDefinitionResponse{}
 
 // SubdomainDefinitionResponse struct for SubdomainDefinitionResponse
 type SubdomainDefinitionResponse struct {
@@ -199,26 +202,22 @@ func (o *SubdomainDefinitionResponse) SetUrl(v string) {
 }
 
 func (o SubdomainDefinitionResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["subdomain"] = o.Subdomain
-	}
-	if true {
-		toSerialize["url"] = o.Url
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SubdomainDefinitionResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["subdomain"] = o.Subdomain
+	toSerialize["url"] = o.Url
+	return toSerialize, nil
 }
 
 type NullableSubdomainDefinitionResponse struct {

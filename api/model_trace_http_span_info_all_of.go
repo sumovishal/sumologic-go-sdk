@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceHttpSpanInfoAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceHttpSpanInfoAllOf{}
 
 // TraceHttpSpanInfoAllOf struct for TraceHttpSpanInfoAllOf
 type TraceHttpSpanInfoAllOf struct {
@@ -43,7 +46,7 @@ func NewTraceHttpSpanInfoAllOfWithDefaults() *TraceHttpSpanInfoAllOf {
 
 // GetMethod returns the Method field value if set, zero value otherwise.
 func (o *TraceHttpSpanInfoAllOf) GetMethod() string {
-	if o == nil || o.Method == nil {
+	if o == nil || IsNil(o.Method) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *TraceHttpSpanInfoAllOf) GetMethod() string {
 // GetMethodOk returns a tuple with the Method field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceHttpSpanInfoAllOf) GetMethodOk() (*string, bool) {
-	if o == nil || o.Method == nil {
+	if o == nil || IsNil(o.Method) {
 		return nil, false
 	}
 	return o.Method, true
@@ -61,7 +64,7 @@ func (o *TraceHttpSpanInfoAllOf) GetMethodOk() (*string, bool) {
 
 // HasMethod returns a boolean if a field has been set.
 func (o *TraceHttpSpanInfoAllOf) HasMethod() bool {
-	if o != nil && o.Method != nil {
+	if o != nil && !IsNil(o.Method) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *TraceHttpSpanInfoAllOf) SetMethod(v string) {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *TraceHttpSpanInfoAllOf) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *TraceHttpSpanInfoAllOf) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceHttpSpanInfoAllOf) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -93,7 +96,7 @@ func (o *TraceHttpSpanInfoAllOf) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *TraceHttpSpanInfoAllOf) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *TraceHttpSpanInfoAllOf) SetUrl(v string) {
 
 // GetStatusCode returns the StatusCode field value if set, zero value otherwise.
 func (o *TraceHttpSpanInfoAllOf) GetStatusCode() int32 {
-	if o == nil || o.StatusCode == nil {
+	if o == nil || IsNil(o.StatusCode) {
 		var ret int32
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *TraceHttpSpanInfoAllOf) GetStatusCode() int32 {
 // GetStatusCodeOk returns a tuple with the StatusCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceHttpSpanInfoAllOf) GetStatusCodeOk() (*int32, bool) {
-	if o == nil || o.StatusCode == nil {
+	if o == nil || IsNil(o.StatusCode) {
 		return nil, false
 	}
 	return o.StatusCode, true
@@ -125,7 +128,7 @@ func (o *TraceHttpSpanInfoAllOf) GetStatusCodeOk() (*int32, bool) {
 
 // HasStatusCode returns a boolean if a field has been set.
 func (o *TraceHttpSpanInfoAllOf) HasStatusCode() bool {
-	if o != nil && o.StatusCode != nil {
+	if o != nil && !IsNil(o.StatusCode) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *TraceHttpSpanInfoAllOf) SetStatusCode(v int32) {
 }
 
 func (o TraceHttpSpanInfoAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Method != nil {
-		toSerialize["method"] = o.Method
-	}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.StatusCode != nil {
-		toSerialize["statusCode"] = o.StatusCode
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceHttpSpanInfoAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Method) {
+		toSerialize["method"] = o.Method
+	}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.StatusCode) {
+		toSerialize["statusCode"] = o.StatusCode
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceHttpSpanInfoAllOf struct {

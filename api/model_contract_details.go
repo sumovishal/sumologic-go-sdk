@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContractDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContractDetails{}
 
 // ContractDetails Contract details include Entitlements of the customer such as ContinuousLogs, FrequentLogs, Metrics, Storage, and Dashboards along with the entitlement value of each entitlement. 
 type ContractDetails struct {
@@ -124,7 +127,7 @@ func (o *ContractDetails) SetEntitlements(v []Entitlements) {
 
 // GetSharedBuckets returns the SharedBuckets field value if set, zero value otherwise.
 func (o *ContractDetails) GetSharedBuckets() []SharedBucket {
-	if o == nil || o.SharedBuckets == nil {
+	if o == nil || IsNil(o.SharedBuckets) {
 		var ret []SharedBucket
 		return ret
 	}
@@ -134,7 +137,7 @@ func (o *ContractDetails) GetSharedBuckets() []SharedBucket {
 // GetSharedBucketsOk returns a tuple with the SharedBuckets field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ContractDetails) GetSharedBucketsOk() ([]SharedBucket, bool) {
-	if o == nil || o.SharedBuckets == nil {
+	if o == nil || IsNil(o.SharedBuckets) {
 		return nil, false
 	}
 	return o.SharedBuckets, true
@@ -142,7 +145,7 @@ func (o *ContractDetails) GetSharedBucketsOk() ([]SharedBucket, bool) {
 
 // HasSharedBuckets returns a boolean if a field has been set.
 func (o *ContractDetails) HasSharedBuckets() bool {
-	if o != nil && o.SharedBuckets != nil {
+	if o != nil && !IsNil(o.SharedBuckets) {
 		return true
 	}
 
@@ -203,26 +206,24 @@ func (o *ContractDetails) SetCurrentBillingPeriod(v CurrentBillingPeriod) {
 }
 
 func (o ContractDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["orgId"] = o.OrgId
-	}
-	if true {
-		toSerialize["planType"] = o.PlanType
-	}
-	if true {
-		toSerialize["entitlements"] = o.Entitlements
-	}
-	if o.SharedBuckets != nil {
-		toSerialize["sharedBuckets"] = o.SharedBuckets
-	}
-	if true {
-		toSerialize["contractPeriod"] = o.ContractPeriod
-	}
-	if true {
-		toSerialize["currentBillingPeriod"] = o.CurrentBillingPeriod
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContractDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["orgId"] = o.OrgId
+	toSerialize["planType"] = o.PlanType
+	toSerialize["entitlements"] = o.Entitlements
+	if !IsNil(o.SharedBuckets) {
+		toSerialize["sharedBuckets"] = o.SharedBuckets
+	}
+	toSerialize["contractPeriod"] = o.ContractPeriod
+	toSerialize["currentBillingPeriod"] = o.CurrentBillingPeriod
+	return toSerialize, nil
 }
 
 type NullableContractDetails struct {

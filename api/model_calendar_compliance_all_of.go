@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CalendarComplianceAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CalendarComplianceAllOf{}
 
 // CalendarComplianceAllOf struct for CalendarComplianceAllOf
 type CalendarComplianceAllOf struct {
@@ -66,7 +69,7 @@ func (o *CalendarComplianceAllOf) SetWindowType(v string) {
 
 // GetStartFrom returns the StartFrom field value if set, zero value otherwise.
 func (o *CalendarComplianceAllOf) GetStartFrom() string {
-	if o == nil || o.StartFrom == nil {
+	if o == nil || IsNil(o.StartFrom) {
 		var ret string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *CalendarComplianceAllOf) GetStartFrom() string {
 // GetStartFromOk returns a tuple with the StartFrom field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalendarComplianceAllOf) GetStartFromOk() (*string, bool) {
-	if o == nil || o.StartFrom == nil {
+	if o == nil || IsNil(o.StartFrom) {
 		return nil, false
 	}
 	return o.StartFrom, true
@@ -84,7 +87,7 @@ func (o *CalendarComplianceAllOf) GetStartFromOk() (*string, bool) {
 
 // HasStartFrom returns a boolean if a field has been set.
 func (o *CalendarComplianceAllOf) HasStartFrom() bool {
-	if o != nil && o.StartFrom != nil {
+	if o != nil && !IsNil(o.StartFrom) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *CalendarComplianceAllOf) SetStartFrom(v string) {
 }
 
 func (o CalendarComplianceAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["windowType"] = o.WindowType
-	}
-	if o.StartFrom != nil {
-		toSerialize["startFrom"] = o.StartFrom
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CalendarComplianceAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["windowType"] = o.WindowType
+	if !IsNil(o.StartFrom) {
+		toSerialize["startFrom"] = o.StartFrom
+	}
+	return toSerialize, nil
 }
 
 type NullableCalendarComplianceAllOf struct {

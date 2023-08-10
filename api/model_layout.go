@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Layout type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Layout{}
 
 // Layout struct for Layout
 type Layout struct {
@@ -90,14 +93,18 @@ func (o *Layout) SetLayoutStructures(v []LayoutStructure) {
 }
 
 func (o Layout) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["layoutType"] = o.LayoutType
-	}
-	if true {
-		toSerialize["layoutStructures"] = o.LayoutStructures
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Layout) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["layoutType"] = o.LayoutType
+	toSerialize["layoutStructures"] = o.LayoutStructures
+	return toSerialize, nil
 }
 
 type NullableLayout struct {

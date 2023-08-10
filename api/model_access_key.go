@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the AccessKey type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccessKey{}
 
 // AccessKey struct for AccessKey
 type AccessKey struct {
@@ -31,6 +34,8 @@ type AccessKey struct {
 	CreatedBy string `json:"createdBy"`
 	// Last modification timestamp in UTC.
 	ModifiedAt time.Time `json:"modifiedAt"`
+	// Last used timestamp in UTC.  <br> **Note:** Property not in use, it is part of an upcoming feature.
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// The key for the created access key. This field will have values only in the response for an access key create request. The value will be an empty string while listing all keys.
 	Key string `json:"key"`
 }
@@ -109,7 +114,7 @@ func (o *AccessKey) SetLabel(v string) {
 
 // GetCorsHeaders returns the CorsHeaders field value if set, zero value otherwise.
 func (o *AccessKey) GetCorsHeaders() []string {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		var ret []string
 		return ret
 	}
@@ -119,7 +124,7 @@ func (o *AccessKey) GetCorsHeaders() []string {
 // GetCorsHeadersOk returns a tuple with the CorsHeaders field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccessKey) GetCorsHeadersOk() ([]string, bool) {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		return nil, false
 	}
 	return o.CorsHeaders, true
@@ -127,7 +132,7 @@ func (o *AccessKey) GetCorsHeadersOk() ([]string, bool) {
 
 // HasCorsHeaders returns a boolean if a field has been set.
 func (o *AccessKey) HasCorsHeaders() bool {
-	if o != nil && o.CorsHeaders != nil {
+	if o != nil && !IsNil(o.CorsHeaders) {
 		return true
 	}
 
@@ -235,6 +240,38 @@ func (o *AccessKey) SetModifiedAt(v time.Time) {
 	o.ModifiedAt = v
 }
 
+// GetLastUsed returns the LastUsed field value if set, zero value otherwise.
+func (o *AccessKey) GetLastUsed() time.Time {
+	if o == nil || IsNil(o.LastUsed) {
+		var ret time.Time
+		return ret
+	}
+	return *o.LastUsed
+}
+
+// GetLastUsedOk returns a tuple with the LastUsed field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccessKey) GetLastUsedOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.LastUsed) {
+		return nil, false
+	}
+	return o.LastUsed, true
+}
+
+// HasLastUsed returns a boolean if a field has been set.
+func (o *AccessKey) HasLastUsed() bool {
+	if o != nil && !IsNil(o.LastUsed) {
+		return true
+	}
+
+	return false
+}
+
+// SetLastUsed gets a reference to the given time.Time and assigns it to the LastUsed field.
+func (o *AccessKey) SetLastUsed(v time.Time) {
+	o.LastUsed = &v
+}
+
 // GetKey returns the Key field value
 func (o *AccessKey) GetKey() string {
 	if o == nil {
@@ -260,32 +297,29 @@ func (o *AccessKey) SetKey(v string) {
 }
 
 func (o AccessKey) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if o.CorsHeaders != nil {
-		toSerialize["corsHeaders"] = o.CorsHeaders
-	}
-	if true {
-		toSerialize["disabled"] = o.Disabled
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["key"] = o.Key
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccessKey) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["label"] = o.Label
+	if !IsNil(o.CorsHeaders) {
+		toSerialize["corsHeaders"] = o.CorsHeaders
+	}
+	toSerialize["disabled"] = o.Disabled
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	if !IsNil(o.LastUsed) {
+		toSerialize["lastUsed"] = o.LastUsed
+	}
+	toSerialize["key"] = o.Key
+	return toSerialize, nil
 }
 
 type NullableAccessKey struct {

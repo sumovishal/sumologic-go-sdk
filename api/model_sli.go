@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,25 +14,22 @@ import (
 	"encoding/json"
 )
 
+// checks if the Sli type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Sli{}
+
 // Sli struct for Sli
 type Sli struct {
-	// Evaluate SLI using successful/total windows, or occurrence of successful events over entire compliance period.
+	// Evaluate SLI using successful/total windows, or occurrence of successful events over entire compliance period, or based on monitor evaluation.
 	EvaluationType string `json:"evaluationType"`
-	// Type of Raw Data Queries for SLI (Logs/Metrics).
-	QueryType string `json:"queryType"`
-	// Queries for defining SLI.
-	Queries []SliQueryGroup `json:"queries"`
 }
 
 // NewSli instantiates a new Sli object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSli(evaluationType string, queryType string, queries []SliQueryGroup) *Sli {
+func NewSli(evaluationType string) *Sli {
 	this := Sli{}
 	this.EvaluationType = evaluationType
-	this.QueryType = queryType
-	this.Queries = queries
 	return &this
 }
 
@@ -68,66 +65,18 @@ func (o *Sli) SetEvaluationType(v string) {
 	o.EvaluationType = v
 }
 
-// GetQueryType returns the QueryType field value
-func (o *Sli) GetQueryType() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.QueryType
-}
-
-// GetQueryTypeOk returns a tuple with the QueryType field value
-// and a boolean to check if the value has been set.
-func (o *Sli) GetQueryTypeOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.QueryType, true
-}
-
-// SetQueryType sets field value
-func (o *Sli) SetQueryType(v string) {
-	o.QueryType = v
-}
-
-// GetQueries returns the Queries field value
-func (o *Sli) GetQueries() []SliQueryGroup {
-	if o == nil {
-		var ret []SliQueryGroup
-		return ret
-	}
-
-	return o.Queries
-}
-
-// GetQueriesOk returns a tuple with the Queries field value
-// and a boolean to check if the value has been set.
-func (o *Sli) GetQueriesOk() ([]SliQueryGroup, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Queries, true
-}
-
-// SetQueries sets field value
-func (o *Sli) SetQueries(v []SliQueryGroup) {
-	o.Queries = v
-}
-
 func (o Sli) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["evaluationType"] = o.EvaluationType
-	}
-	if true {
-		toSerialize["queryType"] = o.QueryType
-	}
-	if true {
-		toSerialize["queries"] = o.Queries
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Sli) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["evaluationType"] = o.EvaluationType
+	return toSerialize, nil
 }
 
 type NullableSli struct {

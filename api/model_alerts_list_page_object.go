@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AlertsListPageObject type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsListPageObject{}
+
 // AlertsListPageObject Alert list page object.
 type AlertsListPageObject struct {
 	// Identifier of the alert.
@@ -24,7 +27,10 @@ type AlertsListPageObject struct {
 	Severity *string `json:"severity,omitempty"`
 	// The status of the Alert. Valid values:   1. `Active`   2. `Resolved`
 	Status *string `json:"status,omitempty"`
+	// List of AlertEntityInfo for primary entities. The primary entity is the most concrete entity  (e.g. k8s container) that can be assigned per time series or log group,  secondary entities are the less specific ones (e.g. k8s cluster or EC2 host). 
 	EntitiesInfo []AlertEntityInfo `json:"entitiesInfo,omitempty"`
+	// List of secondary AlertEntityInfo for primary entities. Primary/secondary entities are explained in description for `entitiesInfo`. 
+	SecondaryEntitiesInfo []AlertEntityInfo `json:"secondaryEntitiesInfo,omitempty"`
 	// The number of unique result groups that have met the alert condition.
 	ViolationCount *string `json:"violationCount,omitempty"`
 	// The condition from the last alert violation.
@@ -35,6 +41,8 @@ type AlertsListPageObject struct {
 	CreatedAt *string `json:"createdAt,omitempty"`
 	// The time when this alert was updated with the most recent violation.
 	LastUpdated *string `json:"lastUpdated,omitempty"`
+	// True if the ARP was created while the monitor was muted
+	IsMuted *bool `json:"isMuted,omitempty"`
 }
 
 // NewAlertsListPageObject instantiates a new AlertsListPageObject object
@@ -43,6 +51,8 @@ type AlertsListPageObject struct {
 // will change when the set of required properties is changed
 func NewAlertsListPageObject() *AlertsListPageObject {
 	this := AlertsListPageObject{}
+	var isMuted bool = false
+	this.IsMuted = &isMuted
 	return &this
 }
 
@@ -51,12 +61,14 @@ func NewAlertsListPageObject() *AlertsListPageObject {
 // but it doesn't guarantee that properties required by API are set
 func NewAlertsListPageObjectWithDefaults() *AlertsListPageObject {
 	this := AlertsListPageObject{}
+	var isMuted bool = false
+	this.IsMuted = &isMuted
 	return &this
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -66,7 +78,7 @@ func (o *AlertsListPageObject) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -74,7 +86,7 @@ func (o *AlertsListPageObject) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -88,7 +100,7 @@ func (o *AlertsListPageObject) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -98,7 +110,7 @@ func (o *AlertsListPageObject) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -106,7 +118,7 @@ func (o *AlertsListPageObject) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -120,7 +132,7 @@ func (o *AlertsListPageObject) SetName(v string) {
 
 // GetSeverity returns the Severity field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetSeverity() string {
-	if o == nil || o.Severity == nil {
+	if o == nil || IsNil(o.Severity) {
 		var ret string
 		return ret
 	}
@@ -130,7 +142,7 @@ func (o *AlertsListPageObject) GetSeverity() string {
 // GetSeverityOk returns a tuple with the Severity field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetSeverityOk() (*string, bool) {
-	if o == nil || o.Severity == nil {
+	if o == nil || IsNil(o.Severity) {
 		return nil, false
 	}
 	return o.Severity, true
@@ -138,7 +150,7 @@ func (o *AlertsListPageObject) GetSeverityOk() (*string, bool) {
 
 // HasSeverity returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasSeverity() bool {
-	if o != nil && o.Severity != nil {
+	if o != nil && !IsNil(o.Severity) {
 		return true
 	}
 
@@ -152,7 +164,7 @@ func (o *AlertsListPageObject) SetSeverity(v string) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetStatus() string {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret string
 		return ret
 	}
@@ -162,7 +174,7 @@ func (o *AlertsListPageObject) GetStatus() string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetStatusOk() (*string, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -170,7 +182,7 @@ func (o *AlertsListPageObject) GetStatusOk() (*string, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -184,7 +196,7 @@ func (o *AlertsListPageObject) SetStatus(v string) {
 
 // GetEntitiesInfo returns the EntitiesInfo field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetEntitiesInfo() []AlertEntityInfo {
-	if o == nil || o.EntitiesInfo == nil {
+	if o == nil || IsNil(o.EntitiesInfo) {
 		var ret []AlertEntityInfo
 		return ret
 	}
@@ -194,7 +206,7 @@ func (o *AlertsListPageObject) GetEntitiesInfo() []AlertEntityInfo {
 // GetEntitiesInfoOk returns a tuple with the EntitiesInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetEntitiesInfoOk() ([]AlertEntityInfo, bool) {
-	if o == nil || o.EntitiesInfo == nil {
+	if o == nil || IsNil(o.EntitiesInfo) {
 		return nil, false
 	}
 	return o.EntitiesInfo, true
@@ -202,7 +214,7 @@ func (o *AlertsListPageObject) GetEntitiesInfoOk() ([]AlertEntityInfo, bool) {
 
 // HasEntitiesInfo returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasEntitiesInfo() bool {
-	if o != nil && o.EntitiesInfo != nil {
+	if o != nil && !IsNil(o.EntitiesInfo) {
 		return true
 	}
 
@@ -214,9 +226,41 @@ func (o *AlertsListPageObject) SetEntitiesInfo(v []AlertEntityInfo) {
 	o.EntitiesInfo = v
 }
 
+// GetSecondaryEntitiesInfo returns the SecondaryEntitiesInfo field value if set, zero value otherwise.
+func (o *AlertsListPageObject) GetSecondaryEntitiesInfo() []AlertEntityInfo {
+	if o == nil || IsNil(o.SecondaryEntitiesInfo) {
+		var ret []AlertEntityInfo
+		return ret
+	}
+	return o.SecondaryEntitiesInfo
+}
+
+// GetSecondaryEntitiesInfoOk returns a tuple with the SecondaryEntitiesInfo field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertsListPageObject) GetSecondaryEntitiesInfoOk() ([]AlertEntityInfo, bool) {
+	if o == nil || IsNil(o.SecondaryEntitiesInfo) {
+		return nil, false
+	}
+	return o.SecondaryEntitiesInfo, true
+}
+
+// HasSecondaryEntitiesInfo returns a boolean if a field has been set.
+func (o *AlertsListPageObject) HasSecondaryEntitiesInfo() bool {
+	if o != nil && !IsNil(o.SecondaryEntitiesInfo) {
+		return true
+	}
+
+	return false
+}
+
+// SetSecondaryEntitiesInfo gets a reference to the given []AlertEntityInfo and assigns it to the SecondaryEntitiesInfo field.
+func (o *AlertsListPageObject) SetSecondaryEntitiesInfo(v []AlertEntityInfo) {
+	o.SecondaryEntitiesInfo = v
+}
+
 // GetViolationCount returns the ViolationCount field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetViolationCount() string {
-	if o == nil || o.ViolationCount == nil {
+	if o == nil || IsNil(o.ViolationCount) {
 		var ret string
 		return ret
 	}
@@ -226,7 +270,7 @@ func (o *AlertsListPageObject) GetViolationCount() string {
 // GetViolationCountOk returns a tuple with the ViolationCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetViolationCountOk() (*string, bool) {
-	if o == nil || o.ViolationCount == nil {
+	if o == nil || IsNil(o.ViolationCount) {
 		return nil, false
 	}
 	return o.ViolationCount, true
@@ -234,7 +278,7 @@ func (o *AlertsListPageObject) GetViolationCountOk() (*string, bool) {
 
 // HasViolationCount returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasViolationCount() bool {
-	if o != nil && o.ViolationCount != nil {
+	if o != nil && !IsNil(o.ViolationCount) {
 		return true
 	}
 
@@ -248,7 +292,7 @@ func (o *AlertsListPageObject) SetViolationCount(v string) {
 
 // GetLastViolation returns the LastViolation field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetLastViolation() string {
-	if o == nil || o.LastViolation == nil {
+	if o == nil || IsNil(o.LastViolation) {
 		var ret string
 		return ret
 	}
@@ -258,7 +302,7 @@ func (o *AlertsListPageObject) GetLastViolation() string {
 // GetLastViolationOk returns a tuple with the LastViolation field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetLastViolationOk() (*string, bool) {
-	if o == nil || o.LastViolation == nil {
+	if o == nil || IsNil(o.LastViolation) {
 		return nil, false
 	}
 	return o.LastViolation, true
@@ -266,7 +310,7 @@ func (o *AlertsListPageObject) GetLastViolationOk() (*string, bool) {
 
 // HasLastViolation returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasLastViolation() bool {
-	if o != nil && o.LastViolation != nil {
+	if o != nil && !IsNil(o.LastViolation) {
 		return true
 	}
 
@@ -280,7 +324,7 @@ func (o *AlertsListPageObject) SetLastViolation(v string) {
 
 // GetDuration returns the Duration field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetDuration() string {
-	if o == nil || o.Duration == nil {
+	if o == nil || IsNil(o.Duration) {
 		var ret string
 		return ret
 	}
@@ -290,7 +334,7 @@ func (o *AlertsListPageObject) GetDuration() string {
 // GetDurationOk returns a tuple with the Duration field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetDurationOk() (*string, bool) {
-	if o == nil || o.Duration == nil {
+	if o == nil || IsNil(o.Duration) {
 		return nil, false
 	}
 	return o.Duration, true
@@ -298,7 +342,7 @@ func (o *AlertsListPageObject) GetDurationOk() (*string, bool) {
 
 // HasDuration returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasDuration() bool {
-	if o != nil && o.Duration != nil {
+	if o != nil && !IsNil(o.Duration) {
 		return true
 	}
 
@@ -312,7 +356,7 @@ func (o *AlertsListPageObject) SetDuration(v string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetCreatedAt() string {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret string
 		return ret
 	}
@@ -322,7 +366,7 @@ func (o *AlertsListPageObject) GetCreatedAt() string {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetCreatedAtOk() (*string, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -330,7 +374,7 @@ func (o *AlertsListPageObject) GetCreatedAtOk() (*string, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -344,7 +388,7 @@ func (o *AlertsListPageObject) SetCreatedAt(v string) {
 
 // GetLastUpdated returns the LastUpdated field value if set, zero value otherwise.
 func (o *AlertsListPageObject) GetLastUpdated() string {
-	if o == nil || o.LastUpdated == nil {
+	if o == nil || IsNil(o.LastUpdated) {
 		var ret string
 		return ret
 	}
@@ -354,7 +398,7 @@ func (o *AlertsListPageObject) GetLastUpdated() string {
 // GetLastUpdatedOk returns a tuple with the LastUpdated field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsListPageObject) GetLastUpdatedOk() (*string, bool) {
-	if o == nil || o.LastUpdated == nil {
+	if o == nil || IsNil(o.LastUpdated) {
 		return nil, false
 	}
 	return o.LastUpdated, true
@@ -362,7 +406,7 @@ func (o *AlertsListPageObject) GetLastUpdatedOk() (*string, bool) {
 
 // HasLastUpdated returns a boolean if a field has been set.
 func (o *AlertsListPageObject) HasLastUpdated() bool {
-	if o != nil && o.LastUpdated != nil {
+	if o != nil && !IsNil(o.LastUpdated) {
 		return true
 	}
 
@@ -374,39 +418,85 @@ func (o *AlertsListPageObject) SetLastUpdated(v string) {
 	o.LastUpdated = &v
 }
 
+// GetIsMuted returns the IsMuted field value if set, zero value otherwise.
+func (o *AlertsListPageObject) GetIsMuted() bool {
+	if o == nil || IsNil(o.IsMuted) {
+		var ret bool
+		return ret
+	}
+	return *o.IsMuted
+}
+
+// GetIsMutedOk returns a tuple with the IsMuted field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertsListPageObject) GetIsMutedOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsMuted) {
+		return nil, false
+	}
+	return o.IsMuted, true
+}
+
+// HasIsMuted returns a boolean if a field has been set.
+func (o *AlertsListPageObject) HasIsMuted() bool {
+	if o != nil && !IsNil(o.IsMuted) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsMuted gets a reference to the given bool and assigns it to the IsMuted field.
+func (o *AlertsListPageObject) SetIsMuted(v bool) {
+	o.IsMuted = &v
+}
+
 func (o AlertsListPageObject) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if o.Severity != nil {
-		toSerialize["severity"] = o.Severity
-	}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if o.EntitiesInfo != nil {
-		toSerialize["entitiesInfo"] = o.EntitiesInfo
-	}
-	if o.ViolationCount != nil {
-		toSerialize["violationCount"] = o.ViolationCount
-	}
-	if o.LastViolation != nil {
-		toSerialize["lastViolation"] = o.LastViolation
-	}
-	if o.Duration != nil {
-		toSerialize["duration"] = o.Duration
-	}
-	if o.CreatedAt != nil {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if o.LastUpdated != nil {
-		toSerialize["lastUpdated"] = o.LastUpdated
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertsListPageObject) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.Severity) {
+		toSerialize["severity"] = o.Severity
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.EntitiesInfo) {
+		toSerialize["entitiesInfo"] = o.EntitiesInfo
+	}
+	if !IsNil(o.SecondaryEntitiesInfo) {
+		toSerialize["secondaryEntitiesInfo"] = o.SecondaryEntitiesInfo
+	}
+	if !IsNil(o.ViolationCount) {
+		toSerialize["violationCount"] = o.ViolationCount
+	}
+	if !IsNil(o.LastViolation) {
+		toSerialize["lastViolation"] = o.LastViolation
+	}
+	if !IsNil(o.Duration) {
+		toSerialize["duration"] = o.Duration
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["createdAt"] = o.CreatedAt
+	}
+	if !IsNil(o.LastUpdated) {
+		toSerialize["lastUpdated"] = o.LastUpdated
+	}
+	if !IsNil(o.IsMuted) {
+		toSerialize["isMuted"] = o.IsMuted
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertsListPageObject struct {

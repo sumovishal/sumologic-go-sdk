@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the GetIncidentTemplatesResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GetIncidentTemplatesResponse{}
 
 // GetIncidentTemplatesResponse struct for GetIncidentTemplatesResponse
 type GetIncidentTemplatesResponse struct {
@@ -63,11 +66,17 @@ func (o *GetIncidentTemplatesResponse) SetTemplates(v []IncidentTemplate) {
 }
 
 func (o GetIncidentTemplatesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["templates"] = o.Templates
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GetIncidentTemplatesResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["templates"] = o.Templates
+	return toSerialize, nil
 }
 
 type NullableGetIncidentTemplatesResponse struct {

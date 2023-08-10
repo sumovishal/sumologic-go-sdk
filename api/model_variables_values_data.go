@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VariablesValuesData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VariablesValuesData{}
 
 // VariablesValuesData struct for VariablesValuesData
 type VariablesValuesData struct {
@@ -66,7 +69,7 @@ func (o *VariablesValuesData) SetData(v map[string][]string) {
 
 // GetRichData returns the RichData field value if set, zero value otherwise.
 func (o *VariablesValuesData) GetRichData() map[string]VariableValuesData {
-	if o == nil || o.RichData == nil {
+	if o == nil || IsNil(o.RichData) {
 		var ret map[string]VariableValuesData
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *VariablesValuesData) GetRichData() map[string]VariableValuesData {
 // GetRichDataOk returns a tuple with the RichData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariablesValuesData) GetRichDataOk() (*map[string]VariableValuesData, bool) {
-	if o == nil || o.RichData == nil {
+	if o == nil || IsNil(o.RichData) {
 		return nil, false
 	}
 	return o.RichData, true
@@ -84,7 +87,7 @@ func (o *VariablesValuesData) GetRichDataOk() (*map[string]VariableValuesData, b
 
 // HasRichData returns a boolean if a field has been set.
 func (o *VariablesValuesData) HasRichData() bool {
-	if o != nil && o.RichData != nil {
+	if o != nil && !IsNil(o.RichData) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *VariablesValuesData) SetRichData(v map[string]VariableValuesData) {
 }
 
 func (o VariablesValuesData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
-	}
-	if o.RichData != nil {
-		toSerialize["richData"] = o.RichData
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VariablesValuesData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	if !IsNil(o.RichData) {
+		toSerialize["richData"] = o.RichData
+	}
+	return toSerialize, nil
 }
 
 type NullableVariablesValuesData struct {

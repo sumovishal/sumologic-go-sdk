@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ReportAutoParsingInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ReportAutoParsingInfo{}
 
 // ReportAutoParsingInfo Auto-parsing information for the panel. This information tells us whether automatic field extraction from JSON log messages is enabled or not
 type ReportAutoParsingInfo struct {
@@ -43,7 +46,7 @@ func NewReportAutoParsingInfoWithDefaults() *ReportAutoParsingInfo {
 
 // GetMode returns the Mode field value if set, zero value otherwise.
 func (o *ReportAutoParsingInfo) GetMode() string {
-	if o == nil || o.Mode == nil {
+	if o == nil || IsNil(o.Mode) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *ReportAutoParsingInfo) GetMode() string {
 // GetModeOk returns a tuple with the Mode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ReportAutoParsingInfo) GetModeOk() (*string, bool) {
-	if o == nil || o.Mode == nil {
+	if o == nil || IsNil(o.Mode) {
 		return nil, false
 	}
 	return o.Mode, true
@@ -61,7 +64,7 @@ func (o *ReportAutoParsingInfo) GetModeOk() (*string, bool) {
 
 // HasMode returns a boolean if a field has been set.
 func (o *ReportAutoParsingInfo) HasMode() bool {
-	if o != nil && o.Mode != nil {
+	if o != nil && !IsNil(o.Mode) {
 		return true
 	}
 
@@ -74,11 +77,19 @@ func (o *ReportAutoParsingInfo) SetMode(v string) {
 }
 
 func (o ReportAutoParsingInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Mode != nil {
-		toSerialize["mode"] = o.Mode
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ReportAutoParsingInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Mode) {
+		toSerialize["mode"] = o.Mode
+	}
+	return toSerialize, nil
 }
 
 type NullableReportAutoParsingInfo struct {

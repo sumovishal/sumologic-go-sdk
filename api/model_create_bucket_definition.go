@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CreateBucketDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateBucketDefinition{}
 
 // CreateBucketDefinition struct for CreateBucketDefinition
 type CreateBucketDefinition struct {
@@ -29,7 +32,7 @@ type CreateBucketDefinition struct {
 	// The AWS Role ARN to access the S3 bucket.
 	RoleArn *string `json:"roleArn,omitempty"`
 	// The region where the S3 bucket is located.
-	Region string `json:"region"`
+	Region *string `json:"region,omitempty"`
 	// Enable S3 server-side encryption.
 	Encrypted *bool `json:"encrypted,omitempty"`
 	// True if the destination is Active.
@@ -42,11 +45,10 @@ type CreateBucketDefinition struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateBucketDefinition(destinationName string, authenticationMode string, region string, bucketName string) *CreateBucketDefinition {
+func NewCreateBucketDefinition(destinationName string, authenticationMode string, bucketName string) *CreateBucketDefinition {
 	this := CreateBucketDefinition{}
 	this.DestinationName = destinationName
 	this.AuthenticationMode = authenticationMode
-	this.Region = region
 	this.BucketName = bucketName
 	return &this
 }
@@ -85,7 +87,7 @@ func (o *CreateBucketDefinition) SetDestinationName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -95,7 +97,7 @@ func (o *CreateBucketDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -103,7 +105,7 @@ func (o *CreateBucketDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -141,7 +143,7 @@ func (o *CreateBucketDefinition) SetAuthenticationMode(v string) {
 
 // GetAccessKeyId returns the AccessKeyId field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetAccessKeyId() string {
-	if o == nil || o.AccessKeyId == nil {
+	if o == nil || IsNil(o.AccessKeyId) {
 		var ret string
 		return ret
 	}
@@ -151,7 +153,7 @@ func (o *CreateBucketDefinition) GetAccessKeyId() string {
 // GetAccessKeyIdOk returns a tuple with the AccessKeyId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetAccessKeyIdOk() (*string, bool) {
-	if o == nil || o.AccessKeyId == nil {
+	if o == nil || IsNil(o.AccessKeyId) {
 		return nil, false
 	}
 	return o.AccessKeyId, true
@@ -159,7 +161,7 @@ func (o *CreateBucketDefinition) GetAccessKeyIdOk() (*string, bool) {
 
 // HasAccessKeyId returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasAccessKeyId() bool {
-	if o != nil && o.AccessKeyId != nil {
+	if o != nil && !IsNil(o.AccessKeyId) {
 		return true
 	}
 
@@ -173,7 +175,7 @@ func (o *CreateBucketDefinition) SetAccessKeyId(v string) {
 
 // GetSecretAccessKey returns the SecretAccessKey field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetSecretAccessKey() string {
-	if o == nil || o.SecretAccessKey == nil {
+	if o == nil || IsNil(o.SecretAccessKey) {
 		var ret string
 		return ret
 	}
@@ -183,7 +185,7 @@ func (o *CreateBucketDefinition) GetSecretAccessKey() string {
 // GetSecretAccessKeyOk returns a tuple with the SecretAccessKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetSecretAccessKeyOk() (*string, bool) {
-	if o == nil || o.SecretAccessKey == nil {
+	if o == nil || IsNil(o.SecretAccessKey) {
 		return nil, false
 	}
 	return o.SecretAccessKey, true
@@ -191,7 +193,7 @@ func (o *CreateBucketDefinition) GetSecretAccessKeyOk() (*string, bool) {
 
 // HasSecretAccessKey returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasSecretAccessKey() bool {
-	if o != nil && o.SecretAccessKey != nil {
+	if o != nil && !IsNil(o.SecretAccessKey) {
 		return true
 	}
 
@@ -205,7 +207,7 @@ func (o *CreateBucketDefinition) SetSecretAccessKey(v string) {
 
 // GetRoleArn returns the RoleArn field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetRoleArn() string {
-	if o == nil || o.RoleArn == nil {
+	if o == nil || IsNil(o.RoleArn) {
 		var ret string
 		return ret
 	}
@@ -215,7 +217,7 @@ func (o *CreateBucketDefinition) GetRoleArn() string {
 // GetRoleArnOk returns a tuple with the RoleArn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetRoleArnOk() (*string, bool) {
-	if o == nil || o.RoleArn == nil {
+	if o == nil || IsNil(o.RoleArn) {
 		return nil, false
 	}
 	return o.RoleArn, true
@@ -223,7 +225,7 @@ func (o *CreateBucketDefinition) GetRoleArnOk() (*string, bool) {
 
 // HasRoleArn returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasRoleArn() bool {
-	if o != nil && o.RoleArn != nil {
+	if o != nil && !IsNil(o.RoleArn) {
 		return true
 	}
 
@@ -235,33 +237,41 @@ func (o *CreateBucketDefinition) SetRoleArn(v string) {
 	o.RoleArn = &v
 }
 
-// GetRegion returns the Region field value
+// GetRegion returns the Region field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetRegion() string {
-	if o == nil {
+	if o == nil || IsNil(o.Region) {
 		var ret string
 		return ret
 	}
-
-	return o.Region
+	return *o.Region
 }
 
-// GetRegionOk returns a tuple with the Region field value
+// GetRegionOk returns a tuple with the Region field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetRegionOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Region) {
 		return nil, false
 	}
-	return &o.Region, true
+	return o.Region, true
 }
 
-// SetRegion sets field value
+// HasRegion returns a boolean if a field has been set.
+func (o *CreateBucketDefinition) HasRegion() bool {
+	if o != nil && !IsNil(o.Region) {
+		return true
+	}
+
+	return false
+}
+
+// SetRegion gets a reference to the given string and assigns it to the Region field.
 func (o *CreateBucketDefinition) SetRegion(v string) {
-	o.Region = v
+	o.Region = &v
 }
 
 // GetEncrypted returns the Encrypted field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetEncrypted() bool {
-	if o == nil || o.Encrypted == nil {
+	if o == nil || IsNil(o.Encrypted) {
 		var ret bool
 		return ret
 	}
@@ -271,7 +281,7 @@ func (o *CreateBucketDefinition) GetEncrypted() bool {
 // GetEncryptedOk returns a tuple with the Encrypted field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetEncryptedOk() (*bool, bool) {
-	if o == nil || o.Encrypted == nil {
+	if o == nil || IsNil(o.Encrypted) {
 		return nil, false
 	}
 	return o.Encrypted, true
@@ -279,7 +289,7 @@ func (o *CreateBucketDefinition) GetEncryptedOk() (*bool, bool) {
 
 // HasEncrypted returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasEncrypted() bool {
-	if o != nil && o.Encrypted != nil {
+	if o != nil && !IsNil(o.Encrypted) {
 		return true
 	}
 
@@ -293,7 +303,7 @@ func (o *CreateBucketDefinition) SetEncrypted(v bool) {
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *CreateBucketDefinition) GetEnabled() bool {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		var ret bool
 		return ret
 	}
@@ -303,7 +313,7 @@ func (o *CreateBucketDefinition) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateBucketDefinition) GetEnabledOk() (*bool, bool) {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		return nil, false
 	}
 	return o.Enabled, true
@@ -311,7 +321,7 @@ func (o *CreateBucketDefinition) GetEnabledOk() (*bool, bool) {
 
 // HasEnabled returns a boolean if a field has been set.
 func (o *CreateBucketDefinition) HasEnabled() bool {
-	if o != nil && o.Enabled != nil {
+	if o != nil && !IsNil(o.Enabled) {
 		return true
 	}
 
@@ -348,38 +358,40 @@ func (o *CreateBucketDefinition) SetBucketName(v string) {
 }
 
 func (o CreateBucketDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["destinationName"] = o.DestinationName
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["authenticationMode"] = o.AuthenticationMode
-	}
-	if o.AccessKeyId != nil {
-		toSerialize["accessKeyId"] = o.AccessKeyId
-	}
-	if o.SecretAccessKey != nil {
-		toSerialize["secretAccessKey"] = o.SecretAccessKey
-	}
-	if o.RoleArn != nil {
-		toSerialize["roleArn"] = o.RoleArn
-	}
-	if true {
-		toSerialize["region"] = o.Region
-	}
-	if o.Encrypted != nil {
-		toSerialize["encrypted"] = o.Encrypted
-	}
-	if o.Enabled != nil {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if true {
-		toSerialize["bucketName"] = o.BucketName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreateBucketDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["destinationName"] = o.DestinationName
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["authenticationMode"] = o.AuthenticationMode
+	if !IsNil(o.AccessKeyId) {
+		toSerialize["accessKeyId"] = o.AccessKeyId
+	}
+	if !IsNil(o.SecretAccessKey) {
+		toSerialize["secretAccessKey"] = o.SecretAccessKey
+	}
+	if !IsNil(o.RoleArn) {
+		toSerialize["roleArn"] = o.RoleArn
+	}
+	if !IsNil(o.Region) {
+		toSerialize["region"] = o.Region
+	}
+	if !IsNil(o.Encrypted) {
+		toSerialize["encrypted"] = o.Encrypted
+	}
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
+	toSerialize["bucketName"] = o.BucketName
+	return toSerialize, nil
 }
 
 type NullableCreateBucketDefinition struct {

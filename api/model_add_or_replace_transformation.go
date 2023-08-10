@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AddOrReplaceTransformation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AddOrReplaceTransformation{}
 
 // AddOrReplaceTransformation struct for AddOrReplaceTransformation
 type AddOrReplaceTransformation struct {
@@ -92,22 +95,26 @@ func (o *AddOrReplaceTransformation) SetValue(v string) {
 }
 
 func (o AddOrReplaceTransformation) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AddOrReplaceTransformation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedDimensionTransformation, errDimensionTransformation := json.Marshal(o.DimensionTransformation)
 	if errDimensionTransformation != nil {
-		return []byte{}, errDimensionTransformation
+		return map[string]interface{}{}, errDimensionTransformation
 	}
 	errDimensionTransformation = json.Unmarshal([]byte(serializedDimensionTransformation), &toSerialize)
 	if errDimensionTransformation != nil {
-		return []byte{}, errDimensionTransformation
+		return map[string]interface{}{}, errDimensionTransformation
 	}
-	if true {
-		toSerialize["dimensionToReplace"] = o.DimensionToReplace
-	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["dimensionToReplace"] = o.DimensionToReplace
+	toSerialize["value"] = o.Value
+	return toSerialize, nil
 }
 
 type NullableAddOrReplaceTransformation struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsFilter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsFilter{}
 
 // MetricsFilter The filter for metrics query.
 type MetricsFilter struct {
@@ -44,7 +47,7 @@ func NewMetricsFilterWithDefaults() *MetricsFilter {
 
 // GetKey returns the Key field value if set, zero value otherwise.
 func (o *MetricsFilter) GetKey() string {
-	if o == nil || o.Key == nil {
+	if o == nil || IsNil(o.Key) {
 		var ret string
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *MetricsFilter) GetKey() string {
 // GetKeyOk returns a tuple with the Key field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsFilter) GetKeyOk() (*string, bool) {
-	if o == nil || o.Key == nil {
+	if o == nil || IsNil(o.Key) {
 		return nil, false
 	}
 	return o.Key, true
@@ -62,7 +65,7 @@ func (o *MetricsFilter) GetKeyOk() (*string, bool) {
 
 // HasKey returns a boolean if a field has been set.
 func (o *MetricsFilter) HasKey() bool {
-	if o != nil && o.Key != nil {
+	if o != nil && !IsNil(o.Key) {
 		return true
 	}
 
@@ -100,7 +103,7 @@ func (o *MetricsFilter) SetValue(v string) {
 
 // GetNegation returns the Negation field value if set, zero value otherwise.
 func (o *MetricsFilter) GetNegation() bool {
-	if o == nil || o.Negation == nil {
+	if o == nil || IsNil(o.Negation) {
 		var ret bool
 		return ret
 	}
@@ -110,7 +113,7 @@ func (o *MetricsFilter) GetNegation() bool {
 // GetNegationOk returns a tuple with the Negation field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsFilter) GetNegationOk() (*bool, bool) {
-	if o == nil || o.Negation == nil {
+	if o == nil || IsNil(o.Negation) {
 		return nil, false
 	}
 	return o.Negation, true
@@ -118,7 +121,7 @@ func (o *MetricsFilter) GetNegationOk() (*bool, bool) {
 
 // HasNegation returns a boolean if a field has been set.
 func (o *MetricsFilter) HasNegation() bool {
-	if o != nil && o.Negation != nil {
+	if o != nil && !IsNil(o.Negation) {
 		return true
 	}
 
@@ -131,17 +134,23 @@ func (o *MetricsFilter) SetNegation(v bool) {
 }
 
 func (o MetricsFilter) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Key != nil {
-		toSerialize["key"] = o.Key
-	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if o.Negation != nil {
-		toSerialize["negation"] = o.Negation
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsFilter) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Key) {
+		toSerialize["key"] = o.Key
+	}
+	toSerialize["value"] = o.Value
+	if !IsNil(o.Negation) {
+		toSerialize["negation"] = o.Negation
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsFilter struct {

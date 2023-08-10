@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Template type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Template{}
 
 // Template struct for Template
 type Template struct {
@@ -63,11 +66,17 @@ func (o *Template) SetTemplateType(v string) {
 }
 
 func (o Template) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["templateType"] = o.TemplateType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Template) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["templateType"] = o.TemplateType
+	return toSerialize, nil
 }
 
 type NullableTemplate struct {

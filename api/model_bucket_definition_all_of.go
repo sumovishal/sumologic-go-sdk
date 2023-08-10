@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BucketDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BucketDefinitionAllOf{}
 
 // BucketDefinitionAllOf struct for BucketDefinitionAllOf
 type BucketDefinitionAllOf struct {
@@ -66,7 +69,7 @@ func (o *BucketDefinitionAllOf) SetId(v string) {
 
 // GetInvalidatedBySystem returns the InvalidatedBySystem field value if set, zero value otherwise.
 func (o *BucketDefinitionAllOf) GetInvalidatedBySystem() bool {
-	if o == nil || o.InvalidatedBySystem == nil {
+	if o == nil || IsNil(o.InvalidatedBySystem) {
 		var ret bool
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *BucketDefinitionAllOf) GetInvalidatedBySystem() bool {
 // GetInvalidatedBySystemOk returns a tuple with the InvalidatedBySystem field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *BucketDefinitionAllOf) GetInvalidatedBySystemOk() (*bool, bool) {
-	if o == nil || o.InvalidatedBySystem == nil {
+	if o == nil || IsNil(o.InvalidatedBySystem) {
 		return nil, false
 	}
 	return o.InvalidatedBySystem, true
@@ -84,7 +87,7 @@ func (o *BucketDefinitionAllOf) GetInvalidatedBySystemOk() (*bool, bool) {
 
 // HasInvalidatedBySystem returns a boolean if a field has been set.
 func (o *BucketDefinitionAllOf) HasInvalidatedBySystem() bool {
-	if o != nil && o.InvalidatedBySystem != nil {
+	if o != nil && !IsNil(o.InvalidatedBySystem) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *BucketDefinitionAllOf) SetInvalidatedBySystem(v bool) {
 }
 
 func (o BucketDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.InvalidatedBySystem != nil {
-		toSerialize["invalidatedBySystem"] = o.InvalidatedBySystem
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BucketDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.InvalidatedBySystem) {
+		toSerialize["invalidatedBySystem"] = o.InvalidatedBySystem
+	}
+	return toSerialize, nil
 }
 
 type NullableBucketDefinitionAllOf struct {

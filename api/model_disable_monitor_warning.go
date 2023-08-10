@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DisableMonitorWarning type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DisableMonitorWarning{}
 
 // DisableMonitorWarning Warning object from the operation providing details such as when a given monitor to disable does not exist.
 type DisableMonitorWarning struct {
@@ -41,7 +44,7 @@ func NewDisableMonitorWarningWithDefaults() *DisableMonitorWarning {
 
 // GetCode returns the Code field value if set, zero value otherwise.
 func (o *DisableMonitorWarning) GetCode() string {
-	if o == nil || o.Code == nil {
+	if o == nil || IsNil(o.Code) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *DisableMonitorWarning) GetCode() string {
 // GetCodeOk returns a tuple with the Code field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DisableMonitorWarning) GetCodeOk() (*string, bool) {
-	if o == nil || o.Code == nil {
+	if o == nil || IsNil(o.Code) {
 		return nil, false
 	}
 	return o.Code, true
@@ -59,7 +62,7 @@ func (o *DisableMonitorWarning) GetCodeOk() (*string, bool) {
 
 // HasCode returns a boolean if a field has been set.
 func (o *DisableMonitorWarning) HasCode() bool {
-	if o != nil && o.Code != nil {
+	if o != nil && !IsNil(o.Code) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *DisableMonitorWarning) SetCode(v string) {
 
 // GetMessage returns the Message field value if set, zero value otherwise.
 func (o *DisableMonitorWarning) GetMessage() string {
-	if o == nil || o.Message == nil {
+	if o == nil || IsNil(o.Message) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *DisableMonitorWarning) GetMessage() string {
 // GetMessageOk returns a tuple with the Message field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DisableMonitorWarning) GetMessageOk() (*string, bool) {
-	if o == nil || o.Message == nil {
+	if o == nil || IsNil(o.Message) {
 		return nil, false
 	}
 	return o.Message, true
@@ -91,7 +94,7 @@ func (o *DisableMonitorWarning) GetMessageOk() (*string, bool) {
 
 // HasMessage returns a boolean if a field has been set.
 func (o *DisableMonitorWarning) HasMessage() bool {
-	if o != nil && o.Message != nil {
+	if o != nil && !IsNil(o.Message) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *DisableMonitorWarning) SetMessage(v string) {
 }
 
 func (o DisableMonitorWarning) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Code != nil {
-		toSerialize["code"] = o.Code
-	}
-	if o.Message != nil {
-		toSerialize["message"] = o.Message
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DisableMonitorWarning) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Code) {
+		toSerialize["code"] = o.Code
+	}
+	if !IsNil(o.Message) {
+		toSerialize["message"] = o.Message
+	}
+	return toSerialize, nil
 }
 
 type NullableDisableMonitorWarning struct {

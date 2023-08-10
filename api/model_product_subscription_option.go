@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ProductSubscriptionOption type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProductSubscriptionOption{}
 
 // ProductSubscriptionOption Subscription option containing billing frequency and discount details.
 type ProductSubscriptionOption struct {
@@ -90,14 +93,18 @@ func (o *ProductSubscriptionOption) SetDiscountPercentage(v int32) {
 }
 
 func (o ProductSubscriptionOption) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["billingFrequency"] = o.BillingFrequency
-	}
-	if true {
-		toSerialize["discountPercentage"] = o.DiscountPercentage
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ProductSubscriptionOption) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["billingFrequency"] = o.BillingFrequency
+	toSerialize["discountPercentage"] = o.DiscountPercentage
+	return toSerialize, nil
 }
 
 type NullableProductSubscriptionOption struct {

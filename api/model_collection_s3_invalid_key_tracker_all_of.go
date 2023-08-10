@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionS3InvalidKeyTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionS3InvalidKeyTrackerAllOf{}
 
 // CollectionS3InvalidKeyTrackerAllOf struct for CollectionS3InvalidKeyTrackerAllOf
 type CollectionS3InvalidKeyTrackerAllOf struct {
@@ -39,7 +42,7 @@ func NewCollectionS3InvalidKeyTrackerAllOfWithDefaults() *CollectionS3InvalidKey
 
 // GetAccessKey returns the AccessKey field value if set, zero value otherwise.
 func (o *CollectionS3InvalidKeyTrackerAllOf) GetAccessKey() string {
-	if o == nil || o.AccessKey == nil {
+	if o == nil || IsNil(o.AccessKey) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *CollectionS3InvalidKeyTrackerAllOf) GetAccessKey() string {
 // GetAccessKeyOk returns a tuple with the AccessKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3InvalidKeyTrackerAllOf) GetAccessKeyOk() (*string, bool) {
-	if o == nil || o.AccessKey == nil {
+	if o == nil || IsNil(o.AccessKey) {
 		return nil, false
 	}
 	return o.AccessKey, true
@@ -57,7 +60,7 @@ func (o *CollectionS3InvalidKeyTrackerAllOf) GetAccessKeyOk() (*string, bool) {
 
 // HasAccessKey returns a boolean if a field has been set.
 func (o *CollectionS3InvalidKeyTrackerAllOf) HasAccessKey() bool {
-	if o != nil && o.AccessKey != nil {
+	if o != nil && !IsNil(o.AccessKey) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *CollectionS3InvalidKeyTrackerAllOf) SetAccessKey(v string) {
 }
 
 func (o CollectionS3InvalidKeyTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.AccessKey != nil {
-		toSerialize["accessKey"] = o.AccessKey
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CollectionS3InvalidKeyTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AccessKey) {
+		toSerialize["accessKey"] = o.AccessKey
+	}
+	return toSerialize, nil
 }
 
 type NullableCollectionS3InvalidKeyTrackerAllOf struct {

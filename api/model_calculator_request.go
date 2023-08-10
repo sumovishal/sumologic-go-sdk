@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CalculatorRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CalculatorRequest{}
 
 // CalculatorRequest Details of the request
 type CalculatorRequest struct {
@@ -44,7 +47,7 @@ func NewCalculatorRequestWithDefaults() *CalculatorRequest {
 
 // GetParentDeploymentId returns the ParentDeploymentId field value if set, zero value otherwise.
 func (o *CalculatorRequest) GetParentDeploymentId() string {
-	if o == nil || o.ParentDeploymentId == nil {
+	if o == nil || IsNil(o.ParentDeploymentId) {
 		var ret string
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *CalculatorRequest) GetParentDeploymentId() string {
 // GetParentDeploymentIdOk returns a tuple with the ParentDeploymentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalculatorRequest) GetParentDeploymentIdOk() (*string, bool) {
-	if o == nil || o.ParentDeploymentId == nil {
+	if o == nil || IsNil(o.ParentDeploymentId) {
 		return nil, false
 	}
 	return o.ParentDeploymentId, true
@@ -62,7 +65,7 @@ func (o *CalculatorRequest) GetParentDeploymentIdOk() (*string, bool) {
 
 // HasParentDeploymentId returns a boolean if a field has been set.
 func (o *CalculatorRequest) HasParentDeploymentId() bool {
-	if o != nil && o.ParentDeploymentId != nil {
+	if o != nil && !IsNil(o.ParentDeploymentId) {
 		return true
 	}
 
@@ -76,7 +79,7 @@ func (o *CalculatorRequest) SetParentDeploymentId(v string) {
 
 // GetDeploymentId returns the DeploymentId field value if set, zero value otherwise.
 func (o *CalculatorRequest) GetDeploymentId() string {
-	if o == nil || o.DeploymentId == nil {
+	if o == nil || IsNil(o.DeploymentId) {
 		var ret string
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *CalculatorRequest) GetDeploymentId() string {
 // GetDeploymentIdOk returns a tuple with the DeploymentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalculatorRequest) GetDeploymentIdOk() (*string, bool) {
-	if o == nil || o.DeploymentId == nil {
+	if o == nil || IsNil(o.DeploymentId) {
 		return nil, false
 	}
 	return o.DeploymentId, true
@@ -94,7 +97,7 @@ func (o *CalculatorRequest) GetDeploymentIdOk() (*string, bool) {
 
 // HasDeploymentId returns a boolean if a field has been set.
 func (o *CalculatorRequest) HasDeploymentId() bool {
-	if o != nil && o.DeploymentId != nil {
+	if o != nil && !IsNil(o.DeploymentId) {
 		return true
 	}
 
@@ -108,7 +111,7 @@ func (o *CalculatorRequest) SetDeploymentId(v string) {
 
 // GetTrialPlanPeriod returns the TrialPlanPeriod field value if set, zero value otherwise.
 func (o *CalculatorRequest) GetTrialPlanPeriod() int32 {
-	if o == nil || o.TrialPlanPeriod == nil {
+	if o == nil || IsNil(o.TrialPlanPeriod) {
 		var ret int32
 		return ret
 	}
@@ -118,7 +121,7 @@ func (o *CalculatorRequest) GetTrialPlanPeriod() int32 {
 // GetTrialPlanPeriodOk returns a tuple with the TrialPlanPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalculatorRequest) GetTrialPlanPeriodOk() (*int32, bool) {
-	if o == nil || o.TrialPlanPeriod == nil {
+	if o == nil || IsNil(o.TrialPlanPeriod) {
 		return nil, false
 	}
 	return o.TrialPlanPeriod, true
@@ -126,7 +129,7 @@ func (o *CalculatorRequest) GetTrialPlanPeriodOk() (*int32, bool) {
 
 // HasTrialPlanPeriod returns a boolean if a field has been set.
 func (o *CalculatorRequest) HasTrialPlanPeriod() bool {
-	if o != nil && o.TrialPlanPeriod != nil {
+	if o != nil && !IsNil(o.TrialPlanPeriod) {
 		return true
 	}
 
@@ -140,7 +143,7 @@ func (o *CalculatorRequest) SetTrialPlanPeriod(v int32) {
 
 // GetBaselines returns the Baselines field value if set, zero value otherwise.
 func (o *CalculatorRequest) GetBaselines() Baselines {
-	if o == nil || o.Baselines == nil {
+	if o == nil || IsNil(o.Baselines) {
 		var ret Baselines
 		return ret
 	}
@@ -150,7 +153,7 @@ func (o *CalculatorRequest) GetBaselines() Baselines {
 // GetBaselinesOk returns a tuple with the Baselines field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CalculatorRequest) GetBaselinesOk() (*Baselines, bool) {
-	if o == nil || o.Baselines == nil {
+	if o == nil || IsNil(o.Baselines) {
 		return nil, false
 	}
 	return o.Baselines, true
@@ -158,7 +161,7 @@ func (o *CalculatorRequest) GetBaselinesOk() (*Baselines, bool) {
 
 // HasBaselines returns a boolean if a field has been set.
 func (o *CalculatorRequest) HasBaselines() bool {
-	if o != nil && o.Baselines != nil {
+	if o != nil && !IsNil(o.Baselines) {
 		return true
 	}
 
@@ -171,20 +174,28 @@ func (o *CalculatorRequest) SetBaselines(v Baselines) {
 }
 
 func (o CalculatorRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ParentDeploymentId != nil {
-		toSerialize["parentDeploymentId"] = o.ParentDeploymentId
-	}
-	if o.DeploymentId != nil {
-		toSerialize["deploymentId"] = o.DeploymentId
-	}
-	if o.TrialPlanPeriod != nil {
-		toSerialize["trialPlanPeriod"] = o.TrialPlanPeriod
-	}
-	if o.Baselines != nil {
-		toSerialize["baselines"] = o.Baselines
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CalculatorRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ParentDeploymentId) {
+		toSerialize["parentDeploymentId"] = o.ParentDeploymentId
+	}
+	if !IsNil(o.DeploymentId) {
+		toSerialize["deploymentId"] = o.DeploymentId
+	}
+	if !IsNil(o.TrialPlanPeriod) {
+		toSerialize["trialPlanPeriod"] = o.TrialPlanPeriod
+	}
+	if !IsNil(o.Baselines) {
+		toSerialize["baselines"] = o.Baselines
+	}
+	return toSerialize, nil
 }
 
 type NullableCalculatorRequest struct {

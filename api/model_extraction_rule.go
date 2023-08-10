@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the ExtractionRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ExtractionRule{}
 
 // ExtractionRule struct for ExtractionRule
 type ExtractionRule struct {
@@ -142,7 +145,7 @@ func (o *ExtractionRule) SetParseExpression(v string) {
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *ExtractionRule) GetEnabled() bool {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		var ret bool
 		return ret
 	}
@@ -152,7 +155,7 @@ func (o *ExtractionRule) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ExtractionRule) GetEnabledOk() (*bool, bool) {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		return nil, false
 	}
 	return o.Enabled, true
@@ -160,7 +163,7 @@ func (o *ExtractionRule) GetEnabledOk() (*bool, bool) {
 
 // HasEnabled returns a boolean if a field has been set.
 func (o *ExtractionRule) HasEnabled() bool {
-	if o != nil && o.Enabled != nil {
+	if o != nil && !IsNil(o.Enabled) {
 		return true
 	}
 
@@ -294,7 +297,7 @@ func (o *ExtractionRule) SetId(v string) {
 
 // GetFieldNames returns the FieldNames field value if set, zero value otherwise.
 func (o *ExtractionRule) GetFieldNames() []string {
-	if o == nil || o.FieldNames == nil {
+	if o == nil || IsNil(o.FieldNames) {
 		var ret []string
 		return ret
 	}
@@ -304,7 +307,7 @@ func (o *ExtractionRule) GetFieldNames() []string {
 // GetFieldNamesOk returns a tuple with the FieldNames field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ExtractionRule) GetFieldNamesOk() ([]string, bool) {
-	if o == nil || o.FieldNames == nil {
+	if o == nil || IsNil(o.FieldNames) {
 		return nil, false
 	}
 	return o.FieldNames, true
@@ -312,7 +315,7 @@ func (o *ExtractionRule) GetFieldNamesOk() ([]string, bool) {
 
 // HasFieldNames returns a boolean if a field has been set.
 func (o *ExtractionRule) HasFieldNames() bool {
-	if o != nil && o.FieldNames != nil {
+	if o != nil && !IsNil(o.FieldNames) {
 		return true
 	}
 
@@ -325,38 +328,30 @@ func (o *ExtractionRule) SetFieldNames(v []string) {
 }
 
 func (o ExtractionRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["scope"] = o.Scope
-	}
-	if true {
-		toSerialize["parseExpression"] = o.ParseExpression
-	}
-	if o.Enabled != nil {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.FieldNames != nil {
-		toSerialize["fieldNames"] = o.FieldNames
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ExtractionRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["scope"] = o.Scope
+	toSerialize["parseExpression"] = o.ParseExpression
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	if !IsNil(o.FieldNames) {
+		toSerialize["fieldNames"] = o.FieldNames
+	}
+	return toSerialize, nil
 }
 
 type NullableExtractionRule struct {

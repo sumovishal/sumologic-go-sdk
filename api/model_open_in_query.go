@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the OpenInQuery type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OpenInQuery{}
 
 // OpenInQuery Raw data query for the computed signal.
 type OpenInQuery struct {
@@ -117,17 +120,19 @@ func (o *OpenInQuery) SetEndTime(v time.Time) {
 }
 
 func (o OpenInQuery) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OpenInQuery) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	return toSerialize, nil
 }
 
 type NullableOpenInQuery struct {

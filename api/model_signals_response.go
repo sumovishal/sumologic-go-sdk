@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the SignalsResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SignalsResponse{}
 
 // SignalsResponse Signal response object.
 type SignalsResponse struct {
@@ -226,29 +229,23 @@ func (o *SignalsResponse) SetOpenInQueries(v []OpenInQuery) {
 }
 
 func (o SignalsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["signalType"] = o.SignalType
-	}
-	if true {
-		toSerialize["signalId"] = o.SignalId
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
-	}
-	if true {
-		toSerialize["summary"] = o.Summary
-	}
-	if true {
-		toSerialize["payload"] = o.Payload
-	}
-	if true {
-		toSerialize["openInQueries"] = o.OpenInQueries
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SignalsResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["signalType"] = o.SignalType
+	toSerialize["signalId"] = o.SignalId
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	toSerialize["summary"] = o.Summary
+	toSerialize["payload"] = o.Payload
+	toSerialize["openInQueries"] = o.OpenInQueries
+	return toSerialize, nil
 }
 
 type NullableSignalsResponse struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertsLibraryFolderExportAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsLibraryFolderExportAllOf{}
 
 // AlertsLibraryFolderExportAllOf struct for AlertsLibraryFolderExportAllOf
 type AlertsLibraryFolderExportAllOf struct {
@@ -39,7 +42,7 @@ func NewAlertsLibraryFolderExportAllOfWithDefaults() *AlertsLibraryFolderExportA
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *AlertsLibraryFolderExportAllOf) GetChildren() []AlertsLibraryBaseExport {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []AlertsLibraryBaseExport
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *AlertsLibraryFolderExportAllOf) GetChildren() []AlertsLibraryBaseExport
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryFolderExportAllOf) GetChildrenOk() ([]AlertsLibraryBaseExport, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -57,7 +60,7 @@ func (o *AlertsLibraryFolderExportAllOf) GetChildrenOk() ([]AlertsLibraryBaseExp
 
 // HasChildren returns a boolean if a field has been set.
 func (o *AlertsLibraryFolderExportAllOf) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *AlertsLibraryFolderExportAllOf) SetChildren(v []AlertsLibraryBaseExport
 }
 
 func (o AlertsLibraryFolderExportAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Children != nil {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertsLibraryFolderExportAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Children) {
+		toSerialize["children"] = o.Children
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertsLibraryFolderExportAllOf struct {

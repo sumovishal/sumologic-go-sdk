@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsSensorOfflineTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsSensorOfflineTracker{}
 
 // CSEWindowsSensorOfflineTracker struct for CSEWindowsSensorOfflineTracker
 type CSEWindowsSensorOfflineTracker struct {
@@ -43,7 +46,7 @@ func NewCSEWindowsSensorOfflineTrackerWithDefaults() *CSEWindowsSensorOfflineTra
 
 // GetMinutesWithNoHeartbeatBeforeMarkingOffline returns the MinutesWithNoHeartbeatBeforeMarkingOffline field value if set, zero value otherwise.
 func (o *CSEWindowsSensorOfflineTracker) GetMinutesWithNoHeartbeatBeforeMarkingOffline() string {
-	if o == nil || o.MinutesWithNoHeartbeatBeforeMarkingOffline == nil {
+	if o == nil || IsNil(o.MinutesWithNoHeartbeatBeforeMarkingOffline) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *CSEWindowsSensorOfflineTracker) GetMinutesWithNoHeartbeatBeforeMarkingO
 // GetMinutesWithNoHeartbeatBeforeMarkingOfflineOk returns a tuple with the MinutesWithNoHeartbeatBeforeMarkingOffline field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsSensorOfflineTracker) GetMinutesWithNoHeartbeatBeforeMarkingOfflineOk() (*string, bool) {
-	if o == nil || o.MinutesWithNoHeartbeatBeforeMarkingOffline == nil {
+	if o == nil || IsNil(o.MinutesWithNoHeartbeatBeforeMarkingOffline) {
 		return nil, false
 	}
 	return o.MinutesWithNoHeartbeatBeforeMarkingOffline, true
@@ -61,7 +64,7 @@ func (o *CSEWindowsSensorOfflineTracker) GetMinutesWithNoHeartbeatBeforeMarkingO
 
 // HasMinutesWithNoHeartbeatBeforeMarkingOffline returns a boolean if a field has been set.
 func (o *CSEWindowsSensorOfflineTracker) HasMinutesWithNoHeartbeatBeforeMarkingOffline() bool {
-	if o != nil && o.MinutesWithNoHeartbeatBeforeMarkingOffline != nil {
+	if o != nil && !IsNil(o.MinutesWithNoHeartbeatBeforeMarkingOffline) {
 		return true
 	}
 
@@ -74,19 +77,27 @@ func (o *CSEWindowsSensorOfflineTracker) SetMinutesWithNoHeartbeatBeforeMarkingO
 }
 
 func (o CSEWindowsSensorOfflineTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsSensorOfflineTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.MinutesWithNoHeartbeatBeforeMarkingOffline != nil {
+	if !IsNil(o.MinutesWithNoHeartbeatBeforeMarkingOffline) {
 		toSerialize["minutesWithNoHeartbeatBeforeMarkingOffline"] = o.MinutesWithNoHeartbeatBeforeMarkingOffline
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsSensorOfflineTracker struct {

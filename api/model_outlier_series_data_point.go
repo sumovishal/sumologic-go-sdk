@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OutlierSeriesDataPoint type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OutlierSeriesDataPoint{}
 
 // OutlierSeriesDataPoint struct for OutlierSeriesDataPoint
 type OutlierSeriesDataPoint struct {
@@ -90,22 +93,26 @@ func (o *OutlierSeriesDataPoint) SetY(v OutlierDataValue) {
 }
 
 func (o OutlierSeriesDataPoint) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o OutlierSeriesDataPoint) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedDataPoint, errDataPoint := json.Marshal(o.DataPoint)
 	if errDataPoint != nil {
-		return []byte{}, errDataPoint
+		return map[string]interface{}{}, errDataPoint
 	}
 	errDataPoint = json.Unmarshal([]byte(serializedDataPoint), &toSerialize)
 	if errDataPoint != nil {
-		return []byte{}, errDataPoint
+		return map[string]interface{}{}, errDataPoint
 	}
-	if true {
-		toSerialize["x"] = o.X
-	}
-	if true {
-		toSerialize["y"] = o.Y
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["x"] = o.X
+	toSerialize["y"] = o.Y
+	return toSerialize, nil
 }
 
 type NullableOutlierSeriesDataPoint struct {

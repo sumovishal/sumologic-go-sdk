@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogSearchEstimatedUsageRequestV2 type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchEstimatedUsageRequestV2{}
+
 // LogSearchEstimatedUsageRequestV2 struct for LogSearchEstimatedUsageRequestV2
 type LogSearchEstimatedUsageRequestV2 struct {
 	// Query to perform.
@@ -21,8 +24,8 @@ type LogSearchEstimatedUsageRequestV2 struct {
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	// This has the value `true` if the search is to be run by receipt time and `false` if it is to be run by message time.
 	RunByReceiptTime *bool `json:"runByReceiptTime,omitempty"`
-	// Definition of the query parameters.
-	QueryParameters []LogSearchQueryParameterSyncDefinition `json:"queryParameters,omitempty"`
+	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
+	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
 	// Time zone to get the estimated usage details. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). 
 	Timezone string `json:"timezone"`
 }
@@ -101,7 +104,7 @@ func (o *LogSearchEstimatedUsageRequestV2) SetTimeRange(v ResolvableTimeRange) {
 
 // GetRunByReceiptTime returns the RunByReceiptTime field value if set, zero value otherwise.
 func (o *LogSearchEstimatedUsageRequestV2) GetRunByReceiptTime() bool {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		var ret bool
 		return ret
 	}
@@ -111,7 +114,7 @@ func (o *LogSearchEstimatedUsageRequestV2) GetRunByReceiptTime() bool {
 // GetRunByReceiptTimeOk returns a tuple with the RunByReceiptTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchEstimatedUsageRequestV2) GetRunByReceiptTimeOk() (*bool, bool) {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		return nil, false
 	}
 	return o.RunByReceiptTime, true
@@ -119,7 +122,7 @@ func (o *LogSearchEstimatedUsageRequestV2) GetRunByReceiptTimeOk() (*bool, bool)
 
 // HasRunByReceiptTime returns a boolean if a field has been set.
 func (o *LogSearchEstimatedUsageRequestV2) HasRunByReceiptTime() bool {
-	if o != nil && o.RunByReceiptTime != nil {
+	if o != nil && !IsNil(o.RunByReceiptTime) {
 		return true
 	}
 
@@ -132,9 +135,9 @@ func (o *LogSearchEstimatedUsageRequestV2) SetRunByReceiptTime(v bool) {
 }
 
 // GetQueryParameters returns the QueryParameters field value if set, zero value otherwise.
-func (o *LogSearchEstimatedUsageRequestV2) GetQueryParameters() []LogSearchQueryParameterSyncDefinition {
-	if o == nil || o.QueryParameters == nil {
-		var ret []LogSearchQueryParameterSyncDefinition
+func (o *LogSearchEstimatedUsageRequestV2) GetQueryParameters() []LogSearchQueryParameterSyncDefinitionBase {
+	if o == nil || IsNil(o.QueryParameters) {
+		var ret []LogSearchQueryParameterSyncDefinitionBase
 		return ret
 	}
 	return o.QueryParameters
@@ -142,8 +145,8 @@ func (o *LogSearchEstimatedUsageRequestV2) GetQueryParameters() []LogSearchQuery
 
 // GetQueryParametersOk returns a tuple with the QueryParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LogSearchEstimatedUsageRequestV2) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinition, bool) {
-	if o == nil || o.QueryParameters == nil {
+func (o *LogSearchEstimatedUsageRequestV2) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinitionBase, bool) {
+	if o == nil || IsNil(o.QueryParameters) {
 		return nil, false
 	}
 	return o.QueryParameters, true
@@ -151,15 +154,15 @@ func (o *LogSearchEstimatedUsageRequestV2) GetQueryParametersOk() ([]LogSearchQu
 
 // HasQueryParameters returns a boolean if a field has been set.
 func (o *LogSearchEstimatedUsageRequestV2) HasQueryParameters() bool {
-	if o != nil && o.QueryParameters != nil {
+	if o != nil && !IsNil(o.QueryParameters) {
 		return true
 	}
 
 	return false
 }
 
-// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinition and assigns it to the QueryParameters field.
-func (o *LogSearchEstimatedUsageRequestV2) SetQueryParameters(v []LogSearchQueryParameterSyncDefinition) {
+// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinitionBase and assigns it to the QueryParameters field.
+func (o *LogSearchEstimatedUsageRequestV2) SetQueryParameters(v []LogSearchQueryParameterSyncDefinitionBase) {
 	o.QueryParameters = v
 }
 
@@ -188,23 +191,25 @@ func (o *LogSearchEstimatedUsageRequestV2) SetTimezone(v string) {
 }
 
 func (o LogSearchEstimatedUsageRequestV2) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.RunByReceiptTime != nil {
-		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
-	}
-	if o.QueryParameters != nil {
-		toSerialize["queryParameters"] = o.QueryParameters
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchEstimatedUsageRequestV2) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.RunByReceiptTime) {
+		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
+	}
+	if !IsNil(o.QueryParameters) {
+		toSerialize["queryParameters"] = o.QueryParameters
+	}
+	toSerialize["timezone"] = o.Timezone
+	return toSerialize, nil
 }
 
 type NullableLogSearchEstimatedUsageRequestV2 struct {

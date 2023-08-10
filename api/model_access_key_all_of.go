@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AccessKeyAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccessKeyAllOf{}
 
 // AccessKeyAllOf struct for AccessKeyAllOf
 type AccessKeyAllOf struct {
@@ -63,11 +66,17 @@ func (o *AccessKeyAllOf) SetKey(v string) {
 }
 
 func (o AccessKeyAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["key"] = o.Key
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccessKeyAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["key"] = o.Key
+	return toSerialize, nil
 }
 
 type NullableAccessKeyAllOf struct {

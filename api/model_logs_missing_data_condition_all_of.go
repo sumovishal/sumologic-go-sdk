@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogsMissingDataConditionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogsMissingDataConditionAllOf{}
+
 // LogsMissingDataConditionAllOf A rule that defines how logs monitors should evaluate missing data and trigger notifications.
 type LogsMissingDataConditionAllOf struct {
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 }
 
@@ -63,11 +66,17 @@ func (o *LogsMissingDataConditionAllOf) SetTimeRange(v string) {
 }
 
 func (o LogsMissingDataConditionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogsMissingDataConditionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeRange"] = o.TimeRange
+	return toSerialize, nil
 }
 
 type NullableLogsMissingDataConditionAllOf struct {

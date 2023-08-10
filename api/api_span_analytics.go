@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -64,7 +64,7 @@ func (a *SpanAnalyticsApiService) CancelSpanQueryExecute(r ApiCancelSpanQueryReq
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -97,9 +97,9 @@ func (a *SpanAnalyticsApiService) CancelSpanQueryExecute(r ApiCancelSpanQueryReq
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -115,7 +115,8 @@ func (a *SpanAnalyticsApiService) CancelSpanQueryExecute(r ApiCancelSpanQueryReq
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 
@@ -206,9 +207,9 @@ func (a *SpanAnalyticsApiService) CreateSpanQueryExecute(r ApiCreateSpanQueryReq
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -224,7 +225,8 @@ func (a *SpanAnalyticsApiService) CreateSpanQueryExecute(r ApiCreateSpanQueryReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -283,7 +285,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQuer
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/aggregates"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -316,9 +318,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQuer
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -334,7 +336,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQuer
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -396,8 +399,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFac
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/rows/{rowId}/facets"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterToString(r.rowId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterValueToString(r.rowId, "rowId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -430,9 +433,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFac
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -448,7 +451,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFac
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -528,20 +532,20 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/fields/{field}/values"
-	localVarPath = strings.Replace(localVarPath, "{"+"field"+"}", url.PathEscape(parameterToString(r.field, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"field"+"}", url.PathEscape(parameterValueToString(r.field, "field")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.query != nil {
-		localVarQueryParams.Add("query", parameterToString(*r.query, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "")
 	}
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -570,9 +574,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -588,7 +592,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -676,9 +681,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFie
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -694,7 +699,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFie
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -770,18 +776,18 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/rows/{rowId}/spans"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterToString(r.rowId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterValueToString(r.rowId, "rowId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -810,9 +816,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -828,7 +834,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -887,7 +894,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQuerySta
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -920,9 +927,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQuerySta
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -938,7 +945,8 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQuerySta
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -995,7 +1003,7 @@ func (a *SpanAnalyticsApiService) PauseSpanQueryExecute(r ApiPauseSpanQueryReque
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/pause"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1028,9 +1036,9 @@ func (a *SpanAnalyticsApiService) PauseSpanQueryExecute(r ApiPauseSpanQueryReque
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1046,7 +1054,8 @@ func (a *SpanAnalyticsApiService) PauseSpanQueryExecute(r ApiPauseSpanQueryReque
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 
@@ -1094,7 +1103,7 @@ func (a *SpanAnalyticsApiService) ResumeSpanQueryExecute(r ApiResumeSpanQueryReq
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/spanquery/{queryId}/resume"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1127,9 +1136,9 @@ func (a *SpanAnalyticsApiService) ResumeSpanQueryExecute(r ApiResumeSpanQueryReq
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1145,7 +1154,8 @@ func (a *SpanAnalyticsApiService) ResumeSpanQueryExecute(r ApiResumeSpanQueryReq
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 

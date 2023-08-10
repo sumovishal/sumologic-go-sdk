@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SlosLibraryFolderExportAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibraryFolderExportAllOf{}
 
 // SlosLibraryFolderExportAllOf struct for SlosLibraryFolderExportAllOf
 type SlosLibraryFolderExportAllOf struct {
@@ -39,7 +42,7 @@ func NewSlosLibraryFolderExportAllOfWithDefaults() *SlosLibraryFolderExportAllOf
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *SlosLibraryFolderExportAllOf) GetChildren() []SlosLibraryBaseExport {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []SlosLibraryBaseExport
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *SlosLibraryFolderExportAllOf) GetChildren() []SlosLibraryBaseExport {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SlosLibraryFolderExportAllOf) GetChildrenOk() ([]SlosLibraryBaseExport, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -57,7 +60,7 @@ func (o *SlosLibraryFolderExportAllOf) GetChildrenOk() ([]SlosLibraryBaseExport,
 
 // HasChildren returns a boolean if a field has been set.
 func (o *SlosLibraryFolderExportAllOf) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *SlosLibraryFolderExportAllOf) SetChildren(v []SlosLibraryBaseExport) {
 }
 
 func (o SlosLibraryFolderExportAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Children != nil {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibraryFolderExportAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Children) {
+		toSerialize["children"] = o.Children
+	}
+	return toSerialize, nil
 }
 
 type NullableSlosLibraryFolderExportAllOf struct {

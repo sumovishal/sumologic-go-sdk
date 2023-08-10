@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SubdomainUrlResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SubdomainUrlResponse{}
 
 // SubdomainUrlResponse struct for SubdomainUrlResponse
 type SubdomainUrlResponse struct {
@@ -63,11 +66,17 @@ func (o *SubdomainUrlResponse) SetUrl(v string) {
 }
 
 func (o SubdomainUrlResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SubdomainUrlResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	return toSerialize, nil
 }
 
 type NullableSubdomainUrlResponse struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardSearchSessionIds type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardSearchSessionIds{}
 
 // DashboardSearchSessionIds struct for DashboardSearchSessionIds
 type DashboardSearchSessionIds struct {
@@ -66,7 +69,7 @@ func (o *DashboardSearchSessionIds) SetData(v map[string]string) {
 
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *DashboardSearchSessionIds) GetErrors() map[string]ErrorResponse {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		var ret map[string]ErrorResponse
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *DashboardSearchSessionIds) GetErrors() map[string]ErrorResponse {
 // GetErrorsOk returns a tuple with the Errors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardSearchSessionIds) GetErrorsOk() (*map[string]ErrorResponse, bool) {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		return nil, false
 	}
 	return o.Errors, true
@@ -84,7 +87,7 @@ func (o *DashboardSearchSessionIds) GetErrorsOk() (*map[string]ErrorResponse, bo
 
 // HasErrors returns a boolean if a field has been set.
 func (o *DashboardSearchSessionIds) HasErrors() bool {
-	if o != nil && o.Errors != nil {
+	if o != nil && !IsNil(o.Errors) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *DashboardSearchSessionIds) SetErrors(v map[string]ErrorResponse) {
 }
 
 func (o DashboardSearchSessionIds) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
-	}
-	if o.Errors != nil {
-		toSerialize["errors"] = o.Errors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardSearchSessionIds) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	if !IsNil(o.Errors) {
+		toSerialize["errors"] = o.Errors
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardSearchSessionIds struct {

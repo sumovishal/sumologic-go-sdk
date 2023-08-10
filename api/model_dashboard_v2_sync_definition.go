@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardV2SyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardV2SyncDefinition{}
 
 // DashboardV2SyncDefinition struct for DashboardV2SyncDefinition
 type DashboardV2SyncDefinition struct {
@@ -62,7 +65,7 @@ func NewDashboardV2SyncDefinitionWithDefaults() *DashboardV2SyncDefinition {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -72,7 +75,7 @@ func (o *DashboardV2SyncDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -80,7 +83,7 @@ func (o *DashboardV2SyncDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -118,7 +121,7 @@ func (o *DashboardV2SyncDefinition) SetTitle(v string) {
 
 // GetTheme returns the Theme field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetTheme() string {
-	if o == nil || o.Theme == nil {
+	if o == nil || IsNil(o.Theme) {
 		var ret string
 		return ret
 	}
@@ -128,7 +131,7 @@ func (o *DashboardV2SyncDefinition) GetTheme() string {
 // GetThemeOk returns a tuple with the Theme field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetThemeOk() (*string, bool) {
-	if o == nil || o.Theme == nil {
+	if o == nil || IsNil(o.Theme) {
 		return nil, false
 	}
 	return o.Theme, true
@@ -136,7 +139,7 @@ func (o *DashboardV2SyncDefinition) GetThemeOk() (*string, bool) {
 
 // HasTheme returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasTheme() bool {
-	if o != nil && o.Theme != nil {
+	if o != nil && !IsNil(o.Theme) {
 		return true
 	}
 
@@ -150,7 +153,7 @@ func (o *DashboardV2SyncDefinition) SetTheme(v string) {
 
 // GetTopologyLabelMap returns the TopologyLabelMap field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetTopologyLabelMap() TopologyLabelMap {
-	if o == nil || o.TopologyLabelMap == nil {
+	if o == nil || IsNil(o.TopologyLabelMap) {
 		var ret TopologyLabelMap
 		return ret
 	}
@@ -160,7 +163,7 @@ func (o *DashboardV2SyncDefinition) GetTopologyLabelMap() TopologyLabelMap {
 // GetTopologyLabelMapOk returns a tuple with the TopologyLabelMap field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetTopologyLabelMapOk() (*TopologyLabelMap, bool) {
-	if o == nil || o.TopologyLabelMap == nil {
+	if o == nil || IsNil(o.TopologyLabelMap) {
 		return nil, false
 	}
 	return o.TopologyLabelMap, true
@@ -168,7 +171,7 @@ func (o *DashboardV2SyncDefinition) GetTopologyLabelMapOk() (*TopologyLabelMap, 
 
 // HasTopologyLabelMap returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasTopologyLabelMap() bool {
-	if o != nil && o.TopologyLabelMap != nil {
+	if o != nil && !IsNil(o.TopologyLabelMap) {
 		return true
 	}
 
@@ -182,7 +185,7 @@ func (o *DashboardV2SyncDefinition) SetTopologyLabelMap(v TopologyLabelMap) {
 
 // GetRefreshInterval returns the RefreshInterval field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetRefreshInterval() int32 {
-	if o == nil || o.RefreshInterval == nil {
+	if o == nil || IsNil(o.RefreshInterval) {
 		var ret int32
 		return ret
 	}
@@ -192,7 +195,7 @@ func (o *DashboardV2SyncDefinition) GetRefreshInterval() int32 {
 // GetRefreshIntervalOk returns a tuple with the RefreshInterval field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetRefreshIntervalOk() (*int32, bool) {
-	if o == nil || o.RefreshInterval == nil {
+	if o == nil || IsNil(o.RefreshInterval) {
 		return nil, false
 	}
 	return o.RefreshInterval, true
@@ -200,7 +203,7 @@ func (o *DashboardV2SyncDefinition) GetRefreshIntervalOk() (*int32, bool) {
 
 // HasRefreshInterval returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasRefreshInterval() bool {
-	if o != nil && o.RefreshInterval != nil {
+	if o != nil && !IsNil(o.RefreshInterval) {
 		return true
 	}
 
@@ -214,7 +217,7 @@ func (o *DashboardV2SyncDefinition) SetRefreshInterval(v int32) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetTimeRange() ResolvableTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret ResolvableTimeRange
 		return ret
 	}
@@ -224,7 +227,7 @@ func (o *DashboardV2SyncDefinition) GetTimeRange() ResolvableTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -232,7 +235,7 @@ func (o *DashboardV2SyncDefinition) GetTimeRangeOk() (*ResolvableTimeRange, bool
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -246,7 +249,7 @@ func (o *DashboardV2SyncDefinition) SetTimeRange(v ResolvableTimeRange) {
 
 // GetLayout returns the Layout field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetLayout() Layout {
-	if o == nil || o.Layout == nil {
+	if o == nil || IsNil(o.Layout) {
 		var ret Layout
 		return ret
 	}
@@ -256,7 +259,7 @@ func (o *DashboardV2SyncDefinition) GetLayout() Layout {
 // GetLayoutOk returns a tuple with the Layout field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetLayoutOk() (*Layout, bool) {
-	if o == nil || o.Layout == nil {
+	if o == nil || IsNil(o.Layout) {
 		return nil, false
 	}
 	return o.Layout, true
@@ -264,7 +267,7 @@ func (o *DashboardV2SyncDefinition) GetLayoutOk() (*Layout, bool) {
 
 // HasLayout returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasLayout() bool {
-	if o != nil && o.Layout != nil {
+	if o != nil && !IsNil(o.Layout) {
 		return true
 	}
 
@@ -278,7 +281,7 @@ func (o *DashboardV2SyncDefinition) SetLayout(v Layout) {
 
 // GetPanels returns the Panels field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetPanels() []Panel {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		var ret []Panel
 		return ret
 	}
@@ -288,7 +291,7 @@ func (o *DashboardV2SyncDefinition) GetPanels() []Panel {
 // GetPanelsOk returns a tuple with the Panels field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetPanelsOk() ([]Panel, bool) {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		return nil, false
 	}
 	return o.Panels, true
@@ -296,7 +299,7 @@ func (o *DashboardV2SyncDefinition) GetPanelsOk() ([]Panel, bool) {
 
 // HasPanels returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasPanels() bool {
-	if o != nil && o.Panels != nil {
+	if o != nil && !IsNil(o.Panels) {
 		return true
 	}
 
@@ -310,7 +313,7 @@ func (o *DashboardV2SyncDefinition) SetPanels(v []Panel) {
 
 // GetVariables returns the Variables field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetVariables() []Variable {
-	if o == nil || o.Variables == nil {
+	if o == nil || IsNil(o.Variables) {
 		var ret []Variable
 		return ret
 	}
@@ -320,7 +323,7 @@ func (o *DashboardV2SyncDefinition) GetVariables() []Variable {
 // GetVariablesOk returns a tuple with the Variables field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetVariablesOk() ([]Variable, bool) {
-	if o == nil || o.Variables == nil {
+	if o == nil || IsNil(o.Variables) {
 		return nil, false
 	}
 	return o.Variables, true
@@ -328,7 +331,7 @@ func (o *DashboardV2SyncDefinition) GetVariablesOk() ([]Variable, bool) {
 
 // HasVariables returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasVariables() bool {
-	if o != nil && o.Variables != nil {
+	if o != nil && !IsNil(o.Variables) {
 		return true
 	}
 
@@ -342,7 +345,7 @@ func (o *DashboardV2SyncDefinition) SetVariables(v []Variable) {
 
 // GetColoringRules returns the ColoringRules field value if set, zero value otherwise.
 func (o *DashboardV2SyncDefinition) GetColoringRules() []ColoringRule {
-	if o == nil || o.ColoringRules == nil {
+	if o == nil || IsNil(o.ColoringRules) {
 		var ret []ColoringRule
 		return ret
 	}
@@ -352,7 +355,7 @@ func (o *DashboardV2SyncDefinition) GetColoringRules() []ColoringRule {
 // GetColoringRulesOk returns a tuple with the ColoringRules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardV2SyncDefinition) GetColoringRulesOk() ([]ColoringRule, bool) {
-	if o == nil || o.ColoringRules == nil {
+	if o == nil || IsNil(o.ColoringRules) {
 		return nil, false
 	}
 	return o.ColoringRules, true
@@ -360,7 +363,7 @@ func (o *DashboardV2SyncDefinition) GetColoringRulesOk() ([]ColoringRule, bool) 
 
 // HasColoringRules returns a boolean if a field has been set.
 func (o *DashboardV2SyncDefinition) HasColoringRules() bool {
-	if o != nil && o.ColoringRules != nil {
+	if o != nil && !IsNil(o.ColoringRules) {
 		return true
 	}
 
@@ -373,46 +376,52 @@ func (o *DashboardV2SyncDefinition) SetColoringRules(v []ColoringRule) {
 }
 
 func (o DashboardV2SyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o DashboardV2SyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedContentSyncDefinition, errContentSyncDefinition := json.Marshal(o.ContentSyncDefinition)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
 	errContentSyncDefinition = json.Unmarshal([]byte(serializedContentSyncDefinition), &toSerialize)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if true {
-		toSerialize["title"] = o.Title
-	}
-	if o.Theme != nil {
+	toSerialize["title"] = o.Title
+	if !IsNil(o.Theme) {
 		toSerialize["theme"] = o.Theme
 	}
-	if o.TopologyLabelMap != nil {
+	if !IsNil(o.TopologyLabelMap) {
 		toSerialize["topologyLabelMap"] = o.TopologyLabelMap
 	}
-	if o.RefreshInterval != nil {
+	if !IsNil(o.RefreshInterval) {
 		toSerialize["refreshInterval"] = o.RefreshInterval
 	}
-	if o.TimeRange != nil {
+	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
-	if o.Layout != nil {
+	if !IsNil(o.Layout) {
 		toSerialize["layout"] = o.Layout
 	}
-	if o.Panels != nil {
+	if !IsNil(o.Panels) {
 		toSerialize["panels"] = o.Panels
 	}
-	if o.Variables != nil {
+	if !IsNil(o.Variables) {
 		toSerialize["variables"] = o.Variables
 	}
-	if o.ColoringRules != nil {
+	if !IsNil(o.ColoringRules) {
 		toSerialize["coloringRules"] = o.ColoringRules
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableDashboardV2SyncDefinition struct {

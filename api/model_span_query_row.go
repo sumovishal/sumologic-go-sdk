@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryRow{}
 
 // SpanQueryRow struct for SpanQueryRow
 type SpanQueryRow struct {
@@ -90,14 +93,18 @@ func (o *SpanQueryRow) SetRowId(v string) {
 }
 
 func (o SpanQueryRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["rowId"] = o.RowId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["rowId"] = o.RowId
+	return toSerialize, nil
 }
 
 type NullableSpanQueryRow struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the VariableValuesData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VariableValuesData{}
+
 // VariableValuesData Variable values, status, type and errors for the variable values search.
 type VariableValuesData struct {
 	// Values for the variable.
@@ -21,8 +24,10 @@ type VariableValuesData struct {
 	Status *DashboardSearchStatus `json:"status,omitempty"`
 	// The type of the variable.
 	VariableType *string `json:"variableType,omitempty"`
-	// The type of value of the variable. Allowed values are `String` and Any`. `String` considers as a single phrase and will wrap in double-quotes, `Any` is all characters.
+	// The type of value of the variable. Allowed values are `String`, Any`, `Numeric`, `Integer`, `Long`, `Double`, `Boolean`. - `String` considers as a single phrase and will wrap in double-quotes. - `Any` is all characters. - `Numeric` consists of a numeric value for variables, it will be displayed differently in the UI. - `Integer` is a variable with an `Int` value. - `Long` is a variable with a `Long` value. - `Double` is a variable with a `Double` value. - `Boolean` is a variable with a `Boolean` value. 
 	ValueType *string `json:"valueType,omitempty"`
+	// Allow multiple selections in the values dropdown.
+	AllowMultiSelect *bool `json:"allowMultiSelect,omitempty"`
 	// Generic errors returned by backend from downstream assemblies. More specific errors will be thrown in the future.
 	Errors []ErrorDescription `json:"errors,omitempty"`
 }
@@ -36,6 +41,8 @@ func NewVariableValuesData(variableValues []string) *VariableValuesData {
 	this.VariableValues = variableValues
 	var valueType string = "Any"
 	this.ValueType = &valueType
+	var allowMultiSelect bool = false
+	this.AllowMultiSelect = &allowMultiSelect
 	return &this
 }
 
@@ -46,6 +53,8 @@ func NewVariableValuesDataWithDefaults() *VariableValuesData {
 	this := VariableValuesData{}
 	var valueType string = "Any"
 	this.ValueType = &valueType
+	var allowMultiSelect bool = false
+	this.AllowMultiSelect = &allowMultiSelect
 	return &this
 }
 
@@ -75,7 +84,7 @@ func (o *VariableValuesData) SetVariableValues(v []string) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *VariableValuesData) GetStatus() DashboardSearchStatus {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret DashboardSearchStatus
 		return ret
 	}
@@ -85,7 +94,7 @@ func (o *VariableValuesData) GetStatus() DashboardSearchStatus {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariableValuesData) GetStatusOk() (*DashboardSearchStatus, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -93,7 +102,7 @@ func (o *VariableValuesData) GetStatusOk() (*DashboardSearchStatus, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *VariableValuesData) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -107,7 +116,7 @@ func (o *VariableValuesData) SetStatus(v DashboardSearchStatus) {
 
 // GetVariableType returns the VariableType field value if set, zero value otherwise.
 func (o *VariableValuesData) GetVariableType() string {
-	if o == nil || o.VariableType == nil {
+	if o == nil || IsNil(o.VariableType) {
 		var ret string
 		return ret
 	}
@@ -117,7 +126,7 @@ func (o *VariableValuesData) GetVariableType() string {
 // GetVariableTypeOk returns a tuple with the VariableType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariableValuesData) GetVariableTypeOk() (*string, bool) {
-	if o == nil || o.VariableType == nil {
+	if o == nil || IsNil(o.VariableType) {
 		return nil, false
 	}
 	return o.VariableType, true
@@ -125,7 +134,7 @@ func (o *VariableValuesData) GetVariableTypeOk() (*string, bool) {
 
 // HasVariableType returns a boolean if a field has been set.
 func (o *VariableValuesData) HasVariableType() bool {
-	if o != nil && o.VariableType != nil {
+	if o != nil && !IsNil(o.VariableType) {
 		return true
 	}
 
@@ -139,7 +148,7 @@ func (o *VariableValuesData) SetVariableType(v string) {
 
 // GetValueType returns the ValueType field value if set, zero value otherwise.
 func (o *VariableValuesData) GetValueType() string {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		var ret string
 		return ret
 	}
@@ -149,7 +158,7 @@ func (o *VariableValuesData) GetValueType() string {
 // GetValueTypeOk returns a tuple with the ValueType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariableValuesData) GetValueTypeOk() (*string, bool) {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		return nil, false
 	}
 	return o.ValueType, true
@@ -157,7 +166,7 @@ func (o *VariableValuesData) GetValueTypeOk() (*string, bool) {
 
 // HasValueType returns a boolean if a field has been set.
 func (o *VariableValuesData) HasValueType() bool {
-	if o != nil && o.ValueType != nil {
+	if o != nil && !IsNil(o.ValueType) {
 		return true
 	}
 
@@ -169,9 +178,41 @@ func (o *VariableValuesData) SetValueType(v string) {
 	o.ValueType = &v
 }
 
+// GetAllowMultiSelect returns the AllowMultiSelect field value if set, zero value otherwise.
+func (o *VariableValuesData) GetAllowMultiSelect() bool {
+	if o == nil || IsNil(o.AllowMultiSelect) {
+		var ret bool
+		return ret
+	}
+	return *o.AllowMultiSelect
+}
+
+// GetAllowMultiSelectOk returns a tuple with the AllowMultiSelect field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *VariableValuesData) GetAllowMultiSelectOk() (*bool, bool) {
+	if o == nil || IsNil(o.AllowMultiSelect) {
+		return nil, false
+	}
+	return o.AllowMultiSelect, true
+}
+
+// HasAllowMultiSelect returns a boolean if a field has been set.
+func (o *VariableValuesData) HasAllowMultiSelect() bool {
+	if o != nil && !IsNil(o.AllowMultiSelect) {
+		return true
+	}
+
+	return false
+}
+
+// SetAllowMultiSelect gets a reference to the given bool and assigns it to the AllowMultiSelect field.
+func (o *VariableValuesData) SetAllowMultiSelect(v bool) {
+	o.AllowMultiSelect = &v
+}
+
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *VariableValuesData) GetErrors() []ErrorDescription {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		var ret []ErrorDescription
 		return ret
 	}
@@ -181,7 +222,7 @@ func (o *VariableValuesData) GetErrors() []ErrorDescription {
 // GetErrorsOk returns a tuple with the Errors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariableValuesData) GetErrorsOk() ([]ErrorDescription, bool) {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		return nil, false
 	}
 	return o.Errors, true
@@ -189,7 +230,7 @@ func (o *VariableValuesData) GetErrorsOk() ([]ErrorDescription, bool) {
 
 // HasErrors returns a boolean if a field has been set.
 func (o *VariableValuesData) HasErrors() bool {
-	if o != nil && o.Errors != nil {
+	if o != nil && !IsNil(o.Errors) {
 		return true
 	}
 
@@ -202,23 +243,32 @@ func (o *VariableValuesData) SetErrors(v []ErrorDescription) {
 }
 
 func (o VariableValuesData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["variableValues"] = o.VariableValues
-	}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if o.VariableType != nil {
-		toSerialize["variableType"] = o.VariableType
-	}
-	if o.ValueType != nil {
-		toSerialize["valueType"] = o.ValueType
-	}
-	if o.Errors != nil {
-		toSerialize["errors"] = o.Errors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VariableValuesData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["variableValues"] = o.VariableValues
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.VariableType) {
+		toSerialize["variableType"] = o.VariableType
+	}
+	if !IsNil(o.ValueType) {
+		toSerialize["valueType"] = o.ValueType
+	}
+	if !IsNil(o.AllowMultiSelect) {
+		toSerialize["allowMultiSelect"] = o.AllowMultiSelect
+	}
+	if !IsNil(o.Errors) {
+		toSerialize["errors"] = o.Errors
+	}
+	return toSerialize, nil
 }
 
 type NullableVariableValuesData struct {

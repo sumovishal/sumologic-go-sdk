@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MonitorSubscriptionsListResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorSubscriptionsListResponse{}
 
 // MonitorSubscriptionsListResponse List of existing subscriptions.
 type MonitorSubscriptionsListResponse struct {
@@ -90,14 +93,18 @@ func (o *MonitorSubscriptionsListResponse) SetExhaustive(v bool) {
 }
 
 func (o MonitorSubscriptionsListResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["subscriptions"] = o.Subscriptions
-	}
-	if true {
-		toSerialize["exhaustive"] = o.Exhaustive
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorSubscriptionsListResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["subscriptions"] = o.Subscriptions
+	toSerialize["exhaustive"] = o.Exhaustive
+	return toSerialize, nil
 }
 
 type NullableMonitorSubscriptionsListResponse struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppDefinition{}
 
 // AppDefinition struct for AppDefinition
 type AppDefinition struct {
@@ -149,7 +152,7 @@ func (o *AppDefinition) SetAppVersion(v string) {
 
 // GetPreview returns the Preview field value if set, zero value otherwise.
 func (o *AppDefinition) GetPreview() bool {
-	if o == nil || o.Preview == nil {
+	if o == nil || IsNil(o.Preview) {
 		var ret bool
 		return ret
 	}
@@ -159,7 +162,7 @@ func (o *AppDefinition) GetPreview() bool {
 // GetPreviewOk returns a tuple with the Preview field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppDefinition) GetPreviewOk() (*bool, bool) {
-	if o == nil || o.Preview == nil {
+	if o == nil || IsNil(o.Preview) {
 		return nil, false
 	}
 	return o.Preview, true
@@ -167,7 +170,7 @@ func (o *AppDefinition) GetPreviewOk() (*bool, bool) {
 
 // HasPreview returns a boolean if a field has been set.
 func (o *AppDefinition) HasPreview() bool {
-	if o != nil && o.Preview != nil {
+	if o != nil && !IsNil(o.Preview) {
 		return true
 	}
 
@@ -181,7 +184,7 @@ func (o *AppDefinition) SetPreview(v bool) {
 
 // GetManifestVersion returns the ManifestVersion field value if set, zero value otherwise.
 func (o *AppDefinition) GetManifestVersion() string {
-	if o == nil || o.ManifestVersion == nil {
+	if o == nil || IsNil(o.ManifestVersion) {
 		var ret string
 		return ret
 	}
@@ -191,7 +194,7 @@ func (o *AppDefinition) GetManifestVersion() string {
 // GetManifestVersionOk returns a tuple with the ManifestVersion field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppDefinition) GetManifestVersionOk() (*string, bool) {
-	if o == nil || o.ManifestVersion == nil {
+	if o == nil || IsNil(o.ManifestVersion) {
 		return nil, false
 	}
 	return o.ManifestVersion, true
@@ -199,7 +202,7 @@ func (o *AppDefinition) GetManifestVersionOk() (*string, bool) {
 
 // HasManifestVersion returns a boolean if a field has been set.
 func (o *AppDefinition) HasManifestVersion() bool {
-	if o != nil && o.ManifestVersion != nil {
+	if o != nil && !IsNil(o.ManifestVersion) {
 		return true
 	}
 
@@ -212,26 +215,26 @@ func (o *AppDefinition) SetManifestVersion(v string) {
 }
 
 func (o AppDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["contentId"] = o.ContentId
-	}
-	if true {
-		toSerialize["uuid"] = o.Uuid
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["appVersion"] = o.AppVersion
-	}
-	if o.Preview != nil {
-		toSerialize["preview"] = o.Preview
-	}
-	if o.ManifestVersion != nil {
-		toSerialize["manifestVersion"] = o.ManifestVersion
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["contentId"] = o.ContentId
+	toSerialize["uuid"] = o.Uuid
+	toSerialize["name"] = o.Name
+	toSerialize["appVersion"] = o.AppVersion
+	if !IsNil(o.Preview) {
+		toSerialize["preview"] = o.Preview
+	}
+	if !IsNil(o.ManifestVersion) {
+		toSerialize["manifestVersion"] = o.ManifestVersion
+	}
+	return toSerialize, nil
 }
 
 type NullableAppDefinition struct {

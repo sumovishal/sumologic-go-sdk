@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the Iso8601TimeRangeBoundaryAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Iso8601TimeRangeBoundaryAllOf{}
 
 // Iso8601TimeRangeBoundaryAllOf struct for Iso8601TimeRangeBoundaryAllOf
 type Iso8601TimeRangeBoundaryAllOf struct {
@@ -64,11 +67,17 @@ func (o *Iso8601TimeRangeBoundaryAllOf) SetIso8601Time(v time.Time) {
 }
 
 func (o Iso8601TimeRangeBoundaryAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["iso8601Time"] = o.Iso8601Time
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Iso8601TimeRangeBoundaryAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["iso8601Time"] = o.Iso8601Time
+	return toSerialize, nil
 }
 
 type NullableIso8601TimeRangeBoundaryAllOf struct {

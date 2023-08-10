@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PendingUpdateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PendingUpdateRequest{}
 
 // PendingUpdateRequest The pending plan update request for the account
 type PendingUpdateRequest struct {
@@ -89,14 +92,18 @@ func (o *PendingUpdateRequest) SetPlan(v CurrentPlan) {
 }
 
 func (o PendingUpdateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["createdOn"] = o.CreatedOn
-	}
-	if true {
-		toSerialize["plan"] = o.Plan
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PendingUpdateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["createdOn"] = o.CreatedOn
+	toSerialize["plan"] = o.Plan
+	return toSerialize, nil
 }
 
 type NullablePendingUpdateRequest struct {

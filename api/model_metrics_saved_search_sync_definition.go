@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsSavedSearchSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsSavedSearchSyncDefinition{}
 
 // MetricsSavedSearchSyncDefinition struct for MetricsSavedSearchSyncDefinition
 type MetricsSavedSearchSyncDefinition struct {
@@ -54,7 +57,7 @@ func NewMetricsSavedSearchSyncDefinitionWithDefaults() *MetricsSavedSearchSyncDe
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *MetricsSavedSearchSyncDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -64,7 +67,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSavedSearchSyncDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -72,7 +75,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *MetricsSavedSearchSyncDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -110,7 +113,7 @@ func (o *MetricsSavedSearchSyncDefinition) SetTimeRange(v ResolvableTimeRange) {
 
 // GetLogQuery returns the LogQuery field value if set, zero value otherwise.
 func (o *MetricsSavedSearchSyncDefinition) GetLogQuery() string {
-	if o == nil || o.LogQuery == nil {
+	if o == nil || IsNil(o.LogQuery) {
 		var ret string
 		return ret
 	}
@@ -120,7 +123,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetLogQuery() string {
 // GetLogQueryOk returns a tuple with the LogQuery field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSavedSearchSyncDefinition) GetLogQueryOk() (*string, bool) {
-	if o == nil || o.LogQuery == nil {
+	if o == nil || IsNil(o.LogQuery) {
 		return nil, false
 	}
 	return o.LogQuery, true
@@ -128,7 +131,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetLogQueryOk() (*string, bool) {
 
 // HasLogQuery returns a boolean if a field has been set.
 func (o *MetricsSavedSearchSyncDefinition) HasLogQuery() bool {
-	if o != nil && o.LogQuery != nil {
+	if o != nil && !IsNil(o.LogQuery) {
 		return true
 	}
 
@@ -190,7 +193,7 @@ func (o *MetricsSavedSearchSyncDefinition) SetDesiredQuantizationInSecs(v int32)
 
 // GetProperties returns the Properties field value if set, zero value otherwise.
 func (o *MetricsSavedSearchSyncDefinition) GetProperties() string {
-	if o == nil || o.Properties == nil {
+	if o == nil || IsNil(o.Properties) {
 		var ret string
 		return ret
 	}
@@ -200,7 +203,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetProperties() string {
 // GetPropertiesOk returns a tuple with the Properties field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsSavedSearchSyncDefinition) GetPropertiesOk() (*string, bool) {
-	if o == nil || o.Properties == nil {
+	if o == nil || IsNil(o.Properties) {
 		return nil, false
 	}
 	return o.Properties, true
@@ -208,7 +211,7 @@ func (o *MetricsSavedSearchSyncDefinition) GetPropertiesOk() (*string, bool) {
 
 // HasProperties returns a boolean if a field has been set.
 func (o *MetricsSavedSearchSyncDefinition) HasProperties() bool {
-	if o != nil && o.Properties != nil {
+	if o != nil && !IsNil(o.Properties) {
 		return true
 	}
 
@@ -221,34 +224,36 @@ func (o *MetricsSavedSearchSyncDefinition) SetProperties(v string) {
 }
 
 func (o MetricsSavedSearchSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetricsSavedSearchSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedContentSyncDefinition, errContentSyncDefinition := json.Marshal(o.ContentSyncDefinition)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
 	errContentSyncDefinition = json.Unmarshal([]byte(serializedContentSyncDefinition), &toSerialize)
 	if errContentSyncDefinition != nil {
-		return []byte{}, errContentSyncDefinition
+		return map[string]interface{}{}, errContentSyncDefinition
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.LogQuery != nil {
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.LogQuery) {
 		toSerialize["logQuery"] = o.LogQuery
 	}
-	if true {
-		toSerialize["metricsQueries"] = o.MetricsQueries
-	}
-	if true {
-		toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
-	}
-	if o.Properties != nil {
+	toSerialize["metricsQueries"] = o.MetricsQueries
+	toSerialize["desiredQuantizationInSecs"] = o.DesiredQuantizationInSecs
+	if !IsNil(o.Properties) {
 		toSerialize["properties"] = o.Properties
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMetricsSavedSearchSyncDefinition struct {

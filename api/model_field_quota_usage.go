@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the FieldQuotaUsage type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FieldQuotaUsage{}
 
 // FieldQuotaUsage struct for FieldQuotaUsage
 type FieldQuotaUsage struct {
@@ -90,14 +93,18 @@ func (o *FieldQuotaUsage) SetRemaining(v int32) {
 }
 
 func (o FieldQuotaUsage) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["quota"] = o.Quota
-	}
-	if true {
-		toSerialize["remaining"] = o.Remaining
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o FieldQuotaUsage) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["quota"] = o.Quota
+	toSerialize["remaining"] = o.Remaining
+	return toSerialize, nil
 }
 
 type NullableFieldQuotaUsage struct {

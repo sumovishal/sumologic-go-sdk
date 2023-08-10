@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ContentPermissionAssignment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ContentPermissionAssignment{}
 
 // ContentPermissionAssignment struct for ContentPermissionAssignment
 type ContentPermissionAssignment struct {
@@ -144,20 +147,20 @@ func (o *ContentPermissionAssignment) SetContentId(v string) {
 }
 
 func (o ContentPermissionAssignment) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["permissionName"] = o.PermissionName
-	}
-	if true {
-		toSerialize["sourceType"] = o.SourceType
-	}
-	if true {
-		toSerialize["sourceId"] = o.SourceId
-	}
-	if true {
-		toSerialize["contentId"] = o.ContentId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ContentPermissionAssignment) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["permissionName"] = o.PermissionName
+	toSerialize["sourceType"] = o.SourceType
+	toSerialize["sourceId"] = o.SourceId
+	toSerialize["contentId"] = o.ContentId
+	return toSerialize, nil
 }
 
 type NullableContentPermissionAssignment struct {

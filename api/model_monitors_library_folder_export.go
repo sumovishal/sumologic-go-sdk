@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MonitorsLibraryFolderExport type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorsLibraryFolderExport{}
 
 // MonitorsLibraryFolderExport struct for MonitorsLibraryFolderExport
 type MonitorsLibraryFolderExport struct {
@@ -42,7 +45,7 @@ func NewMonitorsLibraryFolderExportWithDefaults() *MonitorsLibraryFolderExport {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *MonitorsLibraryFolderExport) GetChildren() []MonitorsLibraryBaseExport {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []MonitorsLibraryBaseExport
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *MonitorsLibraryFolderExport) GetChildren() []MonitorsLibraryBaseExport 
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MonitorsLibraryFolderExport) GetChildrenOk() ([]MonitorsLibraryBaseExport, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -60,7 +63,7 @@ func (o *MonitorsLibraryFolderExport) GetChildrenOk() ([]MonitorsLibraryBaseExpo
 
 // HasChildren returns a boolean if a field has been set.
 func (o *MonitorsLibraryFolderExport) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -73,19 +76,27 @@ func (o *MonitorsLibraryFolderExport) SetChildren(v []MonitorsLibraryBaseExport)
 }
 
 func (o MonitorsLibraryFolderExport) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MonitorsLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedMonitorsLibraryBaseExport, errMonitorsLibraryBaseExport := json.Marshal(o.MonitorsLibraryBaseExport)
 	if errMonitorsLibraryBaseExport != nil {
-		return []byte{}, errMonitorsLibraryBaseExport
+		return map[string]interface{}{}, errMonitorsLibraryBaseExport
 	}
 	errMonitorsLibraryBaseExport = json.Unmarshal([]byte(serializedMonitorsLibraryBaseExport), &toSerialize)
 	if errMonitorsLibraryBaseExport != nil {
-		return []byte{}, errMonitorsLibraryBaseExport
+		return map[string]interface{}{}, errMonitorsLibraryBaseExport
 	}
-	if o.Children != nil {
+	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMonitorsLibraryFolderExport struct {

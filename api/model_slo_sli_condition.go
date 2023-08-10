@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SloSliCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SloSliCondition{}
 
 // SloSliCondition struct for SloSliCondition
 type SloSliCondition struct {
@@ -67,19 +70,25 @@ func (o *SloSliCondition) SetSliThreshold(v float64) {
 }
 
 func (o SloSliCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SloSliCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
-		toSerialize["sliThreshold"] = o.SliThreshold
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["sliThreshold"] = o.SliThreshold
+	return toSerialize, nil
 }
 
 type NullableSloSliCondition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DataPoint type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DataPoint{}
 
 // DataPoint Data for visualizing monitor chart.
 type DataPoint struct {
@@ -39,7 +42,7 @@ func NewDataPointWithDefaults() *DataPoint {
 
 // GetDataPointType returns the DataPointType field value if set, zero value otherwise.
 func (o *DataPoint) GetDataPointType() string {
-	if o == nil || o.DataPointType == nil {
+	if o == nil || IsNil(o.DataPointType) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *DataPoint) GetDataPointType() string {
 // GetDataPointTypeOk returns a tuple with the DataPointType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DataPoint) GetDataPointTypeOk() (*string, bool) {
-	if o == nil || o.DataPointType == nil {
+	if o == nil || IsNil(o.DataPointType) {
 		return nil, false
 	}
 	return o.DataPointType, true
@@ -57,7 +60,7 @@ func (o *DataPoint) GetDataPointTypeOk() (*string, bool) {
 
 // HasDataPointType returns a boolean if a field has been set.
 func (o *DataPoint) HasDataPointType() bool {
-	if o != nil && o.DataPointType != nil {
+	if o != nil && !IsNil(o.DataPointType) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *DataPoint) SetDataPointType(v string) {
 }
 
 func (o DataPoint) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DataPointType != nil {
-		toSerialize["dataPointType"] = o.DataPointType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DataPoint) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DataPointType) {
+		toSerialize["dataPointType"] = o.DataPointType
+	}
+	return toSerialize, nil
 }
 
 type NullableDataPoint struct {

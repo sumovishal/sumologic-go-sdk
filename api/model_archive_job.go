@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the ArchiveJob type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ArchiveJob{}
 
 // ArchiveJob struct for ArchiveJob
 type ArchiveJob struct {
@@ -307,38 +310,26 @@ func (o *ArchiveJob) SetCreatedBy(v string) {
 }
 
 func (o ArchiveJob) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["totalObjectsScanned"] = o.TotalObjectsScanned
-	}
-	if true {
-		toSerialize["totalObjectsIngested"] = o.TotalObjectsIngested
-	}
-	if true {
-		toSerialize["totalBytesIngested"] = o.TotalBytesIngested
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ArchiveJob) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	toSerialize["id"] = o.Id
+	toSerialize["totalObjectsScanned"] = o.TotalObjectsScanned
+	toSerialize["totalObjectsIngested"] = o.TotalObjectsIngested
+	toSerialize["totalBytesIngested"] = o.TotalBytesIngested
+	toSerialize["status"] = o.Status
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	return toSerialize, nil
 }
 
 type NullableArchiveJob struct {

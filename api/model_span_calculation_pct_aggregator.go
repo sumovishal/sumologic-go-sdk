@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanCalculationPctAggregator type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanCalculationPctAggregator{}
 
 // SpanCalculationPctAggregator struct for SpanCalculationPctAggregator
 type SpanCalculationPctAggregator struct {
@@ -65,19 +68,25 @@ func (o *SpanCalculationPctAggregator) SetPercentile(v float64) {
 }
 
 func (o SpanCalculationPctAggregator) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpanCalculationPctAggregator) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpanCalculationAggregator, errSpanCalculationAggregator := json.Marshal(o.SpanCalculationAggregator)
 	if errSpanCalculationAggregator != nil {
-		return []byte{}, errSpanCalculationAggregator
+		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
 	errSpanCalculationAggregator = json.Unmarshal([]byte(serializedSpanCalculationAggregator), &toSerialize)
 	if errSpanCalculationAggregator != nil {
-		return []byte{}, errSpanCalculationAggregator
+		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
-	if true {
-		toSerialize["percentile"] = o.Percentile
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["percentile"] = o.Percentile
+	return toSerialize, nil
 }
 
 type NullableSpanCalculationPctAggregator struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Grid type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Grid{}
 
 // Grid struct for Grid
 type Grid struct {
@@ -39,16 +42,24 @@ func NewGridWithDefaults() *Grid {
 }
 
 func (o Grid) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Grid) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedLayout, errLayout := json.Marshal(o.Layout)
 	if errLayout != nil {
-		return []byte{}, errLayout
+		return map[string]interface{}{}, errLayout
 	}
 	errLayout = json.Unmarshal([]byte(serializedLayout), &toSerialize)
 	if errLayout != nil {
-		return []byte{}, errLayout
+		return map[string]interface{}{}, errLayout
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableGrid struct {

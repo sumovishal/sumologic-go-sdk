@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the GetRulesAndBucketsResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GetRulesAndBucketsResult{}
 
 // GetRulesAndBucketsResult struct for GetRulesAndBucketsResult
 type GetRulesAndBucketsResult struct {
@@ -41,7 +44,7 @@ func NewGetRulesAndBucketsResultWithDefaults() *GetRulesAndBucketsResult {
 
 // GetData returns the Data field value if set, zero value otherwise.
 func (o *GetRulesAndBucketsResult) GetData() []RuleAndBucketDetail {
-	if o == nil || o.Data == nil {
+	if o == nil || IsNil(o.Data) {
 		var ret []RuleAndBucketDetail
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *GetRulesAndBucketsResult) GetData() []RuleAndBucketDetail {
 // GetDataOk returns a tuple with the Data field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetRulesAndBucketsResult) GetDataOk() ([]RuleAndBucketDetail, bool) {
-	if o == nil || o.Data == nil {
+	if o == nil || IsNil(o.Data) {
 		return nil, false
 	}
 	return o.Data, true
@@ -59,7 +62,7 @@ func (o *GetRulesAndBucketsResult) GetDataOk() ([]RuleAndBucketDetail, bool) {
 
 // HasData returns a boolean if a field has been set.
 func (o *GetRulesAndBucketsResult) HasData() bool {
-	if o != nil && o.Data != nil {
+	if o != nil && !IsNil(o.Data) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *GetRulesAndBucketsResult) SetData(v []RuleAndBucketDetail) {
 
 // GetNextToken returns the NextToken field value if set, zero value otherwise.
 func (o *GetRulesAndBucketsResult) GetNextToken() string {
-	if o == nil || o.NextToken == nil {
+	if o == nil || IsNil(o.NextToken) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *GetRulesAndBucketsResult) GetNextToken() string {
 // GetNextTokenOk returns a tuple with the NextToken field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetRulesAndBucketsResult) GetNextTokenOk() (*string, bool) {
-	if o == nil || o.NextToken == nil {
+	if o == nil || IsNil(o.NextToken) {
 		return nil, false
 	}
 	return o.NextToken, true
@@ -91,7 +94,7 @@ func (o *GetRulesAndBucketsResult) GetNextTokenOk() (*string, bool) {
 
 // HasNextToken returns a boolean if a field has been set.
 func (o *GetRulesAndBucketsResult) HasNextToken() bool {
-	if o != nil && o.NextToken != nil {
+	if o != nil && !IsNil(o.NextToken) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *GetRulesAndBucketsResult) SetNextToken(v string) {
 }
 
 func (o GetRulesAndBucketsResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Data != nil {
-		toSerialize["data"] = o.Data
-	}
-	if o.NextToken != nil {
-		toSerialize["nextToken"] = o.NextToken
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GetRulesAndBucketsResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Data) {
+		toSerialize["data"] = o.Data
+	}
+	if !IsNil(o.NextToken) {
+		toSerialize["nextToken"] = o.NextToken
+	}
+	return toSerialize, nil
 }
 
 type NullableGetRulesAndBucketsResult struct {

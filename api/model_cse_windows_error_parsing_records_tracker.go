@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsErrorParsingRecordsTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsErrorParsingRecordsTracker{}
 
 // CSEWindowsErrorParsingRecordsTracker struct for CSEWindowsErrorParsingRecordsTracker
 type CSEWindowsErrorParsingRecordsTracker struct {
@@ -53,7 +56,7 @@ func NewCSEWindowsErrorParsingRecordsTrackerWithDefaults() *CSEWindowsErrorParsi
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -63,7 +66,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -71,7 +74,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetEventTypeOk() (*string, bool) 
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -85,7 +88,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetEventType(v string) {
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -95,7 +98,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -103,7 +106,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorIdOk() (*string, bool) {
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -117,7 +120,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -127,7 +130,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorHostname() string {
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -135,7 +138,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSensorHostnameOk() (*string, b
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -149,7 +152,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetSensorHostname(v string) {
 
 // GetSource returns the Source field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSource() string {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		var ret string
 		return ret
 	}
@@ -159,7 +162,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSource() string {
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetSourceOk() (*string, bool) {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		return nil, false
 	}
 	return o.Source, true
@@ -167,7 +170,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetSourceOk() (*string, bool) {
 
 // HasSource returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasSource() bool {
-	if o != nil && o.Source != nil {
+	if o != nil && !IsNil(o.Source) {
 		return true
 	}
 
@@ -181,7 +184,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetSource(v string) {
 
 // GetErrorCount returns the ErrorCount field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetErrorCount() string {
-	if o == nil || o.ErrorCount == nil {
+	if o == nil || IsNil(o.ErrorCount) {
 		var ret string
 		return ret
 	}
@@ -191,7 +194,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetErrorCount() string {
 // GetErrorCountOk returns a tuple with the ErrorCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetErrorCountOk() (*string, bool) {
-	if o == nil || o.ErrorCount == nil {
+	if o == nil || IsNil(o.ErrorCount) {
 		return nil, false
 	}
 	return o.ErrorCount, true
@@ -199,7 +202,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetErrorCountOk() (*string, bool)
 
 // HasErrorCount returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasErrorCount() bool {
-	if o != nil && o.ErrorCount != nil {
+	if o != nil && !IsNil(o.ErrorCount) {
 		return true
 	}
 
@@ -213,7 +216,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetErrorCount(v string) {
 
 // GetLastErrorMessage returns the LastErrorMessage field value if set, zero value otherwise.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetLastErrorMessage() string {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -223,7 +226,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetLastErrorMessage() string {
 // GetLastErrorMessageOk returns a tuple with the LastErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) GetLastErrorMessageOk() (*string, bool) {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		return nil, false
 	}
 	return o.LastErrorMessage, true
@@ -231,7 +234,7 @@ func (o *CSEWindowsErrorParsingRecordsTracker) GetLastErrorMessageOk() (*string,
 
 // HasLastErrorMessage returns a boolean if a field has been set.
 func (o *CSEWindowsErrorParsingRecordsTracker) HasLastErrorMessage() bool {
-	if o != nil && o.LastErrorMessage != nil {
+	if o != nil && !IsNil(o.LastErrorMessage) {
 		return true
 	}
 
@@ -244,34 +247,42 @@ func (o *CSEWindowsErrorParsingRecordsTracker) SetLastErrorMessage(v string) {
 }
 
 func (o CSEWindowsErrorParsingRecordsTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsErrorParsingRecordsTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.SensorId != nil {
+	if !IsNil(o.SensorId) {
 		toSerialize["sensorId"] = o.SensorId
 	}
-	if o.SensorHostname != nil {
+	if !IsNil(o.SensorHostname) {
 		toSerialize["sensorHostname"] = o.SensorHostname
 	}
-	if o.Source != nil {
+	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
-	if o.ErrorCount != nil {
+	if !IsNil(o.ErrorCount) {
 		toSerialize["errorCount"] = o.ErrorCount
 	}
-	if o.LastErrorMessage != nil {
+	if !IsNil(o.LastErrorMessage) {
 		toSerialize["lastErrorMessage"] = o.LastErrorMessage
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsErrorParsingRecordsTracker struct {

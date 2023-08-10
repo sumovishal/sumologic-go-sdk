@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ServiceMapPanelAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceMapPanelAllOf{}
+
 // ServiceMapPanelAllOf A panel for service map.
 type ServiceMapPanelAllOf struct {
 	// Filter services by the application custom tag.
@@ -22,6 +25,8 @@ type ServiceMapPanelAllOf struct {
 	Service *string `json:"service,omitempty"`
 	// Show remote services, like databases or external calls, automatically detected in client traffic.
 	ShowRemoteServices *bool `json:"showRemoteServices,omitempty"`
+	// Show only service map data specific to the provided environment.
+	Environment *string `json:"environment,omitempty"`
 }
 
 // NewServiceMapPanelAllOf instantiates a new ServiceMapPanelAllOf object
@@ -43,7 +48,7 @@ func NewServiceMapPanelAllOfWithDefaults() *ServiceMapPanelAllOf {
 
 // GetApplication returns the Application field value if set, zero value otherwise.
 func (o *ServiceMapPanelAllOf) GetApplication() string {
-	if o == nil || o.Application == nil {
+	if o == nil || IsNil(o.Application) {
 		var ret string
 		return ret
 	}
@@ -53,7 +58,7 @@ func (o *ServiceMapPanelAllOf) GetApplication() string {
 // GetApplicationOk returns a tuple with the Application field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceMapPanelAllOf) GetApplicationOk() (*string, bool) {
-	if o == nil || o.Application == nil {
+	if o == nil || IsNil(o.Application) {
 		return nil, false
 	}
 	return o.Application, true
@@ -61,7 +66,7 @@ func (o *ServiceMapPanelAllOf) GetApplicationOk() (*string, bool) {
 
 // HasApplication returns a boolean if a field has been set.
 func (o *ServiceMapPanelAllOf) HasApplication() bool {
-	if o != nil && o.Application != nil {
+	if o != nil && !IsNil(o.Application) {
 		return true
 	}
 
@@ -75,7 +80,7 @@ func (o *ServiceMapPanelAllOf) SetApplication(v string) {
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *ServiceMapPanelAllOf) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -85,7 +90,7 @@ func (o *ServiceMapPanelAllOf) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceMapPanelAllOf) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -93,7 +98,7 @@ func (o *ServiceMapPanelAllOf) GetServiceOk() (*string, bool) {
 
 // HasService returns a boolean if a field has been set.
 func (o *ServiceMapPanelAllOf) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -107,7 +112,7 @@ func (o *ServiceMapPanelAllOf) SetService(v string) {
 
 // GetShowRemoteServices returns the ShowRemoteServices field value if set, zero value otherwise.
 func (o *ServiceMapPanelAllOf) GetShowRemoteServices() bool {
-	if o == nil || o.ShowRemoteServices == nil {
+	if o == nil || IsNil(o.ShowRemoteServices) {
 		var ret bool
 		return ret
 	}
@@ -117,7 +122,7 @@ func (o *ServiceMapPanelAllOf) GetShowRemoteServices() bool {
 // GetShowRemoteServicesOk returns a tuple with the ShowRemoteServices field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceMapPanelAllOf) GetShowRemoteServicesOk() (*bool, bool) {
-	if o == nil || o.ShowRemoteServices == nil {
+	if o == nil || IsNil(o.ShowRemoteServices) {
 		return nil, false
 	}
 	return o.ShowRemoteServices, true
@@ -125,7 +130,7 @@ func (o *ServiceMapPanelAllOf) GetShowRemoteServicesOk() (*bool, bool) {
 
 // HasShowRemoteServices returns a boolean if a field has been set.
 func (o *ServiceMapPanelAllOf) HasShowRemoteServices() bool {
-	if o != nil && o.ShowRemoteServices != nil {
+	if o != nil && !IsNil(o.ShowRemoteServices) {
 		return true
 	}
 
@@ -137,18 +142,61 @@ func (o *ServiceMapPanelAllOf) SetShowRemoteServices(v bool) {
 	o.ShowRemoteServices = &v
 }
 
+// GetEnvironment returns the Environment field value if set, zero value otherwise.
+func (o *ServiceMapPanelAllOf) GetEnvironment() string {
+	if o == nil || IsNil(o.Environment) {
+		var ret string
+		return ret
+	}
+	return *o.Environment
+}
+
+// GetEnvironmentOk returns a tuple with the Environment field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceMapPanelAllOf) GetEnvironmentOk() (*string, bool) {
+	if o == nil || IsNil(o.Environment) {
+		return nil, false
+	}
+	return o.Environment, true
+}
+
+// HasEnvironment returns a boolean if a field has been set.
+func (o *ServiceMapPanelAllOf) HasEnvironment() bool {
+	if o != nil && !IsNil(o.Environment) {
+		return true
+	}
+
+	return false
+}
+
+// SetEnvironment gets a reference to the given string and assigns it to the Environment field.
+func (o *ServiceMapPanelAllOf) SetEnvironment(v string) {
+	o.Environment = &v
+}
+
 func (o ServiceMapPanelAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Application != nil {
-		toSerialize["application"] = o.Application
-	}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.ShowRemoteServices != nil {
-		toSerialize["showRemoteServices"] = o.ShowRemoteServices
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceMapPanelAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Application) {
+		toSerialize["application"] = o.Application
+	}
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.ShowRemoteServices) {
+		toSerialize["showRemoteServices"] = o.ShowRemoteServices
+	}
+	if !IsNil(o.Environment) {
+		toSerialize["environment"] = o.Environment
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceMapPanelAllOf struct {

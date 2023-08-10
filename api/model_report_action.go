@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ReportAction type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ReportAction{}
 
 // ReportAction The base class of all report action types. `DirectDownloadReportAction` downloads dashboard from browser. New action types may be supported in the future.
 type ReportAction struct {
@@ -63,11 +66,17 @@ func (o *ReportAction) SetActionType(v string) {
 }
 
 func (o ReportAction) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["actionType"] = o.ActionType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ReportAction) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["actionType"] = o.ActionType
+	return toSerialize, nil
 }
 
 type NullableReportAction struct {

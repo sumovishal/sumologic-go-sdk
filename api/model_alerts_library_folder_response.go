@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,8 +12,10 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
+
+// checks if the AlertsLibraryFolderResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsLibraryFolderResponse{}
 
 // AlertsLibraryFolderResponse struct for AlertsLibraryFolderResponse
 type AlertsLibraryFolderResponse struct {
@@ -78,19 +80,25 @@ func (o *AlertsLibraryFolderResponse) SetChildren(v []AlertsLibraryBaseResponse)
 }
 
 func (o AlertsLibraryFolderResponse) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AlertsLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAlertsLibraryBaseResponse, errAlertsLibraryBaseResponse := json.Marshal(o.AlertsLibraryBaseResponse)
 	if errAlertsLibraryBaseResponse != nil {
-		return []byte{}, errAlertsLibraryBaseResponse
+		return map[string]interface{}{}, errAlertsLibraryBaseResponse
 	}
 	errAlertsLibraryBaseResponse = json.Unmarshal([]byte(serializedAlertsLibraryBaseResponse), &toSerialize)
 	if errAlertsLibraryBaseResponse != nil {
-		return []byte{}, errAlertsLibraryBaseResponse
+		return map[string]interface{}{}, errAlertsLibraryBaseResponse
 	}
-	if true {
-		toSerialize["children"] = o.Children
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["children"] = o.Children
+	return toSerialize, nil
 }
 
 type NullableAlertsLibraryFolderResponse struct {

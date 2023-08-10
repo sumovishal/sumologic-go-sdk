@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Path type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Path{}
 
 // Path struct for Path
 type Path struct {
@@ -90,14 +93,18 @@ func (o *Path) SetPath(v string) {
 }
 
 func (o Path) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["pathItems"] = o.PathItems
-	}
-	if true {
-		toSerialize["path"] = o.Path
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Path) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["pathItems"] = o.PathItems
+	toSerialize["path"] = o.Path
+	return toSerialize, nil
 }
 
 type NullablePath struct {

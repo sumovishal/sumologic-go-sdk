@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ProrationDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProrationDetails{}
 
 // ProrationDetails Details about the prorated credits and prorated cost in case of immediate monthly to monthly cycle upgrades.
 type ProrationDetails struct {
@@ -117,17 +120,19 @@ func (o *ProrationDetails) SetProratedCost(v float64) {
 }
 
 func (o ProrationDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["remainingDays"] = o.RemainingDays
-	}
-	if true {
-		toSerialize["proratedCredits"] = o.ProratedCredits
-	}
-	if true {
-		toSerialize["proratedCost"] = o.ProratedCost
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ProrationDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["remainingDays"] = o.RemainingDays
+	toSerialize["proratedCredits"] = o.ProratedCredits
+	toSerialize["proratedCost"] = o.ProratedCost
+	return toSerialize, nil
 }
 
 type NullableProrationDetails struct {

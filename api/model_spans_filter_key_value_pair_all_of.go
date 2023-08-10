@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansFilterKeyValuePairAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansFilterKeyValuePairAllOf{}
 
 // SpansFilterKeyValuePairAllOf A representation of a span filter where both the field name and field value are provided, e.g. http.status_code > 500. 
 type SpansFilterKeyValuePairAllOf struct {
@@ -90,14 +93,18 @@ func (o *SpansFilterKeyValuePairAllOf) SetFieldValue(v string) {
 }
 
 func (o SpansFilterKeyValuePairAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["operator"] = o.Operator
-	}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansFilterKeyValuePairAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["operator"] = o.Operator
+	toSerialize["fieldValue"] = o.FieldValue
+	return toSerialize, nil
 }
 
 type NullableSpansFilterKeyValuePairAllOf struct {

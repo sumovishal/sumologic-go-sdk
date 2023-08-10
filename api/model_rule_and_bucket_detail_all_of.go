@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RuleAndBucketDetailAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RuleAndBucketDetailAllOf{}
 
 // RuleAndBucketDetailAllOf struct for RuleAndBucketDetailAllOf
 type RuleAndBucketDetailAllOf struct {
@@ -38,7 +41,7 @@ func NewRuleAndBucketDetailAllOfWithDefaults() *RuleAndBucketDetailAllOf {
 
 // GetBucket returns the Bucket field value if set, zero value otherwise.
 func (o *RuleAndBucketDetailAllOf) GetBucket() map[string]interface{} {
-	if o == nil || o.Bucket == nil {
+	if o == nil || IsNil(o.Bucket) {
 		var ret map[string]interface{}
 		return ret
 	}
@@ -48,15 +51,15 @@ func (o *RuleAndBucketDetailAllOf) GetBucket() map[string]interface{} {
 // GetBucketOk returns a tuple with the Bucket field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RuleAndBucketDetailAllOf) GetBucketOk() (map[string]interface{}, bool) {
-	if o == nil || o.Bucket == nil {
-		return nil, false
+	if o == nil || IsNil(o.Bucket) {
+		return map[string]interface{}{}, false
 	}
 	return o.Bucket, true
 }
 
 // HasBucket returns a boolean if a field has been set.
 func (o *RuleAndBucketDetailAllOf) HasBucket() bool {
-	if o != nil && o.Bucket != nil {
+	if o != nil && !IsNil(o.Bucket) {
 		return true
 	}
 
@@ -69,11 +72,19 @@ func (o *RuleAndBucketDetailAllOf) SetBucket(v map[string]interface{}) {
 }
 
 func (o RuleAndBucketDetailAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Bucket != nil {
-		toSerialize["bucket"] = o.Bucket
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RuleAndBucketDetailAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Bucket) {
+		toSerialize["bucket"] = o.Bucket
+	}
+	return toSerialize, nil
 }
 
 type NullableRuleAndBucketDetailAllOf struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardTemplateAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardTemplateAllOf{}
 
 // DashboardTemplateAllOf Generate the report from a dashboard template.
 type DashboardTemplateAllOf struct {
@@ -68,7 +71,7 @@ func (o *DashboardTemplateAllOf) SetId(v string) {
 
 // GetPanelToSessionIdMap returns the PanelToSessionIdMap field value if set, zero value otherwise.
 func (o *DashboardTemplateAllOf) GetPanelToSessionIdMap() map[string]string {
-	if o == nil || o.PanelToSessionIdMap == nil {
+	if o == nil || IsNil(o.PanelToSessionIdMap) {
 		var ret map[string]string
 		return ret
 	}
@@ -78,7 +81,7 @@ func (o *DashboardTemplateAllOf) GetPanelToSessionIdMap() map[string]string {
 // GetPanelToSessionIdMapOk returns a tuple with the PanelToSessionIdMap field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardTemplateAllOf) GetPanelToSessionIdMapOk() (*map[string]string, bool) {
-	if o == nil || o.PanelToSessionIdMap == nil {
+	if o == nil || IsNil(o.PanelToSessionIdMap) {
 		return nil, false
 	}
 	return o.PanelToSessionIdMap, true
@@ -86,7 +89,7 @@ func (o *DashboardTemplateAllOf) GetPanelToSessionIdMapOk() (*map[string]string,
 
 // HasPanelToSessionIdMap returns a boolean if a field has been set.
 func (o *DashboardTemplateAllOf) HasPanelToSessionIdMap() bool {
-	if o != nil && o.PanelToSessionIdMap != nil {
+	if o != nil && !IsNil(o.PanelToSessionIdMap) {
 		return true
 	}
 
@@ -100,7 +103,7 @@ func (o *DashboardTemplateAllOf) SetPanelToSessionIdMap(v map[string]string) {
 
 // GetTimeRange returns the TimeRange field value if set, zero value otherwise.
 func (o *DashboardTemplateAllOf) GetTimeRange() ResolvableTimeRange {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		var ret ResolvableTimeRange
 		return ret
 	}
@@ -110,7 +113,7 @@ func (o *DashboardTemplateAllOf) GetTimeRange() ResolvableTimeRange {
 // GetTimeRangeOk returns a tuple with the TimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardTemplateAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
-	if o == nil || o.TimeRange == nil {
+	if o == nil || IsNil(o.TimeRange) {
 		return nil, false
 	}
 	return o.TimeRange, true
@@ -118,7 +121,7 @@ func (o *DashboardTemplateAllOf) GetTimeRangeOk() (*ResolvableTimeRange, bool) {
 
 // HasTimeRange returns a boolean if a field has been set.
 func (o *DashboardTemplateAllOf) HasTimeRange() bool {
-	if o != nil && o.TimeRange != nil {
+	if o != nil && !IsNil(o.TimeRange) {
 		return true
 	}
 
@@ -132,7 +135,7 @@ func (o *DashboardTemplateAllOf) SetTimeRange(v ResolvableTimeRange) {
 
 // GetVariableValues returns the VariableValues field value if set, zero value otherwise.
 func (o *DashboardTemplateAllOf) GetVariableValues() VariablesValuesData {
-	if o == nil || o.VariableValues == nil {
+	if o == nil || IsNil(o.VariableValues) {
 		var ret VariablesValuesData
 		return ret
 	}
@@ -142,7 +145,7 @@ func (o *DashboardTemplateAllOf) GetVariableValues() VariablesValuesData {
 // GetVariableValuesOk returns a tuple with the VariableValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardTemplateAllOf) GetVariableValuesOk() (*VariablesValuesData, bool) {
-	if o == nil || o.VariableValues == nil {
+	if o == nil || IsNil(o.VariableValues) {
 		return nil, false
 	}
 	return o.VariableValues, true
@@ -150,7 +153,7 @@ func (o *DashboardTemplateAllOf) GetVariableValuesOk() (*VariablesValuesData, bo
 
 // HasVariableValues returns a boolean if a field has been set.
 func (o *DashboardTemplateAllOf) HasVariableValues() bool {
-	if o != nil && o.VariableValues != nil {
+	if o != nil && !IsNil(o.VariableValues) {
 		return true
 	}
 
@@ -163,20 +166,26 @@ func (o *DashboardTemplateAllOf) SetVariableValues(v VariablesValuesData) {
 }
 
 func (o DashboardTemplateAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.PanelToSessionIdMap != nil {
-		toSerialize["panelToSessionIdMap"] = o.PanelToSessionIdMap
-	}
-	if o.TimeRange != nil {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.VariableValues != nil {
-		toSerialize["variableValues"] = o.VariableValues
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardTemplateAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.PanelToSessionIdMap) {
+		toSerialize["panelToSessionIdMap"] = o.PanelToSessionIdMap
+	}
+	if !IsNil(o.TimeRange) {
+		toSerialize["timeRange"] = o.TimeRange
+	}
+	if !IsNil(o.VariableValues) {
+		toSerialize["variableValues"] = o.VariableValues
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardTemplateAllOf struct {

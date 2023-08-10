@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the PlanUpdateEmail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PlanUpdateEmail{}
 
 // PlanUpdateEmail details of the plan for updating with contact information
 type PlanUpdateEmail struct {
@@ -72,7 +75,7 @@ func (o *PlanUpdateEmail) SetEmailId(v string) {
 
 // GetPhoneNumber returns the PhoneNumber field value if set, zero value otherwise.
 func (o *PlanUpdateEmail) GetPhoneNumber() string {
-	if o == nil || o.PhoneNumber == nil {
+	if o == nil || IsNil(o.PhoneNumber) {
 		var ret string
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *PlanUpdateEmail) GetPhoneNumber() string {
 // GetPhoneNumberOk returns a tuple with the PhoneNumber field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PlanUpdateEmail) GetPhoneNumberOk() (*string, bool) {
-	if o == nil || o.PhoneNumber == nil {
+	if o == nil || IsNil(o.PhoneNumber) {
 		return nil, false
 	}
 	return o.PhoneNumber, true
@@ -90,7 +93,7 @@ func (o *PlanUpdateEmail) GetPhoneNumberOk() (*string, bool) {
 
 // HasPhoneNumber returns a boolean if a field has been set.
 func (o *PlanUpdateEmail) HasPhoneNumber() bool {
-	if o != nil && o.PhoneNumber != nil {
+	if o != nil && !IsNil(o.PhoneNumber) {
 		return true
 	}
 
@@ -104,7 +107,7 @@ func (o *PlanUpdateEmail) SetPhoneNumber(v string) {
 
 // GetBillingFrequency returns the BillingFrequency field value if set, zero value otherwise.
 func (o *PlanUpdateEmail) GetBillingFrequency() string {
-	if o == nil || o.BillingFrequency == nil {
+	if o == nil || IsNil(o.BillingFrequency) {
 		var ret string
 		return ret
 	}
@@ -114,7 +117,7 @@ func (o *PlanUpdateEmail) GetBillingFrequency() string {
 // GetBillingFrequencyOk returns a tuple with the BillingFrequency field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PlanUpdateEmail) GetBillingFrequencyOk() (*string, bool) {
-	if o == nil || o.BillingFrequency == nil {
+	if o == nil || IsNil(o.BillingFrequency) {
 		return nil, false
 	}
 	return o.BillingFrequency, true
@@ -122,7 +125,7 @@ func (o *PlanUpdateEmail) GetBillingFrequencyOk() (*string, bool) {
 
 // HasBillingFrequency returns a boolean if a field has been set.
 func (o *PlanUpdateEmail) HasBillingFrequency() bool {
-	if o != nil && o.BillingFrequency != nil {
+	if o != nil && !IsNil(o.BillingFrequency) {
 		return true
 	}
 
@@ -160,7 +163,7 @@ func (o *PlanUpdateEmail) SetBaselines(v SelfServiceCreditsBaselines) {
 
 // GetDetails returns the Details field value if set, zero value otherwise.
 func (o *PlanUpdateEmail) GetDetails() string {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		var ret string
 		return ret
 	}
@@ -170,7 +173,7 @@ func (o *PlanUpdateEmail) GetDetails() string {
 // GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PlanUpdateEmail) GetDetailsOk() (*string, bool) {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
 	return o.Details, true
@@ -178,7 +181,7 @@ func (o *PlanUpdateEmail) GetDetailsOk() (*string, bool) {
 
 // HasDetails returns a boolean if a field has been set.
 func (o *PlanUpdateEmail) HasDetails() bool {
-	if o != nil && o.Details != nil {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
@@ -191,23 +194,27 @@ func (o *PlanUpdateEmail) SetDetails(v string) {
 }
 
 func (o PlanUpdateEmail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["emailId"] = o.EmailId
-	}
-	if o.PhoneNumber != nil {
-		toSerialize["phoneNumber"] = o.PhoneNumber
-	}
-	if o.BillingFrequency != nil {
-		toSerialize["billingFrequency"] = o.BillingFrequency
-	}
-	if true {
-		toSerialize["baselines"] = o.Baselines
-	}
-	if o.Details != nil {
-		toSerialize["details"] = o.Details
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PlanUpdateEmail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["emailId"] = o.EmailId
+	if !IsNil(o.PhoneNumber) {
+		toSerialize["phoneNumber"] = o.PhoneNumber
+	}
+	if !IsNil(o.BillingFrequency) {
+		toSerialize["billingFrequency"] = o.BillingFrequency
+	}
+	toSerialize["baselines"] = o.Baselines
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
+	return toSerialize, nil
 }
 
 type NullablePlanUpdateEmail struct {

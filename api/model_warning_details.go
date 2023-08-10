@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the WarningDetails type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WarningDetails{}
 
 // WarningDetails Warning while computing signals.
 type WarningDetails struct {
@@ -117,17 +120,19 @@ func (o *WarningDetails) SetDetail(v string) {
 }
 
 func (o WarningDetails) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["code"] = o.Code
-	}
-	if true {
-		toSerialize["message"] = o.Message
-	}
-	if true {
-		toSerialize["detail"] = o.Detail
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o WarningDetails) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["code"] = o.Code
+	toSerialize["message"] = o.Message
+	toSerialize["detail"] = o.Detail
+	return toSerialize, nil
 }
 
 type NullableWarningDetails struct {

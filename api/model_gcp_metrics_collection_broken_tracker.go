@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the GcpMetricsCollectionBrokenTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GcpMetricsCollectionBrokenTracker{}
 
 // GcpMetricsCollectionBrokenTracker struct for GcpMetricsCollectionBrokenTracker
 type GcpMetricsCollectionBrokenTracker struct {
@@ -40,16 +43,24 @@ func NewGcpMetricsCollectionBrokenTrackerWithDefaults() *GcpMetricsCollectionBro
 }
 
 func (o GcpMetricsCollectionBrokenTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o GcpMetricsCollectionBrokenTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableGcpMetricsCollectionBrokenTracker struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the LookupAsyncJobStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupAsyncJobStatus{}
 
 // LookupAsyncJobStatus Lookup table async job status.
 type LookupAsyncJobStatus struct {
@@ -118,7 +121,7 @@ func (o *LookupAsyncJobStatus) SetStatus(v string) {
 
 // GetStatusMessages returns the StatusMessages field value if set, zero value otherwise.
 func (o *LookupAsyncJobStatus) GetStatusMessages() []string {
-	if o == nil || o.StatusMessages == nil {
+	if o == nil || IsNil(o.StatusMessages) {
 		var ret []string
 		return ret
 	}
@@ -128,7 +131,7 @@ func (o *LookupAsyncJobStatus) GetStatusMessages() []string {
 // GetStatusMessagesOk returns a tuple with the StatusMessages field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupAsyncJobStatus) GetStatusMessagesOk() ([]string, bool) {
-	if o == nil || o.StatusMessages == nil {
+	if o == nil || IsNil(o.StatusMessages) {
 		return nil, false
 	}
 	return o.StatusMessages, true
@@ -136,7 +139,7 @@ func (o *LookupAsyncJobStatus) GetStatusMessagesOk() ([]string, bool) {
 
 // HasStatusMessages returns a boolean if a field has been set.
 func (o *LookupAsyncJobStatus) HasStatusMessages() bool {
-	if o != nil && o.StatusMessages != nil {
+	if o != nil && !IsNil(o.StatusMessages) {
 		return true
 	}
 
@@ -150,7 +153,7 @@ func (o *LookupAsyncJobStatus) SetStatusMessages(v []string) {
 
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *LookupAsyncJobStatus) GetErrors() []ErrorDescription {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		var ret []ErrorDescription
 		return ret
 	}
@@ -160,7 +163,7 @@ func (o *LookupAsyncJobStatus) GetErrors() []ErrorDescription {
 // GetErrorsOk returns a tuple with the Errors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupAsyncJobStatus) GetErrorsOk() ([]ErrorDescription, bool) {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		return nil, false
 	}
 	return o.Errors, true
@@ -168,7 +171,7 @@ func (o *LookupAsyncJobStatus) GetErrorsOk() ([]ErrorDescription, bool) {
 
 // HasErrors returns a boolean if a field has been set.
 func (o *LookupAsyncJobStatus) HasErrors() bool {
-	if o != nil && o.Errors != nil {
+	if o != nil && !IsNil(o.Errors) {
 		return true
 	}
 
@@ -182,7 +185,7 @@ func (o *LookupAsyncJobStatus) SetErrors(v []ErrorDescription) {
 
 // GetWarnings returns the Warnings field value if set, zero value otherwise.
 func (o *LookupAsyncJobStatus) GetWarnings() []WarningDescription {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		var ret []WarningDescription
 		return ret
 	}
@@ -192,7 +195,7 @@ func (o *LookupAsyncJobStatus) GetWarnings() []WarningDescription {
 // GetWarningsOk returns a tuple with the Warnings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupAsyncJobStatus) GetWarningsOk() ([]WarningDescription, bool) {
-	if o == nil || o.Warnings == nil {
+	if o == nil || IsNil(o.Warnings) {
 		return nil, false
 	}
 	return o.Warnings, true
@@ -200,7 +203,7 @@ func (o *LookupAsyncJobStatus) GetWarningsOk() ([]WarningDescription, bool) {
 
 // HasWarnings returns a boolean if a field has been set.
 func (o *LookupAsyncJobStatus) HasWarnings() bool {
-	if o != nil && o.Warnings != nil {
+	if o != nil && !IsNil(o.Warnings) {
 		return true
 	}
 
@@ -286,7 +289,7 @@ func (o *LookupAsyncJobStatus) SetLookupContentPath(v string) {
 
 // GetRequestType returns the RequestType field value if set, zero value otherwise.
 func (o *LookupAsyncJobStatus) GetRequestType() string {
-	if o == nil || o.RequestType == nil {
+	if o == nil || IsNil(o.RequestType) {
 		var ret string
 		return ret
 	}
@@ -296,7 +299,7 @@ func (o *LookupAsyncJobStatus) GetRequestType() string {
 // GetRequestTypeOk returns a tuple with the RequestType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupAsyncJobStatus) GetRequestTypeOk() (*string, bool) {
-	if o == nil || o.RequestType == nil {
+	if o == nil || IsNil(o.RequestType) {
 		return nil, false
 	}
 	return o.RequestType, true
@@ -304,7 +307,7 @@ func (o *LookupAsyncJobStatus) GetRequestTypeOk() (*string, bool) {
 
 // HasRequestType returns a boolean if a field has been set.
 func (o *LookupAsyncJobStatus) HasRequestType() bool {
-	if o != nil && o.RequestType != nil {
+	if o != nil && !IsNil(o.RequestType) {
 		return true
 	}
 
@@ -389,44 +392,36 @@ func (o *LookupAsyncJobStatus) SetModifiedAt(v time.Time) {
 }
 
 func (o LookupAsyncJobStatus) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["jobId"] = o.JobId
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if o.StatusMessages != nil {
-		toSerialize["statusMessages"] = o.StatusMessages
-	}
-	if o.Errors != nil {
-		toSerialize["errors"] = o.Errors
-	}
-	if o.Warnings != nil {
-		toSerialize["warnings"] = o.Warnings
-	}
-	if true {
-		toSerialize["lookupContentId"] = o.LookupContentId
-	}
-	if true {
-		toSerialize["lookupName"] = o.LookupName
-	}
-	if true {
-		toSerialize["lookupContentPath"] = o.LookupContentPath
-	}
-	if o.RequestType != nil {
-		toSerialize["requestType"] = o.RequestType
-	}
-	if true {
-		toSerialize["userId"] = o.UserId
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupAsyncJobStatus) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["jobId"] = o.JobId
+	toSerialize["status"] = o.Status
+	if !IsNil(o.StatusMessages) {
+		toSerialize["statusMessages"] = o.StatusMessages
+	}
+	if !IsNil(o.Errors) {
+		toSerialize["errors"] = o.Errors
+	}
+	if !IsNil(o.Warnings) {
+		toSerialize["warnings"] = o.Warnings
+	}
+	toSerialize["lookupContentId"] = o.LookupContentId
+	toSerialize["lookupName"] = o.LookupName
+	toSerialize["lookupContentPath"] = o.LookupContentPath
+	if !IsNil(o.RequestType) {
+		toSerialize["requestType"] = o.RequestType
+	}
+	toSerialize["userId"] = o.UserId
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableLookupAsyncJobStatus struct {

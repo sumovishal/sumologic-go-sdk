@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the ScheduledView type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScheduledView{}
 
 // ScheduledView struct for ScheduledView
 type ScheduledView struct {
@@ -162,7 +165,7 @@ func (o *ScheduledView) SetStartTime(v time.Time) {
 
 // GetRetentionPeriod returns the RetentionPeriod field value if set, zero value otherwise.
 func (o *ScheduledView) GetRetentionPeriod() int32 {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -172,7 +175,7 @@ func (o *ScheduledView) GetRetentionPeriod() int32 {
 // GetRetentionPeriodOk returns a tuple with the RetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.RetentionPeriod == nil {
+	if o == nil || IsNil(o.RetentionPeriod) {
 		return nil, false
 	}
 	return o.RetentionPeriod, true
@@ -180,7 +183,7 @@ func (o *ScheduledView) GetRetentionPeriodOk() (*int32, bool) {
 
 // HasRetentionPeriod returns a boolean if a field has been set.
 func (o *ScheduledView) HasRetentionPeriod() bool {
-	if o != nil && o.RetentionPeriod != nil {
+	if o != nil && !IsNil(o.RetentionPeriod) {
 		return true
 	}
 
@@ -194,7 +197,7 @@ func (o *ScheduledView) SetRetentionPeriod(v int32) {
 
 // GetDataForwardingId returns the DataForwardingId field value if set, zero value otherwise.
 func (o *ScheduledView) GetDataForwardingId() string {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		var ret string
 		return ret
 	}
@@ -204,7 +207,7 @@ func (o *ScheduledView) GetDataForwardingId() string {
 // GetDataForwardingIdOk returns a tuple with the DataForwardingId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetDataForwardingIdOk() (*string, bool) {
-	if o == nil || o.DataForwardingId == nil {
+	if o == nil || IsNil(o.DataForwardingId) {
 		return nil, false
 	}
 	return o.DataForwardingId, true
@@ -212,7 +215,7 @@ func (o *ScheduledView) GetDataForwardingIdOk() (*string, bool) {
 
 // HasDataForwardingId returns a boolean if a field has been set.
 func (o *ScheduledView) HasDataForwardingId() bool {
-	if o != nil && o.DataForwardingId != nil {
+	if o != nil && !IsNil(o.DataForwardingId) {
 		return true
 	}
 
@@ -226,7 +229,7 @@ func (o *ScheduledView) SetDataForwardingId(v string) {
 
 // GetParsingMode returns the ParsingMode field value if set, zero value otherwise.
 func (o *ScheduledView) GetParsingMode() string {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		var ret string
 		return ret
 	}
@@ -236,7 +239,7 @@ func (o *ScheduledView) GetParsingMode() string {
 // GetParsingModeOk returns a tuple with the ParsingMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetParsingModeOk() (*string, bool) {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		return nil, false
 	}
 	return o.ParsingMode, true
@@ -244,7 +247,7 @@ func (o *ScheduledView) GetParsingModeOk() (*string, bool) {
 
 // HasParsingMode returns a boolean if a field has been set.
 func (o *ScheduledView) HasParsingMode() bool {
-	if o != nil && o.ParsingMode != nil {
+	if o != nil && !IsNil(o.ParsingMode) {
 		return true
 	}
 
@@ -258,7 +261,7 @@ func (o *ScheduledView) SetParsingMode(v string) {
 
 // GetNewRetentionPeriod returns the NewRetentionPeriod field value if set, zero value otherwise.
 func (o *ScheduledView) GetNewRetentionPeriod() int32 {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		var ret int32
 		return ret
 	}
@@ -268,7 +271,7 @@ func (o *ScheduledView) GetNewRetentionPeriod() int32 {
 // GetNewRetentionPeriodOk returns a tuple with the NewRetentionPeriod field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetNewRetentionPeriodOk() (*int32, bool) {
-	if o == nil || o.NewRetentionPeriod == nil {
+	if o == nil || IsNil(o.NewRetentionPeriod) {
 		return nil, false
 	}
 	return o.NewRetentionPeriod, true
@@ -276,7 +279,7 @@ func (o *ScheduledView) GetNewRetentionPeriodOk() (*int32, bool) {
 
 // HasNewRetentionPeriod returns a boolean if a field has been set.
 func (o *ScheduledView) HasNewRetentionPeriod() bool {
-	if o != nil && o.NewRetentionPeriod != nil {
+	if o != nil && !IsNil(o.NewRetentionPeriod) {
 		return true
 	}
 
@@ -290,7 +293,7 @@ func (o *ScheduledView) SetNewRetentionPeriod(v int32) {
 
 // GetRetentionEffectiveAt returns the RetentionEffectiveAt field value if set, zero value otherwise.
 func (o *ScheduledView) GetRetentionEffectiveAt() time.Time {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		var ret time.Time
 		return ret
 	}
@@ -300,7 +303,7 @@ func (o *ScheduledView) GetRetentionEffectiveAt() time.Time {
 // GetRetentionEffectiveAtOk returns a tuple with the RetentionEffectiveAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetRetentionEffectiveAtOk() (*time.Time, bool) {
-	if o == nil || o.RetentionEffectiveAt == nil {
+	if o == nil || IsNil(o.RetentionEffectiveAt) {
 		return nil, false
 	}
 	return o.RetentionEffectiveAt, true
@@ -308,7 +311,7 @@ func (o *ScheduledView) GetRetentionEffectiveAtOk() (*time.Time, bool) {
 
 // HasRetentionEffectiveAt returns a boolean if a field has been set.
 func (o *ScheduledView) HasRetentionEffectiveAt() bool {
-	if o != nil && o.RetentionEffectiveAt != nil {
+	if o != nil && !IsNil(o.RetentionEffectiveAt) {
 		return true
 	}
 
@@ -346,7 +349,7 @@ func (o *ScheduledView) SetId(v string) {
 
 // GetIndexId returns the IndexId field value if set, zero value otherwise.
 func (o *ScheduledView) GetIndexId() string {
-	if o == nil || o.IndexId == nil {
+	if o == nil || IsNil(o.IndexId) {
 		var ret string
 		return ret
 	}
@@ -356,7 +359,7 @@ func (o *ScheduledView) GetIndexId() string {
 // GetIndexIdOk returns a tuple with the IndexId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetIndexIdOk() (*string, bool) {
-	if o == nil || o.IndexId == nil {
+	if o == nil || IsNil(o.IndexId) {
 		return nil, false
 	}
 	return o.IndexId, true
@@ -364,7 +367,7 @@ func (o *ScheduledView) GetIndexIdOk() (*string, bool) {
 
 // HasIndexId returns a boolean if a field has been set.
 func (o *ScheduledView) HasIndexId() bool {
-	if o != nil && o.IndexId != nil {
+	if o != nil && !IsNil(o.IndexId) {
 		return true
 	}
 
@@ -378,7 +381,7 @@ func (o *ScheduledView) SetIndexId(v string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *ScheduledView) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -388,7 +391,7 @@ func (o *ScheduledView) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -396,7 +399,7 @@ func (o *ScheduledView) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *ScheduledView) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -410,7 +413,7 @@ func (o *ScheduledView) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *ScheduledView) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -420,7 +423,7 @@ func (o *ScheduledView) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -428,7 +431,7 @@ func (o *ScheduledView) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *ScheduledView) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -442,7 +445,7 @@ func (o *ScheduledView) SetModifiedAt(v time.Time) {
 
 // GetCreatedByOptimizeIt returns the CreatedByOptimizeIt field value if set, zero value otherwise.
 func (o *ScheduledView) GetCreatedByOptimizeIt() bool {
-	if o == nil || o.CreatedByOptimizeIt == nil {
+	if o == nil || IsNil(o.CreatedByOptimizeIt) {
 		var ret bool
 		return ret
 	}
@@ -452,7 +455,7 @@ func (o *ScheduledView) GetCreatedByOptimizeIt() bool {
 // GetCreatedByOptimizeItOk returns a tuple with the CreatedByOptimizeIt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetCreatedByOptimizeItOk() (*bool, bool) {
-	if o == nil || o.CreatedByOptimizeIt == nil {
+	if o == nil || IsNil(o.CreatedByOptimizeIt) {
 		return nil, false
 	}
 	return o.CreatedByOptimizeIt, true
@@ -460,7 +463,7 @@ func (o *ScheduledView) GetCreatedByOptimizeItOk() (*bool, bool) {
 
 // HasCreatedByOptimizeIt returns a boolean if a field has been set.
 func (o *ScheduledView) HasCreatedByOptimizeIt() bool {
-	if o != nil && o.CreatedByOptimizeIt != nil {
+	if o != nil && !IsNil(o.CreatedByOptimizeIt) {
 		return true
 	}
 
@@ -474,7 +477,7 @@ func (o *ScheduledView) SetCreatedByOptimizeIt(v bool) {
 
 // GetError returns the Error field value if set, zero value otherwise.
 func (o *ScheduledView) GetError() string {
-	if o == nil || o.Error == nil {
+	if o == nil || IsNil(o.Error) {
 		var ret string
 		return ret
 	}
@@ -484,7 +487,7 @@ func (o *ScheduledView) GetError() string {
 // GetErrorOk returns a tuple with the Error field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetErrorOk() (*string, bool) {
-	if o == nil || o.Error == nil {
+	if o == nil || IsNil(o.Error) {
 		return nil, false
 	}
 	return o.Error, true
@@ -492,7 +495,7 @@ func (o *ScheduledView) GetErrorOk() (*string, bool) {
 
 // HasError returns a boolean if a field has been set.
 func (o *ScheduledView) HasError() bool {
-	if o != nil && o.Error != nil {
+	if o != nil && !IsNil(o.Error) {
 		return true
 	}
 
@@ -506,7 +509,7 @@ func (o *ScheduledView) SetError(v string) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *ScheduledView) GetStatus() string {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret string
 		return ret
 	}
@@ -516,7 +519,7 @@ func (o *ScheduledView) GetStatus() string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetStatusOk() (*string, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -524,7 +527,7 @@ func (o *ScheduledView) GetStatusOk() (*string, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *ScheduledView) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -538,7 +541,7 @@ func (o *ScheduledView) SetStatus(v string) {
 
 // GetTotalBytes returns the TotalBytes field value if set, zero value otherwise.
 func (o *ScheduledView) GetTotalBytes() int64 {
-	if o == nil || o.TotalBytes == nil {
+	if o == nil || IsNil(o.TotalBytes) {
 		var ret int64
 		return ret
 	}
@@ -548,7 +551,7 @@ func (o *ScheduledView) GetTotalBytes() int64 {
 // GetTotalBytesOk returns a tuple with the TotalBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetTotalBytesOk() (*int64, bool) {
-	if o == nil || o.TotalBytes == nil {
+	if o == nil || IsNil(o.TotalBytes) {
 		return nil, false
 	}
 	return o.TotalBytes, true
@@ -556,7 +559,7 @@ func (o *ScheduledView) GetTotalBytesOk() (*int64, bool) {
 
 // HasTotalBytes returns a boolean if a field has been set.
 func (o *ScheduledView) HasTotalBytes() bool {
-	if o != nil && o.TotalBytes != nil {
+	if o != nil && !IsNil(o.TotalBytes) {
 		return true
 	}
 
@@ -570,7 +573,7 @@ func (o *ScheduledView) SetTotalBytes(v int64) {
 
 // GetTotalMessageCount returns the TotalMessageCount field value if set, zero value otherwise.
 func (o *ScheduledView) GetTotalMessageCount() int64 {
-	if o == nil || o.TotalMessageCount == nil {
+	if o == nil || IsNil(o.TotalMessageCount) {
 		var ret int64
 		return ret
 	}
@@ -580,7 +583,7 @@ func (o *ScheduledView) GetTotalMessageCount() int64 {
 // GetTotalMessageCountOk returns a tuple with the TotalMessageCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetTotalMessageCountOk() (*int64, bool) {
-	if o == nil || o.TotalMessageCount == nil {
+	if o == nil || IsNil(o.TotalMessageCount) {
 		return nil, false
 	}
 	return o.TotalMessageCount, true
@@ -588,7 +591,7 @@ func (o *ScheduledView) GetTotalMessageCountOk() (*int64, bool) {
 
 // HasTotalMessageCount returns a boolean if a field has been set.
 func (o *ScheduledView) HasTotalMessageCount() bool {
-	if o != nil && o.TotalMessageCount != nil {
+	if o != nil && !IsNil(o.TotalMessageCount) {
 		return true
 	}
 
@@ -602,7 +605,7 @@ func (o *ScheduledView) SetTotalMessageCount(v int64) {
 
 // GetCreatedBy returns the CreatedBy field value if set, zero value otherwise.
 func (o *ScheduledView) GetCreatedBy() string {
-	if o == nil || o.CreatedBy == nil {
+	if o == nil || IsNil(o.CreatedBy) {
 		var ret string
 		return ret
 	}
@@ -612,7 +615,7 @@ func (o *ScheduledView) GetCreatedBy() string {
 // GetCreatedByOk returns a tuple with the CreatedBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetCreatedByOk() (*string, bool) {
-	if o == nil || o.CreatedBy == nil {
+	if o == nil || IsNil(o.CreatedBy) {
 		return nil, false
 	}
 	return o.CreatedBy, true
@@ -620,7 +623,7 @@ func (o *ScheduledView) GetCreatedByOk() (*string, bool) {
 
 // HasCreatedBy returns a boolean if a field has been set.
 func (o *ScheduledView) HasCreatedBy() bool {
-	if o != nil && o.CreatedBy != nil {
+	if o != nil && !IsNil(o.CreatedBy) {
 		return true
 	}
 
@@ -634,7 +637,7 @@ func (o *ScheduledView) SetCreatedBy(v string) {
 
 // GetModifiedBy returns the ModifiedBy field value if set, zero value otherwise.
 func (o *ScheduledView) GetModifiedBy() string {
-	if o == nil || o.ModifiedBy == nil {
+	if o == nil || IsNil(o.ModifiedBy) {
 		var ret string
 		return ret
 	}
@@ -644,7 +647,7 @@ func (o *ScheduledView) GetModifiedBy() string {
 // GetModifiedByOk returns a tuple with the ModifiedBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetModifiedByOk() (*string, bool) {
-	if o == nil || o.ModifiedBy == nil {
+	if o == nil || IsNil(o.ModifiedBy) {
 		return nil, false
 	}
 	return o.ModifiedBy, true
@@ -652,7 +655,7 @@ func (o *ScheduledView) GetModifiedByOk() (*string, bool) {
 
 // HasModifiedBy returns a boolean if a field has been set.
 func (o *ScheduledView) HasModifiedBy() bool {
-	if o != nil && o.ModifiedBy != nil {
+	if o != nil && !IsNil(o.ModifiedBy) {
 		return true
 	}
 
@@ -666,7 +669,7 @@ func (o *ScheduledView) SetModifiedBy(v string) {
 
 // GetFilledRanges returns the FilledRanges field value if set, zero value otherwise.
 func (o *ScheduledView) GetFilledRanges() []FilledRange {
-	if o == nil || o.FilledRanges == nil {
+	if o == nil || IsNil(o.FilledRanges) {
 		var ret []FilledRange
 		return ret
 	}
@@ -676,7 +679,7 @@ func (o *ScheduledView) GetFilledRanges() []FilledRange {
 // GetFilledRangesOk returns a tuple with the FilledRanges field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScheduledView) GetFilledRangesOk() ([]FilledRange, bool) {
-	if o == nil || o.FilledRanges == nil {
+	if o == nil || IsNil(o.FilledRanges) {
 		return nil, false
 	}
 	return o.FilledRanges, true
@@ -684,7 +687,7 @@ func (o *ScheduledView) GetFilledRangesOk() ([]FilledRange, bool) {
 
 // HasFilledRanges returns a boolean if a field has been set.
 func (o *ScheduledView) HasFilledRanges() bool {
-	if o != nil && o.FilledRanges != nil {
+	if o != nil && !IsNil(o.FilledRanges) {
 		return true
 	}
 
@@ -697,68 +700,68 @@ func (o *ScheduledView) SetFilledRanges(v []FilledRange) {
 }
 
 func (o ScheduledView) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["indexName"] = o.IndexName
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if o.RetentionPeriod != nil {
-		toSerialize["retentionPeriod"] = o.RetentionPeriod
-	}
-	if o.DataForwardingId != nil {
-		toSerialize["dataForwardingId"] = o.DataForwardingId
-	}
-	if o.ParsingMode != nil {
-		toSerialize["parsingMode"] = o.ParsingMode
-	}
-	if o.NewRetentionPeriod != nil {
-		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
-	}
-	if o.RetentionEffectiveAt != nil {
-		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.IndexId != nil {
-		toSerialize["indexId"] = o.IndexId
-	}
-	if o.CreatedAt != nil {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if o.CreatedByOptimizeIt != nil {
-		toSerialize["createdByOptimizeIt"] = o.CreatedByOptimizeIt
-	}
-	if o.Error != nil {
-		toSerialize["error"] = o.Error
-	}
-	if o.Status != nil {
-		toSerialize["status"] = o.Status
-	}
-	if o.TotalBytes != nil {
-		toSerialize["totalBytes"] = o.TotalBytes
-	}
-	if o.TotalMessageCount != nil {
-		toSerialize["totalMessageCount"] = o.TotalMessageCount
-	}
-	if o.CreatedBy != nil {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if o.ModifiedBy != nil {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if o.FilledRanges != nil {
-		toSerialize["filledRanges"] = o.FilledRanges
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ScheduledView) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["indexName"] = o.IndexName
+	toSerialize["startTime"] = o.StartTime
+	if !IsNil(o.RetentionPeriod) {
+		toSerialize["retentionPeriod"] = o.RetentionPeriod
+	}
+	if !IsNil(o.DataForwardingId) {
+		toSerialize["dataForwardingId"] = o.DataForwardingId
+	}
+	if !IsNil(o.ParsingMode) {
+		toSerialize["parsingMode"] = o.ParsingMode
+	}
+	if !IsNil(o.NewRetentionPeriod) {
+		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
+	}
+	if !IsNil(o.RetentionEffectiveAt) {
+		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
+	}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.IndexId) {
+		toSerialize["indexId"] = o.IndexId
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["createdAt"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modifiedAt"] = o.ModifiedAt
+	}
+	if !IsNil(o.CreatedByOptimizeIt) {
+		toSerialize["createdByOptimizeIt"] = o.CreatedByOptimizeIt
+	}
+	if !IsNil(o.Error) {
+		toSerialize["error"] = o.Error
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.TotalBytes) {
+		toSerialize["totalBytes"] = o.TotalBytes
+	}
+	if !IsNil(o.TotalMessageCount) {
+		toSerialize["totalMessageCount"] = o.TotalMessageCount
+	}
+	if !IsNil(o.CreatedBy) {
+		toSerialize["createdBy"] = o.CreatedBy
+	}
+	if !IsNil(o.ModifiedBy) {
+		toSerialize["modifiedBy"] = o.ModifiedBy
+	}
+	if !IsNil(o.FilledRanges) {
+		toSerialize["filledRanges"] = o.FilledRanges
+	}
+	return toSerialize, nil
 }
 
 type NullableScheduledView struct {

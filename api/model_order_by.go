@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OrderBy type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OrderBy{}
 
 // OrderBy struct for OrderBy
 type OrderBy struct {
@@ -92,14 +95,18 @@ func (o *OrderBy) SetOrder(v string) {
 }
 
 func (o OrderBy) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["order"] = o.Order
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OrderBy) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["order"] = o.Order
+	return toSerialize, nil
 }
 
 type NullableOrderBy struct {

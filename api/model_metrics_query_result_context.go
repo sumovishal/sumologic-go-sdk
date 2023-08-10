@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsQueryResultContext type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryResultContext{}
 
 // MetricsQueryResultContext struct for MetricsQueryResultContext
 type MetricsQueryResultContext struct {
@@ -42,7 +45,7 @@ func NewMetricsQueryResultContextWithDefaults() *MetricsQueryResultContext {
 
 // GetQuantizationGranularity returns the QuantizationGranularity field value if set, zero value otherwise.
 func (o *MetricsQueryResultContext) GetQuantizationGranularity() int64 {
-	if o == nil || o.QuantizationGranularity == nil {
+	if o == nil || IsNil(o.QuantizationGranularity) {
 		var ret int64
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *MetricsQueryResultContext) GetQuantizationGranularity() int64 {
 // GetQuantizationGranularityOk returns a tuple with the QuantizationGranularity field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResultContext) GetQuantizationGranularityOk() (*int64, bool) {
-	if o == nil || o.QuantizationGranularity == nil {
+	if o == nil || IsNil(o.QuantizationGranularity) {
 		return nil, false
 	}
 	return o.QuantizationGranularity, true
@@ -60,7 +63,7 @@ func (o *MetricsQueryResultContext) GetQuantizationGranularityOk() (*int64, bool
 
 // HasQuantizationGranularity returns a boolean if a field has been set.
 func (o *MetricsQueryResultContext) HasQuantizationGranularity() bool {
-	if o != nil && o.QuantizationGranularity != nil {
+	if o != nil && !IsNil(o.QuantizationGranularity) {
 		return true
 	}
 
@@ -74,7 +77,7 @@ func (o *MetricsQueryResultContext) SetQuantizationGranularity(v int64) {
 
 // GetRollup returns the Rollup field value if set, zero value otherwise.
 func (o *MetricsQueryResultContext) GetRollup() string {
-	if o == nil || o.Rollup == nil {
+	if o == nil || IsNil(o.Rollup) {
 		var ret string
 		return ret
 	}
@@ -84,7 +87,7 @@ func (o *MetricsQueryResultContext) GetRollup() string {
 // GetRollupOk returns a tuple with the Rollup field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResultContext) GetRollupOk() (*string, bool) {
-	if o == nil || o.Rollup == nil {
+	if o == nil || IsNil(o.Rollup) {
 		return nil, false
 	}
 	return o.Rollup, true
@@ -92,7 +95,7 @@ func (o *MetricsQueryResultContext) GetRollupOk() (*string, bool) {
 
 // HasRollup returns a boolean if a field has been set.
 func (o *MetricsQueryResultContext) HasRollup() bool {
-	if o != nil && o.Rollup != nil {
+	if o != nil && !IsNil(o.Rollup) {
 		return true
 	}
 
@@ -106,7 +109,7 @@ func (o *MetricsQueryResultContext) SetRollup(v string) {
 
 // GetActualQueryTimeRange returns the ActualQueryTimeRange field value if set, zero value otherwise.
 func (o *MetricsQueryResultContext) GetActualQueryTimeRange() Iso8601TimeRange {
-	if o == nil || o.ActualQueryTimeRange == nil {
+	if o == nil || IsNil(o.ActualQueryTimeRange) {
 		var ret Iso8601TimeRange
 		return ret
 	}
@@ -116,7 +119,7 @@ func (o *MetricsQueryResultContext) GetActualQueryTimeRange() Iso8601TimeRange {
 // GetActualQueryTimeRangeOk returns a tuple with the ActualQueryTimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResultContext) GetActualQueryTimeRangeOk() (*Iso8601TimeRange, bool) {
-	if o == nil || o.ActualQueryTimeRange == nil {
+	if o == nil || IsNil(o.ActualQueryTimeRange) {
 		return nil, false
 	}
 	return o.ActualQueryTimeRange, true
@@ -124,7 +127,7 @@ func (o *MetricsQueryResultContext) GetActualQueryTimeRangeOk() (*Iso8601TimeRan
 
 // HasActualQueryTimeRange returns a boolean if a field has been set.
 func (o *MetricsQueryResultContext) HasActualQueryTimeRange() bool {
-	if o != nil && o.ActualQueryTimeRange != nil {
+	if o != nil && !IsNil(o.ActualQueryTimeRange) {
 		return true
 	}
 
@@ -137,17 +140,25 @@ func (o *MetricsQueryResultContext) SetActualQueryTimeRange(v Iso8601TimeRange) 
 }
 
 func (o MetricsQueryResultContext) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.QuantizationGranularity != nil {
-		toSerialize["quantizationGranularity"] = o.QuantizationGranularity
-	}
-	if o.Rollup != nil {
-		toSerialize["rollup"] = o.Rollup
-	}
-	if o.ActualQueryTimeRange != nil {
-		toSerialize["actualQueryTimeRange"] = o.ActualQueryTimeRange
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryResultContext) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.QuantizationGranularity) {
+		toSerialize["quantizationGranularity"] = o.QuantizationGranularity
+	}
+	if !IsNil(o.Rollup) {
+		toSerialize["rollup"] = o.Rollup
+	}
+	if !IsNil(o.ActualQueryTimeRange) {
+		toSerialize["actualQueryTimeRange"] = o.ActualQueryTimeRange
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryResultContext struct {

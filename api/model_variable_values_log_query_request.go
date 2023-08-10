@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VariableValuesLogQueryRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VariableValuesLogQueryRequest{}
 
 // VariableValuesLogQueryRequest The request to get a log query to populate variable values.
 type VariableValuesLogQueryRequest struct {
@@ -92,7 +95,7 @@ func (o *VariableValuesLogQueryRequest) SetField(v string) {
 
 // GetVariablesValues returns the VariablesValues field value if set, zero value otherwise.
 func (o *VariableValuesLogQueryRequest) GetVariablesValues() VariablesValuesData {
-	if o == nil || o.VariablesValues == nil {
+	if o == nil || IsNil(o.VariablesValues) {
 		var ret VariablesValuesData
 		return ret
 	}
@@ -102,7 +105,7 @@ func (o *VariableValuesLogQueryRequest) GetVariablesValues() VariablesValuesData
 // GetVariablesValuesOk returns a tuple with the VariablesValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VariableValuesLogQueryRequest) GetVariablesValuesOk() (*VariablesValuesData, bool) {
-	if o == nil || o.VariablesValues == nil {
+	if o == nil || IsNil(o.VariablesValues) {
 		return nil, false
 	}
 	return o.VariablesValues, true
@@ -110,7 +113,7 @@ func (o *VariableValuesLogQueryRequest) GetVariablesValuesOk() (*VariablesValues
 
 // HasVariablesValues returns a boolean if a field has been set.
 func (o *VariableValuesLogQueryRequest) HasVariablesValues() bool {
-	if o != nil && o.VariablesValues != nil {
+	if o != nil && !IsNil(o.VariablesValues) {
 		return true
 	}
 
@@ -123,17 +126,21 @@ func (o *VariableValuesLogQueryRequest) SetVariablesValues(v VariablesValuesData
 }
 
 func (o VariableValuesLogQueryRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if o.VariablesValues != nil {
-		toSerialize["variablesValues"] = o.VariablesValues
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VariableValuesLogQueryRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["query"] = o.Query
+	toSerialize["field"] = o.Field
+	if !IsNil(o.VariablesValues) {
+		toSerialize["variablesValues"] = o.VariablesValues
+	}
+	return toSerialize, nil
 }
 
 type NullableVariableValuesLogQueryRequest struct {

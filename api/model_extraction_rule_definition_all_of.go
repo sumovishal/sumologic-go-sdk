@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ExtractionRuleDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ExtractionRuleDefinitionAllOf{}
 
 // ExtractionRuleDefinitionAllOf struct for ExtractionRuleDefinitionAllOf
 type ExtractionRuleDefinitionAllOf struct {
@@ -43,7 +46,7 @@ func NewExtractionRuleDefinitionAllOfWithDefaults() *ExtractionRuleDefinitionAll
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *ExtractionRuleDefinitionAllOf) GetEnabled() bool {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		var ret bool
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *ExtractionRuleDefinitionAllOf) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ExtractionRuleDefinitionAllOf) GetEnabledOk() (*bool, bool) {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		return nil, false
 	}
 	return o.Enabled, true
@@ -61,7 +64,7 @@ func (o *ExtractionRuleDefinitionAllOf) GetEnabledOk() (*bool, bool) {
 
 // HasEnabled returns a boolean if a field has been set.
 func (o *ExtractionRuleDefinitionAllOf) HasEnabled() bool {
-	if o != nil && o.Enabled != nil {
+	if o != nil && !IsNil(o.Enabled) {
 		return true
 	}
 
@@ -74,11 +77,19 @@ func (o *ExtractionRuleDefinitionAllOf) SetEnabled(v bool) {
 }
 
 func (o ExtractionRuleDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Enabled != nil {
-		toSerialize["enabled"] = o.Enabled
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ExtractionRuleDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
+	return toSerialize, nil
 }
 
 type NullableExtractionRuleDefinitionAllOf struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogsMissingDataCondition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogsMissingDataCondition{}
+
 // LogsMissingDataCondition struct for LogsMissingDataCondition
 type LogsMissingDataCondition struct {
 	TriggerCondition
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 }
 
@@ -67,19 +70,25 @@ func (o *LogsMissingDataCondition) SetTimeRange(v string) {
 }
 
 func (o LogsMissingDataCondition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LogsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTriggerCondition, errTriggerCondition := json.Marshal(o.TriggerCondition)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
 	errTriggerCondition = json.Unmarshal([]byte(serializedTriggerCondition), &toSerialize)
 	if errTriggerCondition != nil {
-		return []byte{}, errTriggerCondition
+		return map[string]interface{}{}, errTriggerCondition
 	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["timeRange"] = o.TimeRange
+	return toSerialize, nil
 }
 
 type NullableLogsMissingDataCondition struct {

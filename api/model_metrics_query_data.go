@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsQueryData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryData{}
 
 // MetricsQueryData The data format describing a basic metrics query.
 type MetricsQueryData struct {
@@ -73,7 +76,7 @@ func (o *MetricsQueryData) SetMetric(v string) {
 
 // GetAggregationType returns the AggregationType field value if set, zero value otherwise.
 func (o *MetricsQueryData) GetAggregationType() string {
-	if o == nil || o.AggregationType == nil {
+	if o == nil || IsNil(o.AggregationType) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *MetricsQueryData) GetAggregationType() string {
 // GetAggregationTypeOk returns a tuple with the AggregationType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryData) GetAggregationTypeOk() (*string, bool) {
-	if o == nil || o.AggregationType == nil {
+	if o == nil || IsNil(o.AggregationType) {
 		return nil, false
 	}
 	return o.AggregationType, true
@@ -91,7 +94,7 @@ func (o *MetricsQueryData) GetAggregationTypeOk() (*string, bool) {
 
 // HasAggregationType returns a boolean if a field has been set.
 func (o *MetricsQueryData) HasAggregationType() bool {
-	if o != nil && o.AggregationType != nil {
+	if o != nil && !IsNil(o.AggregationType) {
 		return true
 	}
 
@@ -105,7 +108,7 @@ func (o *MetricsQueryData) SetAggregationType(v string) {
 
 // GetGroupBy returns the GroupBy field value if set, zero value otherwise.
 func (o *MetricsQueryData) GetGroupBy() string {
-	if o == nil || o.GroupBy == nil {
+	if o == nil || IsNil(o.GroupBy) {
 		var ret string
 		return ret
 	}
@@ -115,7 +118,7 @@ func (o *MetricsQueryData) GetGroupBy() string {
 // GetGroupByOk returns a tuple with the GroupBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryData) GetGroupByOk() (*string, bool) {
-	if o == nil || o.GroupBy == nil {
+	if o == nil || IsNil(o.GroupBy) {
 		return nil, false
 	}
 	return o.GroupBy, true
@@ -123,7 +126,7 @@ func (o *MetricsQueryData) GetGroupByOk() (*string, bool) {
 
 // HasGroupBy returns a boolean if a field has been set.
 func (o *MetricsQueryData) HasGroupBy() bool {
-	if o != nil && o.GroupBy != nil {
+	if o != nil && !IsNil(o.GroupBy) {
 		return true
 	}
 
@@ -161,7 +164,7 @@ func (o *MetricsQueryData) SetFilters(v []MetricsFilter) {
 
 // GetOperators returns the Operators field value if set, zero value otherwise.
 func (o *MetricsQueryData) GetOperators() []OperatorData {
-	if o == nil || o.Operators == nil {
+	if o == nil || IsNil(o.Operators) {
 		var ret []OperatorData
 		return ret
 	}
@@ -171,7 +174,7 @@ func (o *MetricsQueryData) GetOperators() []OperatorData {
 // GetOperatorsOk returns a tuple with the Operators field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryData) GetOperatorsOk() ([]OperatorData, bool) {
-	if o == nil || o.Operators == nil {
+	if o == nil || IsNil(o.Operators) {
 		return nil, false
 	}
 	return o.Operators, true
@@ -179,7 +182,7 @@ func (o *MetricsQueryData) GetOperatorsOk() ([]OperatorData, bool) {
 
 // HasOperators returns a boolean if a field has been set.
 func (o *MetricsQueryData) HasOperators() bool {
-	if o != nil && o.Operators != nil {
+	if o != nil && !IsNil(o.Operators) {
 		return true
 	}
 
@@ -192,23 +195,27 @@ func (o *MetricsQueryData) SetOperators(v []OperatorData) {
 }
 
 func (o MetricsQueryData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["metric"] = o.Metric
-	}
-	if o.AggregationType != nil {
-		toSerialize["aggregationType"] = o.AggregationType
-	}
-	if o.GroupBy != nil {
-		toSerialize["groupBy"] = o.GroupBy
-	}
-	if true {
-		toSerialize["filters"] = o.Filters
-	}
-	if o.Operators != nil {
-		toSerialize["operators"] = o.Operators
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["metric"] = o.Metric
+	if !IsNil(o.AggregationType) {
+		toSerialize["aggregationType"] = o.AggregationType
+	}
+	if !IsNil(o.GroupBy) {
+		toSerialize["groupBy"] = o.GroupBy
+	}
+	toSerialize["filters"] = o.Filters
+	if !IsNil(o.Operators) {
+		toSerialize["operators"] = o.Operators
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryData struct {

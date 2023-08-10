@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the LogSearchEstimatedUsageDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchEstimatedUsageDefinition{}
+
 // LogSearchEstimatedUsageDefinition struct for LogSearchEstimatedUsageDefinition
 type LogSearchEstimatedUsageDefinition struct {
 	// Query to perform.
@@ -21,8 +24,8 @@ type LogSearchEstimatedUsageDefinition struct {
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	// This has the value `true` if the search is to be run by receipt time and `false` if it is to be run by message time.
 	RunByReceiptTime *bool `json:"runByReceiptTime,omitempty"`
-	// Definition of the query parameters.
-	QueryParameters []LogSearchQueryParameterSyncDefinition `json:"queryParameters,omitempty"`
+	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
+	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty"`
 	// Time zone to get the estimated usage details. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). 
@@ -109,7 +112,7 @@ func (o *LogSearchEstimatedUsageDefinition) SetTimeRange(v ResolvableTimeRange) 
 
 // GetRunByReceiptTime returns the RunByReceiptTime field value if set, zero value otherwise.
 func (o *LogSearchEstimatedUsageDefinition) GetRunByReceiptTime() bool {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		var ret bool
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *LogSearchEstimatedUsageDefinition) GetRunByReceiptTime() bool {
 // GetRunByReceiptTimeOk returns a tuple with the RunByReceiptTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchEstimatedUsageDefinition) GetRunByReceiptTimeOk() (*bool, bool) {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		return nil, false
 	}
 	return o.RunByReceiptTime, true
@@ -127,7 +130,7 @@ func (o *LogSearchEstimatedUsageDefinition) GetRunByReceiptTimeOk() (*bool, bool
 
 // HasRunByReceiptTime returns a boolean if a field has been set.
 func (o *LogSearchEstimatedUsageDefinition) HasRunByReceiptTime() bool {
-	if o != nil && o.RunByReceiptTime != nil {
+	if o != nil && !IsNil(o.RunByReceiptTime) {
 		return true
 	}
 
@@ -140,9 +143,9 @@ func (o *LogSearchEstimatedUsageDefinition) SetRunByReceiptTime(v bool) {
 }
 
 // GetQueryParameters returns the QueryParameters field value if set, zero value otherwise.
-func (o *LogSearchEstimatedUsageDefinition) GetQueryParameters() []LogSearchQueryParameterSyncDefinition {
-	if o == nil || o.QueryParameters == nil {
-		var ret []LogSearchQueryParameterSyncDefinition
+func (o *LogSearchEstimatedUsageDefinition) GetQueryParameters() []LogSearchQueryParameterSyncDefinitionBase {
+	if o == nil || IsNil(o.QueryParameters) {
+		var ret []LogSearchQueryParameterSyncDefinitionBase
 		return ret
 	}
 	return o.QueryParameters
@@ -150,8 +153,8 @@ func (o *LogSearchEstimatedUsageDefinition) GetQueryParameters() []LogSearchQuer
 
 // GetQueryParametersOk returns a tuple with the QueryParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LogSearchEstimatedUsageDefinition) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinition, bool) {
-	if o == nil || o.QueryParameters == nil {
+func (o *LogSearchEstimatedUsageDefinition) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinitionBase, bool) {
+	if o == nil || IsNil(o.QueryParameters) {
 		return nil, false
 	}
 	return o.QueryParameters, true
@@ -159,21 +162,21 @@ func (o *LogSearchEstimatedUsageDefinition) GetQueryParametersOk() ([]LogSearchQ
 
 // HasQueryParameters returns a boolean if a field has been set.
 func (o *LogSearchEstimatedUsageDefinition) HasQueryParameters() bool {
-	if o != nil && o.QueryParameters != nil {
+	if o != nil && !IsNil(o.QueryParameters) {
 		return true
 	}
 
 	return false
 }
 
-// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinition and assigns it to the QueryParameters field.
-func (o *LogSearchEstimatedUsageDefinition) SetQueryParameters(v []LogSearchQueryParameterSyncDefinition) {
+// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinitionBase and assigns it to the QueryParameters field.
+func (o *LogSearchEstimatedUsageDefinition) SetQueryParameters(v []LogSearchQueryParameterSyncDefinitionBase) {
 	o.QueryParameters = v
 }
 
 // GetParsingMode returns the ParsingMode field value if set, zero value otherwise.
 func (o *LogSearchEstimatedUsageDefinition) GetParsingMode() string {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		var ret string
 		return ret
 	}
@@ -183,7 +186,7 @@ func (o *LogSearchEstimatedUsageDefinition) GetParsingMode() string {
 // GetParsingModeOk returns a tuple with the ParsingMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchEstimatedUsageDefinition) GetParsingModeOk() (*string, bool) {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		return nil, false
 	}
 	return o.ParsingMode, true
@@ -191,7 +194,7 @@ func (o *LogSearchEstimatedUsageDefinition) GetParsingModeOk() (*string, bool) {
 
 // HasParsingMode returns a boolean if a field has been set.
 func (o *LogSearchEstimatedUsageDefinition) HasParsingMode() bool {
-	if o != nil && o.ParsingMode != nil {
+	if o != nil && !IsNil(o.ParsingMode) {
 		return true
 	}
 
@@ -252,29 +255,29 @@ func (o *LogSearchEstimatedUsageDefinition) SetEstimatedUsageDetails(v Estimated
 }
 
 func (o LogSearchEstimatedUsageDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.RunByReceiptTime != nil {
-		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
-	}
-	if o.QueryParameters != nil {
-		toSerialize["queryParameters"] = o.QueryParameters
-	}
-	if o.ParsingMode != nil {
-		toSerialize["parsingMode"] = o.ParsingMode
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
-	}
-	if true {
-		toSerialize["estimatedUsageDetails"] = o.EstimatedUsageDetails
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchEstimatedUsageDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.RunByReceiptTime) {
+		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
+	}
+	if !IsNil(o.QueryParameters) {
+		toSerialize["queryParameters"] = o.QueryParameters
+	}
+	if !IsNil(o.ParsingMode) {
+		toSerialize["parsingMode"] = o.ParsingMode
+	}
+	toSerialize["timezone"] = o.Timezone
+	toSerialize["estimatedUsageDetails"] = o.EstimatedUsageDetails
+	return toSerialize, nil
 }
 
 type NullableLogSearchEstimatedUsageDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetadataVariableSourceDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetadataVariableSourceDefinition{}
 
 // MetadataVariableSourceDefinition struct for MetadataVariableSourceDefinition
 type MetadataVariableSourceDefinition struct {
@@ -92,22 +95,26 @@ func (o *MetadataVariableSourceDefinition) SetKey(v string) {
 }
 
 func (o MetadataVariableSourceDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MetadataVariableSourceDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedVariableSourceDefinition, errVariableSourceDefinition := json.Marshal(o.VariableSourceDefinition)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
 	errVariableSourceDefinition = json.Unmarshal([]byte(serializedVariableSourceDefinition), &toSerialize)
 	if errVariableSourceDefinition != nil {
-		return []byte{}, errVariableSourceDefinition
+		return map[string]interface{}{}, errVariableSourceDefinition
 	}
-	if true {
-		toSerialize["filter"] = o.Filter
-	}
-	if true {
-		toSerialize["key"] = o.Key
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["filter"] = o.Filter
+	toSerialize["key"] = o.Key
+	return toSerialize, nil
 }
 
 type NullableMetadataVariableSourceDefinition struct {

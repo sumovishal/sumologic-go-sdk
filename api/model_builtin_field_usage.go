@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BuiltinFieldUsage type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BuiltinFieldUsage{}
 
 // BuiltinFieldUsage struct for BuiltinFieldUsage
 type BuiltinFieldUsage struct {
@@ -151,7 +154,7 @@ func (o *BuiltinFieldUsage) SetState(v string) {
 
 // GetFieldExtractionRules returns the FieldExtractionRules field value if set, zero value otherwise.
 func (o *BuiltinFieldUsage) GetFieldExtractionRules() []string {
-	if o == nil || o.FieldExtractionRules == nil {
+	if o == nil || IsNil(o.FieldExtractionRules) {
 		var ret []string
 		return ret
 	}
@@ -161,7 +164,7 @@ func (o *BuiltinFieldUsage) GetFieldExtractionRules() []string {
 // GetFieldExtractionRulesOk returns a tuple with the FieldExtractionRules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *BuiltinFieldUsage) GetFieldExtractionRulesOk() ([]string, bool) {
-	if o == nil || o.FieldExtractionRules == nil {
+	if o == nil || IsNil(o.FieldExtractionRules) {
 		return nil, false
 	}
 	return o.FieldExtractionRules, true
@@ -169,7 +172,7 @@ func (o *BuiltinFieldUsage) GetFieldExtractionRulesOk() ([]string, bool) {
 
 // HasFieldExtractionRules returns a boolean if a field has been set.
 func (o *BuiltinFieldUsage) HasFieldExtractionRules() bool {
-	if o != nil && o.FieldExtractionRules != nil {
+	if o != nil && !IsNil(o.FieldExtractionRules) {
 		return true
 	}
 
@@ -183,7 +186,7 @@ func (o *BuiltinFieldUsage) SetFieldExtractionRules(v []string) {
 
 // GetRoles returns the Roles field value if set, zero value otherwise.
 func (o *BuiltinFieldUsage) GetRoles() []string {
-	if o == nil || o.Roles == nil {
+	if o == nil || IsNil(o.Roles) {
 		var ret []string
 		return ret
 	}
@@ -193,7 +196,7 @@ func (o *BuiltinFieldUsage) GetRoles() []string {
 // GetRolesOk returns a tuple with the Roles field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *BuiltinFieldUsage) GetRolesOk() ([]string, bool) {
-	if o == nil || o.Roles == nil {
+	if o == nil || IsNil(o.Roles) {
 		return nil, false
 	}
 	return o.Roles, true
@@ -201,7 +204,7 @@ func (o *BuiltinFieldUsage) GetRolesOk() ([]string, bool) {
 
 // HasRoles returns a boolean if a field has been set.
 func (o *BuiltinFieldUsage) HasRoles() bool {
-	if o != nil && o.Roles != nil {
+	if o != nil && !IsNil(o.Roles) {
 		return true
 	}
 
@@ -215,7 +218,7 @@ func (o *BuiltinFieldUsage) SetRoles(v []string) {
 
 // GetPartitions returns the Partitions field value if set, zero value otherwise.
 func (o *BuiltinFieldUsage) GetPartitions() []string {
-	if o == nil || o.Partitions == nil {
+	if o == nil || IsNil(o.Partitions) {
 		var ret []string
 		return ret
 	}
@@ -225,7 +228,7 @@ func (o *BuiltinFieldUsage) GetPartitions() []string {
 // GetPartitionsOk returns a tuple with the Partitions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *BuiltinFieldUsage) GetPartitionsOk() ([]string, bool) {
-	if o == nil || o.Partitions == nil {
+	if o == nil || IsNil(o.Partitions) {
 		return nil, false
 	}
 	return o.Partitions, true
@@ -233,7 +236,7 @@ func (o *BuiltinFieldUsage) GetPartitionsOk() ([]string, bool) {
 
 // HasPartitions returns a boolean if a field has been set.
 func (o *BuiltinFieldUsage) HasPartitions() bool {
-	if o != nil && o.Partitions != nil {
+	if o != nil && !IsNil(o.Partitions) {
 		return true
 	}
 
@@ -246,29 +249,29 @@ func (o *BuiltinFieldUsage) SetPartitions(v []string) {
 }
 
 func (o BuiltinFieldUsage) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["fieldId"] = o.FieldId
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["state"] = o.State
-	}
-	if o.FieldExtractionRules != nil {
-		toSerialize["fieldExtractionRules"] = o.FieldExtractionRules
-	}
-	if o.Roles != nil {
-		toSerialize["roles"] = o.Roles
-	}
-	if o.Partitions != nil {
-		toSerialize["partitions"] = o.Partitions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BuiltinFieldUsage) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["fieldId"] = o.FieldId
+	toSerialize["dataType"] = o.DataType
+	toSerialize["state"] = o.State
+	if !IsNil(o.FieldExtractionRules) {
+		toSerialize["fieldExtractionRules"] = o.FieldExtractionRules
+	}
+	if !IsNil(o.Roles) {
+		toSerialize["roles"] = o.Roles
+	}
+	if !IsNil(o.Partitions) {
+		toSerialize["partitions"] = o.Partitions
+	}
+	return toSerialize, nil
 }
 
 type NullableBuiltinFieldUsage struct {

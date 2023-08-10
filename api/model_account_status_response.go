@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AccountStatusResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccountStatusResponse{}
 
 // AccountStatusResponse Information about the account's plan and payment.
 type AccountStatusResponse struct {
@@ -28,6 +31,8 @@ type AccountStatusResponse struct {
 	ApplicationUse string `json:"applicationUse"`
 	// If the account is activated or not
 	AccountActivated *bool `json:"accountActivated,omitempty"`
+	// Total amount of credits assigned to the account
+	TotalCredits *int32 `json:"totalCredits,omitempty"`
 }
 
 // NewAccountStatusResponse instantiates a new AccountStatusResponse object
@@ -125,7 +130,7 @@ func (o *AccountStatusResponse) SetPlanType(v string) {
 
 // GetPlanExpirationDays returns the PlanExpirationDays field value if set, zero value otherwise.
 func (o *AccountStatusResponse) GetPlanExpirationDays() int32 {
-	if o == nil || o.PlanExpirationDays == nil {
+	if o == nil || IsNil(o.PlanExpirationDays) {
 		var ret int32
 		return ret
 	}
@@ -135,7 +140,7 @@ func (o *AccountStatusResponse) GetPlanExpirationDays() int32 {
 // GetPlanExpirationDaysOk returns a tuple with the PlanExpirationDays field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccountStatusResponse) GetPlanExpirationDaysOk() (*int32, bool) {
-	if o == nil || o.PlanExpirationDays == nil {
+	if o == nil || IsNil(o.PlanExpirationDays) {
 		return nil, false
 	}
 	return o.PlanExpirationDays, true
@@ -143,7 +148,7 @@ func (o *AccountStatusResponse) GetPlanExpirationDaysOk() (*int32, bool) {
 
 // HasPlanExpirationDays returns a boolean if a field has been set.
 func (o *AccountStatusResponse) HasPlanExpirationDays() bool {
-	if o != nil && o.PlanExpirationDays != nil {
+	if o != nil && !IsNil(o.PlanExpirationDays) {
 		return true
 	}
 
@@ -181,7 +186,7 @@ func (o *AccountStatusResponse) SetApplicationUse(v string) {
 
 // GetAccountActivated returns the AccountActivated field value if set, zero value otherwise.
 func (o *AccountStatusResponse) GetAccountActivated() bool {
-	if o == nil || o.AccountActivated == nil {
+	if o == nil || IsNil(o.AccountActivated) {
 		var ret bool
 		return ret
 	}
@@ -191,7 +196,7 @@ func (o *AccountStatusResponse) GetAccountActivated() bool {
 // GetAccountActivatedOk returns a tuple with the AccountActivated field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccountStatusResponse) GetAccountActivatedOk() (*bool, bool) {
-	if o == nil || o.AccountActivated == nil {
+	if o == nil || IsNil(o.AccountActivated) {
 		return nil, false
 	}
 	return o.AccountActivated, true
@@ -199,7 +204,7 @@ func (o *AccountStatusResponse) GetAccountActivatedOk() (*bool, bool) {
 
 // HasAccountActivated returns a boolean if a field has been set.
 func (o *AccountStatusResponse) HasAccountActivated() bool {
-	if o != nil && o.AccountActivated != nil {
+	if o != nil && !IsNil(o.AccountActivated) {
 		return true
 	}
 
@@ -211,27 +216,62 @@ func (o *AccountStatusResponse) SetAccountActivated(v bool) {
 	o.AccountActivated = &v
 }
 
+// GetTotalCredits returns the TotalCredits field value if set, zero value otherwise.
+func (o *AccountStatusResponse) GetTotalCredits() int32 {
+	if o == nil || IsNil(o.TotalCredits) {
+		var ret int32
+		return ret
+	}
+	return *o.TotalCredits
+}
+
+// GetTotalCreditsOk returns a tuple with the TotalCredits field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountStatusResponse) GetTotalCreditsOk() (*int32, bool) {
+	if o == nil || IsNil(o.TotalCredits) {
+		return nil, false
+	}
+	return o.TotalCredits, true
+}
+
+// HasTotalCredits returns a boolean if a field has been set.
+func (o *AccountStatusResponse) HasTotalCredits() bool {
+	if o != nil && !IsNil(o.TotalCredits) {
+		return true
+	}
+
+	return false
+}
+
+// SetTotalCredits gets a reference to the given int32 and assigns it to the TotalCredits field.
+func (o *AccountStatusResponse) SetTotalCredits(v int32) {
+	o.TotalCredits = &v
+}
+
 func (o AccountStatusResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["pricingModel"] = o.PricingModel
-	}
-	if true {
-		toSerialize["canUpdatePlan"] = o.CanUpdatePlan
-	}
-	if true {
-		toSerialize["planType"] = o.PlanType
-	}
-	if o.PlanExpirationDays != nil {
-		toSerialize["planExpirationDays"] = o.PlanExpirationDays
-	}
-	if true {
-		toSerialize["applicationUse"] = o.ApplicationUse
-	}
-	if o.AccountActivated != nil {
-		toSerialize["accountActivated"] = o.AccountActivated
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccountStatusResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["pricingModel"] = o.PricingModel
+	toSerialize["canUpdatePlan"] = o.CanUpdatePlan
+	toSerialize["planType"] = o.PlanType
+	if !IsNil(o.PlanExpirationDays) {
+		toSerialize["planExpirationDays"] = o.PlanExpirationDays
+	}
+	toSerialize["applicationUse"] = o.ApplicationUse
+	if !IsNil(o.AccountActivated) {
+		toSerialize["accountActivated"] = o.AccountActivated
+	}
+	if !IsNil(o.TotalCredits) {
+		toSerialize["totalCredits"] = o.TotalCredits
+	}
+	return toSerialize, nil
 }
 
 type NullableAccountStatusResponse struct {

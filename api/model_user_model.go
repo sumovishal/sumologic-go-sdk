@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the UserModel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UserModel{}
 
 // UserModel struct for UserModel
 type UserModel struct {
@@ -289,7 +292,7 @@ func (o *UserModel) SetId(v string) {
 
 // GetIsActive returns the IsActive field value if set, zero value otherwise.
 func (o *UserModel) GetIsActive() bool {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		var ret bool
 		return ret
 	}
@@ -299,7 +302,7 @@ func (o *UserModel) GetIsActive() bool {
 // GetIsActiveOk returns a tuple with the IsActive field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UserModel) GetIsActiveOk() (*bool, bool) {
-	if o == nil || o.IsActive == nil {
+	if o == nil || IsNil(o.IsActive) {
 		return nil, false
 	}
 	return o.IsActive, true
@@ -307,7 +310,7 @@ func (o *UserModel) GetIsActiveOk() (*bool, bool) {
 
 // HasIsActive returns a boolean if a field has been set.
 func (o *UserModel) HasIsActive() bool {
-	if o != nil && o.IsActive != nil {
+	if o != nil && !IsNil(o.IsActive) {
 		return true
 	}
 
@@ -321,7 +324,7 @@ func (o *UserModel) SetIsActive(v bool) {
 
 // GetIsLocked returns the IsLocked field value if set, zero value otherwise.
 func (o *UserModel) GetIsLocked() bool {
-	if o == nil || o.IsLocked == nil {
+	if o == nil || IsNil(o.IsLocked) {
 		var ret bool
 		return ret
 	}
@@ -331,7 +334,7 @@ func (o *UserModel) GetIsLocked() bool {
 // GetIsLockedOk returns a tuple with the IsLocked field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UserModel) GetIsLockedOk() (*bool, bool) {
-	if o == nil || o.IsLocked == nil {
+	if o == nil || IsNil(o.IsLocked) {
 		return nil, false
 	}
 	return o.IsLocked, true
@@ -339,7 +342,7 @@ func (o *UserModel) GetIsLockedOk() (*bool, bool) {
 
 // HasIsLocked returns a boolean if a field has been set.
 func (o *UserModel) HasIsLocked() bool {
-	if o != nil && o.IsLocked != nil {
+	if o != nil && !IsNil(o.IsLocked) {
 		return true
 	}
 
@@ -353,7 +356,7 @@ func (o *UserModel) SetIsLocked(v bool) {
 
 // GetIsMfaEnabled returns the IsMfaEnabled field value if set, zero value otherwise.
 func (o *UserModel) GetIsMfaEnabled() bool {
-	if o == nil || o.IsMfaEnabled == nil {
+	if o == nil || IsNil(o.IsMfaEnabled) {
 		var ret bool
 		return ret
 	}
@@ -363,7 +366,7 @@ func (o *UserModel) GetIsMfaEnabled() bool {
 // GetIsMfaEnabledOk returns a tuple with the IsMfaEnabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UserModel) GetIsMfaEnabledOk() (*bool, bool) {
-	if o == nil || o.IsMfaEnabled == nil {
+	if o == nil || IsNil(o.IsMfaEnabled) {
 		return nil, false
 	}
 	return o.IsMfaEnabled, true
@@ -371,7 +374,7 @@ func (o *UserModel) GetIsMfaEnabledOk() (*bool, bool) {
 
 // HasIsMfaEnabled returns a boolean if a field has been set.
 func (o *UserModel) HasIsMfaEnabled() bool {
-	if o != nil && o.IsMfaEnabled != nil {
+	if o != nil && !IsNil(o.IsMfaEnabled) {
 		return true
 	}
 
@@ -385,7 +388,7 @@ func (o *UserModel) SetIsMfaEnabled(v bool) {
 
 // GetLastLoginTimestamp returns the LastLoginTimestamp field value if set, zero value otherwise.
 func (o *UserModel) GetLastLoginTimestamp() time.Time {
-	if o == nil || o.LastLoginTimestamp == nil {
+	if o == nil || IsNil(o.LastLoginTimestamp) {
 		var ret time.Time
 		return ret
 	}
@@ -395,7 +398,7 @@ func (o *UserModel) GetLastLoginTimestamp() time.Time {
 // GetLastLoginTimestampOk returns a tuple with the LastLoginTimestamp field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UserModel) GetLastLoginTimestampOk() (*time.Time, bool) {
-	if o == nil || o.LastLoginTimestamp == nil {
+	if o == nil || IsNil(o.LastLoginTimestamp) {
 		return nil, false
 	}
 	return o.LastLoginTimestamp, true
@@ -403,7 +406,7 @@ func (o *UserModel) GetLastLoginTimestampOk() (*time.Time, bool) {
 
 // HasLastLoginTimestamp returns a boolean if a field has been set.
 func (o *UserModel) HasLastLoginTimestamp() bool {
-	if o != nil && o.LastLoginTimestamp != nil {
+	if o != nil && !IsNil(o.LastLoginTimestamp) {
 		return true
 	}
 
@@ -416,47 +419,37 @@ func (o *UserModel) SetLastLoginTimestamp(v time.Time) {
 }
 
 func (o UserModel) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["firstName"] = o.FirstName
-	}
-	if true {
-		toSerialize["lastName"] = o.LastName
-	}
-	if true {
-		toSerialize["email"] = o.Email
-	}
-	if true {
-		toSerialize["roleIds"] = o.RoleIds
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.IsActive != nil {
-		toSerialize["isActive"] = o.IsActive
-	}
-	if o.IsLocked != nil {
-		toSerialize["isLocked"] = o.IsLocked
-	}
-	if o.IsMfaEnabled != nil {
-		toSerialize["isMfaEnabled"] = o.IsMfaEnabled
-	}
-	if o.LastLoginTimestamp != nil {
-		toSerialize["lastLoginTimestamp"] = o.LastLoginTimestamp
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UserModel) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["firstName"] = o.FirstName
+	toSerialize["lastName"] = o.LastName
+	toSerialize["email"] = o.Email
+	toSerialize["roleIds"] = o.RoleIds
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	if !IsNil(o.IsActive) {
+		toSerialize["isActive"] = o.IsActive
+	}
+	if !IsNil(o.IsLocked) {
+		toSerialize["isLocked"] = o.IsLocked
+	}
+	if !IsNil(o.IsMfaEnabled) {
+		toSerialize["isMfaEnabled"] = o.IsMfaEnabled
+	}
+	if !IsNil(o.LastLoginTimestamp) {
+		toSerialize["lastLoginTimestamp"] = o.LastLoginTimestamp
+	}
+	return toSerialize, nil
 }
 
 type NullableUserModel struct {

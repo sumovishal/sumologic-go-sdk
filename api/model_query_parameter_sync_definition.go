@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the QueryParameterSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &QueryParameterSyncDefinition{}
 
 // QueryParameterSyncDefinition struct for QueryParameterSyncDefinition
 type QueryParameterSyncDefinition struct {
@@ -197,26 +200,22 @@ func (o *QueryParameterSyncDefinition) SetAutoComplete(v ParameterAutoCompleteSy
 }
 
 func (o QueryParameterSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if true {
-		toSerialize["autoComplete"] = o.AutoComplete
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o QueryParameterSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["label"] = o.Label
+	toSerialize["description"] = o.Description
+	toSerialize["dataType"] = o.DataType
+	toSerialize["value"] = o.Value
+	toSerialize["autoComplete"] = o.AutoComplete
+	return toSerialize, nil
 }
 
 type NullableQueryParameterSyncDefinition struct {

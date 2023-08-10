@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,8 +14,11 @@ import (
 	"encoding/json"
 )
 
-// WindowBasedSliAllOf struct for WindowBasedSliAllOf
-type WindowBasedSliAllOf struct {
+// checks if the WindowAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &WindowAllOf{}
+
+// WindowAllOf struct for WindowAllOf
+type WindowAllOf struct {
 	// Threshold for classifying window as successful or unsuccessful.
 	Threshold float32 `json:"threshold"`
 	// Comparison function with window threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
@@ -26,28 +29,28 @@ type WindowBasedSliAllOf struct {
 	Size string `json:"size"`
 }
 
-// NewWindowBasedSliAllOf instantiates a new WindowBasedSliAllOf object
+// NewWindowAllOf instantiates a new WindowAllOf object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewWindowBasedSliAllOf(threshold float32, op string, size string) *WindowBasedSliAllOf {
-	this := WindowBasedSliAllOf{}
+func NewWindowAllOf(threshold float32, op string, size string) *WindowAllOf {
+	this := WindowAllOf{}
 	this.Threshold = threshold
 	this.Op = op
 	this.Size = size
 	return &this
 }
 
-// NewWindowBasedSliAllOfWithDefaults instantiates a new WindowBasedSliAllOf object
+// NewWindowAllOfWithDefaults instantiates a new WindowAllOf object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewWindowBasedSliAllOfWithDefaults() *WindowBasedSliAllOf {
-	this := WindowBasedSliAllOf{}
+func NewWindowAllOfWithDefaults() *WindowAllOf {
+	this := WindowAllOf{}
 	return &this
 }
 
 // GetThreshold returns the Threshold field value
-func (o *WindowBasedSliAllOf) GetThreshold() float32 {
+func (o *WindowAllOf) GetThreshold() float32 {
 	if o == nil {
 		var ret float32
 		return ret
@@ -58,7 +61,7 @@ func (o *WindowBasedSliAllOf) GetThreshold() float32 {
 
 // GetThresholdOk returns a tuple with the Threshold field value
 // and a boolean to check if the value has been set.
-func (o *WindowBasedSliAllOf) GetThresholdOk() (*float32, bool) {
+func (o *WindowAllOf) GetThresholdOk() (*float32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -66,12 +69,12 @@ func (o *WindowBasedSliAllOf) GetThresholdOk() (*float32, bool) {
 }
 
 // SetThreshold sets field value
-func (o *WindowBasedSliAllOf) SetThreshold(v float32) {
+func (o *WindowAllOf) SetThreshold(v float32) {
 	o.Threshold = v
 }
 
 // GetOp returns the Op field value
-func (o *WindowBasedSliAllOf) GetOp() string {
+func (o *WindowAllOf) GetOp() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -82,7 +85,7 @@ func (o *WindowBasedSliAllOf) GetOp() string {
 
 // GetOpOk returns a tuple with the Op field value
 // and a boolean to check if the value has been set.
-func (o *WindowBasedSliAllOf) GetOpOk() (*string, bool) {
+func (o *WindowAllOf) GetOpOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -90,13 +93,13 @@ func (o *WindowBasedSliAllOf) GetOpOk() (*string, bool) {
 }
 
 // SetOp sets field value
-func (o *WindowBasedSliAllOf) SetOp(v string) {
+func (o *WindowAllOf) SetOp(v string) {
 	o.Op = v
 }
 
 // GetAggregation returns the Aggregation field value if set, zero value otherwise.
-func (o *WindowBasedSliAllOf) GetAggregation() string {
-	if o == nil || o.Aggregation == nil {
+func (o *WindowAllOf) GetAggregation() string {
+	if o == nil || IsNil(o.Aggregation) {
 		var ret string
 		return ret
 	}
@@ -105,16 +108,16 @@ func (o *WindowBasedSliAllOf) GetAggregation() string {
 
 // GetAggregationOk returns a tuple with the Aggregation field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *WindowBasedSliAllOf) GetAggregationOk() (*string, bool) {
-	if o == nil || o.Aggregation == nil {
+func (o *WindowAllOf) GetAggregationOk() (*string, bool) {
+	if o == nil || IsNil(o.Aggregation) {
 		return nil, false
 	}
 	return o.Aggregation, true
 }
 
 // HasAggregation returns a boolean if a field has been set.
-func (o *WindowBasedSliAllOf) HasAggregation() bool {
-	if o != nil && o.Aggregation != nil {
+func (o *WindowAllOf) HasAggregation() bool {
+	if o != nil && !IsNil(o.Aggregation) {
 		return true
 	}
 
@@ -122,12 +125,12 @@ func (o *WindowBasedSliAllOf) HasAggregation() bool {
 }
 
 // SetAggregation gets a reference to the given string and assigns it to the Aggregation field.
-func (o *WindowBasedSliAllOf) SetAggregation(v string) {
+func (o *WindowAllOf) SetAggregation(v string) {
 	o.Aggregation = &v
 }
 
 // GetSize returns the Size field value
-func (o *WindowBasedSliAllOf) GetSize() string {
+func (o *WindowAllOf) GetSize() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -138,7 +141,7 @@ func (o *WindowBasedSliAllOf) GetSize() string {
 
 // GetSizeOk returns a tuple with the Size field value
 // and a boolean to check if the value has been set.
-func (o *WindowBasedSliAllOf) GetSizeOk() (*string, bool) {
+func (o *WindowAllOf) GetSizeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -146,59 +149,61 @@ func (o *WindowBasedSliAllOf) GetSizeOk() (*string, bool) {
 }
 
 // SetSize sets field value
-func (o *WindowBasedSliAllOf) SetSize(v string) {
+func (o *WindowAllOf) SetSize(v string) {
 	o.Size = v
 }
 
-func (o WindowBasedSliAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if true {
-		toSerialize["op"] = o.Op
-	}
-	if o.Aggregation != nil {
-		toSerialize["aggregation"] = o.Aggregation
-	}
-	if true {
-		toSerialize["size"] = o.Size
+func (o WindowAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableWindowBasedSliAllOf struct {
-	value *WindowBasedSliAllOf
+func (o WindowAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["threshold"] = o.Threshold
+	toSerialize["op"] = o.Op
+	if !IsNil(o.Aggregation) {
+		toSerialize["aggregation"] = o.Aggregation
+	}
+	toSerialize["size"] = o.Size
+	return toSerialize, nil
+}
+
+type NullableWindowAllOf struct {
+	value *WindowAllOf
 	isSet bool
 }
 
-func (v NullableWindowBasedSliAllOf) Get() *WindowBasedSliAllOf {
+func (v NullableWindowAllOf) Get() *WindowAllOf {
 	return v.value
 }
 
-func (v *NullableWindowBasedSliAllOf) Set(val *WindowBasedSliAllOf) {
+func (v *NullableWindowAllOf) Set(val *WindowAllOf) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableWindowBasedSliAllOf) IsSet() bool {
+func (v NullableWindowAllOf) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableWindowBasedSliAllOf) Unset() {
+func (v *NullableWindowAllOf) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableWindowBasedSliAllOf(val *WindowBasedSliAllOf) *NullableWindowBasedSliAllOf {
-	return &NullableWindowBasedSliAllOf{value: val, isSet: true}
+func NewNullableWindowAllOf(val *WindowAllOf) *NullableWindowAllOf {
+	return &NullableWindowAllOf{value: val, isSet: true}
 }
 
-func (v NullableWindowBasedSliAllOf) MarshalJSON() ([]byte, error) {
+func (v NullableWindowAllOf) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableWindowBasedSliAllOf) UnmarshalJSON(src []byte) error {
+func (v *NullableWindowAllOf) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

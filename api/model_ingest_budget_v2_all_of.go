@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the IngestBudgetV2AllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudgetV2AllOf{}
 
 // IngestBudgetV2AllOf struct for IngestBudgetV2AllOf
 type IngestBudgetV2AllOf struct {
@@ -83,7 +86,7 @@ func (o *IngestBudgetV2AllOf) SetId(v string) {
 
 // GetUsageBytes returns the UsageBytes field value if set, zero value otherwise.
 func (o *IngestBudgetV2AllOf) GetUsageBytes() int64 {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		var ret int64
 		return ret
 	}
@@ -93,7 +96,7 @@ func (o *IngestBudgetV2AllOf) GetUsageBytes() int64 {
 // GetUsageBytesOk returns a tuple with the UsageBytes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2AllOf) GetUsageBytesOk() (*int64, bool) {
-	if o == nil || o.UsageBytes == nil {
+	if o == nil || IsNil(o.UsageBytes) {
 		return nil, false
 	}
 	return o.UsageBytes, true
@@ -101,7 +104,7 @@ func (o *IngestBudgetV2AllOf) GetUsageBytesOk() (*int64, bool) {
 
 // HasUsageBytes returns a boolean if a field has been set.
 func (o *IngestBudgetV2AllOf) HasUsageBytes() bool {
-	if o != nil && o.UsageBytes != nil {
+	if o != nil && !IsNil(o.UsageBytes) {
 		return true
 	}
 
@@ -115,7 +118,7 @@ func (o *IngestBudgetV2AllOf) SetUsageBytes(v int64) {
 
 // GetUsageStatus returns the UsageStatus field value if set, zero value otherwise.
 func (o *IngestBudgetV2AllOf) GetUsageStatus() string {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		var ret string
 		return ret
 	}
@@ -125,7 +128,7 @@ func (o *IngestBudgetV2AllOf) GetUsageStatus() string {
 // GetUsageStatusOk returns a tuple with the UsageStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2AllOf) GetUsageStatusOk() (*string, bool) {
-	if o == nil || o.UsageStatus == nil {
+	if o == nil || IsNil(o.UsageStatus) {
 		return nil, false
 	}
 	return o.UsageStatus, true
@@ -133,7 +136,7 @@ func (o *IngestBudgetV2AllOf) GetUsageStatusOk() (*string, bool) {
 
 // HasUsageStatus returns a boolean if a field has been set.
 func (o *IngestBudgetV2AllOf) HasUsageStatus() bool {
-	if o != nil && o.UsageStatus != nil {
+	if o != nil && !IsNil(o.UsageStatus) {
 		return true
 	}
 
@@ -243,7 +246,7 @@ func (o *IngestBudgetV2AllOf) SetModifiedBy(v string) {
 
 // GetBudgetVersion returns the BudgetVersion field value if set, zero value otherwise.
 func (o *IngestBudgetV2AllOf) GetBudgetVersion() int32 {
-	if o == nil || o.BudgetVersion == nil {
+	if o == nil || IsNil(o.BudgetVersion) {
 		var ret int32
 		return ret
 	}
@@ -253,7 +256,7 @@ func (o *IngestBudgetV2AllOf) GetBudgetVersion() int32 {
 // GetBudgetVersionOk returns a tuple with the BudgetVersion field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetV2AllOf) GetBudgetVersionOk() (*int32, bool) {
-	if o == nil || o.BudgetVersion == nil {
+	if o == nil || IsNil(o.BudgetVersion) {
 		return nil, false
 	}
 	return o.BudgetVersion, true
@@ -261,7 +264,7 @@ func (o *IngestBudgetV2AllOf) GetBudgetVersionOk() (*int32, bool) {
 
 // HasBudgetVersion returns a boolean if a field has been set.
 func (o *IngestBudgetV2AllOf) HasBudgetVersion() bool {
-	if o != nil && o.BudgetVersion != nil {
+	if o != nil && !IsNil(o.BudgetVersion) {
 		return true
 	}
 
@@ -274,32 +277,30 @@ func (o *IngestBudgetV2AllOf) SetBudgetVersion(v int32) {
 }
 
 func (o IngestBudgetV2AllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.UsageBytes != nil {
-		toSerialize["usageBytes"] = o.UsageBytes
-	}
-	if o.UsageStatus != nil {
-		toSerialize["usageStatus"] = o.UsageStatus
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if o.BudgetVersion != nil {
-		toSerialize["budgetVersion"] = o.BudgetVersion
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudgetV2AllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.UsageBytes) {
+		toSerialize["usageBytes"] = o.UsageBytes
+	}
+	if !IsNil(o.UsageStatus) {
+		toSerialize["usageStatus"] = o.UsageStatus
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	if !IsNil(o.BudgetVersion) {
+		toSerialize["budgetVersion"] = o.BudgetVersion
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudgetV2AllOf struct {

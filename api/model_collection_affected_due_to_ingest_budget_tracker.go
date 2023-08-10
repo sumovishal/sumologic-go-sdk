@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionAffectedDueToIngestBudgetTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionAffectedDueToIngestBudgetTracker{}
 
 // CollectionAffectedDueToIngestBudgetTracker struct for CollectionAffectedDueToIngestBudgetTracker
 type CollectionAffectedDueToIngestBudgetTracker struct {
@@ -45,7 +48,7 @@ func NewCollectionAffectedDueToIngestBudgetTrackerWithDefaults() *CollectionAffe
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CollectionAffectedDueToIngestBudgetTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionAffectedDueToIngestBudgetTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -63,7 +66,7 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) GetEventTypeOk() (*string, 
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CollectionAffectedDueToIngestBudgetTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) SetEventType(v string) {
 
 // GetAssociatedBudgetNames returns the AssociatedBudgetNames field value if set, zero value otherwise.
 func (o *CollectionAffectedDueToIngestBudgetTracker) GetAssociatedBudgetNames() string {
-	if o == nil || o.AssociatedBudgetNames == nil {
+	if o == nil || IsNil(o.AssociatedBudgetNames) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) GetAssociatedBudgetNames() 
 // GetAssociatedBudgetNamesOk returns a tuple with the AssociatedBudgetNames field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionAffectedDueToIngestBudgetTracker) GetAssociatedBudgetNamesOk() (*string, bool) {
-	if o == nil || o.AssociatedBudgetNames == nil {
+	if o == nil || IsNil(o.AssociatedBudgetNames) {
 		return nil, false
 	}
 	return o.AssociatedBudgetNames, true
@@ -95,7 +98,7 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) GetAssociatedBudgetNamesOk(
 
 // HasAssociatedBudgetNames returns a boolean if a field has been set.
 func (o *CollectionAffectedDueToIngestBudgetTracker) HasAssociatedBudgetNames() bool {
-	if o != nil && o.AssociatedBudgetNames != nil {
+	if o != nil && !IsNil(o.AssociatedBudgetNames) {
 		return true
 	}
 
@@ -108,22 +111,30 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) SetAssociatedBudgetNames(v 
 }
 
 func (o CollectionAffectedDueToIngestBudgetTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CollectionAffectedDueToIngestBudgetTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.AssociatedBudgetNames != nil {
+	if !IsNil(o.AssociatedBudgetNames) {
 		toSerialize["associatedBudgetNames"] = o.AssociatedBudgetNames
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCollectionAffectedDueToIngestBudgetTracker struct {

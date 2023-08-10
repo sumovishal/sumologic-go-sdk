@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LabelValueLookupAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LabelValueLookupAutoCompleteSyncDefinition{}
 
 // LabelValueLookupAutoCompleteSyncDefinition struct for LabelValueLookupAutoCompleteSyncDefinition
 type LabelValueLookupAutoCompleteSyncDefinition struct {
@@ -146,28 +149,28 @@ func (o *LabelValueLookupAutoCompleteSyncDefinition) SetLookupValueColumn(v stri
 }
 
 func (o LabelValueLookupAutoCompleteSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o LabelValueLookupAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedLogSearchParameterAutoCompleteSyncDefinition, errLogSearchParameterAutoCompleteSyncDefinition := json.Marshal(o.LogSearchParameterAutoCompleteSyncDefinition)
 	if errLogSearchParameterAutoCompleteSyncDefinition != nil {
-		return []byte{}, errLogSearchParameterAutoCompleteSyncDefinition
+		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
 	errLogSearchParameterAutoCompleteSyncDefinition = json.Unmarshal([]byte(serializedLogSearchParameterAutoCompleteSyncDefinition), &toSerialize)
 	if errLogSearchParameterAutoCompleteSyncDefinition != nil {
-		return []byte{}, errLogSearchParameterAutoCompleteSyncDefinition
+		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
-	if true {
-		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
-	}
-	if true {
-		toSerialize["lookupFileName"] = o.LookupFileName
-	}
-	if true {
-		toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
-	}
-	if true {
-		toSerialize["lookupValueColumn"] = o.LookupValueColumn
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	toSerialize["lookupFileName"] = o.LookupFileName
+	toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
+	toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	return toSerialize, nil
 }
 
 type NullableLabelValueLookupAutoCompleteSyncDefinition struct {

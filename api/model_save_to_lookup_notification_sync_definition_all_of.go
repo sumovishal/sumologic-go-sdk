@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SaveToLookupNotificationSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SaveToLookupNotificationSyncDefinitionAllOf{}
 
 // SaveToLookupNotificationSyncDefinitionAllOf struct for SaveToLookupNotificationSyncDefinitionAllOf
 type SaveToLookupNotificationSyncDefinitionAllOf struct {
@@ -90,14 +93,18 @@ func (o *SaveToLookupNotificationSyncDefinitionAllOf) SetIsLookupMergeOperation(
 }
 
 func (o SaveToLookupNotificationSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["lookupFilePath"] = o.LookupFilePath
-	}
-	if true {
-		toSerialize["isLookupMergeOperation"] = o.IsLookupMergeOperation
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SaveToLookupNotificationSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["lookupFilePath"] = o.LookupFilePath
+	toSerialize["isLookupMergeOperation"] = o.IsLookupMergeOperation
+	return toSerialize, nil
 }
 
 type NullableSaveToLookupNotificationSyncDefinitionAllOf struct {

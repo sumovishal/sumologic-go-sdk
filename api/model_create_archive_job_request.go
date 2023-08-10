@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the CreateArchiveJobRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateArchiveJobRequest{}
 
 // CreateArchiveJobRequest struct for CreateArchiveJobRequest
 type CreateArchiveJobRequest struct {
@@ -118,17 +121,19 @@ func (o *CreateArchiveJobRequest) SetEndTime(v time.Time) {
 }
 
 func (o CreateArchiveJobRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreateArchiveJobRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	return toSerialize, nil
 }
 
 type NullableCreateArchiveJobRequest struct {

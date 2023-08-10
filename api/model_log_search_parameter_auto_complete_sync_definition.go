@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogSearchParameterAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchParameterAutoCompleteSyncDefinition{}
 
 // LogSearchParameterAutoCompleteSyncDefinition struct for LogSearchParameterAutoCompleteSyncDefinition
 type LogSearchParameterAutoCompleteSyncDefinition struct {
@@ -63,11 +66,17 @@ func (o *LogSearchParameterAutoCompleteSyncDefinition) SetAutoCompleteType(v str
 }
 
 func (o LogSearchParameterAutoCompleteSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["autoCompleteType"] = o.AutoCompleteType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchParameterAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["autoCompleteType"] = o.AutoCompleteType
+	return toSerialize, nil
 }
 
 type NullableLogSearchParameterAutoCompleteSyncDefinition struct {

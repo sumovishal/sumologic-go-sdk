@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Variable type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Variable{}
 
 // Variable struct for Variable
 type Variable struct {
@@ -31,7 +34,7 @@ type Variable struct {
 	IncludeAllOption *bool `json:"includeAllOption,omitempty"`
 	// Hide the variable in the dashboard UI.
 	HideFromUI *bool `json:"hideFromUI,omitempty"`
-	// The type of value of the variable. Allowed values are `String` and Any`. `String` considers as a single phrase and will wrap in double-quotes, `Any` is all characters.
+	// The type of value of the variable. Allowed values are `String`, Any` and `Numeric`. - `String` considers as a single phrase and will wrap in double-quotes. - `Any` is all characters. - `Numeric` consists of a numeric value for variables, it will be displayed differently in the UI. - `Integer` is a variable with an `Int` value. - `Long` is a variable with a `Long` value. - `Double` is a variable with a `Double` value. - `Boolean` is a variable with a `Boolean` value. 
 	ValueType *string `json:"valueType,omitempty"`
 }
 
@@ -72,7 +75,7 @@ func NewVariableWithDefaults() *Variable {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *Variable) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *Variable) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -90,7 +93,7 @@ func (o *Variable) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *Variable) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -128,7 +131,7 @@ func (o *Variable) SetName(v string) {
 
 // GetDisplayName returns the DisplayName field value if set, zero value otherwise.
 func (o *Variable) GetDisplayName() string {
-	if o == nil || o.DisplayName == nil {
+	if o == nil || IsNil(o.DisplayName) {
 		var ret string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *Variable) GetDisplayName() string {
 // GetDisplayNameOk returns a tuple with the DisplayName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetDisplayNameOk() (*string, bool) {
-	if o == nil || o.DisplayName == nil {
+	if o == nil || IsNil(o.DisplayName) {
 		return nil, false
 	}
 	return o.DisplayName, true
@@ -146,7 +149,7 @@ func (o *Variable) GetDisplayNameOk() (*string, bool) {
 
 // HasDisplayName returns a boolean if a field has been set.
 func (o *Variable) HasDisplayName() bool {
-	if o != nil && o.DisplayName != nil {
+	if o != nil && !IsNil(o.DisplayName) {
 		return true
 	}
 
@@ -160,7 +163,7 @@ func (o *Variable) SetDisplayName(v string) {
 
 // GetDefaultValue returns the DefaultValue field value if set, zero value otherwise.
 func (o *Variable) GetDefaultValue() string {
-	if o == nil || o.DefaultValue == nil {
+	if o == nil || IsNil(o.DefaultValue) {
 		var ret string
 		return ret
 	}
@@ -170,7 +173,7 @@ func (o *Variable) GetDefaultValue() string {
 // GetDefaultValueOk returns a tuple with the DefaultValue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetDefaultValueOk() (*string, bool) {
-	if o == nil || o.DefaultValue == nil {
+	if o == nil || IsNil(o.DefaultValue) {
 		return nil, false
 	}
 	return o.DefaultValue, true
@@ -178,7 +181,7 @@ func (o *Variable) GetDefaultValueOk() (*string, bool) {
 
 // HasDefaultValue returns a boolean if a field has been set.
 func (o *Variable) HasDefaultValue() bool {
-	if o != nil && o.DefaultValue != nil {
+	if o != nil && !IsNil(o.DefaultValue) {
 		return true
 	}
 
@@ -216,7 +219,7 @@ func (o *Variable) SetSourceDefinition(v VariableSourceDefinition) {
 
 // GetAllowMultiSelect returns the AllowMultiSelect field value if set, zero value otherwise.
 func (o *Variable) GetAllowMultiSelect() bool {
-	if o == nil || o.AllowMultiSelect == nil {
+	if o == nil || IsNil(o.AllowMultiSelect) {
 		var ret bool
 		return ret
 	}
@@ -226,7 +229,7 @@ func (o *Variable) GetAllowMultiSelect() bool {
 // GetAllowMultiSelectOk returns a tuple with the AllowMultiSelect field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetAllowMultiSelectOk() (*bool, bool) {
-	if o == nil || o.AllowMultiSelect == nil {
+	if o == nil || IsNil(o.AllowMultiSelect) {
 		return nil, false
 	}
 	return o.AllowMultiSelect, true
@@ -234,7 +237,7 @@ func (o *Variable) GetAllowMultiSelectOk() (*bool, bool) {
 
 // HasAllowMultiSelect returns a boolean if a field has been set.
 func (o *Variable) HasAllowMultiSelect() bool {
-	if o != nil && o.AllowMultiSelect != nil {
+	if o != nil && !IsNil(o.AllowMultiSelect) {
 		return true
 	}
 
@@ -248,7 +251,7 @@ func (o *Variable) SetAllowMultiSelect(v bool) {
 
 // GetIncludeAllOption returns the IncludeAllOption field value if set, zero value otherwise.
 func (o *Variable) GetIncludeAllOption() bool {
-	if o == nil || o.IncludeAllOption == nil {
+	if o == nil || IsNil(o.IncludeAllOption) {
 		var ret bool
 		return ret
 	}
@@ -258,7 +261,7 @@ func (o *Variable) GetIncludeAllOption() bool {
 // GetIncludeAllOptionOk returns a tuple with the IncludeAllOption field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetIncludeAllOptionOk() (*bool, bool) {
-	if o == nil || o.IncludeAllOption == nil {
+	if o == nil || IsNil(o.IncludeAllOption) {
 		return nil, false
 	}
 	return o.IncludeAllOption, true
@@ -266,7 +269,7 @@ func (o *Variable) GetIncludeAllOptionOk() (*bool, bool) {
 
 // HasIncludeAllOption returns a boolean if a field has been set.
 func (o *Variable) HasIncludeAllOption() bool {
-	if o != nil && o.IncludeAllOption != nil {
+	if o != nil && !IsNil(o.IncludeAllOption) {
 		return true
 	}
 
@@ -280,7 +283,7 @@ func (o *Variable) SetIncludeAllOption(v bool) {
 
 // GetHideFromUI returns the HideFromUI field value if set, zero value otherwise.
 func (o *Variable) GetHideFromUI() bool {
-	if o == nil || o.HideFromUI == nil {
+	if o == nil || IsNil(o.HideFromUI) {
 		var ret bool
 		return ret
 	}
@@ -290,7 +293,7 @@ func (o *Variable) GetHideFromUI() bool {
 // GetHideFromUIOk returns a tuple with the HideFromUI field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetHideFromUIOk() (*bool, bool) {
-	if o == nil || o.HideFromUI == nil {
+	if o == nil || IsNil(o.HideFromUI) {
 		return nil, false
 	}
 	return o.HideFromUI, true
@@ -298,7 +301,7 @@ func (o *Variable) GetHideFromUIOk() (*bool, bool) {
 
 // HasHideFromUI returns a boolean if a field has been set.
 func (o *Variable) HasHideFromUI() bool {
-	if o != nil && o.HideFromUI != nil {
+	if o != nil && !IsNil(o.HideFromUI) {
 		return true
 	}
 
@@ -312,7 +315,7 @@ func (o *Variable) SetHideFromUI(v bool) {
 
 // GetValueType returns the ValueType field value if set, zero value otherwise.
 func (o *Variable) GetValueType() string {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		var ret string
 		return ret
 	}
@@ -322,7 +325,7 @@ func (o *Variable) GetValueType() string {
 // GetValueTypeOk returns a tuple with the ValueType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Variable) GetValueTypeOk() (*string, bool) {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		return nil, false
 	}
 	return o.ValueType, true
@@ -330,7 +333,7 @@ func (o *Variable) GetValueTypeOk() (*string, bool) {
 
 // HasValueType returns a boolean if a field has been set.
 func (o *Variable) HasValueType() bool {
-	if o != nil && o.ValueType != nil {
+	if o != nil && !IsNil(o.ValueType) {
 		return true
 	}
 
@@ -343,35 +346,39 @@ func (o *Variable) SetValueType(v string) {
 }
 
 func (o Variable) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.DisplayName != nil {
-		toSerialize["displayName"] = o.DisplayName
-	}
-	if o.DefaultValue != nil {
-		toSerialize["defaultValue"] = o.DefaultValue
-	}
-	if true {
-		toSerialize["sourceDefinition"] = o.SourceDefinition
-	}
-	if o.AllowMultiSelect != nil {
-		toSerialize["allowMultiSelect"] = o.AllowMultiSelect
-	}
-	if o.IncludeAllOption != nil {
-		toSerialize["includeAllOption"] = o.IncludeAllOption
-	}
-	if o.HideFromUI != nil {
-		toSerialize["hideFromUI"] = o.HideFromUI
-	}
-	if o.ValueType != nil {
-		toSerialize["valueType"] = o.ValueType
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Variable) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.DisplayName) {
+		toSerialize["displayName"] = o.DisplayName
+	}
+	if !IsNil(o.DefaultValue) {
+		toSerialize["defaultValue"] = o.DefaultValue
+	}
+	toSerialize["sourceDefinition"] = o.SourceDefinition
+	if !IsNil(o.AllowMultiSelect) {
+		toSerialize["allowMultiSelect"] = o.AllowMultiSelect
+	}
+	if !IsNil(o.IncludeAllOption) {
+		toSerialize["includeAllOption"] = o.IncludeAllOption
+	}
+	if !IsNil(o.HideFromUI) {
+		toSerialize["hideFromUI"] = o.HideFromUI
+	}
+	if !IsNil(o.ValueType) {
+		toSerialize["valueType"] = o.ValueType
+	}
+	return toSerialize, nil
 }
 
 type NullableVariable struct {

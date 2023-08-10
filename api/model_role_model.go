@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -15,6 +15,9 @@ import (
 	"time"
 )
 
+// checks if the RoleModel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RoleModel{}
+
 // RoleModel struct for RoleModel
 type RoleModel struct {
 	// Name of the role.
@@ -25,7 +28,7 @@ type RoleModel struct {
 	FilterPredicate *string `json:"filterPredicate,omitempty"`
 	// List of user identifiers to assign the role to.
 	Users []string `json:"users,omitempty"`
-	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
+	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - manageApps   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens   - downloadSearchResults  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
 	Capabilities []string `json:"capabilities,omitempty"`
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
@@ -96,7 +99,7 @@ func (o *RoleModel) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *RoleModel) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *RoleModel) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -114,7 +117,7 @@ func (o *RoleModel) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *RoleModel) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -128,7 +131,7 @@ func (o *RoleModel) SetDescription(v string) {
 
 // GetFilterPredicate returns the FilterPredicate field value if set, zero value otherwise.
 func (o *RoleModel) GetFilterPredicate() string {
-	if o == nil || o.FilterPredicate == nil {
+	if o == nil || IsNil(o.FilterPredicate) {
 		var ret string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *RoleModel) GetFilterPredicate() string {
 // GetFilterPredicateOk returns a tuple with the FilterPredicate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetFilterPredicateOk() (*string, bool) {
-	if o == nil || o.FilterPredicate == nil {
+	if o == nil || IsNil(o.FilterPredicate) {
 		return nil, false
 	}
 	return o.FilterPredicate, true
@@ -146,7 +149,7 @@ func (o *RoleModel) GetFilterPredicateOk() (*string, bool) {
 
 // HasFilterPredicate returns a boolean if a field has been set.
 func (o *RoleModel) HasFilterPredicate() bool {
-	if o != nil && o.FilterPredicate != nil {
+	if o != nil && !IsNil(o.FilterPredicate) {
 		return true
 	}
 
@@ -160,7 +163,7 @@ func (o *RoleModel) SetFilterPredicate(v string) {
 
 // GetUsers returns the Users field value if set, zero value otherwise.
 func (o *RoleModel) GetUsers() []string {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		var ret []string
 		return ret
 	}
@@ -170,7 +173,7 @@ func (o *RoleModel) GetUsers() []string {
 // GetUsersOk returns a tuple with the Users field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetUsersOk() ([]string, bool) {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		return nil, false
 	}
 	return o.Users, true
@@ -178,7 +181,7 @@ func (o *RoleModel) GetUsersOk() ([]string, bool) {
 
 // HasUsers returns a boolean if a field has been set.
 func (o *RoleModel) HasUsers() bool {
-	if o != nil && o.Users != nil {
+	if o != nil && !IsNil(o.Users) {
 		return true
 	}
 
@@ -192,7 +195,7 @@ func (o *RoleModel) SetUsers(v []string) {
 
 // GetCapabilities returns the Capabilities field value if set, zero value otherwise.
 func (o *RoleModel) GetCapabilities() []string {
-	if o == nil || o.Capabilities == nil {
+	if o == nil || IsNil(o.Capabilities) {
 		var ret []string
 		return ret
 	}
@@ -202,7 +205,7 @@ func (o *RoleModel) GetCapabilities() []string {
 // GetCapabilitiesOk returns a tuple with the Capabilities field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetCapabilitiesOk() ([]string, bool) {
-	if o == nil || o.Capabilities == nil {
+	if o == nil || IsNil(o.Capabilities) {
 		return nil, false
 	}
 	return o.Capabilities, true
@@ -210,7 +213,7 @@ func (o *RoleModel) GetCapabilitiesOk() ([]string, bool) {
 
 // HasCapabilities returns a boolean if a field has been set.
 func (o *RoleModel) HasCapabilities() bool {
-	if o != nil && o.Capabilities != nil {
+	if o != nil && !IsNil(o.Capabilities) {
 		return true
 	}
 
@@ -224,7 +227,7 @@ func (o *RoleModel) SetCapabilities(v []string) {
 
 // GetAutofillDependencies returns the AutofillDependencies field value if set, zero value otherwise.
 func (o *RoleModel) GetAutofillDependencies() bool {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		var ret bool
 		return ret
 	}
@@ -234,7 +237,7 @@ func (o *RoleModel) GetAutofillDependencies() bool {
 // GetAutofillDependenciesOk returns a tuple with the AutofillDependencies field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetAutofillDependenciesOk() (*bool, bool) {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		return nil, false
 	}
 	return o.AutofillDependencies, true
@@ -242,7 +245,7 @@ func (o *RoleModel) GetAutofillDependenciesOk() (*bool, bool) {
 
 // HasAutofillDependencies returns a boolean if a field has been set.
 func (o *RoleModel) HasAutofillDependencies() bool {
-	if o != nil && o.AutofillDependencies != nil {
+	if o != nil && !IsNil(o.AutofillDependencies) {
 		return true
 	}
 
@@ -376,7 +379,7 @@ func (o *RoleModel) SetId(v string) {
 
 // GetSystemDefined returns the SystemDefined field value if set, zero value otherwise.
 func (o *RoleModel) GetSystemDefined() bool {
-	if o == nil || o.SystemDefined == nil {
+	if o == nil || IsNil(o.SystemDefined) {
 		var ret bool
 		return ret
 	}
@@ -386,7 +389,7 @@ func (o *RoleModel) GetSystemDefined() bool {
 // GetSystemDefinedOk returns a tuple with the SystemDefined field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RoleModel) GetSystemDefinedOk() (*bool, bool) {
-	if o == nil || o.SystemDefined == nil {
+	if o == nil || IsNil(o.SystemDefined) {
 		return nil, false
 	}
 	return o.SystemDefined, true
@@ -394,7 +397,7 @@ func (o *RoleModel) GetSystemDefinedOk() (*bool, bool) {
 
 // HasSystemDefined returns a boolean if a field has been set.
 func (o *RoleModel) HasSystemDefined() bool {
-	if o != nil && o.SystemDefined != nil {
+	if o != nil && !IsNil(o.SystemDefined) {
 		return true
 	}
 
@@ -407,44 +410,40 @@ func (o *RoleModel) SetSystemDefined(v bool) {
 }
 
 func (o RoleModel) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.FilterPredicate != nil {
-		toSerialize["filterPredicate"] = o.FilterPredicate
-	}
-	if o.Users != nil {
-		toSerialize["users"] = o.Users
-	}
-	if o.Capabilities != nil {
-		toSerialize["capabilities"] = o.Capabilities
-	}
-	if o.AutofillDependencies != nil {
-		toSerialize["autofillDependencies"] = o.AutofillDependencies
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.SystemDefined != nil {
-		toSerialize["systemDefined"] = o.SystemDefined
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RoleModel) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.FilterPredicate) {
+		toSerialize["filterPredicate"] = o.FilterPredicate
+	}
+	if !IsNil(o.Users) {
+		toSerialize["users"] = o.Users
+	}
+	if !IsNil(o.Capabilities) {
+		toSerialize["capabilities"] = o.Capabilities
+	}
+	if !IsNil(o.AutofillDependencies) {
+		toSerialize["autofillDependencies"] = o.AutofillDependencies
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["id"] = o.Id
+	if !IsNil(o.SystemDefined) {
+		toSerialize["systemDefined"] = o.SystemDefined
+	}
+	return toSerialize, nil
 }
 
 type NullableRoleModel struct {

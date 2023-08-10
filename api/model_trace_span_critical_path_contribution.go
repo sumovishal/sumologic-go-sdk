@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceSpanCriticalPathContribution type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceSpanCriticalPathContribution{}
 
 // TraceSpanCriticalPathContribution struct for TraceSpanCriticalPathContribution
 type TraceSpanCriticalPathContribution struct {
@@ -90,14 +93,18 @@ func (o *TraceSpanCriticalPathContribution) SetFraction(v float64) {
 }
 
 func (o TraceSpanCriticalPathContribution) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["duration"] = o.Duration
-	}
-	if true {
-		toSerialize["fraction"] = o.Fraction
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceSpanCriticalPathContribution) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["duration"] = o.Duration
+	toSerialize["fraction"] = o.Fraction
+	return toSerialize, nil
 }
 
 type NullableTraceSpanCriticalPathContribution struct {

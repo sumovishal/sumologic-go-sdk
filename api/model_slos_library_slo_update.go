@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the SlosLibrarySloUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibrarySloUpdate{}
+
 // SlosLibrarySloUpdate struct for SlosLibrarySloUpdate
 type SlosLibrarySloUpdate struct {
 	SlosLibraryBaseUpdate
@@ -25,6 +28,8 @@ type SlosLibrarySloUpdate struct {
 	Service *string `json:"service,omitempty"`
 	// Name of the application.
 	Application *string `json:"application,omitempty"`
+	// Tags to be associated with the SLO.
+	Tags *map[string]string `json:"tags,omitempty"`
 }
 
 // NewSlosLibrarySloUpdate instantiates a new SlosLibrarySloUpdate object
@@ -126,7 +131,7 @@ func (o *SlosLibrarySloUpdate) SetIndicator(v Sli) {
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *SlosLibrarySloUpdate) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -136,7 +141,7 @@ func (o *SlosLibrarySloUpdate) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SlosLibrarySloUpdate) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -144,7 +149,7 @@ func (o *SlosLibrarySloUpdate) GetServiceOk() (*string, bool) {
 
 // HasService returns a boolean if a field has been set.
 func (o *SlosLibrarySloUpdate) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -158,7 +163,7 @@ func (o *SlosLibrarySloUpdate) SetService(v string) {
 
 // GetApplication returns the Application field value if set, zero value otherwise.
 func (o *SlosLibrarySloUpdate) GetApplication() string {
-	if o == nil || o.Application == nil {
+	if o == nil || IsNil(o.Application) {
 		var ret string
 		return ret
 	}
@@ -168,7 +173,7 @@ func (o *SlosLibrarySloUpdate) GetApplication() string {
 // GetApplicationOk returns a tuple with the Application field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SlosLibrarySloUpdate) GetApplicationOk() (*string, bool) {
-	if o == nil || o.Application == nil {
+	if o == nil || IsNil(o.Application) {
 		return nil, false
 	}
 	return o.Application, true
@@ -176,7 +181,7 @@ func (o *SlosLibrarySloUpdate) GetApplicationOk() (*string, bool) {
 
 // HasApplication returns a boolean if a field has been set.
 func (o *SlosLibrarySloUpdate) HasApplication() bool {
-	if o != nil && o.Application != nil {
+	if o != nil && !IsNil(o.Application) {
 		return true
 	}
 
@@ -188,32 +193,69 @@ func (o *SlosLibrarySloUpdate) SetApplication(v string) {
 	o.Application = &v
 }
 
+// GetTags returns the Tags field value if set, zero value otherwise.
+func (o *SlosLibrarySloUpdate) GetTags() map[string]string {
+	if o == nil || IsNil(o.Tags) {
+		var ret map[string]string
+		return ret
+	}
+	return *o.Tags
+}
+
+// GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SlosLibrarySloUpdate) GetTagsOk() (*map[string]string, bool) {
+	if o == nil || IsNil(o.Tags) {
+		return nil, false
+	}
+	return o.Tags, true
+}
+
+// HasTags returns a boolean if a field has been set.
+func (o *SlosLibrarySloUpdate) HasTags() bool {
+	if o != nil && !IsNil(o.Tags) {
+		return true
+	}
+
+	return false
+}
+
+// SetTags gets a reference to the given map[string]string and assigns it to the Tags field.
+func (o *SlosLibrarySloUpdate) SetTags(v map[string]string) {
+	o.Tags = &v
+}
+
 func (o SlosLibrarySloUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibrarySloUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSlosLibraryBaseUpdate, errSlosLibraryBaseUpdate := json.Marshal(o.SlosLibraryBaseUpdate)
 	if errSlosLibraryBaseUpdate != nil {
-		return []byte{}, errSlosLibraryBaseUpdate
+		return map[string]interface{}{}, errSlosLibraryBaseUpdate
 	}
 	errSlosLibraryBaseUpdate = json.Unmarshal([]byte(serializedSlosLibraryBaseUpdate), &toSerialize)
 	if errSlosLibraryBaseUpdate != nil {
-		return []byte{}, errSlosLibraryBaseUpdate
+		return map[string]interface{}{}, errSlosLibraryBaseUpdate
 	}
-	if true {
-		toSerialize["signalType"] = o.SignalType
-	}
-	if true {
-		toSerialize["compliance"] = o.Compliance
-	}
-	if true {
-		toSerialize["indicator"] = o.Indicator
-	}
-	if o.Service != nil {
+	toSerialize["signalType"] = o.SignalType
+	toSerialize["compliance"] = o.Compliance
+	toSerialize["indicator"] = o.Indicator
+	if !IsNil(o.Service) {
 		toSerialize["service"] = o.Service
 	}
-	if o.Application != nil {
+	if !IsNil(o.Application) {
 		toSerialize["application"] = o.Application
 	}
-	return json.Marshal(toSerialize)
+	if !IsNil(o.Tags) {
+		toSerialize["tags"] = o.Tags
+	}
+	return toSerialize, nil
 }
 
 type NullableSlosLibrarySloUpdate struct {

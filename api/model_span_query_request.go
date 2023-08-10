@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryRequest{}
 
 // SpanQueryRequest struct for SpanQueryRequest
 type SpanQueryRequest struct {
@@ -96,7 +99,7 @@ func (o *SpanQueryRequest) SetTimeRange(v ResolvableTimeRange) {
 
 // GetTimeZone returns the TimeZone field value if set, zero value otherwise.
 func (o *SpanQueryRequest) GetTimeZone() string {
-	if o == nil || o.TimeZone == nil {
+	if o == nil || IsNil(o.TimeZone) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *SpanQueryRequest) GetTimeZone() string {
 // GetTimeZoneOk returns a tuple with the TimeZone field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRequest) GetTimeZoneOk() (*string, bool) {
-	if o == nil || o.TimeZone == nil {
+	if o == nil || IsNil(o.TimeZone) {
 		return nil, false
 	}
 	return o.TimeZone, true
@@ -114,7 +117,7 @@ func (o *SpanQueryRequest) GetTimeZoneOk() (*string, bool) {
 
 // HasTimeZone returns a boolean if a field has been set.
 func (o *SpanQueryRequest) HasTimeZone() bool {
-	if o != nil && o.TimeZone != nil {
+	if o != nil && !IsNil(o.TimeZone) {
 		return true
 	}
 
@@ -127,17 +130,21 @@ func (o *SpanQueryRequest) SetTimeZone(v string) {
 }
 
 func (o SpanQueryRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryRows"] = o.QueryRows
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.TimeZone != nil {
-		toSerialize["timeZone"] = o.TimeZone
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryRows"] = o.QueryRows
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.TimeZone) {
+		toSerialize["timeZone"] = o.TimeZone
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryRequest struct {

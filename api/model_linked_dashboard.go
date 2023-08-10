@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LinkedDashboard type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LinkedDashboard{}
 
 // LinkedDashboard struct for LinkedDashboard
 type LinkedDashboard struct {
@@ -78,7 +81,7 @@ func (o *LinkedDashboard) SetId(v string) {
 
 // GetRelativePath returns the RelativePath field value if set, zero value otherwise.
 func (o *LinkedDashboard) GetRelativePath() string {
-	if o == nil || o.RelativePath == nil {
+	if o == nil || IsNil(o.RelativePath) {
 		var ret string
 		return ret
 	}
@@ -88,7 +91,7 @@ func (o *LinkedDashboard) GetRelativePath() string {
 // GetRelativePathOk returns a tuple with the RelativePath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LinkedDashboard) GetRelativePathOk() (*string, bool) {
-	if o == nil || o.RelativePath == nil {
+	if o == nil || IsNil(o.RelativePath) {
 		return nil, false
 	}
 	return o.RelativePath, true
@@ -96,7 +99,7 @@ func (o *LinkedDashboard) GetRelativePathOk() (*string, bool) {
 
 // HasRelativePath returns a boolean if a field has been set.
 func (o *LinkedDashboard) HasRelativePath() bool {
-	if o != nil && o.RelativePath != nil {
+	if o != nil && !IsNil(o.RelativePath) {
 		return true
 	}
 
@@ -110,7 +113,7 @@ func (o *LinkedDashboard) SetRelativePath(v string) {
 
 // GetIncludeTimeRange returns the IncludeTimeRange field value if set, zero value otherwise.
 func (o *LinkedDashboard) GetIncludeTimeRange() bool {
-	if o == nil || o.IncludeTimeRange == nil {
+	if o == nil || IsNil(o.IncludeTimeRange) {
 		var ret bool
 		return ret
 	}
@@ -120,7 +123,7 @@ func (o *LinkedDashboard) GetIncludeTimeRange() bool {
 // GetIncludeTimeRangeOk returns a tuple with the IncludeTimeRange field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LinkedDashboard) GetIncludeTimeRangeOk() (*bool, bool) {
-	if o == nil || o.IncludeTimeRange == nil {
+	if o == nil || IsNil(o.IncludeTimeRange) {
 		return nil, false
 	}
 	return o.IncludeTimeRange, true
@@ -128,7 +131,7 @@ func (o *LinkedDashboard) GetIncludeTimeRangeOk() (*bool, bool) {
 
 // HasIncludeTimeRange returns a boolean if a field has been set.
 func (o *LinkedDashboard) HasIncludeTimeRange() bool {
-	if o != nil && o.IncludeTimeRange != nil {
+	if o != nil && !IsNil(o.IncludeTimeRange) {
 		return true
 	}
 
@@ -142,7 +145,7 @@ func (o *LinkedDashboard) SetIncludeTimeRange(v bool) {
 
 // GetIncludeVariables returns the IncludeVariables field value if set, zero value otherwise.
 func (o *LinkedDashboard) GetIncludeVariables() bool {
-	if o == nil || o.IncludeVariables == nil {
+	if o == nil || IsNil(o.IncludeVariables) {
 		var ret bool
 		return ret
 	}
@@ -152,7 +155,7 @@ func (o *LinkedDashboard) GetIncludeVariables() bool {
 // GetIncludeVariablesOk returns a tuple with the IncludeVariables field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LinkedDashboard) GetIncludeVariablesOk() (*bool, bool) {
-	if o == nil || o.IncludeVariables == nil {
+	if o == nil || IsNil(o.IncludeVariables) {
 		return nil, false
 	}
 	return o.IncludeVariables, true
@@ -160,7 +163,7 @@ func (o *LinkedDashboard) GetIncludeVariablesOk() (*bool, bool) {
 
 // HasIncludeVariables returns a boolean if a field has been set.
 func (o *LinkedDashboard) HasIncludeVariables() bool {
-	if o != nil && o.IncludeVariables != nil {
+	if o != nil && !IsNil(o.IncludeVariables) {
 		return true
 	}
 
@@ -173,20 +176,26 @@ func (o *LinkedDashboard) SetIncludeVariables(v bool) {
 }
 
 func (o LinkedDashboard) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.RelativePath != nil {
-		toSerialize["relativePath"] = o.RelativePath
-	}
-	if o.IncludeTimeRange != nil {
-		toSerialize["includeTimeRange"] = o.IncludeTimeRange
-	}
-	if o.IncludeVariables != nil {
-		toSerialize["includeVariables"] = o.IncludeVariables
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LinkedDashboard) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.RelativePath) {
+		toSerialize["relativePath"] = o.RelativePath
+	}
+	if !IsNil(o.IncludeTimeRange) {
+		toSerialize["includeTimeRange"] = o.IncludeTimeRange
+	}
+	if !IsNil(o.IncludeVariables) {
+		toSerialize["includeVariables"] = o.IncludeVariables
+	}
+	return toSerialize, nil
 }
 
 type NullableLinkedDashboard struct {

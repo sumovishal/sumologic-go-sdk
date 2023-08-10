@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -15,12 +15,13 @@ import (
 	"time"
 )
 
+// checks if the SavedSearchSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SavedSearchSyncDefinition{}
+
 // SavedSearchSyncDefinition struct for SavedSearchSyncDefinition
 type SavedSearchSyncDefinition struct {
 	// The text of a Sumo Logic query.
 	QueryText string `json:"queryText"`
-	// Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \"-1d -12h\" represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \"01-04-2017 20:32:00 to 01-04-2017 20:35:00\" represents a time range     from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM.
-	DefaultTimeRange string `json:"defaultTimeRange"`
 	// Set it to true to run the search using receipt time. By default, searches do not run by receipt time.
 	ByReceiptTime bool `json:"byReceiptTime"`
 	// The name of the Scheduled View that has indexed the data you want to search.
@@ -31,20 +32,22 @@ type SavedSearchSyncDefinition struct {
 	QueryParameters []QueryParameterSyncDefinition `json:"queryParameters"`
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty"`
+	// Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \"-1d -12h\" represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \"01-04-2017 20:32:00 to 01-04-2017 20:35:00\" represents a time range   from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM.
+	DefaultTimeRange string `json:"defaultTimeRange"`
 }
 
 // NewSavedSearchSyncDefinition instantiates a new SavedSearchSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSavedSearchSyncDefinition(queryText string, defaultTimeRange string, byReceiptTime bool, queryParameters []QueryParameterSyncDefinition) *SavedSearchSyncDefinition {
+func NewSavedSearchSyncDefinition(queryText string, byReceiptTime bool, queryParameters []QueryParameterSyncDefinition, defaultTimeRange string) *SavedSearchSyncDefinition {
 	this := SavedSearchSyncDefinition{}
 	this.QueryText = queryText
-	this.DefaultTimeRange = defaultTimeRange
 	this.ByReceiptTime = byReceiptTime
 	this.QueryParameters = queryParameters
 	var parsingMode string = "Manual"
 	this.ParsingMode = &parsingMode
+	this.DefaultTimeRange = defaultTimeRange
 	return &this
 }
 
@@ -84,30 +87,6 @@ func (o *SavedSearchSyncDefinition) SetQueryText(v string) {
 	o.QueryText = v
 }
 
-// GetDefaultTimeRange returns the DefaultTimeRange field value
-func (o *SavedSearchSyncDefinition) GetDefaultTimeRange() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.DefaultTimeRange
-}
-
-// GetDefaultTimeRangeOk returns a tuple with the DefaultTimeRange field value
-// and a boolean to check if the value has been set.
-func (o *SavedSearchSyncDefinition) GetDefaultTimeRangeOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.DefaultTimeRange, true
-}
-
-// SetDefaultTimeRange sets field value
-func (o *SavedSearchSyncDefinition) SetDefaultTimeRange(v string) {
-	o.DefaultTimeRange = v
-}
-
 // GetByReceiptTime returns the ByReceiptTime field value
 func (o *SavedSearchSyncDefinition) GetByReceiptTime() bool {
 	if o == nil {
@@ -134,7 +113,7 @@ func (o *SavedSearchSyncDefinition) SetByReceiptTime(v bool) {
 
 // GetViewName returns the ViewName field value if set, zero value otherwise.
 func (o *SavedSearchSyncDefinition) GetViewName() string {
-	if o == nil || o.ViewName == nil {
+	if o == nil || IsNil(o.ViewName) {
 		var ret string
 		return ret
 	}
@@ -144,7 +123,7 @@ func (o *SavedSearchSyncDefinition) GetViewName() string {
 // GetViewNameOk returns a tuple with the ViewName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SavedSearchSyncDefinition) GetViewNameOk() (*string, bool) {
-	if o == nil || o.ViewName == nil {
+	if o == nil || IsNil(o.ViewName) {
 		return nil, false
 	}
 	return o.ViewName, true
@@ -152,7 +131,7 @@ func (o *SavedSearchSyncDefinition) GetViewNameOk() (*string, bool) {
 
 // HasViewName returns a boolean if a field has been set.
 func (o *SavedSearchSyncDefinition) HasViewName() bool {
-	if o != nil && o.ViewName != nil {
+	if o != nil && !IsNil(o.ViewName) {
 		return true
 	}
 
@@ -166,7 +145,7 @@ func (o *SavedSearchSyncDefinition) SetViewName(v string) {
 
 // GetViewStartTime returns the ViewStartTime field value if set, zero value otherwise.
 func (o *SavedSearchSyncDefinition) GetViewStartTime() time.Time {
-	if o == nil || o.ViewStartTime == nil {
+	if o == nil || IsNil(o.ViewStartTime) {
 		var ret time.Time
 		return ret
 	}
@@ -176,7 +155,7 @@ func (o *SavedSearchSyncDefinition) GetViewStartTime() time.Time {
 // GetViewStartTimeOk returns a tuple with the ViewStartTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SavedSearchSyncDefinition) GetViewStartTimeOk() (*time.Time, bool) {
-	if o == nil || o.ViewStartTime == nil {
+	if o == nil || IsNil(o.ViewStartTime) {
 		return nil, false
 	}
 	return o.ViewStartTime, true
@@ -184,7 +163,7 @@ func (o *SavedSearchSyncDefinition) GetViewStartTimeOk() (*time.Time, bool) {
 
 // HasViewStartTime returns a boolean if a field has been set.
 func (o *SavedSearchSyncDefinition) HasViewStartTime() bool {
-	if o != nil && o.ViewStartTime != nil {
+	if o != nil && !IsNil(o.ViewStartTime) {
 		return true
 	}
 
@@ -222,7 +201,7 @@ func (o *SavedSearchSyncDefinition) SetQueryParameters(v []QueryParameterSyncDef
 
 // GetParsingMode returns the ParsingMode field value if set, zero value otherwise.
 func (o *SavedSearchSyncDefinition) GetParsingMode() string {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		var ret string
 		return ret
 	}
@@ -232,7 +211,7 @@ func (o *SavedSearchSyncDefinition) GetParsingMode() string {
 // GetParsingModeOk returns a tuple with the ParsingMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SavedSearchSyncDefinition) GetParsingModeOk() (*string, bool) {
-	if o == nil || o.ParsingMode == nil {
+	if o == nil || IsNil(o.ParsingMode) {
 		return nil, false
 	}
 	return o.ParsingMode, true
@@ -240,7 +219,7 @@ func (o *SavedSearchSyncDefinition) GetParsingModeOk() (*string, bool) {
 
 // HasParsingMode returns a boolean if a field has been set.
 func (o *SavedSearchSyncDefinition) HasParsingMode() bool {
-	if o != nil && o.ParsingMode != nil {
+	if o != nil && !IsNil(o.ParsingMode) {
 		return true
 	}
 
@@ -252,30 +231,54 @@ func (o *SavedSearchSyncDefinition) SetParsingMode(v string) {
 	o.ParsingMode = &v
 }
 
+// GetDefaultTimeRange returns the DefaultTimeRange field value
+func (o *SavedSearchSyncDefinition) GetDefaultTimeRange() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DefaultTimeRange
+}
+
+// GetDefaultTimeRangeOk returns a tuple with the DefaultTimeRange field value
+// and a boolean to check if the value has been set.
+func (o *SavedSearchSyncDefinition) GetDefaultTimeRangeOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DefaultTimeRange, true
+}
+
+// SetDefaultTimeRange sets field value
+func (o *SavedSearchSyncDefinition) SetDefaultTimeRange(v string) {
+	o.DefaultTimeRange = v
+}
+
 func (o SavedSearchSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryText"] = o.QueryText
-	}
-	if true {
-		toSerialize["defaultTimeRange"] = o.DefaultTimeRange
-	}
-	if true {
-		toSerialize["byReceiptTime"] = o.ByReceiptTime
-	}
-	if o.ViewName != nil {
-		toSerialize["viewName"] = o.ViewName
-	}
-	if o.ViewStartTime != nil {
-		toSerialize["viewStartTime"] = o.ViewStartTime
-	}
-	if true {
-		toSerialize["queryParameters"] = o.QueryParameters
-	}
-	if o.ParsingMode != nil {
-		toSerialize["parsingMode"] = o.ParsingMode
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SavedSearchSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryText"] = o.QueryText
+	toSerialize["byReceiptTime"] = o.ByReceiptTime
+	if !IsNil(o.ViewName) {
+		toSerialize["viewName"] = o.ViewName
+	}
+	if !IsNil(o.ViewStartTime) {
+		toSerialize["viewStartTime"] = o.ViewStartTime
+	}
+	toSerialize["queryParameters"] = o.QueryParameters
+	if !IsNil(o.ParsingMode) {
+		toSerialize["parsingMode"] = o.ParsingMode
+	}
+	toSerialize["defaultTimeRange"] = o.DefaultTimeRange
+	return toSerialize, nil
 }
 
 type NullableSavedSearchSyncDefinition struct {

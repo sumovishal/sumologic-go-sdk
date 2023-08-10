@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BulkErrorResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BulkErrorResponse{}
 
 // BulkErrorResponse struct for BulkErrorResponse
 type BulkErrorResponse struct {
@@ -89,14 +92,18 @@ func (o *BulkErrorResponse) SetErrorResponse(v ErrorResponse) {
 }
 
 func (o BulkErrorResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["errorResponse"] = o.ErrorResponse
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BulkErrorResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["status"] = o.Status
+	toSerialize["errorResponse"] = o.ErrorResponse
+	return toSerialize, nil
 }
 
 type NullableBulkErrorResponse struct {

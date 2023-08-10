@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CriticalPathServiceBreakdownElementBase type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CriticalPathServiceBreakdownElementBase{}
 
 // CriticalPathServiceBreakdownElementBase struct for CriticalPathServiceBreakdownElementBase
 type CriticalPathServiceBreakdownElementBase struct {
@@ -44,7 +47,7 @@ func NewCriticalPathServiceBreakdownElementBaseWithDefaults() *CriticalPathServi
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *CriticalPathServiceBreakdownElementBase) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *CriticalPathServiceBreakdownElementBase) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CriticalPathServiceBreakdownElementBase) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -62,7 +65,7 @@ func (o *CriticalPathServiceBreakdownElementBase) GetServiceOk() (*string, bool)
 
 // HasService returns a boolean if a field has been set.
 func (o *CriticalPathServiceBreakdownElementBase) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -76,7 +79,7 @@ func (o *CriticalPathServiceBreakdownElementBase) SetService(v string) {
 
 // GetServiceColor returns the ServiceColor field value if set, zero value otherwise.
 func (o *CriticalPathServiceBreakdownElementBase) GetServiceColor() string {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		var ret string
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *CriticalPathServiceBreakdownElementBase) GetServiceColor() string {
 // GetServiceColorOk returns a tuple with the ServiceColor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CriticalPathServiceBreakdownElementBase) GetServiceColorOk() (*string, bool) {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		return nil, false
 	}
 	return o.ServiceColor, true
@@ -94,7 +97,7 @@ func (o *CriticalPathServiceBreakdownElementBase) GetServiceColorOk() (*string, 
 
 // HasServiceColor returns a boolean if a field has been set.
 func (o *CriticalPathServiceBreakdownElementBase) HasServiceColor() bool {
-	if o != nil && o.ServiceColor != nil {
+	if o != nil && !IsNil(o.ServiceColor) {
 		return true
 	}
 
@@ -131,17 +134,23 @@ func (o *CriticalPathServiceBreakdownElementBase) SetDuration(v int64) {
 }
 
 func (o CriticalPathServiceBreakdownElementBase) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.ServiceColor != nil {
-		toSerialize["serviceColor"] = o.ServiceColor
-	}
-	if true {
-		toSerialize["duration"] = o.Duration
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CriticalPathServiceBreakdownElementBase) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.ServiceColor) {
+		toSerialize["serviceColor"] = o.ServiceColor
+	}
+	toSerialize["duration"] = o.Duration
+	return toSerialize, nil
 }
 
 type NullableCriticalPathServiceBreakdownElementBase struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ErrorDescription type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ErrorDescription{}
 
 // ErrorDescription struct for ErrorDescription
 type ErrorDescription struct {
@@ -95,7 +98,7 @@ func (o *ErrorDescription) SetMessage(v string) {
 
 // GetDetail returns the Detail field value if set, zero value otherwise.
 func (o *ErrorDescription) GetDetail() string {
-	if o == nil || o.Detail == nil {
+	if o == nil || IsNil(o.Detail) {
 		var ret string
 		return ret
 	}
@@ -105,7 +108,7 @@ func (o *ErrorDescription) GetDetail() string {
 // GetDetailOk returns a tuple with the Detail field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ErrorDescription) GetDetailOk() (*string, bool) {
-	if o == nil || o.Detail == nil {
+	if o == nil || IsNil(o.Detail) {
 		return nil, false
 	}
 	return o.Detail, true
@@ -113,7 +116,7 @@ func (o *ErrorDescription) GetDetailOk() (*string, bool) {
 
 // HasDetail returns a boolean if a field has been set.
 func (o *ErrorDescription) HasDetail() bool {
-	if o != nil && o.Detail != nil {
+	if o != nil && !IsNil(o.Detail) {
 		return true
 	}
 
@@ -127,7 +130,7 @@ func (o *ErrorDescription) SetDetail(v string) {
 
 // GetMeta returns the Meta field value if set, zero value otherwise.
 func (o *ErrorDescription) GetMeta() map[string]interface{} {
-	if o == nil || o.Meta == nil {
+	if o == nil || IsNil(o.Meta) {
 		var ret map[string]interface{}
 		return ret
 	}
@@ -137,15 +140,15 @@ func (o *ErrorDescription) GetMeta() map[string]interface{} {
 // GetMetaOk returns a tuple with the Meta field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ErrorDescription) GetMetaOk() (map[string]interface{}, bool) {
-	if o == nil || o.Meta == nil {
-		return nil, false
+	if o == nil || IsNil(o.Meta) {
+		return map[string]interface{}{}, false
 	}
 	return o.Meta, true
 }
 
 // HasMeta returns a boolean if a field has been set.
 func (o *ErrorDescription) HasMeta() bool {
-	if o != nil && o.Meta != nil {
+	if o != nil && !IsNil(o.Meta) {
 		return true
 	}
 
@@ -158,20 +161,24 @@ func (o *ErrorDescription) SetMeta(v map[string]interface{}) {
 }
 
 func (o ErrorDescription) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["code"] = o.Code
-	}
-	if true {
-		toSerialize["message"] = o.Message
-	}
-	if o.Detail != nil {
-		toSerialize["detail"] = o.Detail
-	}
-	if o.Meta != nil {
-		toSerialize["meta"] = o.Meta
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ErrorDescription) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["code"] = o.Code
+	toSerialize["message"] = o.Message
+	if !IsNil(o.Detail) {
+		toSerialize["detail"] = o.Detail
+	}
+	if !IsNil(o.Meta) {
+		toSerialize["meta"] = o.Meta
+	}
+	return toSerialize, nil
 }
 
 type NullableErrorDescription struct {

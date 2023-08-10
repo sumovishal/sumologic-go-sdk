@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SignalsJobResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SignalsJobResult{}
 
 // SignalsJobResult The job result containing the job status, computed signals and any warnings.
 type SignalsJobResult struct {
@@ -117,17 +120,19 @@ func (o *SignalsJobResult) SetWarnings(v []WarningDetails) {
 }
 
 func (o SignalsJobResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["isComplete"] = o.IsComplete
-	}
-	if true {
-		toSerialize["signals"] = o.Signals
-	}
-	if true {
-		toSerialize["warnings"] = o.Warnings
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SignalsJobResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["isComplete"] = o.IsComplete
+	toSerialize["signals"] = o.Signals
+	toSerialize["warnings"] = o.Warnings
+	return toSerialize, nil
 }
 
 type NullableSignalsJobResult struct {

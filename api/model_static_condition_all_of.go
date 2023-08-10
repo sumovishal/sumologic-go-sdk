@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,9 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the StaticConditionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &StaticConditionAllOf{}
+
 // StaticConditionAllOf A rule that defines how the monitor should evaluate data and trigger notifications.
 type StaticConditionAllOf struct {
-	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
+	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold *float64 `json:"threshold,omitempty"`
@@ -28,6 +31,8 @@ type StaticConditionAllOf struct {
 	OccurrenceType string `json:"occurrenceType"`
 	// Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. `AllTimeSeries`: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is `Metrics`)   2. `AnyTimeSeries`: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is `Metrics`)   3. `AllResults`: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is `Logs`)
 	TriggerSource string `json:"triggerSource"`
+	// The minimum number of data points to alert or resolve a metrics monitor within the time range. This field is only valid for Metrics Monitor, it will always be set to 1 for `AtleastOnce` occurrence type and for `Always`, if not specified by user it will default to 2.
+	MinDataPoints *int32 `json:"minDataPoints,omitempty"`
 }
 
 // NewStaticConditionAllOf instantiates a new StaticConditionAllOf object
@@ -84,7 +89,7 @@ func (o *StaticConditionAllOf) SetTimeRange(v string) {
 
 // GetThreshold returns the Threshold field value if set, zero value otherwise.
 func (o *StaticConditionAllOf) GetThreshold() float64 {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		var ret float64
 		return ret
 	}
@@ -94,7 +99,7 @@ func (o *StaticConditionAllOf) GetThreshold() float64 {
 // GetThresholdOk returns a tuple with the Threshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *StaticConditionAllOf) GetThresholdOk() (*float64, bool) {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		return nil, false
 	}
 	return o.Threshold, true
@@ -102,7 +107,7 @@ func (o *StaticConditionAllOf) GetThresholdOk() (*float64, bool) {
 
 // HasThreshold returns a boolean if a field has been set.
 func (o *StaticConditionAllOf) HasThreshold() bool {
-	if o != nil && o.Threshold != nil {
+	if o != nil && !IsNil(o.Threshold) {
 		return true
 	}
 
@@ -116,7 +121,7 @@ func (o *StaticConditionAllOf) SetThreshold(v float64) {
 
 // GetThresholdType returns the ThresholdType field value if set, zero value otherwise.
 func (o *StaticConditionAllOf) GetThresholdType() string {
-	if o == nil || o.ThresholdType == nil {
+	if o == nil || IsNil(o.ThresholdType) {
 		var ret string
 		return ret
 	}
@@ -126,7 +131,7 @@ func (o *StaticConditionAllOf) GetThresholdType() string {
 // GetThresholdTypeOk returns a tuple with the ThresholdType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *StaticConditionAllOf) GetThresholdTypeOk() (*string, bool) {
-	if o == nil || o.ThresholdType == nil {
+	if o == nil || IsNil(o.ThresholdType) {
 		return nil, false
 	}
 	return o.ThresholdType, true
@@ -134,7 +139,7 @@ func (o *StaticConditionAllOf) GetThresholdTypeOk() (*string, bool) {
 
 // HasThresholdType returns a boolean if a field has been set.
 func (o *StaticConditionAllOf) HasThresholdType() bool {
-	if o != nil && o.ThresholdType != nil {
+	if o != nil && !IsNil(o.ThresholdType) {
 		return true
 	}
 
@@ -148,7 +153,7 @@ func (o *StaticConditionAllOf) SetThresholdType(v string) {
 
 // GetField returns the Field field value if set, zero value otherwise.
 func (o *StaticConditionAllOf) GetField() string {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		var ret string
 		return ret
 	}
@@ -158,7 +163,7 @@ func (o *StaticConditionAllOf) GetField() string {
 // GetFieldOk returns a tuple with the Field field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *StaticConditionAllOf) GetFieldOk() (*string, bool) {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		return nil, false
 	}
 	return o.Field, true
@@ -166,7 +171,7 @@ func (o *StaticConditionAllOf) GetFieldOk() (*string, bool) {
 
 // HasField returns a boolean if a field has been set.
 func (o *StaticConditionAllOf) HasField() bool {
-	if o != nil && o.Field != nil {
+	if o != nil && !IsNil(o.Field) {
 		return true
 	}
 
@@ -226,27 +231,64 @@ func (o *StaticConditionAllOf) SetTriggerSource(v string) {
 	o.TriggerSource = v
 }
 
+// GetMinDataPoints returns the MinDataPoints field value if set, zero value otherwise.
+func (o *StaticConditionAllOf) GetMinDataPoints() int32 {
+	if o == nil || IsNil(o.MinDataPoints) {
+		var ret int32
+		return ret
+	}
+	return *o.MinDataPoints
+}
+
+// GetMinDataPointsOk returns a tuple with the MinDataPoints field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *StaticConditionAllOf) GetMinDataPointsOk() (*int32, bool) {
+	if o == nil || IsNil(o.MinDataPoints) {
+		return nil, false
+	}
+	return o.MinDataPoints, true
+}
+
+// HasMinDataPoints returns a boolean if a field has been set.
+func (o *StaticConditionAllOf) HasMinDataPoints() bool {
+	if o != nil && !IsNil(o.MinDataPoints) {
+		return true
+	}
+
+	return false
+}
+
+// SetMinDataPoints gets a reference to the given int32 and assigns it to the MinDataPoints field.
+func (o *StaticConditionAllOf) SetMinDataPoints(v int32) {
+	o.MinDataPoints = &v
+}
+
 func (o StaticConditionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.Threshold != nil {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if o.ThresholdType != nil {
-		toSerialize["thresholdType"] = o.ThresholdType
-	}
-	if o.Field != nil {
-		toSerialize["field"] = o.Field
-	}
-	if true {
-		toSerialize["occurrenceType"] = o.OccurrenceType
-	}
-	if true {
-		toSerialize["triggerSource"] = o.TriggerSource
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o StaticConditionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.Threshold) {
+		toSerialize["threshold"] = o.Threshold
+	}
+	if !IsNil(o.ThresholdType) {
+		toSerialize["thresholdType"] = o.ThresholdType
+	}
+	if !IsNil(o.Field) {
+		toSerialize["field"] = o.Field
+	}
+	toSerialize["occurrenceType"] = o.OccurrenceType
+	toSerialize["triggerSource"] = o.TriggerSource
+	if !IsNil(o.MinDataPoints) {
+		toSerialize["minDataPoints"] = o.MinDataPoints
+	}
+	return toSerialize, nil
 }
 
 type NullableStaticConditionAllOf struct {

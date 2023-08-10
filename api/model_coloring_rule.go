@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ColoringRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ColoringRule{}
+
 // ColoringRule struct for ColoringRule
 type ColoringRule struct {
 	// Regex string to match queries to apply coloring to.
@@ -23,18 +26,19 @@ type ColoringRule struct {
 	// Function to aggregate the aggregate values of multiple time series into one single value.
 	MultipleSeriesAggregateFunction string `json:"multipleSeriesAggregateFunction"`
 	// Color thresholds.
-	ColorThresholds []ColoringThreshold `json:"colorThresholds,omitempty"`
+	ColorThresholds []ColoringThreshold `json:"colorThresholds"`
 }
 
 // NewColoringRule instantiates a new ColoringRule object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewColoringRule(scope string, singleSeriesAggregateFunction string, multipleSeriesAggregateFunction string) *ColoringRule {
+func NewColoringRule(scope string, singleSeriesAggregateFunction string, multipleSeriesAggregateFunction string, colorThresholds []ColoringThreshold) *ColoringRule {
 	this := ColoringRule{}
 	this.Scope = scope
 	this.SingleSeriesAggregateFunction = singleSeriesAggregateFunction
 	this.MultipleSeriesAggregateFunction = multipleSeriesAggregateFunction
+	this.ColorThresholds = colorThresholds
 	return &this
 }
 
@@ -118,53 +122,45 @@ func (o *ColoringRule) SetMultipleSeriesAggregateFunction(v string) {
 	o.MultipleSeriesAggregateFunction = v
 }
 
-// GetColorThresholds returns the ColorThresholds field value if set, zero value otherwise.
+// GetColorThresholds returns the ColorThresholds field value
 func (o *ColoringRule) GetColorThresholds() []ColoringThreshold {
-	if o == nil || o.ColorThresholds == nil {
+	if o == nil {
 		var ret []ColoringThreshold
 		return ret
 	}
+
 	return o.ColorThresholds
 }
 
-// GetColorThresholdsOk returns a tuple with the ColorThresholds field value if set, nil otherwise
+// GetColorThresholdsOk returns a tuple with the ColorThresholds field value
 // and a boolean to check if the value has been set.
 func (o *ColoringRule) GetColorThresholdsOk() ([]ColoringThreshold, bool) {
-	if o == nil || o.ColorThresholds == nil {
+	if o == nil {
 		return nil, false
 	}
 	return o.ColorThresholds, true
 }
 
-// HasColorThresholds returns a boolean if a field has been set.
-func (o *ColoringRule) HasColorThresholds() bool {
-	if o != nil && o.ColorThresholds != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetColorThresholds gets a reference to the given []ColoringThreshold and assigns it to the ColorThresholds field.
+// SetColorThresholds sets field value
 func (o *ColoringRule) SetColorThresholds(v []ColoringThreshold) {
 	o.ColorThresholds = v
 }
 
 func (o ColoringRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["scope"] = o.Scope
-	}
-	if true {
-		toSerialize["singleSeriesAggregateFunction"] = o.SingleSeriesAggregateFunction
-	}
-	if true {
-		toSerialize["multipleSeriesAggregateFunction"] = o.MultipleSeriesAggregateFunction
-	}
-	if o.ColorThresholds != nil {
-		toSerialize["colorThresholds"] = o.ColorThresholds
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ColoringRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["scope"] = o.Scope
+	toSerialize["singleSeriesAggregateFunction"] = o.SingleSeriesAggregateFunction
+	toSerialize["multipleSeriesAggregateFunction"] = o.MultipleSeriesAggregateFunction
+	toSerialize["colorThresholds"] = o.ColorThresholds
+	return toSerialize, nil
 }
 
 type NullableColoringRule struct {

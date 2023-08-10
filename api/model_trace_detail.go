@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the TraceDetail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceDetail{}
 
 // TraceDetail struct for TraceDetail
 type TraceDetail struct {
@@ -77,7 +80,7 @@ func (o *TraceDetail) SetId(v string) {
 
 // GetRootService returns the RootService field value if set, zero value otherwise.
 func (o *TraceDetail) GetRootService() string {
-	if o == nil || o.RootService == nil {
+	if o == nil || IsNil(o.RootService) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *TraceDetail) GetRootService() string {
 // GetRootServiceOk returns a tuple with the RootService field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetRootServiceOk() (*string, bool) {
-	if o == nil || o.RootService == nil {
+	if o == nil || IsNil(o.RootService) {
 		return nil, false
 	}
 	return o.RootService, true
@@ -95,7 +98,7 @@ func (o *TraceDetail) GetRootServiceOk() (*string, bool) {
 
 // HasRootService returns a boolean if a field has been set.
 func (o *TraceDetail) HasRootService() bool {
-	if o != nil && o.RootService != nil {
+	if o != nil && !IsNil(o.RootService) {
 		return true
 	}
 
@@ -109,7 +112,7 @@ func (o *TraceDetail) SetRootService(v string) {
 
 // GetRootResource returns the RootResource field value if set, zero value otherwise.
 func (o *TraceDetail) GetRootResource() string {
-	if o == nil || o.RootResource == nil {
+	if o == nil || IsNil(o.RootResource) {
 		var ret string
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *TraceDetail) GetRootResource() string {
 // GetRootResourceOk returns a tuple with the RootResource field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetRootResourceOk() (*string, bool) {
-	if o == nil || o.RootResource == nil {
+	if o == nil || IsNil(o.RootResource) {
 		return nil, false
 	}
 	return o.RootResource, true
@@ -127,7 +130,7 @@ func (o *TraceDetail) GetRootResourceOk() (*string, bool) {
 
 // HasRootResource returns a boolean if a field has been set.
 func (o *TraceDetail) HasRootResource() bool {
-	if o != nil && o.RootResource != nil {
+	if o != nil && !IsNil(o.RootResource) {
 		return true
 	}
 
@@ -141,7 +144,7 @@ func (o *TraceDetail) SetRootResource(v string) {
 
 // GetRootStatus returns the RootStatus field value if set, zero value otherwise.
 func (o *TraceDetail) GetRootStatus() TraceSpanStatus {
-	if o == nil || o.RootStatus == nil {
+	if o == nil || IsNil(o.RootStatus) {
 		var ret TraceSpanStatus
 		return ret
 	}
@@ -151,7 +154,7 @@ func (o *TraceDetail) GetRootStatus() TraceSpanStatus {
 // GetRootStatusOk returns a tuple with the RootStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetRootStatusOk() (*TraceSpanStatus, bool) {
-	if o == nil || o.RootStatus == nil {
+	if o == nil || IsNil(o.RootStatus) {
 		return nil, false
 	}
 	return o.RootStatus, true
@@ -159,7 +162,7 @@ func (o *TraceDetail) GetRootStatusOk() (*TraceSpanStatus, bool) {
 
 // HasRootStatus returns a boolean if a field has been set.
 func (o *TraceDetail) HasRootStatus() bool {
-	if o != nil && o.RootStatus != nil {
+	if o != nil && !IsNil(o.RootStatus) {
 		return true
 	}
 
@@ -173,7 +176,7 @@ func (o *TraceDetail) SetRootStatus(v TraceSpanStatus) {
 
 // GetRootOperationName returns the RootOperationName field value if set, zero value otherwise.
 func (o *TraceDetail) GetRootOperationName() string {
-	if o == nil || o.RootOperationName == nil {
+	if o == nil || IsNil(o.RootOperationName) {
 		var ret string
 		return ret
 	}
@@ -183,7 +186,7 @@ func (o *TraceDetail) GetRootOperationName() string {
 // GetRootOperationNameOk returns a tuple with the RootOperationName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetRootOperationNameOk() (*string, bool) {
-	if o == nil || o.RootOperationName == nil {
+	if o == nil || IsNil(o.RootOperationName) {
 		return nil, false
 	}
 	return o.RootOperationName, true
@@ -191,7 +194,7 @@ func (o *TraceDetail) GetRootOperationNameOk() (*string, bool) {
 
 // HasRootOperationName returns a boolean if a field has been set.
 func (o *TraceDetail) HasRootOperationName() bool {
-	if o != nil && o.RootOperationName != nil {
+	if o != nil && !IsNil(o.RootOperationName) {
 		return true
 	}
 
@@ -205,7 +208,7 @@ func (o *TraceDetail) SetRootOperationName(v string) {
 
 // GetMetrics returns the Metrics field value if set, zero value otherwise.
 func (o *TraceDetail) GetMetrics() map[string]DoubleTracingValue {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		var ret map[string]DoubleTracingValue
 		return ret
 	}
@@ -215,7 +218,7 @@ func (o *TraceDetail) GetMetrics() map[string]DoubleTracingValue {
 // GetMetricsOk returns a tuple with the Metrics field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetMetricsOk() (*map[string]DoubleTracingValue, bool) {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		return nil, false
 	}
 	return o.Metrics, true
@@ -223,7 +226,7 @@ func (o *TraceDetail) GetMetricsOk() (*map[string]DoubleTracingValue, bool) {
 
 // HasMetrics returns a boolean if a field has been set.
 func (o *TraceDetail) HasMetrics() bool {
-	if o != nil && o.Metrics != nil {
+	if o != nil && !IsNil(o.Metrics) {
 		return true
 	}
 
@@ -237,7 +240,7 @@ func (o *TraceDetail) SetMetrics(v map[string]DoubleTracingValue) {
 
 // GetStartedAt returns the StartedAt field value if set, zero value otherwise.
 func (o *TraceDetail) GetStartedAt() time.Time {
-	if o == nil || o.StartedAt == nil {
+	if o == nil || IsNil(o.StartedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -247,7 +250,7 @@ func (o *TraceDetail) GetStartedAt() time.Time {
 // GetStartedAtOk returns a tuple with the StartedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetStartedAtOk() (*time.Time, bool) {
-	if o == nil || o.StartedAt == nil {
+	if o == nil || IsNil(o.StartedAt) {
 		return nil, false
 	}
 	return o.StartedAt, true
@@ -255,7 +258,7 @@ func (o *TraceDetail) GetStartedAtOk() (*time.Time, bool) {
 
 // HasStartedAt returns a boolean if a field has been set.
 func (o *TraceDetail) HasStartedAt() bool {
-	if o != nil && o.StartedAt != nil {
+	if o != nil && !IsNil(o.StartedAt) {
 		return true
 	}
 
@@ -269,7 +272,7 @@ func (o *TraceDetail) SetStartedAt(v time.Time) {
 
 // GetCriticalPathServiceBreakdownSummary returns the CriticalPathServiceBreakdownSummary field value if set, zero value otherwise.
 func (o *TraceDetail) GetCriticalPathServiceBreakdownSummary() CriticalPathServiceBreakdownSummary {
-	if o == nil || o.CriticalPathServiceBreakdownSummary == nil {
+	if o == nil || IsNil(o.CriticalPathServiceBreakdownSummary) {
 		var ret CriticalPathServiceBreakdownSummary
 		return ret
 	}
@@ -279,7 +282,7 @@ func (o *TraceDetail) GetCriticalPathServiceBreakdownSummary() CriticalPathServi
 // GetCriticalPathServiceBreakdownSummaryOk returns a tuple with the CriticalPathServiceBreakdownSummary field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDetail) GetCriticalPathServiceBreakdownSummaryOk() (*CriticalPathServiceBreakdownSummary, bool) {
-	if o == nil || o.CriticalPathServiceBreakdownSummary == nil {
+	if o == nil || IsNil(o.CriticalPathServiceBreakdownSummary) {
 		return nil, false
 	}
 	return o.CriticalPathServiceBreakdownSummary, true
@@ -287,7 +290,7 @@ func (o *TraceDetail) GetCriticalPathServiceBreakdownSummaryOk() (*CriticalPathS
 
 // HasCriticalPathServiceBreakdownSummary returns a boolean if a field has been set.
 func (o *TraceDetail) HasCriticalPathServiceBreakdownSummary() bool {
-	if o != nil && o.CriticalPathServiceBreakdownSummary != nil {
+	if o != nil && !IsNil(o.CriticalPathServiceBreakdownSummary) {
 		return true
 	}
 
@@ -300,32 +303,38 @@ func (o *TraceDetail) SetCriticalPathServiceBreakdownSummary(v CriticalPathServi
 }
 
 func (o TraceDetail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.RootService != nil {
-		toSerialize["rootService"] = o.RootService
-	}
-	if o.RootResource != nil {
-		toSerialize["rootResource"] = o.RootResource
-	}
-	if o.RootStatus != nil {
-		toSerialize["rootStatus"] = o.RootStatus
-	}
-	if o.RootOperationName != nil {
-		toSerialize["rootOperationName"] = o.RootOperationName
-	}
-	if o.Metrics != nil {
-		toSerialize["metrics"] = o.Metrics
-	}
-	if o.StartedAt != nil {
-		toSerialize["startedAt"] = o.StartedAt
-	}
-	if o.CriticalPathServiceBreakdownSummary != nil {
-		toSerialize["criticalPathServiceBreakdownSummary"] = o.CriticalPathServiceBreakdownSummary
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceDetail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	if !IsNil(o.RootService) {
+		toSerialize["rootService"] = o.RootService
+	}
+	if !IsNil(o.RootResource) {
+		toSerialize["rootResource"] = o.RootResource
+	}
+	if !IsNil(o.RootStatus) {
+		toSerialize["rootStatus"] = o.RootStatus
+	}
+	if !IsNil(o.RootOperationName) {
+		toSerialize["rootOperationName"] = o.RootOperationName
+	}
+	if !IsNil(o.Metrics) {
+		toSerialize["metrics"] = o.Metrics
+	}
+	if !IsNil(o.StartedAt) {
+		toSerialize["startedAt"] = o.StartedAt
+	}
+	if !IsNil(o.CriticalPathServiceBreakdownSummary) {
+		toSerialize["criticalPathServiceBreakdownSummary"] = o.CriticalPathServiceBreakdownSummary
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceDetail struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CreateTraceQueryResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateTraceQueryResponse{}
 
 // CreateTraceQueryResponse struct for CreateTraceQueryResponse
 type CreateTraceQueryResponse struct {
@@ -63,11 +66,17 @@ func (o *CreateTraceQueryResponse) SetQueryId(v string) {
 }
 
 func (o CreateTraceQueryResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryId"] = o.QueryId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreateTraceQueryResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryId"] = o.QueryId
+	return toSerialize, nil
 }
 
 type NullableCreateTraceQueryResponse struct {

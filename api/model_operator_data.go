@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OperatorData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OperatorData{}
 
 // OperatorData The operator data for metrics query.
 type OperatorData struct {
@@ -90,14 +93,18 @@ func (o *OperatorData) SetParameters(v []OperatorParameter) {
 }
 
 func (o OperatorData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["operatorName"] = o.OperatorName
-	}
-	if true {
-		toSerialize["parameters"] = o.Parameters
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OperatorData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["operatorName"] = o.OperatorName
+	toSerialize["parameters"] = o.Parameters
+	return toSerialize, nil
 }
 
 type NullableOperatorData struct {

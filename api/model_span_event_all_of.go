@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanEventAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanEventAllOf{}
 
 // SpanEventAllOf struct for SpanEventAllOf
 type SpanEventAllOf struct {
@@ -39,7 +42,7 @@ func NewSpanEventAllOfWithDefaults() *SpanEventAllOf {
 
 // GetAttributes returns the Attributes field value if set, zero value otherwise.
 func (o *SpanEventAllOf) GetAttributes() []SpanEventAttribute {
-	if o == nil || o.Attributes == nil {
+	if o == nil || IsNil(o.Attributes) {
 		var ret []SpanEventAttribute
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *SpanEventAllOf) GetAttributes() []SpanEventAttribute {
 // GetAttributesOk returns a tuple with the Attributes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanEventAllOf) GetAttributesOk() ([]SpanEventAttribute, bool) {
-	if o == nil || o.Attributes == nil {
+	if o == nil || IsNil(o.Attributes) {
 		return nil, false
 	}
 	return o.Attributes, true
@@ -57,7 +60,7 @@ func (o *SpanEventAllOf) GetAttributesOk() ([]SpanEventAttribute, bool) {
 
 // HasAttributes returns a boolean if a field has been set.
 func (o *SpanEventAllOf) HasAttributes() bool {
-	if o != nil && o.Attributes != nil {
+	if o != nil && !IsNil(o.Attributes) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *SpanEventAllOf) SetAttributes(v []SpanEventAttribute) {
 }
 
 func (o SpanEventAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Attributes != nil {
-		toSerialize["attributes"] = o.Attributes
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanEventAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Attributes) {
+		toSerialize["attributes"] = o.Attributes
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanEventAllOf struct {

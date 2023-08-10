@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertMonitorQuery type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertMonitorQuery{}
 
 // AlertMonitorQuery struct for AlertMonitorQuery
 type AlertMonitorQuery struct {
@@ -117,17 +120,19 @@ func (o *AlertMonitorQuery) SetIsTriggerRow(v bool) {
 }
 
 func (o AlertMonitorQuery) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if true {
-		toSerialize["isTriggerRow"] = o.IsTriggerRow
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertMonitorQuery) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["query"] = o.Query
+	toSerialize["isTriggerRow"] = o.IsTriggerRow
+	return toSerialize, nil
 }
 
 type NullableAlertMonitorQuery struct {

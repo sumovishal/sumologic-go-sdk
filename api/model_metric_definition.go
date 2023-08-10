@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricDefinition{}
 
 // MetricDefinition struct for MetricDefinition
 type MetricDefinition struct {
@@ -41,7 +44,7 @@ func NewMetricDefinitionWithDefaults() *MetricDefinition {
 
 // GetMetric returns the Metric field value if set, zero value otherwise.
 func (o *MetricDefinition) GetMetric() string {
-	if o == nil || o.Metric == nil {
+	if o == nil || IsNil(o.Metric) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *MetricDefinition) GetMetric() string {
 // GetMetricOk returns a tuple with the Metric field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricDefinition) GetMetricOk() (*string, bool) {
-	if o == nil || o.Metric == nil {
+	if o == nil || IsNil(o.Metric) {
 		return nil, false
 	}
 	return o.Metric, true
@@ -59,7 +62,7 @@ func (o *MetricDefinition) GetMetricOk() (*string, bool) {
 
 // HasMetric returns a boolean if a field has been set.
 func (o *MetricDefinition) HasMetric() bool {
-	if o != nil && o.Metric != nil {
+	if o != nil && !IsNil(o.Metric) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *MetricDefinition) SetMetric(v string) {
 
 // GetDimensions returns the Dimensions field value if set, zero value otherwise.
 func (o *MetricDefinition) GetDimensions() map[string]string {
-	if o == nil || o.Dimensions == nil {
+	if o == nil || IsNil(o.Dimensions) {
 		var ret map[string]string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *MetricDefinition) GetDimensions() map[string]string {
 // GetDimensionsOk returns a tuple with the Dimensions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricDefinition) GetDimensionsOk() (*map[string]string, bool) {
-	if o == nil || o.Dimensions == nil {
+	if o == nil || IsNil(o.Dimensions) {
 		return nil, false
 	}
 	return o.Dimensions, true
@@ -91,7 +94,7 @@ func (o *MetricDefinition) GetDimensionsOk() (*map[string]string, bool) {
 
 // HasDimensions returns a boolean if a field has been set.
 func (o *MetricDefinition) HasDimensions() bool {
-	if o != nil && o.Dimensions != nil {
+	if o != nil && !IsNil(o.Dimensions) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *MetricDefinition) SetDimensions(v map[string]string) {
 }
 
 func (o MetricDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Metric != nil {
-		toSerialize["metric"] = o.Metric
-	}
-	if o.Dimensions != nil {
-		toSerialize["dimensions"] = o.Dimensions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Metric) {
+		toSerialize["metric"] = o.Metric
+	}
+	if !IsNil(o.Dimensions) {
+		toSerialize["dimensions"] = o.Dimensions
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricDefinition struct {

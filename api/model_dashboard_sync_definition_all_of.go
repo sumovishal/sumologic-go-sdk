@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardSyncDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardSyncDefinitionAllOf{}
 
 // DashboardSyncDefinitionAllOf struct for DashboardSyncDefinitionAllOf
 type DashboardSyncDefinitionAllOf struct {
@@ -171,23 +174,21 @@ func (o *DashboardSyncDefinitionAllOf) SetFilters(v []ReportFilterSyncDefinition
 }
 
 func (o DashboardSyncDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["detailLevel"] = o.DetailLevel
-	}
-	if true {
-		toSerialize["properties"] = o.Properties
-	}
-	if true {
-		toSerialize["panels"] = o.Panels
-	}
-	if true {
-		toSerialize["filters"] = o.Filters
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardSyncDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["description"] = o.Description
+	toSerialize["detailLevel"] = o.DetailLevel
+	toSerialize["properties"] = o.Properties
+	toSerialize["panels"] = o.Panels
+	toSerialize["filters"] = o.Filters
+	return toSerialize, nil
 }
 
 type NullableDashboardSyncDefinitionAllOf struct {

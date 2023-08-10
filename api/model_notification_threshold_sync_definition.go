@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,10 +14,14 @@ import (
 	"encoding/json"
 )
 
+// checks if the NotificationThresholdSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &NotificationThresholdSyncDefinition{}
+
 // NotificationThresholdSyncDefinition struct for NotificationThresholdSyncDefinition
 type NotificationThresholdSyncDefinition struct {
-	// Threshold type. Possible values are:  1. `message`  2. `group`  Use `group` as threshold type if the search query is of aggregate type. For non-aggregate queries, set it to `message`.
-	ThresholdType string `json:"thresholdType"`
+	// This property is deprecated. The system will automatically infer the value of this field from the query going forward, so the user-specified value will no longer be honored. Threshold type. Possible values are:  1. `message`  2. `group`  Use `group` as threshold type if the search query is of aggregate type. For non-aggregate queries, set it to `message`.
+	// Deprecated
+	ThresholdType *string `json:"thresholdType,omitempty"`
 	// Criterion to be applied when comparing actual result count with expected count. Possible values are:  1. `eq`  2. `gt`  3. `ge`  4. `lt`  5. `le`
 	Operator string `json:"operator"`
 	// Expected result count.
@@ -28,9 +32,8 @@ type NotificationThresholdSyncDefinition struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewNotificationThresholdSyncDefinition(thresholdType string, operator string, count int32) *NotificationThresholdSyncDefinition {
+func NewNotificationThresholdSyncDefinition(operator string, count int32) *NotificationThresholdSyncDefinition {
 	this := NotificationThresholdSyncDefinition{}
-	this.ThresholdType = thresholdType
 	this.Operator = operator
 	this.Count = count
 	return &this
@@ -44,28 +47,39 @@ func NewNotificationThresholdSyncDefinitionWithDefaults() *NotificationThreshold
 	return &this
 }
 
-// GetThresholdType returns the ThresholdType field value
+// GetThresholdType returns the ThresholdType field value if set, zero value otherwise.
+// Deprecated
 func (o *NotificationThresholdSyncDefinition) GetThresholdType() string {
-	if o == nil {
+	if o == nil || IsNil(o.ThresholdType) {
 		var ret string
 		return ret
 	}
-
-	return o.ThresholdType
+	return *o.ThresholdType
 }
 
-// GetThresholdTypeOk returns a tuple with the ThresholdType field value
+// GetThresholdTypeOk returns a tuple with the ThresholdType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *NotificationThresholdSyncDefinition) GetThresholdTypeOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.ThresholdType) {
 		return nil, false
 	}
-	return &o.ThresholdType, true
+	return o.ThresholdType, true
 }
 
-// SetThresholdType sets field value
+// HasThresholdType returns a boolean if a field has been set.
+func (o *NotificationThresholdSyncDefinition) HasThresholdType() bool {
+	if o != nil && !IsNil(o.ThresholdType) {
+		return true
+	}
+
+	return false
+}
+
+// SetThresholdType gets a reference to the given string and assigns it to the ThresholdType field.
+// Deprecated
 func (o *NotificationThresholdSyncDefinition) SetThresholdType(v string) {
-	o.ThresholdType = v
+	o.ThresholdType = &v
 }
 
 // GetOperator returns the Operator field value
@@ -117,17 +131,21 @@ func (o *NotificationThresholdSyncDefinition) SetCount(v int32) {
 }
 
 func (o NotificationThresholdSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["thresholdType"] = o.ThresholdType
-	}
-	if true {
-		toSerialize["operator"] = o.Operator
-	}
-	if true {
-		toSerialize["count"] = o.Count
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o NotificationThresholdSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ThresholdType) {
+		toSerialize["thresholdType"] = o.ThresholdType
+	}
+	toSerialize["operator"] = o.Operator
+	toSerialize["count"] = o.Count
+	return toSerialize, nil
 }
 
 type NullableNotificationThresholdSyncDefinition struct {

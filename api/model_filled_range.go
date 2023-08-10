@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the FilledRange type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FilledRange{}
 
 // FilledRange Range of timestamps already filled since the autoview has been created.
 type FilledRange struct {
@@ -91,14 +94,18 @@ func (o *FilledRange) SetEndTime(v time.Time) {
 }
 
 func (o FilledRange) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["startTime"] = o.StartTime
-	}
-	if true {
-		toSerialize["endTime"] = o.EndTime
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o FilledRange) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["startTime"] = o.StartTime
+	toSerialize["endTime"] = o.EndTime
+	return toSerialize, nil
 }
 
 type NullableFilledRange struct {

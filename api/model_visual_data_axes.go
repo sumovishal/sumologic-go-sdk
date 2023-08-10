@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VisualDataAxes type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualDataAxes{}
 
 // VisualDataAxes struct for VisualDataAxes
 type VisualDataAxes struct {
@@ -95,7 +98,7 @@ func (o *VisualDataAxes) SetY(v []VisualAxisData) {
 
 // GetX2 returns the X2 field value if set, zero value otherwise.
 func (o *VisualDataAxes) GetX2() []VisualAxisData {
-	if o == nil || o.X2 == nil {
+	if o == nil || IsNil(o.X2) {
 		var ret []VisualAxisData
 		return ret
 	}
@@ -105,7 +108,7 @@ func (o *VisualDataAxes) GetX2() []VisualAxisData {
 // GetX2Ok returns a tuple with the X2 field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataAxes) GetX2Ok() ([]VisualAxisData, bool) {
-	if o == nil || o.X2 == nil {
+	if o == nil || IsNil(o.X2) {
 		return nil, false
 	}
 	return o.X2, true
@@ -113,7 +116,7 @@ func (o *VisualDataAxes) GetX2Ok() ([]VisualAxisData, bool) {
 
 // HasX2 returns a boolean if a field has been set.
 func (o *VisualDataAxes) HasX2() bool {
-	if o != nil && o.X2 != nil {
+	if o != nil && !IsNil(o.X2) {
 		return true
 	}
 
@@ -127,7 +130,7 @@ func (o *VisualDataAxes) SetX2(v []VisualAxisData) {
 
 // GetY2 returns the Y2 field value if set, zero value otherwise.
 func (o *VisualDataAxes) GetY2() []VisualAxisData {
-	if o == nil || o.Y2 == nil {
+	if o == nil || IsNil(o.Y2) {
 		var ret []VisualAxisData
 		return ret
 	}
@@ -137,7 +140,7 @@ func (o *VisualDataAxes) GetY2() []VisualAxisData {
 // GetY2Ok returns a tuple with the Y2 field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataAxes) GetY2Ok() ([]VisualAxisData, bool) {
-	if o == nil || o.Y2 == nil {
+	if o == nil || IsNil(o.Y2) {
 		return nil, false
 	}
 	return o.Y2, true
@@ -145,7 +148,7 @@ func (o *VisualDataAxes) GetY2Ok() ([]VisualAxisData, bool) {
 
 // HasY2 returns a boolean if a field has been set.
 func (o *VisualDataAxes) HasY2() bool {
-	if o != nil && o.Y2 != nil {
+	if o != nil && !IsNil(o.Y2) {
 		return true
 	}
 
@@ -158,20 +161,24 @@ func (o *VisualDataAxes) SetY2(v []VisualAxisData) {
 }
 
 func (o VisualDataAxes) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["x"] = o.X
-	}
-	if true {
-		toSerialize["y"] = o.Y
-	}
-	if o.X2 != nil {
-		toSerialize["x2"] = o.X2
-	}
-	if o.Y2 != nil {
-		toSerialize["y2"] = o.Y2
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualDataAxes) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["x"] = o.X
+	toSerialize["y"] = o.Y
+	if !IsNil(o.X2) {
+		toSerialize["x2"] = o.X2
+	}
+	if !IsNil(o.Y2) {
+		toSerialize["y2"] = o.Y2
+	}
+	return toSerialize, nil
 }
 
 type NullableVisualDataAxes struct {

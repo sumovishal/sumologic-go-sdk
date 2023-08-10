@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -77,8 +77,8 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/copy/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -102,7 +102,7 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -114,9 +114,9 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -132,7 +132,8 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -205,7 +206,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/copy"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -214,7 +215,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		return localVarReturnValue, nil, reportError("destinationFolder is required and must be specified")
 	}
 
-	localVarQueryParams.Add("destinationFolder", parameterToString(*r.destinationFolder, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolder", r.destinationFolder, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -233,7 +234,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -245,9 +246,9 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -263,7 +264,8 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -329,7 +331,7 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/delete"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -353,7 +355,7 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -365,9 +367,9 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -383,7 +385,8 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -451,7 +454,7 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/export"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -475,7 +478,7 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -487,9 +490,9 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -505,7 +508,8 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -585,7 +589,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/{folderId}/import"
-	localVarPath = strings.Replace(localVarPath, "{"+"folderId"+"}", url.PathEscape(parameterToString(r.folderId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"folderId"+"}", url.PathEscape(parameterValueToString(r.folderId, "folderId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -595,7 +599,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 	}
 
 	if r.overwrite != nil {
-		localVarQueryParams.Add("overwrite", parameterToString(*r.overwrite, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "overwrite", r.overwrite, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -615,7 +619,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	// body params
 	localVarPostBody = r.contentSyncDefinition
@@ -629,9 +633,9 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -647,7 +651,8 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -716,8 +721,8 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/delete/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -741,7 +746,7 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -753,9 +758,9 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -771,7 +776,8 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -840,8 +846,8 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 	}
 
 	localVarPath := localBasePath + "/v2/content/{contentId}/export/{jobId}/result"
-	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterToString(r.contentId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterValueToString(r.contentId, "contentId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -865,7 +871,7 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -877,9 +883,9 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -895,7 +901,8 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -964,8 +971,8 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 	}
 
 	localVarPath := localBasePath + "/v2/content/{contentId}/export/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterToString(r.contentId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterValueToString(r.contentId, "contentId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -989,7 +996,7 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -1001,9 +1008,9 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1019,7 +1026,8 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1088,8 +1096,8 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/{folderId}/import/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"folderId"+"}", url.PathEscape(parameterToString(r.folderId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"folderId"+"}", url.PathEscape(parameterValueToString(r.folderId, "folderId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1113,7 +1121,7 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -1125,9 +1133,9 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1143,7 +1151,8 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1224,7 +1233,7 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 		return localVarReturnValue, nil, reportError("path is required and must be specified")
 	}
 
-	localVarQueryParams.Add("path", parameterToString(*r.path, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "path", r.path, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1252,9 +1261,9 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1270,7 +1279,8 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1330,7 +1340,7 @@ func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest
 	}
 
 	localVarPath := localBasePath + "/v2/content/{contentId}/path"
-	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterToString(r.contentId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"contentId"+"}", url.PathEscape(parameterValueToString(r.contentId, "contentId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1363,9 +1373,9 @@ func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1381,7 +1391,8 @@ func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1453,7 +1464,7 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/move"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1462,7 +1473,7 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 		return nil, reportError("destinationFolderId is required and must be specified")
 	}
 
-	localVarQueryParams.Add("destinationFolderId", parameterToString(*r.destinationFolderId, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolderId", r.destinationFolderId, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1481,7 +1492,7 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -1493,9 +1504,9 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1511,7 +1522,8 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 

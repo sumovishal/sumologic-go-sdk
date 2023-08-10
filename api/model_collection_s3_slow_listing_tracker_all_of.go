@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionS3SlowListingTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionS3SlowListingTrackerAllOf{}
 
 // CollectionS3SlowListingTrackerAllOf struct for CollectionS3SlowListingTrackerAllOf
 type CollectionS3SlowListingTrackerAllOf struct {
@@ -41,7 +44,7 @@ func NewCollectionS3SlowListingTrackerAllOfWithDefaults() *CollectionS3SlowListi
 
 // GetBucketName returns the BucketName field value if set, zero value otherwise.
 func (o *CollectionS3SlowListingTrackerAllOf) GetBucketName() string {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *CollectionS3SlowListingTrackerAllOf) GetBucketName() string {
 // GetBucketNameOk returns a tuple with the BucketName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3SlowListingTrackerAllOf) GetBucketNameOk() (*string, bool) {
-	if o == nil || o.BucketName == nil {
+	if o == nil || IsNil(o.BucketName) {
 		return nil, false
 	}
 	return o.BucketName, true
@@ -59,7 +62,7 @@ func (o *CollectionS3SlowListingTrackerAllOf) GetBucketNameOk() (*string, bool) 
 
 // HasBucketName returns a boolean if a field has been set.
 func (o *CollectionS3SlowListingTrackerAllOf) HasBucketName() bool {
-	if o != nil && o.BucketName != nil {
+	if o != nil && !IsNil(o.BucketName) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *CollectionS3SlowListingTrackerAllOf) SetBucketName(v string) {
 
 // GetFlaggedAfterMinutes returns the FlaggedAfterMinutes field value if set, zero value otherwise.
 func (o *CollectionS3SlowListingTrackerAllOf) GetFlaggedAfterMinutes() string {
-	if o == nil || o.FlaggedAfterMinutes == nil {
+	if o == nil || IsNil(o.FlaggedAfterMinutes) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *CollectionS3SlowListingTrackerAllOf) GetFlaggedAfterMinutes() string {
 // GetFlaggedAfterMinutesOk returns a tuple with the FlaggedAfterMinutes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3SlowListingTrackerAllOf) GetFlaggedAfterMinutesOk() (*string, bool) {
-	if o == nil || o.FlaggedAfterMinutes == nil {
+	if o == nil || IsNil(o.FlaggedAfterMinutes) {
 		return nil, false
 	}
 	return o.FlaggedAfterMinutes, true
@@ -91,7 +94,7 @@ func (o *CollectionS3SlowListingTrackerAllOf) GetFlaggedAfterMinutesOk() (*strin
 
 // HasFlaggedAfterMinutes returns a boolean if a field has been set.
 func (o *CollectionS3SlowListingTrackerAllOf) HasFlaggedAfterMinutes() bool {
-	if o != nil && o.FlaggedAfterMinutes != nil {
+	if o != nil && !IsNil(o.FlaggedAfterMinutes) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *CollectionS3SlowListingTrackerAllOf) SetFlaggedAfterMinutes(v string) {
 }
 
 func (o CollectionS3SlowListingTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.BucketName != nil {
-		toSerialize["bucketName"] = o.BucketName
-	}
-	if o.FlaggedAfterMinutes != nil {
-		toSerialize["flaggedAfterMinutes"] = o.FlaggedAfterMinutes
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CollectionS3SlowListingTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BucketName) {
+		toSerialize["bucketName"] = o.BucketName
+	}
+	if !IsNil(o.FlaggedAfterMinutes) {
+		toSerialize["flaggedAfterMinutes"] = o.FlaggedAfterMinutes
+	}
+	return toSerialize, nil
 }
 
 type NullableCollectionS3SlowListingTrackerAllOf struct {

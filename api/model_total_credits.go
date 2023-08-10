@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TotalCredits type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TotalCredits{}
 
 // TotalCredits Total amount of credits to be deducted from the parent organization corresponding to the baselines
 type TotalCredits struct {
@@ -65,7 +68,7 @@ func (o *TotalCredits) SetTotalCredits(v float64) {
 
 // GetBreakdown returns the Breakdown field value if set, zero value otherwise.
 func (o *TotalCredits) GetBreakdown() CreditsBreakdown {
-	if o == nil || o.Breakdown == nil {
+	if o == nil || IsNil(o.Breakdown) {
 		var ret CreditsBreakdown
 		return ret
 	}
@@ -75,7 +78,7 @@ func (o *TotalCredits) GetBreakdown() CreditsBreakdown {
 // GetBreakdownOk returns a tuple with the Breakdown field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TotalCredits) GetBreakdownOk() (*CreditsBreakdown, bool) {
-	if o == nil || o.Breakdown == nil {
+	if o == nil || IsNil(o.Breakdown) {
 		return nil, false
 	}
 	return o.Breakdown, true
@@ -83,7 +86,7 @@ func (o *TotalCredits) GetBreakdownOk() (*CreditsBreakdown, bool) {
 
 // HasBreakdown returns a boolean if a field has been set.
 func (o *TotalCredits) HasBreakdown() bool {
-	if o != nil && o.Breakdown != nil {
+	if o != nil && !IsNil(o.Breakdown) {
 		return true
 	}
 
@@ -96,14 +99,20 @@ func (o *TotalCredits) SetBreakdown(v CreditsBreakdown) {
 }
 
 func (o TotalCredits) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["totalCredits"] = o.TotalCredits
-	}
-	if o.Breakdown != nil {
-		toSerialize["breakdown"] = o.Breakdown
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TotalCredits) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["totalCredits"] = o.TotalCredits
+	if !IsNil(o.Breakdown) {
+		toSerialize["breakdown"] = o.Breakdown
+	}
+	return toSerialize, nil
 }
 
 type NullableTotalCredits struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the QueriesParametersResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &QueriesParametersResult{}
 
 // QueriesParametersResult Queries validation and extracted parameters result.
 type QueriesParametersResult struct {
@@ -43,7 +46,7 @@ func NewQueriesParametersResultWithDefaults() *QueriesParametersResult {
 
 // GetIsValid returns the IsValid field value if set, zero value otherwise.
 func (o *QueriesParametersResult) GetIsValid() bool {
-	if o == nil || o.IsValid == nil {
+	if o == nil || IsNil(o.IsValid) {
 		var ret bool
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *QueriesParametersResult) GetIsValid() bool {
 // GetIsValidOk returns a tuple with the IsValid field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *QueriesParametersResult) GetIsValidOk() (*bool, bool) {
-	if o == nil || o.IsValid == nil {
+	if o == nil || IsNil(o.IsValid) {
 		return nil, false
 	}
 	return o.IsValid, true
@@ -61,7 +64,7 @@ func (o *QueriesParametersResult) GetIsValidOk() (*bool, bool) {
 
 // HasIsValid returns a boolean if a field has been set.
 func (o *QueriesParametersResult) HasIsValid() bool {
-	if o != nil && o.IsValid != nil {
+	if o != nil && !IsNil(o.IsValid) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *QueriesParametersResult) SetIsValid(v bool) {
 
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *QueriesParametersResult) GetErrors() []string {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		var ret []string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *QueriesParametersResult) GetErrors() []string {
 // GetErrorsOk returns a tuple with the Errors field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *QueriesParametersResult) GetErrorsOk() ([]string, bool) {
-	if o == nil || o.Errors == nil {
+	if o == nil || IsNil(o.Errors) {
 		return nil, false
 	}
 	return o.Errors, true
@@ -93,7 +96,7 @@ func (o *QueriesParametersResult) GetErrorsOk() ([]string, bool) {
 
 // HasErrors returns a boolean if a field has been set.
 func (o *QueriesParametersResult) HasErrors() bool {
-	if o != nil && o.Errors != nil {
+	if o != nil && !IsNil(o.Errors) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *QueriesParametersResult) SetErrors(v []string) {
 
 // GetLogsOutlier returns the LogsOutlier field value if set, zero value otherwise.
 func (o *QueriesParametersResult) GetLogsOutlier() LogsOutlier {
-	if o == nil || o.LogsOutlier == nil {
+	if o == nil || IsNil(o.LogsOutlier) {
 		var ret LogsOutlier
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *QueriesParametersResult) GetLogsOutlier() LogsOutlier {
 // GetLogsOutlierOk returns a tuple with the LogsOutlier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *QueriesParametersResult) GetLogsOutlierOk() (*LogsOutlier, bool) {
-	if o == nil || o.LogsOutlier == nil {
+	if o == nil || IsNil(o.LogsOutlier) {
 		return nil, false
 	}
 	return o.LogsOutlier, true
@@ -125,7 +128,7 @@ func (o *QueriesParametersResult) GetLogsOutlierOk() (*LogsOutlier, bool) {
 
 // HasLogsOutlier returns a boolean if a field has been set.
 func (o *QueriesParametersResult) HasLogsOutlier() bool {
-	if o != nil && o.LogsOutlier != nil {
+	if o != nil && !IsNil(o.LogsOutlier) {
 		return true
 	}
 
@@ -139,7 +142,7 @@ func (o *QueriesParametersResult) SetLogsOutlier(v LogsOutlier) {
 
 // GetMetricsOutlier returns the MetricsOutlier field value if set, zero value otherwise.
 func (o *QueriesParametersResult) GetMetricsOutlier() MetricsOutlier {
-	if o == nil || o.MetricsOutlier == nil {
+	if o == nil || IsNil(o.MetricsOutlier) {
 		var ret MetricsOutlier
 		return ret
 	}
@@ -149,7 +152,7 @@ func (o *QueriesParametersResult) GetMetricsOutlier() MetricsOutlier {
 // GetMetricsOutlierOk returns a tuple with the MetricsOutlier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *QueriesParametersResult) GetMetricsOutlierOk() (*MetricsOutlier, bool) {
-	if o == nil || o.MetricsOutlier == nil {
+	if o == nil || IsNil(o.MetricsOutlier) {
 		return nil, false
 	}
 	return o.MetricsOutlier, true
@@ -157,7 +160,7 @@ func (o *QueriesParametersResult) GetMetricsOutlierOk() (*MetricsOutlier, bool) 
 
 // HasMetricsOutlier returns a boolean if a field has been set.
 func (o *QueriesParametersResult) HasMetricsOutlier() bool {
-	if o != nil && o.MetricsOutlier != nil {
+	if o != nil && !IsNil(o.MetricsOutlier) {
 		return true
 	}
 
@@ -170,20 +173,28 @@ func (o *QueriesParametersResult) SetMetricsOutlier(v MetricsOutlier) {
 }
 
 func (o QueriesParametersResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.IsValid != nil {
-		toSerialize["isValid"] = o.IsValid
-	}
-	if o.Errors != nil {
-		toSerialize["errors"] = o.Errors
-	}
-	if o.LogsOutlier != nil {
-		toSerialize["logsOutlier"] = o.LogsOutlier
-	}
-	if o.MetricsOutlier != nil {
-		toSerialize["metricsOutlier"] = o.MetricsOutlier
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o QueriesParametersResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.IsValid) {
+		toSerialize["isValid"] = o.IsValid
+	}
+	if !IsNil(o.Errors) {
+		toSerialize["errors"] = o.Errors
+	}
+	if !IsNil(o.LogsOutlier) {
+		toSerialize["logsOutlier"] = o.LogsOutlier
+	}
+	if !IsNil(o.MetricsOutlier) {
+		toSerialize["metricsOutlier"] = o.MetricsOutlier
+	}
+	return toSerialize, nil
 }
 
 type NullableQueriesParametersResult struct {

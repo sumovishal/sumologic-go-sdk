@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the AlertsLibraryBaseResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsLibraryBaseResponse{}
 
 // AlertsLibraryBaseResponse struct for AlertsLibraryBaseResponse
 type AlertsLibraryBaseResponse struct {
@@ -343,7 +346,7 @@ func (o *AlertsLibraryBaseResponse) SetType(v string) {
 
 // GetIsLocked returns the IsLocked field value if set, zero value otherwise.
 func (o *AlertsLibraryBaseResponse) GetIsLocked() bool {
-	if o == nil || o.IsLocked == nil {
+	if o == nil || IsNil(o.IsLocked) {
 		var ret bool
 		return ret
 	}
@@ -353,7 +356,7 @@ func (o *AlertsLibraryBaseResponse) GetIsLocked() bool {
 // GetIsLockedOk returns a tuple with the IsLocked field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryBaseResponse) GetIsLockedOk() (*bool, bool) {
-	if o == nil || o.IsLocked == nil {
+	if o == nil || IsNil(o.IsLocked) {
 		return nil, false
 	}
 	return o.IsLocked, true
@@ -361,7 +364,7 @@ func (o *AlertsLibraryBaseResponse) GetIsLockedOk() (*bool, bool) {
 
 // HasIsLocked returns a boolean if a field has been set.
 func (o *AlertsLibraryBaseResponse) HasIsLocked() bool {
-	if o != nil && o.IsLocked != nil {
+	if o != nil && !IsNil(o.IsLocked) {
 		return true
 	}
 
@@ -422,50 +425,32 @@ func (o *AlertsLibraryBaseResponse) SetIsMutable(v bool) {
 }
 
 func (o AlertsLibraryBaseResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["version"] = o.Version
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if true {
-		toSerialize["parentId"] = o.ParentId
-	}
-	if true {
-		toSerialize["contentType"] = o.ContentType
-	}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if o.IsLocked != nil {
-		toSerialize["isLocked"] = o.IsLocked
-	}
-	if true {
-		toSerialize["isSystem"] = o.IsSystem
-	}
-	if true {
-		toSerialize["isMutable"] = o.IsMutable
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertsLibraryBaseResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["description"] = o.Description
+	toSerialize["version"] = o.Version
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	toSerialize["parentId"] = o.ParentId
+	toSerialize["contentType"] = o.ContentType
+	toSerialize["type"] = o.Type
+	if !IsNil(o.IsLocked) {
+		toSerialize["isLocked"] = o.IsLocked
+	}
+	toSerialize["isSystem"] = o.IsSystem
+	toSerialize["isMutable"] = o.IsMutable
+	return toSerialize, nil
 }
 
 type NullableAlertsLibraryBaseResponse struct {

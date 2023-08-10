@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SharedBucket type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SharedBucket{}
 
 // SharedBucket A shared bucket contains capacities which can be used my multiple entitlements which are linked to the bucket. There will be a 1:many mapping between SharedBucket:Entitlement.
 type SharedBucket struct {
@@ -120,7 +123,7 @@ func (o *SharedBucket) SetLinkedEntitlementTypes(v []string) {
 
 // GetCapacitites returns the Capacitites field value if set, zero value otherwise.
 func (o *SharedBucket) GetCapacitites() []Capacity {
-	if o == nil || o.Capacitites == nil {
+	if o == nil || IsNil(o.Capacitites) {
 		var ret []Capacity
 		return ret
 	}
@@ -130,7 +133,7 @@ func (o *SharedBucket) GetCapacitites() []Capacity {
 // GetCapacititesOk returns a tuple with the Capacitites field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SharedBucket) GetCapacititesOk() ([]Capacity, bool) {
-	if o == nil || o.Capacitites == nil {
+	if o == nil || IsNil(o.Capacitites) {
 		return nil, false
 	}
 	return o.Capacitites, true
@@ -138,7 +141,7 @@ func (o *SharedBucket) GetCapacititesOk() ([]Capacity, bool) {
 
 // HasCapacitites returns a boolean if a field has been set.
 func (o *SharedBucket) HasCapacitites() bool {
-	if o != nil && o.Capacitites != nil {
+	if o != nil && !IsNil(o.Capacitites) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *SharedBucket) SetCapacitites(v []Capacity) {
 }
 
 func (o SharedBucket) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if true {
-		toSerialize["linkedEntitlementTypes"] = o.LinkedEntitlementTypes
-	}
-	if o.Capacitites != nil {
-		toSerialize["capacitites"] = o.Capacitites
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SharedBucket) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["label"] = o.Label
+	toSerialize["linkedEntitlementTypes"] = o.LinkedEntitlementTypes
+	if !IsNil(o.Capacitites) {
+		toSerialize["capacitites"] = o.Capacitites
+	}
+	return toSerialize, nil
 }
 
 type NullableSharedBucket struct {

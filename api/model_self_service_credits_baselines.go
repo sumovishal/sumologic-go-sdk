@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SelfServiceCreditsBaselines type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SelfServiceCreditsBaselines{}
 
 // SelfServiceCreditsBaselines Details of product variables and its quantity as required for credits.
 type SelfServiceCreditsBaselines struct {
@@ -61,7 +64,7 @@ func NewSelfServiceCreditsBaselinesWithDefaults() *SelfServiceCreditsBaselines {
 
 // GetContinuousIngest returns the ContinuousIngest field value if set, zero value otherwise.
 func (o *SelfServiceCreditsBaselines) GetContinuousIngest() int64 {
-	if o == nil || o.ContinuousIngest == nil {
+	if o == nil || IsNil(o.ContinuousIngest) {
 		var ret int64
 		return ret
 	}
@@ -71,7 +74,7 @@ func (o *SelfServiceCreditsBaselines) GetContinuousIngest() int64 {
 // GetContinuousIngestOk returns a tuple with the ContinuousIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SelfServiceCreditsBaselines) GetContinuousIngestOk() (*int64, bool) {
-	if o == nil || o.ContinuousIngest == nil {
+	if o == nil || IsNil(o.ContinuousIngest) {
 		return nil, false
 	}
 	return o.ContinuousIngest, true
@@ -79,7 +82,7 @@ func (o *SelfServiceCreditsBaselines) GetContinuousIngestOk() (*int64, bool) {
 
 // HasContinuousIngest returns a boolean if a field has been set.
 func (o *SelfServiceCreditsBaselines) HasContinuousIngest() bool {
-	if o != nil && o.ContinuousIngest != nil {
+	if o != nil && !IsNil(o.ContinuousIngest) {
 		return true
 	}
 
@@ -93,7 +96,7 @@ func (o *SelfServiceCreditsBaselines) SetContinuousIngest(v int64) {
 
 // GetContinuousStorage returns the ContinuousStorage field value if set, zero value otherwise.
 func (o *SelfServiceCreditsBaselines) GetContinuousStorage() int64 {
-	if o == nil || o.ContinuousStorage == nil {
+	if o == nil || IsNil(o.ContinuousStorage) {
 		var ret int64
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *SelfServiceCreditsBaselines) GetContinuousStorage() int64 {
 // GetContinuousStorageOk returns a tuple with the ContinuousStorage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SelfServiceCreditsBaselines) GetContinuousStorageOk() (*int64, bool) {
-	if o == nil || o.ContinuousStorage == nil {
+	if o == nil || IsNil(o.ContinuousStorage) {
 		return nil, false
 	}
 	return o.ContinuousStorage, true
@@ -111,7 +114,7 @@ func (o *SelfServiceCreditsBaselines) GetContinuousStorageOk() (*int64, bool) {
 
 // HasContinuousStorage returns a boolean if a field has been set.
 func (o *SelfServiceCreditsBaselines) HasContinuousStorage() bool {
-	if o != nil && o.ContinuousStorage != nil {
+	if o != nil && !IsNil(o.ContinuousStorage) {
 		return true
 	}
 
@@ -125,7 +128,7 @@ func (o *SelfServiceCreditsBaselines) SetContinuousStorage(v int64) {
 
 // GetMetrics returns the Metrics field value if set, zero value otherwise.
 func (o *SelfServiceCreditsBaselines) GetMetrics() int64 {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		var ret int64
 		return ret
 	}
@@ -135,7 +138,7 @@ func (o *SelfServiceCreditsBaselines) GetMetrics() int64 {
 // GetMetricsOk returns a tuple with the Metrics field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SelfServiceCreditsBaselines) GetMetricsOk() (*int64, bool) {
-	if o == nil || o.Metrics == nil {
+	if o == nil || IsNil(o.Metrics) {
 		return nil, false
 	}
 	return o.Metrics, true
@@ -143,7 +146,7 @@ func (o *SelfServiceCreditsBaselines) GetMetricsOk() (*int64, bool) {
 
 // HasMetrics returns a boolean if a field has been set.
 func (o *SelfServiceCreditsBaselines) HasMetrics() bool {
-	if o != nil && o.Metrics != nil {
+	if o != nil && !IsNil(o.Metrics) {
 		return true
 	}
 
@@ -157,7 +160,7 @@ func (o *SelfServiceCreditsBaselines) SetMetrics(v int64) {
 
 // GetTracingIngest returns the TracingIngest field value if set, zero value otherwise.
 func (o *SelfServiceCreditsBaselines) GetTracingIngest() int64 {
-	if o == nil || o.TracingIngest == nil {
+	if o == nil || IsNil(o.TracingIngest) {
 		var ret int64
 		return ret
 	}
@@ -167,7 +170,7 @@ func (o *SelfServiceCreditsBaselines) GetTracingIngest() int64 {
 // GetTracingIngestOk returns a tuple with the TracingIngest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SelfServiceCreditsBaselines) GetTracingIngestOk() (*int64, bool) {
-	if o == nil || o.TracingIngest == nil {
+	if o == nil || IsNil(o.TracingIngest) {
 		return nil, false
 	}
 	return o.TracingIngest, true
@@ -175,7 +178,7 @@ func (o *SelfServiceCreditsBaselines) GetTracingIngestOk() (*int64, bool) {
 
 // HasTracingIngest returns a boolean if a field has been set.
 func (o *SelfServiceCreditsBaselines) HasTracingIngest() bool {
-	if o != nil && o.TracingIngest != nil {
+	if o != nil && !IsNil(o.TracingIngest) {
 		return true
 	}
 
@@ -188,20 +191,28 @@ func (o *SelfServiceCreditsBaselines) SetTracingIngest(v int64) {
 }
 
 func (o SelfServiceCreditsBaselines) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ContinuousIngest != nil {
-		toSerialize["continuousIngest"] = o.ContinuousIngest
-	}
-	if o.ContinuousStorage != nil {
-		toSerialize["continuousStorage"] = o.ContinuousStorage
-	}
-	if o.Metrics != nil {
-		toSerialize["metrics"] = o.Metrics
-	}
-	if o.TracingIngest != nil {
-		toSerialize["tracingIngest"] = o.TracingIngest
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SelfServiceCreditsBaselines) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ContinuousIngest) {
+		toSerialize["continuousIngest"] = o.ContinuousIngest
+	}
+	if !IsNil(o.ContinuousStorage) {
+		toSerialize["continuousStorage"] = o.ContinuousStorage
+	}
+	if !IsNil(o.Metrics) {
+		toSerialize["metrics"] = o.Metrics
+	}
+	if !IsNil(o.TracingIngest) {
+		toSerialize["tracingIngest"] = o.TracingIngest
+	}
+	return toSerialize, nil
 }
 
 type NullableSelfServiceCreditsBaselines struct {

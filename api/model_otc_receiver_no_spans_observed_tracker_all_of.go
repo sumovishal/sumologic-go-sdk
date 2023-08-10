@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCReceiverNoSpansObservedTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCReceiverNoSpansObservedTrackerAllOf{}
 
 // OTCReceiverNoSpansObservedTrackerAllOf struct for OTCReceiverNoSpansObservedTrackerAllOf
 type OTCReceiverNoSpansObservedTrackerAllOf struct {
@@ -43,7 +46,7 @@ func NewOTCReceiverNoSpansObservedTrackerAllOfWithDefaults() *OTCReceiverNoSpans
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -61,7 +64,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceIdOk() (*string, boo
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -75,7 +78,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceAddress() string {
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -93,7 +96,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetInstanceAddressOk() (*string
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) SetInstanceAddress(v string) {
 
 // GetReceiverId returns the ReceiverId field value if set, zero value otherwise.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetReceiverId() string {
-	if o == nil || o.ReceiverId == nil {
+	if o == nil || IsNil(o.ReceiverId) {
 		var ret string
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetReceiverId() string {
 // GetReceiverIdOk returns a tuple with the ReceiverId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetReceiverIdOk() (*string, bool) {
-	if o == nil || o.ReceiverId == nil {
+	if o == nil || IsNil(o.ReceiverId) {
 		return nil, false
 	}
 	return o.ReceiverId, true
@@ -125,7 +128,7 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) GetReceiverIdOk() (*string, boo
 
 // HasReceiverId returns a boolean if a field has been set.
 func (o *OTCReceiverNoSpansObservedTrackerAllOf) HasReceiverId() bool {
-	if o != nil && o.ReceiverId != nil {
+	if o != nil && !IsNil(o.ReceiverId) {
 		return true
 	}
 
@@ -138,17 +141,25 @@ func (o *OTCReceiverNoSpansObservedTrackerAllOf) SetReceiverId(v string) {
 }
 
 func (o OTCReceiverNoSpansObservedTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.InstanceId != nil {
-		toSerialize["instanceId"] = o.InstanceId
-	}
-	if o.InstanceAddress != nil {
-		toSerialize["instanceAddress"] = o.InstanceAddress
-	}
-	if o.ReceiverId != nil {
-		toSerialize["receiverId"] = o.ReceiverId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OTCReceiverNoSpansObservedTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.InstanceId) {
+		toSerialize["instanceId"] = o.InstanceId
+	}
+	if !IsNil(o.InstanceAddress) {
+		toSerialize["instanceAddress"] = o.InstanceAddress
+	}
+	if !IsNil(o.ReceiverId) {
+		toSerialize["receiverId"] = o.ReceiverId
+	}
+	return toSerialize, nil
 }
 
 type NullableOTCReceiverNoSpansObservedTrackerAllOf struct {

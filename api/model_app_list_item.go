@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppListItem type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppListItem{}
 
 // AppListItem struct for AppListItem
 type AppListItem struct {
@@ -101,7 +104,7 @@ func (o *AppListItem) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *AppListItem) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -111,7 +114,7 @@ func (o *AppListItem) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppListItem) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -119,7 +122,7 @@ func (o *AppListItem) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *AppListItem) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -133,7 +136,7 @@ func (o *AppListItem) SetDescription(v string) {
 
 // GetQuery returns the Query field value if set, zero value otherwise.
 func (o *AppListItem) GetQuery() string {
-	if o == nil || o.Query == nil {
+	if o == nil || IsNil(o.Query) {
 		var ret string
 		return ret
 	}
@@ -143,7 +146,7 @@ func (o *AppListItem) GetQuery() string {
 // GetQueryOk returns a tuple with the Query field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppListItem) GetQueryOk() (*string, bool) {
-	if o == nil || o.Query == nil {
+	if o == nil || IsNil(o.Query) {
 		return nil, false
 	}
 	return o.Query, true
@@ -151,7 +154,7 @@ func (o *AppListItem) GetQueryOk() (*string, bool) {
 
 // HasQuery returns a boolean if a field has been set.
 func (o *AppListItem) HasQuery() bool {
-	if o != nil && o.Query != nil {
+	if o != nil && !IsNil(o.Query) {
 		return true
 	}
 
@@ -165,7 +168,7 @@ func (o *AppListItem) SetQuery(v string) {
 
 // GetScreenshotUrl returns the ScreenshotUrl field value if set, zero value otherwise.
 func (o *AppListItem) GetScreenshotUrl() string {
-	if o == nil || o.ScreenshotUrl == nil {
+	if o == nil || IsNil(o.ScreenshotUrl) {
 		var ret string
 		return ret
 	}
@@ -175,7 +178,7 @@ func (o *AppListItem) GetScreenshotUrl() string {
 // GetScreenshotUrlOk returns a tuple with the ScreenshotUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppListItem) GetScreenshotUrlOk() (*string, bool) {
-	if o == nil || o.ScreenshotUrl == nil {
+	if o == nil || IsNil(o.ScreenshotUrl) {
 		return nil, false
 	}
 	return o.ScreenshotUrl, true
@@ -183,7 +186,7 @@ func (o *AppListItem) GetScreenshotUrlOk() (*string, bool) {
 
 // HasScreenshotUrl returns a boolean if a field has been set.
 func (o *AppListItem) HasScreenshotUrl() bool {
-	if o != nil && o.ScreenshotUrl != nil {
+	if o != nil && !IsNil(o.ScreenshotUrl) {
 		return true
 	}
 
@@ -197,7 +200,7 @@ func (o *AppListItem) SetScreenshotUrl(v string) {
 
 // GetPanels returns the Panels field value if set, zero value otherwise.
 func (o *AppListItem) GetPanels() []PanelItem {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		var ret []PanelItem
 		return ret
 	}
@@ -207,7 +210,7 @@ func (o *AppListItem) GetPanels() []PanelItem {
 // GetPanelsOk returns a tuple with the Panels field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppListItem) GetPanelsOk() ([]PanelItem, bool) {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		return nil, false
 	}
 	return o.Panels, true
@@ -215,7 +218,7 @@ func (o *AppListItem) GetPanelsOk() ([]PanelItem, bool) {
 
 // HasPanels returns a boolean if a field has been set.
 func (o *AppListItem) HasPanels() bool {
-	if o != nil && o.Panels != nil {
+	if o != nil && !IsNil(o.Panels) {
 		return true
 	}
 
@@ -229,7 +232,7 @@ func (o *AppListItem) SetPanels(v []PanelItem) {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *AppListItem) GetChildren() []AppListItem {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []AppListItem
 		return ret
 	}
@@ -239,7 +242,7 @@ func (o *AppListItem) GetChildren() []AppListItem {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppListItem) GetChildrenOk() ([]AppListItem, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -247,7 +250,7 @@ func (o *AppListItem) GetChildrenOk() ([]AppListItem, bool) {
 
 // HasChildren returns a boolean if a field has been set.
 func (o *AppListItem) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -260,29 +263,33 @@ func (o *AppListItem) SetChildren(v []AppListItem) {
 }
 
 func (o AppListItem) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["itemType"] = o.ItemType
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Query != nil {
-		toSerialize["query"] = o.Query
-	}
-	if o.ScreenshotUrl != nil {
-		toSerialize["screenshotUrl"] = o.ScreenshotUrl
-	}
-	if o.Panels != nil {
-		toSerialize["panels"] = o.Panels
-	}
-	if o.Children != nil {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppListItem) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["itemType"] = o.ItemType
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Query) {
+		toSerialize["query"] = o.Query
+	}
+	if !IsNil(o.ScreenshotUrl) {
+		toSerialize["screenshotUrl"] = o.ScreenshotUrl
+	}
+	if !IsNil(o.Panels) {
+		toSerialize["panels"] = o.Panels
+	}
+	if !IsNil(o.Children) {
+		toSerialize["children"] = o.Children
+	}
+	return toSerialize, nil
 }
 
 type NullableAppListItem struct {

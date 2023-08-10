@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -107,9 +107,9 @@ func (a *ConnectionManagementApiService) CreateConnectionExecute(r ApiCreateConn
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -125,7 +125,8 @@ func (a *ConnectionManagementApiService) CreateConnectionExecute(r ApiCreateConn
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -189,7 +190,7 @@ func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConn
 	}
 
 	localVarPath := localBasePath + "/v1/connections/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -198,7 +199,7 @@ func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConn
 		return nil, reportError("type_ is required and must be specified")
 	}
 
-	localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -226,9 +227,9 @@ func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConn
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -244,7 +245,8 @@ func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConn
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 
@@ -301,16 +303,15 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 	}
 
 	localVarPath := localBasePath + "/v1/connections/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.type_ == nil {
-		return localVarReturnValue, nil, reportError("type_ is required and must be specified")
-	}
 
-	localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
+	if r.type_ != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -338,9 +339,9 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -356,7 +357,8 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -453,9 +455,9 @@ func (a *ConnectionManagementApiService) GetIncidentTemplatesExecute(r ApiGetInc
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -471,7 +473,8 @@ func (a *ConnectionManagementApiService) GetIncidentTemplatesExecute(r ApiGetInc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -547,10 +550,10 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -579,9 +582,9 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -597,7 +600,8 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -617,11 +621,25 @@ type ApiTestConnectionRequest struct {
 	ctx context.Context
 	ApiService *ConnectionManagementApiService
 	connectionDefinition *ConnectionDefinition
+	functionalities *[]string
+	connectionId *string
 }
 
 // Information about the new connection.
 func (r ApiTestConnectionRequest) ConnectionDefinition(connectionDefinition ConnectionDefinition) ApiTestConnectionRequest {
 	r.connectionDefinition = &connectionDefinition
+	return r
+}
+
+// A comma-separated functionalities of webhook payload to test. Acceptable values: &#x60;alert&#x60;, &#x60;resolution&#x60;.
+func (r ApiTestConnectionRequest) Functionalities(functionalities []string) ApiTestConnectionRequest {
+	r.functionalities = &functionalities
+	return r
+}
+
+// Unique identifier of an existing connection to test. It should be provided when the request body of an existing connection contains masked authorization headers. If not provided, the authorization headers will not be correctly unmasked, and the test may fail due to unauthorized access.
+func (r ApiTestConnectionRequest) ConnectionId(connectionId string) ApiTestConnectionRequest {
+	r.connectionId = &connectionId
 	return r
 }
 
@@ -668,6 +686,12 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 		return localVarReturnValue, nil, reportError("connectionDefinition is required and must be specified")
 	}
 
+	if r.functionalities != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "functionalities", r.functionalities, "csv")
+	}
+	if r.connectionId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "connectionId", r.connectionId, "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
@@ -697,9 +721,9 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -715,7 +739,8 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -781,7 +806,7 @@ func (a *ConnectionManagementApiService) UpdateConnectionExecute(r ApiUpdateConn
 	}
 
 	localVarPath := localBasePath + "/v1/connections/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -819,9 +844,9 @@ func (a *ConnectionManagementApiService) UpdateConnectionExecute(r ApiUpdateConn
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -837,7 +862,8 @@ func (a *ConnectionManagementApiService) UpdateConnectionExecute(r ApiUpdateConn
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

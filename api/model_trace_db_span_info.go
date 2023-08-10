@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceDbSpanInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceDbSpanInfo{}
 
 // TraceDbSpanInfo struct for TraceDbSpanInfo
 type TraceDbSpanInfo struct {
@@ -45,7 +48,7 @@ func NewTraceDbSpanInfoWithDefaults() *TraceDbSpanInfo {
 
 // GetDbType returns the DbType field value if set, zero value otherwise.
 func (o *TraceDbSpanInfo) GetDbType() string {
-	if o == nil || o.DbType == nil {
+	if o == nil || IsNil(o.DbType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *TraceDbSpanInfo) GetDbType() string {
 // GetDbTypeOk returns a tuple with the DbType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDbSpanInfo) GetDbTypeOk() (*string, bool) {
-	if o == nil || o.DbType == nil {
+	if o == nil || IsNil(o.DbType) {
 		return nil, false
 	}
 	return o.DbType, true
@@ -63,7 +66,7 @@ func (o *TraceDbSpanInfo) GetDbTypeOk() (*string, bool) {
 
 // HasDbType returns a boolean if a field has been set.
 func (o *TraceDbSpanInfo) HasDbType() bool {
-	if o != nil && o.DbType != nil {
+	if o != nil && !IsNil(o.DbType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *TraceDbSpanInfo) SetDbType(v string) {
 
 // GetInstance returns the Instance field value if set, zero value otherwise.
 func (o *TraceDbSpanInfo) GetInstance() string {
-	if o == nil || o.Instance == nil {
+	if o == nil || IsNil(o.Instance) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *TraceDbSpanInfo) GetInstance() string {
 // GetInstanceOk returns a tuple with the Instance field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDbSpanInfo) GetInstanceOk() (*string, bool) {
-	if o == nil || o.Instance == nil {
+	if o == nil || IsNil(o.Instance) {
 		return nil, false
 	}
 	return o.Instance, true
@@ -95,7 +98,7 @@ func (o *TraceDbSpanInfo) GetInstanceOk() (*string, bool) {
 
 // HasInstance returns a boolean if a field has been set.
 func (o *TraceDbSpanInfo) HasInstance() bool {
-	if o != nil && o.Instance != nil {
+	if o != nil && !IsNil(o.Instance) {
 		return true
 	}
 
@@ -109,7 +112,7 @@ func (o *TraceDbSpanInfo) SetInstance(v string) {
 
 // GetStatement returns the Statement field value if set, zero value otherwise.
 func (o *TraceDbSpanInfo) GetStatement() string {
-	if o == nil || o.Statement == nil {
+	if o == nil || IsNil(o.Statement) {
 		var ret string
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *TraceDbSpanInfo) GetStatement() string {
 // GetStatementOk returns a tuple with the Statement field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceDbSpanInfo) GetStatementOk() (*string, bool) {
-	if o == nil || o.Statement == nil {
+	if o == nil || IsNil(o.Statement) {
 		return nil, false
 	}
 	return o.Statement, true
@@ -127,7 +130,7 @@ func (o *TraceDbSpanInfo) GetStatementOk() (*string, bool) {
 
 // HasStatement returns a boolean if a field has been set.
 func (o *TraceDbSpanInfo) HasStatement() bool {
-	if o != nil && o.Statement != nil {
+	if o != nil && !IsNil(o.Statement) {
 		return true
 	}
 
@@ -140,25 +143,33 @@ func (o *TraceDbSpanInfo) SetStatement(v string) {
 }
 
 func (o TraceDbSpanInfo) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o TraceDbSpanInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTraceSpanInfo, errTraceSpanInfo := json.Marshal(o.TraceSpanInfo)
 	if errTraceSpanInfo != nil {
-		return []byte{}, errTraceSpanInfo
+		return map[string]interface{}{}, errTraceSpanInfo
 	}
 	errTraceSpanInfo = json.Unmarshal([]byte(serializedTraceSpanInfo), &toSerialize)
 	if errTraceSpanInfo != nil {
-		return []byte{}, errTraceSpanInfo
+		return map[string]interface{}{}, errTraceSpanInfo
 	}
-	if o.DbType != nil {
+	if !IsNil(o.DbType) {
 		toSerialize["dbType"] = o.DbType
 	}
-	if o.Instance != nil {
+	if !IsNil(o.Instance) {
 		toSerialize["instance"] = o.Instance
 	}
-	if o.Statement != nil {
+	if !IsNil(o.Statement) {
 		toSerialize["statement"] = o.Statement
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTraceDbSpanInfo struct {

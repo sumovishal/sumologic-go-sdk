@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AccessKeyUpdateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccessKeyUpdateRequest{}
 
 // AccessKeyUpdateRequest struct for AccessKeyUpdateRequest
 type AccessKeyUpdateRequest struct {
@@ -66,7 +69,7 @@ func (o *AccessKeyUpdateRequest) SetDisabled(v bool) {
 
 // GetCorsHeaders returns the CorsHeaders field value if set, zero value otherwise.
 func (o *AccessKeyUpdateRequest) GetCorsHeaders() []string {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		var ret []string
 		return ret
 	}
@@ -76,7 +79,7 @@ func (o *AccessKeyUpdateRequest) GetCorsHeaders() []string {
 // GetCorsHeadersOk returns a tuple with the CorsHeaders field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccessKeyUpdateRequest) GetCorsHeadersOk() ([]string, bool) {
-	if o == nil || o.CorsHeaders == nil {
+	if o == nil || IsNil(o.CorsHeaders) {
 		return nil, false
 	}
 	return o.CorsHeaders, true
@@ -84,7 +87,7 @@ func (o *AccessKeyUpdateRequest) GetCorsHeadersOk() ([]string, bool) {
 
 // HasCorsHeaders returns a boolean if a field has been set.
 func (o *AccessKeyUpdateRequest) HasCorsHeaders() bool {
-	if o != nil && o.CorsHeaders != nil {
+	if o != nil && !IsNil(o.CorsHeaders) {
 		return true
 	}
 
@@ -97,14 +100,20 @@ func (o *AccessKeyUpdateRequest) SetCorsHeaders(v []string) {
 }
 
 func (o AccessKeyUpdateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["disabled"] = o.Disabled
-	}
-	if o.CorsHeaders != nil {
-		toSerialize["corsHeaders"] = o.CorsHeaders
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccessKeyUpdateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["disabled"] = o.Disabled
+	if !IsNil(o.CorsHeaders) {
+		toSerialize["corsHeaders"] = o.CorsHeaders
+	}
+	return toSerialize, nil
 }
 
 type NullableAccessKeyUpdateRequest struct {

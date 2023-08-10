@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SaveToLookupNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SaveToLookupNotificationSyncDefinition{}
 
 // SaveToLookupNotificationSyncDefinition struct for SaveToLookupNotificationSyncDefinition
 type SaveToLookupNotificationSyncDefinition struct {
@@ -92,22 +95,26 @@ func (o *SaveToLookupNotificationSyncDefinition) SetIsLookupMergeOperation(v boo
 }
 
 func (o SaveToLookupNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SaveToLookupNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedScheduleNotificationSyncDefinition, errScheduleNotificationSyncDefinition := json.Marshal(o.ScheduleNotificationSyncDefinition)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	errScheduleNotificationSyncDefinition = json.Unmarshal([]byte(serializedScheduleNotificationSyncDefinition), &toSerialize)
 	if errScheduleNotificationSyncDefinition != nil {
-		return []byte{}, errScheduleNotificationSyncDefinition
+		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
-	if true {
-		toSerialize["lookupFilePath"] = o.LookupFilePath
-	}
-	if true {
-		toSerialize["isLookupMergeOperation"] = o.IsLookupMergeOperation
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["lookupFilePath"] = o.LookupFilePath
+	toSerialize["isLookupMergeOperation"] = o.IsLookupMergeOperation
+	return toSerialize, nil
 }
 
 type NullableSaveToLookupNotificationSyncDefinition struct {

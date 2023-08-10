@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansTimeGroupBy type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansTimeGroupBy{}
 
 // SpansTimeGroupBy struct for SpansTimeGroupBy
 type SpansTimeGroupBy struct {
@@ -65,19 +68,25 @@ func (o *SpansTimeGroupBy) SetFieldValue(v string) {
 }
 
 func (o SpansTimeGroupBy) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpansTimeGroupBy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpansGroupBy, errSpansGroupBy := json.Marshal(o.SpansGroupBy)
 	if errSpansGroupBy != nil {
-		return []byte{}, errSpansGroupBy
+		return map[string]interface{}{}, errSpansGroupBy
 	}
 	errSpansGroupBy = json.Unmarshal([]byte(serializedSpansGroupBy), &toSerialize)
 	if errSpansGroupBy != nil {
-		return []byte{}, errSpansGroupBy
+		return map[string]interface{}{}, errSpansGroupBy
 	}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["fieldValue"] = o.FieldValue
+	return toSerialize, nil
 }
 
 type NullableSpansTimeGroupBy struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the DateTimeTracingValueAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DateTimeTracingValueAllOf{}
 
 // DateTimeTracingValueAllOf struct for DateTimeTracingValueAllOf
 type DateTimeTracingValueAllOf struct {
@@ -64,11 +67,17 @@ func (o *DateTimeTracingValueAllOf) SetValue(v time.Time) {
 }
 
 func (o DateTimeTracingValueAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["value"] = o.Value
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DateTimeTracingValueAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["value"] = o.Value
+	return toSerialize, nil
 }
 
 type NullableDateTimeTracingValueAllOf struct {

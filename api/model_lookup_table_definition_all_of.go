@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LookupTableDefinitionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LookupTableDefinitionAllOf{}
 
 // LookupTableDefinitionAllOf struct for LookupTableDefinitionAllOf
 type LookupTableDefinitionAllOf struct {
@@ -41,7 +44,7 @@ func NewLookupTableDefinitionAllOfWithDefaults() *LookupTableDefinitionAllOf {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *LookupTableDefinitionAllOf) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *LookupTableDefinitionAllOf) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableDefinitionAllOf) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -59,7 +62,7 @@ func (o *LookupTableDefinitionAllOf) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *LookupTableDefinitionAllOf) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *LookupTableDefinitionAllOf) SetName(v string) {
 
 // GetParentFolderId returns the ParentFolderId field value if set, zero value otherwise.
 func (o *LookupTableDefinitionAllOf) GetParentFolderId() string {
-	if o == nil || o.ParentFolderId == nil {
+	if o == nil || IsNil(o.ParentFolderId) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *LookupTableDefinitionAllOf) GetParentFolderId() string {
 // GetParentFolderIdOk returns a tuple with the ParentFolderId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LookupTableDefinitionAllOf) GetParentFolderIdOk() (*string, bool) {
-	if o == nil || o.ParentFolderId == nil {
+	if o == nil || IsNil(o.ParentFolderId) {
 		return nil, false
 	}
 	return o.ParentFolderId, true
@@ -91,7 +94,7 @@ func (o *LookupTableDefinitionAllOf) GetParentFolderIdOk() (*string, bool) {
 
 // HasParentFolderId returns a boolean if a field has been set.
 func (o *LookupTableDefinitionAllOf) HasParentFolderId() bool {
-	if o != nil && o.ParentFolderId != nil {
+	if o != nil && !IsNil(o.ParentFolderId) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *LookupTableDefinitionAllOf) SetParentFolderId(v string) {
 }
 
 func (o LookupTableDefinitionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if o.ParentFolderId != nil {
-		toSerialize["parentFolderId"] = o.ParentFolderId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LookupTableDefinitionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.ParentFolderId) {
+		toSerialize["parentFolderId"] = o.ParentFolderId
+	}
+	return toSerialize, nil
 }
 
 type NullableLookupTableDefinitionAllOf struct {

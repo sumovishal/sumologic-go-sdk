@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TraceFieldValuesResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TraceFieldValuesResponse{}
 
 // TraceFieldValuesResponse struct for TraceFieldValuesResponse
 type TraceFieldValuesResponse struct {
@@ -93,7 +96,7 @@ func (o *TraceFieldValuesResponse) SetTotalCount(v int64) {
 
 // GetNext returns the Next field value if set, zero value otherwise.
 func (o *TraceFieldValuesResponse) GetNext() string {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *TraceFieldValuesResponse) GetNext() string {
 // GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TraceFieldValuesResponse) GetNextOk() (*string, bool) {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		return nil, false
 	}
 	return o.Next, true
@@ -111,7 +114,7 @@ func (o *TraceFieldValuesResponse) GetNextOk() (*string, bool) {
 
 // HasNext returns a boolean if a field has been set.
 func (o *TraceFieldValuesResponse) HasNext() bool {
-	if o != nil && o.Next != nil {
+	if o != nil && !IsNil(o.Next) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *TraceFieldValuesResponse) SetNext(v string) {
 }
 
 func (o TraceFieldValuesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldValues"] = o.FieldValues
-	}
-	if true {
-		toSerialize["totalCount"] = o.TotalCount
-	}
-	if o.Next != nil {
-		toSerialize["next"] = o.Next
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TraceFieldValuesResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldValues"] = o.FieldValues
+	toSerialize["totalCount"] = o.TotalCount
+	if !IsNil(o.Next) {
+		toSerialize["next"] = o.Next
+	}
+	return toSerialize, nil
 }
 
 type NullableTraceFieldValuesResponse struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ParameterAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterAutoCompleteSyncDefinition{}
 
 // ParameterAutoCompleteSyncDefinition struct for ParameterAutoCompleteSyncDefinition
 type ParameterAutoCompleteSyncDefinition struct {
@@ -74,7 +77,7 @@ func (o *ParameterAutoCompleteSyncDefinition) SetAutoCompleteType(v string) {
 
 // GetAutoCompleteKey returns the AutoCompleteKey field value if set, zero value otherwise.
 func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteKey() string {
-	if o == nil || o.AutoCompleteKey == nil {
+	if o == nil || IsNil(o.AutoCompleteKey) {
 		var ret string
 		return ret
 	}
@@ -84,7 +87,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteKey() string {
 // GetAutoCompleteKeyOk returns a tuple with the AutoCompleteKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteKeyOk() (*string, bool) {
-	if o == nil || o.AutoCompleteKey == nil {
+	if o == nil || IsNil(o.AutoCompleteKey) {
 		return nil, false
 	}
 	return o.AutoCompleteKey, true
@@ -92,7 +95,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteKeyOk() (*string, b
 
 // HasAutoCompleteKey returns a boolean if a field has been set.
 func (o *ParameterAutoCompleteSyncDefinition) HasAutoCompleteKey() bool {
-	if o != nil && o.AutoCompleteKey != nil {
+	if o != nil && !IsNil(o.AutoCompleteKey) {
 		return true
 	}
 
@@ -106,7 +109,7 @@ func (o *ParameterAutoCompleteSyncDefinition) SetAutoCompleteKey(v string) {
 
 // GetAutoCompleteValues returns the AutoCompleteValues field value if set, zero value otherwise.
 func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteValues() []AutoCompleteValueSyncDefinition {
-	if o == nil || o.AutoCompleteValues == nil {
+	if o == nil || IsNil(o.AutoCompleteValues) {
 		var ret []AutoCompleteValueSyncDefinition
 		return ret
 	}
@@ -116,7 +119,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteValues() []AutoComp
 // GetAutoCompleteValuesOk returns a tuple with the AutoCompleteValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteValuesOk() ([]AutoCompleteValueSyncDefinition, bool) {
-	if o == nil || o.AutoCompleteValues == nil {
+	if o == nil || IsNil(o.AutoCompleteValues) {
 		return nil, false
 	}
 	return o.AutoCompleteValues, true
@@ -124,7 +127,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetAutoCompleteValuesOk() ([]AutoC
 
 // HasAutoCompleteValues returns a boolean if a field has been set.
 func (o *ParameterAutoCompleteSyncDefinition) HasAutoCompleteValues() bool {
-	if o != nil && o.AutoCompleteValues != nil {
+	if o != nil && !IsNil(o.AutoCompleteValues) {
 		return true
 	}
 
@@ -138,7 +141,7 @@ func (o *ParameterAutoCompleteSyncDefinition) SetAutoCompleteValues(v []AutoComp
 
 // GetLookupFileName returns the LookupFileName field value if set, zero value otherwise.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupFileName() string {
-	if o == nil || o.LookupFileName == nil {
+	if o == nil || IsNil(o.LookupFileName) {
 		var ret string
 		return ret
 	}
@@ -148,7 +151,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupFileName() string {
 // GetLookupFileNameOk returns a tuple with the LookupFileName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupFileNameOk() (*string, bool) {
-	if o == nil || o.LookupFileName == nil {
+	if o == nil || IsNil(o.LookupFileName) {
 		return nil, false
 	}
 	return o.LookupFileName, true
@@ -156,7 +159,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupFileNameOk() (*string, bo
 
 // HasLookupFileName returns a boolean if a field has been set.
 func (o *ParameterAutoCompleteSyncDefinition) HasLookupFileName() bool {
-	if o != nil && o.LookupFileName != nil {
+	if o != nil && !IsNil(o.LookupFileName) {
 		return true
 	}
 
@@ -170,7 +173,7 @@ func (o *ParameterAutoCompleteSyncDefinition) SetLookupFileName(v string) {
 
 // GetLookupLabelColumn returns the LookupLabelColumn field value if set, zero value otherwise.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupLabelColumn() string {
-	if o == nil || o.LookupLabelColumn == nil {
+	if o == nil || IsNil(o.LookupLabelColumn) {
 		var ret string
 		return ret
 	}
@@ -180,7 +183,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupLabelColumn() string {
 // GetLookupLabelColumnOk returns a tuple with the LookupLabelColumn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupLabelColumnOk() (*string, bool) {
-	if o == nil || o.LookupLabelColumn == nil {
+	if o == nil || IsNil(o.LookupLabelColumn) {
 		return nil, false
 	}
 	return o.LookupLabelColumn, true
@@ -188,7 +191,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupLabelColumnOk() (*string,
 
 // HasLookupLabelColumn returns a boolean if a field has been set.
 func (o *ParameterAutoCompleteSyncDefinition) HasLookupLabelColumn() bool {
-	if o != nil && o.LookupLabelColumn != nil {
+	if o != nil && !IsNil(o.LookupLabelColumn) {
 		return true
 	}
 
@@ -202,7 +205,7 @@ func (o *ParameterAutoCompleteSyncDefinition) SetLookupLabelColumn(v string) {
 
 // GetLookupValueColumn returns the LookupValueColumn field value if set, zero value otherwise.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupValueColumn() string {
-	if o == nil || o.LookupValueColumn == nil {
+	if o == nil || IsNil(o.LookupValueColumn) {
 		var ret string
 		return ret
 	}
@@ -212,7 +215,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupValueColumn() string {
 // GetLookupValueColumnOk returns a tuple with the LookupValueColumn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterAutoCompleteSyncDefinition) GetLookupValueColumnOk() (*string, bool) {
-	if o == nil || o.LookupValueColumn == nil {
+	if o == nil || IsNil(o.LookupValueColumn) {
 		return nil, false
 	}
 	return o.LookupValueColumn, true
@@ -220,7 +223,7 @@ func (o *ParameterAutoCompleteSyncDefinition) GetLookupValueColumnOk() (*string,
 
 // HasLookupValueColumn returns a boolean if a field has been set.
 func (o *ParameterAutoCompleteSyncDefinition) HasLookupValueColumn() bool {
-	if o != nil && o.LookupValueColumn != nil {
+	if o != nil && !IsNil(o.LookupValueColumn) {
 		return true
 	}
 
@@ -233,26 +236,32 @@ func (o *ParameterAutoCompleteSyncDefinition) SetLookupValueColumn(v string) {
 }
 
 func (o ParameterAutoCompleteSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["autoCompleteType"] = o.AutoCompleteType
-	}
-	if o.AutoCompleteKey != nil {
-		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
-	}
-	if o.AutoCompleteValues != nil {
-		toSerialize["autoCompleteValues"] = o.AutoCompleteValues
-	}
-	if o.LookupFileName != nil {
-		toSerialize["lookupFileName"] = o.LookupFileName
-	}
-	if o.LookupLabelColumn != nil {
-		toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
-	}
-	if o.LookupValueColumn != nil {
-		toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["autoCompleteType"] = o.AutoCompleteType
+	if !IsNil(o.AutoCompleteKey) {
+		toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+	}
+	if !IsNil(o.AutoCompleteValues) {
+		toSerialize["autoCompleteValues"] = o.AutoCompleteValues
+	}
+	if !IsNil(o.LookupFileName) {
+		toSerialize["lookupFileName"] = o.LookupFileName
+	}
+	if !IsNil(o.LookupLabelColumn) {
+		toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
+	}
+	if !IsNil(o.LookupValueColumn) {
+		toSerialize["lookupValueColumn"] = o.LookupValueColumn
+	}
+	return toSerialize, nil
 }
 
 type NullableParameterAutoCompleteSyncDefinition struct {

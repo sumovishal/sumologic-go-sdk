@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the LogsOutlierConditionAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogsOutlierConditionAllOf{}
 
 // LogsOutlierConditionAllOf A rule that defines how logs monitor should evaluate outlier data and trigger notifications.
 type LogsOutlierConditionAllOf struct {
@@ -63,7 +66,7 @@ func NewLogsOutlierConditionAllOfWithDefaults() *LogsOutlierConditionAllOf {
 
 // GetWindow returns the Window field value if set, zero value otherwise.
 func (o *LogsOutlierConditionAllOf) GetWindow() int64 {
-	if o == nil || o.Window == nil {
+	if o == nil || IsNil(o.Window) {
 		var ret int64
 		return ret
 	}
@@ -73,7 +76,7 @@ func (o *LogsOutlierConditionAllOf) GetWindow() int64 {
 // GetWindowOk returns a tuple with the Window field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsOutlierConditionAllOf) GetWindowOk() (*int64, bool) {
-	if o == nil || o.Window == nil {
+	if o == nil || IsNil(o.Window) {
 		return nil, false
 	}
 	return o.Window, true
@@ -81,7 +84,7 @@ func (o *LogsOutlierConditionAllOf) GetWindowOk() (*int64, bool) {
 
 // HasWindow returns a boolean if a field has been set.
 func (o *LogsOutlierConditionAllOf) HasWindow() bool {
-	if o != nil && o.Window != nil {
+	if o != nil && !IsNil(o.Window) {
 		return true
 	}
 
@@ -95,7 +98,7 @@ func (o *LogsOutlierConditionAllOf) SetWindow(v int64) {
 
 // GetConsecutive returns the Consecutive field value if set, zero value otherwise.
 func (o *LogsOutlierConditionAllOf) GetConsecutive() int64 {
-	if o == nil || o.Consecutive == nil {
+	if o == nil || IsNil(o.Consecutive) {
 		var ret int64
 		return ret
 	}
@@ -105,7 +108,7 @@ func (o *LogsOutlierConditionAllOf) GetConsecutive() int64 {
 // GetConsecutiveOk returns a tuple with the Consecutive field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsOutlierConditionAllOf) GetConsecutiveOk() (*int64, bool) {
-	if o == nil || o.Consecutive == nil {
+	if o == nil || IsNil(o.Consecutive) {
 		return nil, false
 	}
 	return o.Consecutive, true
@@ -113,7 +116,7 @@ func (o *LogsOutlierConditionAllOf) GetConsecutiveOk() (*int64, bool) {
 
 // HasConsecutive returns a boolean if a field has been set.
 func (o *LogsOutlierConditionAllOf) HasConsecutive() bool {
-	if o != nil && o.Consecutive != nil {
+	if o != nil && !IsNil(o.Consecutive) {
 		return true
 	}
 
@@ -127,7 +130,7 @@ func (o *LogsOutlierConditionAllOf) SetConsecutive(v int64) {
 
 // GetDirection returns the Direction field value if set, zero value otherwise.
 func (o *LogsOutlierConditionAllOf) GetDirection() string {
-	if o == nil || o.Direction == nil {
+	if o == nil || IsNil(o.Direction) {
 		var ret string
 		return ret
 	}
@@ -137,7 +140,7 @@ func (o *LogsOutlierConditionAllOf) GetDirection() string {
 // GetDirectionOk returns a tuple with the Direction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsOutlierConditionAllOf) GetDirectionOk() (*string, bool) {
-	if o == nil || o.Direction == nil {
+	if o == nil || IsNil(o.Direction) {
 		return nil, false
 	}
 	return o.Direction, true
@@ -145,7 +148,7 @@ func (o *LogsOutlierConditionAllOf) GetDirectionOk() (*string, bool) {
 
 // HasDirection returns a boolean if a field has been set.
 func (o *LogsOutlierConditionAllOf) HasDirection() bool {
-	if o != nil && o.Direction != nil {
+	if o != nil && !IsNil(o.Direction) {
 		return true
 	}
 
@@ -159,7 +162,7 @@ func (o *LogsOutlierConditionAllOf) SetDirection(v string) {
 
 // GetThreshold returns the Threshold field value if set, zero value otherwise.
 func (o *LogsOutlierConditionAllOf) GetThreshold() float64 {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		var ret float64
 		return ret
 	}
@@ -169,7 +172,7 @@ func (o *LogsOutlierConditionAllOf) GetThreshold() float64 {
 // GetThresholdOk returns a tuple with the Threshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsOutlierConditionAllOf) GetThresholdOk() (*float64, bool) {
-	if o == nil || o.Threshold == nil {
+	if o == nil || IsNil(o.Threshold) {
 		return nil, false
 	}
 	return o.Threshold, true
@@ -177,7 +180,7 @@ func (o *LogsOutlierConditionAllOf) GetThresholdOk() (*float64, bool) {
 
 // HasThreshold returns a boolean if a field has been set.
 func (o *LogsOutlierConditionAllOf) HasThreshold() bool {
-	if o != nil && o.Threshold != nil {
+	if o != nil && !IsNil(o.Threshold) {
 		return true
 	}
 
@@ -191,7 +194,7 @@ func (o *LogsOutlierConditionAllOf) SetThreshold(v float64) {
 
 // GetField returns the Field field value if set, zero value otherwise.
 func (o *LogsOutlierConditionAllOf) GetField() string {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		var ret string
 		return ret
 	}
@@ -201,7 +204,7 @@ func (o *LogsOutlierConditionAllOf) GetField() string {
 // GetFieldOk returns a tuple with the Field field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogsOutlierConditionAllOf) GetFieldOk() (*string, bool) {
-	if o == nil || o.Field == nil {
+	if o == nil || IsNil(o.Field) {
 		return nil, false
 	}
 	return o.Field, true
@@ -209,7 +212,7 @@ func (o *LogsOutlierConditionAllOf) GetFieldOk() (*string, bool) {
 
 // HasField returns a boolean if a field has been set.
 func (o *LogsOutlierConditionAllOf) HasField() bool {
-	if o != nil && o.Field != nil {
+	if o != nil && !IsNil(o.Field) {
 		return true
 	}
 
@@ -222,23 +225,31 @@ func (o *LogsOutlierConditionAllOf) SetField(v string) {
 }
 
 func (o LogsOutlierConditionAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Window != nil {
-		toSerialize["window"] = o.Window
-	}
-	if o.Consecutive != nil {
-		toSerialize["consecutive"] = o.Consecutive
-	}
-	if o.Direction != nil {
-		toSerialize["direction"] = o.Direction
-	}
-	if o.Threshold != nil {
-		toSerialize["threshold"] = o.Threshold
-	}
-	if o.Field != nil {
-		toSerialize["field"] = o.Field
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogsOutlierConditionAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Window) {
+		toSerialize["window"] = o.Window
+	}
+	if !IsNil(o.Consecutive) {
+		toSerialize["consecutive"] = o.Consecutive
+	}
+	if !IsNil(o.Direction) {
+		toSerialize["direction"] = o.Direction
+	}
+	if !IsNil(o.Threshold) {
+		toSerialize["threshold"] = o.Threshold
+	}
+	if !IsNil(o.Field) {
+		toSerialize["field"] = o.Field
+	}
+	return toSerialize, nil
 }
 
 type NullableLogsOutlierConditionAllOf struct {

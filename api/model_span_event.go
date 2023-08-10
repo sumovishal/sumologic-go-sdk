@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the SpanEvent type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanEvent{}
 
 // SpanEvent Span event containing all information (in particular attributes).
 type SpanEvent struct {
@@ -94,7 +97,7 @@ func (o *SpanEvent) SetName(v string) {
 
 // GetAttributes returns the Attributes field value if set, zero value otherwise.
 func (o *SpanEvent) GetAttributes() []SpanEventAttribute {
-	if o == nil || o.Attributes == nil {
+	if o == nil || IsNil(o.Attributes) {
 		var ret []SpanEventAttribute
 		return ret
 	}
@@ -104,7 +107,7 @@ func (o *SpanEvent) GetAttributes() []SpanEventAttribute {
 // GetAttributesOk returns a tuple with the Attributes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanEvent) GetAttributesOk() ([]SpanEventAttribute, bool) {
-	if o == nil || o.Attributes == nil {
+	if o == nil || IsNil(o.Attributes) {
 		return nil, false
 	}
 	return o.Attributes, true
@@ -112,7 +115,7 @@ func (o *SpanEvent) GetAttributesOk() ([]SpanEventAttribute, bool) {
 
 // HasAttributes returns a boolean if a field has been set.
 func (o *SpanEvent) HasAttributes() bool {
-	if o != nil && o.Attributes != nil {
+	if o != nil && !IsNil(o.Attributes) {
 		return true
 	}
 
@@ -125,17 +128,21 @@ func (o *SpanEvent) SetAttributes(v []SpanEventAttribute) {
 }
 
 func (o SpanEvent) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["timestamp"] = o.Timestamp
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Attributes != nil {
-		toSerialize["attributes"] = o.Attributes
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanEvent) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["timestamp"] = o.Timestamp
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Attributes) {
+		toSerialize["attributes"] = o.Attributes
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanEvent struct {

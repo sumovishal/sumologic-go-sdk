@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansLimitItem type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansLimitItem{}
 
 // SpansLimitItem A representation of the limit operator which reduces the number of aggregate results returned:  either the top k results or bottom k results. 
 type SpansLimitItem struct {
@@ -90,14 +93,18 @@ func (o *SpansLimitItem) SetLimitValue(v int32) {
 }
 
 func (o SpansLimitItem) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["direction"] = o.Direction
-	}
-	if true {
-		toSerialize["limitValue"] = o.LimitValue
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansLimitItem) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["direction"] = o.Direction
+	toSerialize["limitValue"] = o.LimitValue
+	return toSerialize, nil
 }
 
 type NullableSpansLimitItem struct {

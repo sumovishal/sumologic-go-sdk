@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsQueryRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryRow{}
 
 // MetricsQueryRow struct for MetricsQueryRow
 type MetricsQueryRow struct {
@@ -97,7 +100,7 @@ func (o *MetricsQueryRow) SetQuery(v string) {
 
 // GetQuantization returns the Quantization field value if set, zero value otherwise.
 func (o *MetricsQueryRow) GetQuantization() int64 {
-	if o == nil || o.Quantization == nil {
+	if o == nil || IsNil(o.Quantization) {
 		var ret int64
 		return ret
 	}
@@ -107,7 +110,7 @@ func (o *MetricsQueryRow) GetQuantization() int64 {
 // GetQuantizationOk returns a tuple with the Quantization field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryRow) GetQuantizationOk() (*int64, bool) {
-	if o == nil || o.Quantization == nil {
+	if o == nil || IsNil(o.Quantization) {
 		return nil, false
 	}
 	return o.Quantization, true
@@ -115,7 +118,7 @@ func (o *MetricsQueryRow) GetQuantizationOk() (*int64, bool) {
 
 // HasQuantization returns a boolean if a field has been set.
 func (o *MetricsQueryRow) HasQuantization() bool {
-	if o != nil && o.Quantization != nil {
+	if o != nil && !IsNil(o.Quantization) {
 		return true
 	}
 
@@ -129,7 +132,7 @@ func (o *MetricsQueryRow) SetQuantization(v int64) {
 
 // GetRollup returns the Rollup field value if set, zero value otherwise.
 func (o *MetricsQueryRow) GetRollup() string {
-	if o == nil || o.Rollup == nil {
+	if o == nil || IsNil(o.Rollup) {
 		var ret string
 		return ret
 	}
@@ -139,7 +142,7 @@ func (o *MetricsQueryRow) GetRollup() string {
 // GetRollupOk returns a tuple with the Rollup field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryRow) GetRollupOk() (*string, bool) {
-	if o == nil || o.Rollup == nil {
+	if o == nil || IsNil(o.Rollup) {
 		return nil, false
 	}
 	return o.Rollup, true
@@ -147,7 +150,7 @@ func (o *MetricsQueryRow) GetRollupOk() (*string, bool) {
 
 // HasRollup returns a boolean if a field has been set.
 func (o *MetricsQueryRow) HasRollup() bool {
-	if o != nil && o.Rollup != nil {
+	if o != nil && !IsNil(o.Rollup) {
 		return true
 	}
 
@@ -161,7 +164,7 @@ func (o *MetricsQueryRow) SetRollup(v string) {
 
 // GetTimeshift returns the Timeshift field value if set, zero value otherwise.
 func (o *MetricsQueryRow) GetTimeshift() int64 {
-	if o == nil || o.Timeshift == nil {
+	if o == nil || IsNil(o.Timeshift) {
 		var ret int64
 		return ret
 	}
@@ -171,7 +174,7 @@ func (o *MetricsQueryRow) GetTimeshift() int64 {
 // GetTimeshiftOk returns a tuple with the Timeshift field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryRow) GetTimeshiftOk() (*int64, bool) {
-	if o == nil || o.Timeshift == nil {
+	if o == nil || IsNil(o.Timeshift) {
 		return nil, false
 	}
 	return o.Timeshift, true
@@ -179,7 +182,7 @@ func (o *MetricsQueryRow) GetTimeshiftOk() (*int64, bool) {
 
 // HasTimeshift returns a boolean if a field has been set.
 func (o *MetricsQueryRow) HasTimeshift() bool {
-	if o != nil && o.Timeshift != nil {
+	if o != nil && !IsNil(o.Timeshift) {
 		return true
 	}
 
@@ -192,23 +195,27 @@ func (o *MetricsQueryRow) SetTimeshift(v int64) {
 }
 
 func (o MetricsQueryRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["query"] = o.Query
-	}
-	if o.Quantization != nil {
-		toSerialize["quantization"] = o.Quantization
-	}
-	if o.Rollup != nil {
-		toSerialize["rollup"] = o.Rollup
-	}
-	if o.Timeshift != nil {
-		toSerialize["timeshift"] = o.Timeshift
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["query"] = o.Query
+	if !IsNil(o.Quantization) {
+		toSerialize["quantization"] = o.Quantization
+	}
+	if !IsNil(o.Rollup) {
+		toSerialize["rollup"] = o.Rollup
+	}
+	if !IsNil(o.Timeshift) {
+		toSerialize["timeshift"] = o.Timeshift
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryRow struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansFilterKeyValuePair type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansFilterKeyValuePair{}
 
 // SpansFilterKeyValuePair struct for SpansFilterKeyValuePair
 type SpansFilterKeyValuePair struct {
@@ -93,22 +96,26 @@ func (o *SpansFilterKeyValuePair) SetFieldValue(v string) {
 }
 
 func (o SpansFilterKeyValuePair) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpansFilterKeyValuePair) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpansFilter, errSpansFilter := json.Marshal(o.SpansFilter)
 	if errSpansFilter != nil {
-		return []byte{}, errSpansFilter
+		return map[string]interface{}{}, errSpansFilter
 	}
 	errSpansFilter = json.Unmarshal([]byte(serializedSpansFilter), &toSerialize)
 	if errSpansFilter != nil {
-		return []byte{}, errSpansFilter
+		return map[string]interface{}{}, errSpansFilter
 	}
-	if true {
-		toSerialize["operator"] = o.Operator
-	}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["operator"] = o.Operator
+	toSerialize["fieldValue"] = o.FieldValue
+	return toSerialize, nil
 }
 
 type NullableSpansFilterKeyValuePair struct {

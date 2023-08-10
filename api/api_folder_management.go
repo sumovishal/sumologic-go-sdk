@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -103,7 +103,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	// body params
 	localVarPostBody = r.folderDefinition
@@ -117,9 +117,9 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -135,7 +135,8 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -223,7 +224,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -235,9 +236,9 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -253,7 +254,8 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -312,7 +314,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/adminRecommended/{jobId}/result"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -345,9 +347,9 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -363,7 +365,8 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -422,7 +425,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/adminRecommended/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -455,9 +458,9 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -473,7 +476,8 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -539,7 +543,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -563,7 +567,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -575,9 +579,9 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -593,7 +597,8 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -683,7 +688,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -695,9 +700,9 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -713,7 +718,8 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -772,7 +778,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/global/{jobId}/result"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -805,9 +811,9 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -823,7 +829,8 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -882,7 +889,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/global/{jobId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterToString(r.jobId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"jobId"+"}", url.PathEscape(parameterValueToString(r.jobId, "jobId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -915,9 +922,9 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -933,7 +940,8 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1021,9 +1029,9 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1039,7 +1047,8 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1112,7 +1121,7 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 	}
 
 	localVarPath := localBasePath + "/v2/content/folders/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1139,7 +1148,7 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	// body params
 	localVarPostBody = r.updateFolderRequest
@@ -1153,9 +1162,9 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1171,7 +1180,8 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

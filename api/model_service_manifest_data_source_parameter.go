@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ServiceManifestDataSourceParameter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceManifestDataSourceParameter{}
 
 // ServiceManifestDataSourceParameter struct for ServiceManifestDataSourceParameter
 type ServiceManifestDataSourceParameter struct {
@@ -105,7 +108,7 @@ func (o *ServiceManifestDataSourceParameter) SetParameterId(v string) {
 
 // GetDataSourceType returns the DataSourceType field value if set, zero value otherwise.
 func (o *ServiceManifestDataSourceParameter) GetDataSourceType() string {
-	if o == nil || o.DataSourceType == nil {
+	if o == nil || IsNil(o.DataSourceType) {
 		var ret string
 		return ret
 	}
@@ -115,7 +118,7 @@ func (o *ServiceManifestDataSourceParameter) GetDataSourceType() string {
 // GetDataSourceTypeOk returns a tuple with the DataSourceType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceManifestDataSourceParameter) GetDataSourceTypeOk() (*string, bool) {
-	if o == nil || o.DataSourceType == nil {
+	if o == nil || IsNil(o.DataSourceType) {
 		return nil, false
 	}
 	return o.DataSourceType, true
@@ -123,7 +126,7 @@ func (o *ServiceManifestDataSourceParameter) GetDataSourceTypeOk() (*string, boo
 
 // HasDataSourceType returns a boolean if a field has been set.
 func (o *ServiceManifestDataSourceParameter) HasDataSourceType() bool {
-	if o != nil && o.DataSourceType != nil {
+	if o != nil && !IsNil(o.DataSourceType) {
 		return true
 	}
 
@@ -137,7 +140,7 @@ func (o *ServiceManifestDataSourceParameter) SetDataSourceType(v string) {
 
 // GetLabel returns the Label field value if set, zero value otherwise.
 func (o *ServiceManifestDataSourceParameter) GetLabel() string {
-	if o == nil || o.Label == nil {
+	if o == nil || IsNil(o.Label) {
 		var ret string
 		return ret
 	}
@@ -147,7 +150,7 @@ func (o *ServiceManifestDataSourceParameter) GetLabel() string {
 // GetLabelOk returns a tuple with the Label field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceManifestDataSourceParameter) GetLabelOk() (*string, bool) {
-	if o == nil || o.Label == nil {
+	if o == nil || IsNil(o.Label) {
 		return nil, false
 	}
 	return o.Label, true
@@ -155,7 +158,7 @@ func (o *ServiceManifestDataSourceParameter) GetLabelOk() (*string, bool) {
 
 // HasLabel returns a boolean if a field has been set.
 func (o *ServiceManifestDataSourceParameter) HasLabel() bool {
-	if o != nil && o.Label != nil {
+	if o != nil && !IsNil(o.Label) {
 		return true
 	}
 
@@ -169,7 +172,7 @@ func (o *ServiceManifestDataSourceParameter) SetLabel(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ServiceManifestDataSourceParameter) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -179,7 +182,7 @@ func (o *ServiceManifestDataSourceParameter) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceManifestDataSourceParameter) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -187,7 +190,7 @@ func (o *ServiceManifestDataSourceParameter) GetDescriptionOk() (*string, bool) 
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ServiceManifestDataSourceParameter) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -201,7 +204,7 @@ func (o *ServiceManifestDataSourceParameter) SetDescription(v string) {
 
 // GetExample returns the Example field value if set, zero value otherwise.
 func (o *ServiceManifestDataSourceParameter) GetExample() string {
-	if o == nil || o.Example == nil {
+	if o == nil || IsNil(o.Example) {
 		var ret string
 		return ret
 	}
@@ -211,7 +214,7 @@ func (o *ServiceManifestDataSourceParameter) GetExample() string {
 // GetExampleOk returns a tuple with the Example field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceManifestDataSourceParameter) GetExampleOk() (*string, bool) {
-	if o == nil || o.Example == nil {
+	if o == nil || IsNil(o.Example) {
 		return nil, false
 	}
 	return o.Example, true
@@ -219,7 +222,7 @@ func (o *ServiceManifestDataSourceParameter) GetExampleOk() (*string, bool) {
 
 // HasExample returns a boolean if a field has been set.
 func (o *ServiceManifestDataSourceParameter) HasExample() bool {
-	if o != nil && o.Example != nil {
+	if o != nil && !IsNil(o.Example) {
 		return true
 	}
 
@@ -233,7 +236,7 @@ func (o *ServiceManifestDataSourceParameter) SetExample(v string) {
 
 // GetHidden returns the Hidden field value if set, zero value otherwise.
 func (o *ServiceManifestDataSourceParameter) GetHidden() bool {
-	if o == nil || o.Hidden == nil {
+	if o == nil || IsNil(o.Hidden) {
 		var ret bool
 		return ret
 	}
@@ -243,7 +246,7 @@ func (o *ServiceManifestDataSourceParameter) GetHidden() bool {
 // GetHiddenOk returns a tuple with the Hidden field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceManifestDataSourceParameter) GetHiddenOk() (*bool, bool) {
-	if o == nil || o.Hidden == nil {
+	if o == nil || IsNil(o.Hidden) {
 		return nil, false
 	}
 	return o.Hidden, true
@@ -251,7 +254,7 @@ func (o *ServiceManifestDataSourceParameter) GetHiddenOk() (*bool, bool) {
 
 // HasHidden returns a boolean if a field has been set.
 func (o *ServiceManifestDataSourceParameter) HasHidden() bool {
-	if o != nil && o.Hidden != nil {
+	if o != nil && !IsNil(o.Hidden) {
 		return true
 	}
 
@@ -264,29 +267,33 @@ func (o *ServiceManifestDataSourceParameter) SetHidden(v bool) {
 }
 
 func (o ServiceManifestDataSourceParameter) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["parameterType"] = o.ParameterType
-	}
-	if true {
-		toSerialize["parameterId"] = o.ParameterId
-	}
-	if o.DataSourceType != nil {
-		toSerialize["dataSourceType"] = o.DataSourceType
-	}
-	if o.Label != nil {
-		toSerialize["label"] = o.Label
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Example != nil {
-		toSerialize["example"] = o.Example
-	}
-	if o.Hidden != nil {
-		toSerialize["hidden"] = o.Hidden
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceManifestDataSourceParameter) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["parameterType"] = o.ParameterType
+	toSerialize["parameterId"] = o.ParameterId
+	if !IsNil(o.DataSourceType) {
+		toSerialize["dataSourceType"] = o.DataSourceType
+	}
+	if !IsNil(o.Label) {
+		toSerialize["label"] = o.Label
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Example) {
+		toSerialize["example"] = o.Example
+	}
+	if !IsNil(o.Hidden) {
+		toSerialize["hidden"] = o.Hidden
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceManifestDataSourceParameter struct {

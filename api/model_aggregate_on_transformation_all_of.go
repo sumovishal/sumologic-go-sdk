@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AggregateOnTransformationAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AggregateOnTransformationAllOf{}
 
 // AggregateOnTransformationAllOf struct for AggregateOnTransformationAllOf
 type AggregateOnTransformationAllOf struct {
@@ -63,11 +66,17 @@ func (o *AggregateOnTransformationAllOf) SetAggregateOn(v []string) {
 }
 
 func (o AggregateOnTransformationAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["aggregateOn"] = o.AggregateOn
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AggregateOnTransformationAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["aggregateOn"] = o.AggregateOn
+	return toSerialize, nil
 }
 
 type NullableAggregateOnTransformationAllOf struct {

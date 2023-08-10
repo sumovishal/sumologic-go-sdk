@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,12 +14,17 @@ import (
 	"encoding/json"
 )
 
+// checks if the AWSLambdaAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AWSLambdaAllOf{}
+
 // AWSLambdaAllOf struct for AWSLambdaAllOf
 type AWSLambdaAllOf struct {
 	// The identifier of the connection.
 	ConnectionId string `json:"connectionId"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	// The override of the resolution JSON payload of the connection. Should be in JSON format.
+	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
 }
 
 // NewAWSLambdaAllOf instantiates a new AWSLambdaAllOf object
@@ -66,7 +71,7 @@ func (o *AWSLambdaAllOf) SetConnectionId(v string) {
 
 // GetPayloadOverride returns the PayloadOverride field value if set, zero value otherwise.
 func (o *AWSLambdaAllOf) GetPayloadOverride() string {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		var ret string
 		return ret
 	}
@@ -76,7 +81,7 @@ func (o *AWSLambdaAllOf) GetPayloadOverride() string {
 // GetPayloadOverrideOk returns a tuple with the PayloadOverride field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AWSLambdaAllOf) GetPayloadOverrideOk() (*string, bool) {
-	if o == nil || o.PayloadOverride == nil {
+	if o == nil || IsNil(o.PayloadOverride) {
 		return nil, false
 	}
 	return o.PayloadOverride, true
@@ -84,7 +89,7 @@ func (o *AWSLambdaAllOf) GetPayloadOverrideOk() (*string, bool) {
 
 // HasPayloadOverride returns a boolean if a field has been set.
 func (o *AWSLambdaAllOf) HasPayloadOverride() bool {
-	if o != nil && o.PayloadOverride != nil {
+	if o != nil && !IsNil(o.PayloadOverride) {
 		return true
 	}
 
@@ -96,15 +101,56 @@ func (o *AWSLambdaAllOf) SetPayloadOverride(v string) {
 	o.PayloadOverride = &v
 }
 
-func (o AWSLambdaAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["connectionId"] = o.ConnectionId
+// GetResolutionPayloadOverride returns the ResolutionPayloadOverride field value if set, zero value otherwise.
+func (o *AWSLambdaAllOf) GetResolutionPayloadOverride() string {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		var ret string
+		return ret
 	}
-	if o.PayloadOverride != nil {
-		toSerialize["payloadOverride"] = o.PayloadOverride
+	return *o.ResolutionPayloadOverride
+}
+
+// GetResolutionPayloadOverrideOk returns a tuple with the ResolutionPayloadOverride field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AWSLambdaAllOf) GetResolutionPayloadOverrideOk() (*string, bool) {
+	if o == nil || IsNil(o.ResolutionPayloadOverride) {
+		return nil, false
+	}
+	return o.ResolutionPayloadOverride, true
+}
+
+// HasResolutionPayloadOverride returns a boolean if a field has been set.
+func (o *AWSLambdaAllOf) HasResolutionPayloadOverride() bool {
+	if o != nil && !IsNil(o.ResolutionPayloadOverride) {
+		return true
+	}
+
+	return false
+}
+
+// SetResolutionPayloadOverride gets a reference to the given string and assigns it to the ResolutionPayloadOverride field.
+func (o *AWSLambdaAllOf) SetResolutionPayloadOverride(v string) {
+	o.ResolutionPayloadOverride = &v
+}
+
+func (o AWSLambdaAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AWSLambdaAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["connectionId"] = o.ConnectionId
+	if !IsNil(o.PayloadOverride) {
+		toSerialize["payloadOverride"] = o.PayloadOverride
+	}
+	if !IsNil(o.ResolutionPayloadOverride) {
+		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
+	}
+	return toSerialize, nil
 }
 
 type NullableAWSLambdaAllOf struct {

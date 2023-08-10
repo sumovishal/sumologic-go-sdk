@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Query type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Query{}
 
 // Query struct for Query
 type Query struct {
@@ -147,7 +150,7 @@ func (o *Query) SetQueryKey(v string) {
 
 // GetMetricsQueryMode returns the MetricsQueryMode field value if set, zero value otherwise.
 func (o *Query) GetMetricsQueryMode() string {
-	if o == nil || o.MetricsQueryMode == nil {
+	if o == nil || IsNil(o.MetricsQueryMode) {
 		var ret string
 		return ret
 	}
@@ -157,7 +160,7 @@ func (o *Query) GetMetricsQueryMode() string {
 // GetMetricsQueryModeOk returns a tuple with the MetricsQueryMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetMetricsQueryModeOk() (*string, bool) {
-	if o == nil || o.MetricsQueryMode == nil {
+	if o == nil || IsNil(o.MetricsQueryMode) {
 		return nil, false
 	}
 	return o.MetricsQueryMode, true
@@ -165,7 +168,7 @@ func (o *Query) GetMetricsQueryModeOk() (*string, bool) {
 
 // HasMetricsQueryMode returns a boolean if a field has been set.
 func (o *Query) HasMetricsQueryMode() bool {
-	if o != nil && o.MetricsQueryMode != nil {
+	if o != nil && !IsNil(o.MetricsQueryMode) {
 		return true
 	}
 
@@ -179,7 +182,7 @@ func (o *Query) SetMetricsQueryMode(v string) {
 
 // GetMetricsQueryData returns the MetricsQueryData field value if set, zero value otherwise.
 func (o *Query) GetMetricsQueryData() MetricsQueryData {
-	if o == nil || o.MetricsQueryData == nil {
+	if o == nil || IsNil(o.MetricsQueryData) {
 		var ret MetricsQueryData
 		return ret
 	}
@@ -189,7 +192,7 @@ func (o *Query) GetMetricsQueryData() MetricsQueryData {
 // GetMetricsQueryDataOk returns a tuple with the MetricsQueryData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetMetricsQueryDataOk() (*MetricsQueryData, bool) {
-	if o == nil || o.MetricsQueryData == nil {
+	if o == nil || IsNil(o.MetricsQueryData) {
 		return nil, false
 	}
 	return o.MetricsQueryData, true
@@ -197,7 +200,7 @@ func (o *Query) GetMetricsQueryDataOk() (*MetricsQueryData, bool) {
 
 // HasMetricsQueryData returns a boolean if a field has been set.
 func (o *Query) HasMetricsQueryData() bool {
-	if o != nil && o.MetricsQueryData != nil {
+	if o != nil && !IsNil(o.MetricsQueryData) {
 		return true
 	}
 
@@ -211,7 +214,7 @@ func (o *Query) SetMetricsQueryData(v MetricsQueryData) {
 
 // GetTracesQueryData returns the TracesQueryData field value if set, zero value otherwise.
 func (o *Query) GetTracesQueryData() TracesQueryData {
-	if o == nil || o.TracesQueryData == nil {
+	if o == nil || IsNil(o.TracesQueryData) {
 		var ret TracesQueryData
 		return ret
 	}
@@ -221,7 +224,7 @@ func (o *Query) GetTracesQueryData() TracesQueryData {
 // GetTracesQueryDataOk returns a tuple with the TracesQueryData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetTracesQueryDataOk() (*TracesQueryData, bool) {
-	if o == nil || o.TracesQueryData == nil {
+	if o == nil || IsNil(o.TracesQueryData) {
 		return nil, false
 	}
 	return o.TracesQueryData, true
@@ -229,7 +232,7 @@ func (o *Query) GetTracesQueryDataOk() (*TracesQueryData, bool) {
 
 // HasTracesQueryData returns a boolean if a field has been set.
 func (o *Query) HasTracesQueryData() bool {
-	if o != nil && o.TracesQueryData != nil {
+	if o != nil && !IsNil(o.TracesQueryData) {
 		return true
 	}
 
@@ -243,7 +246,7 @@ func (o *Query) SetTracesQueryData(v TracesQueryData) {
 
 // GetSpansQueryData returns the SpansQueryData field value if set, zero value otherwise.
 func (o *Query) GetSpansQueryData() SpansQueryData {
-	if o == nil || o.SpansQueryData == nil {
+	if o == nil || IsNil(o.SpansQueryData) {
 		var ret SpansQueryData
 		return ret
 	}
@@ -253,7 +256,7 @@ func (o *Query) GetSpansQueryData() SpansQueryData {
 // GetSpansQueryDataOk returns a tuple with the SpansQueryData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetSpansQueryDataOk() (*SpansQueryData, bool) {
-	if o == nil || o.SpansQueryData == nil {
+	if o == nil || IsNil(o.SpansQueryData) {
 		return nil, false
 	}
 	return o.SpansQueryData, true
@@ -261,7 +264,7 @@ func (o *Query) GetSpansQueryDataOk() (*SpansQueryData, bool) {
 
 // HasSpansQueryData returns a boolean if a field has been set.
 func (o *Query) HasSpansQueryData() bool {
-	if o != nil && o.SpansQueryData != nil {
+	if o != nil && !IsNil(o.SpansQueryData) {
 		return true
 	}
 
@@ -275,7 +278,7 @@ func (o *Query) SetSpansQueryData(v SpansQueryData) {
 
 // GetParseMode returns the ParseMode field value if set, zero value otherwise.
 func (o *Query) GetParseMode() string {
-	if o == nil || o.ParseMode == nil {
+	if o == nil || IsNil(o.ParseMode) {
 		var ret string
 		return ret
 	}
@@ -285,7 +288,7 @@ func (o *Query) GetParseMode() string {
 // GetParseModeOk returns a tuple with the ParseMode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetParseModeOk() (*string, bool) {
-	if o == nil || o.ParseMode == nil {
+	if o == nil || IsNil(o.ParseMode) {
 		return nil, false
 	}
 	return o.ParseMode, true
@@ -293,7 +296,7 @@ func (o *Query) GetParseModeOk() (*string, bool) {
 
 // HasParseMode returns a boolean if a field has been set.
 func (o *Query) HasParseMode() bool {
-	if o != nil && o.ParseMode != nil {
+	if o != nil && !IsNil(o.ParseMode) {
 		return true
 	}
 
@@ -307,7 +310,7 @@ func (o *Query) SetParseMode(v string) {
 
 // GetTimeSource returns the TimeSource field value if set, zero value otherwise.
 func (o *Query) GetTimeSource() string {
-	if o == nil || o.TimeSource == nil {
+	if o == nil || IsNil(o.TimeSource) {
 		var ret string
 		return ret
 	}
@@ -317,7 +320,7 @@ func (o *Query) GetTimeSource() string {
 // GetTimeSourceOk returns a tuple with the TimeSource field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetTimeSourceOk() (*string, bool) {
-	if o == nil || o.TimeSource == nil {
+	if o == nil || IsNil(o.TimeSource) {
 		return nil, false
 	}
 	return o.TimeSource, true
@@ -325,7 +328,7 @@ func (o *Query) GetTimeSourceOk() (*string, bool) {
 
 // HasTimeSource returns a boolean if a field has been set.
 func (o *Query) HasTimeSource() bool {
-	if o != nil && o.TimeSource != nil {
+	if o != nil && !IsNil(o.TimeSource) {
 		return true
 	}
 
@@ -339,7 +342,7 @@ func (o *Query) SetTimeSource(v string) {
 
 // GetTransient returns the Transient field value if set, zero value otherwise.
 func (o *Query) GetTransient() bool {
-	if o == nil || o.Transient == nil {
+	if o == nil || IsNil(o.Transient) {
 		var ret bool
 		return ret
 	}
@@ -349,7 +352,7 @@ func (o *Query) GetTransient() bool {
 // GetTransientOk returns a tuple with the Transient field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetTransientOk() (*bool, bool) {
-	if o == nil || o.Transient == nil {
+	if o == nil || IsNil(o.Transient) {
 		return nil, false
 	}
 	return o.Transient, true
@@ -357,7 +360,7 @@ func (o *Query) GetTransientOk() (*bool, bool) {
 
 // HasTransient returns a boolean if a field has been set.
 func (o *Query) HasTransient() bool {
-	if o != nil && o.Transient != nil {
+	if o != nil && !IsNil(o.Transient) {
 		return true
 	}
 
@@ -371,7 +374,7 @@ func (o *Query) SetTransient(v bool) {
 
 // GetOutputCardinalityLimit returns the OutputCardinalityLimit field value if set, zero value otherwise.
 func (o *Query) GetOutputCardinalityLimit() int32 {
-	if o == nil || o.OutputCardinalityLimit == nil {
+	if o == nil || IsNil(o.OutputCardinalityLimit) {
 		var ret int32
 		return ret
 	}
@@ -381,7 +384,7 @@ func (o *Query) GetOutputCardinalityLimit() int32 {
 // GetOutputCardinalityLimitOk returns a tuple with the OutputCardinalityLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Query) GetOutputCardinalityLimitOk() (*int32, bool) {
-	if o == nil || o.OutputCardinalityLimit == nil {
+	if o == nil || IsNil(o.OutputCardinalityLimit) {
 		return nil, false
 	}
 	return o.OutputCardinalityLimit, true
@@ -389,7 +392,7 @@ func (o *Query) GetOutputCardinalityLimitOk() (*int32, bool) {
 
 // HasOutputCardinalityLimit returns a boolean if a field has been set.
 func (o *Query) HasOutputCardinalityLimit() bool {
-	if o != nil && o.OutputCardinalityLimit != nil {
+	if o != nil && !IsNil(o.OutputCardinalityLimit) {
 		return true
 	}
 
@@ -402,41 +405,43 @@ func (o *Query) SetOutputCardinalityLimit(v int32) {
 }
 
 func (o Query) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["queryType"] = o.QueryType
-	}
-	if true {
-		toSerialize["queryKey"] = o.QueryKey
-	}
-	if o.MetricsQueryMode != nil {
-		toSerialize["metricsQueryMode"] = o.MetricsQueryMode
-	}
-	if o.MetricsQueryData != nil {
-		toSerialize["metricsQueryData"] = o.MetricsQueryData
-	}
-	if o.TracesQueryData != nil {
-		toSerialize["tracesQueryData"] = o.TracesQueryData
-	}
-	if o.SpansQueryData != nil {
-		toSerialize["spansQueryData"] = o.SpansQueryData
-	}
-	if o.ParseMode != nil {
-		toSerialize["parseMode"] = o.ParseMode
-	}
-	if o.TimeSource != nil {
-		toSerialize["timeSource"] = o.TimeSource
-	}
-	if o.Transient != nil {
-		toSerialize["transient"] = o.Transient
-	}
-	if o.OutputCardinalityLimit != nil {
-		toSerialize["outputCardinalityLimit"] = o.OutputCardinalityLimit
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Query) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["queryType"] = o.QueryType
+	toSerialize["queryKey"] = o.QueryKey
+	if !IsNil(o.MetricsQueryMode) {
+		toSerialize["metricsQueryMode"] = o.MetricsQueryMode
+	}
+	if !IsNil(o.MetricsQueryData) {
+		toSerialize["metricsQueryData"] = o.MetricsQueryData
+	}
+	if !IsNil(o.TracesQueryData) {
+		toSerialize["tracesQueryData"] = o.TracesQueryData
+	}
+	if !IsNil(o.SpansQueryData) {
+		toSerialize["spansQueryData"] = o.SpansQueryData
+	}
+	if !IsNil(o.ParseMode) {
+		toSerialize["parseMode"] = o.ParseMode
+	}
+	if !IsNil(o.TimeSource) {
+		toSerialize["timeSource"] = o.TimeSource
+	}
+	if !IsNil(o.Transient) {
+		toSerialize["transient"] = o.Transient
+	}
+	if !IsNil(o.OutputCardinalityLimit) {
+		toSerialize["outputCardinalityLimit"] = o.OutputCardinalityLimit
+	}
+	return toSerialize, nil
 }
 
 type NullableQuery struct {

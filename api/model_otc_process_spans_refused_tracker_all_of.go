@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCProcessSpansRefusedTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCProcessSpansRefusedTrackerAllOf{}
 
 // OTCProcessSpansRefusedTrackerAllOf struct for OTCProcessSpansRefusedTrackerAllOf
 type OTCProcessSpansRefusedTrackerAllOf struct {
@@ -45,7 +48,7 @@ func NewOTCProcessSpansRefusedTrackerAllOfWithDefaults() *OTCProcessSpansRefused
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -63,7 +66,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceIdOk() (*string, bool) {
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceAddress() string {
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -95,7 +98,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetInstanceAddressOk() (*string, bo
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -109,7 +112,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) SetInstanceAddress(v string) {
 
 // GetProcessorId returns the ProcessorId field value if set, zero value otherwise.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetProcessorId() string {
-	if o == nil || o.ProcessorId == nil {
+	if o == nil || IsNil(o.ProcessorId) {
 		var ret string
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetProcessorId() string {
 // GetProcessorIdOk returns a tuple with the ProcessorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetProcessorIdOk() (*string, bool) {
-	if o == nil || o.ProcessorId == nil {
+	if o == nil || IsNil(o.ProcessorId) {
 		return nil, false
 	}
 	return o.ProcessorId, true
@@ -127,7 +130,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetProcessorIdOk() (*string, bool) 
 
 // HasProcessorId returns a boolean if a field has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) HasProcessorId() bool {
-	if o != nil && o.ProcessorId != nil {
+	if o != nil && !IsNil(o.ProcessorId) {
 		return true
 	}
 
@@ -141,7 +144,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) SetProcessorId(v string) {
 
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetCount() string {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		var ret string
 		return ret
 	}
@@ -151,7 +154,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetCount() string {
 // GetCountOk returns a tuple with the Count field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) GetCountOk() (*string, bool) {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		return nil, false
 	}
 	return o.Count, true
@@ -159,7 +162,7 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) GetCountOk() (*string, bool) {
 
 // HasCount returns a boolean if a field has been set.
 func (o *OTCProcessSpansRefusedTrackerAllOf) HasCount() bool {
-	if o != nil && o.Count != nil {
+	if o != nil && !IsNil(o.Count) {
 		return true
 	}
 
@@ -172,20 +175,28 @@ func (o *OTCProcessSpansRefusedTrackerAllOf) SetCount(v string) {
 }
 
 func (o OTCProcessSpansRefusedTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.InstanceId != nil {
-		toSerialize["instanceId"] = o.InstanceId
-	}
-	if o.InstanceAddress != nil {
-		toSerialize["instanceAddress"] = o.InstanceAddress
-	}
-	if o.ProcessorId != nil {
-		toSerialize["processorId"] = o.ProcessorId
-	}
-	if o.Count != nil {
-		toSerialize["count"] = o.Count
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OTCProcessSpansRefusedTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.InstanceId) {
+		toSerialize["instanceId"] = o.InstanceId
+	}
+	if !IsNil(o.InstanceAddress) {
+		toSerialize["instanceAddress"] = o.InstanceAddress
+	}
+	if !IsNil(o.ProcessorId) {
+		toSerialize["processorId"] = o.ProcessorId
+	}
+	if !IsNil(o.Count) {
+		toSerialize["count"] = o.Count
+	}
+	return toSerialize, nil
 }
 
 type NullableOTCProcessSpansRefusedTrackerAllOf struct {

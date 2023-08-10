@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MetricsQueryResultInfo type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryResultInfo{}
 
 // MetricsQueryResultInfo struct for MetricsQueryResultInfo
 type MetricsQueryResultInfo struct {
@@ -40,7 +43,7 @@ func NewMetricsQueryResultInfoWithDefaults() *MetricsQueryResultInfo {
 
 // GetRowId returns the RowId field value if set, zero value otherwise.
 func (o *MetricsQueryResultInfo) GetRowId() string {
-	if o == nil || o.RowId == nil {
+	if o == nil || IsNil(o.RowId) {
 		var ret string
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *MetricsQueryResultInfo) GetRowId() string {
 // GetRowIdOk returns a tuple with the RowId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResultInfo) GetRowIdOk() (*string, bool) {
-	if o == nil || o.RowId == nil {
+	if o == nil || IsNil(o.RowId) {
 		return nil, false
 	}
 	return o.RowId, true
@@ -58,7 +61,7 @@ func (o *MetricsQueryResultInfo) GetRowIdOk() (*string, bool) {
 
 // HasRowId returns a boolean if a field has been set.
 func (o *MetricsQueryResultInfo) HasRowId() bool {
-	if o != nil && o.RowId != nil {
+	if o != nil && !IsNil(o.RowId) {
 		return true
 	}
 
@@ -72,7 +75,7 @@ func (o *MetricsQueryResultInfo) SetRowId(v string) {
 
 // GetResultContext returns the ResultContext field value if set, zero value otherwise.
 func (o *MetricsQueryResultInfo) GetResultContext() MetricsQueryResultContext {
-	if o == nil || o.ResultContext == nil {
+	if o == nil || IsNil(o.ResultContext) {
 		var ret MetricsQueryResultContext
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *MetricsQueryResultInfo) GetResultContext() MetricsQueryResultContext {
 // GetResultContextOk returns a tuple with the ResultContext field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResultInfo) GetResultContextOk() (*MetricsQueryResultContext, bool) {
-	if o == nil || o.ResultContext == nil {
+	if o == nil || IsNil(o.ResultContext) {
 		return nil, false
 	}
 	return o.ResultContext, true
@@ -90,7 +93,7 @@ func (o *MetricsQueryResultInfo) GetResultContextOk() (*MetricsQueryResultContex
 
 // HasResultContext returns a boolean if a field has been set.
 func (o *MetricsQueryResultInfo) HasResultContext() bool {
-	if o != nil && o.ResultContext != nil {
+	if o != nil && !IsNil(o.ResultContext) {
 		return true
 	}
 
@@ -103,14 +106,22 @@ func (o *MetricsQueryResultInfo) SetResultContext(v MetricsQueryResultContext) {
 }
 
 func (o MetricsQueryResultInfo) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.RowId != nil {
-		toSerialize["rowId"] = o.RowId
-	}
-	if o.ResultContext != nil {
-		toSerialize["resultContext"] = o.ResultContext
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryResultInfo) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.RowId) {
+		toSerialize["rowId"] = o.RowId
+	}
+	if !IsNil(o.ResultContext) {
+		toSerialize["resultContext"] = o.ResultContext
+	}
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryResultInfo struct {

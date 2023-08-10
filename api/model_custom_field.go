@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CustomField type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CustomField{}
 
 // CustomField struct for CustomField
 type CustomField struct {
@@ -144,20 +147,20 @@ func (o *CustomField) SetState(v string) {
 }
 
 func (o CustomField) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["fieldId"] = o.FieldId
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if true {
-		toSerialize["state"] = o.State
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CustomField) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["fieldId"] = o.FieldId
+	toSerialize["dataType"] = o.DataType
+	toSerialize["state"] = o.State
+	return toSerialize, nil
 }
 
 type NullableCustomField struct {

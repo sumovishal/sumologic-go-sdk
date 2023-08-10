@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectorResourceIdentity type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectorResourceIdentity{}
 
 // CollectorResourceIdentity struct for CollectorResourceIdentity
 type CollectorResourceIdentity struct {
@@ -41,16 +44,24 @@ func NewCollectorResourceIdentityWithDefaults() *CollectorResourceIdentity {
 }
 
 func (o CollectorResourceIdentity) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CollectorResourceIdentity) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedResourceIdentity, errResourceIdentity := json.Marshal(o.ResourceIdentity)
 	if errResourceIdentity != nil {
-		return []byte{}, errResourceIdentity
+		return map[string]interface{}{}, errResourceIdentity
 	}
 	errResourceIdentity = json.Unmarshal([]byte(serializedResourceIdentity), &toSerialize)
 	if errResourceIdentity != nil {
-		return []byte{}, errResourceIdentity
+		return map[string]interface{}{}, errResourceIdentity
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCollectorResourceIdentity struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DataForwardingRuleAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DataForwardingRuleAllOf{}
 
 // DataForwardingRuleAllOf struct for DataForwardingRuleAllOf
 type DataForwardingRuleAllOf struct {
@@ -39,7 +42,7 @@ func NewDataForwardingRuleAllOfWithDefaults() *DataForwardingRuleAllOf {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *DataForwardingRuleAllOf) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *DataForwardingRuleAllOf) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DataForwardingRuleAllOf) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -57,7 +60,7 @@ func (o *DataForwardingRuleAllOf) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *DataForwardingRuleAllOf) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *DataForwardingRuleAllOf) SetId(v string) {
 }
 
 func (o DataForwardingRuleAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DataForwardingRuleAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	return toSerialize, nil
 }
 
 type NullableDataForwardingRuleAllOf struct {

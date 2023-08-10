@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AxisRange type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AxisRange{}
 
 // AxisRange The min and max of the x,y axis of the monitor chart.
 type AxisRange struct {
@@ -41,7 +44,7 @@ func NewAxisRangeWithDefaults() *AxisRange {
 
 // GetMin returns the Min field value if set, zero value otherwise.
 func (o *AxisRange) GetMin() int64 {
-	if o == nil || o.Min == nil {
+	if o == nil || IsNil(o.Min) {
 		var ret int64
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *AxisRange) GetMin() int64 {
 // GetMinOk returns a tuple with the Min field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AxisRange) GetMinOk() (*int64, bool) {
-	if o == nil || o.Min == nil {
+	if o == nil || IsNil(o.Min) {
 		return nil, false
 	}
 	return o.Min, true
@@ -59,7 +62,7 @@ func (o *AxisRange) GetMinOk() (*int64, bool) {
 
 // HasMin returns a boolean if a field has been set.
 func (o *AxisRange) HasMin() bool {
-	if o != nil && o.Min != nil {
+	if o != nil && !IsNil(o.Min) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *AxisRange) SetMin(v int64) {
 
 // GetMax returns the Max field value if set, zero value otherwise.
 func (o *AxisRange) GetMax() int64 {
-	if o == nil || o.Max == nil {
+	if o == nil || IsNil(o.Max) {
 		var ret int64
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *AxisRange) GetMax() int64 {
 // GetMaxOk returns a tuple with the Max field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AxisRange) GetMaxOk() (*int64, bool) {
-	if o == nil || o.Max == nil {
+	if o == nil || IsNil(o.Max) {
 		return nil, false
 	}
 	return o.Max, true
@@ -91,7 +94,7 @@ func (o *AxisRange) GetMaxOk() (*int64, bool) {
 
 // HasMax returns a boolean if a field has been set.
 func (o *AxisRange) HasMax() bool {
-	if o != nil && o.Max != nil {
+	if o != nil && !IsNil(o.Max) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *AxisRange) SetMax(v int64) {
 }
 
 func (o AxisRange) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Min != nil {
-		toSerialize["min"] = o.Min
-	}
-	if o.Max != nil {
-		toSerialize["max"] = o.Max
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AxisRange) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Min) {
+		toSerialize["min"] = o.Min
+	}
+	if !IsNil(o.Max) {
+		toSerialize["max"] = o.Max
+	}
+	return toSerialize, nil
 }
 
 type NullableAxisRange struct {

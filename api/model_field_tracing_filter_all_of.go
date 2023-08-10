@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the FieldTracingFilterAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FieldTracingFilterAllOf{}
 
 // FieldTracingFilterAllOf struct for FieldTracingFilterAllOf
 type FieldTracingFilterAllOf struct {
@@ -92,7 +95,7 @@ func (o *FieldTracingFilterAllOf) SetOperator(v string) {
 
 // GetValue returns the Value field value if set, zero value otherwise.
 func (o *FieldTracingFilterAllOf) GetValue() TracingValue {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		var ret TracingValue
 		return ret
 	}
@@ -102,7 +105,7 @@ func (o *FieldTracingFilterAllOf) GetValue() TracingValue {
 // GetValueOk returns a tuple with the Value field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *FieldTracingFilterAllOf) GetValueOk() (*TracingValue, bool) {
-	if o == nil || o.Value == nil {
+	if o == nil || IsNil(o.Value) {
 		return nil, false
 	}
 	return o.Value, true
@@ -110,7 +113,7 @@ func (o *FieldTracingFilterAllOf) GetValueOk() (*TracingValue, bool) {
 
 // HasValue returns a boolean if a field has been set.
 func (o *FieldTracingFilterAllOf) HasValue() bool {
-	if o != nil && o.Value != nil {
+	if o != nil && !IsNil(o.Value) {
 		return true
 	}
 
@@ -123,17 +126,21 @@ func (o *FieldTracingFilterAllOf) SetValue(v TracingValue) {
 }
 
 func (o FieldTracingFilterAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["field"] = o.Field
-	}
-	if true {
-		toSerialize["operator"] = o.Operator
-	}
-	if o.Value != nil {
-		toSerialize["value"] = o.Value
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o FieldTracingFilterAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["field"] = o.Field
+	toSerialize["operator"] = o.Operator
+	if !IsNil(o.Value) {
+		toSerialize["value"] = o.Value
+	}
+	return toSerialize, nil
 }
 
 type NullableFieldTracingFilterAllOf struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the Email type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Email{}
 
 // Email struct for Email
 type Email struct {
@@ -98,7 +101,7 @@ func (o *Email) SetSubject(v string) {
 
 // GetMessageBody returns the MessageBody field value if set, zero value otherwise.
 func (o *Email) GetMessageBody() string {
-	if o == nil || o.MessageBody == nil {
+	if o == nil || IsNil(o.MessageBody) {
 		var ret string
 		return ret
 	}
@@ -108,7 +111,7 @@ func (o *Email) GetMessageBody() string {
 // GetMessageBodyOk returns a tuple with the MessageBody field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Email) GetMessageBodyOk() (*string, bool) {
-	if o == nil || o.MessageBody == nil {
+	if o == nil || IsNil(o.MessageBody) {
 		return nil, false
 	}
 	return o.MessageBody, true
@@ -116,7 +119,7 @@ func (o *Email) GetMessageBodyOk() (*string, bool) {
 
 // HasMessageBody returns a boolean if a field has been set.
 func (o *Email) HasMessageBody() bool {
-	if o != nil && o.MessageBody != nil {
+	if o != nil && !IsNil(o.MessageBody) {
 		return true
 	}
 
@@ -153,28 +156,30 @@ func (o *Email) SetTimeZone(v string) {
 }
 
 func (o Email) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Email) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedAction, errAction := json.Marshal(o.Action)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
 	errAction = json.Unmarshal([]byte(serializedAction), &toSerialize)
 	if errAction != nil {
-		return []byte{}, errAction
+		return map[string]interface{}{}, errAction
 	}
-	if true {
-		toSerialize["recipients"] = o.Recipients
-	}
-	if true {
-		toSerialize["subject"] = o.Subject
-	}
-	if o.MessageBody != nil {
+	toSerialize["recipients"] = o.Recipients
+	toSerialize["subject"] = o.Subject
+	if !IsNil(o.MessageBody) {
 		toSerialize["messageBody"] = o.MessageBody
 	}
-	if true {
-		toSerialize["timeZone"] = o.TimeZone
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["timeZone"] = o.TimeZone
+	return toSerialize, nil
 }
 
 type NullableEmail struct {

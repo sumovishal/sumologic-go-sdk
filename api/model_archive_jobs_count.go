@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ArchiveJobsCount type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ArchiveJobsCount{}
 
 // ArchiveJobsCount struct for ArchiveJobsCount
 type ArchiveJobsCount struct {
@@ -198,26 +201,22 @@ func (o *ArchiveJobsCount) SetSucceeded(v int64) {
 }
 
 func (o ArchiveJobsCount) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["sourceId"] = o.SourceId
-	}
-	if true {
-		toSerialize["pending"] = o.Pending
-	}
-	if true {
-		toSerialize["scanning"] = o.Scanning
-	}
-	if true {
-		toSerialize["ingesting"] = o.Ingesting
-	}
-	if true {
-		toSerialize["failed"] = o.Failed
-	}
-	if true {
-		toSerialize["succeeded"] = o.Succeeded
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ArchiveJobsCount) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["sourceId"] = o.SourceId
+	toSerialize["pending"] = o.Pending
+	toSerialize["scanning"] = o.Scanning
+	toSerialize["ingesting"] = o.Ingesting
+	toSerialize["failed"] = o.Failed
+	toSerialize["succeeded"] = o.Succeeded
+	return toSerialize, nil
 }
 
 type NullableArchiveJobsCount struct {

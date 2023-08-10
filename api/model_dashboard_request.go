@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DashboardRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DashboardRequest{}
 
 // DashboardRequest struct for DashboardRequest
 type DashboardRequest struct {
@@ -27,7 +30,7 @@ type DashboardRequest struct {
 	Domain *string `json:"domain,omitempty"`
 	// If set to non-empty array denotes that the dashboard concerns given hierarchies.
 	Hierarchies []string `json:"hierarchies,omitempty"`
-	// Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are `0`, `30`, `60`, 120`, `300`, `900`, `3600`, `86400`. 
+	// Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are `0`, `30`, `60`, `120`, `300`, `900`, `1800`, `3600`, `7200`, `86400`. 
 	RefreshInterval *int32 `json:"refreshInterval,omitempty"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	// Panels in the dashboard.
@@ -37,6 +40,10 @@ type DashboardRequest struct {
 	Variables []Variable `json:"variables,omitempty"`
 	// Theme for the dashboard. Either `Light` or `Dark`.
 	Theme *string `json:"theme,omitempty"`
+	// Is the dashboard public
+	IsPublic *bool `json:"isPublic,omitempty"`
+	// Whether to highlight threshold violations.
+	HighlightViolations *bool `json:"highlightViolations,omitempty"`
 }
 
 // NewDashboardRequest instantiates a new DashboardRequest object
@@ -51,6 +58,10 @@ func NewDashboardRequest(title string, timeRange ResolvableTimeRange) *Dashboard
 	this.TimeRange = timeRange
 	var theme string = "Light"
 	this.Theme = &theme
+	var isPublic bool = false
+	this.IsPublic = &isPublic
+	var highlightViolations bool = false
+	this.HighlightViolations = &highlightViolations
 	return &this
 }
 
@@ -63,6 +74,10 @@ func NewDashboardRequestWithDefaults() *DashboardRequest {
 	this.Domain = &domain
 	var theme string = "Light"
 	this.Theme = &theme
+	var isPublic bool = false
+	this.IsPublic = &isPublic
+	var highlightViolations bool = false
+	this.HighlightViolations = &highlightViolations
 	return &this
 }
 
@@ -92,7 +107,7 @@ func (o *DashboardRequest) SetTitle(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *DashboardRequest) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -102,7 +117,7 @@ func (o *DashboardRequest) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -110,7 +125,7 @@ func (o *DashboardRequest) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *DashboardRequest) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -124,7 +139,7 @@ func (o *DashboardRequest) SetDescription(v string) {
 
 // GetFolderId returns the FolderId field value if set, zero value otherwise.
 func (o *DashboardRequest) GetFolderId() string {
-	if o == nil || o.FolderId == nil {
+	if o == nil || IsNil(o.FolderId) {
 		var ret string
 		return ret
 	}
@@ -134,7 +149,7 @@ func (o *DashboardRequest) GetFolderId() string {
 // GetFolderIdOk returns a tuple with the FolderId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetFolderIdOk() (*string, bool) {
-	if o == nil || o.FolderId == nil {
+	if o == nil || IsNil(o.FolderId) {
 		return nil, false
 	}
 	return o.FolderId, true
@@ -142,7 +157,7 @@ func (o *DashboardRequest) GetFolderIdOk() (*string, bool) {
 
 // HasFolderId returns a boolean if a field has been set.
 func (o *DashboardRequest) HasFolderId() bool {
-	if o != nil && o.FolderId != nil {
+	if o != nil && !IsNil(o.FolderId) {
 		return true
 	}
 
@@ -156,7 +171,7 @@ func (o *DashboardRequest) SetFolderId(v string) {
 
 // GetTopologyLabelMap returns the TopologyLabelMap field value if set, zero value otherwise.
 func (o *DashboardRequest) GetTopologyLabelMap() TopologyLabelMap {
-	if o == nil || o.TopologyLabelMap == nil {
+	if o == nil || IsNil(o.TopologyLabelMap) {
 		var ret TopologyLabelMap
 		return ret
 	}
@@ -166,7 +181,7 @@ func (o *DashboardRequest) GetTopologyLabelMap() TopologyLabelMap {
 // GetTopologyLabelMapOk returns a tuple with the TopologyLabelMap field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetTopologyLabelMapOk() (*TopologyLabelMap, bool) {
-	if o == nil || o.TopologyLabelMap == nil {
+	if o == nil || IsNil(o.TopologyLabelMap) {
 		return nil, false
 	}
 	return o.TopologyLabelMap, true
@@ -174,7 +189,7 @@ func (o *DashboardRequest) GetTopologyLabelMapOk() (*TopologyLabelMap, bool) {
 
 // HasTopologyLabelMap returns a boolean if a field has been set.
 func (o *DashboardRequest) HasTopologyLabelMap() bool {
-	if o != nil && o.TopologyLabelMap != nil {
+	if o != nil && !IsNil(o.TopologyLabelMap) {
 		return true
 	}
 
@@ -188,7 +203,7 @@ func (o *DashboardRequest) SetTopologyLabelMap(v TopologyLabelMap) {
 
 // GetDomain returns the Domain field value if set, zero value otherwise.
 func (o *DashboardRequest) GetDomain() string {
-	if o == nil || o.Domain == nil {
+	if o == nil || IsNil(o.Domain) {
 		var ret string
 		return ret
 	}
@@ -198,7 +213,7 @@ func (o *DashboardRequest) GetDomain() string {
 // GetDomainOk returns a tuple with the Domain field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetDomainOk() (*string, bool) {
-	if o == nil || o.Domain == nil {
+	if o == nil || IsNil(o.Domain) {
 		return nil, false
 	}
 	return o.Domain, true
@@ -206,7 +221,7 @@ func (o *DashboardRequest) GetDomainOk() (*string, bool) {
 
 // HasDomain returns a boolean if a field has been set.
 func (o *DashboardRequest) HasDomain() bool {
-	if o != nil && o.Domain != nil {
+	if o != nil && !IsNil(o.Domain) {
 		return true
 	}
 
@@ -220,7 +235,7 @@ func (o *DashboardRequest) SetDomain(v string) {
 
 // GetHierarchies returns the Hierarchies field value if set, zero value otherwise.
 func (o *DashboardRequest) GetHierarchies() []string {
-	if o == nil || o.Hierarchies == nil {
+	if o == nil || IsNil(o.Hierarchies) {
 		var ret []string
 		return ret
 	}
@@ -230,7 +245,7 @@ func (o *DashboardRequest) GetHierarchies() []string {
 // GetHierarchiesOk returns a tuple with the Hierarchies field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetHierarchiesOk() ([]string, bool) {
-	if o == nil || o.Hierarchies == nil {
+	if o == nil || IsNil(o.Hierarchies) {
 		return nil, false
 	}
 	return o.Hierarchies, true
@@ -238,7 +253,7 @@ func (o *DashboardRequest) GetHierarchiesOk() ([]string, bool) {
 
 // HasHierarchies returns a boolean if a field has been set.
 func (o *DashboardRequest) HasHierarchies() bool {
-	if o != nil && o.Hierarchies != nil {
+	if o != nil && !IsNil(o.Hierarchies) {
 		return true
 	}
 
@@ -252,7 +267,7 @@ func (o *DashboardRequest) SetHierarchies(v []string) {
 
 // GetRefreshInterval returns the RefreshInterval field value if set, zero value otherwise.
 func (o *DashboardRequest) GetRefreshInterval() int32 {
-	if o == nil || o.RefreshInterval == nil {
+	if o == nil || IsNil(o.RefreshInterval) {
 		var ret int32
 		return ret
 	}
@@ -262,7 +277,7 @@ func (o *DashboardRequest) GetRefreshInterval() int32 {
 // GetRefreshIntervalOk returns a tuple with the RefreshInterval field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetRefreshIntervalOk() (*int32, bool) {
-	if o == nil || o.RefreshInterval == nil {
+	if o == nil || IsNil(o.RefreshInterval) {
 		return nil, false
 	}
 	return o.RefreshInterval, true
@@ -270,7 +285,7 @@ func (o *DashboardRequest) GetRefreshIntervalOk() (*int32, bool) {
 
 // HasRefreshInterval returns a boolean if a field has been set.
 func (o *DashboardRequest) HasRefreshInterval() bool {
-	if o != nil && o.RefreshInterval != nil {
+	if o != nil && !IsNil(o.RefreshInterval) {
 		return true
 	}
 
@@ -308,7 +323,7 @@ func (o *DashboardRequest) SetTimeRange(v ResolvableTimeRange) {
 
 // GetPanels returns the Panels field value if set, zero value otherwise.
 func (o *DashboardRequest) GetPanels() []Panel {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		var ret []Panel
 		return ret
 	}
@@ -318,7 +333,7 @@ func (o *DashboardRequest) GetPanels() []Panel {
 // GetPanelsOk returns a tuple with the Panels field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetPanelsOk() ([]Panel, bool) {
-	if o == nil || o.Panels == nil {
+	if o == nil || IsNil(o.Panels) {
 		return nil, false
 	}
 	return o.Panels, true
@@ -326,7 +341,7 @@ func (o *DashboardRequest) GetPanelsOk() ([]Panel, bool) {
 
 // HasPanels returns a boolean if a field has been set.
 func (o *DashboardRequest) HasPanels() bool {
-	if o != nil && o.Panels != nil {
+	if o != nil && !IsNil(o.Panels) {
 		return true
 	}
 
@@ -340,7 +355,7 @@ func (o *DashboardRequest) SetPanels(v []Panel) {
 
 // GetLayout returns the Layout field value if set, zero value otherwise.
 func (o *DashboardRequest) GetLayout() Layout {
-	if o == nil || o.Layout == nil {
+	if o == nil || IsNil(o.Layout) {
 		var ret Layout
 		return ret
 	}
@@ -350,7 +365,7 @@ func (o *DashboardRequest) GetLayout() Layout {
 // GetLayoutOk returns a tuple with the Layout field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetLayoutOk() (*Layout, bool) {
-	if o == nil || o.Layout == nil {
+	if o == nil || IsNil(o.Layout) {
 		return nil, false
 	}
 	return o.Layout, true
@@ -358,7 +373,7 @@ func (o *DashboardRequest) GetLayoutOk() (*Layout, bool) {
 
 // HasLayout returns a boolean if a field has been set.
 func (o *DashboardRequest) HasLayout() bool {
-	if o != nil && o.Layout != nil {
+	if o != nil && !IsNil(o.Layout) {
 		return true
 	}
 
@@ -372,7 +387,7 @@ func (o *DashboardRequest) SetLayout(v Layout) {
 
 // GetVariables returns the Variables field value if set, zero value otherwise.
 func (o *DashboardRequest) GetVariables() []Variable {
-	if o == nil || o.Variables == nil {
+	if o == nil || IsNil(o.Variables) {
 		var ret []Variable
 		return ret
 	}
@@ -382,7 +397,7 @@ func (o *DashboardRequest) GetVariables() []Variable {
 // GetVariablesOk returns a tuple with the Variables field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetVariablesOk() ([]Variable, bool) {
-	if o == nil || o.Variables == nil {
+	if o == nil || IsNil(o.Variables) {
 		return nil, false
 	}
 	return o.Variables, true
@@ -390,7 +405,7 @@ func (o *DashboardRequest) GetVariablesOk() ([]Variable, bool) {
 
 // HasVariables returns a boolean if a field has been set.
 func (o *DashboardRequest) HasVariables() bool {
-	if o != nil && o.Variables != nil {
+	if o != nil && !IsNil(o.Variables) {
 		return true
 	}
 
@@ -404,7 +419,7 @@ func (o *DashboardRequest) SetVariables(v []Variable) {
 
 // GetTheme returns the Theme field value if set, zero value otherwise.
 func (o *DashboardRequest) GetTheme() string {
-	if o == nil || o.Theme == nil {
+	if o == nil || IsNil(o.Theme) {
 		var ret string
 		return ret
 	}
@@ -414,7 +429,7 @@ func (o *DashboardRequest) GetTheme() string {
 // GetThemeOk returns a tuple with the Theme field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardRequest) GetThemeOk() (*string, bool) {
-	if o == nil || o.Theme == nil {
+	if o == nil || IsNil(o.Theme) {
 		return nil, false
 	}
 	return o.Theme, true
@@ -422,7 +437,7 @@ func (o *DashboardRequest) GetThemeOk() (*string, bool) {
 
 // HasTheme returns a boolean if a field has been set.
 func (o *DashboardRequest) HasTheme() bool {
-	if o != nil && o.Theme != nil {
+	if o != nil && !IsNil(o.Theme) {
 		return true
 	}
 
@@ -434,45 +449,119 @@ func (o *DashboardRequest) SetTheme(v string) {
 	o.Theme = &v
 }
 
+// GetIsPublic returns the IsPublic field value if set, zero value otherwise.
+func (o *DashboardRequest) GetIsPublic() bool {
+	if o == nil || IsNil(o.IsPublic) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPublic
+}
+
+// GetIsPublicOk returns a tuple with the IsPublic field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardRequest) GetIsPublicOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPublic) {
+		return nil, false
+	}
+	return o.IsPublic, true
+}
+
+// HasIsPublic returns a boolean if a field has been set.
+func (o *DashboardRequest) HasIsPublic() bool {
+	if o != nil && !IsNil(o.IsPublic) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPublic gets a reference to the given bool and assigns it to the IsPublic field.
+func (o *DashboardRequest) SetIsPublic(v bool) {
+	o.IsPublic = &v
+}
+
+// GetHighlightViolations returns the HighlightViolations field value if set, zero value otherwise.
+func (o *DashboardRequest) GetHighlightViolations() bool {
+	if o == nil || IsNil(o.HighlightViolations) {
+		var ret bool
+		return ret
+	}
+	return *o.HighlightViolations
+}
+
+// GetHighlightViolationsOk returns a tuple with the HighlightViolations field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardRequest) GetHighlightViolationsOk() (*bool, bool) {
+	if o == nil || IsNil(o.HighlightViolations) {
+		return nil, false
+	}
+	return o.HighlightViolations, true
+}
+
+// HasHighlightViolations returns a boolean if a field has been set.
+func (o *DashboardRequest) HasHighlightViolations() bool {
+	if o != nil && !IsNil(o.HighlightViolations) {
+		return true
+	}
+
+	return false
+}
+
+// SetHighlightViolations gets a reference to the given bool and assigns it to the HighlightViolations field.
+func (o *DashboardRequest) SetHighlightViolations(v bool) {
+	o.HighlightViolations = &v
+}
+
 func (o DashboardRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["title"] = o.Title
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.FolderId != nil {
-		toSerialize["folderId"] = o.FolderId
-	}
-	if o.TopologyLabelMap != nil {
-		toSerialize["topologyLabelMap"] = o.TopologyLabelMap
-	}
-	if o.Domain != nil {
-		toSerialize["domain"] = o.Domain
-	}
-	if o.Hierarchies != nil {
-		toSerialize["hierarchies"] = o.Hierarchies
-	}
-	if o.RefreshInterval != nil {
-		toSerialize["refreshInterval"] = o.RefreshInterval
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.Panels != nil {
-		toSerialize["panels"] = o.Panels
-	}
-	if o.Layout != nil {
-		toSerialize["layout"] = o.Layout
-	}
-	if o.Variables != nil {
-		toSerialize["variables"] = o.Variables
-	}
-	if o.Theme != nil {
-		toSerialize["theme"] = o.Theme
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DashboardRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["title"] = o.Title
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.FolderId) {
+		toSerialize["folderId"] = o.FolderId
+	}
+	if !IsNil(o.TopologyLabelMap) {
+		toSerialize["topologyLabelMap"] = o.TopologyLabelMap
+	}
+	if !IsNil(o.Domain) {
+		toSerialize["domain"] = o.Domain
+	}
+	if !IsNil(o.Hierarchies) {
+		toSerialize["hierarchies"] = o.Hierarchies
+	}
+	if !IsNil(o.RefreshInterval) {
+		toSerialize["refreshInterval"] = o.RefreshInterval
+	}
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.Panels) {
+		toSerialize["panels"] = o.Panels
+	}
+	if !IsNil(o.Layout) {
+		toSerialize["layout"] = o.Layout
+	}
+	if !IsNil(o.Variables) {
+		toSerialize["variables"] = o.Variables
+	}
+	if !IsNil(o.Theme) {
+		toSerialize["theme"] = o.Theme
+	}
+	if !IsNil(o.IsPublic) {
+		toSerialize["isPublic"] = o.IsPublic
+	}
+	if !IsNil(o.HighlightViolations) {
+		toSerialize["highlightViolations"] = o.HighlightViolations
+	}
+	return toSerialize, nil
 }
 
 type NullableDashboardRequest struct {

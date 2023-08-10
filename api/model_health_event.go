@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the HealthEvent type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &HealthEvent{}
 
 // HealthEvent struct for HealthEvent
 type HealthEvent struct {
@@ -224,29 +227,23 @@ func (o *HealthEvent) SetSeverityLevel(v string) {
 }
 
 func (o HealthEvent) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["eventId"] = o.EventId
-	}
-	if true {
-		toSerialize["eventName"] = o.EventName
-	}
-	if true {
-		toSerialize["details"] = o.Details
-	}
-	if true {
-		toSerialize["resourceIdentity"] = o.ResourceIdentity
-	}
-	if true {
-		toSerialize["eventTime"] = o.EventTime
-	}
-	if true {
-		toSerialize["subsystem"] = o.Subsystem
-	}
-	if true {
-		toSerialize["severityLevel"] = o.SeverityLevel
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o HealthEvent) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["eventId"] = o.EventId
+	toSerialize["eventName"] = o.EventName
+	toSerialize["details"] = o.Details
+	toSerialize["resourceIdentity"] = o.ResourceIdentity
+	toSerialize["eventTime"] = o.EventTime
+	toSerialize["subsystem"] = o.Subsystem
+	toSerialize["severityLevel"] = o.SeverityLevel
+	return toSerialize, nil
 }
 
 type NullableHealthEvent struct {

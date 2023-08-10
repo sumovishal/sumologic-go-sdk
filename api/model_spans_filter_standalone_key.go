@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansFilterStandaloneKey type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansFilterStandaloneKey{}
 
 // SpansFilterStandaloneKey struct for SpansFilterStandaloneKey
 type SpansFilterStandaloneKey struct {
@@ -39,16 +42,24 @@ func NewSpansFilterStandaloneKeyWithDefaults() *SpansFilterStandaloneKey {
 }
 
 func (o SpansFilterStandaloneKey) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SpansFilterStandaloneKey) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSpansFilter, errSpansFilter := json.Marshal(o.SpansFilter)
 	if errSpansFilter != nil {
-		return []byte{}, errSpansFilter
+		return map[string]interface{}{}, errSpansFilter
 	}
 	errSpansFilter = json.Unmarshal([]byte(serializedSpansFilter), &toSerialize)
 	if errSpansFilter != nil {
-		return []byte{}, errSpansFilter
+		return map[string]interface{}{}, errSpansFilter
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableSpansFilterStandaloneKey struct {

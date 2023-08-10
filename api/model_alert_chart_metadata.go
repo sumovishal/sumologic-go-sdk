@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertChartMetadata type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertChartMetadata{}
 
 // AlertChartMetadata The metadata timestamps of alert chart data
 type AlertChartMetadata struct {
@@ -47,7 +50,7 @@ func NewAlertChartMetadataWithDefaults() *AlertChartMetadata {
 
 // GetAbnormalityStartTime returns the AbnormalityStartTime field value if set, zero value otherwise.
 func (o *AlertChartMetadata) GetAbnormalityStartTime() int64 {
-	if o == nil || o.AbnormalityStartTime == nil {
+	if o == nil || IsNil(o.AbnormalityStartTime) {
 		var ret int64
 		return ret
 	}
@@ -57,7 +60,7 @@ func (o *AlertChartMetadata) GetAbnormalityStartTime() int64 {
 // GetAbnormalityStartTimeOk returns a tuple with the AbnormalityStartTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertChartMetadata) GetAbnormalityStartTimeOk() (*int64, bool) {
-	if o == nil || o.AbnormalityStartTime == nil {
+	if o == nil || IsNil(o.AbnormalityStartTime) {
 		return nil, false
 	}
 	return o.AbnormalityStartTime, true
@@ -65,7 +68,7 @@ func (o *AlertChartMetadata) GetAbnormalityStartTimeOk() (*int64, bool) {
 
 // HasAbnormalityStartTime returns a boolean if a field has been set.
 func (o *AlertChartMetadata) HasAbnormalityStartTime() bool {
-	if o != nil && o.AbnormalityStartTime != nil {
+	if o != nil && !IsNil(o.AbnormalityStartTime) {
 		return true
 	}
 
@@ -79,7 +82,7 @@ func (o *AlertChartMetadata) SetAbnormalityStartTime(v int64) {
 
 // GetAbnormalityEndTime returns the AbnormalityEndTime field value if set, zero value otherwise.
 func (o *AlertChartMetadata) GetAbnormalityEndTime() int64 {
-	if o == nil || o.AbnormalityEndTime == nil {
+	if o == nil || IsNil(o.AbnormalityEndTime) {
 		var ret int64
 		return ret
 	}
@@ -89,7 +92,7 @@ func (o *AlertChartMetadata) GetAbnormalityEndTime() int64 {
 // GetAbnormalityEndTimeOk returns a tuple with the AbnormalityEndTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertChartMetadata) GetAbnormalityEndTimeOk() (*int64, bool) {
-	if o == nil || o.AbnormalityEndTime == nil {
+	if o == nil || IsNil(o.AbnormalityEndTime) {
 		return nil, false
 	}
 	return o.AbnormalityEndTime, true
@@ -97,7 +100,7 @@ func (o *AlertChartMetadata) GetAbnormalityEndTimeOk() (*int64, bool) {
 
 // HasAbnormalityEndTime returns a boolean if a field has been set.
 func (o *AlertChartMetadata) HasAbnormalityEndTime() bool {
-	if o != nil && o.AbnormalityEndTime != nil {
+	if o != nil && !IsNil(o.AbnormalityEndTime) {
 		return true
 	}
 
@@ -111,7 +114,7 @@ func (o *AlertChartMetadata) SetAbnormalityEndTime(v int64) {
 
 // GetEvaluationDelay returns the EvaluationDelay field value if set, zero value otherwise.
 func (o *AlertChartMetadata) GetEvaluationDelay() int64 {
-	if o == nil || o.EvaluationDelay == nil {
+	if o == nil || IsNil(o.EvaluationDelay) {
 		var ret int64
 		return ret
 	}
@@ -121,7 +124,7 @@ func (o *AlertChartMetadata) GetEvaluationDelay() int64 {
 // GetEvaluationDelayOk returns a tuple with the EvaluationDelay field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertChartMetadata) GetEvaluationDelayOk() (*int64, bool) {
-	if o == nil || o.EvaluationDelay == nil {
+	if o == nil || IsNil(o.EvaluationDelay) {
 		return nil, false
 	}
 	return o.EvaluationDelay, true
@@ -129,7 +132,7 @@ func (o *AlertChartMetadata) GetEvaluationDelayOk() (*int64, bool) {
 
 // HasEvaluationDelay returns a boolean if a field has been set.
 func (o *AlertChartMetadata) HasEvaluationDelay() bool {
-	if o != nil && o.EvaluationDelay != nil {
+	if o != nil && !IsNil(o.EvaluationDelay) {
 		return true
 	}
 
@@ -143,7 +146,7 @@ func (o *AlertChartMetadata) SetEvaluationDelay(v int64) {
 
 // GetAlertCreatedAt returns the AlertCreatedAt field value if set, zero value otherwise.
 func (o *AlertChartMetadata) GetAlertCreatedAt() int64 {
-	if o == nil || o.AlertCreatedAt == nil {
+	if o == nil || IsNil(o.AlertCreatedAt) {
 		var ret int64
 		return ret
 	}
@@ -153,7 +156,7 @@ func (o *AlertChartMetadata) GetAlertCreatedAt() int64 {
 // GetAlertCreatedAtOk returns a tuple with the AlertCreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertChartMetadata) GetAlertCreatedAtOk() (*int64, bool) {
-	if o == nil || o.AlertCreatedAt == nil {
+	if o == nil || IsNil(o.AlertCreatedAt) {
 		return nil, false
 	}
 	return o.AlertCreatedAt, true
@@ -161,7 +164,7 @@ func (o *AlertChartMetadata) GetAlertCreatedAtOk() (*int64, bool) {
 
 // HasAlertCreatedAt returns a boolean if a field has been set.
 func (o *AlertChartMetadata) HasAlertCreatedAt() bool {
-	if o != nil && o.AlertCreatedAt != nil {
+	if o != nil && !IsNil(o.AlertCreatedAt) {
 		return true
 	}
 
@@ -175,7 +178,7 @@ func (o *AlertChartMetadata) SetAlertCreatedAt(v int64) {
 
 // GetAlertResolvedAt returns the AlertResolvedAt field value if set, zero value otherwise.
 func (o *AlertChartMetadata) GetAlertResolvedAt() int64 {
-	if o == nil || o.AlertResolvedAt == nil {
+	if o == nil || IsNil(o.AlertResolvedAt) {
 		var ret int64
 		return ret
 	}
@@ -185,7 +188,7 @@ func (o *AlertChartMetadata) GetAlertResolvedAt() int64 {
 // GetAlertResolvedAtOk returns a tuple with the AlertResolvedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertChartMetadata) GetAlertResolvedAtOk() (*int64, bool) {
-	if o == nil || o.AlertResolvedAt == nil {
+	if o == nil || IsNil(o.AlertResolvedAt) {
 		return nil, false
 	}
 	return o.AlertResolvedAt, true
@@ -193,7 +196,7 @@ func (o *AlertChartMetadata) GetAlertResolvedAtOk() (*int64, bool) {
 
 // HasAlertResolvedAt returns a boolean if a field has been set.
 func (o *AlertChartMetadata) HasAlertResolvedAt() bool {
-	if o != nil && o.AlertResolvedAt != nil {
+	if o != nil && !IsNil(o.AlertResolvedAt) {
 		return true
 	}
 
@@ -206,23 +209,31 @@ func (o *AlertChartMetadata) SetAlertResolvedAt(v int64) {
 }
 
 func (o AlertChartMetadata) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.AbnormalityStartTime != nil {
-		toSerialize["abnormalityStartTime"] = o.AbnormalityStartTime
-	}
-	if o.AbnormalityEndTime != nil {
-		toSerialize["abnormalityEndTime"] = o.AbnormalityEndTime
-	}
-	if o.EvaluationDelay != nil {
-		toSerialize["evaluationDelay"] = o.EvaluationDelay
-	}
-	if o.AlertCreatedAt != nil {
-		toSerialize["alertCreatedAt"] = o.AlertCreatedAt
-	}
-	if o.AlertResolvedAt != nil {
-		toSerialize["alertResolvedAt"] = o.AlertResolvedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertChartMetadata) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AbnormalityStartTime) {
+		toSerialize["abnormalityStartTime"] = o.AbnormalityStartTime
+	}
+	if !IsNil(o.AbnormalityEndTime) {
+		toSerialize["abnormalityEndTime"] = o.AbnormalityEndTime
+	}
+	if !IsNil(o.EvaluationDelay) {
+		toSerialize["evaluationDelay"] = o.EvaluationDelay
+	}
+	if !IsNil(o.AlertCreatedAt) {
+		toSerialize["alertCreatedAt"] = o.AlertCreatedAt
+	}
+	if !IsNil(o.AlertResolvedAt) {
+		toSerialize["alertResolvedAt"] = o.AlertResolvedAt
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertChartMetadata struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the ServiceMapEdge type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceMapEdge{}
 
 // ServiceMapEdge struct for ServiceMapEdge
 type ServiceMapEdge struct {
@@ -118,17 +121,19 @@ func (o *ServiceMapEdge) SetLastSeenAt(v time.Time) {
 }
 
 func (o ServiceMapEdge) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["source"] = o.Source
-	}
-	if true {
-		toSerialize["target"] = o.Target
-	}
-	if true {
-		toSerialize["lastSeenAt"] = o.LastSeenAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceMapEdge) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["source"] = o.Source
+	toSerialize["target"] = o.Target
+	toSerialize["lastSeenAt"] = o.LastSeenAt
+	return toSerialize, nil
 }
 
 type NullableServiceMapEdge struct {

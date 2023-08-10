@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VisualAggregateData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualAggregateData{}
 
 // VisualAggregateData struct for VisualAggregateData
 type VisualAggregateData struct {
@@ -174,7 +177,7 @@ func (o *VisualAggregateData) SetLatest(v float64) {
 
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *VisualAggregateData) GetCount() float64 {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		var ret float64
 		return ret
 	}
@@ -184,7 +187,7 @@ func (o *VisualAggregateData) GetCount() float64 {
 // GetCountOk returns a tuple with the Count field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualAggregateData) GetCountOk() (*float64, bool) {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		return nil, false
 	}
 	return o.Count, true
@@ -192,7 +195,7 @@ func (o *VisualAggregateData) GetCountOk() (*float64, bool) {
 
 // HasCount returns a boolean if a field has been set.
 func (o *VisualAggregateData) HasCount() bool {
-	if o != nil && o.Count != nil {
+	if o != nil && !IsNil(o.Count) {
 		return true
 	}
 
@@ -205,26 +208,24 @@ func (o *VisualAggregateData) SetCount(v float64) {
 }
 
 func (o VisualAggregateData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["max"] = o.Max
-	}
-	if true {
-		toSerialize["min"] = o.Min
-	}
-	if true {
-		toSerialize["avg"] = o.Avg
-	}
-	if true {
-		toSerialize["sum"] = o.Sum
-	}
-	if true {
-		toSerialize["latest"] = o.Latest
-	}
-	if o.Count != nil {
-		toSerialize["count"] = o.Count
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualAggregateData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["max"] = o.Max
+	toSerialize["min"] = o.Min
+	toSerialize["avg"] = o.Avg
+	toSerialize["sum"] = o.Sum
+	toSerialize["latest"] = o.Latest
+	if !IsNil(o.Count) {
+		toSerialize["count"] = o.Count
+	}
+	return toSerialize, nil
 }
 
 type NullableVisualAggregateData struct {

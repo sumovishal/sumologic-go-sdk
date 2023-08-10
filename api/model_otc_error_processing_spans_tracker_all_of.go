@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the OTCErrorProcessingSpansTrackerAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OTCErrorProcessingSpansTrackerAllOf{}
 
 // OTCErrorProcessingSpansTrackerAllOf struct for OTCErrorProcessingSpansTrackerAllOf
 type OTCErrorProcessingSpansTrackerAllOf struct {
@@ -45,7 +48,7 @@ func NewOTCErrorProcessingSpansTrackerAllOfWithDefaults() *OTCErrorProcessingSpa
 
 // GetInstanceId returns the InstanceId field value if set, zero value otherwise.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceId() string {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceId() string {
 // GetInstanceIdOk returns a tuple with the InstanceId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceIdOk() (*string, bool) {
-	if o == nil || o.InstanceId == nil {
+	if o == nil || IsNil(o.InstanceId) {
 		return nil, false
 	}
 	return o.InstanceId, true
@@ -63,7 +66,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceIdOk() (*string, bool) 
 
 // HasInstanceId returns a boolean if a field has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) HasInstanceId() bool {
-	if o != nil && o.InstanceId != nil {
+	if o != nil && !IsNil(o.InstanceId) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) SetInstanceId(v string) {
 
 // GetInstanceAddress returns the InstanceAddress field value if set, zero value otherwise.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceAddress() string {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceAddress() string {
 // GetInstanceAddressOk returns a tuple with the InstanceAddress field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceAddressOk() (*string, bool) {
-	if o == nil || o.InstanceAddress == nil {
+	if o == nil || IsNil(o.InstanceAddress) {
 		return nil, false
 	}
 	return o.InstanceAddress, true
@@ -95,7 +98,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetInstanceAddressOk() (*string, b
 
 // HasInstanceAddress returns a boolean if a field has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) HasInstanceAddress() bool {
-	if o != nil && o.InstanceAddress != nil {
+	if o != nil && !IsNil(o.InstanceAddress) {
 		return true
 	}
 
@@ -109,7 +112,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) SetInstanceAddress(v string) {
 
 // GetProcessorId returns the ProcessorId field value if set, zero value otherwise.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetProcessorId() string {
-	if o == nil || o.ProcessorId == nil {
+	if o == nil || IsNil(o.ProcessorId) {
 		var ret string
 		return ret
 	}
@@ -119,7 +122,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetProcessorId() string {
 // GetProcessorIdOk returns a tuple with the ProcessorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetProcessorIdOk() (*string, bool) {
-	if o == nil || o.ProcessorId == nil {
+	if o == nil || IsNil(o.ProcessorId) {
 		return nil, false
 	}
 	return o.ProcessorId, true
@@ -127,7 +130,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetProcessorIdOk() (*string, bool)
 
 // HasProcessorId returns a boolean if a field has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) HasProcessorId() bool {
-	if o != nil && o.ProcessorId != nil {
+	if o != nil && !IsNil(o.ProcessorId) {
 		return true
 	}
 
@@ -141,7 +144,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) SetProcessorId(v string) {
 
 // GetMessage returns the Message field value if set, zero value otherwise.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetMessage() string {
-	if o == nil || o.Message == nil {
+	if o == nil || IsNil(o.Message) {
 		var ret string
 		return ret
 	}
@@ -151,7 +154,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetMessage() string {
 // GetMessageOk returns a tuple with the Message field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) GetMessageOk() (*string, bool) {
-	if o == nil || o.Message == nil {
+	if o == nil || IsNil(o.Message) {
 		return nil, false
 	}
 	return o.Message, true
@@ -159,7 +162,7 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) GetMessageOk() (*string, bool) {
 
 // HasMessage returns a boolean if a field has been set.
 func (o *OTCErrorProcessingSpansTrackerAllOf) HasMessage() bool {
-	if o != nil && o.Message != nil {
+	if o != nil && !IsNil(o.Message) {
 		return true
 	}
 
@@ -172,20 +175,28 @@ func (o *OTCErrorProcessingSpansTrackerAllOf) SetMessage(v string) {
 }
 
 func (o OTCErrorProcessingSpansTrackerAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.InstanceId != nil {
-		toSerialize["instanceId"] = o.InstanceId
-	}
-	if o.InstanceAddress != nil {
-		toSerialize["instanceAddress"] = o.InstanceAddress
-	}
-	if o.ProcessorId != nil {
-		toSerialize["processorId"] = o.ProcessorId
-	}
-	if o.Message != nil {
-		toSerialize["message"] = o.Message
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OTCErrorProcessingSpansTrackerAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.InstanceId) {
+		toSerialize["instanceId"] = o.InstanceId
+	}
+	if !IsNil(o.InstanceAddress) {
+		toSerialize["instanceAddress"] = o.InstanceAddress
+	}
+	if !IsNil(o.ProcessorId) {
+		toSerialize["processorId"] = o.ProcessorId
+	}
+	if !IsNil(o.Message) {
+		toSerialize["message"] = o.Message
+	}
+	return toSerialize, nil
 }
 
 type NullableOTCErrorProcessingSpansTrackerAllOf struct {

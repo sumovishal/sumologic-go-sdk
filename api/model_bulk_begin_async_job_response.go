@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the BulkBeginAsyncJobResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BulkBeginAsyncJobResponse{}
 
 // BulkBeginAsyncJobResponse struct for BulkBeginAsyncJobResponse
 type BulkBeginAsyncJobResponse struct {
@@ -90,14 +93,18 @@ func (o *BulkBeginAsyncJobResponse) SetErrors(v map[string]BulkErrorResponse) {
 }
 
 func (o BulkBeginAsyncJobResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["jobIds"] = o.JobIds
-	}
-	if true {
-		toSerialize["errors"] = o.Errors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BulkBeginAsyncJobResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["jobIds"] = o.JobIds
+	toSerialize["errors"] = o.Errors
+	return toSerialize, nil
 }
 
 type NullableBulkBeginAsyncJobResponse struct {

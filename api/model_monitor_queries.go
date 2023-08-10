@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the MonitorQueries type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MonitorQueries{}
 
 // MonitorQueries Queries to be validated.
 type MonitorQueries struct {
@@ -117,17 +120,19 @@ func (o *MonitorQueries) SetQueries(v []UnvalidatedMonitorQuery) {
 }
 
 func (o MonitorQueries) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["monitorType"] = o.MonitorType
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if true {
-		toSerialize["queries"] = o.Queries
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MonitorQueries) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["monitorType"] = o.MonitorType
+	toSerialize["timeRange"] = o.TimeRange
+	toSerialize["queries"] = o.Queries
+	return toSerialize, nil
 }
 
 type NullableMonitorQueries struct {

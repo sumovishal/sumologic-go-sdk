@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the IngestThrottlingTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestThrottlingTracker{}
 
 // IngestThrottlingTracker struct for IngestThrottlingTracker
 type IngestThrottlingTracker struct {
@@ -45,7 +48,7 @@ func NewIngestThrottlingTrackerWithDefaults() *IngestThrottlingTracker {
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *IngestThrottlingTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *IngestThrottlingTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestThrottlingTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -63,7 +66,7 @@ func (o *IngestThrottlingTracker) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *IngestThrottlingTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *IngestThrottlingTracker) SetEventType(v string) {
 
 // GetDataType returns the DataType field value if set, zero value otherwise.
 func (o *IngestThrottlingTracker) GetDataType() string {
-	if o == nil || o.DataType == nil {
+	if o == nil || IsNil(o.DataType) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *IngestThrottlingTracker) GetDataType() string {
 // GetDataTypeOk returns a tuple with the DataType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestThrottlingTracker) GetDataTypeOk() (*string, bool) {
-	if o == nil || o.DataType == nil {
+	if o == nil || IsNil(o.DataType) {
 		return nil, false
 	}
 	return o.DataType, true
@@ -95,7 +98,7 @@ func (o *IngestThrottlingTracker) GetDataTypeOk() (*string, bool) {
 
 // HasDataType returns a boolean if a field has been set.
 func (o *IngestThrottlingTracker) HasDataType() bool {
-	if o != nil && o.DataType != nil {
+	if o != nil && !IsNil(o.DataType) {
 		return true
 	}
 
@@ -108,22 +111,30 @@ func (o *IngestThrottlingTracker) SetDataType(v string) {
 }
 
 func (o IngestThrottlingTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o IngestThrottlingTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.DataType != nil {
+	if !IsNil(o.DataType) {
 		toSerialize["dataType"] = o.DataType
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableIngestThrottlingTracker struct {

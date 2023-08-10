@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CollectionS3InvalidKeyTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CollectionS3InvalidKeyTracker{}
 
 // CollectionS3InvalidKeyTracker struct for CollectionS3InvalidKeyTracker
 type CollectionS3InvalidKeyTracker struct {
@@ -45,7 +48,7 @@ func NewCollectionS3InvalidKeyTrackerWithDefaults() *CollectionS3InvalidKeyTrack
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CollectionS3InvalidKeyTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -55,7 +58,7 @@ func (o *CollectionS3InvalidKeyTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3InvalidKeyTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -63,7 +66,7 @@ func (o *CollectionS3InvalidKeyTracker) GetEventTypeOk() (*string, bool) {
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CollectionS3InvalidKeyTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -77,7 +80,7 @@ func (o *CollectionS3InvalidKeyTracker) SetEventType(v string) {
 
 // GetAccessKey returns the AccessKey field value if set, zero value otherwise.
 func (o *CollectionS3InvalidKeyTracker) GetAccessKey() string {
-	if o == nil || o.AccessKey == nil {
+	if o == nil || IsNil(o.AccessKey) {
 		var ret string
 		return ret
 	}
@@ -87,7 +90,7 @@ func (o *CollectionS3InvalidKeyTracker) GetAccessKey() string {
 // GetAccessKeyOk returns a tuple with the AccessKey field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CollectionS3InvalidKeyTracker) GetAccessKeyOk() (*string, bool) {
-	if o == nil || o.AccessKey == nil {
+	if o == nil || IsNil(o.AccessKey) {
 		return nil, false
 	}
 	return o.AccessKey, true
@@ -95,7 +98,7 @@ func (o *CollectionS3InvalidKeyTracker) GetAccessKeyOk() (*string, bool) {
 
 // HasAccessKey returns a boolean if a field has been set.
 func (o *CollectionS3InvalidKeyTracker) HasAccessKey() bool {
-	if o != nil && o.AccessKey != nil {
+	if o != nil && !IsNil(o.AccessKey) {
 		return true
 	}
 
@@ -108,22 +111,30 @@ func (o *CollectionS3InvalidKeyTracker) SetAccessKey(v string) {
 }
 
 func (o CollectionS3InvalidKeyTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CollectionS3InvalidKeyTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.AccessKey != nil {
+	if !IsNil(o.AccessKey) {
 		toSerialize["accessKey"] = o.AccessKey
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCollectionS3InvalidKeyTracker struct {

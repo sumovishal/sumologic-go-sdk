@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanPathSegment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanPathSegment{}
 
 // SpanPathSegment struct for SpanPathSegment
 type SpanPathSegment struct {
@@ -76,7 +79,7 @@ func (o *SpanPathSegment) SetSpanId(v string) {
 
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *SpanPathSegment) GetService() string {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		var ret string
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *SpanPathSegment) GetService() string {
 // GetServiceOk returns a tuple with the Service field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanPathSegment) GetServiceOk() (*string, bool) {
-	if o == nil || o.Service == nil {
+	if o == nil || IsNil(o.Service) {
 		return nil, false
 	}
 	return o.Service, true
@@ -94,7 +97,7 @@ func (o *SpanPathSegment) GetServiceOk() (*string, bool) {
 
 // HasService returns a boolean if a field has been set.
 func (o *SpanPathSegment) HasService() bool {
-	if o != nil && o.Service != nil {
+	if o != nil && !IsNil(o.Service) {
 		return true
 	}
 
@@ -108,7 +111,7 @@ func (o *SpanPathSegment) SetService(v string) {
 
 // GetServiceColor returns the ServiceColor field value if set, zero value otherwise.
 func (o *SpanPathSegment) GetServiceColor() string {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		var ret string
 		return ret
 	}
@@ -118,7 +121,7 @@ func (o *SpanPathSegment) GetServiceColor() string {
 // GetServiceColorOk returns a tuple with the ServiceColor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanPathSegment) GetServiceColorOk() (*string, bool) {
-	if o == nil || o.ServiceColor == nil {
+	if o == nil || IsNil(o.ServiceColor) {
 		return nil, false
 	}
 	return o.ServiceColor, true
@@ -126,7 +129,7 @@ func (o *SpanPathSegment) GetServiceColorOk() (*string, bool) {
 
 // HasServiceColor returns a boolean if a field has been set.
 func (o *SpanPathSegment) HasServiceColor() bool {
-	if o != nil && o.ServiceColor != nil {
+	if o != nil && !IsNil(o.ServiceColor) {
 		return true
 	}
 
@@ -188,7 +191,7 @@ func (o *SpanPathSegment) SetDuration(v int64) {
 
 // GetFraction returns the Fraction field value if set, zero value otherwise.
 func (o *SpanPathSegment) GetFraction() float64 {
-	if o == nil || o.Fraction == nil {
+	if o == nil || IsNil(o.Fraction) {
 		var ret float64
 		return ret
 	}
@@ -198,7 +201,7 @@ func (o *SpanPathSegment) GetFraction() float64 {
 // GetFractionOk returns a tuple with the Fraction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanPathSegment) GetFractionOk() (*float64, bool) {
-	if o == nil || o.Fraction == nil {
+	if o == nil || IsNil(o.Fraction) {
 		return nil, false
 	}
 	return o.Fraction, true
@@ -206,7 +209,7 @@ func (o *SpanPathSegment) GetFractionOk() (*float64, bool) {
 
 // HasFraction returns a boolean if a field has been set.
 func (o *SpanPathSegment) HasFraction() bool {
-	if o != nil && o.Fraction != nil {
+	if o != nil && !IsNil(o.Fraction) {
 		return true
 	}
 
@@ -219,26 +222,28 @@ func (o *SpanPathSegment) SetFraction(v float64) {
 }
 
 func (o SpanPathSegment) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["spanId"] = o.SpanId
-	}
-	if o.Service != nil {
-		toSerialize["service"] = o.Service
-	}
-	if o.ServiceColor != nil {
-		toSerialize["serviceColor"] = o.ServiceColor
-	}
-	if true {
-		toSerialize["startOffset"] = o.StartOffset
-	}
-	if true {
-		toSerialize["duration"] = o.Duration
-	}
-	if o.Fraction != nil {
-		toSerialize["fraction"] = o.Fraction
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanPathSegment) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["spanId"] = o.SpanId
+	if !IsNil(o.Service) {
+		toSerialize["service"] = o.Service
+	}
+	if !IsNil(o.ServiceColor) {
+		toSerialize["serviceColor"] = o.ServiceColor
+	}
+	toSerialize["startOffset"] = o.StartOffset
+	toSerialize["duration"] = o.Duration
+	if !IsNil(o.Fraction) {
+		toSerialize["fraction"] = o.Fraction
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanPathSegment struct {

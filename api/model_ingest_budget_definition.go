@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the IngestBudgetDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IngestBudgetDefinition{}
 
 // IngestBudgetDefinition struct for IngestBudgetDefinition
 type IngestBudgetDefinition struct {
@@ -179,7 +182,7 @@ func (o *IngestBudgetDefinition) SetResetTime(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *IngestBudgetDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -189,7 +192,7 @@ func (o *IngestBudgetDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -197,7 +200,7 @@ func (o *IngestBudgetDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *IngestBudgetDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -235,7 +238,7 @@ func (o *IngestBudgetDefinition) SetAction(v string) {
 
 // GetAuditThreshold returns the AuditThreshold field value if set, zero value otherwise.
 func (o *IngestBudgetDefinition) GetAuditThreshold() int32 {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		var ret int32
 		return ret
 	}
@@ -245,7 +248,7 @@ func (o *IngestBudgetDefinition) GetAuditThreshold() int32 {
 // GetAuditThresholdOk returns a tuple with the AuditThreshold field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IngestBudgetDefinition) GetAuditThresholdOk() (*int32, bool) {
-	if o == nil || o.AuditThreshold == nil {
+	if o == nil || IsNil(o.AuditThreshold) {
 		return nil, false
 	}
 	return o.AuditThreshold, true
@@ -253,7 +256,7 @@ func (o *IngestBudgetDefinition) GetAuditThresholdOk() (*int32, bool) {
 
 // HasAuditThreshold returns a boolean if a field has been set.
 func (o *IngestBudgetDefinition) HasAuditThreshold() bool {
-	if o != nil && o.AuditThreshold != nil {
+	if o != nil && !IsNil(o.AuditThreshold) {
 		return true
 	}
 
@@ -266,32 +269,28 @@ func (o *IngestBudgetDefinition) SetAuditThreshold(v int32) {
 }
 
 func (o IngestBudgetDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["fieldValue"] = o.FieldValue
-	}
-	if true {
-		toSerialize["capacityBytes"] = o.CapacityBytes
-	}
-	if true {
-		toSerialize["timezone"] = o.Timezone
-	}
-	if true {
-		toSerialize["resetTime"] = o.ResetTime
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["action"] = o.Action
-	}
-	if o.AuditThreshold != nil {
-		toSerialize["auditThreshold"] = o.AuditThreshold
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o IngestBudgetDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["fieldValue"] = o.FieldValue
+	toSerialize["capacityBytes"] = o.CapacityBytes
+	toSerialize["timezone"] = o.Timezone
+	toSerialize["resetTime"] = o.ResetTime
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["action"] = o.Action
+	if !IsNil(o.AuditThreshold) {
+		toSerialize["auditThreshold"] = o.AuditThreshold
+	}
+	return toSerialize, nil
 }
 
 type NullableIngestBudgetDefinition struct {

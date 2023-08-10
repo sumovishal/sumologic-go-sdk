@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UpdateUserDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateUserDefinition{}
 
 // UpdateUserDefinition struct for UpdateUserDefinition
 type UpdateUserDefinition struct {
@@ -144,20 +147,20 @@ func (o *UpdateUserDefinition) SetRoleIds(v []string) {
 }
 
 func (o UpdateUserDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["firstName"] = o.FirstName
-	}
-	if true {
-		toSerialize["lastName"] = o.LastName
-	}
-	if true {
-		toSerialize["isActive"] = o.IsActive
-	}
-	if true {
-		toSerialize["roleIds"] = o.RoleIds
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UpdateUserDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["firstName"] = o.FirstName
+	toSerialize["lastName"] = o.LastName
+	toSerialize["isActive"] = o.IsActive
+	toSerialize["roleIds"] = o.RoleIds
+	return toSerialize, nil
 }
 
 type NullableUpdateUserDefinition struct {

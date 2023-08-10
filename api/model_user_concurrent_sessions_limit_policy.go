@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the UserConcurrentSessionsLimitPolicy type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UserConcurrentSessionsLimitPolicy{}
 
 // UserConcurrentSessionsLimitPolicy User Concurrent Sessions Limit policy.
 type UserConcurrentSessionsLimitPolicy struct {
@@ -70,7 +73,7 @@ func (o *UserConcurrentSessionsLimitPolicy) SetEnabled(v bool) {
 
 // GetMaxConcurrentSessions returns the MaxConcurrentSessions field value if set, zero value otherwise.
 func (o *UserConcurrentSessionsLimitPolicy) GetMaxConcurrentSessions() int32 {
-	if o == nil || o.MaxConcurrentSessions == nil {
+	if o == nil || IsNil(o.MaxConcurrentSessions) {
 		var ret int32
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *UserConcurrentSessionsLimitPolicy) GetMaxConcurrentSessions() int32 {
 // GetMaxConcurrentSessionsOk returns a tuple with the MaxConcurrentSessions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UserConcurrentSessionsLimitPolicy) GetMaxConcurrentSessionsOk() (*int32, bool) {
-	if o == nil || o.MaxConcurrentSessions == nil {
+	if o == nil || IsNil(o.MaxConcurrentSessions) {
 		return nil, false
 	}
 	return o.MaxConcurrentSessions, true
@@ -88,7 +91,7 @@ func (o *UserConcurrentSessionsLimitPolicy) GetMaxConcurrentSessionsOk() (*int32
 
 // HasMaxConcurrentSessions returns a boolean if a field has been set.
 func (o *UserConcurrentSessionsLimitPolicy) HasMaxConcurrentSessions() bool {
-	if o != nil && o.MaxConcurrentSessions != nil {
+	if o != nil && !IsNil(o.MaxConcurrentSessions) {
 		return true
 	}
 
@@ -101,14 +104,20 @@ func (o *UserConcurrentSessionsLimitPolicy) SetMaxConcurrentSessions(v int32) {
 }
 
 func (o UserConcurrentSessionsLimitPolicy) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if o.MaxConcurrentSessions != nil {
-		toSerialize["maxConcurrentSessions"] = o.MaxConcurrentSessions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o UserConcurrentSessionsLimitPolicy) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["enabled"] = o.Enabled
+	if !IsNil(o.MaxConcurrentSessions) {
+		toSerialize["maxConcurrentSessions"] = o.MaxConcurrentSessions
+	}
+	return toSerialize, nil
 }
 
 type NullableUserConcurrentSessionsLimitPolicy struct {

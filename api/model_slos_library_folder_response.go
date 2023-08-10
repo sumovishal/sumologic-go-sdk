@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,8 +12,10 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
+
+// checks if the SlosLibraryFolderResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SlosLibraryFolderResponse{}
 
 // SlosLibraryFolderResponse struct for SlosLibraryFolderResponse
 type SlosLibraryFolderResponse struct {
@@ -105,22 +107,26 @@ func (o *SlosLibraryFolderResponse) SetChildren(v []SlosLibraryBaseResponse) {
 }
 
 func (o SlosLibraryFolderResponse) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o SlosLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedSlosLibraryBaseResponse, errSlosLibraryBaseResponse := json.Marshal(o.SlosLibraryBaseResponse)
 	if errSlosLibraryBaseResponse != nil {
-		return []byte{}, errSlosLibraryBaseResponse
+		return map[string]interface{}{}, errSlosLibraryBaseResponse
 	}
 	errSlosLibraryBaseResponse = json.Unmarshal([]byte(serializedSlosLibraryBaseResponse), &toSerialize)
 	if errSlosLibraryBaseResponse != nil {
-		return []byte{}, errSlosLibraryBaseResponse
+		return map[string]interface{}{}, errSlosLibraryBaseResponse
 	}
-	if true {
-		toSerialize["permissions"] = o.Permissions
-	}
-	if true {
-		toSerialize["children"] = o.Children
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["permissions"] = o.Permissions
+	toSerialize["children"] = o.Children
+	return toSerialize, nil
 }
 
 type NullableSlosLibraryFolderResponse struct {

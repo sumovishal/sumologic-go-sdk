@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsErrorAppendingToQueueFilesTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsErrorAppendingToQueueFilesTracker{}
 
 // CSEWindowsErrorAppendingToQueueFilesTracker struct for CSEWindowsErrorAppendingToQueueFilesTracker
 type CSEWindowsErrorAppendingToQueueFilesTracker struct {
@@ -59,7 +62,7 @@ func NewCSEWindowsErrorAppendingToQueueFilesTrackerWithDefaults() *CSEWindowsErr
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -69,7 +72,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -77,7 +80,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetEventTypeOk() (*string,
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -91,7 +94,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetEventType(v string) {
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -101,7 +104,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -109,7 +112,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorIdOk() (*string, 
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -123,7 +126,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -133,7 +136,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorHostname() string
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -141,7 +144,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetSensorHostnameOk() (*st
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -155,7 +158,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetSensorHostname(v string
 
 // GetFolderPath returns the FolderPath field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderPath() string {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		var ret string
 		return ret
 	}
@@ -165,7 +168,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderPath() string {
 // GetFolderPathOk returns a tuple with the FolderPath field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderPathOk() (*string, bool) {
-	if o == nil || o.FolderPath == nil {
+	if o == nil || IsNil(o.FolderPath) {
 		return nil, false
 	}
 	return o.FolderPath, true
@@ -173,7 +176,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderPathOk() (*string
 
 // HasFolderPath returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasFolderPath() bool {
-	if o != nil && o.FolderPath != nil {
+	if o != nil && !IsNil(o.FolderPath) {
 		return true
 	}
 
@@ -187,7 +190,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetFolderPath(v string) {
 
 // GetFolderSizeLimit returns the FolderSizeLimit field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderSizeLimit() string {
-	if o == nil || o.FolderSizeLimit == nil {
+	if o == nil || IsNil(o.FolderSizeLimit) {
 		var ret string
 		return ret
 	}
@@ -197,7 +200,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderSizeLimit() strin
 // GetFolderSizeLimitOk returns a tuple with the FolderSizeLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderSizeLimitOk() (*string, bool) {
-	if o == nil || o.FolderSizeLimit == nil {
+	if o == nil || IsNil(o.FolderSizeLimit) {
 		return nil, false
 	}
 	return o.FolderSizeLimit, true
@@ -205,7 +208,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetFolderSizeLimitOk() (*s
 
 // HasFolderSizeLimit returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasFolderSizeLimit() bool {
-	if o != nil && o.FolderSizeLimit != nil {
+	if o != nil && !IsNil(o.FolderSizeLimit) {
 		return true
 	}
 
@@ -219,7 +222,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetFolderSizeLimit(v strin
 
 // GetCurrentFolderSize returns the CurrentFolderSize field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentFolderSize() string {
-	if o == nil || o.CurrentFolderSize == nil {
+	if o == nil || IsNil(o.CurrentFolderSize) {
 		var ret string
 		return ret
 	}
@@ -229,7 +232,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentFolderSize() str
 // GetCurrentFolderSizeOk returns a tuple with the CurrentFolderSize field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentFolderSizeOk() (*string, bool) {
-	if o == nil || o.CurrentFolderSize == nil {
+	if o == nil || IsNil(o.CurrentFolderSize) {
 		return nil, false
 	}
 	return o.CurrentFolderSize, true
@@ -237,7 +240,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentFolderSizeOk() (
 
 // HasCurrentFolderSize returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasCurrentFolderSize() bool {
-	if o != nil && o.CurrentFolderSize != nil {
+	if o != nil && !IsNil(o.CurrentFolderSize) {
 		return true
 	}
 
@@ -251,7 +254,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetCurrentFolderSize(v str
 
 // GetPercentageAvailableDiskSpaceLimit returns the PercentageAvailableDiskSpaceLimit field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetPercentageAvailableDiskSpaceLimit() string {
-	if o == nil || o.PercentageAvailableDiskSpaceLimit == nil {
+	if o == nil || IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		var ret string
 		return ret
 	}
@@ -261,7 +264,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetPercentageAvailableDisk
 // GetPercentageAvailableDiskSpaceLimitOk returns a tuple with the PercentageAvailableDiskSpaceLimit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetPercentageAvailableDiskSpaceLimitOk() (*string, bool) {
-	if o == nil || o.PercentageAvailableDiskSpaceLimit == nil {
+	if o == nil || IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		return nil, false
 	}
 	return o.PercentageAvailableDiskSpaceLimit, true
@@ -269,7 +272,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetPercentageAvailableDisk
 
 // HasPercentageAvailableDiskSpaceLimit returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasPercentageAvailableDiskSpaceLimit() bool {
-	if o != nil && o.PercentageAvailableDiskSpaceLimit != nil {
+	if o != nil && !IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		return true
 	}
 
@@ -283,7 +286,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetPercentageAvailableDisk
 
 // GetCurrentPercentageAvailableDiskSpace returns the CurrentPercentageAvailableDiskSpace field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentPercentageAvailableDiskSpace() string {
-	if o == nil || o.CurrentPercentageAvailableDiskSpace == nil {
+	if o == nil || IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		var ret string
 		return ret
 	}
@@ -293,7 +296,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentPercentageAvaila
 // GetCurrentPercentageAvailableDiskSpaceOk returns a tuple with the CurrentPercentageAvailableDiskSpace field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentPercentageAvailableDiskSpaceOk() (*string, bool) {
-	if o == nil || o.CurrentPercentageAvailableDiskSpace == nil {
+	if o == nil || IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		return nil, false
 	}
 	return o.CurrentPercentageAvailableDiskSpace, true
@@ -301,7 +304,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetCurrentPercentageAvaila
 
 // HasCurrentPercentageAvailableDiskSpace returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasCurrentPercentageAvailableDiskSpace() bool {
-	if o != nil && o.CurrentPercentageAvailableDiskSpace != nil {
+	if o != nil && !IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		return true
 	}
 
@@ -315,7 +318,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetCurrentPercentageAvaila
 
 // GetLastError returns the LastError field value if set, zero value otherwise.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetLastError() string {
-	if o == nil || o.LastError == nil {
+	if o == nil || IsNil(o.LastError) {
 		var ret string
 		return ret
 	}
@@ -325,7 +328,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetLastError() string {
 // GetLastErrorOk returns a tuple with the LastError field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetLastErrorOk() (*string, bool) {
-	if o == nil || o.LastError == nil {
+	if o == nil || IsNil(o.LastError) {
 		return nil, false
 	}
 	return o.LastError, true
@@ -333,7 +336,7 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) GetLastErrorOk() (*string,
 
 // HasLastError returns a boolean if a field has been set.
 func (o *CSEWindowsErrorAppendingToQueueFilesTracker) HasLastError() bool {
-	if o != nil && o.LastError != nil {
+	if o != nil && !IsNil(o.LastError) {
 		return true
 	}
 
@@ -346,43 +349,51 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) SetLastError(v string) {
 }
 
 func (o CSEWindowsErrorAppendingToQueueFilesTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsErrorAppendingToQueueFilesTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.SensorId != nil {
+	if !IsNil(o.SensorId) {
 		toSerialize["sensorId"] = o.SensorId
 	}
-	if o.SensorHostname != nil {
+	if !IsNil(o.SensorHostname) {
 		toSerialize["sensorHostname"] = o.SensorHostname
 	}
-	if o.FolderPath != nil {
+	if !IsNil(o.FolderPath) {
 		toSerialize["folderPath"] = o.FolderPath
 	}
-	if o.FolderSizeLimit != nil {
+	if !IsNil(o.FolderSizeLimit) {
 		toSerialize["folderSizeLimit"] = o.FolderSizeLimit
 	}
-	if o.CurrentFolderSize != nil {
+	if !IsNil(o.CurrentFolderSize) {
 		toSerialize["currentFolderSize"] = o.CurrentFolderSize
 	}
-	if o.PercentageAvailableDiskSpaceLimit != nil {
+	if !IsNil(o.PercentageAvailableDiskSpaceLimit) {
 		toSerialize["percentageAvailableDiskSpaceLimit"] = o.PercentageAvailableDiskSpaceLimit
 	}
-	if o.CurrentPercentageAvailableDiskSpace != nil {
+	if !IsNil(o.CurrentPercentageAvailableDiskSpace) {
 		toSerialize["currentPercentageAvailableDiskSpace"] = o.CurrentPercentageAvailableDiskSpace
 	}
-	if o.LastError != nil {
+	if !IsNil(o.LastError) {
 		toSerialize["lastError"] = o.LastError
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsErrorAppendingToQueueFilesTracker struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the StringTracingValue type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &StringTracingValue{}
 
 // StringTracingValue struct for StringTracingValue
 type StringTracingValue struct {
@@ -64,19 +67,25 @@ func (o *StringTracingValue) SetValue(v string) {
 }
 
 func (o StringTracingValue) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o StringTracingValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTracingValue, errTracingValue := json.Marshal(o.TracingValue)
 	if errTracingValue != nil {
-		return []byte{}, errTracingValue
+		return map[string]interface{}{}, errTracingValue
 	}
 	errTracingValue = json.Unmarshal([]byte(serializedTracingValue), &toSerialize)
 	if errTracingValue != nil {
-		return []byte{}, errTracingValue
+		return map[string]interface{}{}, errTracingValue
 	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["value"] = o.Value
+	return toSerialize, nil
 }
 
 type NullableStringTracingValue struct {

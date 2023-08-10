@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpanQueryRowFacet type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpanQueryRowFacet{}
 
 // SpanQueryRowFacet struct for SpanQueryRowFacet
 type SpanQueryRowFacet struct {
@@ -122,7 +125,7 @@ func (o *SpanQueryRowFacet) SetDataType(v string) {
 
 // GetInSchema returns the InSchema field value if set, zero value otherwise.
 func (o *SpanQueryRowFacet) GetInSchema() bool {
-	if o == nil || o.InSchema == nil {
+	if o == nil || IsNil(o.InSchema) {
 		var ret bool
 		return ret
 	}
@@ -132,7 +135,7 @@ func (o *SpanQueryRowFacet) GetInSchema() bool {
 // GetInSchemaOk returns a tuple with the InSchema field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowFacet) GetInSchemaOk() (*bool, bool) {
-	if o == nil || o.InSchema == nil {
+	if o == nil || IsNil(o.InSchema) {
 		return nil, false
 	}
 	return o.InSchema, true
@@ -140,7 +143,7 @@ func (o *SpanQueryRowFacet) GetInSchemaOk() (*bool, bool) {
 
 // HasInSchema returns a boolean if a field has been set.
 func (o *SpanQueryRowFacet) HasInSchema() bool {
-	if o != nil && o.InSchema != nil {
+	if o != nil && !IsNil(o.InSchema) {
 		return true
 	}
 
@@ -154,7 +157,7 @@ func (o *SpanQueryRowFacet) SetInSchema(v bool) {
 
 // GetValueFrequency returns the ValueFrequency field value if set, zero value otherwise.
 func (o *SpanQueryRowFacet) GetValueFrequency() map[string]int64 {
-	if o == nil || o.ValueFrequency == nil {
+	if o == nil || IsNil(o.ValueFrequency) {
 		var ret map[string]int64
 		return ret
 	}
@@ -164,7 +167,7 @@ func (o *SpanQueryRowFacet) GetValueFrequency() map[string]int64 {
 // GetValueFrequencyOk returns a tuple with the ValueFrequency field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpanQueryRowFacet) GetValueFrequencyOk() (*map[string]int64, bool) {
-	if o == nil || o.ValueFrequency == nil {
+	if o == nil || IsNil(o.ValueFrequency) {
 		return nil, false
 	}
 	return o.ValueFrequency, true
@@ -172,7 +175,7 @@ func (o *SpanQueryRowFacet) GetValueFrequencyOk() (*map[string]int64, bool) {
 
 // HasValueFrequency returns a boolean if a field has been set.
 func (o *SpanQueryRowFacet) HasValueFrequency() bool {
-	if o != nil && o.ValueFrequency != nil {
+	if o != nil && !IsNil(o.ValueFrequency) {
 		return true
 	}
 
@@ -185,23 +188,25 @@ func (o *SpanQueryRowFacet) SetValueFrequency(v map[string]int64) {
 }
 
 func (o SpanQueryRowFacet) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["cardinality"] = o.Cardinality
-	}
-	if true {
-		toSerialize["dataType"] = o.DataType
-	}
-	if o.InSchema != nil {
-		toSerialize["inSchema"] = o.InSchema
-	}
-	if o.ValueFrequency != nil {
-		toSerialize["valueFrequency"] = o.ValueFrequency
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpanQueryRowFacet) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["cardinality"] = o.Cardinality
+	toSerialize["dataType"] = o.DataType
+	if !IsNil(o.InSchema) {
+		toSerialize["inSchema"] = o.InSchema
+	}
+	if !IsNil(o.ValueFrequency) {
+		toSerialize["valueFrequency"] = o.ValueFrequency
+	}
+	return toSerialize, nil
 }
 
 type NullableSpanQueryRowFacet struct {

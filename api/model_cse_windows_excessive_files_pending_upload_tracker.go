@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the CSEWindowsExcessiveFilesPendingUploadTracker type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CSEWindowsExcessiveFilesPendingUploadTracker{}
 
 // CSEWindowsExcessiveFilesPendingUploadTracker struct for CSEWindowsExcessiveFilesPendingUploadTracker
 type CSEWindowsExcessiveFilesPendingUploadTracker struct {
@@ -55,7 +58,7 @@ func NewCSEWindowsExcessiveFilesPendingUploadTrackerWithDefaults() *CSEWindowsEx
 
 // GetEventType returns the EventType field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetEventType() string {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		var ret string
 		return ret
 	}
@@ -65,7 +68,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetEventType() string {
 // GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetEventTypeOk() (*string, bool) {
-	if o == nil || o.EventType == nil {
+	if o == nil || IsNil(o.EventType) {
 		return nil, false
 	}
 	return o.EventType, true
@@ -73,7 +76,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetEventTypeOk() (*string
 
 // HasEventType returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasEventType() bool {
-	if o != nil && o.EventType != nil {
+	if o != nil && !IsNil(o.EventType) {
 		return true
 	}
 
@@ -87,7 +90,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetEventType(v string) {
 
 // GetSensorId returns the SensorId field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorId() string {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		var ret string
 		return ret
 	}
@@ -97,7 +100,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorId() string {
 // GetSensorIdOk returns a tuple with the SensorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorIdOk() (*string, bool) {
-	if o == nil || o.SensorId == nil {
+	if o == nil || IsNil(o.SensorId) {
 		return nil, false
 	}
 	return o.SensorId, true
@@ -105,7 +108,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorIdOk() (*string,
 
 // HasSensorId returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasSensorId() bool {
-	if o != nil && o.SensorId != nil {
+	if o != nil && !IsNil(o.SensorId) {
 		return true
 	}
 
@@ -119,7 +122,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetSensorId(v string) {
 
 // GetSensorHostname returns the SensorHostname field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorHostname() string {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		var ret string
 		return ret
 	}
@@ -129,7 +132,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorHostname() strin
 // GetSensorHostnameOk returns a tuple with the SensorHostname field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorHostnameOk() (*string, bool) {
-	if o == nil || o.SensorHostname == nil {
+	if o == nil || IsNil(o.SensorHostname) {
 		return nil, false
 	}
 	return o.SensorHostname, true
@@ -137,7 +140,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSensorHostnameOk() (*s
 
 // HasSensorHostname returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasSensorHostname() bool {
-	if o != nil && o.SensorHostname != nil {
+	if o != nil && !IsNil(o.SensorHostname) {
 		return true
 	}
 
@@ -151,7 +154,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetSensorHostname(v strin
 
 // GetSource returns the Source field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSource() string {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		var ret string
 		return ret
 	}
@@ -161,7 +164,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSource() string {
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSourceOk() (*string, bool) {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		return nil, false
 	}
 	return o.Source, true
@@ -169,7 +172,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetSourceOk() (*string, b
 
 // HasSource returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasSource() bool {
-	if o != nil && o.Source != nil {
+	if o != nil && !IsNil(o.Source) {
 		return true
 	}
 
@@ -183,7 +186,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetSource(v string) {
 
 // GetLastErrorMessage returns the LastErrorMessage field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetLastErrorMessage() string {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -193,7 +196,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetLastErrorMessage() str
 // GetLastErrorMessageOk returns a tuple with the LastErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetLastErrorMessageOk() (*string, bool) {
-	if o == nil || o.LastErrorMessage == nil {
+	if o == nil || IsNil(o.LastErrorMessage) {
 		return nil, false
 	}
 	return o.LastErrorMessage, true
@@ -201,7 +204,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetLastErrorMessageOk() (
 
 // HasLastErrorMessage returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasLastErrorMessage() bool {
-	if o != nil && o.LastErrorMessage != nil {
+	if o != nil && !IsNil(o.LastErrorMessage) {
 		return true
 	}
 
@@ -215,7 +218,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetLastErrorMessage(v str
 
 // GetNumberOfFilesPending returns the NumberOfFilesPending field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetNumberOfFilesPending() string {
-	if o == nil || o.NumberOfFilesPending == nil {
+	if o == nil || IsNil(o.NumberOfFilesPending) {
 		var ret string
 		return ret
 	}
@@ -225,7 +228,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetNumberOfFilesPending()
 // GetNumberOfFilesPendingOk returns a tuple with the NumberOfFilesPending field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetNumberOfFilesPendingOk() (*string, bool) {
-	if o == nil || o.NumberOfFilesPending == nil {
+	if o == nil || IsNil(o.NumberOfFilesPending) {
 		return nil, false
 	}
 	return o.NumberOfFilesPending, true
@@ -233,7 +236,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetNumberOfFilesPendingOk
 
 // HasNumberOfFilesPending returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasNumberOfFilesPending() bool {
-	if o != nil && o.NumberOfFilesPending != nil {
+	if o != nil && !IsNil(o.NumberOfFilesPending) {
 		return true
 	}
 
@@ -247,7 +250,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetNumberOfFilesPending(v
 
 // GetOldestTimestampInQueue returns the OldestTimestampInQueue field value if set, zero value otherwise.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetOldestTimestampInQueue() string {
-	if o == nil || o.OldestTimestampInQueue == nil {
+	if o == nil || IsNil(o.OldestTimestampInQueue) {
 		var ret string
 		return ret
 	}
@@ -257,7 +260,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetOldestTimestampInQueue
 // GetOldestTimestampInQueueOk returns a tuple with the OldestTimestampInQueue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetOldestTimestampInQueueOk() (*string, bool) {
-	if o == nil || o.OldestTimestampInQueue == nil {
+	if o == nil || IsNil(o.OldestTimestampInQueue) {
 		return nil, false
 	}
 	return o.OldestTimestampInQueue, true
@@ -265,7 +268,7 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) GetOldestTimestampInQueue
 
 // HasOldestTimestampInQueue returns a boolean if a field has been set.
 func (o *CSEWindowsExcessiveFilesPendingUploadTracker) HasOldestTimestampInQueue() bool {
-	if o != nil && o.OldestTimestampInQueue != nil {
+	if o != nil && !IsNil(o.OldestTimestampInQueue) {
 		return true
 	}
 
@@ -278,37 +281,45 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) SetOldestTimestampInQueue
 }
 
 func (o CSEWindowsExcessiveFilesPendingUploadTracker) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o CSEWindowsExcessiveFilesPendingUploadTracker) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	serializedTrackerIdentity, errTrackerIdentity := json.Marshal(o.TrackerIdentity)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
 	errTrackerIdentity = json.Unmarshal([]byte(serializedTrackerIdentity), &toSerialize)
 	if errTrackerIdentity != nil {
-		return []byte{}, errTrackerIdentity
+		return map[string]interface{}{}, errTrackerIdentity
 	}
-	if o.EventType != nil {
+	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
-	if o.SensorId != nil {
+	if !IsNil(o.SensorId) {
 		toSerialize["sensorId"] = o.SensorId
 	}
-	if o.SensorHostname != nil {
+	if !IsNil(o.SensorHostname) {
 		toSerialize["sensorHostname"] = o.SensorHostname
 	}
-	if o.Source != nil {
+	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
-	if o.LastErrorMessage != nil {
+	if !IsNil(o.LastErrorMessage) {
 		toSerialize["lastErrorMessage"] = o.LastErrorMessage
 	}
-	if o.NumberOfFilesPending != nil {
+	if !IsNil(o.NumberOfFilesPending) {
 		toSerialize["numberOfFilesPending"] = o.NumberOfFilesPending
 	}
-	if o.OldestTimestampInQueue != nil {
+	if !IsNil(o.OldestTimestampInQueue) {
 		toSerialize["oldestTimestampInQueue"] = o.OldestTimestampInQueue
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableCSEWindowsExcessiveFilesPendingUploadTracker struct {

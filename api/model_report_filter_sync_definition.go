@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ReportFilterSyncDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ReportFilterSyncDefinition{}
 
 // ReportFilterSyncDefinition struct for ReportFilterSyncDefinition
 type ReportFilterSyncDefinition struct {
@@ -102,7 +105,7 @@ func (o *ReportFilterSyncDefinition) SetLabel(v string) {
 
 // GetDefaultValue returns the DefaultValue field value if set, zero value otherwise.
 func (o *ReportFilterSyncDefinition) GetDefaultValue() string {
-	if o == nil || o.DefaultValue == nil {
+	if o == nil || IsNil(o.DefaultValue) {
 		var ret string
 		return ret
 	}
@@ -112,7 +115,7 @@ func (o *ReportFilterSyncDefinition) GetDefaultValue() string {
 // GetDefaultValueOk returns a tuple with the DefaultValue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ReportFilterSyncDefinition) GetDefaultValueOk() (*string, bool) {
-	if o == nil || o.DefaultValue == nil {
+	if o == nil || IsNil(o.DefaultValue) {
 		return nil, false
 	}
 	return o.DefaultValue, true
@@ -120,7 +123,7 @@ func (o *ReportFilterSyncDefinition) GetDefaultValueOk() (*string, bool) {
 
 // HasDefaultValue returns a boolean if a field has been set.
 func (o *ReportFilterSyncDefinition) HasDefaultValue() bool {
-	if o != nil && o.DefaultValue != nil {
+	if o != nil && !IsNil(o.DefaultValue) {
 		return true
 	}
 
@@ -205,26 +208,24 @@ func (o *ReportFilterSyncDefinition) SetPanelIds(v []string) {
 }
 
 func (o ReportFilterSyncDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fieldName"] = o.FieldName
-	}
-	if true {
-		toSerialize["label"] = o.Label
-	}
-	if o.DefaultValue != nil {
-		toSerialize["defaultValue"] = o.DefaultValue
-	}
-	if true {
-		toSerialize["filterType"] = o.FilterType
-	}
-	if true {
-		toSerialize["properties"] = o.Properties
-	}
-	if true {
-		toSerialize["panelIds"] = o.PanelIds
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ReportFilterSyncDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fieldName"] = o.FieldName
+	toSerialize["label"] = o.Label
+	if !IsNil(o.DefaultValue) {
+		toSerialize["defaultValue"] = o.DefaultValue
+	}
+	toSerialize["filterType"] = o.FilterType
+	toSerialize["properties"] = o.Properties
+	toSerialize["panelIds"] = o.PanelIds
+	return toSerialize, nil
 }
 
 type NullableReportFilterSyncDefinition struct {

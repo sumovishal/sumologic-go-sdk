@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,18 +14,21 @@ import (
 	"encoding/json"
 )
 
+// checks if the MetricsQueryResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MetricsQueryResponse{}
+
 // MetricsQueryResponse struct for MetricsQueryResponse
 type MetricsQueryResponse struct {
 	// A list of the time series returned by metric query.
 	QueryResult []TimeSeriesRow `json:"queryResult,omitempty"`
-	Errors ErrorResponse `json:"errors"`
+	Errors MetricsQueryResponseErrors `json:"errors"`
 }
 
 // NewMetricsQueryResponse instantiates a new MetricsQueryResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMetricsQueryResponse(errors ErrorResponse) *MetricsQueryResponse {
+func NewMetricsQueryResponse(errors MetricsQueryResponseErrors) *MetricsQueryResponse {
 	this := MetricsQueryResponse{}
 	this.Errors = errors
 	return &this
@@ -41,7 +44,7 @@ func NewMetricsQueryResponseWithDefaults() *MetricsQueryResponse {
 
 // GetQueryResult returns the QueryResult field value if set, zero value otherwise.
 func (o *MetricsQueryResponse) GetQueryResult() []TimeSeriesRow {
-	if o == nil || o.QueryResult == nil {
+	if o == nil || IsNil(o.QueryResult) {
 		var ret []TimeSeriesRow
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *MetricsQueryResponse) GetQueryResult() []TimeSeriesRow {
 // GetQueryResultOk returns a tuple with the QueryResult field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *MetricsQueryResponse) GetQueryResultOk() ([]TimeSeriesRow, bool) {
-	if o == nil || o.QueryResult == nil {
+	if o == nil || IsNil(o.QueryResult) {
 		return nil, false
 	}
 	return o.QueryResult, true
@@ -59,7 +62,7 @@ func (o *MetricsQueryResponse) GetQueryResultOk() ([]TimeSeriesRow, bool) {
 
 // HasQueryResult returns a boolean if a field has been set.
 func (o *MetricsQueryResponse) HasQueryResult() bool {
-	if o != nil && o.QueryResult != nil {
+	if o != nil && !IsNil(o.QueryResult) {
 		return true
 	}
 
@@ -72,9 +75,9 @@ func (o *MetricsQueryResponse) SetQueryResult(v []TimeSeriesRow) {
 }
 
 // GetErrors returns the Errors field value
-func (o *MetricsQueryResponse) GetErrors() ErrorResponse {
+func (o *MetricsQueryResponse) GetErrors() MetricsQueryResponseErrors {
 	if o == nil {
-		var ret ErrorResponse
+		var ret MetricsQueryResponseErrors
 		return ret
 	}
 
@@ -83,7 +86,7 @@ func (o *MetricsQueryResponse) GetErrors() ErrorResponse {
 
 // GetErrorsOk returns a tuple with the Errors field value
 // and a boolean to check if the value has been set.
-func (o *MetricsQueryResponse) GetErrorsOk() (*ErrorResponse, bool) {
+func (o *MetricsQueryResponse) GetErrorsOk() (*MetricsQueryResponseErrors, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -91,19 +94,25 @@ func (o *MetricsQueryResponse) GetErrorsOk() (*ErrorResponse, bool) {
 }
 
 // SetErrors sets field value
-func (o *MetricsQueryResponse) SetErrors(v ErrorResponse) {
+func (o *MetricsQueryResponse) SetErrors(v MetricsQueryResponseErrors) {
 	o.Errors = v
 }
 
 func (o MetricsQueryResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.QueryResult != nil {
-		toSerialize["queryResult"] = o.QueryResult
-	}
-	if true {
-		toSerialize["errors"] = o.Errors
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MetricsQueryResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.QueryResult) {
+		toSerialize["queryResult"] = o.QueryResult
+	}
+	toSerialize["errors"] = o.Errors
+	return toSerialize, nil
 }
 
 type NullableMetricsQueryResponse struct {

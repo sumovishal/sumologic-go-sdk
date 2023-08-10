@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TopologySearchLabel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TopologySearchLabel{}
 
 // TopologySearchLabel Topology label to search for. Each label has a key and a list of values. If a value is `*`, it means we want to match for all values of the label's key. 
 type TopologySearchLabel struct {
@@ -93,7 +96,7 @@ func (o *TopologySearchLabel) SetValue(v string) {
 
 // GetIsRequired returns the IsRequired field value if set, zero value otherwise.
 func (o *TopologySearchLabel) GetIsRequired() bool {
-	if o == nil || o.IsRequired == nil {
+	if o == nil || IsNil(o.IsRequired) {
 		var ret bool
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *TopologySearchLabel) GetIsRequired() bool {
 // GetIsRequiredOk returns a tuple with the IsRequired field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TopologySearchLabel) GetIsRequiredOk() (*bool, bool) {
-	if o == nil || o.IsRequired == nil {
+	if o == nil || IsNil(o.IsRequired) {
 		return nil, false
 	}
 	return o.IsRequired, true
@@ -111,7 +114,7 @@ func (o *TopologySearchLabel) GetIsRequiredOk() (*bool, bool) {
 
 // HasIsRequired returns a boolean if a field has been set.
 func (o *TopologySearchLabel) HasIsRequired() bool {
-	if o != nil && o.IsRequired != nil {
+	if o != nil && !IsNil(o.IsRequired) {
 		return true
 	}
 
@@ -124,17 +127,21 @@ func (o *TopologySearchLabel) SetIsRequired(v bool) {
 }
 
 func (o TopologySearchLabel) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["key"] = o.Key
-	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if o.IsRequired != nil {
-		toSerialize["isRequired"] = o.IsRequired
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TopologySearchLabel) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["key"] = o.Key
+	toSerialize["value"] = o.Value
+	if !IsNil(o.IsRequired) {
+		toSerialize["isRequired"] = o.IsRequired
+	}
+	return toSerialize, nil
 }
 
 type NullableTopologySearchLabel struct {

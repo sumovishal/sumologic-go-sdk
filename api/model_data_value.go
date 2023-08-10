@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DataValue type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DataValue{}
 
 // DataValue struct for DataValue
 type DataValue struct {
@@ -90,14 +93,18 @@ func (o *DataValue) SetUnit(v string) {
 }
 
 func (o DataValue) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["value"] = o.Value
-	}
-	if true {
-		toSerialize["unit"] = o.Unit
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DataValue) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["value"] = o.Value
+	toSerialize["unit"] = o.Unit
+	return toSerialize, nil
 }
 
 type NullableDataValue struct {

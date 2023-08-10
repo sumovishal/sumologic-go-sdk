@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the TimeSeriesRow type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TimeSeriesRow{}
 
 // TimeSeriesRow struct for TimeSeriesRow
 type TimeSeriesRow struct {
@@ -89,14 +92,18 @@ func (o *TimeSeriesRow) SetTimeSeriesList(v TimeSeriesList) {
 }
 
 func (o TimeSeriesRow) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rowId"] = o.RowId
-	}
-	if true {
-		toSerialize["timeSeriesList"] = o.TimeSeriesList
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TimeSeriesRow) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rowId"] = o.RowId
+	toSerialize["timeSeriesList"] = o.TimeSeriesList
+	return toSerialize, nil
 }
 
 type NullableTimeSeriesRow struct {

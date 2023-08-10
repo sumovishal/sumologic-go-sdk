@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansVisualization type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansVisualization{}
 
 // SpansVisualization struct for SpansVisualization
 type SpansVisualization struct {
@@ -90,14 +93,18 @@ func (o *SpansVisualization) SetName(v string) {
 }
 
 func (o SpansVisualization) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansVisualization) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["type"] = o.Type
+	toSerialize["name"] = o.Name
+	return toSerialize, nil
 }
 
 type NullableSpansVisualization struct {

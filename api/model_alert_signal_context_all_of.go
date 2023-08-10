@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AlertSignalContextAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertSignalContextAllOf{}
 
 // AlertSignalContextAllOf struct for AlertSignalContextAllOf
 type AlertSignalContextAllOf struct {
@@ -63,11 +66,17 @@ func (o *AlertSignalContextAllOf) SetAlertId(v string) {
 }
 
 func (o AlertSignalContextAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["alertId"] = o.AlertId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AlertSignalContextAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["alertId"] = o.AlertId
+	return toSerialize, nil
 }
 
 type NullableAlertSignalContextAllOf struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the RelativeTimeRangeBoundaryAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RelativeTimeRangeBoundaryAllOf{}
 
 // RelativeTimeRangeBoundaryAllOf struct for RelativeTimeRangeBoundaryAllOf
 type RelativeTimeRangeBoundaryAllOf struct {
@@ -63,11 +66,17 @@ func (o *RelativeTimeRangeBoundaryAllOf) SetRelativeTime(v string) {
 }
 
 func (o RelativeTimeRangeBoundaryAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["relativeTime"] = o.RelativeTime
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RelativeTimeRangeBoundaryAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["relativeTime"] = o.RelativeTime
+	return toSerialize, nil
 }
 
 type NullableRelativeTimeRangeBoundaryAllOf struct {

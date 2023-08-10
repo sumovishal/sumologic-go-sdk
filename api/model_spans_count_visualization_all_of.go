@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SpansCountVisualizationAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SpansCountVisualizationAllOf{}
 
 // SpansCountVisualizationAllOf Represents the visualization type where the total number of all spans is counted or where the spans are counted by a specific field. 
 type SpansCountVisualizationAllOf struct {
@@ -39,7 +42,7 @@ func NewSpansCountVisualizationAllOfWithDefaults() *SpansCountVisualizationAllOf
 
 // GetDistinctBy returns the DistinctBy field value if set, zero value otherwise.
 func (o *SpansCountVisualizationAllOf) GetDistinctBy() string {
-	if o == nil || o.DistinctBy == nil {
+	if o == nil || IsNil(o.DistinctBy) {
 		var ret string
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *SpansCountVisualizationAllOf) GetDistinctBy() string {
 // GetDistinctByOk returns a tuple with the DistinctBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SpansCountVisualizationAllOf) GetDistinctByOk() (*string, bool) {
-	if o == nil || o.DistinctBy == nil {
+	if o == nil || IsNil(o.DistinctBy) {
 		return nil, false
 	}
 	return o.DistinctBy, true
@@ -57,7 +60,7 @@ func (o *SpansCountVisualizationAllOf) GetDistinctByOk() (*string, bool) {
 
 // HasDistinctBy returns a boolean if a field has been set.
 func (o *SpansCountVisualizationAllOf) HasDistinctBy() bool {
-	if o != nil && o.DistinctBy != nil {
+	if o != nil && !IsNil(o.DistinctBy) {
 		return true
 	}
 
@@ -70,11 +73,19 @@ func (o *SpansCountVisualizationAllOf) SetDistinctBy(v string) {
 }
 
 func (o SpansCountVisualizationAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DistinctBy != nil {
-		toSerialize["distinctBy"] = o.DistinctBy
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SpansCountVisualizationAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DistinctBy) {
+		toSerialize["distinctBy"] = o.DistinctBy
+	}
+	return toSerialize, nil
 }
 
 type NullableSpansCountVisualizationAllOf struct {

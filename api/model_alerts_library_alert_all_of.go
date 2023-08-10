@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 	"time"
 )
+
+// checks if the AlertsLibraryAlertAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AlertsLibraryAlertAllOf{}
 
 // AlertsLibraryAlertAllOf struct for AlertsLibraryAlertAllOf
 type AlertsLibraryAlertAllOf struct {
@@ -41,14 +44,19 @@ type AlertsLibraryAlertAllOf struct {
 	TriggerValue *float64 `json:"triggerValue,omitempty"`
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
 	MonitorType *string `json:"monitorType,omitempty"`
-	// One or more entity identifiers involved in this Alert.
+	// One or more primary entity identifiers involved in this Alert. Primary/secondary entities are explained in description for `entities`. DEPRECATED, USE `entities` INSTEAD. 
+	// Deprecated
 	EntityIds []string `json:"entityIds,omitempty"`
-	// One or more entity involved in this Alert.
+	// One or more primary entities involved in this Alert. Primary entity is the most concrete entity that can be assigned per time series or log group (e.g. k8s container), secondary entities are the less specific ones that can be assigned per that notification (e.g. k8s cluster or EC2 host). 
 	Entities []AlertEntityInfo `json:"entities,omitempty"`
+	// One or more secondary entity involved in this Alert. Primary/secondary entities are explained in description for `entities` 
+	SecondaryEntities []AlertEntityInfo `json:"secondaryEntities,omitempty"`
 	Notes *string `json:"notes,omitempty"`
 	ExtraDetails *ExtraDetails `json:"extraDetails,omitempty"`
 	// The condition which triggered this alert.
 	AlertCondition NullableString `json:"alertCondition,omitempty"`
+	// Flag of the alerts muting status.
+	IsMuted *bool `json:"isMuted,omitempty"`
 }
 
 // NewAlertsLibraryAlertAllOf instantiates a new AlertsLibraryAlertAllOf object
@@ -70,7 +78,7 @@ func NewAlertsLibraryAlertAllOfWithDefaults() *AlertsLibraryAlertAllOf {
 
 // GetMonitorId returns the MonitorId field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetMonitorId() string {
-	if o == nil || o.MonitorId == nil {
+	if o == nil || IsNil(o.MonitorId) {
 		var ret string
 		return ret
 	}
@@ -80,7 +88,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorId() string {
 // GetMonitorIdOk returns a tuple with the MonitorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetMonitorIdOk() (*string, bool) {
-	if o == nil || o.MonitorId == nil {
+	if o == nil || IsNil(o.MonitorId) {
 		return nil, false
 	}
 	return o.MonitorId, true
@@ -88,7 +96,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorIdOk() (*string, bool) {
 
 // HasMonitorId returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasMonitorId() bool {
-	if o != nil && o.MonitorId != nil {
+	if o != nil && !IsNil(o.MonitorId) {
 		return true
 	}
 
@@ -102,7 +110,7 @@ func (o *AlertsLibraryAlertAllOf) SetMonitorId(v string) {
 
 // GetResolvedAt returns the ResolvedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AlertsLibraryAlertAllOf) GetResolvedAt() time.Time {
-	if o == nil || o.ResolvedAt.Get() == nil {
+	if o == nil || IsNil(o.ResolvedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
@@ -144,7 +152,7 @@ func (o *AlertsLibraryAlertAllOf) UnsetResolvedAt() {
 
 // GetAbnormalityStartTime returns the AbnormalityStartTime field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetAbnormalityStartTime() time.Time {
-	if o == nil || o.AbnormalityStartTime == nil {
+	if o == nil || IsNil(o.AbnormalityStartTime) {
 		var ret time.Time
 		return ret
 	}
@@ -154,7 +162,7 @@ func (o *AlertsLibraryAlertAllOf) GetAbnormalityStartTime() time.Time {
 // GetAbnormalityStartTimeOk returns a tuple with the AbnormalityStartTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetAbnormalityStartTimeOk() (*time.Time, bool) {
-	if o == nil || o.AbnormalityStartTime == nil {
+	if o == nil || IsNil(o.AbnormalityStartTime) {
 		return nil, false
 	}
 	return o.AbnormalityStartTime, true
@@ -162,7 +170,7 @@ func (o *AlertsLibraryAlertAllOf) GetAbnormalityStartTimeOk() (*time.Time, bool)
 
 // HasAbnormalityStartTime returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasAbnormalityStartTime() bool {
-	if o != nil && o.AbnormalityStartTime != nil {
+	if o != nil && !IsNil(o.AbnormalityStartTime) {
 		return true
 	}
 
@@ -176,7 +184,7 @@ func (o *AlertsLibraryAlertAllOf) SetAbnormalityStartTime(v time.Time) {
 
 // GetAlertType returns the AlertType field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetAlertType() string {
-	if o == nil || o.AlertType == nil {
+	if o == nil || IsNil(o.AlertType) {
 		var ret string
 		return ret
 	}
@@ -186,7 +194,7 @@ func (o *AlertsLibraryAlertAllOf) GetAlertType() string {
 // GetAlertTypeOk returns a tuple with the AlertType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetAlertTypeOk() (*string, bool) {
-	if o == nil || o.AlertType == nil {
+	if o == nil || IsNil(o.AlertType) {
 		return nil, false
 	}
 	return o.AlertType, true
@@ -194,7 +202,7 @@ func (o *AlertsLibraryAlertAllOf) GetAlertTypeOk() (*string, bool) {
 
 // HasAlertType returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasAlertType() bool {
-	if o != nil && o.AlertType != nil {
+	if o != nil && !IsNil(o.AlertType) {
 		return true
 	}
 
@@ -208,7 +216,7 @@ func (o *AlertsLibraryAlertAllOf) SetAlertType(v string) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetStatus() string {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret string
 		return ret
 	}
@@ -218,7 +226,7 @@ func (o *AlertsLibraryAlertAllOf) GetStatus() string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetStatusOk() (*string, bool) {
-	if o == nil || o.Status == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
 	return o.Status, true
@@ -226,7 +234,7 @@ func (o *AlertsLibraryAlertAllOf) GetStatusOk() (*string, bool) {
 
 // HasStatus returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
@@ -240,7 +248,7 @@ func (o *AlertsLibraryAlertAllOf) SetStatus(v string) {
 
 // GetMonitorQueries returns the MonitorQueries field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetMonitorQueries() []AlertMonitorQuery {
-	if o == nil || o.MonitorQueries == nil {
+	if o == nil || IsNil(o.MonitorQueries) {
 		var ret []AlertMonitorQuery
 		return ret
 	}
@@ -250,7 +258,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorQueries() []AlertMonitorQuery {
 // GetMonitorQueriesOk returns a tuple with the MonitorQueries field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetMonitorQueriesOk() ([]AlertMonitorQuery, bool) {
-	if o == nil || o.MonitorQueries == nil {
+	if o == nil || IsNil(o.MonitorQueries) {
 		return nil, false
 	}
 	return o.MonitorQueries, true
@@ -258,7 +266,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorQueriesOk() ([]AlertMonitorQuery, bo
 
 // HasMonitorQueries returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasMonitorQueries() bool {
-	if o != nil && o.MonitorQueries != nil {
+	if o != nil && !IsNil(o.MonitorQueries) {
 		return true
 	}
 
@@ -272,7 +280,7 @@ func (o *AlertsLibraryAlertAllOf) SetMonitorQueries(v []AlertMonitorQuery) {
 
 // GetTriggerQueries returns the TriggerQueries field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetTriggerQueries() []AlertMonitorQuery {
-	if o == nil || o.TriggerQueries == nil {
+	if o == nil || IsNil(o.TriggerQueries) {
 		var ret []AlertMonitorQuery
 		return ret
 	}
@@ -282,7 +290,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerQueries() []AlertMonitorQuery {
 // GetTriggerQueriesOk returns a tuple with the TriggerQueries field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetTriggerQueriesOk() ([]AlertMonitorQuery, bool) {
-	if o == nil || o.TriggerQueries == nil {
+	if o == nil || IsNil(o.TriggerQueries) {
 		return nil, false
 	}
 	return o.TriggerQueries, true
@@ -290,7 +298,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerQueriesOk() ([]AlertMonitorQuery, bo
 
 // HasTriggerQueries returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasTriggerQueries() bool {
-	if o != nil && o.TriggerQueries != nil {
+	if o != nil && !IsNil(o.TriggerQueries) {
 		return true
 	}
 
@@ -304,7 +312,7 @@ func (o *AlertsLibraryAlertAllOf) SetTriggerQueries(v []AlertMonitorQuery) {
 
 // GetMonitorUrl returns the MonitorUrl field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetMonitorUrl() string {
-	if o == nil || o.MonitorUrl == nil {
+	if o == nil || IsNil(o.MonitorUrl) {
 		var ret string
 		return ret
 	}
@@ -314,7 +322,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorUrl() string {
 // GetMonitorUrlOk returns a tuple with the MonitorUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetMonitorUrlOk() (*string, bool) {
-	if o == nil || o.MonitorUrl == nil {
+	if o == nil || IsNil(o.MonitorUrl) {
 		return nil, false
 	}
 	return o.MonitorUrl, true
@@ -322,7 +330,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorUrlOk() (*string, bool) {
 
 // HasMonitorUrl returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasMonitorUrl() bool {
-	if o != nil && o.MonitorUrl != nil {
+	if o != nil && !IsNil(o.MonitorUrl) {
 		return true
 	}
 
@@ -336,7 +344,7 @@ func (o *AlertsLibraryAlertAllOf) SetMonitorUrl(v string) {
 
 // GetTriggerQueryUrl returns the TriggerQueryUrl field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetTriggerQueryUrl() string {
-	if o == nil || o.TriggerQueryUrl == nil {
+	if o == nil || IsNil(o.TriggerQueryUrl) {
 		var ret string
 		return ret
 	}
@@ -346,7 +354,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerQueryUrl() string {
 // GetTriggerQueryUrlOk returns a tuple with the TriggerQueryUrl field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetTriggerQueryUrlOk() (*string, bool) {
-	if o == nil || o.TriggerQueryUrl == nil {
+	if o == nil || IsNil(o.TriggerQueryUrl) {
 		return nil, false
 	}
 	return o.TriggerQueryUrl, true
@@ -354,7 +362,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerQueryUrlOk() (*string, bool) {
 
 // HasTriggerQueryUrl returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasTriggerQueryUrl() bool {
-	if o != nil && o.TriggerQueryUrl != nil {
+	if o != nil && !IsNil(o.TriggerQueryUrl) {
 		return true
 	}
 
@@ -368,7 +376,7 @@ func (o *AlertsLibraryAlertAllOf) SetTriggerQueryUrl(v string) {
 
 // GetTriggerConditions returns the TriggerConditions field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetTriggerConditions() []TriggerCondition {
-	if o == nil || o.TriggerConditions == nil {
+	if o == nil || IsNil(o.TriggerConditions) {
 		var ret []TriggerCondition
 		return ret
 	}
@@ -378,7 +386,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerConditions() []TriggerCondition {
 // GetTriggerConditionsOk returns a tuple with the TriggerConditions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetTriggerConditionsOk() ([]TriggerCondition, bool) {
-	if o == nil || o.TriggerConditions == nil {
+	if o == nil || IsNil(o.TriggerConditions) {
 		return nil, false
 	}
 	return o.TriggerConditions, true
@@ -386,7 +394,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerConditionsOk() ([]TriggerCondition, 
 
 // HasTriggerConditions returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasTriggerConditions() bool {
-	if o != nil && o.TriggerConditions != nil {
+	if o != nil && !IsNil(o.TriggerConditions) {
 		return true
 	}
 
@@ -400,7 +408,7 @@ func (o *AlertsLibraryAlertAllOf) SetTriggerConditions(v []TriggerCondition) {
 
 // GetTriggerValue returns the TriggerValue field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetTriggerValue() float64 {
-	if o == nil || o.TriggerValue == nil {
+	if o == nil || IsNil(o.TriggerValue) {
 		var ret float64
 		return ret
 	}
@@ -410,7 +418,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerValue() float64 {
 // GetTriggerValueOk returns a tuple with the TriggerValue field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetTriggerValueOk() (*float64, bool) {
-	if o == nil || o.TriggerValue == nil {
+	if o == nil || IsNil(o.TriggerValue) {
 		return nil, false
 	}
 	return o.TriggerValue, true
@@ -418,7 +426,7 @@ func (o *AlertsLibraryAlertAllOf) GetTriggerValueOk() (*float64, bool) {
 
 // HasTriggerValue returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasTriggerValue() bool {
-	if o != nil && o.TriggerValue != nil {
+	if o != nil && !IsNil(o.TriggerValue) {
 		return true
 	}
 
@@ -432,7 +440,7 @@ func (o *AlertsLibraryAlertAllOf) SetTriggerValue(v float64) {
 
 // GetMonitorType returns the MonitorType field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetMonitorType() string {
-	if o == nil || o.MonitorType == nil {
+	if o == nil || IsNil(o.MonitorType) {
 		var ret string
 		return ret
 	}
@@ -442,7 +450,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorType() string {
 // GetMonitorTypeOk returns a tuple with the MonitorType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetMonitorTypeOk() (*string, bool) {
-	if o == nil || o.MonitorType == nil {
+	if o == nil || IsNil(o.MonitorType) {
 		return nil, false
 	}
 	return o.MonitorType, true
@@ -450,7 +458,7 @@ func (o *AlertsLibraryAlertAllOf) GetMonitorTypeOk() (*string, bool) {
 
 // HasMonitorType returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasMonitorType() bool {
-	if o != nil && o.MonitorType != nil {
+	if o != nil && !IsNil(o.MonitorType) {
 		return true
 	}
 
@@ -463,8 +471,9 @@ func (o *AlertsLibraryAlertAllOf) SetMonitorType(v string) {
 }
 
 // GetEntityIds returns the EntityIds field value if set, zero value otherwise.
+// Deprecated
 func (o *AlertsLibraryAlertAllOf) GetEntityIds() []string {
-	if o == nil || o.EntityIds == nil {
+	if o == nil || IsNil(o.EntityIds) {
 		var ret []string
 		return ret
 	}
@@ -473,8 +482,9 @@ func (o *AlertsLibraryAlertAllOf) GetEntityIds() []string {
 
 // GetEntityIdsOk returns a tuple with the EntityIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// Deprecated
 func (o *AlertsLibraryAlertAllOf) GetEntityIdsOk() ([]string, bool) {
-	if o == nil || o.EntityIds == nil {
+	if o == nil || IsNil(o.EntityIds) {
 		return nil, false
 	}
 	return o.EntityIds, true
@@ -482,7 +492,7 @@ func (o *AlertsLibraryAlertAllOf) GetEntityIdsOk() ([]string, bool) {
 
 // HasEntityIds returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasEntityIds() bool {
-	if o != nil && o.EntityIds != nil {
+	if o != nil && !IsNil(o.EntityIds) {
 		return true
 	}
 
@@ -490,13 +500,14 @@ func (o *AlertsLibraryAlertAllOf) HasEntityIds() bool {
 }
 
 // SetEntityIds gets a reference to the given []string and assigns it to the EntityIds field.
+// Deprecated
 func (o *AlertsLibraryAlertAllOf) SetEntityIds(v []string) {
 	o.EntityIds = v
 }
 
 // GetEntities returns the Entities field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetEntities() []AlertEntityInfo {
-	if o == nil || o.Entities == nil {
+	if o == nil || IsNil(o.Entities) {
 		var ret []AlertEntityInfo
 		return ret
 	}
@@ -506,7 +517,7 @@ func (o *AlertsLibraryAlertAllOf) GetEntities() []AlertEntityInfo {
 // GetEntitiesOk returns a tuple with the Entities field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetEntitiesOk() ([]AlertEntityInfo, bool) {
-	if o == nil || o.Entities == nil {
+	if o == nil || IsNil(o.Entities) {
 		return nil, false
 	}
 	return o.Entities, true
@@ -514,7 +525,7 @@ func (o *AlertsLibraryAlertAllOf) GetEntitiesOk() ([]AlertEntityInfo, bool) {
 
 // HasEntities returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasEntities() bool {
-	if o != nil && o.Entities != nil {
+	if o != nil && !IsNil(o.Entities) {
 		return true
 	}
 
@@ -526,9 +537,41 @@ func (o *AlertsLibraryAlertAllOf) SetEntities(v []AlertEntityInfo) {
 	o.Entities = v
 }
 
+// GetSecondaryEntities returns the SecondaryEntities field value if set, zero value otherwise.
+func (o *AlertsLibraryAlertAllOf) GetSecondaryEntities() []AlertEntityInfo {
+	if o == nil || IsNil(o.SecondaryEntities) {
+		var ret []AlertEntityInfo
+		return ret
+	}
+	return o.SecondaryEntities
+}
+
+// GetSecondaryEntitiesOk returns a tuple with the SecondaryEntities field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertsLibraryAlertAllOf) GetSecondaryEntitiesOk() ([]AlertEntityInfo, bool) {
+	if o == nil || IsNil(o.SecondaryEntities) {
+		return nil, false
+	}
+	return o.SecondaryEntities, true
+}
+
+// HasSecondaryEntities returns a boolean if a field has been set.
+func (o *AlertsLibraryAlertAllOf) HasSecondaryEntities() bool {
+	if o != nil && !IsNil(o.SecondaryEntities) {
+		return true
+	}
+
+	return false
+}
+
+// SetSecondaryEntities gets a reference to the given []AlertEntityInfo and assigns it to the SecondaryEntities field.
+func (o *AlertsLibraryAlertAllOf) SetSecondaryEntities(v []AlertEntityInfo) {
+	o.SecondaryEntities = v
+}
+
 // GetNotes returns the Notes field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetNotes() string {
-	if o == nil || o.Notes == nil {
+	if o == nil || IsNil(o.Notes) {
 		var ret string
 		return ret
 	}
@@ -538,7 +581,7 @@ func (o *AlertsLibraryAlertAllOf) GetNotes() string {
 // GetNotesOk returns a tuple with the Notes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetNotesOk() (*string, bool) {
-	if o == nil || o.Notes == nil {
+	if o == nil || IsNil(o.Notes) {
 		return nil, false
 	}
 	return o.Notes, true
@@ -546,7 +589,7 @@ func (o *AlertsLibraryAlertAllOf) GetNotesOk() (*string, bool) {
 
 // HasNotes returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasNotes() bool {
-	if o != nil && o.Notes != nil {
+	if o != nil && !IsNil(o.Notes) {
 		return true
 	}
 
@@ -560,7 +603,7 @@ func (o *AlertsLibraryAlertAllOf) SetNotes(v string) {
 
 // GetExtraDetails returns the ExtraDetails field value if set, zero value otherwise.
 func (o *AlertsLibraryAlertAllOf) GetExtraDetails() ExtraDetails {
-	if o == nil || o.ExtraDetails == nil {
+	if o == nil || IsNil(o.ExtraDetails) {
 		var ret ExtraDetails
 		return ret
 	}
@@ -570,7 +613,7 @@ func (o *AlertsLibraryAlertAllOf) GetExtraDetails() ExtraDetails {
 // GetExtraDetailsOk returns a tuple with the ExtraDetails field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AlertsLibraryAlertAllOf) GetExtraDetailsOk() (*ExtraDetails, bool) {
-	if o == nil || o.ExtraDetails == nil {
+	if o == nil || IsNil(o.ExtraDetails) {
 		return nil, false
 	}
 	return o.ExtraDetails, true
@@ -578,7 +621,7 @@ func (o *AlertsLibraryAlertAllOf) GetExtraDetailsOk() (*ExtraDetails, bool) {
 
 // HasExtraDetails returns a boolean if a field has been set.
 func (o *AlertsLibraryAlertAllOf) HasExtraDetails() bool {
-	if o != nil && o.ExtraDetails != nil {
+	if o != nil && !IsNil(o.ExtraDetails) {
 		return true
 	}
 
@@ -592,7 +635,7 @@ func (o *AlertsLibraryAlertAllOf) SetExtraDetails(v ExtraDetails) {
 
 // GetAlertCondition returns the AlertCondition field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AlertsLibraryAlertAllOf) GetAlertCondition() string {
-	if o == nil || o.AlertCondition.Get() == nil {
+	if o == nil || IsNil(o.AlertCondition.Get()) {
 		var ret string
 		return ret
 	}
@@ -632,60 +675,106 @@ func (o *AlertsLibraryAlertAllOf) UnsetAlertCondition() {
 	o.AlertCondition.Unset()
 }
 
+// GetIsMuted returns the IsMuted field value if set, zero value otherwise.
+func (o *AlertsLibraryAlertAllOf) GetIsMuted() bool {
+	if o == nil || IsNil(o.IsMuted) {
+		var ret bool
+		return ret
+	}
+	return *o.IsMuted
+}
+
+// GetIsMutedOk returns a tuple with the IsMuted field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AlertsLibraryAlertAllOf) GetIsMutedOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsMuted) {
+		return nil, false
+	}
+	return o.IsMuted, true
+}
+
+// HasIsMuted returns a boolean if a field has been set.
+func (o *AlertsLibraryAlertAllOf) HasIsMuted() bool {
+	if o != nil && !IsNil(o.IsMuted) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsMuted gets a reference to the given bool and assigns it to the IsMuted field.
+func (o *AlertsLibraryAlertAllOf) SetIsMuted(v bool) {
+	o.IsMuted = &v
+}
+
 func (o AlertsLibraryAlertAllOf) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AlertsLibraryAlertAllOf) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.MonitorId != nil {
+	if !IsNil(o.MonitorId) {
 		toSerialize["monitorId"] = o.MonitorId
 	}
 	if o.ResolvedAt.IsSet() {
 		toSerialize["resolvedAt"] = o.ResolvedAt.Get()
 	}
-	if o.AbnormalityStartTime != nil {
+	if !IsNil(o.AbnormalityStartTime) {
 		toSerialize["abnormalityStartTime"] = o.AbnormalityStartTime
 	}
-	if o.AlertType != nil {
+	if !IsNil(o.AlertType) {
 		toSerialize["alertType"] = o.AlertType
 	}
-	if o.Status != nil {
+	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
-	if o.MonitorQueries != nil {
+	if !IsNil(o.MonitorQueries) {
 		toSerialize["monitorQueries"] = o.MonitorQueries
 	}
-	if o.TriggerQueries != nil {
+	if !IsNil(o.TriggerQueries) {
 		toSerialize["triggerQueries"] = o.TriggerQueries
 	}
-	if o.MonitorUrl != nil {
+	if !IsNil(o.MonitorUrl) {
 		toSerialize["monitorUrl"] = o.MonitorUrl
 	}
-	if o.TriggerQueryUrl != nil {
+	if !IsNil(o.TriggerQueryUrl) {
 		toSerialize["triggerQueryUrl"] = o.TriggerQueryUrl
 	}
-	if o.TriggerConditions != nil {
+	if !IsNil(o.TriggerConditions) {
 		toSerialize["triggerConditions"] = o.TriggerConditions
 	}
-	if o.TriggerValue != nil {
+	if !IsNil(o.TriggerValue) {
 		toSerialize["triggerValue"] = o.TriggerValue
 	}
-	if o.MonitorType != nil {
+	if !IsNil(o.MonitorType) {
 		toSerialize["monitorType"] = o.MonitorType
 	}
-	if o.EntityIds != nil {
+	if !IsNil(o.EntityIds) {
 		toSerialize["entityIds"] = o.EntityIds
 	}
-	if o.Entities != nil {
+	if !IsNil(o.Entities) {
 		toSerialize["entities"] = o.Entities
 	}
-	if o.Notes != nil {
+	if !IsNil(o.SecondaryEntities) {
+		toSerialize["secondaryEntities"] = o.SecondaryEntities
+	}
+	if !IsNil(o.Notes) {
 		toSerialize["notes"] = o.Notes
 	}
-	if o.ExtraDetails != nil {
+	if !IsNil(o.ExtraDetails) {
 		toSerialize["extraDetails"] = o.ExtraDetails
 	}
 	if o.AlertCondition.IsSet() {
 		toSerialize["alertCondition"] = o.AlertCondition.Get()
 	}
-	return json.Marshal(toSerialize)
+	if !IsNil(o.IsMuted) {
+		toSerialize["isMuted"] = o.IsMuted
+	}
+	return toSerialize, nil
 }
 
 type NullableAlertsLibraryAlertAllOf struct {

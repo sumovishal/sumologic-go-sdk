@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -64,7 +64,7 @@ func (a *TracesApiService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest)
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/tracequery/{queryId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -97,9 +97,9 @@ func (a *TracesApiService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest)
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -115,7 +115,8 @@ func (a *TracesApiService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest)
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarHTTPResponse, newErr
 	}
 
@@ -206,9 +207,9 @@ func (a *TracesApiService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest)
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -224,7 +225,8 @@ func (a *TracesApiService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -297,17 +299,17 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/criticalPath"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -336,9 +338,9 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -354,7 +356,8 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -413,7 +416,7 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCritic
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/criticalPath/breakdown/service"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -446,9 +449,9 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCritic
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -464,7 +467,8 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCritic
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -552,9 +556,9 @@ func (a *TracesApiService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetr
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -570,7 +574,8 @@ func (a *TracesApiService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -632,8 +637,8 @@ func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/spans/{spanId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"spanId"+"}", url.PathEscape(parameterToString(r.spanId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"spanId"+"}", url.PathEscape(parameterValueToString(r.spanId, "spanId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -666,9 +671,9 @@ func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -684,7 +689,8 @@ func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -746,8 +752,8 @@ func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequ
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/spans/{spanId}/billingInfo"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"spanId"+"}", url.PathEscape(parameterToString(r.spanId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"spanId"+"}", url.PathEscape(parameterValueToString(r.spanId, "spanId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -780,9 +786,9 @@ func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequ
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -798,7 +804,8 @@ func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -871,17 +878,17 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/spans"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -910,9 +917,9 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -928,7 +935,8 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -987,7 +995,7 @@ func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, 
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1020,9 +1028,9 @@ func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1038,7 +1046,8 @@ func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1111,7 +1120,7 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/traceEvents"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1124,10 +1133,10 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 	}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1156,9 +1165,9 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1174,7 +1183,8 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1197,6 +1207,7 @@ type ApiGetTraceQueryFieldValuesRequest struct {
 	query *string
 	limit *int32
 	token *string
+	fieldType *string
 }
 
 // Search filter to apply on the values to be returned. Only values containing the search query term will be returned.
@@ -1214,6 +1225,12 @@ func (r ApiGetTraceQueryFieldValuesRequest) Limit(limit int32) ApiGetTraceQueryF
 // Continuation token to get the next page of results. A page object with the next continuation token is returned in the response body. Subsequent GET requests should specify the continuation token to get the next page of results. &#x60;token&#x60; is set to null when no more pages are left.
 func (r ApiGetTraceQueryFieldValuesRequest) Token(token string) ApiGetTraceQueryFieldValuesRequest {
 	r.token = &token
+	return r
+}
+
+// Indicates the kind of a field. Possible values: &#x60;SpanAttribute&#x60;, &#x60;SpanEventAttribute&#x60;.
+func (r ApiGetTraceQueryFieldValuesRequest) FieldType(fieldType string) ApiGetTraceQueryFieldValuesRequest {
+	r.fieldType = &fieldType
 	return r
 }
 
@@ -1254,20 +1271,23 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/tracequery/fields/{field}/values"
-	localVarPath = strings.Replace(localVarPath, "{"+"field"+"}", url.PathEscape(parameterToString(r.field, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"field"+"}", url.PathEscape(parameterValueToString(r.field, "field")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.query != nil {
-		localVarQueryParams.Add("query", parameterToString(*r.query, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "")
 	}
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
+	}
+	if r.fieldType != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fieldType", r.fieldType, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1296,9 +1316,9 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1314,7 +1334,8 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1402,9 +1423,9 @@ func (a *TracesApiService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1420,7 +1441,8 @@ func (a *TracesApiService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1496,18 +1518,18 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/tracequery/{queryId}/rows/{rowId}/traces"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterToString(r.rowId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"rowId"+"}", url.PathEscape(parameterValueToString(r.rowId, "rowId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
 	}
 	if r.token != nil {
-		localVarQueryParams.Add("token", parameterToString(*r.token, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1536,9 +1558,9 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1554,7 +1576,8 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1613,7 +1636,7 @@ func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRe
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/tracequery/{queryId}/status"
-	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterToString(r.queryId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"queryId"+"}", url.PathEscape(parameterValueToString(r.queryId, "queryId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1646,9 +1669,9 @@ func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1664,7 +1687,8 @@ func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -1723,7 +1747,7 @@ func (a *TracesApiService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceEx
 	}
 
 	localVarPath := localBasePath + "/v1/tracing/traces/{traceId}/exists"
-	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterToString(r.traceId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"traceId"+"}", url.PathEscape(parameterValueToString(r.traceId, "traceId")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1756,9 +1780,9 @@ func (a *TracesApiService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceEx
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1774,7 +1798,8 @@ func (a *TracesApiService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceEx
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

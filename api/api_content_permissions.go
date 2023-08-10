@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,7 +13,7 @@ package sumologic
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -80,7 +80,7 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/permissions/add"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -107,7 +107,7 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	// body params
 	localVarPostBody = r.contentPermissionUpdateRequest
@@ -121,9 +121,9 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -139,7 +139,8 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -212,14 +213,14 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/permissions"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.explicitOnly != nil {
-		localVarQueryParams.Add("explicitOnly", parameterToString(*r.explicitOnly, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "explicitOnly", r.explicitOnly, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -239,7 +240,7 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -251,9 +252,9 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -269,7 +270,8 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -342,7 +344,7 @@ func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemo
 	}
 
 	localVarPath := localBasePath + "/v2/content/{id}/permissions/remove"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -369,7 +371,7 @@ func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemo
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		localVarHeaderParams["isAdminMode"] = parameterToString(*r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
 	}
 	// body params
 	localVarPostBody = r.contentPermissionUpdateRequest
@@ -383,9 +385,9 @@ func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemo
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -401,7 +403,8 @@ func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 

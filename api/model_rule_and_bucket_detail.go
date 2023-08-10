@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -15,6 +15,9 @@ import (
 	"time"
 )
 
+// checks if the RuleAndBucketDetail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RuleAndBucketDetail{}
+
 // RuleAndBucketDetail struct for RuleAndBucketDetail
 type RuleAndBucketDetail struct {
 	// The `id` of the Partition or Scheduled View the rule applies to.
@@ -25,6 +28,8 @@ type RuleAndBucketDetail struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// Specify the path prefix to a directory in the S3 bucket and how to format the file name.
 	FileFormat *string `json:"fileFormat,omitempty"`
+	// Format of the payload.
+	Format *string `json:"format,omitempty"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	CreatedAt time.Time `json:"createdAt"`
 	// Identifier of the user who created the resource.
@@ -46,6 +51,8 @@ func NewRuleAndBucketDetail(indexId string, destinationId string, createdAt time
 	this := RuleAndBucketDetail{}
 	this.IndexId = indexId
 	this.DestinationId = destinationId
+	var format string = "csv"
+	this.Format = &format
 	this.CreatedAt = createdAt
 	this.CreatedBy = createdBy
 	this.ModifiedAt = modifiedAt
@@ -58,6 +65,8 @@ func NewRuleAndBucketDetail(indexId string, destinationId string, createdAt time
 // but it doesn't guarantee that properties required by API are set
 func NewRuleAndBucketDetailWithDefaults() *RuleAndBucketDetail {
 	this := RuleAndBucketDetail{}
+	var format string = "csv"
+	this.Format = &format
 	return &this
 }
 
@@ -111,7 +120,7 @@ func (o *RuleAndBucketDetail) SetDestinationId(v string) {
 
 // GetEnabled returns the Enabled field value if set, zero value otherwise.
 func (o *RuleAndBucketDetail) GetEnabled() bool {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		var ret bool
 		return ret
 	}
@@ -121,7 +130,7 @@ func (o *RuleAndBucketDetail) GetEnabled() bool {
 // GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RuleAndBucketDetail) GetEnabledOk() (*bool, bool) {
-	if o == nil || o.Enabled == nil {
+	if o == nil || IsNil(o.Enabled) {
 		return nil, false
 	}
 	return o.Enabled, true
@@ -129,7 +138,7 @@ func (o *RuleAndBucketDetail) GetEnabledOk() (*bool, bool) {
 
 // HasEnabled returns a boolean if a field has been set.
 func (o *RuleAndBucketDetail) HasEnabled() bool {
-	if o != nil && o.Enabled != nil {
+	if o != nil && !IsNil(o.Enabled) {
 		return true
 	}
 
@@ -143,7 +152,7 @@ func (o *RuleAndBucketDetail) SetEnabled(v bool) {
 
 // GetFileFormat returns the FileFormat field value if set, zero value otherwise.
 func (o *RuleAndBucketDetail) GetFileFormat() string {
-	if o == nil || o.FileFormat == nil {
+	if o == nil || IsNil(o.FileFormat) {
 		var ret string
 		return ret
 	}
@@ -153,7 +162,7 @@ func (o *RuleAndBucketDetail) GetFileFormat() string {
 // GetFileFormatOk returns a tuple with the FileFormat field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RuleAndBucketDetail) GetFileFormatOk() (*string, bool) {
-	if o == nil || o.FileFormat == nil {
+	if o == nil || IsNil(o.FileFormat) {
 		return nil, false
 	}
 	return o.FileFormat, true
@@ -161,7 +170,7 @@ func (o *RuleAndBucketDetail) GetFileFormatOk() (*string, bool) {
 
 // HasFileFormat returns a boolean if a field has been set.
 func (o *RuleAndBucketDetail) HasFileFormat() bool {
-	if o != nil && o.FileFormat != nil {
+	if o != nil && !IsNil(o.FileFormat) {
 		return true
 	}
 
@@ -171,6 +180,38 @@ func (o *RuleAndBucketDetail) HasFileFormat() bool {
 // SetFileFormat gets a reference to the given string and assigns it to the FileFormat field.
 func (o *RuleAndBucketDetail) SetFileFormat(v string) {
 	o.FileFormat = &v
+}
+
+// GetFormat returns the Format field value if set, zero value otherwise.
+func (o *RuleAndBucketDetail) GetFormat() string {
+	if o == nil || IsNil(o.Format) {
+		var ret string
+		return ret
+	}
+	return *o.Format
+}
+
+// GetFormatOk returns a tuple with the Format field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RuleAndBucketDetail) GetFormatOk() (*string, bool) {
+	if o == nil || IsNil(o.Format) {
+		return nil, false
+	}
+	return o.Format, true
+}
+
+// HasFormat returns a boolean if a field has been set.
+func (o *RuleAndBucketDetail) HasFormat() bool {
+	if o != nil && !IsNil(o.Format) {
+		return true
+	}
+
+	return false
+}
+
+// SetFormat gets a reference to the given string and assigns it to the Format field.
+func (o *RuleAndBucketDetail) SetFormat(v string) {
+	o.Format = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value
@@ -271,7 +312,7 @@ func (o *RuleAndBucketDetail) SetModifiedBy(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *RuleAndBucketDetail) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -281,7 +322,7 @@ func (o *RuleAndBucketDetail) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RuleAndBucketDetail) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -289,7 +330,7 @@ func (o *RuleAndBucketDetail) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *RuleAndBucketDetail) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -303,7 +344,7 @@ func (o *RuleAndBucketDetail) SetId(v string) {
 
 // GetBucket returns the Bucket field value if set, zero value otherwise.
 func (o *RuleAndBucketDetail) GetBucket() map[string]interface{} {
-	if o == nil || o.Bucket == nil {
+	if o == nil || IsNil(o.Bucket) {
 		var ret map[string]interface{}
 		return ret
 	}
@@ -313,15 +354,15 @@ func (o *RuleAndBucketDetail) GetBucket() map[string]interface{} {
 // GetBucketOk returns a tuple with the Bucket field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *RuleAndBucketDetail) GetBucketOk() (map[string]interface{}, bool) {
-	if o == nil || o.Bucket == nil {
-		return nil, false
+	if o == nil || IsNil(o.Bucket) {
+		return map[string]interface{}{}, false
 	}
 	return o.Bucket, true
 }
 
 // HasBucket returns a boolean if a field has been set.
 func (o *RuleAndBucketDetail) HasBucket() bool {
-	if o != nil && o.Bucket != nil {
+	if o != nil && !IsNil(o.Bucket) {
 		return true
 	}
 
@@ -334,38 +375,37 @@ func (o *RuleAndBucketDetail) SetBucket(v map[string]interface{}) {
 }
 
 func (o RuleAndBucketDetail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["indexId"] = o.IndexId
-	}
-	if true {
-		toSerialize["destinationId"] = o.DestinationId
-	}
-	if o.Enabled != nil {
-		toSerialize["enabled"] = o.Enabled
-	}
-	if o.FileFormat != nil {
-		toSerialize["fileFormat"] = o.FileFormat
-	}
-	if true {
-		toSerialize["createdAt"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["createdBy"] = o.CreatedBy
-	}
-	if true {
-		toSerialize["modifiedAt"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["modifiedBy"] = o.ModifiedBy
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Bucket != nil {
-		toSerialize["bucket"] = o.Bucket
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o RuleAndBucketDetail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["indexId"] = o.IndexId
+	toSerialize["destinationId"] = o.DestinationId
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
+	if !IsNil(o.FileFormat) {
+		toSerialize["fileFormat"] = o.FileFormat
+	}
+	if !IsNil(o.Format) {
+		toSerialize["format"] = o.Format
+	}
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["createdBy"] = o.CreatedBy
+	toSerialize["modifiedAt"] = o.ModifiedAt
+	toSerialize["modifiedBy"] = o.ModifiedBy
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Bucket) {
+		toSerialize["bucket"] = o.Bucket
+	}
+	return toSerialize, nil
 }
 
 type NullableRuleAndBucketDetail struct {

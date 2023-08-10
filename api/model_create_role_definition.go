@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the CreateRoleDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CreateRoleDefinition{}
+
 // CreateRoleDefinition struct for CreateRoleDefinition
 type CreateRoleDefinition struct {
 	// Name of the role.
@@ -24,7 +27,7 @@ type CreateRoleDefinition struct {
 	FilterPredicate *string `json:"filterPredicate,omitempty"`
 	// List of user identifiers to assign the role to.
 	Users []string `json:"users,omitempty"`
-	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
+	// List of [capabilities](https://help.sumologic.com/Manage/Users-and-Roles/Manage-Roles/Role-Capabilities) associated with this role. Valid values are ### Data Management   - viewCollectors   - manageCollectors   - manageBudgets   - manageDataVolumeFeed   - viewFieldExtraction   - manageFieldExtractionRules   - manageS3DataForwarding   - manageContent   - manageApps   - dataVolumeIndex   - manageConnections   - viewScheduledViews   - manageScheduledViews   - viewPartitions   - managePartitions   - viewFields   - manageFields   - viewAccountOverview   - manageTokens   - downloadSearchResults  ### Entity management   - manageEntityTypeConfig  ### Metrics   - metricsTransformation   - metricsExtraction   - metricsRules  ### Security   - managePasswordPolicy   - ipAllowlisting   - createAccessKeys   - manageAccessKeys   - manageSupportAccountAccess   - manageAuditDataFeed   - manageSaml   - shareDashboardOutsideOrg   - manageOrgSettings   - changeDataAccessLevel  ### Dashboards   - shareDashboardWorld   - shareDashboardAllowlist  ### UserManagement   - manageUsersAndRoles  ### Observability   - searchAuditIndex   - auditEventIndex  ### Cloud SIEM Enterprise   - viewCse  ### Alerting   - viewMonitorsV2   - manageMonitorsV2   - viewAlerts
 	Capabilities []string `json:"capabilities,omitempty"`
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
@@ -78,7 +81,7 @@ func (o *CreateRoleDefinition) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *CreateRoleDefinition) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -88,7 +91,7 @@ func (o *CreateRoleDefinition) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateRoleDefinition) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -96,7 +99,7 @@ func (o *CreateRoleDefinition) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *CreateRoleDefinition) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -110,7 +113,7 @@ func (o *CreateRoleDefinition) SetDescription(v string) {
 
 // GetFilterPredicate returns the FilterPredicate field value if set, zero value otherwise.
 func (o *CreateRoleDefinition) GetFilterPredicate() string {
-	if o == nil || o.FilterPredicate == nil {
+	if o == nil || IsNil(o.FilterPredicate) {
 		var ret string
 		return ret
 	}
@@ -120,7 +123,7 @@ func (o *CreateRoleDefinition) GetFilterPredicate() string {
 // GetFilterPredicateOk returns a tuple with the FilterPredicate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateRoleDefinition) GetFilterPredicateOk() (*string, bool) {
-	if o == nil || o.FilterPredicate == nil {
+	if o == nil || IsNil(o.FilterPredicate) {
 		return nil, false
 	}
 	return o.FilterPredicate, true
@@ -128,7 +131,7 @@ func (o *CreateRoleDefinition) GetFilterPredicateOk() (*string, bool) {
 
 // HasFilterPredicate returns a boolean if a field has been set.
 func (o *CreateRoleDefinition) HasFilterPredicate() bool {
-	if o != nil && o.FilterPredicate != nil {
+	if o != nil && !IsNil(o.FilterPredicate) {
 		return true
 	}
 
@@ -142,7 +145,7 @@ func (o *CreateRoleDefinition) SetFilterPredicate(v string) {
 
 // GetUsers returns the Users field value if set, zero value otherwise.
 func (o *CreateRoleDefinition) GetUsers() []string {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		var ret []string
 		return ret
 	}
@@ -152,7 +155,7 @@ func (o *CreateRoleDefinition) GetUsers() []string {
 // GetUsersOk returns a tuple with the Users field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateRoleDefinition) GetUsersOk() ([]string, bool) {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		return nil, false
 	}
 	return o.Users, true
@@ -160,7 +163,7 @@ func (o *CreateRoleDefinition) GetUsersOk() ([]string, bool) {
 
 // HasUsers returns a boolean if a field has been set.
 func (o *CreateRoleDefinition) HasUsers() bool {
-	if o != nil && o.Users != nil {
+	if o != nil && !IsNil(o.Users) {
 		return true
 	}
 
@@ -174,7 +177,7 @@ func (o *CreateRoleDefinition) SetUsers(v []string) {
 
 // GetCapabilities returns the Capabilities field value if set, zero value otherwise.
 func (o *CreateRoleDefinition) GetCapabilities() []string {
-	if o == nil || o.Capabilities == nil {
+	if o == nil || IsNil(o.Capabilities) {
 		var ret []string
 		return ret
 	}
@@ -184,7 +187,7 @@ func (o *CreateRoleDefinition) GetCapabilities() []string {
 // GetCapabilitiesOk returns a tuple with the Capabilities field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateRoleDefinition) GetCapabilitiesOk() ([]string, bool) {
-	if o == nil || o.Capabilities == nil {
+	if o == nil || IsNil(o.Capabilities) {
 		return nil, false
 	}
 	return o.Capabilities, true
@@ -192,7 +195,7 @@ func (o *CreateRoleDefinition) GetCapabilitiesOk() ([]string, bool) {
 
 // HasCapabilities returns a boolean if a field has been set.
 func (o *CreateRoleDefinition) HasCapabilities() bool {
-	if o != nil && o.Capabilities != nil {
+	if o != nil && !IsNil(o.Capabilities) {
 		return true
 	}
 
@@ -206,7 +209,7 @@ func (o *CreateRoleDefinition) SetCapabilities(v []string) {
 
 // GetAutofillDependencies returns the AutofillDependencies field value if set, zero value otherwise.
 func (o *CreateRoleDefinition) GetAutofillDependencies() bool {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		var ret bool
 		return ret
 	}
@@ -216,7 +219,7 @@ func (o *CreateRoleDefinition) GetAutofillDependencies() bool {
 // GetAutofillDependenciesOk returns a tuple with the AutofillDependencies field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateRoleDefinition) GetAutofillDependenciesOk() (*bool, bool) {
-	if o == nil || o.AutofillDependencies == nil {
+	if o == nil || IsNil(o.AutofillDependencies) {
 		return nil, false
 	}
 	return o.AutofillDependencies, true
@@ -224,7 +227,7 @@ func (o *CreateRoleDefinition) GetAutofillDependenciesOk() (*bool, bool) {
 
 // HasAutofillDependencies returns a boolean if a field has been set.
 func (o *CreateRoleDefinition) HasAutofillDependencies() bool {
-	if o != nil && o.AutofillDependencies != nil {
+	if o != nil && !IsNil(o.AutofillDependencies) {
 		return true
 	}
 
@@ -237,26 +240,32 @@ func (o *CreateRoleDefinition) SetAutofillDependencies(v bool) {
 }
 
 func (o CreateRoleDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.FilterPredicate != nil {
-		toSerialize["filterPredicate"] = o.FilterPredicate
-	}
-	if o.Users != nil {
-		toSerialize["users"] = o.Users
-	}
-	if o.Capabilities != nil {
-		toSerialize["capabilities"] = o.Capabilities
-	}
-	if o.AutofillDependencies != nil {
-		toSerialize["autofillDependencies"] = o.AutofillDependencies
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o CreateRoleDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.FilterPredicate) {
+		toSerialize["filterPredicate"] = o.FilterPredicate
+	}
+	if !IsNil(o.Users) {
+		toSerialize["users"] = o.Users
+	}
+	if !IsNil(o.Capabilities) {
+		toSerialize["capabilities"] = o.Capabilities
+	}
+	if !IsNil(o.AutofillDependencies) {
+		toSerialize["autofillDependencies"] = o.AutofillDependencies
+	}
+	return toSerialize, nil
 }
 
 type NullableCreateRoleDefinition struct {

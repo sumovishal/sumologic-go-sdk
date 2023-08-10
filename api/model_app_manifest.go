@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppManifest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppManifest{}
 
 // AppManifest struct for AppManifest
 type AppManifest struct {
@@ -72,7 +75,7 @@ func NewAppManifestWithDefaults() *AppManifest {
 
 // GetFamily returns the Family field value if set, zero value otherwise.
 func (o *AppManifest) GetFamily() string {
-	if o == nil || o.Family == nil {
+	if o == nil || IsNil(o.Family) {
 		var ret string
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *AppManifest) GetFamily() string {
 // GetFamilyOk returns a tuple with the Family field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetFamilyOk() (*string, bool) {
-	if o == nil || o.Family == nil {
+	if o == nil || IsNil(o.Family) {
 		return nil, false
 	}
 	return o.Family, true
@@ -90,7 +93,7 @@ func (o *AppManifest) GetFamilyOk() (*string, bool) {
 
 // HasFamily returns a boolean if a field has been set.
 func (o *AppManifest) HasFamily() bool {
-	if o != nil && o.Family != nil {
+	if o != nil && !IsNil(o.Family) {
 		return true
 	}
 
@@ -128,7 +131,7 @@ func (o *AppManifest) SetDescription(v string) {
 
 // GetCategories returns the Categories field value if set, zero value otherwise.
 func (o *AppManifest) GetCategories() []string {
-	if o == nil || o.Categories == nil {
+	if o == nil || IsNil(o.Categories) {
 		var ret []string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *AppManifest) GetCategories() []string {
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetCategoriesOk() ([]string, bool) {
-	if o == nil || o.Categories == nil {
+	if o == nil || IsNil(o.Categories) {
 		return nil, false
 	}
 	return o.Categories, true
@@ -146,7 +149,7 @@ func (o *AppManifest) GetCategoriesOk() ([]string, bool) {
 
 // HasCategories returns a boolean if a field has been set.
 func (o *AppManifest) HasCategories() bool {
-	if o != nil && o.Categories != nil {
+	if o != nil && !IsNil(o.Categories) {
 		return true
 	}
 
@@ -208,7 +211,7 @@ func (o *AppManifest) SetIconURL(v string) {
 
 // GetScreenshotURLs returns the ScreenshotURLs field value if set, zero value otherwise.
 func (o *AppManifest) GetScreenshotURLs() []string {
-	if o == nil || o.ScreenshotURLs == nil {
+	if o == nil || IsNil(o.ScreenshotURLs) {
 		var ret []string
 		return ret
 	}
@@ -218,7 +221,7 @@ func (o *AppManifest) GetScreenshotURLs() []string {
 // GetScreenshotURLsOk returns a tuple with the ScreenshotURLs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetScreenshotURLsOk() ([]string, bool) {
-	if o == nil || o.ScreenshotURLs == nil {
+	if o == nil || IsNil(o.ScreenshotURLs) {
 		return nil, false
 	}
 	return o.ScreenshotURLs, true
@@ -226,7 +229,7 @@ func (o *AppManifest) GetScreenshotURLsOk() ([]string, bool) {
 
 // HasScreenshotURLs returns a boolean if a field has been set.
 func (o *AppManifest) HasScreenshotURLs() bool {
-	if o != nil && o.ScreenshotURLs != nil {
+	if o != nil && !IsNil(o.ScreenshotURLs) {
 		return true
 	}
 
@@ -240,7 +243,7 @@ func (o *AppManifest) SetScreenshotURLs(v []string) {
 
 // GetHelpURL returns the HelpURL field value if set, zero value otherwise.
 func (o *AppManifest) GetHelpURL() string {
-	if o == nil || o.HelpURL == nil {
+	if o == nil || IsNil(o.HelpURL) {
 		var ret string
 		return ret
 	}
@@ -250,7 +253,7 @@ func (o *AppManifest) GetHelpURL() string {
 // GetHelpURLOk returns a tuple with the HelpURL field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetHelpURLOk() (*string, bool) {
-	if o == nil || o.HelpURL == nil {
+	if o == nil || IsNil(o.HelpURL) {
 		return nil, false
 	}
 	return o.HelpURL, true
@@ -258,7 +261,7 @@ func (o *AppManifest) GetHelpURLOk() (*string, bool) {
 
 // HasHelpURL returns a boolean if a field has been set.
 func (o *AppManifest) HasHelpURL() bool {
-	if o != nil && o.HelpURL != nil {
+	if o != nil && !IsNil(o.HelpURL) {
 		return true
 	}
 
@@ -272,7 +275,7 @@ func (o *AppManifest) SetHelpURL(v string) {
 
 // GetHelpDocIdMap returns the HelpDocIdMap field value if set, zero value otherwise.
 func (o *AppManifest) GetHelpDocIdMap() map[string]string {
-	if o == nil || o.HelpDocIdMap == nil {
+	if o == nil || IsNil(o.HelpDocIdMap) {
 		var ret map[string]string
 		return ret
 	}
@@ -282,7 +285,7 @@ func (o *AppManifest) GetHelpDocIdMap() map[string]string {
 // GetHelpDocIdMapOk returns a tuple with the HelpDocIdMap field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetHelpDocIdMapOk() (*map[string]string, bool) {
-	if o == nil || o.HelpDocIdMap == nil {
+	if o == nil || IsNil(o.HelpDocIdMap) {
 		return nil, false
 	}
 	return o.HelpDocIdMap, true
@@ -290,7 +293,7 @@ func (o *AppManifest) GetHelpDocIdMapOk() (*map[string]string, bool) {
 
 // HasHelpDocIdMap returns a boolean if a field has been set.
 func (o *AppManifest) HasHelpDocIdMap() bool {
-	if o != nil && o.HelpDocIdMap != nil {
+	if o != nil && !IsNil(o.HelpDocIdMap) {
 		return true
 	}
 
@@ -304,7 +307,7 @@ func (o *AppManifest) SetHelpDocIdMap(v map[string]string) {
 
 // GetCommunityURL returns the CommunityURL field value if set, zero value otherwise.
 func (o *AppManifest) GetCommunityURL() string {
-	if o == nil || o.CommunityURL == nil {
+	if o == nil || IsNil(o.CommunityURL) {
 		var ret string
 		return ret
 	}
@@ -314,7 +317,7 @@ func (o *AppManifest) GetCommunityURL() string {
 // GetCommunityURLOk returns a tuple with the CommunityURL field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetCommunityURLOk() (*string, bool) {
-	if o == nil || o.CommunityURL == nil {
+	if o == nil || IsNil(o.CommunityURL) {
 		return nil, false
 	}
 	return o.CommunityURL, true
@@ -322,7 +325,7 @@ func (o *AppManifest) GetCommunityURLOk() (*string, bool) {
 
 // HasCommunityURL returns a boolean if a field has been set.
 func (o *AppManifest) HasCommunityURL() bool {
-	if o != nil && o.CommunityURL != nil {
+	if o != nil && !IsNil(o.CommunityURL) {
 		return true
 	}
 
@@ -336,7 +339,7 @@ func (o *AppManifest) SetCommunityURL(v string) {
 
 // GetRequirements returns the Requirements field value if set, zero value otherwise.
 func (o *AppManifest) GetRequirements() []string {
-	if o == nil || o.Requirements == nil {
+	if o == nil || IsNil(o.Requirements) {
 		var ret []string
 		return ret
 	}
@@ -346,7 +349,7 @@ func (o *AppManifest) GetRequirements() []string {
 // GetRequirementsOk returns a tuple with the Requirements field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetRequirementsOk() ([]string, bool) {
-	if o == nil || o.Requirements == nil {
+	if o == nil || IsNil(o.Requirements) {
 		return nil, false
 	}
 	return o.Requirements, true
@@ -354,7 +357,7 @@ func (o *AppManifest) GetRequirementsOk() ([]string, bool) {
 
 // HasRequirements returns a boolean if a field has been set.
 func (o *AppManifest) HasRequirements() bool {
-	if o != nil && o.Requirements != nil {
+	if o != nil && !IsNil(o.Requirements) {
 		return true
 	}
 
@@ -368,7 +371,7 @@ func (o *AppManifest) SetRequirements(v []string) {
 
 // GetAccountTypes returns the AccountTypes field value if set, zero value otherwise.
 func (o *AppManifest) GetAccountTypes() []string {
-	if o == nil || o.AccountTypes == nil {
+	if o == nil || IsNil(o.AccountTypes) {
 		var ret []string
 		return ret
 	}
@@ -378,7 +381,7 @@ func (o *AppManifest) GetAccountTypes() []string {
 // GetAccountTypesOk returns a tuple with the AccountTypes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetAccountTypesOk() ([]string, bool) {
-	if o == nil || o.AccountTypes == nil {
+	if o == nil || IsNil(o.AccountTypes) {
 		return nil, false
 	}
 	return o.AccountTypes, true
@@ -386,7 +389,7 @@ func (o *AppManifest) GetAccountTypesOk() ([]string, bool) {
 
 // HasAccountTypes returns a boolean if a field has been set.
 func (o *AppManifest) HasAccountTypes() bool {
-	if o != nil && o.AccountTypes != nil {
+	if o != nil && !IsNil(o.AccountTypes) {
 		return true
 	}
 
@@ -400,7 +403,7 @@ func (o *AppManifest) SetAccountTypes(v []string) {
 
 // GetRequiresInstallationInstructions returns the RequiresInstallationInstructions field value if set, zero value otherwise.
 func (o *AppManifest) GetRequiresInstallationInstructions() bool {
-	if o == nil || o.RequiresInstallationInstructions == nil {
+	if o == nil || IsNil(o.RequiresInstallationInstructions) {
 		var ret bool
 		return ret
 	}
@@ -410,7 +413,7 @@ func (o *AppManifest) GetRequiresInstallationInstructions() bool {
 // GetRequiresInstallationInstructionsOk returns a tuple with the RequiresInstallationInstructions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetRequiresInstallationInstructionsOk() (*bool, bool) {
-	if o == nil || o.RequiresInstallationInstructions == nil {
+	if o == nil || IsNil(o.RequiresInstallationInstructions) {
 		return nil, false
 	}
 	return o.RequiresInstallationInstructions, true
@@ -418,7 +421,7 @@ func (o *AppManifest) GetRequiresInstallationInstructionsOk() (*bool, bool) {
 
 // HasRequiresInstallationInstructions returns a boolean if a field has been set.
 func (o *AppManifest) HasRequiresInstallationInstructions() bool {
-	if o != nil && o.RequiresInstallationInstructions != nil {
+	if o != nil && !IsNil(o.RequiresInstallationInstructions) {
 		return true
 	}
 
@@ -432,7 +435,7 @@ func (o *AppManifest) SetRequiresInstallationInstructions(v bool) {
 
 // GetInstallationInstructions returns the InstallationInstructions field value if set, zero value otherwise.
 func (o *AppManifest) GetInstallationInstructions() string {
-	if o == nil || o.InstallationInstructions == nil {
+	if o == nil || IsNil(o.InstallationInstructions) {
 		var ret string
 		return ret
 	}
@@ -442,7 +445,7 @@ func (o *AppManifest) GetInstallationInstructions() string {
 // GetInstallationInstructionsOk returns a tuple with the InstallationInstructions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetInstallationInstructionsOk() (*string, bool) {
-	if o == nil || o.InstallationInstructions == nil {
+	if o == nil || IsNil(o.InstallationInstructions) {
 		return nil, false
 	}
 	return o.InstallationInstructions, true
@@ -450,7 +453,7 @@ func (o *AppManifest) GetInstallationInstructionsOk() (*string, bool) {
 
 // HasInstallationInstructions returns a boolean if a field has been set.
 func (o *AppManifest) HasInstallationInstructions() bool {
-	if o != nil && o.InstallationInstructions != nil {
+	if o != nil && !IsNil(o.InstallationInstructions) {
 		return true
 	}
 
@@ -464,7 +467,7 @@ func (o *AppManifest) SetInstallationInstructions(v string) {
 
 // GetParameters returns the Parameters field value if set, zero value otherwise.
 func (o *AppManifest) GetParameters() []ServiceManifestDataSourceParameter {
-	if o == nil || o.Parameters == nil {
+	if o == nil || IsNil(o.Parameters) {
 		var ret []ServiceManifestDataSourceParameter
 		return ret
 	}
@@ -474,7 +477,7 @@ func (o *AppManifest) GetParameters() []ServiceManifestDataSourceParameter {
 // GetParametersOk returns a tuple with the Parameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetParametersOk() ([]ServiceManifestDataSourceParameter, bool) {
-	if o == nil || o.Parameters == nil {
+	if o == nil || IsNil(o.Parameters) {
 		return nil, false
 	}
 	return o.Parameters, true
@@ -482,7 +485,7 @@ func (o *AppManifest) GetParametersOk() ([]ServiceManifestDataSourceParameter, b
 
 // HasParameters returns a boolean if a field has been set.
 func (o *AppManifest) HasParameters() bool {
-	if o != nil && o.Parameters != nil {
+	if o != nil && !IsNil(o.Parameters) {
 		return true
 	}
 
@@ -496,7 +499,7 @@ func (o *AppManifest) SetParameters(v []ServiceManifestDataSourceParameter) {
 
 // GetAuthor returns the Author field value if set, zero value otherwise.
 func (o *AppManifest) GetAuthor() string {
-	if o == nil || o.Author == nil {
+	if o == nil || IsNil(o.Author) {
 		var ret string
 		return ret
 	}
@@ -506,7 +509,7 @@ func (o *AppManifest) GetAuthor() string {
 // GetAuthorOk returns a tuple with the Author field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetAuthorOk() (*string, bool) {
-	if o == nil || o.Author == nil {
+	if o == nil || IsNil(o.Author) {
 		return nil, false
 	}
 	return o.Author, true
@@ -514,7 +517,7 @@ func (o *AppManifest) GetAuthorOk() (*string, bool) {
 
 // HasAuthor returns a boolean if a field has been set.
 func (o *AppManifest) HasAuthor() bool {
-	if o != nil && o.Author != nil {
+	if o != nil && !IsNil(o.Author) {
 		return true
 	}
 
@@ -528,7 +531,7 @@ func (o *AppManifest) SetAuthor(v string) {
 
 // GetAuthorWebsite returns the AuthorWebsite field value if set, zero value otherwise.
 func (o *AppManifest) GetAuthorWebsite() string {
-	if o == nil || o.AuthorWebsite == nil {
+	if o == nil || IsNil(o.AuthorWebsite) {
 		var ret string
 		return ret
 	}
@@ -538,7 +541,7 @@ func (o *AppManifest) GetAuthorWebsite() string {
 // GetAuthorWebsiteOk returns a tuple with the AuthorWebsite field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppManifest) GetAuthorWebsiteOk() (*string, bool) {
-	if o == nil || o.AuthorWebsite == nil {
+	if o == nil || IsNil(o.AuthorWebsite) {
 		return nil, false
 	}
 	return o.AuthorWebsite, true
@@ -546,7 +549,7 @@ func (o *AppManifest) GetAuthorWebsiteOk() (*string, bool) {
 
 // HasAuthorWebsite returns a boolean if a field has been set.
 func (o *AppManifest) HasAuthorWebsite() bool {
-	if o != nil && o.AuthorWebsite != nil {
+	if o != nil && !IsNil(o.AuthorWebsite) {
 		return true
 	}
 
@@ -559,56 +562,58 @@ func (o *AppManifest) SetAuthorWebsite(v string) {
 }
 
 func (o AppManifest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Family != nil {
-		toSerialize["family"] = o.Family
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if o.Categories != nil {
-		toSerialize["categories"] = o.Categories
-	}
-	if true {
-		toSerialize["hoverText"] = o.HoverText
-	}
-	if true {
-		toSerialize["iconURL"] = o.IconURL
-	}
-	if o.ScreenshotURLs != nil {
-		toSerialize["screenshotURLs"] = o.ScreenshotURLs
-	}
-	if o.HelpURL != nil {
-		toSerialize["helpURL"] = o.HelpURL
-	}
-	if o.HelpDocIdMap != nil {
-		toSerialize["helpDocIdMap"] = o.HelpDocIdMap
-	}
-	if o.CommunityURL != nil {
-		toSerialize["communityURL"] = o.CommunityURL
-	}
-	if o.Requirements != nil {
-		toSerialize["requirements"] = o.Requirements
-	}
-	if o.AccountTypes != nil {
-		toSerialize["accountTypes"] = o.AccountTypes
-	}
-	if o.RequiresInstallationInstructions != nil {
-		toSerialize["requiresInstallationInstructions"] = o.RequiresInstallationInstructions
-	}
-	if o.InstallationInstructions != nil {
-		toSerialize["installationInstructions"] = o.InstallationInstructions
-	}
-	if o.Parameters != nil {
-		toSerialize["parameters"] = o.Parameters
-	}
-	if o.Author != nil {
-		toSerialize["author"] = o.Author
-	}
-	if o.AuthorWebsite != nil {
-		toSerialize["authorWebsite"] = o.AuthorWebsite
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppManifest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Family) {
+		toSerialize["family"] = o.Family
+	}
+	toSerialize["description"] = o.Description
+	if !IsNil(o.Categories) {
+		toSerialize["categories"] = o.Categories
+	}
+	toSerialize["hoverText"] = o.HoverText
+	toSerialize["iconURL"] = o.IconURL
+	if !IsNil(o.ScreenshotURLs) {
+		toSerialize["screenshotURLs"] = o.ScreenshotURLs
+	}
+	if !IsNil(o.HelpURL) {
+		toSerialize["helpURL"] = o.HelpURL
+	}
+	if !IsNil(o.HelpDocIdMap) {
+		toSerialize["helpDocIdMap"] = o.HelpDocIdMap
+	}
+	if !IsNil(o.CommunityURL) {
+		toSerialize["communityURL"] = o.CommunityURL
+	}
+	if !IsNil(o.Requirements) {
+		toSerialize["requirements"] = o.Requirements
+	}
+	if !IsNil(o.AccountTypes) {
+		toSerialize["accountTypes"] = o.AccountTypes
+	}
+	if !IsNil(o.RequiresInstallationInstructions) {
+		toSerialize["requiresInstallationInstructions"] = o.RequiresInstallationInstructions
+	}
+	if !IsNil(o.InstallationInstructions) {
+		toSerialize["installationInstructions"] = o.InstallationInstructions
+	}
+	if !IsNil(o.Parameters) {
+		toSerialize["parameters"] = o.Parameters
+	}
+	if !IsNil(o.Author) {
+		toSerialize["author"] = o.Author
+	}
+	if !IsNil(o.AuthorWebsite) {
+		toSerialize["authorWebsite"] = o.AuthorWebsite
+	}
+	return toSerialize, nil
 }
 
 type NullableAppManifest struct {

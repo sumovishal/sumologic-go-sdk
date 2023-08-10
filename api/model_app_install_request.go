@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the AppInstallRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AppInstallRequest{}
 
 // AppInstallRequest JSON object containing name, description, destinationFolderId, and dataSourceType.
 type AppInstallRequest struct {
@@ -120,7 +123,7 @@ func (o *AppInstallRequest) SetDestinationFolderId(v string) {
 
 // GetDataSourceValues returns the DataSourceValues field value if set, zero value otherwise.
 func (o *AppInstallRequest) GetDataSourceValues() map[string]string {
-	if o == nil || o.DataSourceValues == nil {
+	if o == nil || IsNil(o.DataSourceValues) {
 		var ret map[string]string
 		return ret
 	}
@@ -130,7 +133,7 @@ func (o *AppInstallRequest) GetDataSourceValues() map[string]string {
 // GetDataSourceValuesOk returns a tuple with the DataSourceValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AppInstallRequest) GetDataSourceValuesOk() (*map[string]string, bool) {
-	if o == nil || o.DataSourceValues == nil {
+	if o == nil || IsNil(o.DataSourceValues) {
 		return nil, false
 	}
 	return o.DataSourceValues, true
@@ -138,7 +141,7 @@ func (o *AppInstallRequest) GetDataSourceValuesOk() (*map[string]string, bool) {
 
 // HasDataSourceValues returns a boolean if a field has been set.
 func (o *AppInstallRequest) HasDataSourceValues() bool {
-	if o != nil && o.DataSourceValues != nil {
+	if o != nil && !IsNil(o.DataSourceValues) {
 		return true
 	}
 
@@ -151,20 +154,22 @@ func (o *AppInstallRequest) SetDataSourceValues(v map[string]string) {
 }
 
 func (o AppInstallRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["destinationFolderId"] = o.DestinationFolderId
-	}
-	if o.DataSourceValues != nil {
-		toSerialize["dataSourceValues"] = o.DataSourceValues
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AppInstallRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["description"] = o.Description
+	toSerialize["destinationFolderId"] = o.DestinationFolderId
+	if !IsNil(o.DataSourceValues) {
+		toSerialize["dataSourceValues"] = o.DataSourceValues
+	}
+	return toSerialize, nil
 }
 
 type NullableAppInstallRequest struct {

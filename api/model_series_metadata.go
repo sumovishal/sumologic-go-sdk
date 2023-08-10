@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the SeriesMetadata type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &SeriesMetadata{}
 
 // SeriesMetadata The metadata of time series for chart.
 type SeriesMetadata struct {
@@ -41,7 +44,7 @@ func NewSeriesMetadataWithDefaults() *SeriesMetadata {
 
 // GetRowId returns the RowId field value if set, zero value otherwise.
 func (o *SeriesMetadata) GetRowId() string {
-	if o == nil || o.RowId == nil {
+	if o == nil || IsNil(o.RowId) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *SeriesMetadata) GetRowId() string {
 // GetRowIdOk returns a tuple with the RowId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SeriesMetadata) GetRowIdOk() (*string, bool) {
-	if o == nil || o.RowId == nil {
+	if o == nil || IsNil(o.RowId) {
 		return nil, false
 	}
 	return o.RowId, true
@@ -59,7 +62,7 @@ func (o *SeriesMetadata) GetRowIdOk() (*string, bool) {
 
 // HasRowId returns a boolean if a field has been set.
 func (o *SeriesMetadata) HasRowId() bool {
-	if o != nil && o.RowId != nil {
+	if o != nil && !IsNil(o.RowId) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *SeriesMetadata) SetRowId(v string) {
 
 // GetDimensions returns the Dimensions field value if set, zero value otherwise.
 func (o *SeriesMetadata) GetDimensions() []DimensionKeyValue {
-	if o == nil || o.Dimensions == nil {
+	if o == nil || IsNil(o.Dimensions) {
 		var ret []DimensionKeyValue
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *SeriesMetadata) GetDimensions() []DimensionKeyValue {
 // GetDimensionsOk returns a tuple with the Dimensions field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *SeriesMetadata) GetDimensionsOk() ([]DimensionKeyValue, bool) {
-	if o == nil || o.Dimensions == nil {
+	if o == nil || IsNil(o.Dimensions) {
 		return nil, false
 	}
 	return o.Dimensions, true
@@ -91,7 +94,7 @@ func (o *SeriesMetadata) GetDimensionsOk() ([]DimensionKeyValue, bool) {
 
 // HasDimensions returns a boolean if a field has been set.
 func (o *SeriesMetadata) HasDimensions() bool {
-	if o != nil && o.Dimensions != nil {
+	if o != nil && !IsNil(o.Dimensions) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *SeriesMetadata) SetDimensions(v []DimensionKeyValue) {
 }
 
 func (o SeriesMetadata) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.RowId != nil {
-		toSerialize["rowId"] = o.RowId
-	}
-	if o.Dimensions != nil {
-		toSerialize["dimensions"] = o.Dimensions
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o SeriesMetadata) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.RowId) {
+		toSerialize["rowId"] = o.RowId
+	}
+	if !IsNil(o.Dimensions) {
+		toSerialize["dimensions"] = o.Dimensions
+	}
+	return toSerialize, nil
 }
 
 type NullableSeriesMetadata struct {

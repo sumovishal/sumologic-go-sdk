@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the VisualDataSeries type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &VisualDataSeries{}
 
 // VisualDataSeries struct for VisualDataSeries
 type VisualDataSeries struct {
@@ -131,7 +134,7 @@ func (o *VisualDataSeries) SetDataPoints(v []VisualPointData) {
 
 // GetAggregateInfo returns the AggregateInfo field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetAggregateInfo() VisualAggregateData {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		var ret VisualAggregateData
 		return ret
 	}
@@ -141,7 +144,7 @@ func (o *VisualDataSeries) GetAggregateInfo() VisualAggregateData {
 // GetAggregateInfoOk returns a tuple with the AggregateInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetAggregateInfoOk() (*VisualAggregateData, bool) {
-	if o == nil || o.AggregateInfo == nil {
+	if o == nil || IsNil(o.AggregateInfo) {
 		return nil, false
 	}
 	return o.AggregateInfo, true
@@ -149,7 +152,7 @@ func (o *VisualDataSeries) GetAggregateInfoOk() (*VisualAggregateData, bool) {
 
 // HasAggregateInfo returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasAggregateInfo() bool {
-	if o != nil && o.AggregateInfo != nil {
+	if o != nil && !IsNil(o.AggregateInfo) {
 		return true
 	}
 
@@ -163,7 +166,7 @@ func (o *VisualDataSeries) SetAggregateInfo(v VisualAggregateData) {
 
 // GetMetaData returns the MetaData field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetMetaData() VisualMetaData {
-	if o == nil || o.MetaData == nil {
+	if o == nil || IsNil(o.MetaData) {
 		var ret VisualMetaData
 		return ret
 	}
@@ -173,7 +176,7 @@ func (o *VisualDataSeries) GetMetaData() VisualMetaData {
 // GetMetaDataOk returns a tuple with the MetaData field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetMetaDataOk() (*VisualMetaData, bool) {
-	if o == nil || o.MetaData == nil {
+	if o == nil || IsNil(o.MetaData) {
 		return nil, false
 	}
 	return o.MetaData, true
@@ -181,7 +184,7 @@ func (o *VisualDataSeries) GetMetaDataOk() (*VisualMetaData, bool) {
 
 // HasMetaData returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasMetaData() bool {
-	if o != nil && o.MetaData != nil {
+	if o != nil && !IsNil(o.MetaData) {
 		return true
 	}
 
@@ -195,7 +198,7 @@ func (o *VisualDataSeries) SetMetaData(v VisualMetaData) {
 
 // GetSeriesType returns the SeriesType field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetSeriesType() string {
-	if o == nil || o.SeriesType == nil {
+	if o == nil || IsNil(o.SeriesType) {
 		var ret string
 		return ret
 	}
@@ -205,7 +208,7 @@ func (o *VisualDataSeries) GetSeriesType() string {
 // GetSeriesTypeOk returns a tuple with the SeriesType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetSeriesTypeOk() (*string, bool) {
-	if o == nil || o.SeriesType == nil {
+	if o == nil || IsNil(o.SeriesType) {
 		return nil, false
 	}
 	return o.SeriesType, true
@@ -213,7 +216,7 @@ func (o *VisualDataSeries) GetSeriesTypeOk() (*string, bool) {
 
 // HasSeriesType returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasSeriesType() bool {
-	if o != nil && o.SeriesType != nil {
+	if o != nil && !IsNil(o.SeriesType) {
 		return true
 	}
 
@@ -227,7 +230,7 @@ func (o *VisualDataSeries) SetSeriesType(v string) {
 
 // GetXAxisKeys returns the XAxisKeys field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetXAxisKeys() []string {
-	if o == nil || o.XAxisKeys == nil {
+	if o == nil || IsNil(o.XAxisKeys) {
 		var ret []string
 		return ret
 	}
@@ -237,7 +240,7 @@ func (o *VisualDataSeries) GetXAxisKeys() []string {
 // GetXAxisKeysOk returns a tuple with the XAxisKeys field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetXAxisKeysOk() ([]string, bool) {
-	if o == nil || o.XAxisKeys == nil {
+	if o == nil || IsNil(o.XAxisKeys) {
 		return nil, false
 	}
 	return o.XAxisKeys, true
@@ -245,7 +248,7 @@ func (o *VisualDataSeries) GetXAxisKeysOk() ([]string, bool) {
 
 // HasXAxisKeys returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasXAxisKeys() bool {
-	if o != nil && o.XAxisKeys != nil {
+	if o != nil && !IsNil(o.XAxisKeys) {
 		return true
 	}
 
@@ -259,7 +262,7 @@ func (o *VisualDataSeries) SetXAxisKeys(v []string) {
 
 // GetValueType returns the ValueType field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetValueType() string {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		var ret string
 		return ret
 	}
@@ -269,7 +272,7 @@ func (o *VisualDataSeries) GetValueType() string {
 // GetValueTypeOk returns a tuple with the ValueType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetValueTypeOk() (*string, bool) {
-	if o == nil || o.ValueType == nil {
+	if o == nil || IsNil(o.ValueType) {
 		return nil, false
 	}
 	return o.ValueType, true
@@ -277,7 +280,7 @@ func (o *VisualDataSeries) GetValueTypeOk() (*string, bool) {
 
 // HasValueType returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasValueType() bool {
-	if o != nil && o.ValueType != nil {
+	if o != nil && !IsNil(o.ValueType) {
 		return true
 	}
 
@@ -291,7 +294,7 @@ func (o *VisualDataSeries) SetValueType(v string) {
 
 // GetSource returns the Source field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetSource() string {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		var ret string
 		return ret
 	}
@@ -301,7 +304,7 @@ func (o *VisualDataSeries) GetSource() string {
 // GetSourceOk returns a tuple with the Source field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetSourceOk() (*string, bool) {
-	if o == nil || o.Source == nil {
+	if o == nil || IsNil(o.Source) {
 		return nil, false
 	}
 	return o.Source, true
@@ -309,7 +312,7 @@ func (o *VisualDataSeries) GetSourceOk() (*string, bool) {
 
 // HasSource returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasSource() bool {
-	if o != nil && o.Source != nil {
+	if o != nil && !IsNil(o.Source) {
 		return true
 	}
 
@@ -323,7 +326,7 @@ func (o *VisualDataSeries) SetSource(v string) {
 
 // GetXAxisKeyTypes returns the XAxisKeyTypes field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetXAxisKeyTypes() map[string]string {
-	if o == nil || o.XAxisKeyTypes == nil {
+	if o == nil || IsNil(o.XAxisKeyTypes) {
 		var ret map[string]string
 		return ret
 	}
@@ -333,7 +336,7 @@ func (o *VisualDataSeries) GetXAxisKeyTypes() map[string]string {
 // GetXAxisKeyTypesOk returns a tuple with the XAxisKeyTypes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetXAxisKeyTypesOk() (*map[string]string, bool) {
-	if o == nil || o.XAxisKeyTypes == nil {
+	if o == nil || IsNil(o.XAxisKeyTypes) {
 		return nil, false
 	}
 	return o.XAxisKeyTypes, true
@@ -341,7 +344,7 @@ func (o *VisualDataSeries) GetXAxisKeyTypesOk() (*map[string]string, bool) {
 
 // HasXAxisKeyTypes returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasXAxisKeyTypes() bool {
-	if o != nil && o.XAxisKeyTypes != nil {
+	if o != nil && !IsNil(o.XAxisKeyTypes) {
 		return true
 	}
 
@@ -355,7 +358,7 @@ func (o *VisualDataSeries) SetXAxisKeyTypes(v map[string]string) {
 
 // GetQueryInfo returns the QueryInfo field value if set, zero value otherwise.
 func (o *VisualDataSeries) GetQueryInfo() MetricsQueryResultInfo {
-	if o == nil || o.QueryInfo == nil {
+	if o == nil || IsNil(o.QueryInfo) {
 		var ret MetricsQueryResultInfo
 		return ret
 	}
@@ -365,7 +368,7 @@ func (o *VisualDataSeries) GetQueryInfo() MetricsQueryResultInfo {
 // GetQueryInfoOk returns a tuple with the QueryInfo field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *VisualDataSeries) GetQueryInfoOk() (*MetricsQueryResultInfo, bool) {
-	if o == nil || o.QueryInfo == nil {
+	if o == nil || IsNil(o.QueryInfo) {
 		return nil, false
 	}
 	return o.QueryInfo, true
@@ -373,7 +376,7 @@ func (o *VisualDataSeries) GetQueryInfoOk() (*MetricsQueryResultInfo, bool) {
 
 // HasQueryInfo returns a boolean if a field has been set.
 func (o *VisualDataSeries) HasQueryInfo() bool {
-	if o != nil && o.QueryInfo != nil {
+	if o != nil && !IsNil(o.QueryInfo) {
 		return true
 	}
 
@@ -386,41 +389,43 @@ func (o *VisualDataSeries) SetQueryInfo(v MetricsQueryResultInfo) {
 }
 
 func (o VisualDataSeries) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryId"] = o.QueryId
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["dataPoints"] = o.DataPoints
-	}
-	if o.AggregateInfo != nil {
-		toSerialize["aggregateInfo"] = o.AggregateInfo
-	}
-	if o.MetaData != nil {
-		toSerialize["metaData"] = o.MetaData
-	}
-	if o.SeriesType != nil {
-		toSerialize["seriesType"] = o.SeriesType
-	}
-	if o.XAxisKeys != nil {
-		toSerialize["xAxisKeys"] = o.XAxisKeys
-	}
-	if o.ValueType != nil {
-		toSerialize["valueType"] = o.ValueType
-	}
-	if o.Source != nil {
-		toSerialize["source"] = o.Source
-	}
-	if o.XAxisKeyTypes != nil {
-		toSerialize["xAxisKeyTypes"] = o.XAxisKeyTypes
-	}
-	if o.QueryInfo != nil {
-		toSerialize["queryInfo"] = o.QueryInfo
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o VisualDataSeries) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryId"] = o.QueryId
+	toSerialize["name"] = o.Name
+	toSerialize["dataPoints"] = o.DataPoints
+	if !IsNil(o.AggregateInfo) {
+		toSerialize["aggregateInfo"] = o.AggregateInfo
+	}
+	if !IsNil(o.MetaData) {
+		toSerialize["metaData"] = o.MetaData
+	}
+	if !IsNil(o.SeriesType) {
+		toSerialize["seriesType"] = o.SeriesType
+	}
+	if !IsNil(o.XAxisKeys) {
+		toSerialize["xAxisKeys"] = o.XAxisKeys
+	}
+	if !IsNil(o.ValueType) {
+		toSerialize["valueType"] = o.ValueType
+	}
+	if !IsNil(o.Source) {
+		toSerialize["source"] = o.Source
+	}
+	if !IsNil(o.XAxisKeyTypes) {
+		toSerialize["xAxisKeyTypes"] = o.XAxisKeyTypes
+	}
+	if !IsNil(o.QueryInfo) {
+		toSerialize["queryInfo"] = o.QueryInfo
+	}
+	return toSerialize, nil
 }
 
 type NullableVisualDataSeries struct {

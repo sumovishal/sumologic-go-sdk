@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the FolderAllOf type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &FolderAllOf{}
 
 // FolderAllOf struct for FolderAllOf
 type FolderAllOf struct {
@@ -41,7 +44,7 @@ func NewFolderAllOfWithDefaults() *FolderAllOf {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *FolderAllOf) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *FolderAllOf) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *FolderAllOf) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -59,7 +62,7 @@ func (o *FolderAllOf) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *FolderAllOf) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *FolderAllOf) SetDescription(v string) {
 
 // GetChildren returns the Children field value if set, zero value otherwise.
 func (o *FolderAllOf) GetChildren() []Content {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		var ret []Content
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *FolderAllOf) GetChildren() []Content {
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *FolderAllOf) GetChildrenOk() ([]Content, bool) {
-	if o == nil || o.Children == nil {
+	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
 	return o.Children, true
@@ -91,7 +94,7 @@ func (o *FolderAllOf) GetChildrenOk() ([]Content, bool) {
 
 // HasChildren returns a boolean if a field has been set.
 func (o *FolderAllOf) HasChildren() bool {
-	if o != nil && o.Children != nil {
+	if o != nil && !IsNil(o.Children) {
 		return true
 	}
 
@@ -104,14 +107,22 @@ func (o *FolderAllOf) SetChildren(v []Content) {
 }
 
 func (o FolderAllOf) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Children != nil {
-		toSerialize["children"] = o.Children
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o FolderAllOf) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Children) {
+		toSerialize["children"] = o.Children
+	}
+	return toSerialize, nil
 }
 
 type NullableFolderAllOf struct {

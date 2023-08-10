@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the ProductVariable type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProductVariable{}
 
 // ProductVariable Details of product variable and its quantity.
 type ProductVariable struct {
@@ -144,20 +147,20 @@ func (o *ProductVariable) SetPossibleValues(v []int64) {
 }
 
 func (o ProductVariable) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["productVariableName"] = o.ProductVariableName
-	}
-	if true {
-		toSerialize["productVariableId"] = o.ProductVariableId
-	}
-	if true {
-		toSerialize["unit"] = o.Unit
-	}
-	if true {
-		toSerialize["possibleValues"] = o.PossibleValues
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ProductVariable) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["productVariableName"] = o.ProductVariableName
+	toSerialize["productVariableId"] = o.ProductVariableId
+	toSerialize["unit"] = o.Unit
+	toSerialize["possibleValues"] = o.PossibleValues
+	return toSerialize, nil
 }
 
 type NullableProductVariable struct {

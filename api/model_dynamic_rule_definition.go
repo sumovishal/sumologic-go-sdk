@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -13,6 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 )
+
+// checks if the DynamicRuleDefinition type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DynamicRuleDefinition{}
 
 // DynamicRuleDefinition struct for DynamicRuleDefinition
 type DynamicRuleDefinition struct {
@@ -119,17 +122,19 @@ func (o *DynamicRuleDefinition) SetEnabled(v bool) {
 }
 
 func (o DynamicRuleDefinition) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["scope"] = o.Scope
-	}
-	if true {
-		toSerialize["enabled"] = o.Enabled
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DynamicRuleDefinition) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["scope"] = o.Scope
+	toSerialize["enabled"] = o.Enabled
+	return toSerialize, nil
 }
 
 type NullableDynamicRuleDefinition struct {

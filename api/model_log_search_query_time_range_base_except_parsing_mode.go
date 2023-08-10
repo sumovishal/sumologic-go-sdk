@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -14,15 +14,18 @@ import (
 	"encoding/json"
 )
 
-// LogSearchQueryTimeRangeBaseExceptParsingMode Definition of a log search with query and timerange.
+// checks if the LogSearchQueryTimeRangeBaseExceptParsingMode type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LogSearchQueryTimeRangeBaseExceptParsingMode{}
+
+// LogSearchQueryTimeRangeBaseExceptParsingMode Definition of the saved log search with query and timerange.
 type LogSearchQueryTimeRangeBaseExceptParsingMode struct {
 	// Query to perform.
 	QueryString string `json:"queryString"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	// This has the value `true` if the search is to be run by receipt time and `false` if it is to be run by message time.
 	RunByReceiptTime *bool `json:"runByReceiptTime,omitempty"`
-	// Definition of the query parameters.
-	QueryParameters []LogSearchQueryParameterSyncDefinition `json:"queryParameters,omitempty"`
+	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
+	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
 }
 
 // NewLogSearchQueryTimeRangeBaseExceptParsingMode instantiates a new LogSearchQueryTimeRangeBaseExceptParsingMode object
@@ -98,7 +101,7 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetTimeRange(v Resolvable
 
 // GetRunByReceiptTime returns the RunByReceiptTime field value if set, zero value otherwise.
 func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetRunByReceiptTime() bool {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		var ret bool
 		return ret
 	}
@@ -108,7 +111,7 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetRunByReceiptTime() boo
 // GetRunByReceiptTimeOk returns a tuple with the RunByReceiptTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetRunByReceiptTimeOk() (*bool, bool) {
-	if o == nil || o.RunByReceiptTime == nil {
+	if o == nil || IsNil(o.RunByReceiptTime) {
 		return nil, false
 	}
 	return o.RunByReceiptTime, true
@@ -116,7 +119,7 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetRunByReceiptTimeOk() (
 
 // HasRunByReceiptTime returns a boolean if a field has been set.
 func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) HasRunByReceiptTime() bool {
-	if o != nil && o.RunByReceiptTime != nil {
+	if o != nil && !IsNil(o.RunByReceiptTime) {
 		return true
 	}
 
@@ -129,9 +132,9 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetRunByReceiptTime(v boo
 }
 
 // GetQueryParameters returns the QueryParameters field value if set, zero value otherwise.
-func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParameters() []LogSearchQueryParameterSyncDefinition {
-	if o == nil || o.QueryParameters == nil {
-		var ret []LogSearchQueryParameterSyncDefinition
+func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParameters() []LogSearchQueryParameterSyncDefinitionBase {
+	if o == nil || IsNil(o.QueryParameters) {
+		var ret []LogSearchQueryParameterSyncDefinitionBase
 		return ret
 	}
 	return o.QueryParameters
@@ -139,8 +142,8 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParameters() []Lo
 
 // GetQueryParametersOk returns a tuple with the QueryParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinition, bool) {
-	if o == nil || o.QueryParameters == nil {
+func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParametersOk() ([]LogSearchQueryParameterSyncDefinitionBase, bool) {
+	if o == nil || IsNil(o.QueryParameters) {
 		return nil, false
 	}
 	return o.QueryParameters, true
@@ -148,33 +151,37 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParametersOk() ([
 
 // HasQueryParameters returns a boolean if a field has been set.
 func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) HasQueryParameters() bool {
-	if o != nil && o.QueryParameters != nil {
+	if o != nil && !IsNil(o.QueryParameters) {
 		return true
 	}
 
 	return false
 }
 
-// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinition and assigns it to the QueryParameters field.
-func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetQueryParameters(v []LogSearchQueryParameterSyncDefinition) {
+// SetQueryParameters gets a reference to the given []LogSearchQueryParameterSyncDefinitionBase and assigns it to the QueryParameters field.
+func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetQueryParameters(v []LogSearchQueryParameterSyncDefinitionBase) {
 	o.QueryParameters = v
 }
 
 func (o LogSearchQueryTimeRangeBaseExceptParsingMode) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["queryString"] = o.QueryString
-	}
-	if true {
-		toSerialize["timeRange"] = o.TimeRange
-	}
-	if o.RunByReceiptTime != nil {
-		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
-	}
-	if o.QueryParameters != nil {
-		toSerialize["queryParameters"] = o.QueryParameters
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LogSearchQueryTimeRangeBaseExceptParsingMode) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["queryString"] = o.QueryString
+	toSerialize["timeRange"] = o.TimeRange
+	if !IsNil(o.RunByReceiptTime) {
+		toSerialize["runByReceiptTime"] = o.RunByReceiptTime
+	}
+	if !IsNil(o.QueryParameters) {
+		toSerialize["queryParameters"] = o.QueryParameters
+	}
+	return toSerialize, nil
 }
 
 type NullableLogSearchQueryTimeRangeBaseExceptParsingMode struct {
