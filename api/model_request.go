@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -19,6 +19,7 @@ var _ MappedNullable = &Request{}
 
 // Request Evaluate SLI using occurrences of successful events over compliance period.
 type Request struct {
+	Sli
 	// Type of Raw Data Queries for SLI (Logs/Metrics).
 	QueryType string `json:"queryType"`
 	// Queries for defining SLI.

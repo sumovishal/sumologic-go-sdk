@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -12,6 +12,7 @@ package sumologic
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the SlosLibraryFolderResponse type satisfies the MappedNullable interface at compile time

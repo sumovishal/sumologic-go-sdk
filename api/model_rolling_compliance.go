@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -19,6 +19,7 @@ var _ MappedNullable = &RollingCompliance{}
 
 // RollingCompliance Window for Rolling Compliance.
 type RollingCompliance struct {
+	Compliance
 	// Size of Rolling Window. Must be a multiple of days.
 	Size string `json:"size"`
 }

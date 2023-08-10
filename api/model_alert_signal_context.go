@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -19,6 +19,7 @@ var _ MappedNullable = &AlertSignalContext{}
 
 // AlertSignalContext Details of the alert signal context.
 type AlertSignalContext struct {
+	SignalContext
 	// Alert Identifier.
 	AlertId string `json:"alertId"`
 }

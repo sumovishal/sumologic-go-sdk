@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -19,6 +19,7 @@ var _ MappedNullable = &Monitor{}
 
 // Monitor SLI definition based on monitors.
 type Monitor struct {
+	Sli
 	// Monitors over which the SLO is defined.
 	MonitorTriggers []MonitorTrigger `json:"monitorTriggers"`
 }

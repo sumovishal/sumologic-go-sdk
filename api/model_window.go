@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+Go client for Sumo Logic API.
 
 API version: 1.0.0
 */
@@ -19,6 +19,7 @@ var _ MappedNullable = &Window{}
 
 // Window Evaluate SLI using successful or unsuccessful windows over compliance period.
 type Window struct {
+	Sli
 	// Type of Raw Data Queries for SLI (Logs/Metrics).
 	QueryType string `json:"queryType"`
 	// Queries for defining SLI.
