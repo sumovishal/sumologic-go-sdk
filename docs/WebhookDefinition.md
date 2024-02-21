@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **DefaultPayload** | **string** | Default payload of the webhook. | 
 **WebhookType** | Pointer to **string** | Type of webhook connection. Valid values are &#x60;AWSLambda&#x60;, &#x60;Azure&#x60;, &#x60;Datadog&#x60;, &#x60;HipChat&#x60;, &#x60;Jira&#x60;, &#x60;NewRelic&#x60;, &#x60;Opsgenie&#x60;, &#x60;PagerDuty&#x60;, &#x60;Slack&#x60;, &#x60;MicrosoftTeams&#x60;, &#x60;ServiceNow&#x60;, &#x60;SumoCloudSOAR&#x60; and &#x60;Webhook&#x60;. | [optional] 
 **ConnectionSubtype** | Pointer to **string** | The subtype of the connection. Valid values are &#x60;Event&#x60; or &#x60;Incident&#x60;. | [optional] 
+**ResolutionPayload** | Pointer to **string** | Resolution payload of the webhook. | [optional] 
 
 ## Methods
 
@@ -169,6 +170,31 @@ SetConnectionSubtype sets ConnectionSubtype field to given value.
 `func (o *WebhookDefinition) HasConnectionSubtype() bool`
 
 HasConnectionSubtype returns a boolean if a field has been set.
+
+### GetResolutionPayload
+
+`func (o *WebhookDefinition) GetResolutionPayload() string`
+
+GetResolutionPayload returns the ResolutionPayload field if non-nil, zero value otherwise.
+
+### GetResolutionPayloadOk
+
+`func (o *WebhookDefinition) GetResolutionPayloadOk() (*string, bool)`
+
+GetResolutionPayloadOk returns a tuple with the ResolutionPayload field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetResolutionPayload
+
+`func (o *WebhookDefinition) SetResolutionPayload(v string)`
+
+SetResolutionPayload sets ResolutionPayload field to given value.
+
+### HasResolutionPayload
+
+`func (o *WebhookDefinition) HasResolutionPayload() bool`
+
+HasResolutionPayload returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

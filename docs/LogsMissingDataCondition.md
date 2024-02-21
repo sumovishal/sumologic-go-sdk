@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TimeRange** | **string** | The relative time range of the monitor. Valid values of time ranges are &#x60;5m&#x60;, &#x60;10m&#x60;, &#x60;15m&#x60;, &#x60;30m&#x60;, &#x60;1h&#x60;, &#x60;3h&#x60;, &#x60;6h&#x60;, &#x60;12h&#x60;, or &#x60;24h&#x60;. | 
+**TimeRange** | **string** | The relative time range of the monitor. Valid values of time ranges are &#x60;-5m&#x60;, &#x60;-10m&#x60;, &#x60;-15m&#x60;, &#x60;-30m&#x60;, &#x60;-1h&#x60;, &#x60;-3h&#x60;, &#x60;-6h&#x60;, &#x60;-12h&#x60;, or &#x60;-24h&#x60;. | 
 
 ## Methods
 

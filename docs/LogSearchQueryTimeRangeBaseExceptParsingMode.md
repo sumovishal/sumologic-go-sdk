@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **QueryString** | **string** | Query to perform. | 
 **TimeRange** | [**ResolvableTimeRange**](ResolvableTimeRange.md) |  | 
 **RunByReceiptTime** | Pointer to **bool** | This has the value &#x60;true&#x60; if the search is to be run by receipt time and &#x60;false&#x60; if it is to be run by message time. | [optional] [default to false]
-**QueryParameters** | Pointer to [**[]LogSearchQueryParameterSyncDefinition**](LogSearchQueryParameterSyncDefinition.md) | Definition of the query parameters. | [optional] 
+**QueryParameters** | Pointer to [**[]LogSearchQueryParameterSyncDefinitionBase**](LogSearchQueryParameterSyncDefinitionBase.md) | Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/ | [optional] 
 
 ## Methods
 
@@ -95,20 +95,20 @@ HasRunByReceiptTime returns a boolean if a field has been set.
 
 ### GetQueryParameters
 
-`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParameters() []LogSearchQueryParameterSyncDefinition`
+`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParameters() []LogSearchQueryParameterSyncDefinitionBase`
 
 GetQueryParameters returns the QueryParameters field if non-nil, zero value otherwise.
 
 ### GetQueryParametersOk
 
-`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParametersOk() (*[]LogSearchQueryParameterSyncDefinition, bool)`
+`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) GetQueryParametersOk() (*[]LogSearchQueryParameterSyncDefinitionBase, bool)`
 
 GetQueryParametersOk returns a tuple with the QueryParameters field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetQueryParameters
 
-`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetQueryParameters(v []LogSearchQueryParameterSyncDefinition)`
+`func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) SetQueryParameters(v []LogSearchQueryParameterSyncDefinitionBase)`
 
 SetQueryParameters sets QueryParameters field to given value.
 

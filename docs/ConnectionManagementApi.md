@@ -31,7 +31,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -97,7 +97,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -106,7 +106,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.ConnectionManagementApi.DeleteConnection(context.Background(), id).Type_(type_).Execute()
+    r, err := apiClient.ConnectionManagementApi.DeleteConnection(context.Background(), id).Type_(type_).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ConnectionManagementApi.DeleteConnection``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -167,12 +167,12 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     id := "id_example" // string | Identifier of connection to return.
-    type_ := "type__example" // string | Type of connection to return. Valid values are `WebhookConnection`, `ServiceNowConnection`. (default to "WebhookConnection")
+    type_ := "type__example" // string | Type of connection to return. Valid values are `WebhookConnection`, `ServiceNowConnection`. (optional) (default to "WebhookConnection")
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
@@ -239,7 +239,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -305,7 +305,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -358,7 +358,7 @@ Name | Type | Description  | Notes
 
 ## TestConnection
 
-> TestConnectionResponse TestConnection(ctx).ConnectionDefinition(connectionDefinition).Execute()
+> TestConnectionResponse TestConnection(ctx).ConnectionDefinition(connectionDefinition).Functionalities(functionalities).ConnectionId(connectionId).Execute()
 
 Test a new connection url.
 
@@ -373,15 +373,17 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     connectionDefinition := *openapiclient.NewConnectionDefinition("Type_example", "Name_example") // ConnectionDefinition | Information about the new connection.
+    functionalities := []string{"Inner_example"} // []string | A comma-separated functionalities of webhook payload to test. Acceptable values: `alert`, `resolution`. (optional) (default to ["alert"])
+    connectionId := "0000000000123ABC" // string | Unique identifier of an existing connection to test. It should be provided when the request body of an existing connection contains masked authorization headers. If not provided, the authorization headers will not be correctly unmasked, and the test may fail due to unauthorized access. (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.ConnectionManagementApi.TestConnection(context.Background()).ConnectionDefinition(connectionDefinition).Execute()
+    resp, r, err := apiClient.ConnectionManagementApi.TestConnection(context.Background()).ConnectionDefinition(connectionDefinition).Functionalities(functionalities).ConnectionId(connectionId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ConnectionManagementApi.TestConnection``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -403,6 +405,8 @@ Other parameters are passed through a pointer to a apiTestConnectionRequest stru
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **connectionDefinition** | [**ConnectionDefinition**](ConnectionDefinition.md) | Information about the new connection. | 
+ **functionalities** | **[]string** | A comma-separated functionalities of webhook payload to test. Acceptable values: &#x60;alert&#x60;, &#x60;resolution&#x60;. | [default to [&quot;alert&quot;]]
+ **connectionId** | **string** | Unique identifier of an existing connection to test. It should be provided when the request body of an existing connection contains masked authorization headers. If not provided, the authorization headers will not be correctly unmasked, and the test may fail due to unauthorized access. | 
 
 ### Return type
 
@@ -439,7 +443,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {

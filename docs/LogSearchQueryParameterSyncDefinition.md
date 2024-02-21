@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | The name of the parameter. | 
 **Description** | Pointer to **string** | A description of the parameter. | [optional] 
-**DataType** | **string** | The data type of the parameter. Supported values are:   1. &#x60;NUMBER&#x60;   2. &#x60;STRING&#x60;   3. &#x60;QUERY_FRAGMENT&#x60;   4. &#x60;SEARCH_KEYWORD&#x60; | 
+**DataType** | **string** | The data type of the parameter. Supported values are:   1. &#x60;NUMBER&#x60;   2. &#x60;STRING&#x60;   3. &#x60;ANY&#x60;   4. &#x60;KEYWORD&#x60; | 
 **Value** | **string** | A value for the parameter. Should be compatible with the type set in dataType field. | 
 **AutoComplete** | [**LogSearchParameterAutoCompleteSyncDefinition**](LogSearchParameterAutoCompleteSyncDefinition.md) |  | 
 

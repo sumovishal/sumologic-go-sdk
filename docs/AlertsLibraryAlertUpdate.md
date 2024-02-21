@@ -16,11 +16,13 @@ Name | Type | Description | Notes
 **TriggerConditions** | Pointer to [**[]TriggerCondition**](TriggerCondition.md) | Trigger conditions which were breached to create this Alert. | [optional] 
 **TriggerValue** | Pointer to **float64** | The of the query result which breached the trigger condition. | [optional] 
 **MonitorType** | Pointer to **string** | The type of monitor. Valid values:   1. &#x60;Logs&#x60;: A logs query monitor.   2. &#x60;Metrics&#x60;: A metrics query monitor. | [optional] 
-**EntityIds** | Pointer to **[]string** | One or more entity identifiers involved in this Alert. | [optional] 
-**Entities** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) | One or more entity involved in this Alert. | [optional] 
+**EntityIds** | Pointer to **[]string** | One or more primary entity identifiers involved in this Alert. Primary/secondary entities are explained in description for &#x60;entities&#x60;. DEPRECATED, USE &#x60;entities&#x60; INSTEAD.  | [optional] 
+**Entities** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) | One or more primary entities involved in this Alert. Primary entity is the most concrete entity that can be assigned per time series or log group (e.g. k8s container), secondary entities are the less specific ones that can be assigned per that notification (e.g. k8s cluster or EC2 host).  | [optional] 
+**SecondaryEntities** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) | One or more secondary entity involved in this Alert. Primary/secondary entities are explained in description for &#x60;entities&#x60;  | [optional] [default to []]
 **Notes** | Pointer to **string** |  | [optional] 
 **ExtraDetails** | Pointer to [**ExtraDetails**](ExtraDetails.md) |  | [optional] 
 **AlertCondition** | Pointer to **NullableString** | The condition which triggered this alert. | [optional] 
+**IsMuted** | Pointer to **bool** | Flag of the alerts muting status. | [optional] 
 
 ## Methods
 
@@ -401,6 +403,31 @@ SetEntities sets Entities field to given value.
 
 HasEntities returns a boolean if a field has been set.
 
+### GetSecondaryEntities
+
+`func (o *AlertsLibraryAlertUpdate) GetSecondaryEntities() []AlertEntityInfo`
+
+GetSecondaryEntities returns the SecondaryEntities field if non-nil, zero value otherwise.
+
+### GetSecondaryEntitiesOk
+
+`func (o *AlertsLibraryAlertUpdate) GetSecondaryEntitiesOk() (*[]AlertEntityInfo, bool)`
+
+GetSecondaryEntitiesOk returns a tuple with the SecondaryEntities field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSecondaryEntities
+
+`func (o *AlertsLibraryAlertUpdate) SetSecondaryEntities(v []AlertEntityInfo)`
+
+SetSecondaryEntities sets SecondaryEntities field to given value.
+
+### HasSecondaryEntities
+
+`func (o *AlertsLibraryAlertUpdate) HasSecondaryEntities() bool`
+
+HasSecondaryEntities returns a boolean if a field has been set.
+
 ### GetNotes
 
 `func (o *AlertsLibraryAlertUpdate) GetNotes() string`
@@ -486,6 +513,31 @@ HasAlertCondition returns a boolean if a field has been set.
 `func (o *AlertsLibraryAlertUpdate) UnsetAlertCondition()`
 
 UnsetAlertCondition ensures that no value is present for AlertCondition, not even an explicit nil
+### GetIsMuted
+
+`func (o *AlertsLibraryAlertUpdate) GetIsMuted() bool`
+
+GetIsMuted returns the IsMuted field if non-nil, zero value otherwise.
+
+### GetIsMutedOk
+
+`func (o *AlertsLibraryAlertUpdate) GetIsMutedOk() (*bool, bool)`
+
+GetIsMutedOk returns a tuple with the IsMuted field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsMuted
+
+`func (o *AlertsLibraryAlertUpdate) SetIsMuted(v bool)`
+
+SetIsMuted sets IsMuted field to given value.
+
+### HasIsMuted
+
+`func (o *AlertsLibraryAlertUpdate) HasIsMuted() bool`
+
+HasIsMuted returns a boolean if a field has been set.
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -8,12 +8,14 @@ Name | Type | Description | Notes
 **Name** | Pointer to **string** | Name of the alert. | [optional] 
 **Severity** | Pointer to **string** | The severity of the Alert. Valid values:   1. &#x60;Critical&#x60;   2. &#x60;Warning&#x60;   3. &#x60;MissingData&#x60; | [optional] 
 **Status** | Pointer to **string** | The status of the Alert. Valid values:   1. &#x60;Active&#x60;   2. &#x60;Resolved&#x60; | [optional] 
-**EntitiesInfo** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) |  | [optional] 
+**EntitiesInfo** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) | List of AlertEntityInfo for primary entities. The primary entity is the most concrete entity  (e.g. k8s container) that can be assigned per time series or log group,  secondary entities are the less specific ones (e.g. k8s cluster or EC2 host).  | [optional] 
+**SecondaryEntitiesInfo** | Pointer to [**[]AlertEntityInfo**](AlertEntityInfo.md) | List of secondary AlertEntityInfo for primary entities. Primary/secondary entities are explained in description for &#x60;entitiesInfo&#x60;.  | [optional] 
 **ViolationCount** | Pointer to **string** | The number of unique result groups that have met the alert condition. | [optional] 
 **LastViolation** | Pointer to **string** | The condition from the last alert violation. | [optional] 
 **Duration** | Pointer to **string** | The current duration of the alert. | [optional] 
 **CreatedAt** | Pointer to **string** | The creation time of the alert. | [optional] 
 **LastUpdated** | Pointer to **string** | The time when this alert was updated with the most recent violation. | [optional] 
+**IsMuted** | Pointer to **bool** | True if the ARP was created while the monitor was muted | [optional] [default to false]
 
 ## Methods
 
@@ -159,6 +161,31 @@ SetEntitiesInfo sets EntitiesInfo field to given value.
 
 HasEntitiesInfo returns a boolean if a field has been set.
 
+### GetSecondaryEntitiesInfo
+
+`func (o *AlertsListPageObject) GetSecondaryEntitiesInfo() []AlertEntityInfo`
+
+GetSecondaryEntitiesInfo returns the SecondaryEntitiesInfo field if non-nil, zero value otherwise.
+
+### GetSecondaryEntitiesInfoOk
+
+`func (o *AlertsListPageObject) GetSecondaryEntitiesInfoOk() (*[]AlertEntityInfo, bool)`
+
+GetSecondaryEntitiesInfoOk returns a tuple with the SecondaryEntitiesInfo field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSecondaryEntitiesInfo
+
+`func (o *AlertsListPageObject) SetSecondaryEntitiesInfo(v []AlertEntityInfo)`
+
+SetSecondaryEntitiesInfo sets SecondaryEntitiesInfo field to given value.
+
+### HasSecondaryEntitiesInfo
+
+`func (o *AlertsListPageObject) HasSecondaryEntitiesInfo() bool`
+
+HasSecondaryEntitiesInfo returns a boolean if a field has been set.
+
 ### GetViolationCount
 
 `func (o *AlertsListPageObject) GetViolationCount() string`
@@ -283,6 +310,31 @@ SetLastUpdated sets LastUpdated field to given value.
 `func (o *AlertsListPageObject) HasLastUpdated() bool`
 
 HasLastUpdated returns a boolean if a field has been set.
+
+### GetIsMuted
+
+`func (o *AlertsListPageObject) GetIsMuted() bool`
+
+GetIsMuted returns the IsMuted field if non-nil, zero value otherwise.
+
+### GetIsMutedOk
+
+`func (o *AlertsListPageObject) GetIsMutedOk() (*bool, bool)`
+
+GetIsMutedOk returns a tuple with the IsMuted field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsMuted
+
+`func (o *AlertsListPageObject) SetIsMuted(v bool)`
+
+SetIsMuted sets IsMuted field to given value.
+
+### HasIsMuted
+
+`func (o *AlertsListPageObject) HasIsMuted() bool`
+
+HasIsMuted returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

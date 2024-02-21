@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Field** | **string** | Filter field name. | 
+**FieldType** | **string** | Indicates the kind of a field. Possible values: &#x60;SpanAttribute&#x60;, &#x60;SpanEventAttribute&#x60;. | [default to "SpanAttribute"]
 **ValueListing** | Pointer to **bool** | Indicates whether values for this field can be listed. | [optional] 
 **Description** | Pointer to **string** | Short description of the field. | [optional] 
 **Type** | **string** | The type the values of this field will have. Possible values: &#x60;DoubleTracingValue&#x60;, &#x60;IntegerTracingValue&#x60;, &#x60;StringTracingValue&#x60;, &#x60;DateTimeTracingValue&#x60;. | 
@@ -15,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewSpanQueryFieldDetail
 
-`func NewSpanQueryFieldDetail(field string, type_ string, inSchema bool, ) *SpanQueryFieldDetail`
+`func NewSpanQueryFieldDetail(field string, fieldType string, type_ string, inSchema bool, ) *SpanQueryFieldDetail`
 
 NewSpanQueryFieldDetail instantiates a new SpanQueryFieldDetail object
 This constructor will assign default values to properties that have it defined,
@@ -48,6 +49,26 @@ and a boolean to check if the value has been set.
 `func (o *SpanQueryFieldDetail) SetField(v string)`
 
 SetField sets Field field to given value.
+
+
+### GetFieldType
+
+`func (o *SpanQueryFieldDetail) GetFieldType() string`
+
+GetFieldType returns the FieldType field if non-nil, zero value otherwise.
+
+### GetFieldTypeOk
+
+`func (o *SpanQueryFieldDetail) GetFieldTypeOk() (*string, bool)`
+
+GetFieldTypeOk returns a tuple with the FieldType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFieldType
+
+`func (o *SpanQueryFieldDetail) SetFieldType(v string)`
+
+SetFieldType sets FieldType field to given value.
 
 
 ### GetValueListing

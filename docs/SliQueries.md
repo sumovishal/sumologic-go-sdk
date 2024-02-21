@@ -6,6 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **QueryGroup** | [**SliQueryGroup**](SliQueryGroup.md) |  | 
 **QueryType** | **string** | Type of queries for SLI (Logs/Metrics). | 
+**EvaluationType** | Pointer to **string** | SLI evaluation type. | [optional] 
+**WindowSize** | Pointer to **string** | Size of the SLI aggregation window (valid only for &#x60;Window&#x60; evaluation type). | [optional] 
 
 ## Methods
 
@@ -65,6 +67,56 @@ and a boolean to check if the value has been set.
 
 SetQueryType sets QueryType field to given value.
 
+
+### GetEvaluationType
+
+`func (o *SliQueries) GetEvaluationType() string`
+
+GetEvaluationType returns the EvaluationType field if non-nil, zero value otherwise.
+
+### GetEvaluationTypeOk
+
+`func (o *SliQueries) GetEvaluationTypeOk() (*string, bool)`
+
+GetEvaluationTypeOk returns a tuple with the EvaluationType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEvaluationType
+
+`func (o *SliQueries) SetEvaluationType(v string)`
+
+SetEvaluationType sets EvaluationType field to given value.
+
+### HasEvaluationType
+
+`func (o *SliQueries) HasEvaluationType() bool`
+
+HasEvaluationType returns a boolean if a field has been set.
+
+### GetWindowSize
+
+`func (o *SliQueries) GetWindowSize() string`
+
+GetWindowSize returns the WindowSize field if non-nil, zero value otherwise.
+
+### GetWindowSizeOk
+
+`func (o *SliQueries) GetWindowSizeOk() (*string, bool)`
+
+GetWindowSizeOk returns a tuple with the WindowSize field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWindowSize
+
+`func (o *SliQueries) SetWindowSize(v string)`
+
+SetWindowSize sets WindowSize field to given value.
+
+### HasWindowSize
+
+`func (o *SliQueries) HasWindowSize() bool`
+
+HasWindowSize returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
