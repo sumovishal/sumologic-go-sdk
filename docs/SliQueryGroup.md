@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **QueryGroupType** | **string** | Type of Query (successful/unsuccessful/total/threshold). | 
-**QueryGroup** | [**[]SliQuery**](SliQuery.md) |  | 
+**QueryGroup** | [**[]SliQuery**](SliQuery.md) | Group of queries to allow for query arithmetic. | 
 
 ## Methods
 

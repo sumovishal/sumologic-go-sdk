@@ -5,18 +5,18 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **QueryText** | **string** | The text of a Sumo Logic query. | 
-**DefaultTimeRange** | **string** | Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \&quot;-1d -12h\&quot; represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \&quot;01-04-2017 20:32:00 to 01-04-2017 20:35:00\&quot; represents a time range     from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM. | 
 **ByReceiptTime** | **bool** | Set it to true to run the search using receipt time. By default, searches do not run by receipt time. | [default to false]
 **ViewName** | Pointer to **string** | The name of the Scheduled View that has indexed the data you want to search. | [optional] 
 **ViewStartTime** | Pointer to **time.Time** | Start timestamp of the Scheduled View in UTC format. | [optional] 
 **QueryParameters** | [**[]QueryParameterSyncDefinition**](QueryParameterSyncDefinition.md) | An array of search query parameter objects. | 
 **ParsingMode** | Pointer to **string** | Define the parsing mode to scan the JSON format log messages. Possible values are:   1. &#x60;AutoParse&#x60;   2. &#x60;Manual&#x60; In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid&#x3D;0011). | [optional] [default to "Manual"]
+**DefaultTimeRange** | **string** | Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \&quot;-1d -12h\&quot; represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \&quot;01-04-2017 20:32:00 to 01-04-2017 20:35:00\&quot; represents a time range   from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM. | 
 
 ## Methods
 
 ### NewSavedSearchSyncDefinition
 
-`func NewSavedSearchSyncDefinition(queryText string, defaultTimeRange string, byReceiptTime bool, queryParameters []QueryParameterSyncDefinition, ) *SavedSearchSyncDefinition`
+`func NewSavedSearchSyncDefinition(queryText string, byReceiptTime bool, queryParameters []QueryParameterSyncDefinition, defaultTimeRange string, ) *SavedSearchSyncDefinition`
 
 NewSavedSearchSyncDefinition instantiates a new SavedSearchSyncDefinition object
 This constructor will assign default values to properties that have it defined,
@@ -49,26 +49,6 @@ and a boolean to check if the value has been set.
 `func (o *SavedSearchSyncDefinition) SetQueryText(v string)`
 
 SetQueryText sets QueryText field to given value.
-
-
-### GetDefaultTimeRange
-
-`func (o *SavedSearchSyncDefinition) GetDefaultTimeRange() string`
-
-GetDefaultTimeRange returns the DefaultTimeRange field if non-nil, zero value otherwise.
-
-### GetDefaultTimeRangeOk
-
-`func (o *SavedSearchSyncDefinition) GetDefaultTimeRangeOk() (*string, bool)`
-
-GetDefaultTimeRangeOk returns a tuple with the DefaultTimeRange field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetDefaultTimeRange
-
-`func (o *SavedSearchSyncDefinition) SetDefaultTimeRange(v string)`
-
-SetDefaultTimeRange sets DefaultTimeRange field to given value.
 
 
 ### GetByReceiptTime
@@ -185,6 +165,26 @@ SetParsingMode sets ParsingMode field to given value.
 `func (o *SavedSearchSyncDefinition) HasParsingMode() bool`
 
 HasParsingMode returns a boolean if a field has been set.
+
+### GetDefaultTimeRange
+
+`func (o *SavedSearchSyncDefinition) GetDefaultTimeRange() string`
+
+GetDefaultTimeRange returns the DefaultTimeRange field if non-nil, zero value otherwise.
+
+### GetDefaultTimeRangeOk
+
+`func (o *SavedSearchSyncDefinition) GetDefaultTimeRangeOk() (*string, bool)`
+
+GetDefaultTimeRangeOk returns a tuple with the DefaultTimeRange field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDefaultTimeRange
+
+`func (o *SavedSearchSyncDefinition) SetDefaultTimeRange(v string)`
+
+SetDefaultTimeRange sets DefaultTimeRange field to given value.
+
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

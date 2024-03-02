@@ -10,12 +10,14 @@ Name | Type | Description | Notes
 **TopologyLabelMap** | Pointer to [**TopologyLabelMap**](TopologyLabelMap.md) |  | [optional] 
 **Domain** | Pointer to **string** | If set denotes that the dashboard concerns a given domain (e.g. &#x60;aws&#x60;, &#x60;k8s&#x60;, &#x60;app&#x60;). | [optional] [default to ""]
 **Hierarchies** | Pointer to **[]string** | If set to non-empty array denotes that the dashboard concerns given hierarchies. | [optional] [default to []]
-**RefreshInterval** | Pointer to **int32** | Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are &#x60;0&#x60;, &#x60;30&#x60;, &#x60;60&#x60;, 120&#x60;, &#x60;300&#x60;, &#x60;900&#x60;, &#x60;3600&#x60;, &#x60;86400&#x60;.  | [optional] 
+**RefreshInterval** | Pointer to **int32** | Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are &#x60;0&#x60;, &#x60;30&#x60;, &#x60;60&#x60;, &#x60;120&#x60;, &#x60;300&#x60;, &#x60;900&#x60;, &#x60;1800&#x60;, &#x60;3600&#x60;, &#x60;7200&#x60;, &#x60;86400&#x60;.  | [optional] 
 **TimeRange** | [**ResolvableTimeRange**](ResolvableTimeRange.md) |  | 
 **Panels** | Pointer to [**[]Panel**](Panel.md) | Panels in the dashboard. | [optional] 
 **Layout** | Pointer to [**Layout**](Layout.md) |  | [optional] 
 **Variables** | Pointer to [**[]Variable**](Variable.md) | Variables to apply to the panels. | [optional] 
 **Theme** | Pointer to **string** | Theme for the dashboard. Either &#x60;Light&#x60; or &#x60;Dark&#x60;. | [optional] [default to "Light"]
+**IsPublic** | Pointer to **bool** | Is the dashboard public | [optional] [default to false]
+**HighlightViolations** | Pointer to **bool** | Whether to highlight threshold violations. | [optional] [default to false]
 
 ## Methods
 
@@ -325,6 +327,56 @@ SetTheme sets Theme field to given value.
 `func (o *DashboardRequest) HasTheme() bool`
 
 HasTheme returns a boolean if a field has been set.
+
+### GetIsPublic
+
+`func (o *DashboardRequest) GetIsPublic() bool`
+
+GetIsPublic returns the IsPublic field if non-nil, zero value otherwise.
+
+### GetIsPublicOk
+
+`func (o *DashboardRequest) GetIsPublicOk() (*bool, bool)`
+
+GetIsPublicOk returns a tuple with the IsPublic field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPublic
+
+`func (o *DashboardRequest) SetIsPublic(v bool)`
+
+SetIsPublic sets IsPublic field to given value.
+
+### HasIsPublic
+
+`func (o *DashboardRequest) HasIsPublic() bool`
+
+HasIsPublic returns a boolean if a field has been set.
+
+### GetHighlightViolations
+
+`func (o *DashboardRequest) GetHighlightViolations() bool`
+
+GetHighlightViolations returns the HighlightViolations field if non-nil, zero value otherwise.
+
+### GetHighlightViolationsOk
+
+`func (o *DashboardRequest) GetHighlightViolationsOk() (*bool, bool)`
+
+GetHighlightViolationsOk returns a tuple with the HighlightViolations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHighlightViolations
+
+`func (o *DashboardRequest) SetHighlightViolations(v bool)`
+
+SetHighlightViolations sets HighlightViolations field to given value.
+
+### HasHighlightViolations
+
+`func (o *DashboardRequest) HasHighlightViolations() bool`
+
+HasHighlightViolations returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

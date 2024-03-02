@@ -26,11 +26,11 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    logSearchEstimatedUsageRequest := *openapiclient.NewLogSearchEstimatedUsageRequest("error | count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequest | The definition of the log search estimated usage.
+    logSearchEstimatedUsageRequest := *openapiclient.NewLogSearchEstimatedUsageRequest("error {{sourceCategory}}| count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequest | The definition of the log search estimated usage.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
@@ -92,11 +92,11 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    logSearchEstimatedUsageRequestV2 := *openapiclient.NewLogSearchEstimatedUsageRequestV2("error | count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequestV2 | The definition of the log search estimated usage.
+    logSearchEstimatedUsageRequestV2 := *openapiclient.NewLogSearchEstimatedUsageRequestV2("error {{sourceCategory}}| count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequestV2 | The definition of the log search estimated usage.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)

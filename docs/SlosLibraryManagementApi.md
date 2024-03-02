@@ -4,8 +4,10 @@ All URIs are relative to *https://api.au.sumologic.com/api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**GetSloUsageInfo**](SlosLibraryManagementApi.md#GetSloUsageInfo) | **Get** /v1/slos/usageInfo | Usage info of SLOs.
 [**GetSlosFullPath**](SlosLibraryManagementApi.md#GetSlosFullPath) | **Get** /v1/slos/{id}/path | Get the path of a slo or folder.
 [**GetSlosLibraryRoot**](SlosLibraryManagementApi.md#GetSlosLibraryRoot) | **Get** /v1/slos/root | Get the root slos folder.
+[**Sli**](SlosLibraryManagementApi.md#Sli) | **Get** /v1/slos/sli | Bulk fetch SLI values, error budget remaining and SLI computation status for the current compliance period.
 [**SlosCopy**](SlosLibraryManagementApi.md#SlosCopy) | **Post** /v1/slos/{id}/copy | Copy a slo or folder.
 [**SlosCreate**](SlosLibraryManagementApi.md#SlosCreate) | **Post** /v1/slos | Create a slo or folder. 
 [**SlosDeleteById**](SlosLibraryManagementApi.md#SlosDeleteById) | **Delete** /v1/slos/{id} | Delete a slo or folder. 
@@ -19,6 +21,67 @@ Method | HTTP request | Description
 [**SlosSearch**](SlosLibraryManagementApi.md#SlosSearch) | **Get** /v1/slos/search | Search for a slo or folder.
 [**SlosUpdateById**](SlosLibraryManagementApi.md#SlosUpdateById) | **Put** /v1/slos/{id} | Update a slo or folder. 
 
+
+
+## GetSloUsageInfo
+
+> []SloUsage GetSloUsageInfo(ctx).Execute()
+
+Usage info of SLOs.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.SlosLibraryManagementApi.GetSloUsageInfo(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `SlosLibraryManagementApi.GetSloUsageInfo``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetSloUsageInfo`: []SloUsage
+    fmt.Fprintf(os.Stdout, "Response from `SlosLibraryManagementApi.GetSloUsageInfo`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetSloUsageInfoRequest struct via the builder pattern
+
+
+### Return type
+
+[**[]SloUsage**](SloUsage.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## GetSlosFullPath
@@ -38,7 +101,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -108,7 +171,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -152,6 +215,72 @@ Other parameters are passed through a pointer to a apiGetSlosLibraryRootRequest 
 [[Back to README]](../README.md)
 
 
+## Sli
+
+> map[string]SliStatus Sli(ctx).Ids(ids).Execute()
+
+Bulk fetch SLI values, error budget remaining and SLI computation status for the current compliance period.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    ids := []string{"Inner_example"} // []string | The identifiers of the SLOs.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.SlosLibraryManagementApi.Sli(context.Background()).Ids(ids).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `SlosLibraryManagementApi.Sli``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `Sli`: map[string]SliStatus
+    fmt.Fprintf(os.Stdout, "Response from `SlosLibraryManagementApi.Sli`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSliRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ids** | **[]string** | The identifiers of the SLOs. | 
+
+### Return type
+
+[**map[string]SliStatus**](SliStatus.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## SlosCopy
 
 > SlosLibraryBaseResponse SlosCopy(ctx, id).ContentCopyParams(contentCopyParams).Execute()
@@ -169,7 +298,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -241,7 +370,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -309,7 +438,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -317,7 +446,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SlosLibraryManagementApi.SlosDeleteById(context.Background(), id).Execute()
+    r, err := apiClient.SlosLibraryManagementApi.SlosDeleteById(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SlosLibraryManagementApi.SlosDeleteById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -377,7 +506,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -443,7 +572,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -513,7 +642,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -579,7 +708,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -651,7 +780,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -723,7 +852,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -778,7 +907,7 @@ Name | Type | Description  | Notes
 
 ## SlosReadByIds
 
-> map[string]SlosLibraryBaseResponse SlosReadByIds(ctx).Ids(ids).Execute()
+> map[string]SlosLibraryBaseResponse SlosReadByIds(ctx).Ids(ids).SkipChildren(skipChildren).Execute()
 
 Bulk read a slo or folder.
 
@@ -793,15 +922,16 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     ids := []string{"Inner_example"} // []string | A comma-separated list of identifiers.
+    skipChildren := true // bool | a boolean parameter to control skipping fetching children of requested folder(s) (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SlosLibraryManagementApi.SlosReadByIds(context.Background()).Ids(ids).Execute()
+    resp, r, err := apiClient.SlosLibraryManagementApi.SlosReadByIds(context.Background()).Ids(ids).SkipChildren(skipChildren).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SlosLibraryManagementApi.SlosReadByIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -823,6 +953,7 @@ Other parameters are passed through a pointer to a apiSlosReadByIdsRequest struc
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ids** | **[]string** | A comma-separated list of identifiers. | 
+ **skipChildren** | **bool** | a boolean parameter to control skipping fetching children of requested folder(s) | 
 
 ### Return type
 
@@ -844,7 +975,7 @@ Name | Type | Description  | Notes
 
 ## SlosSearch
 
-> []SlosLibraryItemWithPath SlosSearch(ctx).Query(query).Limit(limit).Offset(offset).Execute()
+> []SlosLibraryItemWithPath SlosSearch(ctx).Query(query).Limit(limit).Offset(offset).SkipChildren(skipChildren).Execute()
 
 Search for a slo or folder.
 
@@ -859,17 +990,18 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    query := "createdBy:000000000000968B Test" // string | The search query to find slo or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user's identifier who created the content. Example: `createdBy:000000000000968B`.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: `createdBefore:1457997222`.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: `createdAfter:1457997111`.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: `modifiedBefore:1457997222`.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: `modifiedAfter:1457997111`.   - **type** : Filter by the type of the content object. Example: `type:folder`.   - **sloStatus** : Filter by the status of the SLO: Normal, Critical, Warning. Example: `sloStatus:Normal`.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    `createdBy:000000000000968B createdAfter:1457997222 Test`
-    limit := int32(10) // int32 | Maximum number of items you want in the response. (optional) (default to 100)
+    query := "createdBy:000000000000968B Test" // string | The search query to find slo or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user's identifier who created the content. Example: `createdBy:000000000000968B`.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: `createdBefore:1457997222`.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: `createdAfter:1457997111`.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: `modifiedBefore:1457997222`.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: `modifiedAfter:1457997111`.   - **type** : Filter by the type of the content object. Example: `type:folder`.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    `createdBy:000000000000968B createdAfter:1457997222 Test`
+    limit := int32(10) // int32 | Maximum number of items you want in the response. (optional) (default to 1000)
     offset := int32(5) // int32 | The position or row from where to start the search operation. (optional) (default to 0)
+    skipChildren := true // bool | a boolean parameter to control skipping fetching children of requested folder(s) (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SlosLibraryManagementApi.SlosSearch(context.Background()).Query(query).Limit(limit).Offset(offset).Execute()
+    resp, r, err := apiClient.SlosLibraryManagementApi.SlosSearch(context.Background()).Query(query).Limit(limit).Offset(offset).SkipChildren(skipChildren).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SlosLibraryManagementApi.SlosSearch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -890,9 +1022,10 @@ Other parameters are passed through a pointer to a apiSlosSearchRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | **string** | The search query to find slo or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.   - **sloStatus** : Filter by the status of the SLO: Normal, Critical, Warning. Example: &#x60;sloStatus:Normal&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60; | 
- **limit** | **int32** | Maximum number of items you want in the response. | [default to 100]
+ **query** | **string** | The search query to find slo or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60; | 
+ **limit** | **int32** | Maximum number of items you want in the response. | [default to 1000]
  **offset** | **int32** | The position or row from where to start the search operation. | [default to 0]
+ **skipChildren** | **bool** | a boolean parameter to control skipping fetching children of requested folder(s) | 
 
 ### Return type
 
@@ -929,7 +1062,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **TimeSeries** | [**[]TimeSeries**](TimeSeries.md) | A list of timeseries returned by corresponding query. | 
 **Unit** | Pointer to **string** | Unit of the query. | [optional] 
 **TimeShiftLabel** | Pointer to **string** | Time shift value if specified in request in human readable format. | [optional] 
+**ResultContext** | Pointer to [**MetricsQueryResultContext**](MetricsQueryResultContext.md) |  | [optional] 
 
 ## Methods
 
@@ -96,6 +97,31 @@ SetTimeShiftLabel sets TimeShiftLabel field to given value.
 `func (o *TimeSeriesList) HasTimeShiftLabel() bool`
 
 HasTimeShiftLabel returns a boolean if a field has been set.
+
+### GetResultContext
+
+`func (o *TimeSeriesList) GetResultContext() MetricsQueryResultContext`
+
+GetResultContext returns the ResultContext field if non-nil, zero value otherwise.
+
+### GetResultContextOk
+
+`func (o *TimeSeriesList) GetResultContextOk() (*MetricsQueryResultContext, bool)`
+
+GetResultContextOk returns a tuple with the ResultContext field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetResultContext
+
+`func (o *TimeSeriesList) SetResultContext(v MetricsQueryResultContext)`
+
+SetResultContext sets ResultContext field to given value.
+
+### HasResultContext
+
+`func (o *TimeSeriesList) HasResultContext() bool`
+
+HasResultContext returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Id** | **string** | Unique identifier of the SAML Identity Provider. | 
 **AssertionConsumerUrl** | Pointer to **string** | The URL on Sumo Logic where the IdP will redirect to with its authentication response. | [optional] [default to ""]
 **EntityId** | Pointer to **string** | A unique identifier that is the intended audience of the SAML assertion. | [optional] [default to ""]
+**MetadataUrl** | Pointer to **string** | The URL to fetch SAML metadata XML. | [optional] [default to ""]
 
 ## Methods
 
@@ -96,6 +97,31 @@ SetEntityId sets EntityId field to given value.
 `func (o *SamlIdentityProviderAllOf) HasEntityId() bool`
 
 HasEntityId returns a boolean if a field has been set.
+
+### GetMetadataUrl
+
+`func (o *SamlIdentityProviderAllOf) GetMetadataUrl() string`
+
+GetMetadataUrl returns the MetadataUrl field if non-nil, zero value otherwise.
+
+### GetMetadataUrlOk
+
+`func (o *SamlIdentityProviderAllOf) GetMetadataUrlOk() (*string, bool)`
+
+GetMetadataUrlOk returns a tuple with the MetadataUrl field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMetadataUrl
+
+`func (o *SamlIdentityProviderAllOf) SetMetadataUrl(v string)`
+
+SetMetadataUrl sets MetadataUrl field to given value.
+
+### HasMetadataUrl
+
+`func (o *SamlIdentityProviderAllOf) HasMetadataUrl() bool`
+
+HasMetadataUrl returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

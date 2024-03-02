@@ -5,12 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **GroupFields** | **[]string** | List of group fields | 
+**IsQueryAggregate** | **bool** | Whether or not the queries are aggregate. | [default to false]
 
 ## Methods
 
 ### NewGroupFieldsResponse
 
-`func NewGroupFieldsResponse(groupFields []string, ) *GroupFieldsResponse`
+`func NewGroupFieldsResponse(groupFields []string, isQueryAggregate bool, ) *GroupFieldsResponse`
 
 NewGroupFieldsResponse instantiates a new GroupFieldsResponse object
 This constructor will assign default values to properties that have it defined,
@@ -43,6 +44,26 @@ and a boolean to check if the value has been set.
 `func (o *GroupFieldsResponse) SetGroupFields(v []string)`
 
 SetGroupFields sets GroupFields field to given value.
+
+
+### GetIsQueryAggregate
+
+`func (o *GroupFieldsResponse) GetIsQueryAggregate() bool`
+
+GetIsQueryAggregate returns the IsQueryAggregate field if non-nil, zero value otherwise.
+
+### GetIsQueryAggregateOk
+
+`func (o *GroupFieldsResponse) GetIsQueryAggregateOk() (*bool, bool)`
+
+GetIsQueryAggregateOk returns a tuple with the IsQueryAggregate field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsQueryAggregate
+
+`func (o *GroupFieldsResponse) SetIsQueryAggregate(v bool)`
+
+SetIsQueryAggregate sets IsQueryAggregate field to given value.
 
 
 

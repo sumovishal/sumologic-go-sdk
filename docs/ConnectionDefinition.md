@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | **string** | Type of connection. Valid values are &#x60;WebhookDefinition&#x60;, &#x60;ServiceNowDefinition&#x60;. | 
-**Name** | **string** | Name of connection. Name should be a valid alphanumeric value. | 
+**Name** | **string** | Name of the connection. | 
 **Description** | Pointer to **string** | Description of the connection. | [optional] [default to ""]
 
 ## Methods

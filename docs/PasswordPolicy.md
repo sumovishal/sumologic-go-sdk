@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **AccountLockoutDurationInMins** | Pointer to **int32** | The duration of time in minutes that a locked-out account remained locked before getting unlocked automatically. | [optional] [default to 30]
 **RequireMfa** | Pointer to **bool** | If MFA should be required to log in. By default, this field is set to &#x60;false&#x60;. | [optional] [default to false]
 **RememberMfa** | Pointer to **bool** | If MFA should be remembered on the browser. | [optional] [default to true]
+**DisallowWeakPasswords** | Pointer to **bool** | If weak passwords should be disallowed. By default, this field is set to &#x60;false&#x60;. | [optional] [default to false]
 
 ## Methods
 
@@ -361,6 +362,31 @@ SetRememberMfa sets RememberMfa field to given value.
 `func (o *PasswordPolicy) HasRememberMfa() bool`
 
 HasRememberMfa returns a boolean if a field has been set.
+
+### GetDisallowWeakPasswords
+
+`func (o *PasswordPolicy) GetDisallowWeakPasswords() bool`
+
+GetDisallowWeakPasswords returns the DisallowWeakPasswords field if non-nil, zero value otherwise.
+
+### GetDisallowWeakPasswordsOk
+
+`func (o *PasswordPolicy) GetDisallowWeakPasswordsOk() (*bool, bool)`
+
+GetDisallowWeakPasswordsOk returns a tuple with the DisallowWeakPasswords field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisallowWeakPasswords
+
+`func (o *PasswordPolicy) SetDisallowWeakPasswords(v bool)`
+
+SetDisallowWeakPasswords sets DisallowWeakPasswords field to given value.
+
+### HasDisallowWeakPasswords
+
+`func (o *PasswordPolicy) HasDisallowWeakPasswords() bool`
+
+HasDisallowWeakPasswords returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

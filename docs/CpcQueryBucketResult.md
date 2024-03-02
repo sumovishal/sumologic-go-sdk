@@ -11,12 +11,13 @@ Name | Type | Description | Notes
 **AvgTraceDuration** | **float64** | The average duration in nanoseconds of the traces matching the search criteria  based on which the CPC data is aggregated. | 
 **PerServiceCpcSummaries** | [**[]CpcServiceSummary**](CpcServiceSummary.md) | The summary of aggregated Critical Path Contribution data on a per service basis.  Each element of the array corresponds to a summary for a specific service. | 
 **OtherServicesCpcSummary** | [**CpcSummary**](CpcSummary.md) |  | 
+**IdleTimeCpcSummary** | [**CpcSummary**](CpcSummary.md) |  | 
 
 ## Methods
 
 ### NewCpcQueryBucketResult
 
-`func NewCpcQueryBucketResult(bucketId string, startTimestamp time.Time, length int64, totalNumOfTraces int64, avgTraceDuration float64, perServiceCpcSummaries []CpcServiceSummary, otherServicesCpcSummary CpcSummary, ) *CpcQueryBucketResult`
+`func NewCpcQueryBucketResult(bucketId string, startTimestamp time.Time, length int64, totalNumOfTraces int64, avgTraceDuration float64, perServiceCpcSummaries []CpcServiceSummary, otherServicesCpcSummary CpcSummary, idleTimeCpcSummary CpcSummary, ) *CpcQueryBucketResult`
 
 NewCpcQueryBucketResult instantiates a new CpcQueryBucketResult object
 This constructor will assign default values to properties that have it defined,
@@ -169,6 +170,26 @@ and a boolean to check if the value has been set.
 `func (o *CpcQueryBucketResult) SetOtherServicesCpcSummary(v CpcSummary)`
 
 SetOtherServicesCpcSummary sets OtherServicesCpcSummary field to given value.
+
+
+### GetIdleTimeCpcSummary
+
+`func (o *CpcQueryBucketResult) GetIdleTimeCpcSummary() CpcSummary`
+
+GetIdleTimeCpcSummary returns the IdleTimeCpcSummary field if non-nil, zero value otherwise.
+
+### GetIdleTimeCpcSummaryOk
+
+`func (o *CpcQueryBucketResult) GetIdleTimeCpcSummaryOk() (*CpcSummary, bool)`
+
+GetIdleTimeCpcSummaryOk returns a tuple with the IdleTimeCpcSummary field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIdleTimeCpcSummary
+
+`func (o *CpcQueryBucketResult) SetIdleTimeCpcSummary(v CpcSummary)`
+
+SetIdleTimeCpcSummary sets IdleTimeCpcSummary field to given value.
 
 
 

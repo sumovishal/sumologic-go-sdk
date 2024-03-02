@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]AlertsListPageObject**](AlertsListPageObject.md) |  | [optional] 
+**Data** | Pointer to [**[]AlertsListPageObject**](AlertsListPageObject.md) | List of alerts summaries. | [optional] 
 
 ## Methods
 

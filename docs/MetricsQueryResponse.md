@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **QueryResult** | Pointer to [**[]TimeSeriesRow**](TimeSeriesRow.md) | A list of the time series returned by metric query. | [optional] 
-**Errors** | [**ErrorResponse**](ErrorResponse.md) |  | 
+**Errors** | [**MetricsQueryResponseErrors**](MetricsQueryResponseErrors.md) |  | 
 
 ## Methods
 
 ### NewMetricsQueryResponse
 
-`func NewMetricsQueryResponse(errors ErrorResponse, ) *MetricsQueryResponse`
+`func NewMetricsQueryResponse(errors MetricsQueryResponseErrors, ) *MetricsQueryResponse`
 
 NewMetricsQueryResponse instantiates a new MetricsQueryResponse object
 This constructor will assign default values to properties that have it defined,
@@ -53,20 +53,20 @@ HasQueryResult returns a boolean if a field has been set.
 
 ### GetErrors
 
-`func (o *MetricsQueryResponse) GetErrors() ErrorResponse`
+`func (o *MetricsQueryResponse) GetErrors() MetricsQueryResponseErrors`
 
 GetErrors returns the Errors field if non-nil, zero value otherwise.
 
 ### GetErrorsOk
 
-`func (o *MetricsQueryResponse) GetErrorsOk() (*ErrorResponse, bool)`
+`func (o *MetricsQueryResponse) GetErrorsOk() (*MetricsQueryResponseErrors, bool)`
 
 GetErrorsOk returns a tuple with the Errors field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetErrors
 
-`func (o *MetricsQueryResponse) SetErrors(v ErrorResponse)`
+`func (o *MetricsQueryResponse) SetErrors(v MetricsQueryResponseErrors)`
 
 SetErrors sets Errors field to given value.
 

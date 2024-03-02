@@ -30,11 +30,11 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    ingestBudgetDefinitionV2 := *openapiclient.NewIngestBudgetDefinitionV2("Developer Budget", "_sourceCategory=*prod*nginx*", int64(1000), "America/Los_Angeles", "1410", "stopCollecting") // IngestBudgetDefinitionV2 | Information about the new ingest budget.
+    ingestBudgetDefinitionV2 := *openapiclient.NewIngestBudgetDefinitionV2("Developer Budget", "_sourceCategory=*prod*nginx*", int64(1000), "stopCollecting") // IngestBudgetDefinitionV2 | Information about the new ingest budget.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
@@ -96,7 +96,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -104,7 +104,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.IngestBudgetManagementV2Api.DeleteIngestBudgetV2(context.Background(), id).Execute()
+    r, err := apiClient.IngestBudgetManagementV2Api.DeleteIngestBudgetV2(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `IngestBudgetManagementV2Api.DeleteIngestBudgetV2``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -164,7 +164,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -234,7 +234,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -302,7 +302,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -310,7 +310,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.IngestBudgetManagementV2Api.ResetUsageV2(context.Background(), id).Execute()
+    r, err := apiClient.IngestBudgetManagementV2Api.ResetUsageV2(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `IngestBudgetManagementV2Api.ResetUsageV2``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -370,12 +370,12 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     id := "id_example" // string | Identifier of the ingest budget to update.
-    ingestBudgetDefinitionV2 := *openapiclient.NewIngestBudgetDefinitionV2("Developer Budget", "_sourceCategory=*prod*nginx*", int64(1000), "America/Los_Angeles", "1410", "stopCollecting") // IngestBudgetDefinitionV2 | Information to update about the ingest budget.
+    ingestBudgetDefinitionV2 := *openapiclient.NewIngestBudgetDefinitionV2("Developer Budget", "_sourceCategory=*prod*nginx*", int64(1000), "stopCollecting") // IngestBudgetDefinitionV2 | Information to update about the ingest budget.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)

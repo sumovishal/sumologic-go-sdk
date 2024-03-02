@@ -39,7 +39,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -47,7 +47,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TracesApi.CancelTraceQuery(context.Background(), queryId).Execute()
+    r, err := apiClient.TracesApi.CancelTraceQuery(context.Background(), queryId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TracesApi.CancelTraceQuery``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -107,7 +107,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -173,7 +173,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -247,7 +247,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -317,7 +317,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -378,7 +378,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -451,7 +451,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -524,7 +524,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -598,7 +598,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -668,7 +668,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -727,7 +727,7 @@ Name | Type | Description  | Notes
 
 ## GetTraceQueryFieldValues
 
-> TraceFieldValuesResponse GetTraceQueryFieldValues(ctx, field).Query(query).Limit(limit).Token(token).Execute()
+> TraceFieldValuesResponse GetTraceQueryFieldValues(ctx, field).Query(query).Limit(limit).Token(token).FieldType(fieldType).Execute()
 
 Get trace search query filter field values.
 
@@ -742,7 +742,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -750,10 +750,11 @@ func main() {
     query := "query_example" // string | Search filter to apply on the values to be returned. Only values containing the search query term will be returned. (optional)
     limit := int32(56) // int32 | The maximum number of results to fetch. (optional) (default to 10)
     token := "token_example" // string | Continuation token to get the next page of results. A page object with the next continuation token is returned in the response body. Subsequent GET requests should specify the continuation token to get the next page of results. `token` is set to null when no more pages are left. (optional)
+    fieldType := "SpanEventAttribute" // string | Indicates the kind of a field. Possible values: `SpanAttribute`, `SpanEventAttribute`. (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.TracesApi.GetTraceQueryFieldValues(context.Background(), field).Query(query).Limit(limit).Token(token).Execute()
+    resp, r, err := apiClient.TracesApi.GetTraceQueryFieldValues(context.Background(), field).Query(query).Limit(limit).Token(token).FieldType(fieldType).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TracesApi.GetTraceQueryFieldValues``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -782,6 +783,7 @@ Name | Type | Description  | Notes
  **query** | **string** | Search filter to apply on the values to be returned. Only values containing the search query term will be returned. | 
  **limit** | **int32** | The maximum number of results to fetch. | [default to 10]
  **token** | **string** | Continuation token to get the next page of results. A page object with the next continuation token is returned in the response body. Subsequent GET requests should specify the continuation token to get the next page of results. &#x60;token&#x60; is set to null when no more pages are left. | 
+ **fieldType** | **string** | Indicates the kind of a field. Possible values: &#x60;SpanAttribute&#x60;, &#x60;SpanEventAttribute&#x60;. | 
 
 ### Return type
 
@@ -818,7 +820,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -879,7 +881,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -956,7 +958,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -1026,7 +1028,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {

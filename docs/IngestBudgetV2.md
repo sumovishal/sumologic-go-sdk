@@ -6,9 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | Display name of the ingest budget. | 
 **Scope** | **string** | A scope is a constraint that will be used to identify the messages on which budget needs to be applied. A scope is consists of key and value separated by &#x3D;. The field must be enabled in the fields table. Value supports wildcard. e.g. _sourceCategory&#x3D;*prod*payment*, cluster&#x3D;kafka. If the scope is defined _sourceCategory&#x3D;*nginx* in this budget will be applied on messages having fields _sourceCategory&#x3D;prod/nginx, _sourceCategory&#x3D;dev/nginx, or _sourceCategory&#x3D;dev/nginx/error | 
-**CapacityBytes** | **int64** | Capacity of the ingest budget, in bytes. It takes a few minutes for Collectors to stop collecting when capacity is reached. We recommend setting a soft limit that is lower than your needed hard limit. | 
-**Timezone** | **string** | Time zone of the reset time for the ingest budget. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | 
-**ResetTime** | **string** | Reset time of the ingest budget in HH:MM format. | 
+**CapacityBytes** | **int64** | Capacity of the ingest budget, in bytes. It takes a few minutes for Collectors to stop collecting when capacity is reached. We recommend setting a soft limit that is lower than your needed hard limit. The capacity bytes unit varies based on the budgetType field. For &#x60;dailyVolume&#x60; budgetType the capacity specified is in bytes/day whereas for &#x60;minuteVolume&#x60; budgetType its bytes/min. | 
+**Timezone** | Pointer to **string** | Time zone of the reset time for the ingest budget. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | [optional] [default to "Etc/UTC"]
+**ResetTime** | Pointer to **string** | Reset time of the ingest budget in HH:MM format. | [optional] [default to "00:00"]
 **Description** | Pointer to **string** | Description of the ingest budget. | [optional] 
 **Action** | **string** | Action to take when ingest budget&#39;s capacity is reached. All actions are audited. Supported values are:   * &#x60;stopCollecting&#x60;   * &#x60;keepCollecting&#x60; | 
 **AuditThreshold** | Pointer to **int32** | The threshold as a percentage of when an ingest budget&#39;s capacity usage is logged in the Audit Index. | [optional] 
@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewIngestBudgetV2
 
-`func NewIngestBudgetV2(name string, scope string, capacityBytes int64, timezone string, resetTime string, action string, id string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, ) *IngestBudgetV2`
+`func NewIngestBudgetV2(name string, scope string, capacityBytes int64, action string, id string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, ) *IngestBudgetV2`
 
 NewIngestBudgetV2 instantiates a new IngestBudgetV2 object
 This constructor will assign default values to properties that have it defined,
@@ -119,6 +119,11 @@ and a boolean to check if the value has been set.
 
 SetTimezone sets Timezone field to given value.
 
+### HasTimezone
+
+`func (o *IngestBudgetV2) HasTimezone() bool`
+
+HasTimezone returns a boolean if a field has been set.
 
 ### GetResetTime
 
@@ -139,6 +144,11 @@ and a boolean to check if the value has been set.
 
 SetResetTime sets ResetTime field to given value.
 
+### HasResetTime
+
+`func (o *IngestBudgetV2) HasResetTime() bool`
+
+HasResetTime returns a boolean if a field has been set.
 
 ### GetDescription
 

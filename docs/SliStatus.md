@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Status** | **string** | Status showing whether the SLI related metrics for the SLO were successfully computed or had an irrecoverable error during calculation or computation is in progress. | 
-**SliPercentage** | Pointer to **float64** | SLI percentage for the compliance period. | [optional] 
-**ErrorBudgetRemainingPercentage** | Pointer to **float64** | A string representing the error budget remaining in percentage. | [optional] 
-**AbsoluteErrorBudgetRemaining** | Pointer to **string** | A string representing the absolute error budget remaining in terms of time or number of requests. | [optional] 
-**ProgressPercentage** | Pointer to **float64** | The percentage progress of SLI metrics calculation in the system if SLI metrics are currently being computed. | [optional] 
+**Status** | **string** | Whether the SLI computation is complete / had an error / is in progress. | 
+**SliPercentage** | Pointer to **float64** | SLI percentage for the compliance period. Available if &#x60;status&#x60; is &#x60;Success&#x60;. | [optional] 
+**ErrorBudgetRemainingPercentage** | Pointer to **float64** | Percentage of error budget remaining for the compliance period. Available if &#x60;status&#x60; is &#x60;Success&#x60;. | [optional] 
+**AbsoluteErrorBudgetRemaining** | Pointer to **string** | Formatted string for the absolute error budget remaining (time duration for window-based SLIs, request count for request-based SLIs). Available if &#x60;status&#x60; is &#x60;Success&#x60;. | [optional] 
+**ProgressPercentage** | Pointer to **float64** | SLI computation progress. | [optional] 
 
 ## Methods
 

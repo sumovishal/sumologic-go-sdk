@@ -11,6 +11,9 @@ Name | Type | Description | Notes
 **TimeRange** | Pointer to [**BeginBoundedTimeRange**](BeginBoundedTimeRange.md) |  | [optional] 
 **RequestToken** | Pointer to **string** | A user-generated string to uniquely identify the search request. This field can be safely ignored if you don&#39;t intend to identify a search request. | [optional] 
 **FieldOrdering** | Pointer to **[]string** | The expected ordering of the column fields in tabular format. If null or empty, the ordering is unknown or indeterminate.  | [optional] 
+**InfrequentScannedBytes** | Pointer to **float32** | The total number of scanned bytes from infrequent tier data for the query in bytes. | [optional] 
+**ScannedBytes** | Pointer to [**ScannedBytes**](ScannedBytes.md) |  | [optional] 
+**BackfillPercent** | Pointer to **float32** | The backfill percentage of a continuous query. | [optional] 
 
 ## Methods
 
@@ -190,6 +193,81 @@ SetFieldOrdering sets FieldOrdering field to given value.
 `func (o *DashboardSearchResult) HasFieldOrdering() bool`
 
 HasFieldOrdering returns a boolean if a field has been set.
+
+### GetInfrequentScannedBytes
+
+`func (o *DashboardSearchResult) GetInfrequentScannedBytes() float32`
+
+GetInfrequentScannedBytes returns the InfrequentScannedBytes field if non-nil, zero value otherwise.
+
+### GetInfrequentScannedBytesOk
+
+`func (o *DashboardSearchResult) GetInfrequentScannedBytesOk() (*float32, bool)`
+
+GetInfrequentScannedBytesOk returns a tuple with the InfrequentScannedBytes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInfrequentScannedBytes
+
+`func (o *DashboardSearchResult) SetInfrequentScannedBytes(v float32)`
+
+SetInfrequentScannedBytes sets InfrequentScannedBytes field to given value.
+
+### HasInfrequentScannedBytes
+
+`func (o *DashboardSearchResult) HasInfrequentScannedBytes() bool`
+
+HasInfrequentScannedBytes returns a boolean if a field has been set.
+
+### GetScannedBytes
+
+`func (o *DashboardSearchResult) GetScannedBytes() ScannedBytes`
+
+GetScannedBytes returns the ScannedBytes field if non-nil, zero value otherwise.
+
+### GetScannedBytesOk
+
+`func (o *DashboardSearchResult) GetScannedBytesOk() (*ScannedBytes, bool)`
+
+GetScannedBytesOk returns a tuple with the ScannedBytes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScannedBytes
+
+`func (o *DashboardSearchResult) SetScannedBytes(v ScannedBytes)`
+
+SetScannedBytes sets ScannedBytes field to given value.
+
+### HasScannedBytes
+
+`func (o *DashboardSearchResult) HasScannedBytes() bool`
+
+HasScannedBytes returns a boolean if a field has been set.
+
+### GetBackfillPercent
+
+`func (o *DashboardSearchResult) GetBackfillPercent() float32`
+
+GetBackfillPercent returns the BackfillPercent field if non-nil, zero value otherwise.
+
+### GetBackfillPercentOk
+
+`func (o *DashboardSearchResult) GetBackfillPercentOk() (*float32, bool)`
+
+GetBackfillPercentOk returns a tuple with the BackfillPercent field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackfillPercent
+
+`func (o *DashboardSearchResult) SetBackfillPercent(v float32)`
+
+SetBackfillPercent sets BackfillPercent field to given value.
+
+### HasBackfillPercent
+
+`func (o *DashboardSearchResult) HasBackfillPercent() bool`
+
+HasBackfillPercent returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **AllowMultiSelect** | Pointer to **bool** | Allow multiple selections in the values dropdown. | [optional] [default to false]
 **IncludeAllOption** | Pointer to **bool** | Include an \&quot;All\&quot; option at the top of the variable&#39;s values dropdown. | [optional] [default to true]
 **HideFromUI** | Pointer to **bool** | Hide the variable in the dashboard UI. | [optional] [default to false]
-**ValueType** | Pointer to **string** | The type of value of the variable. Allowed values are &#x60;String&#x60; and Any&#x60;. &#x60;String&#x60; considers as a single phrase and will wrap in double-quotes, &#x60;Any&#x60; is all characters. | [optional] [default to "Any"]
+**ValueType** | Pointer to **string** | The type of value of the variable. Allowed values are &#x60;String&#x60;, Any&#x60; and &#x60;Numeric&#x60;. - &#x60;String&#x60; considers as a single phrase and will wrap in double-quotes. - &#x60;Any&#x60; is all characters. - &#x60;Numeric&#x60; consists of a numeric value for variables, it will be displayed differently in the UI. - &#x60;Integer&#x60; is a variable with an &#x60;Int&#x60; value. - &#x60;Long&#x60; is a variable with a &#x60;Long&#x60; value. - &#x60;Double&#x60; is a variable with a &#x60;Double&#x60; value. - &#x60;Boolean&#x60; is a variable with a &#x60;Boolean&#x60; value.  | [optional] [default to "Any"]
 
 ## Methods
 

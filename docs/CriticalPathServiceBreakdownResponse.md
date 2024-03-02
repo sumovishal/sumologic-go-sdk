@@ -5,12 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Elements** | [**[]CriticalPathServiceBreakdownElementDetail**](CriticalPathServiceBreakdownElementDetail.md) | List of elements representing the critical path service breakdown. | 
+**IdleTime** | **int64** | Overall time in nanoseconds when no particular operation was in progress. | 
 
 ## Methods
 
 ### NewCriticalPathServiceBreakdownResponse
 
-`func NewCriticalPathServiceBreakdownResponse(elements []CriticalPathServiceBreakdownElementDetail, ) *CriticalPathServiceBreakdownResponse`
+`func NewCriticalPathServiceBreakdownResponse(elements []CriticalPathServiceBreakdownElementDetail, idleTime int64, ) *CriticalPathServiceBreakdownResponse`
 
 NewCriticalPathServiceBreakdownResponse instantiates a new CriticalPathServiceBreakdownResponse object
 This constructor will assign default values to properties that have it defined,
@@ -43,6 +44,26 @@ and a boolean to check if the value has been set.
 `func (o *CriticalPathServiceBreakdownResponse) SetElements(v []CriticalPathServiceBreakdownElementDetail)`
 
 SetElements sets Elements field to given value.
+
+
+### GetIdleTime
+
+`func (o *CriticalPathServiceBreakdownResponse) GetIdleTime() int64`
+
+GetIdleTime returns the IdleTime field if non-nil, zero value otherwise.
+
+### GetIdleTimeOk
+
+`func (o *CriticalPathServiceBreakdownResponse) GetIdleTimeOk() (*int64, bool)`
+
+GetIdleTimeOk returns a tuple with the IdleTime field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIdleTime
+
+`func (o *CriticalPathServiceBreakdownResponse) SetIdleTime(v int64)`
+
+SetIdleTime sets IdleTime field to given value.
 
 
 

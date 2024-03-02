@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ThresholdType** | **string** | Threshold type. Possible values are:  1. &#x60;message&#x60;  2. &#x60;group&#x60;  Use &#x60;group&#x60; as threshold type if the search query is of aggregate type. For non-aggregate queries, set it to &#x60;message&#x60;. | 
+**ThresholdType** | Pointer to **string** | This property is deprecated. The system will automatically infer the value of this field from the query going forward, so the user-specified value will no longer be honored. Threshold type. Possible values are:  1. &#x60;message&#x60;  2. &#x60;group&#x60;  Use &#x60;group&#x60; as threshold type if the search query is of aggregate type. For non-aggregate queries, set it to &#x60;message&#x60;. | [optional] 
 **Operator** | **string** | Criterion to be applied when comparing actual result count with expected count. Possible values are:  1. &#x60;eq&#x60;  2. &#x60;gt&#x60;  3. &#x60;ge&#x60;  4. &#x60;lt&#x60;  5. &#x60;le&#x60; | 
 **Count** | **int32** | Expected result count. | 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewNotificationThresholdSyncDefinition
 
-`func NewNotificationThresholdSyncDefinition(thresholdType string, operator string, count int32, ) *NotificationThresholdSyncDefinition`
+`func NewNotificationThresholdSyncDefinition(operator string, count int32, ) *NotificationThresholdSyncDefinition`
 
 NewNotificationThresholdSyncDefinition instantiates a new NotificationThresholdSyncDefinition object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,11 @@ and a boolean to check if the value has been set.
 
 SetThresholdType sets ThresholdType field to given value.
 
+### HasThresholdType
+
+`func (o *NotificationThresholdSyncDefinition) HasThresholdType() bool`
+
+HasThresholdType returns a boolean if a field has been set.
 
 ### GetOperator
 

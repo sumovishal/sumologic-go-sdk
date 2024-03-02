@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **CreatedAt** | **time.Time** | Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format. | 
 **CreatedBy** | **string** | Identifier of the user who created the access key. | 
 **ModifiedAt** | **time.Time** | Last modification timestamp in UTC. | 
+**LastUsed** | Pointer to **time.Time** | Last used timestamp in UTC.  &lt;br&gt; **Note:** Property not in use, it is part of an upcoming feature. | [optional] 
 
 ## Methods
 
@@ -175,6 +176,31 @@ and a boolean to check if the value has been set.
 
 SetModifiedAt sets ModifiedAt field to given value.
 
+
+### GetLastUsed
+
+`func (o *AccessKeyPublic) GetLastUsed() time.Time`
+
+GetLastUsed returns the LastUsed field if non-nil, zero value otherwise.
+
+### GetLastUsedOk
+
+`func (o *AccessKeyPublic) GetLastUsedOk() (*time.Time, bool)`
+
+GetLastUsedOk returns a tuple with the LastUsed field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLastUsed
+
+`func (o *AccessKeyPublic) SetLastUsed(v time.Time)`
+
+SetLastUsed sets LastUsed field to given value.
+
+### HasLastUsed
+
+`func (o *AccessKeyPublic) HasLastUsed() bool`
+
+HasLastUsed returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

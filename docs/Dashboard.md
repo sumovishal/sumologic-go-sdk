@@ -10,14 +10,18 @@ Name | Type | Description | Notes
 **TopologyLabelMap** | Pointer to [**TopologyLabelMap**](TopologyLabelMap.md) |  | [optional] 
 **Domain** | Pointer to **string** | If set denotes that the dashboard concerns a given domain (e.g. &#x60;aws&#x60;, &#x60;k8s&#x60;, &#x60;app&#x60;). | [optional] [default to ""]
 **Hierarchies** | Pointer to **[]string** | If set to non-empty array denotes that the dashboard concerns given hierarchies. | [optional] [default to []]
-**RefreshInterval** | Pointer to **int32** | Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are &#x60;0&#x60;, &#x60;30&#x60;, &#x60;60&#x60;, 120&#x60;, &#x60;300&#x60;, &#x60;900&#x60;, &#x60;3600&#x60;, &#x60;86400&#x60;.  | [optional] 
+**RefreshInterval** | Pointer to **int32** | Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard. Allowed values are &#x60;0&#x60;, &#x60;30&#x60;, &#x60;60&#x60;, &#x60;120&#x60;, &#x60;300&#x60;, &#x60;900&#x60;, &#x60;1800&#x60;, &#x60;3600&#x60;, &#x60;7200&#x60;, &#x60;86400&#x60;.  | [optional] 
 **TimeRange** | [**ResolvableTimeRange**](ResolvableTimeRange.md) |  | 
 **Panels** | Pointer to [**[]Panel**](Panel.md) | Panels in the dashboard. | [optional] 
 **Layout** | Pointer to [**Layout**](Layout.md) |  | [optional] 
 **Variables** | Pointer to [**[]Variable**](Variable.md) | Variables to apply to the panels. | [optional] 
 **Theme** | Pointer to **string** | Theme for the dashboard. Either &#x60;Light&#x60; or &#x60;Dark&#x60;. | [optional] [default to "Light"]
+**IsPublic** | Pointer to **bool** | Is the dashboard public | [optional] [default to false]
+**HighlightViolations** | Pointer to **bool** | Whether to highlight threshold violations. | [optional] [default to false]
 **Id** | Pointer to **string** | Unique identifier for the dashboard. This id is used to get detailed information about the dashboard, such as panels, variables and the layout.  | [optional] 
 **ContentId** | Pointer to **string** | Content identifier for the dashboard. This id is used to connect to the Sumo Content Library and get general metadata about the dashboard. Use this id if you want to search for dashboards in Sumo folders.  | [optional] 
+**ScheduleId** | Pointer to **string** | Scheduled report identifier for the dashboard. Only most recently modified report schedule is rerun per dashboard. This id is used to manage the schedule details through the scheduled report API.  | [optional] 
+**ScheduleCount** | Pointer to **int32** | Count of report schedules for the dashboard. | [optional] 
 
 ## Methods
 
@@ -328,6 +332,56 @@ SetTheme sets Theme field to given value.
 
 HasTheme returns a boolean if a field has been set.
 
+### GetIsPublic
+
+`func (o *Dashboard) GetIsPublic() bool`
+
+GetIsPublic returns the IsPublic field if non-nil, zero value otherwise.
+
+### GetIsPublicOk
+
+`func (o *Dashboard) GetIsPublicOk() (*bool, bool)`
+
+GetIsPublicOk returns a tuple with the IsPublic field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPublic
+
+`func (o *Dashboard) SetIsPublic(v bool)`
+
+SetIsPublic sets IsPublic field to given value.
+
+### HasIsPublic
+
+`func (o *Dashboard) HasIsPublic() bool`
+
+HasIsPublic returns a boolean if a field has been set.
+
+### GetHighlightViolations
+
+`func (o *Dashboard) GetHighlightViolations() bool`
+
+GetHighlightViolations returns the HighlightViolations field if non-nil, zero value otherwise.
+
+### GetHighlightViolationsOk
+
+`func (o *Dashboard) GetHighlightViolationsOk() (*bool, bool)`
+
+GetHighlightViolationsOk returns a tuple with the HighlightViolations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHighlightViolations
+
+`func (o *Dashboard) SetHighlightViolations(v bool)`
+
+SetHighlightViolations sets HighlightViolations field to given value.
+
+### HasHighlightViolations
+
+`func (o *Dashboard) HasHighlightViolations() bool`
+
+HasHighlightViolations returns a boolean if a field has been set.
+
 ### GetId
 
 `func (o *Dashboard) GetId() string`
@@ -377,6 +431,56 @@ SetContentId sets ContentId field to given value.
 `func (o *Dashboard) HasContentId() bool`
 
 HasContentId returns a boolean if a field has been set.
+
+### GetScheduleId
+
+`func (o *Dashboard) GetScheduleId() string`
+
+GetScheduleId returns the ScheduleId field if non-nil, zero value otherwise.
+
+### GetScheduleIdOk
+
+`func (o *Dashboard) GetScheduleIdOk() (*string, bool)`
+
+GetScheduleIdOk returns a tuple with the ScheduleId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScheduleId
+
+`func (o *Dashboard) SetScheduleId(v string)`
+
+SetScheduleId sets ScheduleId field to given value.
+
+### HasScheduleId
+
+`func (o *Dashboard) HasScheduleId() bool`
+
+HasScheduleId returns a boolean if a field has been set.
+
+### GetScheduleCount
+
+`func (o *Dashboard) GetScheduleCount() int32`
+
+GetScheduleCount returns the ScheduleCount field if non-nil, zero value otherwise.
+
+### GetScheduleCountOk
+
+`func (o *Dashboard) GetScheduleCountOk() (*int32, bool)`
+
+GetScheduleCountOk returns a tuple with the ScheduleCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScheduleCount
+
+`func (o *Dashboard) SetScheduleCount(v int32)`
+
+SetScheduleCount sets ScheduleCount field to given value.
+
+### HasScheduleCount
+
+`func (o *Dashboard) HasScheduleCount() bool`
+
+HasScheduleCount returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

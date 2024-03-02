@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **IngestBudgetFieldValue** | Pointer to **string** | The unique field value of the ingest budget v1. This will be empty for v2 budgets. | [optional] [default to "Unknown"]
 **Scope** | Pointer to **string** | The scope of the ingest budget v2. This will be empty for v1 budgets. | [optional] [default to "Unknown"]
+**BudgetType** | Pointer to **string** | The type of budget. Supported values are:  * &#x60;dailyVolume&#x60; * &#x60;minuteVolume&#x60; | [optional] 
 
 ## Methods
 
@@ -75,6 +76,31 @@ SetScope sets Scope field to given value.
 `func (o *IngestBudgetResourceIdentity) HasScope() bool`
 
 HasScope returns a boolean if a field has been set.
+
+### GetBudgetType
+
+`func (o *IngestBudgetResourceIdentity) GetBudgetType() string`
+
+GetBudgetType returns the BudgetType field if non-nil, zero value otherwise.
+
+### GetBudgetTypeOk
+
+`func (o *IngestBudgetResourceIdentity) GetBudgetTypeOk() (*string, bool)`
+
+GetBudgetTypeOk returns a tuple with the BudgetType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBudgetType
+
+`func (o *IngestBudgetResourceIdentity) SetBudgetType(v string)`
+
+SetBudgetType sets BudgetType field to given value.
+
+### HasBudgetType
+
+`func (o *IngestBudgetResourceIdentity) HasBudgetType() bool`
+
+HasBudgetType returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

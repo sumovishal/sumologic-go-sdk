@@ -4,15 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**EvaluationType** | **string** | Evaluate SLI using successful/total windows, or occurrence of successful events over entire compliance period. | 
-**QueryType** | **string** | Type of Raw Data Queries for SLI (Logs/Metrics). | 
-**Queries** | [**[]SliQueryGroup**](SliQueryGroup.md) | Queries for defining SLI. | 
+**EvaluationType** | **string** | Evaluate SLI using successful/total windows, or occurrence of successful events over entire compliance period, or based on monitor evaluation. | 
 
 ## Methods
 
 ### NewSli
 
-`func NewSli(evaluationType string, queryType string, queries []SliQueryGroup, ) *Sli`
+`func NewSli(evaluationType string, ) *Sli`
 
 NewSli instantiates a new Sli object
 This constructor will assign default values to properties that have it defined,
@@ -45,46 +43,6 @@ and a boolean to check if the value has been set.
 `func (o *Sli) SetEvaluationType(v string)`
 
 SetEvaluationType sets EvaluationType field to given value.
-
-
-### GetQueryType
-
-`func (o *Sli) GetQueryType() string`
-
-GetQueryType returns the QueryType field if non-nil, zero value otherwise.
-
-### GetQueryTypeOk
-
-`func (o *Sli) GetQueryTypeOk() (*string, bool)`
-
-GetQueryTypeOk returns a tuple with the QueryType field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetQueryType
-
-`func (o *Sli) SetQueryType(v string)`
-
-SetQueryType sets QueryType field to given value.
-
-
-### GetQueries
-
-`func (o *Sli) GetQueries() []SliQueryGroup`
-
-GetQueries returns the Queries field if non-nil, zero value otherwise.
-
-### GetQueriesOk
-
-`func (o *Sli) GetQueriesOk() (*[]SliQueryGroup, bool)`
-
-GetQueriesOk returns a tuple with the Queries field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetQueries
-
-`func (o *Sli) SetQueries(v []SliQueryGroup)`
-
-SetQueries sets Queries field to given value.
 
 
 

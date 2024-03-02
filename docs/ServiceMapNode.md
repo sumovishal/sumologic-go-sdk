@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ServiceName** | **string** | Name of a service in a service map. | 
+**ServiceColor** | Pointer to **string** | Color hex code assigned to the service. | [optional] 
 **LastSeenAt** | **time.Time** | The last time in UTC a service has been seen. Formatted as defined by date-time - RFC3339. | 
 **IsRemote** | **bool** | Indicates whether node comes from inferred remote service or instrumented one. | 
 **ServiceType** | **string** | Defines type of service. | 
@@ -47,6 +48,31 @@ and a boolean to check if the value has been set.
 
 SetServiceName sets ServiceName field to given value.
 
+
+### GetServiceColor
+
+`func (o *ServiceMapNode) GetServiceColor() string`
+
+GetServiceColor returns the ServiceColor field if non-nil, zero value otherwise.
+
+### GetServiceColorOk
+
+`func (o *ServiceMapNode) GetServiceColorOk() (*string, bool)`
+
+GetServiceColorOk returns a tuple with the ServiceColor field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetServiceColor
+
+`func (o *ServiceMapNode) SetServiceColor(v string)`
+
+SetServiceColor sets ServiceColor field to given value.
+
+### HasServiceColor
+
+`func (o *ServiceMapNode) HasServiceColor() bool`
+
+HasServiceColor returns a boolean if a field has been set.
 
 ### GetLastSeenAt
 

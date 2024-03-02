@@ -7,13 +7,13 @@ Name | Type | Description | Notes
 **Recipients** | **[]string** | A list of email addresses to send to when the rule fires. | 
 **Subject** | **string** | The subject line of the email. | 
 **MessageBody** | Pointer to **string** | The message body of the email to send. | [optional] 
-**TimeZone** | **string** | Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | 
+**TimeZone** | Pointer to **string** | Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | [optional] 
 
 ## Methods
 
 ### NewEmailAllOf
 
-`func NewEmailAllOf(recipients []string, subject string, timeZone string, ) *EmailAllOf`
+`func NewEmailAllOf(recipients []string, subject string, ) *EmailAllOf`
 
 NewEmailAllOf instantiates a new EmailAllOf object
 This constructor will assign default values to properties that have it defined,
@@ -112,6 +112,11 @@ and a boolean to check if the value has been set.
 
 SetTimeZone sets TimeZone field to given value.
 
+### HasTimeZone
+
+`func (o *EmailAllOf) HasTimeZone() bool`
+
+HasTimeZone returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
