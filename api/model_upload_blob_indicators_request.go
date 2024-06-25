@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
 )
 
 // checks if the UploadBlobIndicatorsRequest type satisfies the MappedNullable interface at compile time
@@ -22,9 +21,7 @@ var _ MappedNullable = &UploadBlobIndicatorsRequest{}
 type UploadBlobIndicatorsRequest struct {
 	// User-provided text to identify the source of the indicator
 	Source string `json:"source"`
-	// When this indicator was first loaded into Sumo. Timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
-	Imported time.Time `json:"imported"`
-	// The input format.
+	// The input format. STIX_2_JSON includes support for minor versions (i.e. 2.0, 2.1)
 	Format string `json:"format"`
 	// The blob containing indicators.
 	Blob string `json:"blob"`
@@ -34,10 +31,9 @@ type UploadBlobIndicatorsRequest struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadBlobIndicatorsRequest(source string, imported time.Time, format string, blob string) *UploadBlobIndicatorsRequest {
+func NewUploadBlobIndicatorsRequest(source string, format string, blob string) *UploadBlobIndicatorsRequest {
 	this := UploadBlobIndicatorsRequest{}
 	this.Source = source
-	this.Imported = imported
 	this.Format = format
 	this.Blob = blob
 	return &this
@@ -73,30 +69,6 @@ func (o *UploadBlobIndicatorsRequest) GetSourceOk() (*string, bool) {
 // SetSource sets field value
 func (o *UploadBlobIndicatorsRequest) SetSource(v string) {
 	o.Source = v
-}
-
-// GetImported returns the Imported field value
-func (o *UploadBlobIndicatorsRequest) GetImported() time.Time {
-	if o == nil {
-		var ret time.Time
-		return ret
-	}
-
-	return o.Imported
-}
-
-// GetImportedOk returns a tuple with the Imported field value
-// and a boolean to check if the value has been set.
-func (o *UploadBlobIndicatorsRequest) GetImportedOk() (*time.Time, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Imported, true
-}
-
-// SetImported sets field value
-func (o *UploadBlobIndicatorsRequest) SetImported(v time.Time) {
-	o.Imported = v
 }
 
 // GetFormat returns the Format field value
@@ -158,7 +130,6 @@ func (o UploadBlobIndicatorsRequest) MarshalJSON() ([]byte, error) {
 func (o UploadBlobIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source"] = o.Source
-	toSerialize["imported"] = o.Imported
 	toSerialize["format"] = o.Format
 	toSerialize["blob"] = o.Blob
 	return toSerialize, nil

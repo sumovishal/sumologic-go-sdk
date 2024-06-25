@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**BurnRateThreshold** | **float64** | The burn rate percentage. | 
-**TimeRange** | **string** | The relative time range for the burn rate percentage evaluation. | 
+**BurnRateThreshold** | Pointer to **float64** | The error budget depletion percentage. | [optional] 
+**TimeRange** | Pointer to **string** | The relative time range for measuring error budget depletion. | [optional] 
 
 ## Methods
 
 ### NewSloBurnRateCondition
 
-`func NewSloBurnRateCondition(burnRateThreshold float64, timeRange string, ) *SloBurnRateCondition`
+`func NewSloBurnRateCondition() *SloBurnRateCondition`
 
 NewSloBurnRateCondition instantiates a new SloBurnRateCondition object
 This constructor will assign default values to properties that have it defined,
@@ -45,6 +45,11 @@ and a boolean to check if the value has been set.
 
 SetBurnRateThreshold sets BurnRateThreshold field to given value.
 
+### HasBurnRateThreshold
+
+`func (o *SloBurnRateCondition) HasBurnRateThreshold() bool`
+
+HasBurnRateThreshold returns a boolean if a field has been set.
 
 ### GetTimeRange
 
@@ -65,6 +70,11 @@ and a boolean to check if the value has been set.
 
 SetTimeRange sets TimeRange field to given value.
 
+### HasTimeRange
+
+`func (o *SloBurnRateCondition) HasTimeRange() bool`
+
+HasTimeRange returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -22,6 +22,7 @@ type MutingSchedulesLibraryMutingScheduleUpdate struct {
 	MutingSchedulesLibraryBaseUpdate
 	Schedule ScheduleDefinition `json:"schedule"`
 	Monitor *MonitorScope `json:"monitor,omitempty"`
+	NotificationGroups []GroupDefinition `json:"notificationGroups,omitempty"`
 }
 
 // NewMutingSchedulesLibraryMutingScheduleUpdate instantiates a new MutingSchedulesLibraryMutingScheduleUpdate object
@@ -103,6 +104,38 @@ func (o *MutingSchedulesLibraryMutingScheduleUpdate) SetMonitor(v MonitorScope) 
 	o.Monitor = &v
 }
 
+// GetNotificationGroups returns the NotificationGroups field value if set, zero value otherwise.
+func (o *MutingSchedulesLibraryMutingScheduleUpdate) GetNotificationGroups() []GroupDefinition {
+	if o == nil || IsNil(o.NotificationGroups) {
+		var ret []GroupDefinition
+		return ret
+	}
+	return o.NotificationGroups
+}
+
+// GetNotificationGroupsOk returns a tuple with the NotificationGroups field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MutingSchedulesLibraryMutingScheduleUpdate) GetNotificationGroupsOk() ([]GroupDefinition, bool) {
+	if o == nil || IsNil(o.NotificationGroups) {
+		return nil, false
+	}
+	return o.NotificationGroups, true
+}
+
+// HasNotificationGroups returns a boolean if a field has been set.
+func (o *MutingSchedulesLibraryMutingScheduleUpdate) HasNotificationGroups() bool {
+	if o != nil && !IsNil(o.NotificationGroups) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationGroups gets a reference to the given []GroupDefinition and assigns it to the NotificationGroups field.
+func (o *MutingSchedulesLibraryMutingScheduleUpdate) SetNotificationGroups(v []GroupDefinition) {
+	o.NotificationGroups = v
+}
+
 func (o MutingSchedulesLibraryMutingScheduleUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -124,6 +157,9 @@ func (o MutingSchedulesLibraryMutingScheduleUpdate) ToMap() (map[string]interfac
 	toSerialize["schedule"] = o.Schedule
 	if !IsNil(o.Monitor) {
 		toSerialize["monitor"] = o.Monitor
+	}
+	if !IsNil(o.NotificationGroups) {
+		toSerialize["notificationGroups"] = o.NotificationGroups
 	}
 	return toSerialize, nil
 }

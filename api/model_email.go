@@ -27,19 +27,18 @@ type Email struct {
 	// The message body of the email to send.
 	MessageBody *string `json:"messageBody,omitempty"`
 	// Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
-	TimeZone string `json:"timeZone"`
+	TimeZone *string `json:"timeZone,omitempty"`
 }
 
 // NewEmail instantiates a new Email object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEmail(recipients []string, subject string, timeZone string, connectionType string) *Email {
+func NewEmail(recipients []string, subject string, connectionType string) *Email {
 	this := Email{}
 	this.ConnectionType = connectionType
 	this.Recipients = recipients
 	this.Subject = subject
-	this.TimeZone = timeZone
 	return &this
 }
 
@@ -131,28 +130,36 @@ func (o *Email) SetMessageBody(v string) {
 	o.MessageBody = &v
 }
 
-// GetTimeZone returns the TimeZone field value
+// GetTimeZone returns the TimeZone field value if set, zero value otherwise.
 func (o *Email) GetTimeZone() string {
-	if o == nil {
+	if o == nil || IsNil(o.TimeZone) {
 		var ret string
 		return ret
 	}
-
-	return o.TimeZone
+	return *o.TimeZone
 }
 
-// GetTimeZoneOk returns a tuple with the TimeZone field value
+// GetTimeZoneOk returns a tuple with the TimeZone field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Email) GetTimeZoneOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.TimeZone) {
 		return nil, false
 	}
-	return &o.TimeZone, true
+	return o.TimeZone, true
 }
 
-// SetTimeZone sets field value
+// HasTimeZone returns a boolean if a field has been set.
+func (o *Email) HasTimeZone() bool {
+	if o != nil && !IsNil(o.TimeZone) {
+		return true
+	}
+
+	return false
+}
+
+// SetTimeZone gets a reference to the given string and assigns it to the TimeZone field.
 func (o *Email) SetTimeZone(v string) {
-	o.TimeZone = v
+	o.TimeZone = &v
 }
 
 func (o Email) MarshalJSON() ([]byte, error) {
@@ -178,7 +185,9 @@ func (o Email) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MessageBody) {
 		toSerialize["messageBody"] = o.MessageBody
 	}
-	toSerialize["timeZone"] = o.TimeZone
+	if !IsNil(o.TimeZone) {
+		toSerialize["timeZone"] = o.TimeZone
+	}
 	return toSerialize, nil
 }
 

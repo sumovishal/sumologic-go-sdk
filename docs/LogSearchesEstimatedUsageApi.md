@@ -5,6 +5,7 @@ All URIs are relative to *https://api.au.sumologic.com/api*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**GetLogSearchEstimatedUsage**](LogSearchesEstimatedUsageApi.md#GetLogSearchEstimatedUsage) | **Post** /v1/logSearches/estimatedUsage | Gets estimated usage details.
+[**GetLogSearchEstimatedUsageByMeteringType**](LogSearchesEstimatedUsageApi.md#GetLogSearchEstimatedUsageByMeteringType) | **Post** /v1/logSearches/estimatedUsageByMeteringType | Gets estimated usage details per metering type.
 [**GetLogSearchEstimatedUsageByTier**](LogSearchesEstimatedUsageApi.md#GetLogSearchEstimatedUsageByTier) | **Post** /v1/logSearches/estimatedUsageByTier | Gets Tier Wise estimated usage details.
 
 
@@ -26,11 +27,11 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    logSearchEstimatedUsageRequest := *openapiclient.NewLogSearchEstimatedUsageRequest("error | count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequest | The definition of the log search estimated usage.
+    logSearchEstimatedUsageRequest := *openapiclient.NewLogSearchEstimatedUsageRequest("error {{sourceCategory}}| count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequest | The definition of the log search estimated usage.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
@@ -75,6 +76,72 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## GetLogSearchEstimatedUsageByMeteringType
+
+> LogSearchEstimatedUsageByMeteringTypeDefinition GetLogSearchEstimatedUsageByMeteringType(ctx).LogSearchEstimatedUsageRequestV3(logSearchEstimatedUsageRequestV3).Execute()
+
+Gets estimated usage details per metering type.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    logSearchEstimatedUsageRequestV3 := *openapiclient.NewLogSearchEstimatedUsageRequestV3("error {{sourceCategory}}| count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequestV3 | The definition of the log search estimated usage.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.LogSearchesEstimatedUsageApi.GetLogSearchEstimatedUsageByMeteringType(context.Background()).LogSearchEstimatedUsageRequestV3(logSearchEstimatedUsageRequestV3).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `LogSearchesEstimatedUsageApi.GetLogSearchEstimatedUsageByMeteringType``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetLogSearchEstimatedUsageByMeteringType`: LogSearchEstimatedUsageByMeteringTypeDefinition
+    fmt.Fprintf(os.Stdout, "Response from `LogSearchesEstimatedUsageApi.GetLogSearchEstimatedUsageByMeteringType`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetLogSearchEstimatedUsageByMeteringTypeRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **logSearchEstimatedUsageRequestV3** | [**LogSearchEstimatedUsageRequestV3**](LogSearchEstimatedUsageRequestV3.md) | The definition of the log search estimated usage. | 
+
+### Return type
+
+[**LogSearchEstimatedUsageByMeteringTypeDefinition**](LogSearchEstimatedUsageByMeteringTypeDefinition.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## GetLogSearchEstimatedUsageByTier
 
 > LogSearchEstimatedUsageByTierDefinition GetLogSearchEstimatedUsageByTier(ctx).LogSearchEstimatedUsageRequestV2(logSearchEstimatedUsageRequestV2).Execute()
@@ -92,11 +159,11 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-    logSearchEstimatedUsageRequestV2 := *openapiclient.NewLogSearchEstimatedUsageRequestV2("error | count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequestV2 | The definition of the log search estimated usage.
+    logSearchEstimatedUsageRequestV2 := *openapiclient.NewLogSearchEstimatedUsageRequestV2("error {{sourceCategory}}| count by _sourceCategory", *openapiclient.NewResolvableTimeRange("Type_example"), "America/Los_Angeles") // LogSearchEstimatedUsageRequestV2 | The definition of the log search estimated usage.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)

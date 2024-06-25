@@ -5,9 +5,11 @@ All URIs are relative to *https://api.au.sumologic.com/api*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**DisableMonitorByIds**](MonitorsLibraryManagementApi.md#DisableMonitorByIds) | **Put** /v1/monitors/disable | Disable monitors.
+[**GetMonitorPlaybooks**](MonitorsLibraryManagementApi.md#GetMonitorPlaybooks) | **Get** /v1/monitors/playbooks | List all playbooks.
 [**GetMonitorUsageInfo**](MonitorsLibraryManagementApi.md#GetMonitorUsageInfo) | **Get** /v1/monitors/usageInfo | Usage info of monitors.
 [**GetMonitorsFullPath**](MonitorsLibraryManagementApi.md#GetMonitorsFullPath) | **Get** /v1/monitors/{id}/path | Get the path of a monitor or folder.
 [**GetMonitorsLibraryRoot**](MonitorsLibraryManagementApi.md#GetMonitorsLibraryRoot) | **Get** /v1/monitors/root | Get the root monitors folder.
+[**GetPlaybooksDetails**](MonitorsLibraryManagementApi.md#GetPlaybooksDetails) | **Get** /v1/monitors/playbooksDetails | Get playbook details.
 [**MonitorsCopy**](MonitorsLibraryManagementApi.md#MonitorsCopy) | **Post** /v1/monitors/{id}/copy | Copy a monitor or folder.
 [**MonitorsCreate**](MonitorsLibraryManagementApi.md#MonitorsCreate) | **Post** /v1/monitors | Create a monitor or folder. 
 [**MonitorsDeleteById**](MonitorsLibraryManagementApi.md#MonitorsDeleteById) | **Delete** /v1/monitors/{id} | Delete a monitor or folder. 
@@ -44,7 +46,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -93,6 +95,72 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## GetMonitorPlaybooks
+
+> []MonitorPlaybook GetMonitorPlaybooks(ctx).PlaybookType(playbookType).Execute()
+
+List all playbooks.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    playbookType := "CSE" // string | A string value for playbook type. (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MonitorsLibraryManagementApi.GetMonitorPlaybooks(context.Background()).PlaybookType(playbookType).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.GetMonitorPlaybooks``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetMonitorPlaybooks`: []MonitorPlaybook
+    fmt.Fprintf(os.Stdout, "Response from `MonitorsLibraryManagementApi.GetMonitorPlaybooks`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetMonitorPlaybooksRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **playbookType** | **string** | A string value for playbook type. | 
+
+### Return type
+
+[**[]MonitorPlaybook**](MonitorPlaybook.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## GetMonitorUsageInfo
 
 > []MonitorUsage GetMonitorUsageInfo(ctx).Execute()
@@ -110,7 +178,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -171,7 +239,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -241,7 +309,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -285,6 +353,72 @@ Other parameters are passed through a pointer to a apiGetMonitorsLibraryRootRequ
 [[Back to README]](../README.md)
 
 
+## GetPlaybooksDetails
+
+> []MonitorPlaybook GetPlaybooksDetails(ctx).Ids(ids).Execute()
+
+Get playbook details.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    ids := []string{"Inner_example"} // []string | A comma-separated list of playbook identifiers.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MonitorsLibraryManagementApi.GetPlaybooksDetails(context.Background()).Ids(ids).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.GetPlaybooksDetails``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetPlaybooksDetails`: []MonitorPlaybook
+    fmt.Fprintf(os.Stdout, "Response from `MonitorsLibraryManagementApi.GetPlaybooksDetails`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetPlaybooksDetailsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ids** | **[]string** | A comma-separated list of playbook identifiers. | 
+
+### Return type
+
+[**[]MonitorPlaybook**](MonitorPlaybook.md)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## MonitorsCopy
 
 > MonitorsLibraryBaseResponse MonitorsCopy(ctx, id).ContentCopyParams(contentCopyParams).Execute()
@@ -302,7 +436,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -374,7 +508,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -442,7 +576,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -450,7 +584,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsDeleteById(context.Background(), id).Execute()
+    r, err := apiClient.MonitorsLibraryManagementApi.MonitorsDeleteById(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.MonitorsDeleteById``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -510,7 +644,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -576,7 +710,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -646,7 +780,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -712,7 +846,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -784,7 +918,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -856,7 +990,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -911,7 +1045,7 @@ Name | Type | Description  | Notes
 
 ## MonitorsReadByIds
 
-> map[string]MonitorsLibraryBaseResponse MonitorsReadByIds(ctx).Ids(ids).Execute()
+> map[string]MonitorsLibraryBaseResponse MonitorsReadByIds(ctx).Ids(ids).SkipChildren(skipChildren).Execute()
 
 Bulk read a monitor or folder.
 
@@ -926,15 +1060,16 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     ids := []string{"Inner_example"} // []string | A comma-separated list of identifiers.
+    skipChildren := true // bool | a boolean parameter to control skipping fetching children of requested folder(s) (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsReadByIds(context.Background()).Ids(ids).Execute()
+    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsReadByIds(context.Background()).Ids(ids).SkipChildren(skipChildren).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.MonitorsReadByIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -956,6 +1091,7 @@ Other parameters are passed through a pointer to a apiMonitorsReadByIdsRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ids** | **[]string** | A comma-separated list of identifiers. | 
+ **skipChildren** | **bool** | a boolean parameter to control skipping fetching children of requested folder(s) | 
 
 ### Return type
 
@@ -992,7 +1128,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -1062,7 +1198,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -1132,7 +1268,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -1140,7 +1276,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsRevokePermissions(context.Background()).PermissionIdentifiers(permissionIdentifiers).Execute()
+    r, err := apiClient.MonitorsLibraryManagementApi.MonitorsRevokePermissions(context.Background()).PermissionIdentifiers(permissionIdentifiers).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.MonitorsRevokePermissions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1181,7 +1317,7 @@ Name | Type | Description  | Notes
 
 ## MonitorsSearch
 
-> []MonitorsLibraryItemWithPath MonitorsSearch(ctx).Query(query).Limit(limit).Offset(offset).Execute()
+> []MonitorsLibraryItemWithPath MonitorsSearch(ctx).Query(query).Limit(limit).Offset(offset).SkipChildren(skipChildren).Execute()
 
 Search for a monitor or folder.
 
@@ -1196,17 +1332,18 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     query := "createdBy:000000000000968B Test" // string | The search query to find monitor or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user's identifier who created the content. Example: `createdBy:000000000000968B`.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: `createdBefore:1457997222`.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: `createdAfter:1457997111`.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: `modifiedBefore:1457997222`.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: `modifiedAfter:1457997111`.   - **type** : Filter by the type of the content object. Example: `type:folder`.   - **monitorStatus** : Filter by the status of the monitor: Normal, Critical, Warning, MissingData, Disabled, AllTriggered. Example: `monitorStatus:Normal`.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    `createdBy:000000000000968B createdAfter:1457997222 Test`
-    limit := int32(10) // int32 | Maximum number of items you want in the response. (optional) (default to 100)
+    limit := int32(10) // int32 | Maximum number of items you want in the response. (optional) (default to 1000)
     offset := int32(5) // int32 | The position or row from where to start the search operation. (optional) (default to 0)
+    skipChildren := true // bool | a boolean parameter to control skipping fetching children of requested folder(s) (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsSearch(context.Background()).Query(query).Limit(limit).Offset(offset).Execute()
+    resp, r, err := apiClient.MonitorsLibraryManagementApi.MonitorsSearch(context.Background()).Query(query).Limit(limit).Offset(offset).SkipChildren(skipChildren).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MonitorsLibraryManagementApi.MonitorsSearch``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1228,8 +1365,9 @@ Other parameters are passed through a pointer to a apiMonitorsSearchRequest stru
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **query** | **string** | The search query to find monitor or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.   - **monitorStatus** : Filter by the status of the monitor: Normal, Critical, Warning, MissingData, Disabled, AllTriggered. Example: &#x60;monitorStatus:Normal&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60; | 
- **limit** | **int32** | Maximum number of items you want in the response. | [default to 100]
+ **limit** | **int32** | Maximum number of items you want in the response. | [default to 1000]
  **offset** | **int32** | The position or row from where to start the search operation. | [default to 0]
+ **skipChildren** | **bool** | a boolean parameter to control skipping fetching children of requested folder(s) | 
 
 ### Return type
 
@@ -1266,7 +1404,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -1332,7 +1470,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {

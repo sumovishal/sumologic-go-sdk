@@ -27,6 +27,8 @@ type UsageReportRequest struct {
 	GroupBy *string `json:"groupBy,omitempty"`
 	// Specifies the type of report to be exported. Available types are `standard` and `detailed`. An additional `childDetailed` type is available for Sumo Orgs parents. Detailed report will have raw consumption along with the credits breakdown. If no value is provided Standard reports will be exported.
 	ReportType *string `json:"reportType,omitempty"`
+	// Deployment charges will be applied to the returned usages csv if this is set to true and the organization  is a part of Sumo Organizations as a child organization.
+	IncludeDeploymentCharge *bool `json:"includeDeploymentCharge,omitempty"`
 }
 
 // NewUsageReportRequest instantiates a new UsageReportRequest object
@@ -39,6 +41,8 @@ func NewUsageReportRequest() *UsageReportRequest {
 	this.GroupBy = &groupBy
 	var reportType string = "standard"
 	this.ReportType = &reportType
+	var includeDeploymentCharge bool = false
+	this.IncludeDeploymentCharge = &includeDeploymentCharge
 	return &this
 }
 
@@ -51,6 +55,8 @@ func NewUsageReportRequestWithDefaults() *UsageReportRequest {
 	this.GroupBy = &groupBy
 	var reportType string = "standard"
 	this.ReportType = &reportType
+	var includeDeploymentCharge bool = false
+	this.IncludeDeploymentCharge = &includeDeploymentCharge
 	return &this
 }
 
@@ -182,6 +188,38 @@ func (o *UsageReportRequest) SetReportType(v string) {
 	o.ReportType = &v
 }
 
+// GetIncludeDeploymentCharge returns the IncludeDeploymentCharge field value if set, zero value otherwise.
+func (o *UsageReportRequest) GetIncludeDeploymentCharge() bool {
+	if o == nil || IsNil(o.IncludeDeploymentCharge) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeDeploymentCharge
+}
+
+// GetIncludeDeploymentChargeOk returns a tuple with the IncludeDeploymentCharge field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UsageReportRequest) GetIncludeDeploymentChargeOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeDeploymentCharge) {
+		return nil, false
+	}
+	return o.IncludeDeploymentCharge, true
+}
+
+// HasIncludeDeploymentCharge returns a boolean if a field has been set.
+func (o *UsageReportRequest) HasIncludeDeploymentCharge() bool {
+	if o != nil && !IsNil(o.IncludeDeploymentCharge) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeDeploymentCharge gets a reference to the given bool and assigns it to the IncludeDeploymentCharge field.
+func (o *UsageReportRequest) SetIncludeDeploymentCharge(v bool) {
+	o.IncludeDeploymentCharge = &v
+}
+
 func (o UsageReportRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -203,6 +241,9 @@ func (o UsageReportRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ReportType) {
 		toSerialize["reportType"] = o.ReportType
+	}
+	if !IsNil(o.IncludeDeploymentCharge) {
+		toSerialize["includeDeploymentCharge"] = o.IncludeDeploymentCharge
 	}
 	return toSerialize, nil
 }

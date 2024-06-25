@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**EnableSamlLockdown**](SamlConfigurationManagementApi.md#EnableSamlLockdown) | **Post** /v1/saml/lockdown/enable | Require SAML for sign-in.
 [**GetAllowlistedUsers**](SamlConfigurationManagementApi.md#GetAllowlistedUsers) | **Get** /v1/saml/allowlistedUsers | Get list of allowlisted users.
 [**GetIdentityProviders**](SamlConfigurationManagementApi.md#GetIdentityProviders) | **Get** /v1/saml/identityProviders | Get a list of SAML configurations.
+[**GetSamlMetadata**](SamlConfigurationManagementApi.md#GetSamlMetadata) | **Get** /v1/saml/identityProviders/{id}/metadata | Get SAML configuration metadata XML.
 [**UpdateIdentityProvider**](SamlConfigurationManagementApi.md#UpdateIdentityProvider) | **Put** /v1/saml/identityProviders/{id} | Update a SAML configuration.
 
 
@@ -33,7 +34,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -103,7 +104,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -169,7 +170,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -177,7 +178,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SamlConfigurationManagementApi.DeleteAllowlistedUser(context.Background(), userId).Execute()
+    r, err := apiClient.SamlConfigurationManagementApi.DeleteAllowlistedUser(context.Background(), userId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SamlConfigurationManagementApi.DeleteAllowlistedUser``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -237,7 +238,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -245,7 +246,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SamlConfigurationManagementApi.DeleteIdentityProvider(context.Background(), id).Execute()
+    r, err := apiClient.SamlConfigurationManagementApi.DeleteIdentityProvider(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SamlConfigurationManagementApi.DeleteIdentityProvider``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -305,14 +306,14 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SamlConfigurationManagementApi.DisableSamlLockdown(context.Background()).Execute()
+    r, err := apiClient.SamlConfigurationManagementApi.DisableSamlLockdown(context.Background()).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SamlConfigurationManagementApi.DisableSamlLockdown``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -364,14 +365,14 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.SamlConfigurationManagementApi.EnableSamlLockdown(context.Background()).Execute()
+    r, err := apiClient.SamlConfigurationManagementApi.EnableSamlLockdown(context.Background()).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SamlConfigurationManagementApi.EnableSamlLockdown``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -423,7 +424,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -484,7 +485,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -528,6 +529,76 @@ Other parameters are passed through a pointer to a apiGetIdentityProvidersReques
 [[Back to README]](../README.md)
 
 
+## GetSamlMetadata
+
+> string GetSamlMetadata(ctx, id).Execute()
+
+Get SAML configuration metadata XML.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    id := "id_example" // string | Identifier of the SAML configuration for which metadata should be returned.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.SamlConfigurationManagementApi.GetSamlMetadata(context.Background(), id).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `SamlConfigurationManagementApi.GetSamlMetadata``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetSamlMetadata`: string
+    fmt.Fprintf(os.Stdout, "Response from `SamlConfigurationManagementApi.GetSamlMetadata`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Identifier of the SAML configuration for which metadata should be returned. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetSamlMetadataRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+**string**
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/xml, application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## UpdateIdentityProvider
 
 > SamlIdentityProvider UpdateIdentityProvider(ctx, id).SamlIdentityProviderRequest(samlIdentityProviderRequest).Execute()
@@ -545,7 +616,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {

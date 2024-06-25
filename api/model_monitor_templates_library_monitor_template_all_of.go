@@ -21,8 +21,6 @@ var _ MappedNullable = &MonitorTemplatesLibraryMonitorTemplateAllOf{}
 type MonitorTemplatesLibraryMonitorTemplateAllOf struct {
 	// The type of monitor template. Valid values:   1. `Logs`: A logs query monitor template.   2. `Metrics`: A metrics query monitor template.   3. `Slo`: A SLO based monitor template.
 	MonitorType string `json:"monitorType"`
-	// The app id which related to the monitor template. It will be UUID string
-	AppId string `json:"appId"`
 	// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
 	EvaluationDelay *string `json:"evaluationDelay,omitempty"`
 	// The name of the alert(s) triggered from the monitor created based on the template. Monitor name will be used if not specified.
@@ -43,10 +41,9 @@ type MonitorTemplatesLibraryMonitorTemplateAllOf struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMonitorTemplatesLibraryMonitorTemplateAllOf(monitorType string, appId string, queries []MonitorQuery, triggers []TriggerCondition) *MonitorTemplatesLibraryMonitorTemplateAllOf {
+func NewMonitorTemplatesLibraryMonitorTemplateAllOf(monitorType string, queries []MonitorQuery, triggers []TriggerCondition) *MonitorTemplatesLibraryMonitorTemplateAllOf {
 	this := MonitorTemplatesLibraryMonitorTemplateAllOf{}
 	this.MonitorType = monitorType
-	this.AppId = appId
 	var evaluationDelay string = "0m"
 	this.EvaluationDelay = &evaluationDelay
 	this.Queries = queries
@@ -98,30 +95,6 @@ func (o *MonitorTemplatesLibraryMonitorTemplateAllOf) GetMonitorTypeOk() (*strin
 // SetMonitorType sets field value
 func (o *MonitorTemplatesLibraryMonitorTemplateAllOf) SetMonitorType(v string) {
 	o.MonitorType = v
-}
-
-// GetAppId returns the AppId field value
-func (o *MonitorTemplatesLibraryMonitorTemplateAllOf) GetAppId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.AppId
-}
-
-// GetAppIdOk returns a tuple with the AppId field value
-// and a boolean to check if the value has been set.
-func (o *MonitorTemplatesLibraryMonitorTemplateAllOf) GetAppIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.AppId, true
-}
-
-// SetAppId sets field value
-func (o *MonitorTemplatesLibraryMonitorTemplateAllOf) SetAppId(v string) {
-	o.AppId = v
 }
 
 // GetEvaluationDelay returns the EvaluationDelay field value if set, zero value otherwise.
@@ -343,7 +316,6 @@ func (o MonitorTemplatesLibraryMonitorTemplateAllOf) MarshalJSON() ([]byte, erro
 func (o MonitorTemplatesLibraryMonitorTemplateAllOf) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["monitorType"] = o.MonitorType
-	toSerialize["appId"] = o.AppId
 	if !IsNil(o.EvaluationDelay) {
 		toSerialize["evaluationDelay"] = o.EvaluationDelay
 	}

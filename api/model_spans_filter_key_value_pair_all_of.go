@@ -17,7 +17,7 @@ import (
 // checks if the SpansFilterKeyValuePairAllOf type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SpansFilterKeyValuePairAllOf{}
 
-// SpansFilterKeyValuePairAllOf A representation of a span filter where both the field name and field value are provided, e.g. http.status_code > 500. 
+// SpansFilterKeyValuePairAllOf A representation of a span filter where both the field name and field value are provided, e.g. http.response.status_code > 500. 
 type SpansFilterKeyValuePairAllOf struct {
 	// A symbol that indicates an operation to be performed between a `fieldName` and `fieldValue`.
 	Operator string `json:"operator"`

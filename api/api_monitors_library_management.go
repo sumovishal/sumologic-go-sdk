@@ -142,6 +142,123 @@ func (a *MonitorsLibraryManagementApiService) DisableMonitorByIdsExecute(r ApiDi
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetMonitorPlaybooksRequest struct {
+	ctx context.Context
+	ApiService *MonitorsLibraryManagementApiService
+	playbookType *string
+}
+
+// A string value for playbook type.
+func (r ApiGetMonitorPlaybooksRequest) PlaybookType(playbookType string) ApiGetMonitorPlaybooksRequest {
+	r.playbookType = &playbookType
+	return r
+}
+
+func (r ApiGetMonitorPlaybooksRequest) Execute() ([]MonitorPlaybook, *http.Response, error) {
+	return r.ApiService.GetMonitorPlaybooksExecute(r)
+}
+
+/*
+GetMonitorPlaybooks List all playbooks.
+
+List all playbooks available to run.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetMonitorPlaybooksRequest
+*/
+func (a *MonitorsLibraryManagementApiService) GetMonitorPlaybooks(ctx context.Context) ApiGetMonitorPlaybooksRequest {
+	return ApiGetMonitorPlaybooksRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return []MonitorPlaybook
+func (a *MonitorsLibraryManagementApiService) GetMonitorPlaybooksExecute(r ApiGetMonitorPlaybooksRequest) ([]MonitorPlaybook, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []MonitorPlaybook
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.GetMonitorPlaybooks")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/monitors/playbooks"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.playbookType != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "playbookType", r.playbookType, "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetMonitorUsageInfoRequest struct {
 	ctx context.Context
 	ApiService *MonitorsLibraryManagementApiService
@@ -405,6 +522,124 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRootExecute(r Ap
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetPlaybooksDetailsRequest struct {
+	ctx context.Context
+	ApiService *MonitorsLibraryManagementApiService
+	ids *[]string
+}
+
+// A comma-separated list of playbook identifiers.
+func (r ApiGetPlaybooksDetailsRequest) Ids(ids []string) ApiGetPlaybooksDetailsRequest {
+	r.ids = &ids
+	return r
+}
+
+func (r ApiGetPlaybooksDetailsRequest) Execute() ([]MonitorPlaybook, *http.Response, error) {
+	return r.ApiService.GetPlaybooksDetailsExecute(r)
+}
+
+/*
+GetPlaybooksDetails Get playbook details.
+
+Get the details of the playbooks with the specified identifiers.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetPlaybooksDetailsRequest
+*/
+func (a *MonitorsLibraryManagementApiService) GetPlaybooksDetails(ctx context.Context) ApiGetPlaybooksDetailsRequest {
+	return ApiGetPlaybooksDetailsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return []MonitorPlaybook
+func (a *MonitorsLibraryManagementApiService) GetPlaybooksDetailsExecute(r ApiGetPlaybooksDetailsRequest) ([]MonitorPlaybook, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []MonitorPlaybook
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.GetPlaybooksDetails")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/monitors/playbooksDetails"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.ids == nil {
+		return localVarReturnValue, nil, reportError("ids is required and must be specified")
+	}
+
+	parameterAddToHeaderOrQuery(localVarQueryParams, "ids", r.ids, "csv")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1537,11 +1772,18 @@ type ApiMonitorsReadByIdsRequest struct {
 	ctx context.Context
 	ApiService *MonitorsLibraryManagementApiService
 	ids *[]string
+	skipChildren *bool
 }
 
 // A comma-separated list of identifiers.
 func (r ApiMonitorsReadByIdsRequest) Ids(ids []string) ApiMonitorsReadByIdsRequest {
 	r.ids = &ids
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMonitorsReadByIdsRequest) SkipChildren(skipChildren bool) ApiMonitorsReadByIdsRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1598,6 +1840,9 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdsExecute(r ApiMoni
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
 		}
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1997,6 +2242,7 @@ type ApiMonitorsSearchRequest struct {
 	query *string
 	limit *int32
 	offset *int32
+	skipChildren *bool
 }
 
 // The search query to find monitor or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.   - **monitorStatus** : Filter by the status of the monitor: Normal, Critical, Warning, MissingData, Disabled, AllTriggered. Example: &#x60;monitorStatus:Normal&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60;
@@ -2014,6 +2260,12 @@ func (r ApiMonitorsSearchRequest) Limit(limit int32) ApiMonitorsSearchRequest {
 // The position or row from where to start the search operation.
 func (r ApiMonitorsSearchRequest) Offset(offset int32) ApiMonitorsSearchRequest {
 	r.offset = &offset
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMonitorsSearchRequest) SkipChildren(skipChildren bool) ApiMonitorsSearchRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -2066,6 +2318,9 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSearchExecute(r ApiMonitor
 	}
 	if r.offset != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

@@ -70,6 +70,8 @@ type SamlIdentityProvider struct {
 	AssertionConsumerUrl *string `json:"assertionConsumerUrl,omitempty"`
 	// A unique identifier that is the intended audience of the SAML assertion.
 	EntityId *string `json:"entityId,omitempty"`
+	// The URL to fetch SAML metadata XML.
+	MetadataUrl *string `json:"metadataUrl,omitempty"`
 }
 
 // NewSamlIdentityProvider instantiates a new SamlIdentityProvider object
@@ -117,6 +119,8 @@ func NewSamlIdentityProvider(configurationName string, issuer string, x509cert1 
 	this.AssertionConsumerUrl = &assertionConsumerUrl
 	var entityId string = ""
 	this.EntityId = &entityId
+	var metadataUrl string = ""
+	this.MetadataUrl = &metadataUrl
 	return &this
 }
 
@@ -155,6 +159,8 @@ func NewSamlIdentityProviderWithDefaults() *SamlIdentityProvider {
 	this.AssertionConsumerUrl = &assertionConsumerUrl
 	var entityId string = ""
 	this.EntityId = &entityId
+	var metadataUrl string = ""
+	this.MetadataUrl = &metadataUrl
 	return &this
 }
 
@@ -889,6 +895,38 @@ func (o *SamlIdentityProvider) SetEntityId(v string) {
 	o.EntityId = &v
 }
 
+// GetMetadataUrl returns the MetadataUrl field value if set, zero value otherwise.
+func (o *SamlIdentityProvider) GetMetadataUrl() string {
+	if o == nil || IsNil(o.MetadataUrl) {
+		var ret string
+		return ret
+	}
+	return *o.MetadataUrl
+}
+
+// GetMetadataUrlOk returns a tuple with the MetadataUrl field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SamlIdentityProvider) GetMetadataUrlOk() (*string, bool) {
+	if o == nil || IsNil(o.MetadataUrl) {
+		return nil, false
+	}
+	return o.MetadataUrl, true
+}
+
+// HasMetadataUrl returns a boolean if a field has been set.
+func (o *SamlIdentityProvider) HasMetadataUrl() bool {
+	if o != nil && !IsNil(o.MetadataUrl) {
+		return true
+	}
+
+	return false
+}
+
+// SetMetadataUrl gets a reference to the given string and assigns it to the MetadataUrl field.
+func (o *SamlIdentityProvider) SetMetadataUrl(v string) {
+	o.MetadataUrl = &v
+}
+
 func (o SamlIdentityProvider) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -955,6 +993,9 @@ func (o SamlIdentityProvider) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.EntityId) {
 		toSerialize["entityId"] = o.EntityId
+	}
+	if !IsNil(o.MetadataUrl) {
+		toSerialize["metadataUrl"] = o.MetadataUrl
 	}
 	return toSerialize, nil
 }

@@ -6,9 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | The name of the partition. | 
 **RoutingExpression** | **string** | The query that defines the data to be included in the partition. | 
-**AnalyticsTier** | Pointer to **string** | The Data Tier where the data in the partition will reside. Possible values are:               1. &#x60;continuous&#x60;               2. &#x60;frequent&#x60;               3. &#x60;infrequent&#x60; Note: The \&quot;infrequent\&quot; and \&quot;frequent\&quot; tiers are only available to Cloud Flex Credits Enterprise Suite accounts. | [optional] [default to "continuous"]
+**AnalyticsTier** | Pointer to **string** | The Data Tier where the data in the partition will reside. Possible values are:               1. &#x60;continuous&#x60;               2. &#x60;frequent&#x60;               3. &#x60;infrequent&#x60; Note: The \&quot;infrequent\&quot; and \&quot;frequent\&quot; tiers are only available to Cloud Flex Credits Enterprise Suite accounts. | [optional] 
 **RetentionPeriod** | Pointer to **int32** | The number of days to retain data in the partition, or -1 to use the default value for your account.  Only relevant if your account has variable retention enabled. | [optional] [default to -1]
 **IsCompliant** | Pointer to **bool** | Whether the partition is compliant or not. Mark a partition as compliant if it contains data used for compliance or audit purpose. Retention for a compliant partition can only be increased and cannot be reduced after the partition is marked compliant. A partition once marked compliant, cannot be marked non-compliant later. | [optional] [default to false]
+**IsIncludedInDefaultSearch** | Pointer to **bool** | Indicates whether the partition is included in the default search scope. When executing a  query such as \&quot;error | count,\&quot; certain partitions are automatically part of the search scope.  However, for specific partitions, the user must explicitly mention the partition using the _index  term, as in \&quot;_index&#x3D;webApp error | count\&quot;. This property governs the default inclusion of the  partition in the search scope. Configuring this property is exclusively permitted for flex partitions. | [optional] 
 **NewRetentionPeriod** | Pointer to **int32** | If the retention period is scheduled to be updated in the future (i.e., if retention period is previously reduced with value of reduceRetentionPeriodImmediately as false), this property gives the future value of retention period while retentionPeriod gives the current value. retentionPeriod will take up the value of newRetentionPeriod after the scheduled time. | [optional] 
 **RetentionEffectiveAt** | Pointer to **time.Time** | When the newRetentionPeriod will become effective in UTC format. | [optional] 
 **CreatedAt** | **time.Time** | Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format. | 
@@ -154,6 +155,31 @@ SetIsCompliant sets IsCompliant field to given value.
 `func (o *Partition) HasIsCompliant() bool`
 
 HasIsCompliant returns a boolean if a field has been set.
+
+### GetIsIncludedInDefaultSearch
+
+`func (o *Partition) GetIsIncludedInDefaultSearch() bool`
+
+GetIsIncludedInDefaultSearch returns the IsIncludedInDefaultSearch field if non-nil, zero value otherwise.
+
+### GetIsIncludedInDefaultSearchOk
+
+`func (o *Partition) GetIsIncludedInDefaultSearchOk() (*bool, bool)`
+
+GetIsIncludedInDefaultSearchOk returns a tuple with the IsIncludedInDefaultSearch field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsIncludedInDefaultSearch
+
+`func (o *Partition) SetIsIncludedInDefaultSearch(v bool)`
+
+SetIsIncludedInDefaultSearch sets IsIncludedInDefaultSearch field to given value.
+
+### HasIsIncludedInDefaultSearch
+
+`func (o *Partition) HasIsIncludedInDefaultSearch() bool`
+
+HasIsIncludedInDefaultSearch returns a boolean if a field has been set.
 
 ### GetNewRetentionPeriod
 

@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **AccessKeyId** | Pointer to **string** | The AWS Access ID to access the S3 bucket. | [optional] 
 **SecretAccessKey** | Pointer to **string** | The AWS Secret Key to access the S3 bucket. | [optional] 
 **RoleArn** | Pointer to **string** | The AWS Role ARN to access the S3 bucket. | [optional] 
-**Region** | **string** | The region where the S3 bucket is located. | 
+**Region** | Pointer to **string** | The region where the S3 bucket is located. | [optional] 
 **Encrypted** | Pointer to **bool** | Enable S3 server-side encryption. | [optional] 
 **Enabled** | Pointer to **bool** | True if the destination is Active. | [optional] 
 **BucketName** | **string** | The name of the Amazon S3 bucket. | 
@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewBucketDefinition
 
-`func NewBucketDefinition(destinationName string, authenticationMode string, region string, bucketName string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, id string, ) *BucketDefinition`
+`func NewBucketDefinition(destinationName string, authenticationMode string, bucketName string, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, id string, ) *BucketDefinition`
 
 NewBucketDefinition instantiates a new BucketDefinition object
 This constructor will assign default values to properties that have it defined,
@@ -199,6 +199,11 @@ and a boolean to check if the value has been set.
 
 SetRegion sets Region field to given value.
 
+### HasRegion
+
+`func (o *BucketDefinition) HasRegion() bool`
+
+HasRegion returns a boolean if a field has been set.
 
 ### GetEncrypted
 

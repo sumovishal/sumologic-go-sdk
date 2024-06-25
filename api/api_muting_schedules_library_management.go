@@ -1072,11 +1072,18 @@ type ApiMutingSchedulesReadByIdsRequest struct {
 	ctx context.Context
 	ApiService *MutingSchedulesLibraryManagementApiService
 	ids *[]string
+	skipChildren *bool
 }
 
 // A comma-separated list of identifiers.
 func (r ApiMutingSchedulesReadByIdsRequest) Ids(ids []string) ApiMutingSchedulesReadByIdsRequest {
 	r.ids = &ids
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMutingSchedulesReadByIdsRequest) SkipChildren(skipChildren bool) ApiMutingSchedulesReadByIdsRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1133,6 +1140,9 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdsExe
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
 		}
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1202,6 +1212,7 @@ type ApiMutingSchedulesSearchRequest struct {
 	query *string
 	limit *int32
 	offset *int32
+	skipChildren *bool
 }
 
 // The search query to find mutingschedule or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60;
@@ -1219,6 +1230,12 @@ func (r ApiMutingSchedulesSearchRequest) Limit(limit int32) ApiMutingSchedulesSe
 // The position or row from where to start the search operation.
 func (r ApiMutingSchedulesSearchRequest) Offset(offset int32) ApiMutingSchedulesSearchRequest {
 	r.offset = &offset
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMutingSchedulesSearchRequest) SkipChildren(skipChildren bool) ApiMutingSchedulesSearchRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1271,6 +1288,9 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearchExecut
 	}
 	if r.offset != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

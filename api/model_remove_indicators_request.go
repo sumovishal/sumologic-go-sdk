@@ -19,7 +19,9 @@ var _ MappedNullable = &RemoveIndicatorsRequest{}
 
 // RemoveIndicatorsRequest struct for RemoveIndicatorsRequest
 type RemoveIndicatorsRequest struct {
-	// A list of indicator IDs
+	// The source of the indicator ID to match against
+	Source string `json:"source"`
+	// The list of indicator IDs to match against
 	IndicatorIds []string `json:"indicatorIds"`
 }
 
@@ -27,8 +29,9 @@ type RemoveIndicatorsRequest struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRemoveIndicatorsRequest(indicatorIds []string) *RemoveIndicatorsRequest {
+func NewRemoveIndicatorsRequest(source string, indicatorIds []string) *RemoveIndicatorsRequest {
 	this := RemoveIndicatorsRequest{}
+	this.Source = source
 	this.IndicatorIds = indicatorIds
 	return &this
 }
@@ -39,6 +42,30 @@ func NewRemoveIndicatorsRequest(indicatorIds []string) *RemoveIndicatorsRequest 
 func NewRemoveIndicatorsRequestWithDefaults() *RemoveIndicatorsRequest {
 	this := RemoveIndicatorsRequest{}
 	return &this
+}
+
+// GetSource returns the Source field value
+func (o *RemoveIndicatorsRequest) GetSource() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Source
+}
+
+// GetSourceOk returns a tuple with the Source field value
+// and a boolean to check if the value has been set.
+func (o *RemoveIndicatorsRequest) GetSourceOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Source, true
+}
+
+// SetSource sets field value
+func (o *RemoveIndicatorsRequest) SetSource(v string) {
+	o.Source = v
 }
 
 // GetIndicatorIds returns the IndicatorIds field value
@@ -75,6 +102,7 @@ func (o RemoveIndicatorsRequest) MarshalJSON() ([]byte, error) {
 
 func (o RemoveIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["source"] = o.Source
 	toSerialize["indicatorIds"] = o.IndicatorIds
 	return toSerialize, nil
 }

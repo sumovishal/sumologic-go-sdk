@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TriggerSource** | **string** | Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. &#x60;AllTimeSeries&#x60;: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is &#x60;Metrics&#x60;)   2. &#x60;AnyTimeSeries&#x60;: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is &#x60;Metrics&#x60;)   3. &#x60;AllResults&#x60;: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is &#x60;Logs&#x60;) | 
-**TimeRange** | **string** | The relative time range of the monitor. Valid values of time ranges are &#x60;5m&#x60;, &#x60;10m&#x60;, &#x60;15m&#x60;, &#x60;30m&#x60;, &#x60;1h&#x60;, &#x60;3h&#x60;, &#x60;6h&#x60;, &#x60;12h&#x60;, or &#x60;24h&#x60;. | 
+**TimeRange** | **string** | The relative time range of the monitor. Valid values of time ranges are &#x60;-5m&#x60;, &#x60;-10m&#x60;, &#x60;-15m&#x60;, &#x60;-30m&#x60;, &#x60;-1h&#x60;, &#x60;-3h&#x60;, &#x60;-6h&#x60;, &#x60;-12h&#x60;, or &#x60;-24h&#x60;. | 
 
 ## Methods
 

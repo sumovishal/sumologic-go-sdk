@@ -23,7 +23,7 @@ type WindowAllOf struct {
 	Threshold float32 `json:"threshold"`
 	// Comparison function with window threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
 	Op string `json:"op"`
-	// Aggregation function applied over each window to arrive at SLI. Must be `Avg`, `Min`, `Max`, `Sum`, or percentile of the form `pX` where `X` is an integer between 1 and 99.
+	// Aggregation function applied over each window to arrive at SLI. Must be `Avg`, `Min`, `Max`, `Sum`, or percentile of the form `pX` where `X` is an integer between 0 and 100.
 	Aggregation *string `json:"aggregation,omitempty"`
 	// Size of the aggregation window (minimum of 1m and maximum of 1h).
 	Size string `json:"size"`

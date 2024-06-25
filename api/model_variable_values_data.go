@@ -28,6 +28,8 @@ type VariableValuesData struct {
 	ValueType *string `json:"valueType,omitempty"`
 	// Allow multiple selections in the values dropdown.
 	AllowMultiSelect *bool `json:"allowMultiSelect,omitempty"`
+	// The key of the variable.
+	VariableKey *string `json:"variableKey,omitempty"`
 	// Generic errors returned by backend from downstream assemblies. More specific errors will be thrown in the future.
 	Errors []ErrorDescription `json:"errors,omitempty"`
 }
@@ -210,6 +212,38 @@ func (o *VariableValuesData) SetAllowMultiSelect(v bool) {
 	o.AllowMultiSelect = &v
 }
 
+// GetVariableKey returns the VariableKey field value if set, zero value otherwise.
+func (o *VariableValuesData) GetVariableKey() string {
+	if o == nil || IsNil(o.VariableKey) {
+		var ret string
+		return ret
+	}
+	return *o.VariableKey
+}
+
+// GetVariableKeyOk returns a tuple with the VariableKey field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *VariableValuesData) GetVariableKeyOk() (*string, bool) {
+	if o == nil || IsNil(o.VariableKey) {
+		return nil, false
+	}
+	return o.VariableKey, true
+}
+
+// HasVariableKey returns a boolean if a field has been set.
+func (o *VariableValuesData) HasVariableKey() bool {
+	if o != nil && !IsNil(o.VariableKey) {
+		return true
+	}
+
+	return false
+}
+
+// SetVariableKey gets a reference to the given string and assigns it to the VariableKey field.
+func (o *VariableValuesData) SetVariableKey(v string) {
+	o.VariableKey = &v
+}
+
 // GetErrors returns the Errors field value if set, zero value otherwise.
 func (o *VariableValuesData) GetErrors() []ErrorDescription {
 	if o == nil || IsNil(o.Errors) {
@@ -264,6 +298,9 @@ func (o VariableValuesData) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.AllowMultiSelect) {
 		toSerialize["allowMultiSelect"] = o.AllowMultiSelect
+	}
+	if !IsNil(o.VariableKey) {
+		toSerialize["variableKey"] = o.VariableKey
 	}
 	if !IsNil(o.Errors) {
 		toSerialize["errors"] = o.Errors

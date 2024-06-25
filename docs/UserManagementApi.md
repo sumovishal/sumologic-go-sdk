@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**GetUser**](UserManagementApi.md#GetUser) | **Get** /v1/users/{id} | Get a user.
 [**ListUsers**](UserManagementApi.md#ListUsers) | **Get** /v1/users | Get a list of users.
 [**RequestChangeEmail**](UserManagementApi.md#RequestChangeEmail) | **Post** /v1/users/{id}/email/requestChange | Change email address.
+[**ResendWelcomeEmail**](UserManagementApi.md#ResendWelcomeEmail) | **Post** /v1/users/{id}/resendWelcomeEmail | Resend verification email.
 [**ResetPassword**](UserManagementApi.md#ResetPassword) | **Post** /v1/users/{id}/password/reset | Reset password.
 [**UnlockUser**](UserManagementApi.md#UnlockUser) | **Post** /v1/users/{id}/unlock | Unlock a user.
 [**UpdateUser**](UserManagementApi.md#UpdateUser) | **Put** /v1/users/{id} | Update a user.
@@ -33,7 +34,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -99,7 +100,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -109,7 +110,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.UserManagementApi.DeleteUser(context.Background(), id).TransferTo(transferTo).DeleteContent(deleteContent).Execute()
+    r, err := apiClient.UserManagementApi.DeleteUser(context.Background(), id).TransferTo(transferTo).DeleteContent(deleteContent).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.DeleteUser``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -171,7 +172,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -180,7 +181,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.UserManagementApi.DisableMfa(context.Background(), id).DisableMfaRequest(disableMfaRequest).Execute()
+    r, err := apiClient.UserManagementApi.DisableMfa(context.Background(), id).DisableMfaRequest(disableMfaRequest).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.DisableMfa``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -241,7 +242,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -311,7 +312,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -383,7 +384,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -392,7 +393,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.UserManagementApi.RequestChangeEmail(context.Background(), id).ChangeEmailRequest(changeEmailRequest).Execute()
+    r, err := apiClient.UserManagementApi.RequestChangeEmail(context.Background(), id).ChangeEmailRequest(changeEmailRequest).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.RequestChangeEmail``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -436,6 +437,74 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ResendWelcomeEmail
+
+> ResendWelcomeEmail(ctx, id).Execute()
+
+Resend verification email.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+    id := "id_example" // string | Identifier of the user to resend the welcome email.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    r, err := apiClient.UserManagementApi.ResendWelcomeEmail(context.Background(), id).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.ResendWelcomeEmail``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Identifier of the user to resend the welcome email. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiResendWelcomeEmailRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ResetPassword
 
 > ResetPassword(ctx, id).Execute()
@@ -453,7 +522,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -461,7 +530,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.UserManagementApi.ResetPassword(context.Background(), id).Execute()
+    r, err := apiClient.UserManagementApi.ResetPassword(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.ResetPassword``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -521,7 +590,7 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
@@ -529,7 +598,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.UserManagementApi.UnlockUser(context.Background(), id).Execute()
+    r, err := apiClient.UserManagementApi.UnlockUser(context.Background(), id).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UserManagementApi.UnlockUser``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -589,12 +658,12 @@ import (
     "context"
     "fmt"
     "os"
-    openapiclient "./openapi"
+    openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
     id := "id_example" // string | Identifier of the user to update.
-    updateUserDefinition := *openapiclient.NewUpdateUserDefinition("John", "Doe", true, []string{"RoleIds_example"}) // UpdateUserDefinition | Information to update about the user.
+    updateUserDefinition := *openapiclient.NewUpdateUserDefinition("John", "Doe") // UpdateUserDefinition | Information to update about the user.
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
