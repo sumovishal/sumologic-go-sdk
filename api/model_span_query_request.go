@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryRequest type satisfies the MappedNullable interface at compile time
@@ -25,6 +27,8 @@ type SpanQueryRequest struct {
 	// Time zone for the query time ranges. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	TimeZone *string `json:"timeZone,omitempty"`
 }
+
+type _SpanQueryRequest SpanQueryRequest
 
 // NewSpanQueryRequest instantiates a new SpanQueryRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -145,6 +149,44 @@ func (o SpanQueryRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["timeZone"] = o.TimeZone
 	}
 	return toSerialize, nil
+}
+
+func (o *SpanQueryRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryRows",
+		"timeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryRequest := _SpanQueryRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryRequest(varSpanQueryRequest)
+
+	return err
 }
 
 type NullableSpanQueryRequest struct {

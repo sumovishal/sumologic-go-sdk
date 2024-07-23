@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BaseExtractionRuleDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type BaseExtractionRuleDefinition struct {
 	// Describes the fields to be parsed.
 	ParseExpression string `json:"parseExpression"`
 }
+
+type _BaseExtractionRuleDefinition BaseExtractionRuleDefinition
 
 // NewBaseExtractionRuleDefinition instantiates a new BaseExtractionRuleDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o BaseExtractionRuleDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["scope"] = o.Scope
 	toSerialize["parseExpression"] = o.ParseExpression
 	return toSerialize, nil
+}
+
+func (o *BaseExtractionRuleDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"scope",
+		"parseExpression",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBaseExtractionRuleDefinition := _BaseExtractionRuleDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBaseExtractionRuleDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BaseExtractionRuleDefinition(varBaseExtractionRuleDefinition)
+
+	return err
 }
 
 type NullableBaseExtractionRuleDefinition struct {

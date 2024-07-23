@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the PlaybookRunningResult type satisfies the MappedNullable interface at compile time
@@ -37,6 +39,8 @@ type PlaybookRunningResult struct {
 	// The status code of the playbook running.
 	StatusCode int32 `json:"statusCode"`
 }
+
+type _PlaybookRunningResult PlaybookRunningResult
 
 // NewPlaybookRunningResult instantiates a new PlaybookRunningResult object
 // This constructor will assign default values to properties that have it defined,
@@ -294,6 +298,48 @@ func (o PlaybookRunningResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["status"] = o.Status
 	toSerialize["statusCode"] = o.StatusCode
 	return toSerialize, nil
+}
+
+func (o *PlaybookRunningResult) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"playbookId",
+		"isChild",
+		"name",
+		"status",
+		"statusCode",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPlaybookRunningResult := _PlaybookRunningResult{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPlaybookRunningResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PlaybookRunningResult(varPlaybookRunningResult)
+
+	return err
 }
 
 type NullablePlaybookRunningResult struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CSEWindowsSensorOfflineTracker type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type CSEWindowsSensorOfflineTracker struct {
 	// The number of minutes without heartbeat after which sensor is marked offline.
 	MinutesWithNoHeartbeatBeforeMarkingOffline *string `json:"minutesWithNoHeartbeatBeforeMarkingOffline,omitempty"`
 }
+
+type _CSEWindowsSensorOfflineTracker CSEWindowsSensorOfflineTracker
 
 // NewCSEWindowsSensorOfflineTracker instantiates a new CSEWindowsSensorOfflineTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -98,6 +102,45 @@ func (o CSEWindowsSensorOfflineTracker) ToMap() (map[string]interface{}, error) 
 		toSerialize["minutesWithNoHeartbeatBeforeMarkingOffline"] = o.MinutesWithNoHeartbeatBeforeMarkingOffline
 	}
 	return toSerialize, nil
+}
+
+func (o *CSEWindowsSensorOfflineTracker) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"trackerId",
+		"error",
+		"description",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCSEWindowsSensorOfflineTracker := _CSEWindowsSensorOfflineTracker{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCSEWindowsSensorOfflineTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CSEWindowsSensorOfflineTracker(varCSEWindowsSensorOfflineTracker)
+
+	return err
 }
 
 type NullableCSEWindowsSensorOfflineTracker struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ServiceManifestDataSourceParameter type satisfies the MappedNullable interface at compile time
@@ -20,11 +22,11 @@ var _ MappedNullable = &ServiceManifestDataSourceParameter{}
 // ServiceManifestDataSourceParameter struct for ServiceManifestDataSourceParameter
 type ServiceManifestDataSourceParameter struct {
 	// Parameter type.
-	ParameterType string `json:"parameterType"`
+	ParameterType string `json:"parameterType" validate:"regexp=^DATA_SOURCE$"`
 	// Parameter identifier.
 	ParameterId string `json:"parameterId"`
 	// Data source type.
-	DataSourceType *string `json:"dataSourceType,omitempty"`
+	DataSourceType *string `json:"dataSourceType,omitempty" validate:"regexp=^(LOG|METRICS)$"`
 	// Label.
 	Label *string `json:"label,omitempty"`
 	// Description.
@@ -34,6 +36,8 @@ type ServiceManifestDataSourceParameter struct {
 	// Should the UI display?
 	Hidden *bool `json:"hidden,omitempty"`
 }
+
+type _ServiceManifestDataSourceParameter ServiceManifestDataSourceParameter
 
 // NewServiceManifestDataSourceParameter instantiates a new ServiceManifestDataSourceParameter object
 // This constructor will assign default values to properties that have it defined,
@@ -294,6 +298,44 @@ func (o ServiceManifestDataSourceParameter) ToMap() (map[string]interface{}, err
 		toSerialize["hidden"] = o.Hidden
 	}
 	return toSerialize, nil
+}
+
+func (o *ServiceManifestDataSourceParameter) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"parameterType",
+		"parameterId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varServiceManifestDataSourceParameter := _ServiceManifestDataSourceParameter{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varServiceManifestDataSourceParameter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceManifestDataSourceParameter(varServiceManifestDataSourceParameter)
+
+	return err
 }
 
 type NullableServiceManifestDataSourceParameter struct {

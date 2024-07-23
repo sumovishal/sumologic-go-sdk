@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,7 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingSchedulesLibraryMutingScheduleResponse type satisfies the MappedNullable interface at compile time
@@ -23,7 +24,10 @@ type MutingSchedulesLibraryMutingScheduleResponse struct {
 	MutingSchedulesLibraryBaseResponse
 	Schedule ScheduleDefinition `json:"schedule"`
 	Monitor *MonitorScope `json:"monitor,omitempty"`
+	NotificationGroups []GroupDefinition `json:"notificationGroups,omitempty"`
 }
+
+type _MutingSchedulesLibraryMutingScheduleResponse MutingSchedulesLibraryMutingScheduleResponse
 
 // NewMutingSchedulesLibraryMutingScheduleResponse instantiates a new MutingSchedulesLibraryMutingScheduleResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -112,6 +116,38 @@ func (o *MutingSchedulesLibraryMutingScheduleResponse) SetMonitor(v MonitorScope
 	o.Monitor = &v
 }
 
+// GetNotificationGroups returns the NotificationGroups field value if set, zero value otherwise.
+func (o *MutingSchedulesLibraryMutingScheduleResponse) GetNotificationGroups() []GroupDefinition {
+	if o == nil || IsNil(o.NotificationGroups) {
+		var ret []GroupDefinition
+		return ret
+	}
+	return o.NotificationGroups
+}
+
+// GetNotificationGroupsOk returns a tuple with the NotificationGroups field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MutingSchedulesLibraryMutingScheduleResponse) GetNotificationGroupsOk() ([]GroupDefinition, bool) {
+	if o == nil || IsNil(o.NotificationGroups) {
+		return nil, false
+	}
+	return o.NotificationGroups, true
+}
+
+// HasNotificationGroups returns a boolean if a field has been set.
+func (o *MutingSchedulesLibraryMutingScheduleResponse) HasNotificationGroups() bool {
+	if o != nil && !IsNil(o.NotificationGroups) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationGroups gets a reference to the given []GroupDefinition and assigns it to the NotificationGroups field.
+func (o *MutingSchedulesLibraryMutingScheduleResponse) SetNotificationGroups(v []GroupDefinition) {
+	o.NotificationGroups = v
+}
+
 func (o MutingSchedulesLibraryMutingScheduleResponse) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -134,7 +170,60 @@ func (o MutingSchedulesLibraryMutingScheduleResponse) ToMap() (map[string]interf
 	if !IsNil(o.Monitor) {
 		toSerialize["monitor"] = o.Monitor
 	}
+	if !IsNil(o.NotificationGroups) {
+		toSerialize["notificationGroups"] = o.NotificationGroups
+	}
 	return toSerialize, nil
+}
+
+func (o *MutingSchedulesLibraryMutingScheduleResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"schedule",
+		"id",
+		"name",
+		"description",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"parentId",
+		"contentType",
+		"type",
+		"isSystem",
+		"isMutable",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingSchedulesLibraryMutingScheduleResponse := _MutingSchedulesLibraryMutingScheduleResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingSchedulesLibraryMutingScheduleResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingSchedulesLibraryMutingScheduleResponse(varMutingSchedulesLibraryMutingScheduleResponse)
+
+	return err
 }
 
 type NullableMutingSchedulesLibraryMutingScheduleResponse struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RootSpanTracingFilter type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type RootSpanTracingFilter struct {
 	Operator string `json:"operator"`
 	Value *TracingValue `json:"value,omitempty"`
 }
+
+type _RootSpanTracingFilter RootSpanTracingFilter
 
 // NewRootSpanTracingFilter instantiates a new RootSpanTracingFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -151,6 +155,45 @@ func (o RootSpanTracingFilter) ToMap() (map[string]interface{}, error) {
 		toSerialize["value"] = o.Value
 	}
 	return toSerialize, nil
+}
+
+func (o *RootSpanTracingFilter) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"field",
+		"operator",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRootSpanTracingFilter := _RootSpanTracingFilter{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRootSpanTracingFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RootSpanTracingFilter(varRootSpanTracingFilter)
+
+	return err
 }
 
 type NullableRootSpanTracingFilter struct {

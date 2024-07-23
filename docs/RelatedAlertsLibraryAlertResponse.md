@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]RelatedAlert**](RelatedAlert.md) |  | [optional] 
+**Data** | Pointer to [**[]RelatedAlert**](RelatedAlert.md) | All alerts related to the given alert and their relationship tags. | [optional] 
 
 ## Methods
 

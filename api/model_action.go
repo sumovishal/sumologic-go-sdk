@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Action type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &Action{}
 // Action The base class of all connection types.
 type Action struct {
 	// Connection type of the connection. Valid values:   1.  `Email`   2.  `AWSLambda`   3.  `AzureFunctions`   4.  `Datadog`   5.  `HipChat`   6.  `Jira`   7.  `NewRelic`   8.  `Opsgenie`   9.  `PagerDuty`   10. `Slack`   11. `MicrosoftTeams`   12. `ServiceNow`   13. `SumoCloudSOAR`   14. `Webhook`
-	ConnectionType string `json:"connectionType"`
+	ConnectionType string `json:"connectionType" validate:"regexp=^(Email|AWSLambda|AzureFunctions|Datadog|HipChat|Jira|NewRelic|Opsgenie|PagerDuty|Slack|MicrosoftTeams|ServiceNow|SumoCloudSOAR|Webhook)$"`
 }
+
+type _Action Action
 
 // NewAction instantiates a new Action object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o Action) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["connectionType"] = o.ConnectionType
 	return toSerialize, nil
+}
+
+func (o *Action) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"connectionType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAction := _Action{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAction)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Action(varAction)
+
+	return err
 }
 
 type NullableAction struct {

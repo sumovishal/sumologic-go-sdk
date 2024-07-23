@@ -20,12 +20,12 @@ import (
 )
 
 
-// TransformationRuleManagementApiService TransformationRuleManagementApi service
-type TransformationRuleManagementApiService service
+// TransformationRuleManagementAPIService TransformationRuleManagementAPI service
+type TransformationRuleManagementAPIService service
 
 type ApiCreateRuleRequest struct {
 	ctx context.Context
-	ApiService *TransformationRuleManagementApiService
+	ApiService *TransformationRuleManagementAPIService
 	transformationRuleRequest *TransformationRuleRequest
 }
 
@@ -47,7 +47,7 @@ Create a new transformation rule.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateRuleRequest
 */
-func (a *TransformationRuleManagementApiService) CreateRule(ctx context.Context) ApiCreateRuleRequest {
+func (a *TransformationRuleManagementAPIService) CreateRule(ctx context.Context) ApiCreateRuleRequest {
 	return ApiCreateRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *TransformationRuleManagementApiService) CreateRule(ctx context.Context)
 
 // Execute executes the request
 //  @return TransformationRuleResponse
-func (a *TransformationRuleManagementApiService) CreateRuleExecute(r ApiCreateRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
+func (a *TransformationRuleManagementAPIService) CreateRuleExecute(r ApiCreateRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *TransformationRuleManagementApiService) CreateRuleExecute(r ApiCreateRu
 		localVarReturnValue  *TransformationRuleResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementApiService.CreateRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementAPIService.CreateRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *TransformationRuleManagementApiService) CreateRuleExecute(r ApiCreateRu
 
 type ApiDeleteRuleRequest struct {
 	ctx context.Context
-	ApiService *TransformationRuleManagementApiService
+	ApiService *TransformationRuleManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete a transformation rule with the given identifier.
  @param id Identifier of the transformation rule to delete.
  @return ApiDeleteRuleRequest
 */
-func (a *TransformationRuleManagementApiService) DeleteRule(ctx context.Context, id string) ApiDeleteRuleRequest {
+func (a *TransformationRuleManagementAPIService) DeleteRule(ctx context.Context, id string) ApiDeleteRuleRequest {
 	return ApiDeleteRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *TransformationRuleManagementApiService) DeleteRule(ctx context.Context,
 }
 
 // Execute executes the request
-func (a *TransformationRuleManagementApiService) DeleteRuleExecute(r ApiDeleteRuleRequest) (*http.Response, error) {
+func (a *TransformationRuleManagementAPIService) DeleteRuleExecute(r ApiDeleteRuleRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementApiService.DeleteRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementAPIService.DeleteRule")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *TransformationRuleManagementApiService) DeleteRuleExecute(r ApiDeleteRu
 
 type ApiGetTransformationRuleRequest struct {
 	ctx context.Context
-	ApiService *TransformationRuleManagementApiService
+	ApiService *TransformationRuleManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a transformation rule with the given identifier.
  @param id Identifier of transformation rule to return.
  @return ApiGetTransformationRuleRequest
 */
-func (a *TransformationRuleManagementApiService) GetTransformationRule(ctx context.Context, id string) ApiGetTransformationRuleRequest {
+func (a *TransformationRuleManagementAPIService) GetTransformationRule(ctx context.Context, id string) ApiGetTransformationRuleRequest {
 	return ApiGetTransformationRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRule(ctx conte
 
 // Execute executes the request
 //  @return TransformationRuleResponse
-func (a *TransformationRuleManagementApiService) GetTransformationRuleExecute(r ApiGetTransformationRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
+func (a *TransformationRuleManagementAPIService) GetTransformationRuleExecute(r ApiGetTransformationRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRuleExecute(r 
 		localVarReturnValue  *TransformationRuleResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementApiService.GetTransformationRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementAPIService.GetTransformationRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRuleExecute(r 
 
 type ApiGetTransformationRulesRequest struct {
 	ctx context.Context
-	ApiService *TransformationRuleManagementApiService
+	ApiService *TransformationRuleManagementAPIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ Get a list of transformation rules in the organization. The response is paginate
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetTransformationRulesRequest
 */
-func (a *TransformationRuleManagementApiService) GetTransformationRules(ctx context.Context) ApiGetTransformationRulesRequest {
+func (a *TransformationRuleManagementAPIService) GetTransformationRules(ctx context.Context) ApiGetTransformationRulesRequest {
 	return ApiGetTransformationRulesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRules(ctx cont
 
 // Execute executes the request
 //  @return TransformationRulesResponse
-func (a *TransformationRuleManagementApiService) GetTransformationRulesExecute(r ApiGetTransformationRulesRequest) (*TransformationRulesResponse, *http.Response, error) {
+func (a *TransformationRuleManagementAPIService) GetTransformationRulesExecute(r ApiGetTransformationRulesRequest) (*TransformationRulesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRulesExecute(r
 		localVarReturnValue  *TransformationRulesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementApiService.GetTransformationRules")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementAPIService.GetTransformationRules")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *TransformationRuleManagementApiService) GetTransformationRulesExecute(r
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *TransformationRuleManagementApiService) GetTransformationRulesExecute(r
 
 type ApiUpdateTransformationRuleRequest struct {
 	ctx context.Context
-	ApiService *TransformationRuleManagementApiService
+	ApiService *TransformationRuleManagementAPIService
 	id string
 	transformationRuleRequest *TransformationRuleRequest
 }
@@ -506,7 +509,7 @@ Update an existing transformation rule. All properties specified in the request 
  @param id Identifier of the transformation rule to update.
  @return ApiUpdateTransformationRuleRequest
 */
-func (a *TransformationRuleManagementApiService) UpdateTransformationRule(ctx context.Context, id string) ApiUpdateTransformationRuleRequest {
+func (a *TransformationRuleManagementAPIService) UpdateTransformationRule(ctx context.Context, id string) ApiUpdateTransformationRuleRequest {
 	return ApiUpdateTransformationRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -516,7 +519,7 @@ func (a *TransformationRuleManagementApiService) UpdateTransformationRule(ctx co
 
 // Execute executes the request
 //  @return TransformationRuleResponse
-func (a *TransformationRuleManagementApiService) UpdateTransformationRuleExecute(r ApiUpdateTransformationRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
+func (a *TransformationRuleManagementAPIService) UpdateTransformationRuleExecute(r ApiUpdateTransformationRuleRequest) (*TransformationRuleResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -524,7 +527,7 @@ func (a *TransformationRuleManagementApiService) UpdateTransformationRuleExecute
 		localVarReturnValue  *TransformationRuleResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementApiService.UpdateTransformationRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransformationRuleManagementAPIService.UpdateTransformationRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -20,12 +20,12 @@ import (
 )
 
 
-// AppManagementApiService AppManagementApi service
-type AppManagementApiService service
+// AppManagementAPIService AppManagementAPI service
+type AppManagementAPIService service
 
 type ApiGetAppRequest struct {
 	ctx context.Context
-	ApiService *AppManagementApiService
+	ApiService *AppManagementAPIService
 	uuid string
 }
 
@@ -42,7 +42,7 @@ Gets the app with the given universally unique identifier (UUID).
  @param uuid The identifier of the app to retrieve.
  @return ApiGetAppRequest
 */
-func (a *AppManagementApiService) GetApp(ctx context.Context, uuid string) ApiGetAppRequest {
+func (a *AppManagementAPIService) GetApp(ctx context.Context, uuid string) ApiGetAppRequest {
 	return ApiGetAppRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -52,7 +52,7 @@ func (a *AppManagementApiService) GetApp(ctx context.Context, uuid string) ApiGe
 
 // Execute executes the request
 //  @return App
-func (a *AppManagementApiService) GetAppExecute(r ApiGetAppRequest) (*App, *http.Response, error) {
+func (a *AppManagementAPIService) GetAppExecute(r ApiGetAppRequest) (*App, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -60,7 +60,7 @@ func (a *AppManagementApiService) GetAppExecute(r ApiGetAppRequest) (*App, *http
 		localVarReturnValue  *App
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementApiService.GetApp")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementAPIService.GetApp")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -136,7 +136,7 @@ func (a *AppManagementApiService) GetAppExecute(r ApiGetAppRequest) (*App, *http
 
 type ApiGetAsyncInstallStatusRequest struct {
 	ctx context.Context
-	ApiService *AppManagementApiService
+	ApiService *AppManagementAPIService
 	jobId string
 }
 
@@ -153,7 +153,7 @@ Get the status of an asynchronous app install request for the given job identifi
  @param jobId The identifier of the asynchronous install job.
  @return ApiGetAsyncInstallStatusRequest
 */
-func (a *AppManagementApiService) GetAsyncInstallStatus(ctx context.Context, jobId string) ApiGetAsyncInstallStatusRequest {
+func (a *AppManagementAPIService) GetAsyncInstallStatus(ctx context.Context, jobId string) ApiGetAsyncInstallStatusRequest {
 	return ApiGetAsyncInstallStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -163,7 +163,7 @@ func (a *AppManagementApiService) GetAsyncInstallStatus(ctx context.Context, job
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *AppManagementApiService) GetAsyncInstallStatusExecute(r ApiGetAsyncInstallStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *AppManagementAPIService) GetAsyncInstallStatusExecute(r ApiGetAsyncInstallStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -171,7 +171,7 @@ func (a *AppManagementApiService) GetAsyncInstallStatusExecute(r ApiGetAsyncInst
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementApiService.GetAsyncInstallStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementAPIService.GetAsyncInstallStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -247,7 +247,7 @@ func (a *AppManagementApiService) GetAsyncInstallStatusExecute(r ApiGetAsyncInst
 
 type ApiInstallAppRequest struct {
 	ctx context.Context
-	ApiService *AppManagementApiService
+	ApiService *AppManagementAPIService
 	uuid string
 	appInstallRequest *AppInstallRequest
 }
@@ -270,7 +270,7 @@ Installs the app with given UUID in the folder specified using destinationFolder
  @param uuid UUID of the app to install.
  @return ApiInstallAppRequest
 */
-func (a *AppManagementApiService) InstallApp(ctx context.Context, uuid string) ApiInstallAppRequest {
+func (a *AppManagementAPIService) InstallApp(ctx context.Context, uuid string) ApiInstallAppRequest {
 	return ApiInstallAppRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -280,7 +280,7 @@ func (a *AppManagementApiService) InstallApp(ctx context.Context, uuid string) A
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *AppManagementApiService) InstallAppExecute(r ApiInstallAppRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *AppManagementAPIService) InstallAppExecute(r ApiInstallAppRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -288,7 +288,7 @@ func (a *AppManagementApiService) InstallAppExecute(r ApiInstallAppRequest) (*Be
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementApiService.InstallApp")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementAPIService.InstallApp")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -369,7 +369,7 @@ func (a *AppManagementApiService) InstallAppExecute(r ApiInstallAppRequest) (*Be
 
 type ApiListAppsRequest struct {
 	ctx context.Context
-	ApiService *AppManagementApiService
+	ApiService *AppManagementAPIService
 }
 
 func (r ApiListAppsRequest) Execute() (*ListAppsResult, *http.Response, error) {
@@ -384,7 +384,7 @@ Lists all available apps from the App Catalog.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListAppsRequest
 */
-func (a *AppManagementApiService) ListApps(ctx context.Context) ApiListAppsRequest {
+func (a *AppManagementAPIService) ListApps(ctx context.Context) ApiListAppsRequest {
 	return ApiListAppsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *AppManagementApiService) ListApps(ctx context.Context) ApiListAppsReque
 
 // Execute executes the request
 //  @return ListAppsResult
-func (a *AppManagementApiService) ListAppsExecute(r ApiListAppsRequest) (*ListAppsResult, *http.Response, error) {
+func (a *AppManagementAPIService) ListAppsExecute(r ApiListAppsRequest) (*ListAppsResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *AppManagementApiService) ListAppsExecute(r ApiListAppsRequest) (*ListAp
 		localVarReturnValue  *ListAppsResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementApiService.ListApps")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AppManagementAPIService.ListApps")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

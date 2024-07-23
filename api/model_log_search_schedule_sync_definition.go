@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogSearchScheduleSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -29,12 +31,14 @@ type LogSearchScheduleSyncDefinition struct {
 	Threshold *LogSearchNotificationThresholdSyncDefinition `json:"threshold,omitempty"`
 	Notification ScheduleNotificationSyncDefinition `json:"notification"`
 	// Run schedule of the scheduled search. Set to \"Custom\" to specify the schedule with a CRON expression.Please note that with Custom, 1Day and 1Week schedule types you need to provide the corresponding cron expression to determine when to actually run the search. e.g. Sample Valid Cron for 1Day is \"0 0 16 ? * 2-6 *\". Possible schedule types are:   - `RealTime`   - `15Minutes`   - `1Hour`   - `2Hours`   - `4Hours`   - `6Hours`   - `8Hours`   - `12Hours`   - `1Day`   - `1Week`   - `Custom`
-	ScheduleType string `json:"scheduleType"`
+	ScheduleType string `json:"scheduleType" validate:"regexp=^(RealTime|15Minutes|1Hour|2Hours|4Hours|6Hours|8Hours|12Hours|1Day|1Week|Custom)$"`
 	// If enabled, emails are not sent out in case of errors with the search.
 	MuteErrorEmails *bool `json:"muteErrorEmails,omitempty"`
 	// A list of scheduled search template parameters to be used while executing the query. This is different from the queryParameters field in parent object as this field will be  used for execution as  per the schedule. The parent object field is for search itself, not part of execution.  Learn more about the search templates here :  https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
 	Parameters []ScheduleSearchParameterSyncDefinition `json:"parameters,omitempty"`
 }
+
+type _LogSearchScheduleSyncDefinition LogSearchScheduleSyncDefinition
 
 // NewLogSearchScheduleSyncDefinition instantiates a new LogSearchScheduleSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -343,6 +347,46 @@ func (o LogSearchScheduleSyncDefinition) ToMap() (map[string]interface{}, error)
 		toSerialize["parameters"] = o.Parameters
 	}
 	return toSerialize, nil
+}
+
+func (o *LogSearchScheduleSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"parseableTimeRange",
+		"timeZone",
+		"notification",
+		"scheduleType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogSearchScheduleSyncDefinition := _LogSearchScheduleSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogSearchScheduleSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchScheduleSyncDefinition(varLogSearchScheduleSyncDefinition)
+
+	return err
 }
 
 type NullableLogSearchScheduleSyncDefinition struct {

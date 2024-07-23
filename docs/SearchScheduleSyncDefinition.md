@@ -5,20 +5,20 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **CronExpression** | Pointer to **string** | Cron-like expression specifying the search&#39;s schedule. Field scheduleType must be set to \&quot;Custom\&quot;, otherwise, scheduleType takes precedence over cronExpression. | [optional] 
-**DisplayableTimeRange** | Pointer to **string** | A human-friendly text describing the query time range. For e.g. \&quot;-2h\&quot;, \&quot;last three days\&quot;, \&quot;team default time\&quot; | [optional] 
+**DisplayableTimeRange** | Pointer to **string** | A human-friendly text describing the query time range. For e.g. \&quot;-2h\&quot;, \&quot;last three days\&quot;, \&quot;team default time\&quot;. This value can not be set via API. | [optional] 
 **ParseableTimeRange** | [**ResolvableTimeRange**](ResolvableTimeRange.md) |  | 
 **TimeZone** | **string** | Time zone identifier for time specification. Either an abbreviation such as \&quot;PST\&quot;, a full name such as \&quot;America/Los_Angeles\&quot;, or a custom ID such as \&quot;GMT-8:00\&quot;. Note that the support of abbreviations is for JDK 1.1.x compatibility only and full names should be used. | 
 **Threshold** | Pointer to [**NotificationThresholdSyncDefinition**](NotificationThresholdSyncDefinition.md) |  | [optional] 
 **Notification** | [**ScheduleNotificationSyncDefinition**](ScheduleNotificationSyncDefinition.md) |  | 
-**ScheduleType** | **string** | Run schedule of the scheduled search. Set to \&quot;Custom\&quot; to specify the schedule with a CRON expression. Possible schedule types are:   - &#x60;RealTime&#x60;   - &#x60;15Minutes&#x60;   - &#x60;1Hour&#x60;   - &#x60;2Hours&#x60;   - &#x60;4Hours&#x60;   - &#x60;6Hours&#x60;   - &#x60;8Hours&#x60;   - &#x60;12Hours&#x60;   - &#x60;1Day&#x60;   - &#x60;1Week&#x60;   - &#x60;Custom&#x60; | 
+**ScheduleType** | **string** | Run schedule of the scheduled search. Set to \&quot;Custom\&quot; to specify the schedule with a CRON expression.Please note that with Custom, 1Day and 1Week schedule types you need to provide the corresponding cron expression to determine when to actually run the search. e.g. Sample Valid Cron for 1Day is \&quot;0 0 16 ? * 2-6 *\&quot;. Possible schedule types are:   - &#x60;RealTime&#x60;   - &#x60;15Minutes&#x60;   - &#x60;1Hour&#x60;   - &#x60;2Hours&#x60;   - &#x60;4Hours&#x60;   - &#x60;6Hours&#x60;   - &#x60;8Hours&#x60;   - &#x60;12Hours&#x60;   - &#x60;1Day&#x60;   - &#x60;1Week&#x60;   - &#x60;Custom&#x60; | 
 **MuteErrorEmails** | Pointer to **bool** | If enabled, emails are not sent out in case of errors with the search. | [optional] 
-**Parameters** | [**[]ScheduleSearchParameterSyncDefinition**](ScheduleSearchParameterSyncDefinition.md) | A list of scheduled search parameters. | 
+**Parameters** | Pointer to [**[]ScheduleSearchParameterSyncDefinition**](ScheduleSearchParameterSyncDefinition.md) | A list of scheduled search parameters. | [optional] 
 
 ## Methods
 
 ### NewSearchScheduleSyncDefinition
 
-`func NewSearchScheduleSyncDefinition(parseableTimeRange ResolvableTimeRange, timeZone string, notification ScheduleNotificationSyncDefinition, scheduleType string, parameters []ScheduleSearchParameterSyncDefinition, ) *SearchScheduleSyncDefinition`
+`func NewSearchScheduleSyncDefinition(parseableTimeRange ResolvableTimeRange, timeZone string, notification ScheduleNotificationSyncDefinition, scheduleType string, ) *SearchScheduleSyncDefinition`
 
 NewSearchScheduleSyncDefinition instantiates a new SearchScheduleSyncDefinition object
 This constructor will assign default values to properties that have it defined,
@@ -232,6 +232,11 @@ and a boolean to check if the value has been set.
 
 SetParameters sets Parameters field to given value.
 
+### HasParameters
+
+`func (o *SearchScheduleSyncDefinition) HasParameters() bool`
+
+HasParameters returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

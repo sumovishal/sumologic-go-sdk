@@ -20,7 +20,7 @@ var _ MappedNullable = &SloUsage{}
 // SloUsage The usage info of SLOs.
 type SloUsage struct {
 	// The type of SLO usage info (Logs/Metrics/Monitor based).
-	SliType *string `json:"sliType,omitempty"`
+	SliType *string `json:"sliType,omitempty" validate:"regexp=^(Logs|Metrics|Monitors)$"`
 	// Current number of active Logs/Metrics/Monitors SLOs.
 	Usage *int32 `json:"usage,omitempty"`
 	// The limit of active Logs/Metrics/Monitors SLOs.

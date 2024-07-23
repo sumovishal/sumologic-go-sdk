@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CreateArchiveJobRequest type satisfies the MappedNullable interface at compile time
@@ -27,6 +29,8 @@ type CreateArchiveJobRequest struct {
 	// The ending timestamp of the ingestion job.
 	EndTime time.Time `json:"endTime"`
 }
+
+type _CreateArchiveJobRequest CreateArchiveJobRequest
 
 // NewCreateArchiveJobRequest instantiates a new CreateArchiveJobRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -134,6 +138,45 @@ func (o CreateArchiveJobRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["startTime"] = o.StartTime
 	toSerialize["endTime"] = o.EndTime
 	return toSerialize, nil
+}
+
+func (o *CreateArchiveJobRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"startTime",
+		"endTime",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCreateArchiveJobRequest := _CreateArchiveJobRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCreateArchiveJobRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateArchiveJobRequest(varCreateArchiveJobRequest)
+
+	return err
 }
 
 type NullableCreateArchiveJobRequest struct {

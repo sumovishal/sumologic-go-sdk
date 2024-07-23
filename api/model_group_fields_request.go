@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the GroupFieldsRequest type satisfies the MappedNullable interface at compile time
@@ -22,8 +24,10 @@ type GroupFieldsRequest struct {
 	// All queries from the monitor.
 	Queries []MonitorQuery `json:"queries"`
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
-	MonitorType string `json:"monitorType"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics)$"`
 }
+
+type _GroupFieldsRequest GroupFieldsRequest
 
 // NewGroupFieldsRequest instantiates a new GroupFieldsRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o GroupFieldsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["queries"] = o.Queries
 	toSerialize["monitorType"] = o.MonitorType
 	return toSerialize, nil
+}
+
+func (o *GroupFieldsRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queries",
+		"monitorType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varGroupFieldsRequest := _GroupFieldsRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varGroupFieldsRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupFieldsRequest(varGroupFieldsRequest)
+
+	return err
 }
 
 type NullableGroupFieldsRequest struct {

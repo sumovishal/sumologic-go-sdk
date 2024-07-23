@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RowDeleteDefinition type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type RowDeleteDefinition struct {
 	// A list of all the primary key field identifiers and their corresponding values which defines the row to delete.
 	PrimaryKey []TableRow `json:"primaryKey"`
 }
+
+type _RowDeleteDefinition RowDeleteDefinition
 
 // NewRowDeleteDefinition instantiates a new RowDeleteDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o RowDeleteDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["primaryKey"] = o.PrimaryKey
 	return toSerialize, nil
+}
+
+func (o *RowDeleteDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"primaryKey",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRowDeleteDefinition := _RowDeleteDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRowDeleteDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RowDeleteDefinition(varRowDeleteDefinition)
+
+	return err
 }
 
 type NullableRowDeleteDefinition struct {

@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Iso8601TimeRange type satisfies the MappedNullable interface at compile time
@@ -25,6 +27,8 @@ type Iso8601TimeRange struct {
 	// End time in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format
 	End time.Time `json:"end"`
 }
+
+type _Iso8601TimeRange Iso8601TimeRange
 
 // NewIso8601TimeRange instantiates a new Iso8601TimeRange object
 // This constructor will assign default values to properties that have it defined,
@@ -106,6 +110,44 @@ func (o Iso8601TimeRange) ToMap() (map[string]interface{}, error) {
 	toSerialize["start"] = o.Start
 	toSerialize["end"] = o.End
 	return toSerialize, nil
+}
+
+func (o *Iso8601TimeRange) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"start",
+		"end",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varIso8601TimeRange := _Iso8601TimeRange{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varIso8601TimeRange)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Iso8601TimeRange(varIso8601TimeRange)
+
+	return err
 }
 
 type NullableIso8601TimeRange struct {

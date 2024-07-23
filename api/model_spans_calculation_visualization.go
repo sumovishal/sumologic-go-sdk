@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpansCalculationVisualization type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type SpansCalculationVisualization struct {
 	Field string `json:"field"`
 	Aggregator SpanCalculationAggregator `json:"aggregator"`
 }
+
+type _SpansCalculationVisualization SpansCalculationVisualization
 
 // NewSpansCalculationVisualization instantiates a new SpansCalculationVisualization object
 // This constructor will assign default values to properties that have it defined,
@@ -115,6 +119,46 @@ func (o SpansCalculationVisualization) ToMap() (map[string]interface{}, error) {
 	toSerialize["field"] = o.Field
 	toSerialize["aggregator"] = o.Aggregator
 	return toSerialize, nil
+}
+
+func (o *SpansCalculationVisualization) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"field",
+		"aggregator",
+		"type",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpansCalculationVisualization := _SpansCalculationVisualization{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpansCalculationVisualization)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpansCalculationVisualization(varSpansCalculationVisualization)
+
+	return err
 }
 
 type NullableSpansCalculationVisualization struct {

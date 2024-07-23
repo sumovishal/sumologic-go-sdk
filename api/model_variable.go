@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Variable type satisfies the MappedNullable interface at compile time
@@ -37,6 +39,8 @@ type Variable struct {
 	// The type of value of the variable. Allowed values are `String`, Any` and `Numeric`. - `String` considers as a single phrase and will wrap in double-quotes. - `Any` is all characters. - `Numeric` consists of a numeric value for variables, it will be displayed differently in the UI. - `Integer` is a variable with an `Int` value. - `Long` is a variable with a `Long` value. - `Double` is a variable with a `Double` value. - `Boolean` is a variable with a `Boolean` value. 
 	ValueType *string `json:"valueType,omitempty"`
 }
+
+type _Variable Variable
 
 // NewVariable instantiates a new Variable object
 // This constructor will assign default values to properties that have it defined,
@@ -379,6 +383,44 @@ func (o Variable) ToMap() (map[string]interface{}, error) {
 		toSerialize["valueType"] = o.ValueType
 	}
 	return toSerialize, nil
+}
+
+func (o *Variable) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"sourceDefinition",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varVariable := _Variable{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varVariable)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Variable(varVariable)
+
+	return err
 }
 
 type NullableVariable struct {

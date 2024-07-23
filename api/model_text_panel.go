@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TextPanel type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type TextPanel struct {
 	// Text to display in the panel.
 	Text string `json:"text"`
 }
+
+type _TextPanel TextPanel
 
 // NewTextPanel instantiates a new TextPanel object
 // This constructor will assign default values to properties that have it defined,
@@ -90,6 +94,45 @@ func (o TextPanel) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["text"] = o.Text
 	return toSerialize, nil
+}
+
+func (o *TextPanel) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"text",
+		"key",
+		"panelType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTextPanel := _TextPanel{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTextPanel)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TextPanel(varTextPanel)
+
+	return err
 }
 
 type NullableTextPanel struct {

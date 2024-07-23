@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the WebhookSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -29,6 +31,8 @@ type WebhookSearchNotificationSyncDefinition struct {
 	// The maximum number of results for which we send separate alerts. This value should be between 1 and 100.
 	MaxItemizedAlerts *int32 `json:"maxItemizedAlerts,omitempty"`
 }
+
+type _WebhookSearchNotificationSyncDefinition WebhookSearchNotificationSyncDefinition
 
 // NewWebhookSearchNotificationSyncDefinition instantiates a new WebhookSearchNotificationSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -202,6 +206,44 @@ func (o WebhookSearchNotificationSyncDefinition) ToMap() (map[string]interface{}
 		toSerialize["maxItemizedAlerts"] = o.MaxItemizedAlerts
 	}
 	return toSerialize, nil
+}
+
+func (o *WebhookSearchNotificationSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"webhookId",
+		"taskType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varWebhookSearchNotificationSyncDefinition := _WebhookSearchNotificationSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varWebhookSearchNotificationSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = WebhookSearchNotificationSyncDefinition(varWebhookSearchNotificationSyncDefinition)
+
+	return err
 }
 
 type NullableWebhookSearchNotificationSyncDefinition struct {

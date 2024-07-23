@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ReportFilterSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -32,6 +34,8 @@ type ReportFilterSyncDefinition struct {
 	// A list of panel identifiers that the filter applies to.
 	PanelIds []string `json:"panelIds"`
 }
+
+type _ReportFilterSyncDefinition ReportFilterSyncDefinition
 
 // NewReportFilterSyncDefinition instantiates a new ReportFilterSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -226,6 +230,47 @@ func (o ReportFilterSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["properties"] = o.Properties
 	toSerialize["panelIds"] = o.PanelIds
 	return toSerialize, nil
+}
+
+func (o *ReportFilterSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fieldName",
+		"label",
+		"filterType",
+		"properties",
+		"panelIds",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varReportFilterSyncDefinition := _ReportFilterSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varReportFilterSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ReportFilterSyncDefinition(varReportFilterSyncDefinition)
+
+	return err
 }
 
 type NullableReportFilterSyncDefinition struct {

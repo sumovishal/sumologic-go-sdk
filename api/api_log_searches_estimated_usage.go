@@ -19,12 +19,12 @@ import (
 )
 
 
-// LogSearchesEstimatedUsageApiService LogSearchesEstimatedUsageApi service
-type LogSearchesEstimatedUsageApiService service
+// LogSearchesEstimatedUsageAPIService LogSearchesEstimatedUsageAPI service
+type LogSearchesEstimatedUsageAPIService service
 
 type ApiGetLogSearchEstimatedUsageRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesEstimatedUsageApiService
+	ApiService *LogSearchesEstimatedUsageAPIService
 	logSearchEstimatedUsageRequest *LogSearchEstimatedUsageRequest
 }
 
@@ -47,7 +47,7 @@ Gets the estimated volume of data that would be scanned for a given log search i
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetLogSearchEstimatedUsageRequest
 */
-func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsage(ctx context.Context) ApiGetLogSearchEstimatedUsageRequest {
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsage(ctx context.Context) ApiGetLogSearchEstimatedUsageRequest {
 	return ApiGetLogSearchEstimatedUsageRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsage(ctx con
 
 // Execute executes the request
 //  @return LogSearchEstimatedUsageDefinition
-func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageExecute(r ApiGetLogSearchEstimatedUsageRequest) (*LogSearchEstimatedUsageDefinition, *http.Response, error) {
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsageExecute(r ApiGetLogSearchEstimatedUsageRequest) (*LogSearchEstimatedUsageDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageExecute(
 		localVarReturnValue  *LogSearchEstimatedUsageDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesEstimatedUsageApiService.GetLogSearchEstimatedUsage")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesEstimatedUsageAPIService.GetLogSearchEstimatedUsage")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -142,9 +142,129 @@ func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageExecute(
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetLogSearchEstimatedUsageByMeteringTypeRequest struct {
+	ctx context.Context
+	ApiService *LogSearchesEstimatedUsageAPIService
+	logSearchEstimatedUsageRequestV3 *LogSearchEstimatedUsageRequestV3
+}
+
+// The definition of the log search estimated usage.
+func (r ApiGetLogSearchEstimatedUsageByMeteringTypeRequest) LogSearchEstimatedUsageRequestV3(logSearchEstimatedUsageRequestV3 LogSearchEstimatedUsageRequestV3) ApiGetLogSearchEstimatedUsageByMeteringTypeRequest {
+	r.logSearchEstimatedUsageRequestV3 = &logSearchEstimatedUsageRequestV3
+	return r
+}
+
+func (r ApiGetLogSearchEstimatedUsageByMeteringTypeRequest) Execute() (*LogSearchEstimatedUsageByMeteringTypeDefinition, *http.Response, error) {
+	return r.ApiService.GetLogSearchEstimatedUsageByMeteringTypeExecute(r)
+}
+
+/*
+GetLogSearchEstimatedUsageByMeteringType Gets estimated usage details per metering type.
+
+Gets the estimated volume of data, per metering type,  that would be scanned for running a given log search for a given timerange.
+
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetLogSearchEstimatedUsageByMeteringTypeRequest
+*/
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsageByMeteringType(ctx context.Context) ApiGetLogSearchEstimatedUsageByMeteringTypeRequest {
+	return ApiGetLogSearchEstimatedUsageByMeteringTypeRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return LogSearchEstimatedUsageByMeteringTypeDefinition
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsageByMeteringTypeExecute(r ApiGetLogSearchEstimatedUsageByMeteringTypeRequest) (*LogSearchEstimatedUsageByMeteringTypeDefinition, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *LogSearchEstimatedUsageByMeteringTypeDefinition
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesEstimatedUsageAPIService.GetLogSearchEstimatedUsageByMeteringType")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/logSearches/estimatedUsageByMeteringType"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.logSearchEstimatedUsageRequestV3 == nil {
+		return localVarReturnValue, nil, reportError("logSearchEstimatedUsageRequestV3 is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.logSearchEstimatedUsageRequestV3
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetLogSearchEstimatedUsageByTierRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesEstimatedUsageApiService
+	ApiService *LogSearchesEstimatedUsageAPIService
 	logSearchEstimatedUsageRequestV2 *LogSearchEstimatedUsageRequestV2
 }
 
@@ -167,7 +287,7 @@ Gets the estimated volume of data that would be scanned for a given log search p
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetLogSearchEstimatedUsageByTierRequest
 */
-func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageByTier(ctx context.Context) ApiGetLogSearchEstimatedUsageByTierRequest {
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsageByTier(ctx context.Context) ApiGetLogSearchEstimatedUsageByTierRequest {
 	return ApiGetLogSearchEstimatedUsageByTierRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -176,7 +296,7 @@ func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageByTier(c
 
 // Execute executes the request
 //  @return LogSearchEstimatedUsageByTierDefinition
-func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageByTierExecute(r ApiGetLogSearchEstimatedUsageByTierRequest) (*LogSearchEstimatedUsageByTierDefinition, *http.Response, error) {
+func (a *LogSearchesEstimatedUsageAPIService) GetLogSearchEstimatedUsageByTierExecute(r ApiGetLogSearchEstimatedUsageByTierRequest) (*LogSearchEstimatedUsageByTierDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -184,7 +304,7 @@ func (a *LogSearchesEstimatedUsageApiService) GetLogSearchEstimatedUsageByTierEx
 		localVarReturnValue  *LogSearchEstimatedUsageByTierDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesEstimatedUsageApiService.GetLogSearchEstimatedUsageByTier")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesEstimatedUsageAPIService.GetLogSearchEstimatedUsageByTier")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

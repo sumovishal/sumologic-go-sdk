@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AccountStatusResponse type satisfies the MappedNullable interface at compile time
@@ -20,20 +22,22 @@ var _ MappedNullable = &AccountStatusResponse{}
 // AccountStatusResponse Information about the account's plan and payment.
 type AccountStatusResponse struct {
 	// Whether the account is `cloudflex` or `credits`
-	PricingModel string `json:"pricingModel"`
+	PricingModel string `json:"pricingModel" validate:"regexp=^(credits|cloudflex)$"`
 	// If the plan can be updated by the given user
 	CanUpdatePlan bool `json:"canUpdatePlan"`
 	// Whether the account is `Free`/`Trial`/`Paid`
-	PlanType string `json:"planType"`
+	PlanType string `json:"planType" validate:"regexp=^(Free|Trial|Paid)$"`
 	// The number of days in which the plan will expire
 	PlanExpirationDays *int32 `json:"planExpirationDays,omitempty"`
 	// The current usage of the application.
-	ApplicationUse string `json:"applicationUse"`
+	ApplicationUse string `json:"applicationUse" validate:"regexp=^(ALLOWED|ALLOWED_WITH_WARNING|THROTTLED|RESTRICTED)$"`
 	// If the account is activated or not
 	AccountActivated *bool `json:"accountActivated,omitempty"`
 	// Total amount of credits assigned to the account
 	TotalCredits *int32 `json:"totalCredits,omitempty"`
 }
+
+type _AccountStatusResponse AccountStatusResponse
 
 // NewAccountStatusResponse instantiates a new AccountStatusResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -272,6 +276,46 @@ func (o AccountStatusResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["totalCredits"] = o.TotalCredits
 	}
 	return toSerialize, nil
+}
+
+func (o *AccountStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"pricingModel",
+		"canUpdatePlan",
+		"planType",
+		"applicationUse",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAccountStatusResponse := _AccountStatusResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAccountStatusResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AccountStatusResponse(varAccountStatusResponse)
+
+	return err
 }
 
 type NullableAccountStatusResponse struct {

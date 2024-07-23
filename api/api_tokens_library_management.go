@@ -20,12 +20,12 @@ import (
 )
 
 
-// TokensLibraryManagementApiService TokensLibraryManagementApi service
-type TokensLibraryManagementApiService service
+// TokensLibraryManagementAPIService TokensLibraryManagementAPI service
+type TokensLibraryManagementAPIService service
 
 type ApiCreateTokenRequest struct {
 	ctx context.Context
-	ApiService *TokensLibraryManagementApiService
+	ApiService *TokensLibraryManagementAPIService
 	tokenBaseDefinition *TokenBaseDefinition
 }
 
@@ -47,7 +47,7 @@ Create a token in the token library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateTokenRequest
 */
-func (a *TokensLibraryManagementApiService) CreateToken(ctx context.Context) ApiCreateTokenRequest {
+func (a *TokensLibraryManagementAPIService) CreateToken(ctx context.Context) ApiCreateTokenRequest {
 	return ApiCreateTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *TokensLibraryManagementApiService) CreateToken(ctx context.Context) Api
 
 // Execute executes the request
 //  @return TokenBaseResponse
-func (a *TokensLibraryManagementApiService) CreateTokenExecute(r ApiCreateTokenRequest) (*TokenBaseResponse, *http.Response, error) {
+func (a *TokensLibraryManagementAPIService) CreateTokenExecute(r ApiCreateTokenRequest) (*TokenBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *TokensLibraryManagementApiService) CreateTokenExecute(r ApiCreateTokenR
 		localVarReturnValue  *TokenBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementApiService.CreateToken")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementAPIService.CreateToken")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *TokensLibraryManagementApiService) CreateTokenExecute(r ApiCreateTokenR
 
 type ApiDeleteTokenRequest struct {
 	ctx context.Context
-	ApiService *TokensLibraryManagementApiService
+	ApiService *TokensLibraryManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete a token with the given identifier in the token library.
  @param id Identifier of the token to delete.
  @return ApiDeleteTokenRequest
 */
-func (a *TokensLibraryManagementApiService) DeleteToken(ctx context.Context, id string) ApiDeleteTokenRequest {
+func (a *TokensLibraryManagementAPIService) DeleteToken(ctx context.Context, id string) ApiDeleteTokenRequest {
 	return ApiDeleteTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *TokensLibraryManagementApiService) DeleteToken(ctx context.Context, id 
 }
 
 // Execute executes the request
-func (a *TokensLibraryManagementApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*http.Response, error) {
+func (a *TokensLibraryManagementAPIService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementApiService.DeleteToken")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementAPIService.DeleteToken")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *TokensLibraryManagementApiService) DeleteTokenExecute(r ApiDeleteTokenR
 
 type ApiGetTokenRequest struct {
 	ctx context.Context
-	ApiService *TokensLibraryManagementApiService
+	ApiService *TokensLibraryManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a token with the given identifier in the token library.
  @param id Identifier of the token to return.
  @return ApiGetTokenRequest
 */
-func (a *TokensLibraryManagementApiService) GetToken(ctx context.Context, id string) ApiGetTokenRequest {
+func (a *TokensLibraryManagementAPIService) GetToken(ctx context.Context, id string) ApiGetTokenRequest {
 	return ApiGetTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *TokensLibraryManagementApiService) GetToken(ctx context.Context, id str
 
 // Execute executes the request
 //  @return TokenBaseResponse
-func (a *TokensLibraryManagementApiService) GetTokenExecute(r ApiGetTokenRequest) (*TokenBaseResponse, *http.Response, error) {
+func (a *TokensLibraryManagementAPIService) GetTokenExecute(r ApiGetTokenRequest) (*TokenBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *TokensLibraryManagementApiService) GetTokenExecute(r ApiGetTokenRequest
 		localVarReturnValue  *TokenBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementApiService.GetToken")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementAPIService.GetToken")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *TokensLibraryManagementApiService) GetTokenExecute(r ApiGetTokenRequest
 
 type ApiListTokensRequest struct {
 	ctx context.Context
-	ApiService *TokensLibraryManagementApiService
+	ApiService *TokensLibraryManagementAPIService
 }
 
 func (r ApiListTokensRequest) Execute() (*ListTokensBaseResponse, *http.Response, error) {
@@ -370,7 +370,7 @@ Get a list of all tokens in the token library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListTokensRequest
 */
-func (a *TokensLibraryManagementApiService) ListTokens(ctx context.Context) ApiListTokensRequest {
+func (a *TokensLibraryManagementAPIService) ListTokens(ctx context.Context) ApiListTokensRequest {
 	return ApiListTokensRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -379,7 +379,7 @@ func (a *TokensLibraryManagementApiService) ListTokens(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return ListTokensBaseResponse
-func (a *TokensLibraryManagementApiService) ListTokensExecute(r ApiListTokensRequest) (*ListTokensBaseResponse, *http.Response, error) {
+func (a *TokensLibraryManagementAPIService) ListTokensExecute(r ApiListTokensRequest) (*ListTokensBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -387,7 +387,7 @@ func (a *TokensLibraryManagementApiService) ListTokensExecute(r ApiListTokensReq
 		localVarReturnValue  *ListTokensBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementApiService.ListTokens")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementAPIService.ListTokens")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -462,7 +462,7 @@ func (a *TokensLibraryManagementApiService) ListTokensExecute(r ApiListTokensReq
 
 type ApiUpdateTokenRequest struct {
 	ctx context.Context
-	ApiService *TokensLibraryManagementApiService
+	ApiService *TokensLibraryManagementAPIService
 	id string
 	tokenBaseDefinitionUpdate *TokenBaseDefinitionUpdate
 }
@@ -486,7 +486,7 @@ Update a token with the given identifier in the token library.
  @param id Identifier of the token to update.
  @return ApiUpdateTokenRequest
 */
-func (a *TokensLibraryManagementApiService) UpdateToken(ctx context.Context, id string) ApiUpdateTokenRequest {
+func (a *TokensLibraryManagementAPIService) UpdateToken(ctx context.Context, id string) ApiUpdateTokenRequest {
 	return ApiUpdateTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -496,7 +496,7 @@ func (a *TokensLibraryManagementApiService) UpdateToken(ctx context.Context, id 
 
 // Execute executes the request
 //  @return TokenBaseResponse
-func (a *TokensLibraryManagementApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*TokenBaseResponse, *http.Response, error) {
+func (a *TokensLibraryManagementAPIService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*TokenBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -504,7 +504,7 @@ func (a *TokensLibraryManagementApiService) UpdateTokenExecute(r ApiUpdateTokenR
 		localVarReturnValue  *TokenBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementApiService.UpdateToken")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TokensLibraryManagementAPIService.UpdateToken")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

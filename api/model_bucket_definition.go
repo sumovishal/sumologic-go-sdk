@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BucketDefinition type satisfies the MappedNullable interface at compile time
@@ -39,7 +41,7 @@ type BucketDefinition struct {
 	// True if the destination is Active.
 	Enabled *bool `json:"enabled,omitempty"`
 	// The name of the Amazon S3 bucket.
-	BucketName string `json:"bucketName"`
+	BucketName string `json:"bucketName" validate:"regexp=(?!(^xn--|-s3alias$))^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	CreatedAt time.Time `json:"createdAt"`
 	// Identifier of the user who created the resource.
@@ -53,6 +55,8 @@ type BucketDefinition struct {
 	// True if invalidated by the system.
 	InvalidatedBySystem *bool `json:"invalidatedBySystem,omitempty"`
 }
+
+type _BucketDefinition BucketDefinition
 
 // NewBucketDefinition instantiates a new BucketDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -570,6 +574,50 @@ func (o BucketDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["invalidatedBySystem"] = o.InvalidatedBySystem
 	}
 	return toSerialize, nil
+}
+
+func (o *BucketDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"destinationName",
+		"authenticationMode",
+		"bucketName",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBucketDefinition := _BucketDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBucketDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BucketDefinition(varBucketDefinition)
+
+	return err
 }
 
 type NullableBucketDefinition struct {

@@ -20,12 +20,12 @@ import (
 )
 
 
-// IngestBudgetManagementV2ApiService IngestBudgetManagementV2Api service
-type IngestBudgetManagementV2ApiService service
+// IngestBudgetManagementV2APIService IngestBudgetManagementV2API service
+type IngestBudgetManagementV2APIService service
 
 type ApiCreateIngestBudgetV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	ingestBudgetDefinitionV2 *IngestBudgetDefinitionV2
 }
 
@@ -47,7 +47,7 @@ Create a new ingest budget.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateIngestBudgetV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) CreateIngestBudgetV2(ctx context.Context) ApiCreateIngestBudgetV2Request {
+func (a *IngestBudgetManagementV2APIService) CreateIngestBudgetV2(ctx context.Context) ApiCreateIngestBudgetV2Request {
 	return ApiCreateIngestBudgetV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *IngestBudgetManagementV2ApiService) CreateIngestBudgetV2(ctx context.Co
 
 // Execute executes the request
 //  @return IngestBudgetV2
-func (a *IngestBudgetManagementV2ApiService) CreateIngestBudgetV2Execute(r ApiCreateIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) CreateIngestBudgetV2Execute(r ApiCreateIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *IngestBudgetManagementV2ApiService) CreateIngestBudgetV2Execute(r ApiCr
 		localVarReturnValue  *IngestBudgetV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.CreateIngestBudgetV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.CreateIngestBudgetV2")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *IngestBudgetManagementV2ApiService) CreateIngestBudgetV2Execute(r ApiCr
 
 type ApiDeleteIngestBudgetV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete an ingest budget with the given identifier.
  @param id Identifier of the ingest budget to delete.
  @return ApiDeleteIngestBudgetV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) DeleteIngestBudgetV2(ctx context.Context, id string) ApiDeleteIngestBudgetV2Request {
+func (a *IngestBudgetManagementV2APIService) DeleteIngestBudgetV2(ctx context.Context, id string) ApiDeleteIngestBudgetV2Request {
 	return ApiDeleteIngestBudgetV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *IngestBudgetManagementV2ApiService) DeleteIngestBudgetV2(ctx context.Co
 }
 
 // Execute executes the request
-func (a *IngestBudgetManagementV2ApiService) DeleteIngestBudgetV2Execute(r ApiDeleteIngestBudgetV2Request) (*http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) DeleteIngestBudgetV2Execute(r ApiDeleteIngestBudgetV2Request) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.DeleteIngestBudgetV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.DeleteIngestBudgetV2")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *IngestBudgetManagementV2ApiService) DeleteIngestBudgetV2Execute(r ApiDe
 
 type ApiGetIngestBudgetV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get an ingest budget by the given identifier.
  @param id Identifier of ingest budget to return.
  @return ApiGetIngestBudgetV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) GetIngestBudgetV2(ctx context.Context, id string) ApiGetIngestBudgetV2Request {
+func (a *IngestBudgetManagementV2APIService) GetIngestBudgetV2(ctx context.Context, id string) ApiGetIngestBudgetV2Request {
 	return ApiGetIngestBudgetV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *IngestBudgetManagementV2ApiService) GetIngestBudgetV2(ctx context.Conte
 
 // Execute executes the request
 //  @return IngestBudgetV2
-func (a *IngestBudgetManagementV2ApiService) GetIngestBudgetV2Execute(r ApiGetIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) GetIngestBudgetV2Execute(r ApiGetIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *IngestBudgetManagementV2ApiService) GetIngestBudgetV2Execute(r ApiGetIn
 		localVarReturnValue  *IngestBudgetV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.GetIngestBudgetV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.GetIngestBudgetV2")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *IngestBudgetManagementV2ApiService) GetIngestBudgetV2Execute(r ApiGetIn
 
 type ApiListIngestBudgetsV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ Get a list of all ingest budgets. The response is paginated with a default limit
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListIngestBudgetsV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2(ctx context.Context) ApiListIngestBudgetsV2Request {
+func (a *IngestBudgetManagementV2APIService) ListIngestBudgetsV2(ctx context.Context) ApiListIngestBudgetsV2Request {
 	return ApiListIngestBudgetsV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2(ctx context.Con
 
 // Execute executes the request
 //  @return ListIngestBudgetsResponseV2
-func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2Execute(r ApiListIngestBudgetsV2Request) (*ListIngestBudgetsResponseV2, *http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) ListIngestBudgetsV2Execute(r ApiListIngestBudgetsV2Request) (*ListIngestBudgetsResponseV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2Execute(r ApiLis
 		localVarReturnValue  *ListIngestBudgetsResponseV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.ListIngestBudgetsV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.ListIngestBudgetsV2")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2Execute(r ApiLis
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *IngestBudgetManagementV2ApiService) ListIngestBudgetsV2Execute(r ApiLis
 
 type ApiResetUsageV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	id string
 }
 
@@ -499,7 +502,7 @@ Reset ingest budget's current usage to 0 before the scheduled reset time. This i
  @param id Identifier of the ingest budget to reset usage.
  @return ApiResetUsageV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) ResetUsageV2(ctx context.Context, id string) ApiResetUsageV2Request {
+func (a *IngestBudgetManagementV2APIService) ResetUsageV2(ctx context.Context, id string) ApiResetUsageV2Request {
 	return ApiResetUsageV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -508,14 +511,14 @@ func (a *IngestBudgetManagementV2ApiService) ResetUsageV2(ctx context.Context, i
 }
 
 // Execute executes the request
-func (a *IngestBudgetManagementV2ApiService) ResetUsageV2Execute(r ApiResetUsageV2Request) (*http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) ResetUsageV2Execute(r ApiResetUsageV2Request) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.ResetUsageV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.ResetUsageV2")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -582,7 +585,7 @@ func (a *IngestBudgetManagementV2ApiService) ResetUsageV2Execute(r ApiResetUsage
 
 type ApiUpdateIngestBudgetV2Request struct {
 	ctx context.Context
-	ApiService *IngestBudgetManagementV2ApiService
+	ApiService *IngestBudgetManagementV2APIService
 	id string
 	ingestBudgetDefinitionV2 *IngestBudgetDefinitionV2
 }
@@ -606,7 +609,7 @@ Update an existing ingest budget. All properties specified in the request are re
  @param id Identifier of the ingest budget to update.
  @return ApiUpdateIngestBudgetV2Request
 */
-func (a *IngestBudgetManagementV2ApiService) UpdateIngestBudgetV2(ctx context.Context, id string) ApiUpdateIngestBudgetV2Request {
+func (a *IngestBudgetManagementV2APIService) UpdateIngestBudgetV2(ctx context.Context, id string) ApiUpdateIngestBudgetV2Request {
 	return ApiUpdateIngestBudgetV2Request{
 		ApiService: a,
 		ctx: ctx,
@@ -616,7 +619,7 @@ func (a *IngestBudgetManagementV2ApiService) UpdateIngestBudgetV2(ctx context.Co
 
 // Execute executes the request
 //  @return IngestBudgetV2
-func (a *IngestBudgetManagementV2ApiService) UpdateIngestBudgetV2Execute(r ApiUpdateIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
+func (a *IngestBudgetManagementV2APIService) UpdateIngestBudgetV2Execute(r ApiUpdateIngestBudgetV2Request) (*IngestBudgetV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -624,7 +627,7 @@ func (a *IngestBudgetManagementV2ApiService) UpdateIngestBudgetV2Execute(r ApiUp
 		localVarReturnValue  *IngestBudgetV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2ApiService.UpdateIngestBudgetV2")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IngestBudgetManagementV2APIService.UpdateIngestBudgetV2")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

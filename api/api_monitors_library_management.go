@@ -21,12 +21,12 @@ import (
 )
 
 
-// MonitorsLibraryManagementApiService MonitorsLibraryManagementApi service
-type MonitorsLibraryManagementApiService service
+// MonitorsLibraryManagementAPIService MonitorsLibraryManagementAPI service
+type MonitorsLibraryManagementAPIService service
 
 type ApiDisableMonitorByIdsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	ids *[]string
 }
 
@@ -48,7 +48,7 @@ Bulk disable monitors by the given identifiers.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDisableMonitorByIdsRequest
 */
-func (a *MonitorsLibraryManagementApiService) DisableMonitorByIds(ctx context.Context) ApiDisableMonitorByIdsRequest {
+func (a *MonitorsLibraryManagementAPIService) DisableMonitorByIds(ctx context.Context) ApiDisableMonitorByIdsRequest {
 	return ApiDisableMonitorByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -57,7 +57,7 @@ func (a *MonitorsLibraryManagementApiService) DisableMonitorByIds(ctx context.Co
 
 // Execute executes the request
 //  @return DisableMonitorResponse
-func (a *MonitorsLibraryManagementApiService) DisableMonitorByIdsExecute(r ApiDisableMonitorByIdsRequest) (*DisableMonitorResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) DisableMonitorByIdsExecute(r ApiDisableMonitorByIdsRequest) (*DisableMonitorResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -65,7 +65,7 @@ func (a *MonitorsLibraryManagementApiService) DisableMonitorByIdsExecute(r ApiDi
 		localVarReturnValue  *DisableMonitorResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.DisableMonitorByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.DisableMonitorByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -142,9 +142,126 @@ func (a *MonitorsLibraryManagementApiService) DisableMonitorByIdsExecute(r ApiDi
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetMonitorPlaybooksRequest struct {
+	ctx context.Context
+	ApiService *MonitorsLibraryManagementAPIService
+	playbookType *string
+}
+
+// A string value for playbook type.
+func (r ApiGetMonitorPlaybooksRequest) PlaybookType(playbookType string) ApiGetMonitorPlaybooksRequest {
+	r.playbookType = &playbookType
+	return r
+}
+
+func (r ApiGetMonitorPlaybooksRequest) Execute() ([]MonitorPlaybook, *http.Response, error) {
+	return r.ApiService.GetMonitorPlaybooksExecute(r)
+}
+
+/*
+GetMonitorPlaybooks List all playbooks.
+
+List all playbooks available to run.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetMonitorPlaybooksRequest
+*/
+func (a *MonitorsLibraryManagementAPIService) GetMonitorPlaybooks(ctx context.Context) ApiGetMonitorPlaybooksRequest {
+	return ApiGetMonitorPlaybooksRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return []MonitorPlaybook
+func (a *MonitorsLibraryManagementAPIService) GetMonitorPlaybooksExecute(r ApiGetMonitorPlaybooksRequest) ([]MonitorPlaybook, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []MonitorPlaybook
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.GetMonitorPlaybooks")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/monitors/playbooks"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.playbookType != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "playbookType", r.playbookType, "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetMonitorUsageInfoRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 }
 
 func (r ApiGetMonitorUsageInfoRequest) Execute() ([]MonitorUsage, *http.Response, error) {
@@ -159,7 +276,7 @@ Get the current number and the allowed number of log and metrics monitors.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetMonitorUsageInfoRequest
 */
-func (a *MonitorsLibraryManagementApiService) GetMonitorUsageInfo(ctx context.Context) ApiGetMonitorUsageInfoRequest {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorUsageInfo(ctx context.Context) ApiGetMonitorUsageInfoRequest {
 	return ApiGetMonitorUsageInfoRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -168,7 +285,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorUsageInfo(ctx context.Co
 
 // Execute executes the request
 //  @return []MonitorUsage
-func (a *MonitorsLibraryManagementApiService) GetMonitorUsageInfoExecute(r ApiGetMonitorUsageInfoRequest) ([]MonitorUsage, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorUsageInfoExecute(r ApiGetMonitorUsageInfoRequest) ([]MonitorUsage, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -176,7 +293,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorUsageInfoExecute(r ApiGe
 		localVarReturnValue  []MonitorUsage
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.GetMonitorUsageInfo")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.GetMonitorUsageInfo")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -251,7 +368,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorUsageInfoExecute(r ApiGe
 
 type ApiGetMonitorsFullPathRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -268,7 +385,7 @@ Get the full path of the monitor or folder in the monitors library.
  @param id Identifier of the monitor or folder.
  @return ApiGetMonitorsFullPathRequest
 */
-func (a *MonitorsLibraryManagementApiService) GetMonitorsFullPath(ctx context.Context, id string) ApiGetMonitorsFullPathRequest {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorsFullPath(ctx context.Context, id string) ApiGetMonitorsFullPathRequest {
 	return ApiGetMonitorsFullPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -278,7 +395,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsFullPath(ctx context.Co
 
 // Execute executes the request
 //  @return Path
-func (a *MonitorsLibraryManagementApiService) GetMonitorsFullPathExecute(r ApiGetMonitorsFullPathRequest) (*Path, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorsFullPathExecute(r ApiGetMonitorsFullPathRequest) (*Path, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -286,7 +403,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsFullPathExecute(r ApiGe
 		localVarReturnValue  *Path
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.GetMonitorsFullPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.GetMonitorsFullPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -362,7 +479,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsFullPathExecute(r ApiGe
 
 type ApiGetMonitorsLibraryRootRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 }
 
 func (r ApiGetMonitorsLibraryRootRequest) Execute() (*MonitorsLibraryFolderResponse, *http.Response, error) {
@@ -377,7 +494,7 @@ Get the root folder in the monitors library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetMonitorsLibraryRootRequest
 */
-func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRoot(ctx context.Context) ApiGetMonitorsLibraryRootRequest {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorsLibraryRoot(ctx context.Context) ApiGetMonitorsLibraryRootRequest {
 	return ApiGetMonitorsLibraryRootRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -386,7 +503,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRoot(ctx context
 
 // Execute executes the request
 //  @return MonitorsLibraryFolderResponse
-func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRootExecute(r ApiGetMonitorsLibraryRootRequest) (*MonitorsLibraryFolderResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) GetMonitorsLibraryRootExecute(r ApiGetMonitorsLibraryRootRequest) (*MonitorsLibraryFolderResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -394,7 +511,7 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRootExecute(r Ap
 		localVarReturnValue  *MonitorsLibraryFolderResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.GetMonitorsLibraryRoot")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.GetMonitorsLibraryRoot")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -467,9 +584,127 @@ func (a *MonitorsLibraryManagementApiService) GetMonitorsLibraryRootExecute(r Ap
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetPlaybooksDetailsRequest struct {
+	ctx context.Context
+	ApiService *MonitorsLibraryManagementAPIService
+	ids *[]string
+}
+
+// A comma-separated list of playbook identifiers.
+func (r ApiGetPlaybooksDetailsRequest) Ids(ids []string) ApiGetPlaybooksDetailsRequest {
+	r.ids = &ids
+	return r
+}
+
+func (r ApiGetPlaybooksDetailsRequest) Execute() ([]MonitorPlaybook, *http.Response, error) {
+	return r.ApiService.GetPlaybooksDetailsExecute(r)
+}
+
+/*
+GetPlaybooksDetails Get playbook details.
+
+Get the details of the playbooks with the specified identifiers.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetPlaybooksDetailsRequest
+*/
+func (a *MonitorsLibraryManagementAPIService) GetPlaybooksDetails(ctx context.Context) ApiGetPlaybooksDetailsRequest {
+	return ApiGetPlaybooksDetailsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return []MonitorPlaybook
+func (a *MonitorsLibraryManagementAPIService) GetPlaybooksDetailsExecute(r ApiGetPlaybooksDetailsRequest) ([]MonitorPlaybook, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []MonitorPlaybook
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.GetPlaybooksDetails")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/monitors/playbooksDetails"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.ids == nil {
+		return localVarReturnValue, nil, reportError("ids is required and must be specified")
+	}
+
+	parameterAddToHeaderOrQuery(localVarQueryParams, "ids", r.ids, "csv")
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiMonitorsCopyRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 	contentCopyParams *ContentCopyParams
 }
@@ -493,7 +728,7 @@ Copy a monitor or folder in the monitors library.
  @param id Identifier of the monitor or folder to copy.
  @return ApiMonitorsCopyRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsCopy(ctx context.Context, id string) ApiMonitorsCopyRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsCopy(ctx context.Context, id string) ApiMonitorsCopyRequest {
 	return ApiMonitorsCopyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -503,7 +738,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCopy(ctx context.Context, 
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsCopyExecute(r ApiMonitorsCopyRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsCopyExecute(r ApiMonitorsCopyRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -511,7 +746,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCopyExecute(r ApiMonitorsC
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsCopy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsCopy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -592,7 +827,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCopyExecute(r ApiMonitorsC
 
 type ApiMonitorsCreateRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	parentId *string
 	monitorsLibraryBase *MonitorsLibraryBase
 }
@@ -621,7 +856,7 @@ Create a monitor or folder in the monitors library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsCreateRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsCreate(ctx context.Context) ApiMonitorsCreateRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsCreate(ctx context.Context) ApiMonitorsCreateRequest {
 	return ApiMonitorsCreateRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -630,7 +865,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCreate(ctx context.Context
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsCreateExecute(r ApiMonitorsCreateRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsCreateExecute(r ApiMonitorsCreateRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -638,7 +873,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCreateExecute(r ApiMonitor
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -722,7 +957,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsCreateExecute(r ApiMonitor
 
 type ApiMonitorsDeleteByIdRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -739,7 +974,7 @@ Delete a monitor or folder from the monitors library.
  @param id Identifier of the monitor or folder to delete.
  @return ApiMonitorsDeleteByIdRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsDeleteById(ctx context.Context, id string) ApiMonitorsDeleteByIdRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsDeleteById(ctx context.Context, id string) ApiMonitorsDeleteByIdRequest {
 	return ApiMonitorsDeleteByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -748,14 +983,14 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteById(ctx context.Con
 }
 
 // Execute executes the request
-func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdExecute(r ApiMonitorsDeleteByIdRequest) (*http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsDeleteByIdExecute(r ApiMonitorsDeleteByIdRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsDeleteById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsDeleteById")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -822,7 +1057,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdExecute(r ApiMon
 
 type ApiMonitorsDeleteByIdsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	ids *[]string
 }
 
@@ -844,7 +1079,7 @@ Bulk delete a monitor or folder by the given identifiers in the monitors library
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsDeleteByIdsRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIds(ctx context.Context) ApiMonitorsDeleteByIdsRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsDeleteByIds(ctx context.Context) ApiMonitorsDeleteByIdsRequest {
 	return ApiMonitorsDeleteByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -853,7 +1088,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIds(ctx context.Co
 
 // Execute executes the request
 //  @return map[string]MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdsExecute(r ApiMonitorsDeleteByIdsRequest) (*map[string]MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsDeleteByIdsExecute(r ApiMonitorsDeleteByIdsRequest) (*map[string]MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -861,7 +1096,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdsExecute(r ApiMo
 		localVarReturnValue  *map[string]MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsDeleteByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsDeleteByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -880,7 +1115,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdsExecute(r ApiMo
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
@@ -950,7 +1185,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsDeleteByIdsExecute(r ApiMo
 
 type ApiMonitorsExportItemRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -967,7 +1202,7 @@ Export a monitor or folder. If the given identifier is a folder, everything unde
  @param id Identifier of the monitor or folder to export.
  @return ApiMonitorsExportItemRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsExportItem(ctx context.Context, id string) ApiMonitorsExportItemRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsExportItem(ctx context.Context, id string) ApiMonitorsExportItemRequest {
 	return ApiMonitorsExportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -977,7 +1212,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsExportItem(ctx context.Con
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseExport
-func (a *MonitorsLibraryManagementApiService) MonitorsExportItemExecute(r ApiMonitorsExportItemRequest) (*MonitorsLibraryBaseExport, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsExportItemExecute(r ApiMonitorsExportItemRequest) (*MonitorsLibraryBaseExport, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -985,7 +1220,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsExportItemExecute(r ApiMon
 		localVarReturnValue  *MonitorsLibraryBaseExport
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsExportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsExportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1061,7 +1296,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsExportItemExecute(r ApiMon
 
 type ApiMonitorsGetByPathRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	path *string
 }
 
@@ -1083,7 +1318,7 @@ Read a monitor or folder by its path in the monitors library structure.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsGetByPathRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsGetByPath(ctx context.Context) ApiMonitorsGetByPathRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsGetByPath(ctx context.Context) ApiMonitorsGetByPathRequest {
 	return ApiMonitorsGetByPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1092,7 +1327,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsGetByPath(ctx context.Cont
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsGetByPathExecute(r ApiMonitorsGetByPathRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsGetByPathExecute(r ApiMonitorsGetByPathRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1100,7 +1335,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsGetByPathExecute(r ApiMoni
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsGetByPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsGetByPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1179,7 +1414,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsGetByPathExecute(r ApiMoni
 
 type ApiMonitorsImportItemRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	parentId string
 	monitorsLibraryBaseExport *MonitorsLibraryBaseExport
 }
@@ -1203,7 +1438,7 @@ Import a monitor or folder.
  @param parentId Identifier of the parent folder in which to import the monitor or folder.
  @return ApiMonitorsImportItemRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsImportItem(ctx context.Context, parentId string) ApiMonitorsImportItemRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsImportItem(ctx context.Context, parentId string) ApiMonitorsImportItemRequest {
 	return ApiMonitorsImportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1213,7 +1448,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsImportItem(ctx context.Con
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsImportItemExecute(r ApiMonitorsImportItemRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsImportItemExecute(r ApiMonitorsImportItemRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1221,7 +1456,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsImportItemExecute(r ApiMon
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsImportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsImportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1302,7 +1537,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsImportItemExecute(r ApiMon
 
 type ApiMonitorsMoveRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 	parentId *string
 }
@@ -1326,7 +1561,7 @@ Move a monitor or folder to a different location in the monitors library.
  @param id Identifier of the monitor or folder to move.
  @return ApiMonitorsMoveRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsMove(ctx context.Context, id string) ApiMonitorsMoveRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsMove(ctx context.Context, id string) ApiMonitorsMoveRequest {
 	return ApiMonitorsMoveRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1336,7 +1571,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsMove(ctx context.Context, 
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsMoveExecute(r ApiMonitorsMoveRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsMoveExecute(r ApiMonitorsMoveRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1344,7 +1579,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsMoveExecute(r ApiMonitorsM
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsMove")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsMove")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1424,7 +1659,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsMoveExecute(r ApiMonitorsM
 
 type ApiMonitorsReadByIdRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -1441,7 +1676,7 @@ Get a monitor or folder from the monitors library.
  @param id Identifier of the monitor or folder to read.
  @return ApiMonitorsReadByIdRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsReadById(ctx context.Context, id string) ApiMonitorsReadByIdRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadById(ctx context.Context, id string) ApiMonitorsReadByIdRequest {
 	return ApiMonitorsReadByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1451,7 +1686,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadById(ctx context.Conte
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdExecute(r ApiMonitorsReadByIdRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadByIdExecute(r ApiMonitorsReadByIdRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1459,7 +1694,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdExecute(r ApiMonit
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsReadById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsReadById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1535,13 +1770,20 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdExecute(r ApiMonit
 
 type ApiMonitorsReadByIdsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	ids *[]string
+	skipChildren *bool
 }
 
 // A comma-separated list of identifiers.
 func (r ApiMonitorsReadByIdsRequest) Ids(ids []string) ApiMonitorsReadByIdsRequest {
 	r.ids = &ids
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMonitorsReadByIdsRequest) SkipChildren(skipChildren bool) ApiMonitorsReadByIdsRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1557,7 +1799,7 @@ Bulk read a monitor or folder by the given identifiers from the monitors library
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsReadByIdsRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsReadByIds(ctx context.Context) ApiMonitorsReadByIdsRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadByIds(ctx context.Context) ApiMonitorsReadByIdsRequest {
 	return ApiMonitorsReadByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1566,7 +1808,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIds(ctx context.Cont
 
 // Execute executes the request
 //  @return map[string]MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdsExecute(r ApiMonitorsReadByIdsRequest) (*map[string]MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadByIdsExecute(r ApiMonitorsReadByIdsRequest) (*map[string]MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1574,7 +1816,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdsExecute(r ApiMoni
 		localVarReturnValue  *map[string]MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsReadByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsReadByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1593,11 +1835,14 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdsExecute(r ApiMoni
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
 		}
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1663,7 +1908,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadByIdsExecute(r ApiMoni
 
 type ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -1680,7 +1925,7 @@ List permission summary meta(s) grouped by subjects on monitor or folder in the 
  @param id Identifier of the monitor or folder to list permissions.
  @return ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionSummariesByIdGroupBySubjects(ctx context.Context, id string) ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadPermissionSummariesByIdGroupBySubjects(ctx context.Context, id string) ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest {
 	return ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1690,7 +1935,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionSummariesByI
 
 // Execute executes the request
 //  @return PermissionSummariesBySubjects
-func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionSummariesByIdGroupBySubjectsExecute(r ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest) (*PermissionSummariesBySubjects, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadPermissionSummariesByIdGroupBySubjectsExecute(r ApiMonitorsReadPermissionSummariesByIdGroupBySubjectsRequest) (*PermissionSummariesBySubjects, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1698,7 +1943,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionSummariesByI
 		localVarReturnValue  *PermissionSummariesBySubjects
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsReadPermissionSummariesByIdGroupBySubjects")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsReadPermissionSummariesByIdGroupBySubjects")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1774,7 +2019,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionSummariesByI
 
 type ApiMonitorsReadPermissionsByIdRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 }
 
@@ -1791,7 +2036,7 @@ List explicit permissions on monitor or folder in the monitors library.
  @param id Identifier of the monitor or folder to list permissions.
  @return ApiMonitorsReadPermissionsByIdRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionsById(ctx context.Context, id string) ApiMonitorsReadPermissionsByIdRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadPermissionsById(ctx context.Context, id string) ApiMonitorsReadPermissionsByIdRequest {
 	return ApiMonitorsReadPermissionsByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1801,7 +2046,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionsById(ctx co
 
 // Execute executes the request
 //  @return ListPermissionsResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionsByIdExecute(r ApiMonitorsReadPermissionsByIdRequest) (*ListPermissionsResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsReadPermissionsByIdExecute(r ApiMonitorsReadPermissionsByIdRequest) (*ListPermissionsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1809,7 +2054,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionsByIdExecute
 		localVarReturnValue  *ListPermissionsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsReadPermissionsById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsReadPermissionsById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1885,7 +2130,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsReadPermissionsByIdExecute
 
 type ApiMonitorsRevokePermissionsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	permissionIdentifiers *PermissionIdentifiers
 }
 
@@ -1907,7 +2152,7 @@ Revoke all permissions on monitor or folder in the monitors library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsRevokePermissionsRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsRevokePermissions(ctx context.Context) ApiMonitorsRevokePermissionsRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsRevokePermissions(ctx context.Context) ApiMonitorsRevokePermissionsRequest {
 	return ApiMonitorsRevokePermissionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1915,14 +2160,14 @@ func (a *MonitorsLibraryManagementApiService) MonitorsRevokePermissions(ctx cont
 }
 
 // Execute executes the request
-func (a *MonitorsLibraryManagementApiService) MonitorsRevokePermissionsExecute(r ApiMonitorsRevokePermissionsRequest) (*http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsRevokePermissionsExecute(r ApiMonitorsRevokePermissionsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsRevokePermissions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsRevokePermissions")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1993,10 +2238,11 @@ func (a *MonitorsLibraryManagementApiService) MonitorsRevokePermissionsExecute(r
 
 type ApiMonitorsSearchRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	query *string
 	limit *int32
 	offset *int32
+	skipChildren *bool
 }
 
 // The search query to find monitor or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.   - **monitorStatus** : Filter by the status of the monitor: Normal, Critical, Warning, MissingData, Disabled, AllTriggered. Example: &#x60;monitorStatus:Normal&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60;
@@ -2017,6 +2263,12 @@ func (r ApiMonitorsSearchRequest) Offset(offset int32) ApiMonitorsSearchRequest 
 	return r
 }
 
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMonitorsSearchRequest) SkipChildren(skipChildren bool) ApiMonitorsSearchRequest {
+	r.skipChildren = &skipChildren
+	return r
+}
+
 func (r ApiMonitorsSearchRequest) Execute() ([]MonitorsLibraryItemWithPath, *http.Response, error) {
 	return r.ApiService.MonitorsSearchExecute(r)
 }
@@ -2029,7 +2281,7 @@ Search for a monitor or folder in the monitors library structure.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsSearchRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsSearch(ctx context.Context) ApiMonitorsSearchRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsSearch(ctx context.Context) ApiMonitorsSearchRequest {
 	return ApiMonitorsSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -2038,7 +2290,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSearch(ctx context.Context
 
 // Execute executes the request
 //  @return []MonitorsLibraryItemWithPath
-func (a *MonitorsLibraryManagementApiService) MonitorsSearchExecute(r ApiMonitorsSearchRequest) ([]MonitorsLibraryItemWithPath, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsSearchExecute(r ApiMonitorsSearchRequest) ([]MonitorsLibraryItemWithPath, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -2046,7 +2298,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSearchExecute(r ApiMonitor
 		localVarReturnValue  []MonitorsLibraryItemWithPath
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2063,9 +2315,18 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSearchExecute(r ApiMonitor
 	parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "")
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 1000
+		r.limit = &defaultValue
 	}
 	if r.offset != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	} else {
+		var defaultValue int32 = 0
+		r.offset = &defaultValue
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2131,7 +2392,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSearchExecute(r ApiMonitor
 
 type ApiMonitorsSetPermissionsRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	permissionStatementDefinitions *PermissionStatementDefinitions
 }
 
@@ -2153,7 +2414,7 @@ Set permissions on monitor or folder in the monitors library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMonitorsSetPermissionsRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsSetPermissions(ctx context.Context) ApiMonitorsSetPermissionsRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsSetPermissions(ctx context.Context) ApiMonitorsSetPermissionsRequest {
 	return ApiMonitorsSetPermissionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -2162,7 +2423,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSetPermissions(ctx context
 
 // Execute executes the request
 //  @return PermissionStatements
-func (a *MonitorsLibraryManagementApiService) MonitorsSetPermissionsExecute(r ApiMonitorsSetPermissionsRequest) (*PermissionStatements, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsSetPermissionsExecute(r ApiMonitorsSetPermissionsRequest) (*PermissionStatements, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -2170,7 +2431,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSetPermissionsExecute(r Ap
 		localVarReturnValue  *PermissionStatements
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsSetPermissions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsSetPermissions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2250,7 +2511,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsSetPermissionsExecute(r Ap
 
 type ApiMonitorsUpdateByIdRequest struct {
 	ctx context.Context
-	ApiService *MonitorsLibraryManagementApiService
+	ApiService *MonitorsLibraryManagementAPIService
 	id string
 	monitorsLibraryBaseUpdate *MonitorsLibraryBaseUpdate
 }
@@ -2274,7 +2535,7 @@ Update a monitor or folder in the monitors library.
  @param id Identifier of the monitor or folder to update.
  @return ApiMonitorsUpdateByIdRequest
 */
-func (a *MonitorsLibraryManagementApiService) MonitorsUpdateById(ctx context.Context, id string) ApiMonitorsUpdateByIdRequest {
+func (a *MonitorsLibraryManagementAPIService) MonitorsUpdateById(ctx context.Context, id string) ApiMonitorsUpdateByIdRequest {
 	return ApiMonitorsUpdateByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -2284,7 +2545,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsUpdateById(ctx context.Con
 
 // Execute executes the request
 //  @return MonitorsLibraryBaseResponse
-func (a *MonitorsLibraryManagementApiService) MonitorsUpdateByIdExecute(r ApiMonitorsUpdateByIdRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
+func (a *MonitorsLibraryManagementAPIService) MonitorsUpdateByIdExecute(r ApiMonitorsUpdateByIdRequest) (*MonitorsLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -2292,7 +2553,7 @@ func (a *MonitorsLibraryManagementApiService) MonitorsUpdateByIdExecute(r ApiMon
 		localVarReturnValue  *MonitorsLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementApiService.MonitorsUpdateById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MonitorsLibraryManagementAPIService.MonitorsUpdateById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

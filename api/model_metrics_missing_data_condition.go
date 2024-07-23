@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetricsMissingDataCondition type satisfies the MappedNullable interface at compile time
@@ -21,10 +23,12 @@ var _ MappedNullable = &MetricsMissingDataCondition{}
 type MetricsMissingDataCondition struct {
 	TriggerCondition
 	// Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. `AllTimeSeries`: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is `Metrics`)   2. `AnyTimeSeries`: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is `Metrics`)   3. `AllResults`: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is `Logs`)
-	TriggerSource string `json:"triggerSource"`
+	TriggerSource string `json:"triggerSource" validate:"regexp=^(AllTimeSeries|AnyTimeSeries|AllResults)$"`
 	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 }
+
+type _MetricsMissingDataCondition MetricsMissingDataCondition
 
 // NewMetricsMissingDataCondition instantiates a new MetricsMissingDataCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -117,6 +121,45 @@ func (o MetricsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize["triggerSource"] = o.TriggerSource
 	toSerialize["timeRange"] = o.TimeRange
 	return toSerialize, nil
+}
+
+func (o *MetricsMissingDataCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"triggerSource",
+		"timeRange",
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetricsMissingDataCondition := _MetricsMissingDataCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetricsMissingDataCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsMissingDataCondition(varMetricsMissingDataCondition)
+
+	return err
 }
 
 type NullableMetricsMissingDataCondition struct {

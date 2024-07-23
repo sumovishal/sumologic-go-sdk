@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CurrentPlan type satisfies the MappedNullable interface at compile time
@@ -20,15 +22,15 @@ var _ MappedNullable = &CurrentPlan{}
 // CurrentPlan Current plan of the account.
 type CurrentPlan struct {
 	// Unique identifier of the product in current plan. Valid values are: 1. `Free` 2. `Trial` 3. `Essentials` 4. `EnterpriseOps` 5. `EnterpriseSec` 6. `EnterpriseSuite` 
-	ProductId string `json:"productId"`
+	ProductId string `json:"productId" validate:"regexp=^(Essentials|Trial|Free|EnterpriseOps|EnterpriseSec|EnterpriseSuite)$"`
 	// Cost incurred for the current plan.
 	PlanCost float64 `json:"planCost"`
 	// Billing frequency for the current plan. Valid values are: 1. `Monthly` 2. `Annually` 
-	BillingFrequency string `json:"billingFrequency"`
+	BillingFrequency string `json:"billingFrequency" validate:"regexp=^(Monthly|Annually)$"`
 	// Consumables in the current plan.
 	Consumables []Consumable `json:"consumables,omitempty"`
 	// Whether the account is `Free`/`Trial`/`Paid`
-	PlanType *string `json:"planType,omitempty"`
+	PlanType *string `json:"planType,omitempty" validate:"regexp=^(Free|Trial|Paid)$"`
 	// The plan name for the product being used.
 	PlanName *string `json:"planName,omitempty"`
 	// The discount offered for the given contract period.
@@ -42,6 +44,8 @@ type CurrentPlan struct {
 	PendingUpdateRequest *bool `json:"pendingUpdateRequest,omitempty"`
 	ProrationDetails *ProrationDetails `json:"prorationDetails,omitempty"`
 }
+
+type _CurrentPlan CurrentPlan
 
 // NewCurrentPlan instantiates a new CurrentPlan object
 // This constructor will assign default values to properties that have it defined,
@@ -499,6 +503,45 @@ func (o CurrentPlan) ToMap() (map[string]interface{}, error) {
 		toSerialize["prorationDetails"] = o.ProrationDetails
 	}
 	return toSerialize, nil
+}
+
+func (o *CurrentPlan) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"productId",
+		"planCost",
+		"billingFrequency",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCurrentPlan := _CurrentPlan{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCurrentPlan)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CurrentPlan(varCurrentPlan)
+
+	return err
 }
 
 type NullableCurrentPlan struct {

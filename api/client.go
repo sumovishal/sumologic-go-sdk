@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -35,8 +35,8 @@ import (
 )
 
 var (
-	jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:vnd\.[^;]+\+)?json)`)
-	xmlCheck  = regexp.MustCompile(`(?i:(?:application|text)/xml)`)
+	JsonCheck       = regexp.MustCompile(`(?i:(?:application|text)/(?:[^;]+\+)?json)`)
+	XmlCheck        = regexp.MustCompile(`(?i:(?:application|text)/(?:[^;]+\+)?xml)`)
 	queryParamSplit = regexp.MustCompile(`(^|&)([^&]+)`)
 	queryDescape    = strings.NewReplacer( "%5B", "[", "%5D", "]" )
 )
@@ -49,81 +49,91 @@ type APIClient struct {
 
 	// API Services
 
-	AccessKeyManagementApi *AccessKeyManagementApiService
+	AccessKeyManagementAPI *AccessKeyManagementAPIService
 
-	AccountManagementApi *AccountManagementApiService
+	AccountManagementAPI *AccountManagementAPIService
 
-	AppManagementApi *AppManagementApiService
+	AppManagementAPI *AppManagementAPIService
 
-	ArchiveManagementApi *ArchiveManagementApiService
+	AppManagementV2API *AppManagementV2APIService
 
-	ConnectionManagementApi *ConnectionManagementApiService
+	ArchiveManagementAPI *ArchiveManagementAPIService
 
-	ContentManagementApi *ContentManagementApiService
+	ConnectionManagementAPI *ConnectionManagementAPIService
 
-	ContentPermissionsApi *ContentPermissionsApiService
+	ContentManagementAPI *ContentManagementAPIService
 
-	DashboardManagementApi *DashboardManagementApiService
+	ContentPermissionsAPI *ContentPermissionsAPIService
 
-	DynamicParsingRuleManagementApi *DynamicParsingRuleManagementApiService
+	DashboardManagementAPI *DashboardManagementAPIService
 
-	ExtractionRuleManagementApi *ExtractionRuleManagementApiService
+	DynamicParsingRuleManagementAPI *DynamicParsingRuleManagementAPIService
 
-	FieldManagementV1Api *FieldManagementV1ApiService
+	ExtractionRuleManagementAPI *ExtractionRuleManagementAPIService
 
-	FolderManagementApi *FolderManagementApiService
+	FieldManagementV1API *FieldManagementV1APIService
 
-	HealthEventsApi *HealthEventsApiService
+	FolderManagementAPI *FolderManagementAPIService
 
-	IngestBudgetManagementV1Api *IngestBudgetManagementV1ApiService
+	HealthEventsAPI *HealthEventsAPIService
 
-	IngestBudgetManagementV2Api *IngestBudgetManagementV2ApiService
+	IngestBudgetManagementV1API *IngestBudgetManagementV1APIService
 
-	LogSearchesEstimatedUsageApi *LogSearchesEstimatedUsageApiService
+	IngestBudgetManagementV2API *IngestBudgetManagementV2APIService
 
-	LogSearchesManagementApi *LogSearchesManagementApiService
+	LogSearchesEstimatedUsageAPI *LogSearchesEstimatedUsageAPIService
 
-	LogsDataForwardingManagementApi *LogsDataForwardingManagementApiService
+	LogSearchesManagementAPI *LogSearchesManagementAPIService
 
-	LookupManagementApi *LookupManagementApiService
+	LogsDataForwardingManagementAPI *LogsDataForwardingManagementAPIService
 
-	MetricsQueryApi *MetricsQueryApiService
+	LookupManagementAPI *LookupManagementAPIService
 
-	MetricsSearchesManagementApi *MetricsSearchesManagementApiService
+	MetricsQueryAPI *MetricsQueryAPIService
 
-	MonitorsLibraryManagementApi *MonitorsLibraryManagementApiService
+	MetricsSearchesManagementAPI *MetricsSearchesManagementAPIService
 
-	MutingSchedulesLibraryManagementApi *MutingSchedulesLibraryManagementApiService
+	MetricsSearchesManagementV2API *MetricsSearchesManagementV2APIService
 
-	PartitionManagementApi *PartitionManagementApiService
+	MonitorsLibraryManagementAPI *MonitorsLibraryManagementAPIService
 
-	PasswordPolicyApi *PasswordPolicyApiService
+	MutingSchedulesLibraryManagementAPI *MutingSchedulesLibraryManagementAPIService
 
-	PoliciesManagementApi *PoliciesManagementApiService
+	OrgsManagementAPI *OrgsManagementAPIService
 
-	RoleManagementApi *RoleManagementApiService
+	OtCollectorManagementExternalAPI *OtCollectorManagementExternalAPIService
 
-	SamlConfigurationManagementApi *SamlConfigurationManagementApiService
+	ParsersLibraryManagementAPI *ParsersLibraryManagementAPIService
 
-	ScheduledViewManagementApi *ScheduledViewManagementApiService
+	PartitionManagementAPI *PartitionManagementAPIService
 
-	ServiceAllowlistManagementApi *ServiceAllowlistManagementApiService
+	PasswordPolicyAPI *PasswordPolicyAPIService
 
-	ServiceMapApi *ServiceMapApiService
+	PoliciesManagementAPI *PoliciesManagementAPIService
 
-	SlosLibraryManagementApi *SlosLibraryManagementApiService
+	RoleManagementAPI *RoleManagementAPIService
 
-	SpanAnalyticsApi *SpanAnalyticsApiService
+	SamlConfigurationManagementAPI *SamlConfigurationManagementAPIService
 
-	ThreatIntelIngestApi *ThreatIntelIngestApiService
+	ScheduledViewManagementAPI *ScheduledViewManagementAPIService
 
-	TokensLibraryManagementApi *TokensLibraryManagementApiService
+	ServiceAllowlistManagementAPI *ServiceAllowlistManagementAPIService
 
-	TracesApi *TracesApiService
+	ServiceMapAPI *ServiceMapAPIService
 
-	TransformationRuleManagementApi *TransformationRuleManagementApiService
+	SlosLibraryManagementAPI *SlosLibraryManagementAPIService
 
-	UserManagementApi *UserManagementApiService
+	SpanAnalyticsAPI *SpanAnalyticsAPIService
+
+	ThreatIntelIngestAPI *ThreatIntelIngestAPIService
+
+	TokensLibraryManagementAPI *TokensLibraryManagementAPIService
+
+	TracesAPI *TracesAPIService
+
+	TransformationRuleManagementAPI *TransformationRuleManagementAPIService
+
+	UserManagementAPI *UserManagementAPIService
 }
 
 type service struct {
@@ -142,44 +152,49 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.AccessKeyManagementApi = (*AccessKeyManagementApiService)(&c.common)
-	c.AccountManagementApi = (*AccountManagementApiService)(&c.common)
-	c.AppManagementApi = (*AppManagementApiService)(&c.common)
-	c.ArchiveManagementApi = (*ArchiveManagementApiService)(&c.common)
-	c.ConnectionManagementApi = (*ConnectionManagementApiService)(&c.common)
-	c.ContentManagementApi = (*ContentManagementApiService)(&c.common)
-	c.ContentPermissionsApi = (*ContentPermissionsApiService)(&c.common)
-	c.DashboardManagementApi = (*DashboardManagementApiService)(&c.common)
-	c.DynamicParsingRuleManagementApi = (*DynamicParsingRuleManagementApiService)(&c.common)
-	c.ExtractionRuleManagementApi = (*ExtractionRuleManagementApiService)(&c.common)
-	c.FieldManagementV1Api = (*FieldManagementV1ApiService)(&c.common)
-	c.FolderManagementApi = (*FolderManagementApiService)(&c.common)
-	c.HealthEventsApi = (*HealthEventsApiService)(&c.common)
-	c.IngestBudgetManagementV1Api = (*IngestBudgetManagementV1ApiService)(&c.common)
-	c.IngestBudgetManagementV2Api = (*IngestBudgetManagementV2ApiService)(&c.common)
-	c.LogSearchesEstimatedUsageApi = (*LogSearchesEstimatedUsageApiService)(&c.common)
-	c.LogSearchesManagementApi = (*LogSearchesManagementApiService)(&c.common)
-	c.LogsDataForwardingManagementApi = (*LogsDataForwardingManagementApiService)(&c.common)
-	c.LookupManagementApi = (*LookupManagementApiService)(&c.common)
-	c.MetricsQueryApi = (*MetricsQueryApiService)(&c.common)
-	c.MetricsSearchesManagementApi = (*MetricsSearchesManagementApiService)(&c.common)
-	c.MonitorsLibraryManagementApi = (*MonitorsLibraryManagementApiService)(&c.common)
-	c.MutingSchedulesLibraryManagementApi = (*MutingSchedulesLibraryManagementApiService)(&c.common)
-	c.PartitionManagementApi = (*PartitionManagementApiService)(&c.common)
-	c.PasswordPolicyApi = (*PasswordPolicyApiService)(&c.common)
-	c.PoliciesManagementApi = (*PoliciesManagementApiService)(&c.common)
-	c.RoleManagementApi = (*RoleManagementApiService)(&c.common)
-	c.SamlConfigurationManagementApi = (*SamlConfigurationManagementApiService)(&c.common)
-	c.ScheduledViewManagementApi = (*ScheduledViewManagementApiService)(&c.common)
-	c.ServiceAllowlistManagementApi = (*ServiceAllowlistManagementApiService)(&c.common)
-	c.ServiceMapApi = (*ServiceMapApiService)(&c.common)
-	c.SlosLibraryManagementApi = (*SlosLibraryManagementApiService)(&c.common)
-	c.SpanAnalyticsApi = (*SpanAnalyticsApiService)(&c.common)
-	c.ThreatIntelIngestApi = (*ThreatIntelIngestApiService)(&c.common)
-	c.TokensLibraryManagementApi = (*TokensLibraryManagementApiService)(&c.common)
-	c.TracesApi = (*TracesApiService)(&c.common)
-	c.TransformationRuleManagementApi = (*TransformationRuleManagementApiService)(&c.common)
-	c.UserManagementApi = (*UserManagementApiService)(&c.common)
+	c.AccessKeyManagementAPI = (*AccessKeyManagementAPIService)(&c.common)
+	c.AccountManagementAPI = (*AccountManagementAPIService)(&c.common)
+	c.AppManagementAPI = (*AppManagementAPIService)(&c.common)
+	c.AppManagementV2API = (*AppManagementV2APIService)(&c.common)
+	c.ArchiveManagementAPI = (*ArchiveManagementAPIService)(&c.common)
+	c.ConnectionManagementAPI = (*ConnectionManagementAPIService)(&c.common)
+	c.ContentManagementAPI = (*ContentManagementAPIService)(&c.common)
+	c.ContentPermissionsAPI = (*ContentPermissionsAPIService)(&c.common)
+	c.DashboardManagementAPI = (*DashboardManagementAPIService)(&c.common)
+	c.DynamicParsingRuleManagementAPI = (*DynamicParsingRuleManagementAPIService)(&c.common)
+	c.ExtractionRuleManagementAPI = (*ExtractionRuleManagementAPIService)(&c.common)
+	c.FieldManagementV1API = (*FieldManagementV1APIService)(&c.common)
+	c.FolderManagementAPI = (*FolderManagementAPIService)(&c.common)
+	c.HealthEventsAPI = (*HealthEventsAPIService)(&c.common)
+	c.IngestBudgetManagementV1API = (*IngestBudgetManagementV1APIService)(&c.common)
+	c.IngestBudgetManagementV2API = (*IngestBudgetManagementV2APIService)(&c.common)
+	c.LogSearchesEstimatedUsageAPI = (*LogSearchesEstimatedUsageAPIService)(&c.common)
+	c.LogSearchesManagementAPI = (*LogSearchesManagementAPIService)(&c.common)
+	c.LogsDataForwardingManagementAPI = (*LogsDataForwardingManagementAPIService)(&c.common)
+	c.LookupManagementAPI = (*LookupManagementAPIService)(&c.common)
+	c.MetricsQueryAPI = (*MetricsQueryAPIService)(&c.common)
+	c.MetricsSearchesManagementAPI = (*MetricsSearchesManagementAPIService)(&c.common)
+	c.MetricsSearchesManagementV2API = (*MetricsSearchesManagementV2APIService)(&c.common)
+	c.MonitorsLibraryManagementAPI = (*MonitorsLibraryManagementAPIService)(&c.common)
+	c.MutingSchedulesLibraryManagementAPI = (*MutingSchedulesLibraryManagementAPIService)(&c.common)
+	c.OrgsManagementAPI = (*OrgsManagementAPIService)(&c.common)
+	c.OtCollectorManagementExternalAPI = (*OtCollectorManagementExternalAPIService)(&c.common)
+	c.ParsersLibraryManagementAPI = (*ParsersLibraryManagementAPIService)(&c.common)
+	c.PartitionManagementAPI = (*PartitionManagementAPIService)(&c.common)
+	c.PasswordPolicyAPI = (*PasswordPolicyAPIService)(&c.common)
+	c.PoliciesManagementAPI = (*PoliciesManagementAPIService)(&c.common)
+	c.RoleManagementAPI = (*RoleManagementAPIService)(&c.common)
+	c.SamlConfigurationManagementAPI = (*SamlConfigurationManagementAPIService)(&c.common)
+	c.ScheduledViewManagementAPI = (*ScheduledViewManagementAPIService)(&c.common)
+	c.ServiceAllowlistManagementAPI = (*ServiceAllowlistManagementAPIService)(&c.common)
+	c.ServiceMapAPI = (*ServiceMapAPIService)(&c.common)
+	c.SlosLibraryManagementAPI = (*SlosLibraryManagementAPIService)(&c.common)
+	c.SpanAnalyticsAPI = (*SpanAnalyticsAPIService)(&c.common)
+	c.ThreatIntelIngestAPI = (*ThreatIntelIngestAPIService)(&c.common)
+	c.TokensLibraryManagementAPI = (*TokensLibraryManagementAPIService)(&c.common)
+	c.TracesAPI = (*TracesAPIService)(&c.common)
+	c.TransformationRuleManagementAPI = (*TransformationRuleManagementAPIService)(&c.common)
+	c.UserManagementAPI = (*UserManagementAPIService)(&c.common)
 
 	return c
 }
@@ -273,7 +288,7 @@ func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix stri
 					return
 				}
 				if t, ok := obj.(time.Time); ok {
-					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, t.Format(time.RFC3339), collectionType)
+					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, t.Format(time.RFC3339Nano), collectionType)
 					return
 				}
 				value = v.Type().String() + " value"
@@ -413,7 +428,7 @@ func (c *APIClient) prepareRequest(
 	// add form parameters and file if available.
 	if strings.HasPrefix(headerParams["Content-Type"], "multipart/form-data") && len(formParams) > 0 || (len(formFiles) > 0) {
 		if body != nil {
-			return nil, errors.New("cannot specify postBody and multipart form at the same time")
+			return nil, errors.New("Cannot specify postBody and multipart form at the same time.")
 		}
 		body = &bytes.Buffer{}
 		w := multipart.NewWriter(body)
@@ -454,7 +469,7 @@ func (c *APIClient) prepareRequest(
 
 	if strings.HasPrefix(headerParams["Content-Type"], "application/x-www-form-urlencoded") && len(formParams) > 0 {
 		if body != nil {
-			return nil, errors.New("cannot specify postBody and x-www-form-urlencoded form at the same time")
+			return nil, errors.New("Cannot specify postBody and x-www-form-urlencoded form at the same time.")
 		}
 		body = &bytes.Buffer{}
 		body.WriteString(formParams.Encode())
@@ -566,20 +581,20 @@ func (c *APIClient) decode(v interface{}, b []byte, contentType string) (err err
 		_, err = (*f).Seek(0, io.SeekStart)
 		return
 	}
-	if xmlCheck.MatchString(contentType) {
+	if XmlCheck.MatchString(contentType) {
 		if err = xml.Unmarshal(b, v); err != nil {
 			return err
 		}
 		return nil
 	}
-	if jsonCheck.MatchString(contentType) {
+	if JsonCheck.MatchString(contentType) {
 		if actualObj, ok := v.(interface{ GetActualInstance() interface{} }); ok { // oneOf, anyOf schemas
 			if unmarshalObj, ok := actualObj.(interface{ UnmarshalJSON([]byte) error }); ok { // make sure it has UnmarshalJSON defined
 				if err = unmarshalObj.UnmarshalJSON(b); err != nil {
 					return err
 				}
 			} else {
-				return errors.New("unknown type with GetActualInstance but no unmarshalObj.UnmarshalJSON defined")
+				return errors.New("Unknown type with GetActualInstance but no unmarshalObj.UnmarshalJSON defined")
 			}
 		} else if err = json.Unmarshal(b, v); err != nil { // simple model
 			return err
@@ -609,18 +624,6 @@ func addFile(w *multipart.Writer, fieldName, path string) error {
 	return err
 }
 
-// Prevent trying to import "fmt"
-func reportError(format string, a ...interface{}) error {
-	return fmt.Errorf(format, a...)
-}
-
-// A wrapper for strict JSON decoding
-func newStrictDecoder(data []byte) *json.Decoder {
-	dec := json.NewDecoder(bytes.NewBuffer(data))
-	dec.DisallowUnknownFields()
-	return dec
-}
-
 // Set request body from an interface{}
 func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err error) {
 	if bodyBuf == nil {
@@ -637,10 +640,14 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 		_, err = bodyBuf.WriteString(s)
 	} else if s, ok := body.(*string); ok {
 		_, err = bodyBuf.WriteString(*s)
-	} else if jsonCheck.MatchString(contentType) {
+	} else if JsonCheck.MatchString(contentType) {
 		err = json.NewEncoder(bodyBuf).Encode(body)
-	} else if xmlCheck.MatchString(contentType) {
-		err = xml.NewEncoder(bodyBuf).Encode(body)
+	} else if XmlCheck.MatchString(contentType) {
+		var bs []byte
+		bs, err = xml.Marshal(body)
+		if err == nil {
+			bodyBuf.Write(bs)
+		}
 	}
 
 	if err != nil {
@@ -648,7 +655,7 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 	}
 
 	if bodyBuf.Len() == 0 {
-		err = fmt.Errorf("invalid body type %s", contentType)
+		err = fmt.Errorf("invalid body type %s\n", contentType)
 		return nil, err
 	}
 	return bodyBuf, nil

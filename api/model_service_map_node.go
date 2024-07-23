@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ServiceMapNode type satisfies the MappedNullable interface at compile time
@@ -29,8 +31,10 @@ type ServiceMapNode struct {
 	// Indicates whether node comes from inferred remote service or instrumented one.
 	IsRemote bool `json:"isRemote"`
 	// Defines type of service.
-	ServiceType string `json:"serviceType"`
+	ServiceType string `json:"serviceType" validate:"regexp=^(Db|HTTP|MQ|Web|Mixed|Unknown|Cpp|DotNET|Erlang|Go|Java|NodeJS|Php|Python|Ruby|WebJS|Swift|MSSQL|MySQL|Oracle|Db2|PostgreSQL|Redshift|Hive|Cloudscape|HSQLDB|Progress|MaxDB|HANADB|Ingres|FirstSQL|EnterpriseDB|Cache|Adabas|Firebird|ApacheDerby|FileMaker|Informix|InstantDB|InterBase|MariaDB|Netezza|PervasivePSQL|PointBase|SQLite|Sybase|Teradata|Vertica|H2|ColdFusion|Cassandra|HBase|MongoDB|Redis|Couchbase|CouchDB|CosmosDB|DynamoDB|Neo4j|Geode|Elasticsearch|Memcached|CockroachDB|RPC|gRPC|JavaRMI|DotNETWCF|ApacheDubbo)$"`
 }
+
+type _ServiceMapNode ServiceMapNode
 
 // NewServiceMapNode instantiates a new ServiceMapNode object
 // This constructor will assign default values to properties that have it defined,
@@ -199,6 +203,46 @@ func (o ServiceMapNode) ToMap() (map[string]interface{}, error) {
 	toSerialize["isRemote"] = o.IsRemote
 	toSerialize["serviceType"] = o.ServiceType
 	return toSerialize, nil
+}
+
+func (o *ServiceMapNode) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"serviceName",
+		"lastSeenAt",
+		"isRemote",
+		"serviceType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varServiceMapNode := _ServiceMapNode{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varServiceMapNode)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceMapNode(varServiceMapNode)
+
+	return err
 }
 
 type NullableServiceMapNode struct {

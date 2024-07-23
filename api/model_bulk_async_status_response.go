@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BulkAsyncStatusResponse type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type BulkAsyncStatusResponse struct {
 	// Map of content identifiers to error messages for all failed job requests
 	Errors map[string]BulkErrorResponse `json:"errors"`
 }
+
+type _BulkAsyncStatusResponse BulkAsyncStatusResponse
 
 // NewBulkAsyncStatusResponse instantiates a new BulkAsyncStatusResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o BulkAsyncStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["jobStatuses"] = o.JobStatuses
 	toSerialize["errors"] = o.Errors
 	return toSerialize, nil
+}
+
+func (o *BulkAsyncStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"jobStatuses",
+		"errors",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBulkAsyncStatusResponse := _BulkAsyncStatusResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBulkAsyncStatusResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BulkAsyncStatusResponse(varBulkAsyncStatusResponse)
+
+	return err
 }
 
 type NullableBulkAsyncStatusResponse struct {

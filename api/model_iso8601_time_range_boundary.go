@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Iso8601TimeRangeBoundary type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type Iso8601TimeRangeBoundary struct {
 	// Starting point in time as a string in ISO 8601 format. For example `2018-10-01T11:10:20.52+01:00`
 	Iso8601Time time.Time `json:"iso8601Time"`
 }
+
+type _Iso8601TimeRangeBoundary Iso8601TimeRangeBoundary
 
 // NewIso8601TimeRangeBoundary instantiates a new Iso8601TimeRangeBoundary object
 // This constructor will assign default values to properties that have it defined,
@@ -88,6 +92,44 @@ func (o Iso8601TimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["iso8601Time"] = o.Iso8601Time
 	return toSerialize, nil
+}
+
+func (o *Iso8601TimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"iso8601Time",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varIso8601TimeRangeBoundary := _Iso8601TimeRangeBoundary{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varIso8601TimeRangeBoundary)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Iso8601TimeRangeBoundary(varIso8601TimeRangeBoundary)
+
+	return err
 }
 
 type NullableIso8601TimeRangeBoundary struct {

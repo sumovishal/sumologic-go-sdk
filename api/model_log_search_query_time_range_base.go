@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogSearchQueryTimeRangeBase type satisfies the MappedNullable interface at compile time
@@ -27,8 +29,10 @@ type LogSearchQueryTimeRangeBase struct {
 	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
 	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
-	ParsingMode *string `json:"parsingMode,omitempty"`
+	ParsingMode *string `json:"parsingMode,omitempty" validate:"regexp=^(AutoParse|Manual)$"`
 }
+
+type _LogSearchQueryTimeRangeBase LogSearchQueryTimeRangeBase
 
 // NewLogSearchQueryTimeRangeBase instantiates a new LogSearchQueryTimeRangeBase object
 // This constructor will assign default values to properties that have it defined,
@@ -223,6 +227,44 @@ func (o LogSearchQueryTimeRangeBase) ToMap() (map[string]interface{}, error) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
 	return toSerialize, nil
+}
+
+func (o *LogSearchQueryTimeRangeBase) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryString",
+		"timeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogSearchQueryTimeRangeBase := _LogSearchQueryTimeRangeBase{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogSearchQueryTimeRangeBase)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchQueryTimeRangeBase(varLogSearchQueryTimeRangeBase)
+
+	return err
 }
 
 type NullableLogSearchQueryTimeRangeBase struct {

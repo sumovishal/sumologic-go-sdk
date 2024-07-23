@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MonitorsLibraryMonitor type satisfies the MappedNullable interface at compile time
@@ -21,13 +23,13 @@ var _ MappedNullable = &MonitorsLibraryMonitor{}
 type MonitorsLibraryMonitor struct {
 	MonitorsLibraryBase
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.   3. `Slo`: A SLO based monitor. Currently SLO based monitor is available in closed beta (Notify your Sumo Logic representative in order to get the early access).
-	MonitorType string `json:"monitorType"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics|Slo)$"`
 	// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
 	EvaluationDelay *string `json:"evaluationDelay,omitempty"`
-	// The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified.
+	// The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified. All template variables can be used here except {{AlertName}}, {{AlertResponseURL}}, {{ResultsJson}}, and {{Playbook}}.
 	AlertName *string `json:"alertName,omitempty"`
-	RunAs *MonitorsLibraryMonitorAllOfRunAs `json:"runAs,omitempty"`
-	// The set of fields to be used to group alert notifications for a monitor. The value of this field will be considered only when 'groupNotifications' is true. The fields with very high cardinality such as `_raw`, `_messagetime`, `_receipttime`, and `_messageid` are not allowed for Alert Grouping.
+	RunAs map[string]interface{} `json:"runAs,omitempty"`
+	// The set of fields to be used to group alert notifications for a monitor. The value of this field will be considered only when 'groupNotifications' is true. The fields with very high cardinality such as `_blockid`, `_raw`, `_messagetime`, `_receipttime`, and `_messageid` are not allowed for Alert Grouping.
 	NotificationGroupFields []string `json:"notificationGroupFields,omitempty"`
 	// All queries from the monitor.
 	Queries []MonitorQuery `json:"queries"`
@@ -46,6 +48,8 @@ type MonitorsLibraryMonitor struct {
 	// The set of automated playbook ids for a monitor.
 	AutomatedPlaybookIds []string `json:"automatedPlaybookIds,omitempty"`
 }
+
+type _MonitorsLibraryMonitor MonitorsLibraryMonitor
 
 // NewMonitorsLibraryMonitor instantiates a new MonitorsLibraryMonitor object
 // This constructor will assign default values to properties that have it defined,
@@ -176,19 +180,19 @@ func (o *MonitorsLibraryMonitor) SetAlertName(v string) {
 }
 
 // GetRunAs returns the RunAs field value if set, zero value otherwise.
-func (o *MonitorsLibraryMonitor) GetRunAs() MonitorsLibraryMonitorAllOfRunAs {
+func (o *MonitorsLibraryMonitor) GetRunAs() map[string]interface{} {
 	if o == nil || IsNil(o.RunAs) {
-		var ret MonitorsLibraryMonitorAllOfRunAs
+		var ret map[string]interface{}
 		return ret
 	}
-	return *o.RunAs
+	return o.RunAs
 }
 
 // GetRunAsOk returns a tuple with the RunAs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *MonitorsLibraryMonitor) GetRunAsOk() (*MonitorsLibraryMonitorAllOfRunAs, bool) {
+func (o *MonitorsLibraryMonitor) GetRunAsOk() (map[string]interface{}, bool) {
 	if o == nil || IsNil(o.RunAs) {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
 	return o.RunAs, true
 }
@@ -202,9 +206,9 @@ func (o *MonitorsLibraryMonitor) HasRunAs() bool {
 	return false
 }
 
-// SetRunAs gets a reference to the given MonitorsLibraryMonitorAllOfRunAs and assigns it to the RunAs field.
-func (o *MonitorsLibraryMonitor) SetRunAs(v MonitorsLibraryMonitorAllOfRunAs) {
-	o.RunAs = &v
+// SetRunAs gets a reference to the given map[string]interface{} and assigns it to the RunAs field.
+func (o *MonitorsLibraryMonitor) SetRunAs(v map[string]interface{}) {
+	o.RunAs = v
 }
 
 // GetNotificationGroupFields returns the NotificationGroupFields field value if set, zero value otherwise.
@@ -531,6 +535,47 @@ func (o MonitorsLibraryMonitor) ToMap() (map[string]interface{}, error) {
 		toSerialize["automatedPlaybookIds"] = o.AutomatedPlaybookIds
 	}
 	return toSerialize, nil
+}
+
+func (o *MonitorsLibraryMonitor) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"monitorType",
+		"queries",
+		"triggers",
+		"name",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorsLibraryMonitor := _MonitorsLibraryMonitor{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorsLibraryMonitor)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorsLibraryMonitor(varMonitorsLibraryMonitor)
+
+	return err
 }
 
 type NullableMonitorsLibraryMonitor struct {

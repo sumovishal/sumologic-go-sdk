@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DisableUnusedAccessKeysPolicy type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type DisableUnusedAccessKeysPolicy struct {
 	// The number of days it will take for an unused access key to automatically disable. Setting it to 0 (never) means that the accessKeys will not be disabled automatically.
 	UnusedAccessKeysDisableAfterInDays int32 `json:"unusedAccessKeysDisableAfterInDays"`
 }
+
+type _DisableUnusedAccessKeysPolicy DisableUnusedAccessKeysPolicy
 
 // NewDisableUnusedAccessKeysPolicy instantiates a new DisableUnusedAccessKeysPolicy object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o DisableUnusedAccessKeysPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["unusedAccessKeysDisableAfterInDays"] = o.UnusedAccessKeysDisableAfterInDays
 	return toSerialize, nil
+}
+
+func (o *DisableUnusedAccessKeysPolicy) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"unusedAccessKeysDisableAfterInDays",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDisableUnusedAccessKeysPolicy := _DisableUnusedAccessKeysPolicy{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDisableUnusedAccessKeysPolicy)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DisableUnusedAccessKeysPolicy(varDisableUnusedAccessKeysPolicy)
+
+	return err
 }
 
 type NullableDisableUnusedAccessKeysPolicy struct {

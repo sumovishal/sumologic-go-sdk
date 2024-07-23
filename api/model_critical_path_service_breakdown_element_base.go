@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CriticalPathServiceBreakdownElementBase type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type CriticalPathServiceBreakdownElementBase struct {
 	// Overall processing time in nanoseconds consumed by the spans belonging to this service in the critical path (a sum of the duration times of the spans' critical path segments).
 	Duration int64 `json:"duration"`
 }
+
+type _CriticalPathServiceBreakdownElementBase CriticalPathServiceBreakdownElementBase
 
 // NewCriticalPathServiceBreakdownElementBase instantiates a new CriticalPathServiceBreakdownElementBase object
 // This constructor will assign default values to properties that have it defined,
@@ -151,6 +155,43 @@ func (o CriticalPathServiceBreakdownElementBase) ToMap() (map[string]interface{}
 	}
 	toSerialize["duration"] = o.Duration
 	return toSerialize, nil
+}
+
+func (o *CriticalPathServiceBreakdownElementBase) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"duration",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCriticalPathServiceBreakdownElementBase := _CriticalPathServiceBreakdownElementBase{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCriticalPathServiceBreakdownElementBase)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CriticalPathServiceBreakdownElementBase(varCriticalPathServiceBreakdownElementBase)
+
+	return err
 }
 
 type NullableCriticalPathServiceBreakdownElementBase struct {

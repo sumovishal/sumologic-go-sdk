@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DashboardSearchResult type satisfies the MappedNullable interface at compile time
@@ -33,7 +35,11 @@ type DashboardSearchResult struct {
 	// The total number of scanned bytes from infrequent tier data for the query in bytes.
 	InfrequentScannedBytes *float32 `json:"infrequentScannedBytes,omitempty"`
 	ScannedBytes *ScannedBytes `json:"scannedBytes,omitempty"`
+	// The backfill percentage of a continuous query.
+	BackfillPercent *float32 `json:"backfillPercent,omitempty"`
 }
+
+type _DashboardSearchResult DashboardSearchResult
 
 // NewDashboardSearchResult instantiates a new DashboardSearchResult object
 // This constructor will assign default values to properties that have it defined,
@@ -319,6 +325,38 @@ func (o *DashboardSearchResult) SetScannedBytes(v ScannedBytes) {
 	o.ScannedBytes = &v
 }
 
+// GetBackfillPercent returns the BackfillPercent field value if set, zero value otherwise.
+func (o *DashboardSearchResult) GetBackfillPercent() float32 {
+	if o == nil || IsNil(o.BackfillPercent) {
+		var ret float32
+		return ret
+	}
+	return *o.BackfillPercent
+}
+
+// GetBackfillPercentOk returns a tuple with the BackfillPercent field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardSearchResult) GetBackfillPercentOk() (*float32, bool) {
+	if o == nil || IsNil(o.BackfillPercent) {
+		return nil, false
+	}
+	return o.BackfillPercent, true
+}
+
+// HasBackfillPercent returns a boolean if a field has been set.
+func (o *DashboardSearchResult) HasBackfillPercent() bool {
+	if o != nil && !IsNil(o.BackfillPercent) {
+		return true
+	}
+
+	return false
+}
+
+// SetBackfillPercent gets a reference to the given float32 and assigns it to the BackfillPercent field.
+func (o *DashboardSearchResult) SetBackfillPercent(v float32) {
+	o.BackfillPercent = &v
+}
+
 func (o DashboardSearchResult) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -350,7 +388,49 @@ func (o DashboardSearchResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScannedBytes) {
 		toSerialize["scannedBytes"] = o.ScannedBytes
 	}
+	if !IsNil(o.BackfillPercent) {
+		toSerialize["backfillPercent"] = o.BackfillPercent
+	}
 	return toSerialize, nil
+}
+
+func (o *DashboardSearchResult) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"status",
+		"axes",
+		"series",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDashboardSearchResult := _DashboardSearchResult{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDashboardSearchResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DashboardSearchResult(varDashboardSearchResult)
+
+	return err
 }
 
 type NullableDashboardSearchResult struct {

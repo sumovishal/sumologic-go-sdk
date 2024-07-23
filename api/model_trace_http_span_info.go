@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TraceHttpSpanInfo type satisfies the MappedNullable interface at compile time
@@ -21,12 +23,14 @@ var _ MappedNullable = &TraceHttpSpanInfo{}
 type TraceHttpSpanInfo struct {
 	TraceSpanInfo
 	// HTTP method of the request for the associated span.
-	Method *string `json:"method,omitempty"`
+	Method *string `json:"method,omitempty" validate:"regexp=^(GET|HEAD|POST|PUT|DELETE|CONNECT|OPTIONS|TRACE)$"`
 	// URL of the request being handled in this span, in the standard URI format.
 	Url *string `json:"url,omitempty"`
 	// HTTP response status code for the associated span.
 	StatusCode *int32 `json:"statusCode,omitempty"`
 }
+
+type _TraceHttpSpanInfo TraceHttpSpanInfo
 
 // NewTraceHttpSpanInfo instantiates a new TraceHttpSpanInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -170,6 +174,43 @@ func (o TraceHttpSpanInfo) ToMap() (map[string]interface{}, error) {
 		toSerialize["statusCode"] = o.StatusCode
 	}
 	return toSerialize, nil
+}
+
+func (o *TraceHttpSpanInfo) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTraceHttpSpanInfo := _TraceHttpSpanInfo{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTraceHttpSpanInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceHttpSpanInfo(varTraceHttpSpanInfo)
+
+	return err
 }
 
 type NullableTraceHttpSpanInfo struct {

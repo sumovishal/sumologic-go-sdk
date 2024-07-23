@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpansFilter type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &SpansFilter{}
 // SpansFilter struct for SpansFilter
 type SpansFilter struct {
 	// The spans filter type.
-	Type string `json:"type"`
+	Type string `json:"type" validate:"regexp=^(StandaloneKey|KeyValuePair)$"`
 	// The name of the filtering field.
 	FieldName string `json:"fieldName"`
 }
+
+type _SpansFilter SpansFilter
 
 // NewSpansFilter instantiates a new SpansFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o SpansFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize["type"] = o.Type
 	toSerialize["fieldName"] = o.FieldName
 	return toSerialize, nil
+}
+
+func (o *SpansFilter) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+		"fieldName",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpansFilter := _SpansFilter{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpansFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpansFilter(varSpansFilter)
+
+	return err
 }
 
 type NullableSpansFilter struct {

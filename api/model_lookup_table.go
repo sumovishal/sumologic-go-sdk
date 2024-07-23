@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LookupTable type satisfies the MappedNullable interface at compile time
@@ -37,7 +39,7 @@ type LookupTable struct {
 	// A time to live for each entry in the lookup table (in minutes). 365 days is the maximum time to live for each entry that you can specify. Setting it to 0 means that the records will not expire automatically.
 	Ttl *int32 `json:"ttl,omitempty"`
 	// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will start deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
-	SizeLimitAction *string `json:"sizeLimitAction,omitempty"`
+	SizeLimitAction *string `json:"sizeLimitAction,omitempty" validate:"regexp=^(StopIncomingMessages|DeleteOldData)$"`
 	// The name of the lookup table.
 	Name string `json:"name"`
 	// The parent-folder-path identifier of the lookup table in the Library.
@@ -49,6 +51,8 @@ type LookupTable struct {
 	// The current size of the lookup table in bytes
 	Size *int64 `json:"size,omitempty"`
 }
+
+type _LookupTable LookupTable
 
 // NewLookupTable instantiates a new LookupTable object
 // This constructor will assign default values to properties that have it defined,
@@ -486,6 +490,52 @@ func (o LookupTable) ToMap() (map[string]interface{}, error) {
 		toSerialize["size"] = o.Size
 	}
 	return toSerialize, nil
+}
+
+func (o *LookupTable) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"description",
+		"fields",
+		"primaryKeys",
+		"name",
+		"parentFolderId",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLookupTable := _LookupTable{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLookupTable)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupTable(varLookupTable)
+
+	return err
 }
 
 type NullableLookupTable struct {

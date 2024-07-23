@@ -7,7 +7,9 @@ Name | Type | Description | Notes
 **VariableValues** | **[]string** | Values for the variable. | 
 **Status** | Pointer to [**DashboardSearchStatus**](DashboardSearchStatus.md) |  | [optional] 
 **VariableType** | Pointer to **string** | The type of the variable. | [optional] 
-**ValueType** | Pointer to **string** | The type of value of the variable. Allowed values are &#x60;String&#x60; and Any&#x60;. &#x60;String&#x60; considers as a single phrase and will wrap in double-quotes, &#x60;Any&#x60; is all characters. | [optional] [default to "Any"]
+**ValueType** | Pointer to **string** | The type of value of the variable. Allowed values are &#x60;String&#x60;, Any&#x60;, &#x60;Numeric&#x60;, &#x60;Integer&#x60;, &#x60;Long&#x60;, &#x60;Double&#x60;, &#x60;Boolean&#x60;. - &#x60;String&#x60; considers as a single phrase and will wrap in double-quotes. - &#x60;Any&#x60; is all characters. - &#x60;Numeric&#x60; consists of a numeric value for variables, it will be displayed differently in the UI. - &#x60;Integer&#x60; is a variable with an &#x60;Int&#x60; value. - &#x60;Long&#x60; is a variable with a &#x60;Long&#x60; value. - &#x60;Double&#x60; is a variable with a &#x60;Double&#x60; value. - &#x60;Boolean&#x60; is a variable with a &#x60;Boolean&#x60; value.  | [optional] [default to "Any"]
+**AllowMultiSelect** | Pointer to **bool** | Allow multiple selections in the values dropdown. | [optional] [default to false]
+**VariableKey** | Pointer to **string** | The key of the variable. | [optional] 
 **Errors** | Pointer to [**[]ErrorDescription**](ErrorDescription.md) | Generic errors returned by backend from downstream assemblies. More specific errors will be thrown in the future. | [optional] 
 
 ## Methods
@@ -123,6 +125,56 @@ SetValueType sets ValueType field to given value.
 `func (o *VariableValuesData) HasValueType() bool`
 
 HasValueType returns a boolean if a field has been set.
+
+### GetAllowMultiSelect
+
+`func (o *VariableValuesData) GetAllowMultiSelect() bool`
+
+GetAllowMultiSelect returns the AllowMultiSelect field if non-nil, zero value otherwise.
+
+### GetAllowMultiSelectOk
+
+`func (o *VariableValuesData) GetAllowMultiSelectOk() (*bool, bool)`
+
+GetAllowMultiSelectOk returns a tuple with the AllowMultiSelect field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAllowMultiSelect
+
+`func (o *VariableValuesData) SetAllowMultiSelect(v bool)`
+
+SetAllowMultiSelect sets AllowMultiSelect field to given value.
+
+### HasAllowMultiSelect
+
+`func (o *VariableValuesData) HasAllowMultiSelect() bool`
+
+HasAllowMultiSelect returns a boolean if a field has been set.
+
+### GetVariableKey
+
+`func (o *VariableValuesData) GetVariableKey() string`
+
+GetVariableKey returns the VariableKey field if non-nil, zero value otherwise.
+
+### GetVariableKeyOk
+
+`func (o *VariableValuesData) GetVariableKeyOk() (*string, bool)`
+
+GetVariableKeyOk returns a tuple with the VariableKey field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVariableKey
+
+`func (o *VariableValuesData) SetVariableKey(v string)`
+
+SetVariableKey sets VariableKey field to given value.
+
+### HasVariableKey
+
+`func (o *VariableValuesData) HasVariableKey() bool`
+
+HasVariableKey returns a boolean if a field has been set.
 
 ### GetErrors
 

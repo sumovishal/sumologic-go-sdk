@@ -24,9 +24,11 @@ type UsageReportRequest struct {
 	// End date, without the time, of usage data to fetch. If no value is provided endDate is used as the end of the subscription. The end date cannot be after the end of the subscription.
 	EndDate *string `json:"endDate,omitempty"`
 	// Perform a groupBy operation on the usage details. If no value is provided data is grouped by `Day` - `day`: Aggregate the data by day - `week`: Aggregate the data by week. Week starts at Monday and ends at sunday night. - `month`: Aggregate the data by calendar month.
-	GroupBy *string `json:"groupBy,omitempty"`
+	GroupBy *string `json:"groupBy,omitempty" validate:"regexp=^(day|week|month)$"`
 	// Specifies the type of report to be exported. Available types are `standard` and `detailed`. An additional `childDetailed` type is available for Sumo Orgs parents. Detailed report will have raw consumption along with the credits breakdown. If no value is provided Standard reports will be exported.
-	ReportType *string `json:"reportType,omitempty"`
+	ReportType *string `json:"reportType,omitempty" validate:"regexp=^(standard|detailed|childDetailed)$"`
+	// Deployment charges will be applied to the returned usages csv if this is set to true and the organization  is a part of Sumo Organizations as a child organization.
+	IncludeDeploymentCharge *bool `json:"includeDeploymentCharge,omitempty"`
 }
 
 // NewUsageReportRequest instantiates a new UsageReportRequest object
@@ -39,6 +41,8 @@ func NewUsageReportRequest() *UsageReportRequest {
 	this.GroupBy = &groupBy
 	var reportType string = "standard"
 	this.ReportType = &reportType
+	var includeDeploymentCharge bool = false
+	this.IncludeDeploymentCharge = &includeDeploymentCharge
 	return &this
 }
 
@@ -51,6 +55,8 @@ func NewUsageReportRequestWithDefaults() *UsageReportRequest {
 	this.GroupBy = &groupBy
 	var reportType string = "standard"
 	this.ReportType = &reportType
+	var includeDeploymentCharge bool = false
+	this.IncludeDeploymentCharge = &includeDeploymentCharge
 	return &this
 }
 
@@ -182,6 +188,38 @@ func (o *UsageReportRequest) SetReportType(v string) {
 	o.ReportType = &v
 }
 
+// GetIncludeDeploymentCharge returns the IncludeDeploymentCharge field value if set, zero value otherwise.
+func (o *UsageReportRequest) GetIncludeDeploymentCharge() bool {
+	if o == nil || IsNil(o.IncludeDeploymentCharge) {
+		var ret bool
+		return ret
+	}
+	return *o.IncludeDeploymentCharge
+}
+
+// GetIncludeDeploymentChargeOk returns a tuple with the IncludeDeploymentCharge field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UsageReportRequest) GetIncludeDeploymentChargeOk() (*bool, bool) {
+	if o == nil || IsNil(o.IncludeDeploymentCharge) {
+		return nil, false
+	}
+	return o.IncludeDeploymentCharge, true
+}
+
+// HasIncludeDeploymentCharge returns a boolean if a field has been set.
+func (o *UsageReportRequest) HasIncludeDeploymentCharge() bool {
+	if o != nil && !IsNil(o.IncludeDeploymentCharge) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludeDeploymentCharge gets a reference to the given bool and assigns it to the IncludeDeploymentCharge field.
+func (o *UsageReportRequest) SetIncludeDeploymentCharge(v bool) {
+	o.IncludeDeploymentCharge = &v
+}
+
 func (o UsageReportRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -203,6 +241,9 @@ func (o UsageReportRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ReportType) {
 		toSerialize["reportType"] = o.ReportType
+	}
+	if !IsNil(o.IncludeDeploymentCharge) {
+		toSerialize["includeDeploymentCharge"] = o.IncludeDeploymentCharge
 	}
 	return toSerialize, nil
 }

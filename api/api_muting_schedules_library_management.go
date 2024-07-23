@@ -21,12 +21,12 @@ import (
 )
 
 
-// MutingSchedulesLibraryManagementApiService MutingSchedulesLibraryManagementApi service
-type MutingSchedulesLibraryManagementApiService service
+// MutingSchedulesLibraryManagementAPIService MutingSchedulesLibraryManagementAPI service
+type MutingSchedulesLibraryManagementAPIService service
 
 type ApiGetMutingSchedulesFullPathRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 }
 
@@ -43,7 +43,7 @@ Get the full path of the mutingschedule or folder in the mutingSchedules library
  @param id Identifier of the mutingschedule or folder.
  @return ApiGetMutingSchedulesFullPathRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesFullPath(ctx context.Context, id string) ApiGetMutingSchedulesFullPathRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) GetMutingSchedulesFullPath(ctx context.Context, id string) ApiGetMutingSchedulesFullPathRequest {
 	return ApiGetMutingSchedulesFullPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -53,7 +53,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesFullPath(
 
 // Execute executes the request
 //  @return Path
-func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesFullPathExecute(r ApiGetMutingSchedulesFullPathRequest) (*Path, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) GetMutingSchedulesFullPathExecute(r ApiGetMutingSchedulesFullPathRequest) (*Path, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -61,7 +61,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesFullPathE
 		localVarReturnValue  *Path
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.GetMutingSchedulesFullPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.GetMutingSchedulesFullPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -137,7 +137,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesFullPathE
 
 type ApiGetMutingSchedulesLibraryRootRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 }
 
 func (r ApiGetMutingSchedulesLibraryRootRequest) Execute() (*MutingSchedulesLibraryFolderResponse, *http.Response, error) {
@@ -152,7 +152,7 @@ Get the root folder in the mutingSchedules library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetMutingSchedulesLibraryRootRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesLibraryRoot(ctx context.Context) ApiGetMutingSchedulesLibraryRootRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) GetMutingSchedulesLibraryRoot(ctx context.Context) ApiGetMutingSchedulesLibraryRootRequest {
 	return ApiGetMutingSchedulesLibraryRootRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -161,7 +161,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesLibraryRo
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryFolderResponse
-func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesLibraryRootExecute(r ApiGetMutingSchedulesLibraryRootRequest) (*MutingSchedulesLibraryFolderResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) GetMutingSchedulesLibraryRootExecute(r ApiGetMutingSchedulesLibraryRootRequest) (*MutingSchedulesLibraryFolderResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -169,7 +169,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesLibraryRo
 		localVarReturnValue  *MutingSchedulesLibraryFolderResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.GetMutingSchedulesLibraryRoot")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.GetMutingSchedulesLibraryRoot")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *MutingSchedulesLibraryManagementApiService) GetMutingSchedulesLibraryRo
 
 type ApiMutingSchedulesCopyRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 	contentCopyParams *ContentCopyParams
 }
@@ -268,7 +268,7 @@ Copy a mutingschedule or folder in the mutingSchedules library.
  @param id Identifier of the mutingschedule or folder to copy.
  @return ApiMutingSchedulesCopyRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCopy(ctx context.Context, id string) ApiMutingSchedulesCopyRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesCopy(ctx context.Context, id string) ApiMutingSchedulesCopyRequest {
 	return ApiMutingSchedulesCopyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -278,7 +278,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCopy(ctx con
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCopyExecute(r ApiMutingSchedulesCopyRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesCopyExecute(r ApiMutingSchedulesCopyRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -286,7 +286,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCopyExecute(
 		localVarReturnValue  *MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesCopy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesCopy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -367,7 +367,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCopyExecute(
 
 type ApiMutingSchedulesCreateRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	parentId *string
 	mutingSchedulesLibraryBase *MutingSchedulesLibraryBase
 }
@@ -396,7 +396,7 @@ Create a mutingschedule or folder in the mutingSchedules library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMutingSchedulesCreateRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCreate(ctx context.Context) ApiMutingSchedulesCreateRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesCreate(ctx context.Context) ApiMutingSchedulesCreateRequest {
 	return ApiMutingSchedulesCreateRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -405,7 +405,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCreate(ctx c
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCreateExecute(r ApiMutingSchedulesCreateRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesCreateExecute(r ApiMutingSchedulesCreateRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -413,7 +413,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCreateExecut
 		localVarReturnValue  *MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -497,7 +497,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesCreateExecut
 
 type ApiMutingSchedulesDeleteByIdRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 }
 
@@ -514,7 +514,7 @@ Delete a mutingschedule or folder from the mutingSchedules library.
  @param id Identifier of the mutingschedule or folder to delete.
  @return ApiMutingSchedulesDeleteByIdRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteById(ctx context.Context, id string) ApiMutingSchedulesDeleteByIdRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesDeleteById(ctx context.Context, id string) ApiMutingSchedulesDeleteByIdRequest {
 	return ApiMutingSchedulesDeleteByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -523,14 +523,14 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteById(c
 }
 
 // Execute executes the request
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdExecute(r ApiMutingSchedulesDeleteByIdRequest) (*http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesDeleteByIdExecute(r ApiMutingSchedulesDeleteByIdRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesDeleteById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesDeleteById")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -597,7 +597,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdEx
 
 type ApiMutingSchedulesDeleteByIdsRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	ids *[]string
 }
 
@@ -619,7 +619,7 @@ Bulk delete a mutingschedule or folder by the given identifiers in the mutingSch
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMutingSchedulesDeleteByIdsRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIds(ctx context.Context) ApiMutingSchedulesDeleteByIdsRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesDeleteByIds(ctx context.Context) ApiMutingSchedulesDeleteByIdsRequest {
 	return ApiMutingSchedulesDeleteByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -628,7 +628,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIds(
 
 // Execute executes the request
 //  @return map[string]MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdsExecute(r ApiMutingSchedulesDeleteByIdsRequest) (*map[string]MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesDeleteByIdsExecute(r ApiMutingSchedulesDeleteByIdsRequest) (*map[string]MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -636,7 +636,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdsE
 		localVarReturnValue  *map[string]MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesDeleteByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesDeleteByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -655,7 +655,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdsE
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
@@ -725,7 +725,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesDeleteByIdsE
 
 type ApiMutingSchedulesExportItemRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 }
 
@@ -742,7 +742,7 @@ Export a mutingschedule or folder. If the given identifier is a folder, everythi
  @param id Identifier of the mutingschedule or folder to export.
  @return ApiMutingSchedulesExportItemRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesExportItem(ctx context.Context, id string) ApiMutingSchedulesExportItemRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesExportItem(ctx context.Context, id string) ApiMutingSchedulesExportItemRequest {
 	return ApiMutingSchedulesExportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -752,7 +752,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesExportItem(c
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseExport
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesExportItemExecute(r ApiMutingSchedulesExportItemRequest) (*MutingSchedulesLibraryBaseExport, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesExportItemExecute(r ApiMutingSchedulesExportItemRequest) (*MutingSchedulesLibraryBaseExport, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -760,7 +760,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesExportItemEx
 		localVarReturnValue  *MutingSchedulesLibraryBaseExport
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesExportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesExportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -836,7 +836,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesExportItemEx
 
 type ApiMutingSchedulesImportItemRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	parentId string
 	mutingSchedulesLibraryBaseExport *MutingSchedulesLibraryBaseExport
 }
@@ -860,7 +860,7 @@ Import a mutingschedule or folder.
  @param parentId Identifier of the parent folder in which to import the mutingschedule or folder.
  @return ApiMutingSchedulesImportItemRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesImportItem(ctx context.Context, parentId string) ApiMutingSchedulesImportItemRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesImportItem(ctx context.Context, parentId string) ApiMutingSchedulesImportItemRequest {
 	return ApiMutingSchedulesImportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -870,7 +870,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesImportItem(c
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesImportItemExecute(r ApiMutingSchedulesImportItemRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesImportItemExecute(r ApiMutingSchedulesImportItemRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -878,7 +878,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesImportItemEx
 		localVarReturnValue  *MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesImportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesImportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -959,7 +959,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesImportItemEx
 
 type ApiMutingSchedulesReadByIdRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 }
 
@@ -976,7 +976,7 @@ Get a mutingschedule or folder from the mutingSchedules library.
  @param id Identifier of the mutingschedule or folder to read.
  @return ApiMutingSchedulesReadByIdRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadById(ctx context.Context, id string) ApiMutingSchedulesReadByIdRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesReadById(ctx context.Context, id string) ApiMutingSchedulesReadByIdRequest {
 	return ApiMutingSchedulesReadByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -986,7 +986,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadById(ctx
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdExecute(r ApiMutingSchedulesReadByIdRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesReadByIdExecute(r ApiMutingSchedulesReadByIdRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -994,7 +994,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdExec
 		localVarReturnValue  *MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesReadById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesReadById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1070,13 +1070,20 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdExec
 
 type ApiMutingSchedulesReadByIdsRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	ids *[]string
+	skipChildren *bool
 }
 
 // A comma-separated list of identifiers.
 func (r ApiMutingSchedulesReadByIdsRequest) Ids(ids []string) ApiMutingSchedulesReadByIdsRequest {
 	r.ids = &ids
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMutingSchedulesReadByIdsRequest) SkipChildren(skipChildren bool) ApiMutingSchedulesReadByIdsRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1092,7 +1099,7 @@ Bulk read a mutingschedule or folder by the given identifiers from the mutingSch
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMutingSchedulesReadByIdsRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIds(ctx context.Context) ApiMutingSchedulesReadByIdsRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesReadByIds(ctx context.Context) ApiMutingSchedulesReadByIdsRequest {
 	return ApiMutingSchedulesReadByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1101,7 +1108,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIds(ct
 
 // Execute executes the request
 //  @return map[string]MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdsExecute(r ApiMutingSchedulesReadByIdsRequest) (*map[string]MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesReadByIdsExecute(r ApiMutingSchedulesReadByIdsRequest) (*map[string]MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1109,7 +1116,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdsExe
 		localVarReturnValue  *map[string]MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesReadByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesReadByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1128,11 +1135,14 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdsExe
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
 		}
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1198,10 +1208,11 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesReadByIdsExe
 
 type ApiMutingSchedulesSearchRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	query *string
 	limit *int32
 	offset *int32
+	skipChildren *bool
 }
 
 // The search query to find mutingschedule or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60;
@@ -1222,6 +1233,12 @@ func (r ApiMutingSchedulesSearchRequest) Offset(offset int32) ApiMutingSchedules
 	return r
 }
 
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiMutingSchedulesSearchRequest) SkipChildren(skipChildren bool) ApiMutingSchedulesSearchRequest {
+	r.skipChildren = &skipChildren
+	return r
+}
+
 func (r ApiMutingSchedulesSearchRequest) Execute() ([]MutingSchedulesLibraryItemWithPath, *http.Response, error) {
 	return r.ApiService.MutingSchedulesSearchExecute(r)
 }
@@ -1234,7 +1251,7 @@ Search for a mutingschedule or folder in the mutingSchedules library structure.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMutingSchedulesSearchRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearch(ctx context.Context) ApiMutingSchedulesSearchRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesSearch(ctx context.Context) ApiMutingSchedulesSearchRequest {
 	return ApiMutingSchedulesSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1243,7 +1260,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearch(ctx c
 
 // Execute executes the request
 //  @return []MutingSchedulesLibraryItemWithPath
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearchExecute(r ApiMutingSchedulesSearchRequest) ([]MutingSchedulesLibraryItemWithPath, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesSearchExecute(r ApiMutingSchedulesSearchRequest) ([]MutingSchedulesLibraryItemWithPath, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1251,7 +1268,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearchExecut
 		localVarReturnValue  []MutingSchedulesLibraryItemWithPath
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1268,9 +1285,18 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearchExecut
 	parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "")
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 1000
+		r.limit = &defaultValue
 	}
 	if r.offset != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	} else {
+		var defaultValue int32 = 0
+		r.offset = &defaultValue
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1336,7 +1362,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesSearchExecut
 
 type ApiMutingSchedulesUpdateByIdRequest struct {
 	ctx context.Context
-	ApiService *MutingSchedulesLibraryManagementApiService
+	ApiService *MutingSchedulesLibraryManagementAPIService
 	id string
 	mutingSchedulesLibraryBaseUpdate *MutingSchedulesLibraryBaseUpdate
 }
@@ -1360,7 +1386,7 @@ Update a mutingschedule or folder in the mutingSchedules library.
  @param id Identifier of the mutingschedule or folder to update.
  @return ApiMutingSchedulesUpdateByIdRequest
 */
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesUpdateById(ctx context.Context, id string) ApiMutingSchedulesUpdateByIdRequest {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesUpdateById(ctx context.Context, id string) ApiMutingSchedulesUpdateByIdRequest {
 	return ApiMutingSchedulesUpdateByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1370,7 +1396,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesUpdateById(c
 
 // Execute executes the request
 //  @return MutingSchedulesLibraryBaseResponse
-func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesUpdateByIdExecute(r ApiMutingSchedulesUpdateByIdRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
+func (a *MutingSchedulesLibraryManagementAPIService) MutingSchedulesUpdateByIdExecute(r ApiMutingSchedulesUpdateByIdRequest) (*MutingSchedulesLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1378,7 +1404,7 @@ func (a *MutingSchedulesLibraryManagementApiService) MutingSchedulesUpdateByIdEx
 		localVarReturnValue  *MutingSchedulesLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementApiService.MutingSchedulesUpdateById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MutingSchedulesLibraryManagementAPIService.MutingSchedulesUpdateById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

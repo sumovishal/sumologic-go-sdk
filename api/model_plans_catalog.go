@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the PlansCatalog type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type PlansCatalog struct {
 	// List of plans available.
 	Plans []SelfServicePlan `json:"plans"`
 }
+
+type _PlansCatalog PlansCatalog
 
 // NewPlansCatalog instantiates a new PlansCatalog object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o PlansCatalog) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["plans"] = o.Plans
 	return toSerialize, nil
+}
+
+func (o *PlansCatalog) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"plans",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPlansCatalog := _PlansCatalog{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPlansCatalog)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PlansCatalog(varPlansCatalog)
+
+	return err
 }
 
 type NullablePlansCatalog struct {

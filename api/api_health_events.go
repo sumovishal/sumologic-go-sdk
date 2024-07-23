@@ -19,12 +19,12 @@ import (
 )
 
 
-// HealthEventsApiService HealthEventsApi service
-type HealthEventsApiService service
+// HealthEventsAPIService HealthEventsAPI service
+type HealthEventsAPIService service
 
 type ApiListAllHealthEventsRequest struct {
 	ctx context.Context
-	ApiService *HealthEventsApiService
+	ApiService *HealthEventsAPIService
 	limit *int32
 	token *string
 }
@@ -53,7 +53,7 @@ Get a list of all the unresolved health events in your account.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListAllHealthEventsRequest
 */
-func (a *HealthEventsApiService) ListAllHealthEvents(ctx context.Context) ApiListAllHealthEventsRequest {
+func (a *HealthEventsAPIService) ListAllHealthEvents(ctx context.Context) ApiListAllHealthEventsRequest {
 	return ApiListAllHealthEventsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -62,7 +62,7 @@ func (a *HealthEventsApiService) ListAllHealthEvents(ctx context.Context) ApiLis
 
 // Execute executes the request
 //  @return ListHealthEventResponse
-func (a *HealthEventsApiService) ListAllHealthEventsExecute(r ApiListAllHealthEventsRequest) (*ListHealthEventResponse, *http.Response, error) {
+func (a *HealthEventsAPIService) ListAllHealthEventsExecute(r ApiListAllHealthEventsRequest) (*ListHealthEventResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -70,7 +70,7 @@ func (a *HealthEventsApiService) ListAllHealthEventsExecute(r ApiListAllHealthEv
 		localVarReturnValue  *ListHealthEventResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HealthEventsApiService.ListAllHealthEvents")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HealthEventsAPIService.ListAllHealthEvents")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -83,6 +83,9 @@ func (a *HealthEventsApiService) ListAllHealthEventsExecute(r ApiListAllHealthEv
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -151,7 +154,7 @@ func (a *HealthEventsApiService) ListAllHealthEventsExecute(r ApiListAllHealthEv
 
 type ApiListAllHealthEventsForResourcesRequest struct {
 	ctx context.Context
-	ApiService *HealthEventsApiService
+	ApiService *HealthEventsAPIService
 	resourceIdentities *ResourceIdentities
 	limit *int32
 	token *string
@@ -187,7 +190,7 @@ Get a list of all the unresolved events in your account that belong to the suppl
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListAllHealthEventsForResourcesRequest
 */
-func (a *HealthEventsApiService) ListAllHealthEventsForResources(ctx context.Context) ApiListAllHealthEventsForResourcesRequest {
+func (a *HealthEventsAPIService) ListAllHealthEventsForResources(ctx context.Context) ApiListAllHealthEventsForResourcesRequest {
 	return ApiListAllHealthEventsForResourcesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -196,7 +199,7 @@ func (a *HealthEventsApiService) ListAllHealthEventsForResources(ctx context.Con
 
 // Execute executes the request
 //  @return ListHealthEventResponse
-func (a *HealthEventsApiService) ListAllHealthEventsForResourcesExecute(r ApiListAllHealthEventsForResourcesRequest) (*ListHealthEventResponse, *http.Response, error) {
+func (a *HealthEventsAPIService) ListAllHealthEventsForResourcesExecute(r ApiListAllHealthEventsForResourcesRequest) (*ListHealthEventResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -204,7 +207,7 @@ func (a *HealthEventsApiService) ListAllHealthEventsForResourcesExecute(r ApiLis
 		localVarReturnValue  *ListHealthEventResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HealthEventsApiService.ListAllHealthEventsForResources")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HealthEventsAPIService.ListAllHealthEventsForResources")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -220,6 +223,9 @@ func (a *HealthEventsApiService) ListAllHealthEventsForResourcesExecute(r ApiLis
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")

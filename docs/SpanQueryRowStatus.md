@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **RowId** | **string** | A unique identifier of the query. | 
 **Status** | **string** | Status of the query. Possible values: &#x60;Processing&#x60;, &#x60;Finished&#x60;, &#x60;Error&#x60;, &#x60;Paused&#x60;. | 
 **StatusMessage** | Pointer to **string** | Descriptive message of the status. | [optional] 
-**Count** | **int64** | Number of restuls matching the query | 
+**Count** | **int64** | Number of results matching the query | 
 **ApproximatedFieldCounts** | Pointer to **bool** | Indicates whether facet field cardinality counts are approximated or not. | [optional] 
 **FacetsCompleted** | Pointer to **bool** | Indicates whether facets calculation has completed. | [optional] 
 

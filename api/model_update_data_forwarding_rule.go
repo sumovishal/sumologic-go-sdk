@@ -26,7 +26,7 @@ type UpdateDataForwardingRule struct {
 	// Specify the path prefix to a directory in the S3 bucket and how to format the file name.
 	FileFormat *string `json:"fileFormat,omitempty"`
 	// Format of the payload.
-	Format *string `json:"format,omitempty"`
+	Format *string `json:"format,omitempty" validate:"regexp=^(csv|json)$"`
 }
 
 // NewUpdateDataForwardingRule instantiates a new UpdateDataForwardingRule object

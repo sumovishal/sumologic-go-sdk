@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LookupTableField type satisfies the MappedNullable interface at compile time
@@ -22,8 +24,10 @@ type LookupTableField struct {
 	// The name of the field.
 	FieldName string `json:"fieldName"`
 	// The data type of the field. Supported types:   - `boolean`   - `int`   - `long`   - `double`   - `string`
-	FieldType string `json:"fieldType"`
+	FieldType string `json:"fieldType" validate:"regexp=^(boolean|int|long|double|string)$"`
 }
+
+type _LookupTableField LookupTableField
 
 // NewLookupTableField instantiates a new LookupTableField object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o LookupTableField) ToMap() (map[string]interface{}, error) {
 	toSerialize["fieldName"] = o.FieldName
 	toSerialize["fieldType"] = o.FieldType
 	return toSerialize, nil
+}
+
+func (o *LookupTableField) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fieldName",
+		"fieldType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLookupTableField := _LookupTableField{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLookupTableField)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupTableField(varLookupTableField)
+
+	return err
 }
 
 type NullableLookupTableField struct {

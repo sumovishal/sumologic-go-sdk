@@ -20,12 +20,12 @@ import (
 )
 
 
-// ContentPermissionsApiService ContentPermissionsApi service
-type ContentPermissionsApiService service
+// ContentPermissionsAPIService ContentPermissionsAPI service
+type ContentPermissionsAPIService service
 
 type ApiAddContentPermissionsRequest struct {
 	ctx context.Context
-	ApiService *ContentPermissionsApiService
+	ApiService *ContentPermissionsAPIService
 	id string
 	contentPermissionUpdateRequest *ContentPermissionUpdateRequest
 	isAdminMode *string
@@ -56,7 +56,7 @@ Add permissions to a content item with the given identifier.
  @param id The identifier of the content item.
  @return ApiAddContentPermissionsRequest
 */
-func (a *ContentPermissionsApiService) AddContentPermissions(ctx context.Context, id string) ApiAddContentPermissionsRequest {
+func (a *ContentPermissionsAPIService) AddContentPermissions(ctx context.Context, id string) ApiAddContentPermissionsRequest {
 	return ApiAddContentPermissionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -66,7 +66,7 @@ func (a *ContentPermissionsApiService) AddContentPermissions(ctx context.Context
 
 // Execute executes the request
 //  @return ContentPermissionResult
-func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
+func (a *ContentPermissionsAPIService) AddContentPermissionsExecute(r ApiAddContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -74,7 +74,7 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 		localVarReturnValue  *ContentPermissionResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsApiService.AddContentPermissions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsAPIService.AddContentPermissions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -158,7 +158,7 @@ func (a *ContentPermissionsApiService) AddContentPermissionsExecute(r ApiAddCont
 
 type ApiGetContentPermissionsRequest struct {
 	ctx context.Context
-	ApiService *ContentPermissionsApiService
+	ApiService *ContentPermissionsAPIService
 	id string
 	explicitOnly *bool
 	isAdminMode *string
@@ -189,7 +189,7 @@ Returns content permissions of a content item with the given identifier.
  @param id The identifier of the content item.
  @return ApiGetContentPermissionsRequest
 */
-func (a *ContentPermissionsApiService) GetContentPermissions(ctx context.Context, id string) ApiGetContentPermissionsRequest {
+func (a *ContentPermissionsAPIService) GetContentPermissions(ctx context.Context, id string) ApiGetContentPermissionsRequest {
 	return ApiGetContentPermissionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -199,7 +199,7 @@ func (a *ContentPermissionsApiService) GetContentPermissions(ctx context.Context
 
 // Execute executes the request
 //  @return ContentPermissionResult
-func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
+func (a *ContentPermissionsAPIService) GetContentPermissionsExecute(r ApiGetContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -207,7 +207,7 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 		localVarReturnValue  *ContentPermissionResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsApiService.GetContentPermissions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsAPIService.GetContentPermissions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -221,6 +221,9 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 
 	if r.explicitOnly != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "explicitOnly", r.explicitOnly, "")
+	} else {
+		var defaultValue bool = false
+		r.explicitOnly = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -289,7 +292,7 @@ func (a *ContentPermissionsApiService) GetContentPermissionsExecute(r ApiGetCont
 
 type ApiRemoveContentPermissionsRequest struct {
 	ctx context.Context
-	ApiService *ContentPermissionsApiService
+	ApiService *ContentPermissionsAPIService
 	id string
 	contentPermissionUpdateRequest *ContentPermissionUpdateRequest
 	isAdminMode *string
@@ -320,7 +323,7 @@ Remove permissions from a content item with the given identifier.
  @param id The identifier of the content item.
  @return ApiRemoveContentPermissionsRequest
 */
-func (a *ContentPermissionsApiService) RemoveContentPermissions(ctx context.Context, id string) ApiRemoveContentPermissionsRequest {
+func (a *ContentPermissionsAPIService) RemoveContentPermissions(ctx context.Context, id string) ApiRemoveContentPermissionsRequest {
 	return ApiRemoveContentPermissionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -330,7 +333,7 @@ func (a *ContentPermissionsApiService) RemoveContentPermissions(ctx context.Cont
 
 // Execute executes the request
 //  @return ContentPermissionResult
-func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemoveContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
+func (a *ContentPermissionsAPIService) RemoveContentPermissionsExecute(r ApiRemoveContentPermissionsRequest) (*ContentPermissionResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -338,7 +341,7 @@ func (a *ContentPermissionsApiService) RemoveContentPermissionsExecute(r ApiRemo
 		localVarReturnValue  *ContentPermissionResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsApiService.RemoveContentPermissions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentPermissionsAPIService.RemoveContentPermissions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

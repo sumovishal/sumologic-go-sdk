@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,7 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CollectorRegistrationTokenResponse type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,8 @@ type CollectorRegistrationTokenResponse struct {
 	// The token and URL used to register the Collector as an encoded string.
 	EncodedTokenAndUrl string `json:"encodedTokenAndUrl"`
 }
+
+type _CollectorRegistrationTokenResponse CollectorRegistrationTokenResponse
 
 // NewCollectorRegistrationTokenResponse instantiates a new CollectorRegistrationTokenResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -97,6 +100,53 @@ func (o CollectorRegistrationTokenResponse) ToMap() (map[string]interface{}, err
 	}
 	toSerialize["encodedTokenAndUrl"] = o.EncodedTokenAndUrl
 	return toSerialize, nil
+}
+
+func (o *CollectorRegistrationTokenResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"encodedTokenAndUrl",
+		"id",
+		"name",
+		"description",
+		"status",
+		"type",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCollectorRegistrationTokenResponse := _CollectorRegistrationTokenResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCollectorRegistrationTokenResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CollectorRegistrationTokenResponse(varCollectorRegistrationTokenResponse)
+
+	return err
 }
 
 type NullableCollectorRegistrationTokenResponse struct {

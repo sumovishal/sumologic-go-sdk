@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,7 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the WebhookConnection type satisfies the MappedNullable interface at compile time
@@ -30,14 +31,16 @@ type WebhookConnection struct {
 	// Default payload of the webhook.
 	DefaultPayload string `json:"defaultPayload"`
 	// Type of webhook connection. Valid values are `AWSLambda`, `Azure`, `Datadog`, `HipChat`, `Jira`, `NewRelic`, `Opsgenie`, `PagerDuty`, `Slack`, `MicrosoftTeams`, `ServiceNow`, `SumoCloudSOAR` and `Webhook`.
-	WebhookType string `json:"webhookType"`
+	WebhookType string `json:"webhookType" validate:"regexp=^(AWSLambda|Azure|Datadog|HipChat|PagerDuty|Slack|Webhook|NewRelic|Jira|Opsgenie|MicrosoftTeams|ServiceNow|SumoCloudSOAR)$"`
 	// The subtype of the connection. Valid values are `Event` or `Incident`.
-	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
+	ConnectionSubtype *string `json:"connectionSubtype,omitempty" validate:"regexp=^(Event|Incident)$"`
 	// Resolution payload of the webhook.
 	ResolutionPayload *string `json:"resolutionPayload,omitempty"`
 	// Webhook endpoint warning for incorrect variable names and syntax.
 	Warnings []string `json:"warnings,omitempty"`
 }
+
+type _WebhookConnection WebhookConnection
 
 // NewWebhookConnection instantiates a new WebhookConnection object
 // This constructor will assign default values to properties that have it defined,
@@ -318,6 +321,55 @@ func (o WebhookConnection) ToMap() (map[string]interface{}, error) {
 		toSerialize["warnings"] = o.Warnings
 	}
 	return toSerialize, nil
+}
+
+func (o *WebhookConnection) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"headers",
+		"customHeaders",
+		"defaultPayload",
+		"webhookType",
+		"type",
+		"id",
+		"name",
+		"description",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varWebhookConnection := _WebhookConnection{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varWebhookConnection)
+
+	if err != nil {
+		return err
+	}
+
+	*o = WebhookConnection(varWebhookConnection)
+
+	return err
 }
 
 type NullableWebhookConnection struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DashboardSearchStatus type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type DashboardSearchStatus struct {
 	// Percentage of search completed.
 	PercentCompleted *int32 `json:"percentCompleted,omitempty"`
 }
+
+type _DashboardSearchStatus DashboardSearchStatus
 
 // NewDashboardSearchStatus instantiates a new DashboardSearchStatus object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o DashboardSearchStatus) ToMap() (map[string]interface{}, error) {
 		toSerialize["percentCompleted"] = o.PercentCompleted
 	}
 	return toSerialize, nil
+}
+
+func (o *DashboardSearchStatus) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"state",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDashboardSearchStatus := _DashboardSearchStatus{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDashboardSearchStatus)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DashboardSearchStatus(varDashboardSearchStatus)
+
+	return err
 }
 
 type NullableDashboardSearchStatus struct {

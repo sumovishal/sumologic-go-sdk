@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Folder type satisfies the MappedNullable interface at compile time
@@ -43,6 +45,8 @@ type Folder struct {
 	// A list of the content items.
 	Children []Content `json:"children,omitempty"`
 }
+
+type _Folder Folder
 
 // NewFolder instantiates a new Folder object
 // This constructor will assign default values to properties that have it defined,
@@ -376,6 +380,51 @@ func (o Folder) ToMap() (map[string]interface{}, error) {
 		toSerialize["children"] = o.Children
 	}
 	return toSerialize, nil
+}
+
+func (o *Folder) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+		"name",
+		"itemType",
+		"parentId",
+		"permissions",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varFolder := _Folder{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varFolder)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Folder(varFolder)
+
+	return err
 }
 
 type NullableFolder struct {

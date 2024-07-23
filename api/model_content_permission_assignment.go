@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ContentPermissionAssignment type satisfies the MappedNullable interface at compile time
@@ -20,14 +22,16 @@ var _ MappedNullable = &ContentPermissionAssignment{}
 // ContentPermissionAssignment struct for ContentPermissionAssignment
 type ContentPermissionAssignment struct {
 	// Content permission name. Valid values are: `View`, `GrantView`, `Edit`, `GrantEdit`, `Manage`, and `GrantManage`.
-	PermissionName string `json:"permissionName"`
+	PermissionName string `json:"permissionName" validate:"regexp=^(View|GrantView|Edit|GrantEdit|Manage|GrantManage)$"`
 	// Type of source for the permission. Valid values are: `user`, `role`, and `org`.
-	SourceType string `json:"sourceType"`
+	SourceType string `json:"sourceType" validate:"regexp=^(user|role|org)$"`
 	// An identifier that belongs to the source type chosen above. For e.g. if the sourceType is set to \"user\", sourceId should be identifier of a user (same goes for `role` and `org` sourceType)
 	SourceId string `json:"sourceId"`
 	// Unique identifier for the content item.
 	ContentId string `json:"contentId"`
 }
+
+type _ContentPermissionAssignment ContentPermissionAssignment
 
 // NewContentPermissionAssignment instantiates a new ContentPermissionAssignment object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o ContentPermissionAssignment) ToMap() (map[string]interface{}, error) {
 	toSerialize["sourceId"] = o.SourceId
 	toSerialize["contentId"] = o.ContentId
 	return toSerialize, nil
+}
+
+func (o *ContentPermissionAssignment) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"permissionName",
+		"sourceType",
+		"sourceId",
+		"contentId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varContentPermissionAssignment := _ContentPermissionAssignment{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varContentPermissionAssignment)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ContentPermissionAssignment(varContentPermissionAssignment)
+
+	return err
 }
 
 type NullableContentPermissionAssignment struct {

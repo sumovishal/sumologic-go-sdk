@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **QueryString** | **string** | Query to perform. | 
 **TimeRange** | [**ResolvableTimeRange**](ResolvableTimeRange.md) |  | 
 **RunByReceiptTime** | Pointer to **bool** | This has the value &#x60;true&#x60; if the search is to be run by receipt time and &#x60;false&#x60; if it is to be run by message time. | [optional] [default to false]
-**QueryParameters** | Pointer to [**[]LogSearchQueryParameterSyncDefinition**](LogSearchQueryParameterSyncDefinition.md) | Definition of the query parameters. | [optional] 
+**QueryParameters** | Pointer to [**[]LogSearchQueryParameterSyncDefinitionBase**](LogSearchQueryParameterSyncDefinitionBase.md) | Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/ | [optional] 
 **ParsingMode** | Pointer to **string** | Define the parsing mode to scan the JSON format log messages. Possible values are:   1. &#x60;AutoParse&#x60;   2. &#x60;Manual&#x60; In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid&#x3D;0011). | [optional] [default to "Manual"]
 **Timezone** | **string** | Time zone to get the estimated usage details. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).  | 
 
@@ -97,20 +97,20 @@ HasRunByReceiptTime returns a boolean if a field has been set.
 
 ### GetQueryParameters
 
-`func (o *LogSearchEstimatedUsageRequest) GetQueryParameters() []LogSearchQueryParameterSyncDefinition`
+`func (o *LogSearchEstimatedUsageRequest) GetQueryParameters() []LogSearchQueryParameterSyncDefinitionBase`
 
 GetQueryParameters returns the QueryParameters field if non-nil, zero value otherwise.
 
 ### GetQueryParametersOk
 
-`func (o *LogSearchEstimatedUsageRequest) GetQueryParametersOk() (*[]LogSearchQueryParameterSyncDefinition, bool)`
+`func (o *LogSearchEstimatedUsageRequest) GetQueryParametersOk() (*[]LogSearchQueryParameterSyncDefinitionBase, bool)`
 
 GetQueryParametersOk returns a tuple with the QueryParameters field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetQueryParameters
 
-`func (o *LogSearchEstimatedUsageRequest) SetQueryParameters(v []LogSearchQueryParameterSyncDefinition)`
+`func (o *LogSearchEstimatedUsageRequest) SetQueryParameters(v []LogSearchQueryParameterSyncDefinitionBase)`
 
 SetQueryParameters sets QueryParameters field to given value.
 

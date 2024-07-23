@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ListArchiveJobsCount type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type ListArchiveJobsCount struct {
 	// List of archive sources with count of jobs having various statuses.
 	Data []ArchiveJobsCount `json:"data"`
 }
+
+type _ListArchiveJobsCount ListArchiveJobsCount
 
 // NewListArchiveJobsCount instantiates a new ListArchiveJobsCount object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o ListArchiveJobsCount) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
+}
+
+func (o *ListArchiveJobsCount) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"data",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varListArchiveJobsCount := _ListArchiveJobsCount{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varListArchiveJobsCount)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListArchiveJobsCount(varListArchiveJobsCount)
+
+	return err
 }
 
 type NullableListArchiveJobsCount struct {

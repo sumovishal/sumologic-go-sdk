@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryRowError type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type SpanQueryRowError struct {
 	// Details about the occured error.
 	Details *string `json:"details,omitempty"`
 }
+
+type _SpanQueryRowError SpanQueryRowError
 
 // NewSpanQueryRowError instantiates a new SpanQueryRowError object
 // This constructor will assign default values to properties that have it defined,
@@ -142,6 +146,44 @@ func (o SpanQueryRowError) ToMap() (map[string]interface{}, error) {
 		toSerialize["details"] = o.Details
 	}
 	return toSerialize, nil
+}
+
+func (o *SpanQueryRowError) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"code",
+		"message",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryRowError := _SpanQueryRowError{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryRowError)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryRowError(varSpanQueryRowError)
+
+	return err
 }
 
 type NullableSpanQueryRowError struct {

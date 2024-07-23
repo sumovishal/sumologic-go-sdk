@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the VisualOutlierData type satisfies the MappedNullable interface at compile time
@@ -30,6 +32,8 @@ type VisualOutlierData struct {
 	// Indicates if the data point is outlier or not.
 	IsOutlier bool `json:"isOutlier"`
 }
+
+type _VisualOutlierData VisualOutlierData
 
 // NewVisualOutlierData instantiates a new VisualOutlierData object
 // This constructor will assign default values to properties that have it defined,
@@ -189,6 +193,47 @@ func (o VisualOutlierData) ToMap() (map[string]interface{}, error) {
 	toSerialize["upperBound"] = o.UpperBound
 	toSerialize["isOutlier"] = o.IsOutlier
 	return toSerialize, nil
+}
+
+func (o *VisualOutlierData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"baseline",
+		"unit",
+		"lowerBound",
+		"upperBound",
+		"isOutlier",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varVisualOutlierData := _VisualOutlierData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varVisualOutlierData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VisualOutlierData(varVisualOutlierData)
+
+	return err
 }
 
 type NullableVisualOutlierData struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CreateBucketDefinitionItems type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &CreateBucketDefinitionItems{}
 // CreateBucketDefinitionItems struct for CreateBucketDefinitionItems
 type CreateBucketDefinitionItems struct {
 	// The name of the Amazon S3 bucket.
-	BucketName string `json:"bucketName"`
+	BucketName string `json:"bucketName" validate:"regexp=(?!(^xn--|-s3alias$))^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$"`
 }
+
+type _CreateBucketDefinitionItems CreateBucketDefinitionItems
 
 // NewCreateBucketDefinitionItems instantiates a new CreateBucketDefinitionItems object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o CreateBucketDefinitionItems) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketName"] = o.BucketName
 	return toSerialize, nil
+}
+
+func (o *CreateBucketDefinitionItems) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"bucketName",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCreateBucketDefinitionItems := _CreateBucketDefinitionItems{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCreateBucketDefinitionItems)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateBucketDefinitionItems(varCreateBucketDefinitionItems)
+
+	return err
 }
 
 type NullableCreateBucketDefinitionItems struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the VisualDataSeries type satisfies the MappedNullable interface at compile time
@@ -28,17 +30,19 @@ type VisualDataSeries struct {
 	AggregateInfo *VisualAggregateData `json:"aggregateInfo,omitempty"`
 	MetaData *VisualMetaData `json:"metaData,omitempty"`
 	// Type of the visual series.
-	SeriesType *string `json:"seriesType,omitempty"`
+	SeriesType *string `json:"seriesType,omitempty" validate:"regexp=^(timeseries|nontimeseries|table)$|^$"`
 	// Keys that will be plotted as a point on the x axis.
 	XAxisKeys []string `json:"xAxisKeys,omitempty"`
 	// Value that represents if the series values are String or Double
 	ValueType *string `json:"valueType,omitempty"`
 	// Source of the visual series.
-	Source *string `json:"source,omitempty"`
+	Source *string `json:"source,omitempty" validate:"regexp=^(Logs|Metrics)$|^$"`
 	// Keys that will be plotted as a point on the x axis and their data type
 	XAxisKeyTypes *map[string]string `json:"xAxisKeyTypes,omitempty"`
 	QueryInfo *MetricsQueryResultInfo `json:"queryInfo,omitempty"`
 }
+
+type _VisualDataSeries VisualDataSeries
 
 // NewVisualDataSeries instantiates a new VisualDataSeries object
 // This constructor will assign default values to properties that have it defined,
@@ -426,6 +430,45 @@ func (o VisualDataSeries) ToMap() (map[string]interface{}, error) {
 		toSerialize["queryInfo"] = o.QueryInfo
 	}
 	return toSerialize, nil
+}
+
+func (o *VisualDataSeries) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryId",
+		"name",
+		"dataPoints",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varVisualDataSeries := _VisualDataSeries{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varVisualDataSeries)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VisualDataSeries(varVisualDataSeries)
+
+	return err
 }
 
 type NullableVisualDataSeries struct {

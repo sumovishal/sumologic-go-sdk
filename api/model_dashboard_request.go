@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DashboardRequest type satisfies the MappedNullable interface at compile time
@@ -39,12 +41,14 @@ type DashboardRequest struct {
 	// Variables to apply to the panels.
 	Variables []Variable `json:"variables,omitempty"`
 	// Theme for the dashboard. Either `Light` or `Dark`.
-	Theme *string `json:"theme,omitempty"`
+	Theme *string `json:"theme,omitempty" validate:"regexp=^(light|dark|Light|Dark)$"`
 	// Is the dashboard public
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// Whether to highlight threshold violations.
 	HighlightViolations *bool `json:"highlightViolations,omitempty"`
 }
+
+type _DashboardRequest DashboardRequest
 
 // NewDashboardRequest instantiates a new DashboardRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -562,6 +566,44 @@ func (o DashboardRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["highlightViolations"] = o.HighlightViolations
 	}
 	return toSerialize, nil
+}
+
+func (o *DashboardRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"title",
+		"timeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDashboardRequest := _DashboardRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDashboardRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DashboardRequest(varDashboardRequest)
+
+	return err
 }
 
 type NullableDashboardRequest struct {

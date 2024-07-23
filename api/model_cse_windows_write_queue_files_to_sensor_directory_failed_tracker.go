@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker type satisfies the MappedNullable interface at compile time
@@ -35,6 +37,8 @@ type CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker struct {
 	// The HostName + EventLog name for EventLogs and Domain name for Directory..
 	Source *string `json:"source,omitempty"`
 }
+
+type _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker
 
 // NewCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker instantiates a new CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -320,6 +324,45 @@ func (o CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker) ToMap() (map[st
 		toSerialize["source"] = o.Source
 	}
 	return toSerialize, nil
+}
+
+func (o *CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"trackerId",
+		"error",
+		"description",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker := _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker(varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+
+	return err
 }
 
 type NullableCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker struct {

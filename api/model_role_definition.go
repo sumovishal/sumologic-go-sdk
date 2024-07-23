@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RoleDefinition type satisfies the MappedNullable interface at compile time
@@ -23,11 +25,11 @@ type RoleDefinition struct {
 	Name string `json:"name"`
 	// Description of the role.
 	Description *string `json:"description,omitempty"`
-	// A search filter which would be applied on partitions which belong to Log Analytics product area. Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Log Analytics product area.
 	LogAnalyticsFilter *string `json:"logAnalyticsFilter,omitempty"`
-	// A search filter which would be applied on partitions which belong to Audit Data product area. Help Doc : (https://help.sumologic.com/docs/manage/security/audit-index/). Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Audit Data product area. Help Doc : (https://help.sumologic.com/docs/manage/security/audit-index/).
 	AuditDataFilter *string `json:"auditDataFilter,omitempty"`
-	// A search filter which would be applied on partitions which belong to Security Data product area. Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Security Data product area.
 	SecurityDataFilter *string `json:"securityDataFilter,omitempty"`
 	// Describes the Permission Construct for the list of views in \"selectedViews\" parameter.  ### Valid Values are :    - `All` selectionType would allow access to all views in the org.   - `Allow` selectionType would allow access to specific views mentioned in \"selectedViews\" parameter.   - `Deny` selectionType would deny access to specific views mentioned in \"selectedViews\" parameter.
 	SelectionType *string `json:"selectionType,omitempty"`
@@ -40,6 +42,8 @@ type RoleDefinition struct {
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
 }
+
+type _RoleDefinition RoleDefinition
 
 // NewRoleDefinition instantiates a new RoleDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -414,6 +418,43 @@ func (o RoleDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["autofillDependencies"] = o.AutofillDependencies
 	}
 	return toSerialize, nil
+}
+
+func (o *RoleDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRoleDefinition := _RoleDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRoleDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RoleDefinition(varRoleDefinition)
+
+	return err
 }
 
 type NullableRoleDefinition struct {

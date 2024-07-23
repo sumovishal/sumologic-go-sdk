@@ -20,12 +20,12 @@ import (
 )
 
 
-// ConnectionManagementApiService ConnectionManagementApi service
-type ConnectionManagementApiService service
+// ConnectionManagementAPIService ConnectionManagementAPI service
+type ConnectionManagementAPIService service
 
 type ApiCreateConnectionRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	connectionDefinition *ConnectionDefinition
 }
 
@@ -47,7 +47,7 @@ Create a new connection in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateConnectionRequest
 */
-func (a *ConnectionManagementApiService) CreateConnection(ctx context.Context) ApiCreateConnectionRequest {
+func (a *ConnectionManagementAPIService) CreateConnection(ctx context.Context) ApiCreateConnectionRequest {
 	return ApiCreateConnectionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *ConnectionManagementApiService) CreateConnection(ctx context.Context) A
 
 // Execute executes the request
 //  @return Connection
-func (a *ConnectionManagementApiService) CreateConnectionExecute(r ApiCreateConnectionRequest) (*Connection, *http.Response, error) {
+func (a *ConnectionManagementAPIService) CreateConnectionExecute(r ApiCreateConnectionRequest) (*Connection, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *ConnectionManagementApiService) CreateConnectionExecute(r ApiCreateConn
 		localVarReturnValue  *Connection
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.CreateConnection")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.CreateConnection")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *ConnectionManagementApiService) CreateConnectionExecute(r ApiCreateConn
 
 type ApiDeleteConnectionRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	id string
 	type_ *string
 }
@@ -168,7 +168,7 @@ Delete a connection with the given identifier.
  @param id Identifier of the connection to delete.
  @return ApiDeleteConnectionRequest
 */
-func (a *ConnectionManagementApiService) DeleteConnection(ctx context.Context, id string) ApiDeleteConnectionRequest {
+func (a *ConnectionManagementAPIService) DeleteConnection(ctx context.Context, id string) ApiDeleteConnectionRequest {
 	return ApiDeleteConnectionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -177,14 +177,14 @@ func (a *ConnectionManagementApiService) DeleteConnection(ctx context.Context, i
 }
 
 // Execute executes the request
-func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConnectionRequest) (*http.Response, error) {
+func (a *ConnectionManagementAPIService) DeleteConnectionExecute(r ApiDeleteConnectionRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.DeleteConnection")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.DeleteConnection")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -255,7 +255,7 @@ func (a *ConnectionManagementApiService) DeleteConnectionExecute(r ApiDeleteConn
 
 type ApiGetConnectionRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	id string
 	type_ *string
 }
@@ -279,7 +279,7 @@ Get a connection with the given identifier.
  @param id Identifier of connection to return.
  @return ApiGetConnectionRequest
 */
-func (a *ConnectionManagementApiService) GetConnection(ctx context.Context, id string) ApiGetConnectionRequest {
+func (a *ConnectionManagementAPIService) GetConnection(ctx context.Context, id string) ApiGetConnectionRequest {
 	return ApiGetConnectionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -289,7 +289,7 @@ func (a *ConnectionManagementApiService) GetConnection(ctx context.Context, id s
 
 // Execute executes the request
 //  @return Connection
-func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnectionRequest) (*Connection, *http.Response, error) {
+func (a *ConnectionManagementAPIService) GetConnectionExecute(r ApiGetConnectionRequest) (*Connection, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -297,7 +297,7 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 		localVarReturnValue  *Connection
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.GetConnection")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.GetConnection")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -311,6 +311,9 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 
 	if r.type_ != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "")
+	} else {
+		var defaultValue string = "WebhookConnection"
+		r.type_ = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -376,7 +379,7 @@ func (a *ConnectionManagementApiService) GetConnectionExecute(r ApiGetConnection
 
 type ApiGetIncidentTemplatesRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	getIncidentTemplatesRequest *GetIncidentTemplatesRequest
 }
 
@@ -398,7 +401,7 @@ Get incident templates for CloudSOAR connections.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetIncidentTemplatesRequest
 */
-func (a *ConnectionManagementApiService) GetIncidentTemplates(ctx context.Context) ApiGetIncidentTemplatesRequest {
+func (a *ConnectionManagementAPIService) GetIncidentTemplates(ctx context.Context) ApiGetIncidentTemplatesRequest {
 	return ApiGetIncidentTemplatesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -407,7 +410,7 @@ func (a *ConnectionManagementApiService) GetIncidentTemplates(ctx context.Contex
 
 // Execute executes the request
 //  @return GetIncidentTemplatesResponse
-func (a *ConnectionManagementApiService) GetIncidentTemplatesExecute(r ApiGetIncidentTemplatesRequest) (*GetIncidentTemplatesResponse, *http.Response, error) {
+func (a *ConnectionManagementAPIService) GetIncidentTemplatesExecute(r ApiGetIncidentTemplatesRequest) (*GetIncidentTemplatesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -415,7 +418,7 @@ func (a *ConnectionManagementApiService) GetIncidentTemplatesExecute(r ApiGetInc
 		localVarReturnValue  *GetIncidentTemplatesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.GetIncidentTemplates")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.GetIncidentTemplates")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -492,7 +495,7 @@ func (a *ConnectionManagementApiService) GetIncidentTemplatesExecute(r ApiGetInc
 
 type ApiListConnectionsRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	limit *int32
 	token *string
 }
@@ -521,7 +524,7 @@ Get a list of all connections in the organization. The response is paginated wit
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListConnectionsRequest
 */
-func (a *ConnectionManagementApiService) ListConnections(ctx context.Context) ApiListConnectionsRequest {
+func (a *ConnectionManagementAPIService) ListConnections(ctx context.Context) ApiListConnectionsRequest {
 	return ApiListConnectionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -530,7 +533,7 @@ func (a *ConnectionManagementApiService) ListConnections(ctx context.Context) Ap
 
 // Execute executes the request
 //  @return ListConnectionsResponse
-func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnectionsRequest) (*ListConnectionsResponse, *http.Response, error) {
+func (a *ConnectionManagementAPIService) ListConnectionsExecute(r ApiListConnectionsRequest) (*ListConnectionsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -538,7 +541,7 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 		localVarReturnValue  *ListConnectionsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.ListConnections")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.ListConnections")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -551,6 +554,9 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -619,7 +625,7 @@ func (a *ConnectionManagementApiService) ListConnectionsExecute(r ApiListConnect
 
 type ApiTestConnectionRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	connectionDefinition *ConnectionDefinition
 	functionalities *[]string
 	connectionId *string
@@ -655,7 +661,7 @@ Test a new connection url is valid and can connect.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiTestConnectionRequest
 */
-func (a *ConnectionManagementApiService) TestConnection(ctx context.Context) ApiTestConnectionRequest {
+func (a *ConnectionManagementAPIService) TestConnection(ctx context.Context) ApiTestConnectionRequest {
 	return ApiTestConnectionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -664,7 +670,7 @@ func (a *ConnectionManagementApiService) TestConnection(ctx context.Context) Api
 
 // Execute executes the request
 //  @return TestConnectionResponse
-func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnectionRequest) (*TestConnectionResponse, *http.Response, error) {
+func (a *ConnectionManagementAPIService) TestConnectionExecute(r ApiTestConnectionRequest) (*TestConnectionResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -672,7 +678,7 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 		localVarReturnValue  *TestConnectionResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.TestConnection")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.TestConnection")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -688,6 +694,9 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 
 	if r.functionalities != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "functionalities", r.functionalities, "csv")
+	} else {
+		var defaultValue []string = ["alert"]
+		r.functionalities = &defaultValue
 	}
 	if r.connectionId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "connectionId", r.connectionId, "")
@@ -758,7 +767,7 @@ func (a *ConnectionManagementApiService) TestConnectionExecute(r ApiTestConnecti
 
 type ApiUpdateConnectionRequest struct {
 	ctx context.Context
-	ApiService *ConnectionManagementApiService
+	ApiService *ConnectionManagementAPIService
 	id string
 	connectionDefinition *ConnectionDefinition
 }
@@ -782,7 +791,7 @@ Update an existing connection.
  @param id Identifier of the connection to update.
  @return ApiUpdateConnectionRequest
 */
-func (a *ConnectionManagementApiService) UpdateConnection(ctx context.Context, id string) ApiUpdateConnectionRequest {
+func (a *ConnectionManagementAPIService) UpdateConnection(ctx context.Context, id string) ApiUpdateConnectionRequest {
 	return ApiUpdateConnectionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -792,7 +801,7 @@ func (a *ConnectionManagementApiService) UpdateConnection(ctx context.Context, i
 
 // Execute executes the request
 //  @return Connection
-func (a *ConnectionManagementApiService) UpdateConnectionExecute(r ApiUpdateConnectionRequest) (*Connection, *http.Response, error) {
+func (a *ConnectionManagementAPIService) UpdateConnectionExecute(r ApiUpdateConnectionRequest) (*Connection, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -800,7 +809,7 @@ func (a *ConnectionManagementApiService) UpdateConnectionExecute(r ApiUpdateConn
 		localVarReturnValue  *Connection
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementApiService.UpdateConnection")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ConnectionManagementAPIService.UpdateConnection")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

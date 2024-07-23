@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the GetRoleDefinitionV2 type satisfies the MappedNullable interface at compile time
@@ -24,11 +26,11 @@ type GetRoleDefinitionV2 struct {
 	Name string `json:"name"`
 	// Description of the role.
 	Description *string `json:"description,omitempty"`
-	// A search filter which would be applied on partitions which belong to Log Analytics product area. Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Log Analytics product area.
 	LogAnalyticsFilter *string `json:"logAnalyticsFilter,omitempty"`
-	// A search filter which would be applied on partitions which belong to Audit Data product area. Help Doc : (https://help.sumologic.com/docs/manage/security/audit-index/). Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Audit Data product area. Help Doc : (https://help.sumologic.com/docs/manage/security/audit-index/).
 	AuditDataFilter *string `json:"auditDataFilter,omitempty"`
-	// A search filter which would be applied on partitions which belong to Security Data product area. Applicable with only `All` selectionType
+	// A search filter which would be applied on partitions which belong to Security Data product area.
 	SecurityDataFilter *string `json:"securityDataFilter,omitempty"`
 	// Describes the Permission Construct for the list of views in \"selectedViews\" parameter.  ### Valid Values are :    - `All` selectionType would allow access to all views in the org.   - `Allow` selectionType would allow access to specific views mentioned in \"selectedViews\" parameter.   - `Deny` selectionType would deny access to specific views mentioned in \"selectedViews\" parameter.
 	SelectionType *string `json:"selectionType,omitempty"`
@@ -53,6 +55,8 @@ type GetRoleDefinitionV2 struct {
 	// Role is system or user defined.
 	SystemDefined *bool `json:"systemDefined,omitempty"`
 }
+
+type _GetRoleDefinitionV2 GetRoleDefinitionV2
 
 // NewGetRoleDefinitionV2 instantiates a new GetRoleDefinitionV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -592,6 +596,48 @@ func (o GetRoleDefinitionV2) ToMap() (map[string]interface{}, error) {
 		toSerialize["systemDefined"] = o.SystemDefined
 	}
 	return toSerialize, nil
+}
+
+func (o *GetRoleDefinitionV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varGetRoleDefinitionV2 := _GetRoleDefinitionV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varGetRoleDefinitionV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GetRoleDefinitionV2(varGetRoleDefinitionV2)
+
+	return err
 }
 
 type NullableGetRoleDefinitionV2 struct {

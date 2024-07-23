@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SeriesData type satisfies the MappedNullable interface at compile time
@@ -27,6 +29,8 @@ type SeriesData struct {
 	AggregateInfo *VisualAggregateData `json:"aggregateInfo,omitempty"`
 	SeriesMetadata *SeriesMetadata `json:"seriesMetadata,omitempty"`
 }
+
+type _SeriesData SeriesData
 
 // NewSeriesData instantiates a new SeriesData object
 // This constructor will assign default values to properties that have it defined,
@@ -204,6 +208,45 @@ func (o SeriesData) ToMap() (map[string]interface{}, error) {
 		toSerialize["seriesMetadata"] = o.SeriesMetadata
 	}
 	return toSerialize, nil
+}
+
+func (o *SeriesData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"dataPoints",
+		"seriesAxisRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSeriesData := _SeriesData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSeriesData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SeriesData(varSeriesData)
+
+	return err
 }
 
 type NullableSeriesData struct {

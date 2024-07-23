@@ -20,12 +20,12 @@ import (
 )
 
 
-// LogsDataForwardingManagementApiService LogsDataForwardingManagementApi service
-type LogsDataForwardingManagementApiService service
+// LogsDataForwardingManagementAPIService LogsDataForwardingManagementAPI service
+type LogsDataForwardingManagementAPIService service
 
 type ApiCreateDataForwardingBucketRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	createBucketDefinition *CreateBucketDefinition
 }
 
@@ -47,7 +47,7 @@ Create a new Amazon S3 data forwarding destination.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateDataForwardingBucketRequest
 */
-func (a *LogsDataForwardingManagementApiService) CreateDataForwardingBucket(ctx context.Context) ApiCreateDataForwardingBucketRequest {
+func (a *LogsDataForwardingManagementAPIService) CreateDataForwardingBucket(ctx context.Context) ApiCreateDataForwardingBucketRequest {
 	return ApiCreateDataForwardingBucketRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingBucket(ctx 
 
 // Execute executes the request
 //  @return BucketDefinition
-func (a *LogsDataForwardingManagementApiService) CreateDataForwardingBucketExecute(r ApiCreateDataForwardingBucketRequest) (*BucketDefinition, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) CreateDataForwardingBucketExecute(r ApiCreateDataForwardingBucketRequest) (*BucketDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingBucketExecu
 		localVarReturnValue  *BucketDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.CreateDataForwardingBucket")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.CreateDataForwardingBucket")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingBucketExecu
 
 type ApiCreateDataForwardingRuleRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	createDataForwardingRule *CreateDataForwardingRule
 }
 
@@ -166,7 +166,7 @@ Create a data forwarding rule to send data from a Partition or Scheduled View to
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateDataForwardingRuleRequest
 */
-func (a *LogsDataForwardingManagementApiService) CreateDataForwardingRule(ctx context.Context) ApiCreateDataForwardingRuleRequest {
+func (a *LogsDataForwardingManagementAPIService) CreateDataForwardingRule(ctx context.Context) ApiCreateDataForwardingRuleRequest {
 	return ApiCreateDataForwardingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -175,7 +175,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingRule(ctx co
 
 // Execute executes the request
 //  @return DataForwardingRule
-func (a *LogsDataForwardingManagementApiService) CreateDataForwardingRuleExecute(r ApiCreateDataForwardingRuleRequest) (*DataForwardingRule, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) CreateDataForwardingRuleExecute(r ApiCreateDataForwardingRuleRequest) (*DataForwardingRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -183,7 +183,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingRuleExecute
 		localVarReturnValue  *DataForwardingRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.CreateDataForwardingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.CreateDataForwardingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -263,7 +263,7 @@ func (a *LogsDataForwardingManagementApiService) CreateDataForwardingRuleExecute
 
 type ApiDeleteDataForwardingBucketRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	id string
 }
 
@@ -280,7 +280,7 @@ Delete an existing Amazon S3 data forwarding destination with the given identifi
  @param id Identifier of the data forwarding destination to delete.
  @return ApiDeleteDataForwardingBucketRequest
 */
-func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingBucket(ctx context.Context, id string) ApiDeleteDataForwardingBucketRequest {
+func (a *LogsDataForwardingManagementAPIService) DeleteDataForwardingBucket(ctx context.Context, id string) ApiDeleteDataForwardingBucketRequest {
 	return ApiDeleteDataForwardingBucketRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -289,14 +289,14 @@ func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingBucket(ctx 
 }
 
 // Execute executes the request
-func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingBucketExecute(r ApiDeleteDataForwardingBucketRequest) (*http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) DeleteDataForwardingBucketExecute(r ApiDeleteDataForwardingBucketRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.DeleteDataForwardingBucket")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.DeleteDataForwardingBucket")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -363,7 +363,7 @@ func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingBucketExecu
 
 type ApiDeleteDataForwardingRuleRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	indexId string
 }
 
@@ -380,7 +380,7 @@ Delete an S3 data forwarding rule by its Partition or Scheduled View identifier.
  @param indexId The `id` of the Partition or Scheduled View with the data forwarding rule to delete.
  @return ApiDeleteDataForwardingRuleRequest
 */
-func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingRule(ctx context.Context, indexId string) ApiDeleteDataForwardingRuleRequest {
+func (a *LogsDataForwardingManagementAPIService) DeleteDataForwardingRule(ctx context.Context, indexId string) ApiDeleteDataForwardingRuleRequest {
 	return ApiDeleteDataForwardingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -389,14 +389,14 @@ func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingRule(ctx co
 }
 
 // Execute executes the request
-func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingRuleExecute(r ApiDeleteDataForwardingRuleRequest) (*http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) DeleteDataForwardingRuleExecute(r ApiDeleteDataForwardingRuleRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.DeleteDataForwardingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.DeleteDataForwardingRule")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -463,7 +463,7 @@ func (a *LogsDataForwardingManagementApiService) DeleteDataForwardingRuleExecute
 
 type ApiGetDataForwardingBucketsRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	limit *int32
 	token *string
 }
@@ -492,7 +492,7 @@ Get a list of all Amazon S3 data forwarding destinations.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetDataForwardingBucketsRequest
 */
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingBuckets(ctx context.Context) ApiGetDataForwardingBucketsRequest {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingBuckets(ctx context.Context) ApiGetDataForwardingBucketsRequest {
 	return ApiGetDataForwardingBucketsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -501,7 +501,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingBuckets(ctx co
 
 // Execute executes the request
 //  @return GetDataForwardingDestinations
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingBucketsExecute(r ApiGetDataForwardingBucketsRequest) (*GetDataForwardingDestinations, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingBucketsExecute(r ApiGetDataForwardingBucketsRequest) (*GetDataForwardingDestinations, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -509,7 +509,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingBucketsExecute
 		localVarReturnValue  *GetDataForwardingDestinations
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.GetDataForwardingBuckets")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.GetDataForwardingBuckets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -522,6 +522,9 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingBucketsExecute
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 10
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -590,7 +593,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingBucketsExecute
 
 type ApiGetDataForwardingDestinationRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	id string
 }
 
@@ -607,7 +610,7 @@ Get an S3 data forwarding destination by the given identifier.
  @param id Identifier of the S3 data forwarding destination to return.
  @return ApiGetDataForwardingDestinationRequest
 */
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingDestination(ctx context.Context, id string) ApiGetDataForwardingDestinationRequest {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingDestination(ctx context.Context, id string) ApiGetDataForwardingDestinationRequest {
 	return ApiGetDataForwardingDestinationRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -617,7 +620,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingDestination(ct
 
 // Execute executes the request
 //  @return BucketDefinition
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingDestinationExecute(r ApiGetDataForwardingDestinationRequest) (*BucketDefinition, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingDestinationExecute(r ApiGetDataForwardingDestinationRequest) (*BucketDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -625,7 +628,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingDestinationExe
 		localVarReturnValue  *BucketDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.GetDataForwardingDestination")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.GetDataForwardingDestination")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -701,7 +704,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingDestinationExe
 
 type ApiGetDataForwardingRuleRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	indexId string
 }
 
@@ -718,7 +721,7 @@ Get the details of an S3 data forwarding rule by its Partition or Scheduled View
  @param indexId The `id` of the Partition or Scheduled View.
  @return ApiGetDataForwardingRuleRequest
 */
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingRule(ctx context.Context, indexId string) ApiGetDataForwardingRuleRequest {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingRule(ctx context.Context, indexId string) ApiGetDataForwardingRuleRequest {
 	return ApiGetDataForwardingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -728,7 +731,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingRule(ctx conte
 
 // Execute executes the request
 //  @return RuleAndBucketDetail
-func (a *LogsDataForwardingManagementApiService) GetDataForwardingRuleExecute(r ApiGetDataForwardingRuleRequest) (*RuleAndBucketDetail, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) GetDataForwardingRuleExecute(r ApiGetDataForwardingRuleRequest) (*RuleAndBucketDetail, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -736,7 +739,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingRuleExecute(r 
 		localVarReturnValue  *RuleAndBucketDetail
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.GetDataForwardingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.GetDataForwardingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -812,7 +815,7 @@ func (a *LogsDataForwardingManagementApiService) GetDataForwardingRuleExecute(r 
 
 type ApiGetRulesAndBucketsRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	limit *int32
 	token *string
 }
@@ -841,7 +844,7 @@ Get a list of all S3 data forwarding rules.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetRulesAndBucketsRequest
 */
-func (a *LogsDataForwardingManagementApiService) GetRulesAndBuckets(ctx context.Context) ApiGetRulesAndBucketsRequest {
+func (a *LogsDataForwardingManagementAPIService) GetRulesAndBuckets(ctx context.Context) ApiGetRulesAndBucketsRequest {
 	return ApiGetRulesAndBucketsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -850,7 +853,7 @@ func (a *LogsDataForwardingManagementApiService) GetRulesAndBuckets(ctx context.
 
 // Execute executes the request
 //  @return GetRulesAndBucketsResult
-func (a *LogsDataForwardingManagementApiService) GetRulesAndBucketsExecute(r ApiGetRulesAndBucketsRequest) (*GetRulesAndBucketsResult, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) GetRulesAndBucketsExecute(r ApiGetRulesAndBucketsRequest) (*GetRulesAndBucketsResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -858,7 +861,7 @@ func (a *LogsDataForwardingManagementApiService) GetRulesAndBucketsExecute(r Api
 		localVarReturnValue  *GetRulesAndBucketsResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.GetRulesAndBuckets")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.GetRulesAndBuckets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -871,6 +874,9 @@ func (a *LogsDataForwardingManagementApiService) GetRulesAndBucketsExecute(r Api
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 10
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -939,7 +945,7 @@ func (a *LogsDataForwardingManagementApiService) GetRulesAndBucketsExecute(r Api
 
 type ApiUpdateDataForwardingBucketRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	id string
 	updateBucketDefinition *UpdateBucketDefinition
 }
@@ -963,7 +969,7 @@ Update an S3 data forwarding destination by the given identifier.
  @param id Identifier of the data forwarding destination to update.
  @return ApiUpdateDataForwardingBucketRequest
 */
-func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingBucket(ctx context.Context, id string) ApiUpdateDataForwardingBucketRequest {
+func (a *LogsDataForwardingManagementAPIService) UpdateDataForwardingBucket(ctx context.Context, id string) ApiUpdateDataForwardingBucketRequest {
 	return ApiUpdateDataForwardingBucketRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -973,7 +979,7 @@ func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingBucket(ctx 
 
 // Execute executes the request
 //  @return BucketDefinition
-func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingBucketExecute(r ApiUpdateDataForwardingBucketRequest) (*BucketDefinition, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) UpdateDataForwardingBucketExecute(r ApiUpdateDataForwardingBucketRequest) (*BucketDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -981,7 +987,7 @@ func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingBucketExecu
 		localVarReturnValue  *BucketDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.UpdateDataForwardingBucket")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.UpdateDataForwardingBucket")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1062,7 +1068,7 @@ func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingBucketExecu
 
 type ApiUpdateDataForwardingRuleRequest struct {
 	ctx context.Context
-	ApiService *LogsDataForwardingManagementApiService
+	ApiService *LogsDataForwardingManagementAPIService
 	indexId string
 	updateDataForwardingRule *UpdateDataForwardingRule
 }
@@ -1086,7 +1092,7 @@ Update an S3 data forwarding rule by its Partition or Scheduled View identifier.
  @param indexId The `id` of the Partition or Scheduled View with the data forwarding rule to update.
  @return ApiUpdateDataForwardingRuleRequest
 */
-func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingRule(ctx context.Context, indexId string) ApiUpdateDataForwardingRuleRequest {
+func (a *LogsDataForwardingManagementAPIService) UpdateDataForwardingRule(ctx context.Context, indexId string) ApiUpdateDataForwardingRuleRequest {
 	return ApiUpdateDataForwardingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1096,7 +1102,7 @@ func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingRule(ctx co
 
 // Execute executes the request
 //  @return DataForwardingRule
-func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingRuleExecute(r ApiUpdateDataForwardingRuleRequest) (*DataForwardingRule, *http.Response, error) {
+func (a *LogsDataForwardingManagementAPIService) UpdateDataForwardingRuleExecute(r ApiUpdateDataForwardingRuleRequest) (*DataForwardingRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1104,7 +1110,7 @@ func (a *LogsDataForwardingManagementApiService) UpdateDataForwardingRuleExecute
 		localVarReturnValue  *DataForwardingRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementApiService.UpdateDataForwardingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsDataForwardingManagementAPIService.UpdateDataForwardingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

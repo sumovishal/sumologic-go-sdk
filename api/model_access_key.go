@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AccessKey type satisfies the MappedNullable interface at compile time
@@ -39,6 +41,8 @@ type AccessKey struct {
 	// The key for the created access key. This field will have values only in the response for an access key create request. The value will be an empty string while listing all keys.
 	Key string `json:"key"`
 }
+
+type _AccessKey AccessKey
 
 // NewAccessKey instantiates a new AccessKey object
 // This constructor will assign default values to properties that have it defined,
@@ -320,6 +324,49 @@ func (o AccessKey) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["key"] = o.Key
 	return toSerialize, nil
+}
+
+func (o *AccessKey) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"label",
+		"disabled",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"key",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAccessKey := _AccessKey{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAccessKey)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AccessKey(varAccessKey)
+
+	return err
 }
 
 type NullableAccessKey struct {

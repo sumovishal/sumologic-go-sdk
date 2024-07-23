@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AuthnCertificateResult type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type AuthnCertificateResult struct {
 	// Authentication Request Signing Certificate for the user.
 	Certificate string `json:"certificate"`
 }
+
+type _AuthnCertificateResult AuthnCertificateResult
 
 // NewAuthnCertificateResult instantiates a new AuthnCertificateResult object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o AuthnCertificateResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["certificate"] = o.Certificate
 	return toSerialize, nil
+}
+
+func (o *AuthnCertificateResult) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"certificate",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAuthnCertificateResult := _AuthnCertificateResult{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAuthnCertificateResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AuthnCertificateResult(varAuthnCertificateResult)
+
+	return err
 }
 
 type NullableAuthnCertificateResult struct {

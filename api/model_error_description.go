@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ErrorDescription type satisfies the MappedNullable interface at compile time
@@ -28,6 +30,8 @@ type ErrorDescription struct {
 	// An optional list of metadata about the error.
 	Meta map[string]interface{} `json:"meta,omitempty"`
 }
+
+type _ErrorDescription ErrorDescription
 
 // NewErrorDescription instantiates a new ErrorDescription object
 // This constructor will assign default values to properties that have it defined,
@@ -179,6 +183,44 @@ func (o ErrorDescription) ToMap() (map[string]interface{}, error) {
 		toSerialize["meta"] = o.Meta
 	}
 	return toSerialize, nil
+}
+
+func (o *ErrorDescription) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"code",
+		"message",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varErrorDescription := _ErrorDescription{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varErrorDescription)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ErrorDescription(varErrorDescription)
+
+	return err
 }
 
 type NullableErrorDescription struct {

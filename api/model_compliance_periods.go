@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CompliancePeriods type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type CompliancePeriods struct {
 	// List of CompliancePeriodProgress.
 	Periods []CompliancePeriodProgress `json:"periods"`
 }
+
+type _CompliancePeriods CompliancePeriods
 
 // NewCompliancePeriods instantiates a new CompliancePeriods object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o CompliancePeriods) ToMap() (map[string]interface{}, error) {
 	toSerialize["timezone"] = o.Timezone
 	toSerialize["periods"] = o.Periods
 	return toSerialize, nil
+}
+
+func (o *CompliancePeriods) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"timezone",
+		"periods",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCompliancePeriods := _CompliancePeriods{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCompliancePeriods)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CompliancePeriods(varCompliancePeriods)
+
+	return err
 }
 
 type NullableCompliancePeriods struct {

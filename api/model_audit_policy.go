@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AuditPolicy type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type AuditPolicy struct {
 	// Whether the Audit policy is enabled.
 	Enabled bool `json:"enabled"`
 }
+
+type _AuditPolicy AuditPolicy
 
 // NewAuditPolicy instantiates a new AuditPolicy object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o AuditPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["enabled"] = o.Enabled
 	return toSerialize, nil
+}
+
+func (o *AuditPolicy) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"enabled",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAuditPolicy := _AuditPolicy{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAuditPolicy)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AuditPolicy(varAuditPolicy)
+
+	return err
 }
 
 type NullableAuditPolicy struct {

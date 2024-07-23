@@ -25,7 +25,7 @@ type OutlierDataValue struct {
 	// The value of outlier data point.
 	Value *float64 `json:"value,omitempty"`
 	// The type of violation.
-	Violation *string `json:"violation,omitempty"`
+	Violation *string `json:"violation,omitempty" validate:"regexp=^(CriticalUpperViolation|CriticalLowerViolation|WarningUpperViolation|WarningLowerViolation|NoViolation)$"`
 }
 
 // NewOutlierDataValue instantiates a new OutlierDataValue object

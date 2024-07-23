@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the IngestBudget type satisfies the MappedNullable interface at compile time
@@ -33,7 +35,7 @@ type IngestBudget struct {
 	// Description of the ingest budget.
 	Description *string `json:"description,omitempty"`
 	// Action to take when ingest budget's capacity is reached. All actions are audited. Supported values are:   * `stopCollecting`   * `keepCollecting`
-	Action string `json:"action"`
+	Action string `json:"action" validate:"regexp=^(keepCollecting|stopCollecting)$"`
 	// The threshold as a percentage of when an ingest budget's capacity usage is logged in the Audit Index.
 	AuditThreshold *int32 `json:"auditThreshold,omitempty"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
@@ -51,6 +53,8 @@ type IngestBudget struct {
 	// Number of collectors assigned to the ingest budget.
 	NumberOfCollectors *int64 `json:"numberOfCollectors,omitempty"`
 }
+
+type _IngestBudget IngestBudget
 
 // NewIngestBudget instantiates a new IngestBudget object
 // This constructor will assign default values to properties that have it defined,
@@ -545,6 +549,53 @@ func (o IngestBudget) ToMap() (map[string]interface{}, error) {
 		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
 	}
 	return toSerialize, nil
+}
+
+func (o *IngestBudget) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"fieldValue",
+		"capacityBytes",
+		"timezone",
+		"resetTime",
+		"action",
+		"createdAt",
+		"createdByUser",
+		"modifiedAt",
+		"modifiedByUser",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varIngestBudget := _IngestBudget{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varIngestBudget)
+
+	if err != nil {
+		return err
+	}
+
+	*o = IngestBudget(varIngestBudget)
+
+	return err
 }
 
 type NullableIngestBudget struct {

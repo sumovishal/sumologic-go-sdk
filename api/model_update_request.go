@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the UpdateRequest type satisfies the MappedNullable interface at compile time
@@ -20,13 +22,15 @@ var _ MappedNullable = &UpdateRequest{}
 // UpdateRequest Update request for the account.
 type UpdateRequest struct {
 	// Unique identifier of the product in current plan. Valid values are: 1. `Free` 2. `Trial` 3. `Essentials` 4. `EnterpriseOps` 5. `EnterpriseSec` 6. `EnterpriseSuite` 
-	ProductId string `json:"productId"`
+	ProductId string `json:"productId" validate:"regexp=^(Essentials|Trial|Free|EnterpriseOps|EnterpriseSec|EnterpriseSuite)$"`
 	// Identifier for the plans billing term. Valid values are:  1. Monthly  2. Annually 
-	BillingFrequency string `json:"billingFrequency"`
+	BillingFrequency string `json:"billingFrequency" validate:"regexp=^(Monthly|Annually)$"`
 	Baselines SelfServiceCreditsBaselines `json:"baselines"`
 	// true in case the subscription baselines need to be updated immediately(only for monthly customers who are staying on the monthly plan)
 	Immediate *bool `json:"immediate,omitempty"`
 }
+
+type _UpdateRequest UpdateRequest
 
 // NewUpdateRequest instantiates a new UpdateRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -173,6 +177,45 @@ func (o UpdateRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["immediate"] = o.Immediate
 	}
 	return toSerialize, nil
+}
+
+func (o *UpdateRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"productId",
+		"billingFrequency",
+		"baselines",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varUpdateRequest := _UpdateRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varUpdateRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateRequest(varUpdateRequest)
+
+	return err
 }
 
 type NullableUpdateRequest struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ListBuiltinFieldsUsageResponse type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type ListBuiltinFieldsUsageResponse struct {
 	// List of fields with their usages.
 	Data []BuiltinFieldUsage `json:"data"`
 }
+
+type _ListBuiltinFieldsUsageResponse ListBuiltinFieldsUsageResponse
 
 // NewListBuiltinFieldsUsageResponse instantiates a new ListBuiltinFieldsUsageResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o ListBuiltinFieldsUsageResponse) ToMap() (map[string]interface{}, error) 
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
 	return toSerialize, nil
+}
+
+func (o *ListBuiltinFieldsUsageResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"data",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varListBuiltinFieldsUsageResponse := _ListBuiltinFieldsUsageResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varListBuiltinFieldsUsageResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListBuiltinFieldsUsageResponse(varListBuiltinFieldsUsageResponse)
+
+	return err
 }
 
 type NullableListBuiltinFieldsUsageResponse struct {
