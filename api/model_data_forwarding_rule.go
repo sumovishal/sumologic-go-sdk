@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DataForwardingRule type satisfies the MappedNullable interface at compile time
@@ -29,7 +31,7 @@ type DataForwardingRule struct {
 	// Specify the path prefix to a directory in the S3 bucket and how to format the file name.
 	FileFormat *string `json:"fileFormat,omitempty"`
 	// Format of the payload.
-	Format *string `json:"format,omitempty"`
+	Format *string `json:"format,omitempty" validate:"regexp=^(csv|raw|json)$"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	CreatedAt time.Time `json:"createdAt"`
 	// Identifier of the user who created the resource.
@@ -41,6 +43,8 @@ type DataForwardingRule struct {
 	// The unique identifier of the data forwarding rule.
 	Id *string `json:"id,omitempty"`
 }
+
+type _DataForwardingRule DataForwardingRule
 
 // NewDataForwardingRule instantiates a new DataForwardingRule object
 // This constructor will assign default values to properties that have it defined,
@@ -370,6 +374,48 @@ func (o DataForwardingRule) ToMap() (map[string]interface{}, error) {
 		toSerialize["id"] = o.Id
 	}
 	return toSerialize, nil
+}
+
+func (o *DataForwardingRule) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"indexId",
+		"destinationId",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDataForwardingRule := _DataForwardingRule{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDataForwardingRule)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DataForwardingRule(varDataForwardingRule)
+
+	return err
 }
 
 type NullableDataForwardingRule struct {

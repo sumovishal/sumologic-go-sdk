@@ -22,7 +22,7 @@ type SearchQueryFieldAndType struct {
 	// Log field parsed from log search query.
 	FieldName *string `json:"fieldName,omitempty"`
 	// The type of the field inferred from log results and explicit configuration. Valid values:   1. `NumericValue`: A field with a numerical type.   2. `DistinctCount`: A field with a dimensional type.
-	FieldType *string `json:"fieldType,omitempty"`
+	FieldType *string `json:"fieldType,omitempty" validate:"regexp=^(NumericValue|DistinctCount)$"`
 	// Indicates if the field is implicit or user defined.
 	IsImplicitField *bool `json:"isImplicitField,omitempty"`
 }

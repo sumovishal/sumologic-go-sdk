@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the QueryBasedSli type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &QueryBasedSli{}
 // QueryBasedSli Common properties for query based SLIs
 type QueryBasedSli struct {
 	// Type of Raw Data Queries for SLI (Logs/Metrics).
-	QueryType string `json:"queryType"`
+	QueryType string `json:"queryType" validate:"regexp=^(Logs|Metrics)$"`
 	// Queries for defining SLI.
 	Queries []SliQueryGroup `json:"queries"`
 }
+
+type _QueryBasedSli QueryBasedSli
 
 // NewQueryBasedSli instantiates a new QueryBasedSli object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o QueryBasedSli) ToMap() (map[string]interface{}, error) {
 	toSerialize["queryType"] = o.QueryType
 	toSerialize["queries"] = o.Queries
 	return toSerialize, nil
+}
+
+func (o *QueryBasedSli) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryType",
+		"queries",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varQueryBasedSli := _QueryBasedSli{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varQueryBasedSli)
+
+	if err != nil {
+		return err
+	}
+
+	*o = QueryBasedSli(varQueryBasedSli)
+
+	return err
 }
 
 type NullableQueryBasedSli struct {

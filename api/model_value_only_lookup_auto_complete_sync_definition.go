@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ValueOnlyLookupAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -27,6 +29,8 @@ type ValueOnlyLookupAutoCompleteSyncDefinition struct {
 	// The column from the lookup file to fill the actual value when a particular label is selected.
 	LookupValueColumn string `json:"lookupValueColumn"`
 }
+
+type _ValueOnlyLookupAutoCompleteSyncDefinition ValueOnlyLookupAutoCompleteSyncDefinition
 
 // NewValueOnlyLookupAutoCompleteSyncDefinition instantiates a new ValueOnlyLookupAutoCompleteSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -143,6 +147,46 @@ func (o ValueOnlyLookupAutoCompleteSyncDefinition) ToMap() (map[string]interface
 	toSerialize["lookupFileName"] = o.LookupFileName
 	toSerialize["lookupValueColumn"] = o.LookupValueColumn
 	return toSerialize, nil
+}
+
+func (o *ValueOnlyLookupAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"autoCompleteKey",
+		"lookupFileName",
+		"lookupValueColumn",
+		"autoCompleteType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varValueOnlyLookupAutoCompleteSyncDefinition := _ValueOnlyLookupAutoCompleteSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varValueOnlyLookupAutoCompleteSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ValueOnlyLookupAutoCompleteSyncDefinition(varValueOnlyLookupAutoCompleteSyncDefinition)
+
+	return err
 }
 
 type NullableValueOnlyLookupAutoCompleteSyncDefinition struct {

@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TokenBaseResponse type satisfies the MappedNullable interface at compile time
@@ -27,9 +29,9 @@ type TokenBaseResponse struct {
 	// Description of the token.
 	Description string `json:"description"`
 	// Status of the token. Can be `Active`, or `Inactive`.
-	Status string `json:"status"`
+	Status string `json:"status" validate:"regexp=^(Active|Inactive)$"`
 	// Type of the token. Valid values: 1) CollectorRegistrationTokenResponse
-	Type string `json:"type"`
+	Type string `json:"type" validate:"regexp=^(CollectorRegistrationTokenResponse)$"`
 	// Version of the token.
 	Version int64 `json:"version"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
@@ -41,6 +43,8 @@ type TokenBaseResponse struct {
 	// Identifier of the user who last modified the resource.
 	ModifiedBy string `json:"modifiedBy"`
 }
+
+type _TokenBaseResponse TokenBaseResponse
 
 // NewTokenBaseResponse instantiates a new TokenBaseResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -330,6 +334,52 @@ func (o TokenBaseResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
 	return toSerialize, nil
+}
+
+func (o *TokenBaseResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"name",
+		"description",
+		"status",
+		"type",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTokenBaseResponse := _TokenBaseResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTokenBaseResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TokenBaseResponse(varTokenBaseResponse)
+
+	return err
 }
 
 type NullableTokenBaseResponse struct {

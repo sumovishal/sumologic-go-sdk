@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the OrderBy type satisfies the MappedNullable interface at compile time
@@ -22,8 +24,10 @@ type OrderBy struct {
 	// Field based on which results should be sorted. When not provided, the default behavior is to sort by timestamp descending. Sortable fields values: `trace_id`, `start_timestamp`, `duration`, `spans_number`, `errors`, `status_code`.
 	FieldName string `json:"fieldName"`
 	// Type of sorting values - descending or ascending.
-	Order string `json:"order"`
+	Order string `json:"order" validate:"regexp=^(Asc|Desc)$"`
 }
+
+type _OrderBy OrderBy
 
 // NewOrderBy instantiates a new OrderBy object
 // This constructor will assign default values to properties that have it defined,
@@ -107,6 +111,44 @@ func (o OrderBy) ToMap() (map[string]interface{}, error) {
 	toSerialize["fieldName"] = o.FieldName
 	toSerialize["order"] = o.Order
 	return toSerialize, nil
+}
+
+func (o *OrderBy) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fieldName",
+		"order",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varOrderBy := _OrderBy{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varOrderBy)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OrderBy(varOrderBy)
+
+	return err
 }
 
 type NullableOrderBy struct {

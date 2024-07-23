@@ -20,12 +20,12 @@ import (
 )
 
 
-// UserManagementApiService UserManagementApi service
-type UserManagementApiService service
+// UserManagementAPIService UserManagementAPI service
+type UserManagementAPIService service
 
 type ApiCreateUserRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	createUserDefinition *CreateUserDefinition
 }
 
@@ -47,7 +47,7 @@ Create a new user in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateUserRequest
 */
-func (a *UserManagementApiService) CreateUser(ctx context.Context) ApiCreateUserRequest {
+func (a *UserManagementAPIService) CreateUser(ctx context.Context) ApiCreateUserRequest {
 	return ApiCreateUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *UserManagementApiService) CreateUser(ctx context.Context) ApiCreateUser
 
 // Execute executes the request
 //  @return UserModel
-func (a *UserManagementApiService) CreateUserExecute(r ApiCreateUserRequest) (*UserModel, *http.Response, error) {
+func (a *UserManagementAPIService) CreateUserExecute(r ApiCreateUserRequest) (*UserModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *UserManagementApiService) CreateUserExecute(r ApiCreateUserRequest) (*U
 		localVarReturnValue  *UserModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.CreateUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.CreateUser")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *UserManagementApiService) CreateUserExecute(r ApiCreateUserRequest) (*U
 
 type ApiDeleteUserRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 	transferTo *string
 	deleteContent *bool
@@ -175,7 +175,7 @@ Delete a user with the given identifier from the organization and transfer their
  @param id Identifier of the user to delete.
  @return ApiDeleteUserRequest
 */
-func (a *UserManagementApiService) DeleteUser(ctx context.Context, id string) ApiDeleteUserRequest {
+func (a *UserManagementAPIService) DeleteUser(ctx context.Context, id string) ApiDeleteUserRequest {
 	return ApiDeleteUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -184,14 +184,14 @@ func (a *UserManagementApiService) DeleteUser(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-func (a *UserManagementApiService) DeleteUserExecute(r ApiDeleteUserRequest) (*http.Response, error) {
+func (a *UserManagementAPIService) DeleteUserExecute(r ApiDeleteUserRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.DeleteUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.DeleteUser")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -264,7 +264,7 @@ func (a *UserManagementApiService) DeleteUserExecute(r ApiDeleteUserRequest) (*h
 
 type ApiDisableMfaRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 	disableMfaRequest *DisableMfaRequest
 }
@@ -288,7 +288,7 @@ Disable multi-factor authentication for given user.
  @param id Identifier of the user to disable MFA for.
  @return ApiDisableMfaRequest
 */
-func (a *UserManagementApiService) DisableMfa(ctx context.Context, id string) ApiDisableMfaRequest {
+func (a *UserManagementAPIService) DisableMfa(ctx context.Context, id string) ApiDisableMfaRequest {
 	return ApiDisableMfaRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -297,14 +297,14 @@ func (a *UserManagementApiService) DisableMfa(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-func (a *UserManagementApiService) DisableMfaExecute(r ApiDisableMfaRequest) (*http.Response, error) {
+func (a *UserManagementAPIService) DisableMfaExecute(r ApiDisableMfaRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.DisableMfa")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.DisableMfa")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -376,7 +376,7 @@ func (a *UserManagementApiService) DisableMfaExecute(r ApiDisableMfaRequest) (*h
 
 type ApiGetUserRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 }
 
@@ -393,7 +393,7 @@ Get a user with the given identifier from the organization.
  @param id Identifier of user to return.
  @return ApiGetUserRequest
 */
-func (a *UserManagementApiService) GetUser(ctx context.Context, id string) ApiGetUserRequest {
+func (a *UserManagementAPIService) GetUser(ctx context.Context, id string) ApiGetUserRequest {
 	return ApiGetUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -403,7 +403,7 @@ func (a *UserManagementApiService) GetUser(ctx context.Context, id string) ApiGe
 
 // Execute executes the request
 //  @return UserModel
-func (a *UserManagementApiService) GetUserExecute(r ApiGetUserRequest) (*UserModel, *http.Response, error) {
+func (a *UserManagementAPIService) GetUserExecute(r ApiGetUserRequest) (*UserModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -411,7 +411,7 @@ func (a *UserManagementApiService) GetUserExecute(r ApiGetUserRequest) (*UserMod
 		localVarReturnValue  *UserModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.GetUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.GetUser")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -487,7 +487,7 @@ func (a *UserManagementApiService) GetUserExecute(r ApiGetUserRequest) (*UserMod
 
 type ApiListUsersRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	limit *int32
 	token *string
 	sortBy *string
@@ -530,7 +530,7 @@ Get a list of all users in the organization. The response is paginated with a de
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListUsersRequest
 */
-func (a *UserManagementApiService) ListUsers(ctx context.Context) ApiListUsersRequest {
+func (a *UserManagementAPIService) ListUsers(ctx context.Context) ApiListUsersRequest {
 	return ApiListUsersRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -539,7 +539,7 @@ func (a *UserManagementApiService) ListUsers(ctx context.Context) ApiListUsersRe
 
 // Execute executes the request
 //  @return ListUserModelsResponse
-func (a *UserManagementApiService) ListUsersExecute(r ApiListUsersRequest) (*ListUserModelsResponse, *http.Response, error) {
+func (a *UserManagementAPIService) ListUsersExecute(r ApiListUsersRequest) (*ListUserModelsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -547,7 +547,7 @@ func (a *UserManagementApiService) ListUsersExecute(r ApiListUsersRequest) (*Lis
 		localVarReturnValue  *ListUserModelsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.ListUsers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.ListUsers")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -560,6 +560,9 @@ func (a *UserManagementApiService) ListUsersExecute(r ApiListUsersRequest) (*Lis
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -634,7 +637,7 @@ func (a *UserManagementApiService) ListUsersExecute(r ApiListUsersRequest) (*Lis
 
 type ApiRequestChangeEmailRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 	changeEmailRequest *ChangeEmailRequest
 }
@@ -658,7 +661,7 @@ An email with an activation link is sent to the user’s new email address. The 
  @param id Identifier of the user to change email address.
  @return ApiRequestChangeEmailRequest
 */
-func (a *UserManagementApiService) RequestChangeEmail(ctx context.Context, id string) ApiRequestChangeEmailRequest {
+func (a *UserManagementAPIService) RequestChangeEmail(ctx context.Context, id string) ApiRequestChangeEmailRequest {
 	return ApiRequestChangeEmailRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -667,14 +670,14 @@ func (a *UserManagementApiService) RequestChangeEmail(ctx context.Context, id st
 }
 
 // Execute executes the request
-func (a *UserManagementApiService) RequestChangeEmailExecute(r ApiRequestChangeEmailRequest) (*http.Response, error) {
+func (a *UserManagementAPIService) RequestChangeEmailExecute(r ApiRequestChangeEmailRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.RequestChangeEmail")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.RequestChangeEmail")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -746,7 +749,7 @@ func (a *UserManagementApiService) RequestChangeEmailExecute(r ApiRequestChangeE
 
 type ApiResetPasswordRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 }
 
@@ -763,7 +766,7 @@ Reset a user's password.
  @param id Identifier of the user to reset password.
  @return ApiResetPasswordRequest
 */
-func (a *UserManagementApiService) ResetPassword(ctx context.Context, id string) ApiResetPasswordRequest {
+func (a *UserManagementAPIService) ResetPassword(ctx context.Context, id string) ApiResetPasswordRequest {
 	return ApiResetPasswordRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -772,14 +775,14 @@ func (a *UserManagementApiService) ResetPassword(ctx context.Context, id string)
 }
 
 // Execute executes the request
-func (a *UserManagementApiService) ResetPasswordExecute(r ApiResetPasswordRequest) (*http.Response, error) {
+func (a *UserManagementAPIService) ResetPasswordExecute(r ApiResetPasswordRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.ResetPassword")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.ResetPassword")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -846,7 +849,7 @@ func (a *UserManagementApiService) ResetPasswordExecute(r ApiResetPasswordReques
 
 type ApiUnlockUserRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 }
 
@@ -863,7 +866,7 @@ Unlock another user's account.
  @param id The id of the user that needs to be unlocked.
  @return ApiUnlockUserRequest
 */
-func (a *UserManagementApiService) UnlockUser(ctx context.Context, id string) ApiUnlockUserRequest {
+func (a *UserManagementAPIService) UnlockUser(ctx context.Context, id string) ApiUnlockUserRequest {
 	return ApiUnlockUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -872,14 +875,14 @@ func (a *UserManagementApiService) UnlockUser(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-func (a *UserManagementApiService) UnlockUserExecute(r ApiUnlockUserRequest) (*http.Response, error) {
+func (a *UserManagementAPIService) UnlockUserExecute(r ApiUnlockUserRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.UnlockUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.UnlockUser")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -946,7 +949,7 @@ func (a *UserManagementApiService) UnlockUserExecute(r ApiUnlockUserRequest) (*h
 
 type ApiUpdateUserRequest struct {
 	ctx context.Context
-	ApiService *UserManagementApiService
+	ApiService *UserManagementAPIService
 	id string
 	updateUserDefinition *UpdateUserDefinition
 }
@@ -970,7 +973,7 @@ Update an existing user in the organization.
  @param id Identifier of the user to update.
  @return ApiUpdateUserRequest
 */
-func (a *UserManagementApiService) UpdateUser(ctx context.Context, id string) ApiUpdateUserRequest {
+func (a *UserManagementAPIService) UpdateUser(ctx context.Context, id string) ApiUpdateUserRequest {
 	return ApiUpdateUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -980,7 +983,7 @@ func (a *UserManagementApiService) UpdateUser(ctx context.Context, id string) Ap
 
 // Execute executes the request
 //  @return UserModel
-func (a *UserManagementApiService) UpdateUserExecute(r ApiUpdateUserRequest) (*UserModel, *http.Response, error) {
+func (a *UserManagementAPIService) UpdateUserExecute(r ApiUpdateUserRequest) (*UserModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -988,7 +991,7 @@ func (a *UserManagementApiService) UpdateUserExecute(r ApiUpdateUserRequest) (*U
 		localVarReturnValue  *UserModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementApiService.UpdateUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserManagementAPIService.UpdateUser")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

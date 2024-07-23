@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Email type satisfies the MappedNullable interface at compile time
@@ -29,6 +31,8 @@ type Email struct {
 	// Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	TimeZone string `json:"timeZone"`
 }
+
+type _Email Email
 
 // NewEmail instantiates a new Email object
 // This constructor will assign default values to properties that have it defined,
@@ -180,6 +184,46 @@ func (o Email) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["timeZone"] = o.TimeZone
 	return toSerialize, nil
+}
+
+func (o *Email) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"recipients",
+		"subject",
+		"timeZone",
+		"connectionType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varEmail := _Email{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varEmail)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Email(varEmail)
+
+	return err
 }
 
 type NullableEmail struct {

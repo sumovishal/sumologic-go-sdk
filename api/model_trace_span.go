@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TraceSpan type satisfies the MappedNullable interface at compile time
@@ -33,24 +35,26 @@ type TraceSpan struct {
 	// Color hex code assigned to the service.
 	ServiceColor *string `json:"serviceColor,omitempty"`
 	// Defines type of service.
-	ServiceType *string `json:"serviceType,omitempty"`
+	ServiceType *string `json:"serviceType,omitempty" validate:"regexp=^(Db|HTTP|MQ|Web|Mixed|Unknown|Cpp|DotNET|Erlang|Go|Java|NodeJS|Php|Python|Ruby|WebJS|Swift|MSSQL|MySQL|Oracle|Db2|PostgreSQL|Redshift|Hive|Cloudscape|HSQLDB|Progress|MaxDB|HANADB|Ingres|FirstSQL|EnterpriseDB|Cache|Adabas|Firebird|ApacheDerby|FileMaker|Informix|InstantDB|InterBase|MariaDB|Netezza|PervasivePSQL|PointBase|SQLite|Sybase|Teradata|Vertica|H2|ColdFusion|Cassandra|HBase|MongoDB|Redis|Couchbase|CouchDB|CosmosDB|DynamoDB|Neo4j|Geode|Elasticsearch|Memcached|CockroachDB|RPC|gRPC|JavaRMI|DotNETWCF|ApacheDubbo)$"`
 	// Number of nanoseconds the span lasted.
 	Duration int64 `json:"duration"`
 	// Date and time the span was started in the [ISO 8601 / RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	StartedAt time.Time `json:"startedAt"`
 	Status TraceSpanStatus `json:"status"`
 	// Span kind describes the relationship between the Span, its parents, and its children in a Trace. Possible values: `CLIENT`, `SERVER`, `PRODUCER`, `CONSUMER`, `INTERNAL`.
-	Kind *string `json:"kind,omitempty"`
+	Kind *string `json:"kind,omitempty" validate:"regexp=^(CLIENT|SERVER|PRODUCER|CONSUMER|INTERNAL)$"`
 	// Name of the possible remote span's service.
 	RemoteService *string `json:"remoteService,omitempty"`
 	// Color hex code assigned to the remote service.
 	RemoteServiceColor *string `json:"remoteServiceColor,omitempty"`
 	// Defines type of service.
-	RemoteServiceType *string `json:"remoteServiceType,omitempty"`
+	RemoteServiceType *string `json:"remoteServiceType,omitempty" validate:"regexp=^(Db|HTTP|MQ|Web|Mixed|Unknown|Cpp|DotNET|Erlang|Go|Java|NodeJS|Php|Python|Ruby|WebJS|Swift|MSSQL|MySQL|Oracle|Db2|PostgreSQL|Redshift|Hive|Cloudscape|HSQLDB|Progress|MaxDB|HANADB|Ingres|FirstSQL|EnterpriseDB|Cache|Adabas|Firebird|ApacheDerby|FileMaker|Informix|InstantDB|InterBase|MariaDB|Netezza|PervasivePSQL|PointBase|SQLite|Sybase|Teradata|Vertica|H2|ColdFusion|Cassandra|HBase|MongoDB|Redis|Couchbase|CouchDB|CosmosDB|DynamoDB|Neo4j|Geode|Elasticsearch|Memcached|CockroachDB|RPC|gRPC|JavaRMI|DotNETWCF|ApacheDubbo)$"`
 	Info *TraceSpanInfo `json:"info,omitempty"`
 	// Number of span links in this span.
 	NumberOfLinks *int32 `json:"numberOfLinks,omitempty"`
 }
+
+type _TraceSpan TraceSpan
 
 // NewTraceSpan instantiates a new TraceSpan object
 // This constructor will assign default values to properties that have it defined,
@@ -595,6 +599,47 @@ func (o TraceSpan) ToMap() (map[string]interface{}, error) {
 		toSerialize["numberOfLinks"] = o.NumberOfLinks
 	}
 	return toSerialize, nil
+}
+
+func (o *TraceSpan) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"operationName",
+		"duration",
+		"startedAt",
+		"status",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTraceSpan := _TraceSpan{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTraceSpan)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceSpan(varTraceSpan)
+
+	return err
 }
 
 type NullableTraceSpan struct {

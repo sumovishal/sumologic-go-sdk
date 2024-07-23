@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CpcSummary type satisfies the MappedNullable interface at compile time
@@ -28,6 +30,8 @@ type CpcSummary struct {
 	// The total time in nanoseconds spent by a given service (or a group of services) in the critical path  of analyzed traces.
 	TotalTimeTaken int64 `json:"totalTimeTaken"`
 }
+
+type _CpcSummary CpcSummary
 
 // NewCpcSummary instantiates a new CpcSummary object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o CpcSummary) ToMap() (map[string]interface{}, error) {
 	toSerialize["avgTimeInTrace"] = o.AvgTimeInTrace
 	toSerialize["totalTimeTaken"] = o.TotalTimeTaken
 	return toSerialize, nil
+}
+
+func (o *CpcSummary) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"numOfTraces",
+		"avgPercentageInTrace",
+		"avgTimeInTrace",
+		"totalTimeTaken",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCpcSummary := _CpcSummary{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCpcSummary)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CpcSummary(varCpcSummary)
+
+	return err
 }
 
 type NullableCpcSummary struct {

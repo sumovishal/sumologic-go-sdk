@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Cidr type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &Cidr{}
 // Cidr A CIDR notation or IP address along with its description.
 type Cidr struct {
 	// The string representation of the CIDR notation or IP address.
-	Cidr string `json:"cidr"`
+	Cidr string `json:"cidr" validate:"regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))?$"`
 	// Description of the CIDR notation or IP address.
 	Description *string `json:"description,omitempty"`
 }
+
+type _Cidr Cidr
 
 // NewCidr instantiates a new Cidr object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o Cidr) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	return toSerialize, nil
+}
+
+func (o *Cidr) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"cidr",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCidr := _Cidr{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCidr)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Cidr(varCidr)
+
+	return err
 }
 
 type NullableCidr struct {

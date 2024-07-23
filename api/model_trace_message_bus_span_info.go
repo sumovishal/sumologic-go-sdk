@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TraceMessageBusSpanInfo type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type TraceMessageBusSpanInfo struct {
 	// An address at which messages can be exchanged e.g. a Kafka record has an associated \"topic name\" that can be stored using this tag.
 	Destination *string `json:"destination,omitempty"`
 }
+
+type _TraceMessageBusSpanInfo TraceMessageBusSpanInfo
 
 // NewTraceMessageBusSpanInfo instantiates a new TraceMessageBusSpanInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -96,6 +100,43 @@ func (o TraceMessageBusSpanInfo) ToMap() (map[string]interface{}, error) {
 		toSerialize["destination"] = o.Destination
 	}
 	return toSerialize, nil
+}
+
+func (o *TraceMessageBusSpanInfo) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTraceMessageBusSpanInfo := _TraceMessageBusSpanInfo{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTraceMessageBusSpanInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceMessageBusSpanInfo(varTraceMessageBusSpanInfo)
+
+	return err
 }
 
 type NullableTraceMessageBusSpanInfo struct {

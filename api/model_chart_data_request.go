@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ChartDataRequest type satisfies the MappedNullable interface at compile time
@@ -20,13 +22,15 @@ var _ MappedNullable = &ChartDataRequest{}
 // ChartDataRequest Request payload for monitor chart data visualization.
 type ChartDataRequest struct {
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
-	MonitorType string `json:"monitorType"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics)$"`
 	// All queries from the monitor.
 	Queries []MonitorQuery `json:"queries"`
 	// Defines the conditions of when to send notifications.
 	Triggers []TriggerCondition `json:"triggers,omitempty"`
 	TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
 }
+
+type _ChartDataRequest ChartDataRequest
 
 // NewChartDataRequest instantiates a new ChartDataRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -178,6 +182,44 @@ func (o ChartDataRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
 	return toSerialize, nil
+}
+
+func (o *ChartDataRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"monitorType",
+		"queries",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varChartDataRequest := _ChartDataRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varChartDataRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChartDataRequest(varChartDataRequest)
+
+	return err
 }
 
 type NullableChartDataRequest struct {

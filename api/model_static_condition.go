@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the StaticCondition type satisfies the MappedNullable interface at compile time
@@ -25,16 +27,18 @@ type StaticCondition struct {
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold *float64 `json:"threshold,omitempty"`
 	// The comparison type for the `threshold` evaluation. This defines how you want the data value compared. Valid values:   1. `LessThan`: Less than than the configured threshold.   2. `GreaterThan`: Greater than the configured threshold.   3. `LessThanOrEqual`: Less than or equal to the configured threshold.   4. `GreaterThanOrEqual`: Greater than or equal to the configured threshold. ThresholdType value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
-	ThresholdType *string `json:"thresholdType,omitempty"`
+	ThresholdType *string `json:"thresholdType,omitempty" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
 	// The name of the field that the trigger condition will alert on. The trigger could compare the value of specified field with the threshold. If `field` is not specified, monitor would default to result count instead.
 	Field *string `json:"field,omitempty"`
 	// The criteria to evaluate the threshold and thresholdType in the given time range. Valid values:   1. `AtLeastOnce`: Trigger if the threshold is met at least once. (NOTE: This is the only valid value if monitorType is `Metrics`.)   2. `Always`: Trigger if the threshold is met continuously. (NOTE: This is the only valid value if monitorType is `Metrics`.)   3. `ResultCount`: Trigger if the threshold is met against the count of results. (NOTE: This is the only valid value if monitorType is `Logs`.)   4. `MissingData`: Trigger if the data is missing. (NOTE: This is valid for both `Logs` and `Metrics` monitorTypes)
-	OccurrenceType string `json:"occurrenceType"`
+	OccurrenceType string `json:"occurrenceType" validate:"regexp=^(AtLeastOnce|Always|ResultCount|MissingData)$"`
 	// Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. `AllTimeSeries`: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is `Metrics`)   2. `AnyTimeSeries`: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is `Metrics`)   3. `AllResults`: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is `Logs`)
-	TriggerSource string `json:"triggerSource"`
+	TriggerSource string `json:"triggerSource" validate:"regexp=^(AllTimeSeries|AnyTimeSeries|AllResults)$"`
 	// The minimum number of data points to alert or resolve a metrics monitor within the time range. This field is only valid for Metrics Monitor, it will always be set to 1 for `AtleastOnce` occurrence type and for `Always`, if not specified by user it will default to 2.
 	MinDataPoints *int32 `json:"minDataPoints,omitempty"`
 }
+
+type _StaticCondition StaticCondition
 
 // NewStaticCondition instantiates a new StaticCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -301,6 +305,46 @@ func (o StaticCondition) ToMap() (map[string]interface{}, error) {
 		toSerialize["minDataPoints"] = o.MinDataPoints
 	}
 	return toSerialize, nil
+}
+
+func (o *StaticCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"timeRange",
+		"occurrenceType",
+		"triggerSource",
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varStaticCondition := _StaticCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varStaticCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = StaticCondition(varStaticCondition)
+
+	return err
 }
 
 type NullableStaticCondition struct {

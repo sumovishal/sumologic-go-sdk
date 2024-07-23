@@ -20,12 +20,12 @@ import (
 )
 
 
-// SpanAnalyticsApiService SpanAnalyticsApi service
-type SpanAnalyticsApiService service
+// SpanAnalyticsAPIService SpanAnalyticsAPI service
+type SpanAnalyticsAPIService service
 
 type ApiCancelSpanQueryRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 }
 
@@ -42,7 +42,7 @@ Cancel a currently processed span search query with the given id.
  @param queryId Identifier of the query to cancel.
  @return ApiCancelSpanQueryRequest
 */
-func (a *SpanAnalyticsApiService) CancelSpanQuery(ctx context.Context, queryId string) ApiCancelSpanQueryRequest {
+func (a *SpanAnalyticsAPIService) CancelSpanQuery(ctx context.Context, queryId string) ApiCancelSpanQueryRequest {
 	return ApiCancelSpanQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -51,14 +51,14 @@ func (a *SpanAnalyticsApiService) CancelSpanQuery(ctx context.Context, queryId s
 }
 
 // Execute executes the request
-func (a *SpanAnalyticsApiService) CancelSpanQueryExecute(r ApiCancelSpanQueryRequest) (*http.Response, error) {
+func (a *SpanAnalyticsAPIService) CancelSpanQueryExecute(r ApiCancelSpanQueryRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.CancelSpanQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.CancelSpanQuery")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -125,7 +125,7 @@ func (a *SpanAnalyticsApiService) CancelSpanQueryExecute(r ApiCancelSpanQueryReq
 
 type ApiCreateSpanQueryRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	spanQueryRequest *SpanQueryRequest
 }
 
@@ -147,7 +147,7 @@ Execute a span analytics query and get the id to fetch its status and results. U
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateSpanQueryRequest
 */
-func (a *SpanAnalyticsApiService) CreateSpanQuery(ctx context.Context) ApiCreateSpanQueryRequest {
+func (a *SpanAnalyticsAPIService) CreateSpanQuery(ctx context.Context) ApiCreateSpanQueryRequest {
 	return ApiCreateSpanQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -156,7 +156,7 @@ func (a *SpanAnalyticsApiService) CreateSpanQuery(ctx context.Context) ApiCreate
 
 // Execute executes the request
 //  @return SpanQueryResponse
-func (a *SpanAnalyticsApiService) CreateSpanQueryExecute(r ApiCreateSpanQueryRequest) (*SpanQueryResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) CreateSpanQueryExecute(r ApiCreateSpanQueryRequest) (*SpanQueryResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -164,7 +164,7 @@ func (a *SpanAnalyticsApiService) CreateSpanQueryExecute(r ApiCreateSpanQueryReq
 		localVarReturnValue  *SpanQueryResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.CreateSpanQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.CreateSpanQuery")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *SpanAnalyticsApiService) CreateSpanQueryExecute(r ApiCreateSpanQueryReq
 
 type ApiGetSpanQueryAggregatesRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 }
 
@@ -261,7 +261,7 @@ Get span aggregation results for an aggregated span analytics query with the spe
  @param queryId Identifier of the executed query.
  @return ApiGetSpanQueryAggregatesRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryAggregates(ctx context.Context, queryId string) ApiGetSpanQueryAggregatesRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryAggregates(ctx context.Context, queryId string) ApiGetSpanQueryAggregatesRequest {
 	return ApiGetSpanQueryAggregatesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregates(ctx context.Context, qu
 
 // Execute executes the request
 //  @return SpanQueryAggregateResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQueryAggregatesRequest) (*SpanQueryAggregateResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryAggregatesExecute(r ApiGetSpanQueryAggregatesRequest) (*SpanQueryAggregateResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQuer
 		localVarReturnValue  *SpanQueryAggregateResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryAggregates")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryAggregates")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryAggregatesExecute(r ApiGetSpanQuer
 
 type ApiGetSpanQueryFacetsRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 	rowId string
 }
@@ -374,7 +374,7 @@ Get a list of facets of a span analytics query with the specified id.
  @param rowId Identifier of the query row.
  @return ApiGetSpanQueryFacetsRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryFacets(ctx context.Context, queryId string, rowId string) ApiGetSpanQueryFacetsRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFacets(ctx context.Context, queryId string, rowId string) ApiGetSpanQueryFacetsRequest {
 	return ApiGetSpanQueryFacetsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -385,7 +385,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacets(ctx context.Context, queryI
 
 // Execute executes the request
 //  @return SpanQueryResultFacetsResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFacetsRequest) (*SpanQueryResultFacetsResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFacetsRequest) (*SpanQueryResultFacetsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -393,7 +393,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFac
 		localVarReturnValue  *SpanQueryResultFacetsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryFacets")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryFacets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -470,7 +470,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFacetsExecute(r ApiGetSpanQueryFac
 
 type ApiGetSpanQueryFieldValuesRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	field string
 	query *string
 	limit *int32
@@ -508,7 +508,7 @@ Get a list of available values for the given span analytics query filter field. 
  @param field Field identifier.
  @return ApiGetSpanQueryFieldValuesRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryFieldValues(ctx context.Context, field string) ApiGetSpanQueryFieldValuesRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFieldValues(ctx context.Context, field string) ApiGetSpanQueryFieldValuesRequest {
 	return ApiGetSpanQueryFieldValuesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -518,7 +518,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValues(ctx context.Context, f
 
 // Execute executes the request
 //  @return TraceFieldValuesResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQueryFieldValuesRequest) (*TraceFieldValuesResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQueryFieldValuesRequest) (*TraceFieldValuesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -526,7 +526,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 		localVarReturnValue  *TraceFieldValuesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryFieldValues")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryFieldValues")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -543,6 +543,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 	}
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 10
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -611,7 +614,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldValuesExecute(r ApiGetSpanQue
 
 type ApiGetSpanQueryFieldsRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 }
 
 func (r ApiGetSpanQueryFieldsRequest) Execute() (*SpanQueryFieldsResponse, *http.Response, error) {
@@ -626,7 +629,7 @@ Get a list of available fields which can be used in span analytics queries.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetSpanQueryFieldsRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryFields(ctx context.Context) ApiGetSpanQueryFieldsRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFields(ctx context.Context) ApiGetSpanQueryFieldsRequest {
 	return ApiGetSpanQueryFieldsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -635,7 +638,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFields(ctx context.Context) ApiGet
 
 // Execute executes the request
 //  @return SpanQueryFieldsResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFieldsRequest) (*SpanQueryFieldsResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFieldsRequest) (*SpanQueryFieldsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -643,7 +646,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFie
 		localVarReturnValue  *SpanQueryFieldsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryFields")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryFields")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -718,7 +721,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryFieldsExecute(r ApiGetSpanQueryFie
 
 type ApiGetSpanQueryResultRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 	rowId string
 	limit *int32
@@ -751,7 +754,7 @@ Get a list of spans matching a query with the specified id. The response is pagi
  @param rowId Identifier of the query row.
  @return ApiGetSpanQueryResultRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryResult(ctx context.Context, queryId string, rowId string) ApiGetSpanQueryResultRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryResult(ctx context.Context, queryId string, rowId string) ApiGetSpanQueryResultRequest {
 	return ApiGetSpanQueryResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -762,7 +765,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResult(ctx context.Context, queryI
 
 // Execute executes the request
 //  @return SpanQueryResultSpansResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryResultRequest) (*SpanQueryResultSpansResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryResultExecute(r ApiGetSpanQueryResultRequest) (*SpanQueryResultSpansResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -770,7 +773,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 		localVarReturnValue  *SpanQueryResultSpansResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -785,6 +788,9 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -853,7 +859,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryResultExecute(r ApiGetSpanQueryRes
 
 type ApiGetSpanQueryStatusRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 }
 
@@ -870,7 +876,7 @@ Get a status of a span analytics query with the given id. When the query has bee
  @param queryId Identifier of the executed query.
  @return ApiGetSpanQueryStatusRequest
 */
-func (a *SpanAnalyticsApiService) GetSpanQueryStatus(ctx context.Context, queryId string) ApiGetSpanQueryStatusRequest {
+func (a *SpanAnalyticsAPIService) GetSpanQueryStatus(ctx context.Context, queryId string) ApiGetSpanQueryStatusRequest {
 	return ApiGetSpanQueryStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -880,7 +886,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatus(ctx context.Context, queryI
 
 // Execute executes the request
 //  @return SpanQueryStatusResponse
-func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQueryStatusRequest) (*SpanQueryStatusResponse, *http.Response, error) {
+func (a *SpanAnalyticsAPIService) GetSpanQueryStatusExecute(r ApiGetSpanQueryStatusRequest) (*SpanQueryStatusResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -888,7 +894,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQuerySta
 		localVarReturnValue  *SpanQueryStatusResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.GetSpanQueryStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.GetSpanQueryStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -964,7 +970,7 @@ func (a *SpanAnalyticsApiService) GetSpanQueryStatusExecute(r ApiGetSpanQuerySta
 
 type ApiPauseSpanQueryRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 }
 
@@ -981,7 +987,7 @@ Pause a currently processed span search query with the given id.
  @param queryId Identifier of the query to pause.
  @return ApiPauseSpanQueryRequest
 */
-func (a *SpanAnalyticsApiService) PauseSpanQuery(ctx context.Context, queryId string) ApiPauseSpanQueryRequest {
+func (a *SpanAnalyticsAPIService) PauseSpanQuery(ctx context.Context, queryId string) ApiPauseSpanQueryRequest {
 	return ApiPauseSpanQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -990,14 +996,14 @@ func (a *SpanAnalyticsApiService) PauseSpanQuery(ctx context.Context, queryId st
 }
 
 // Execute executes the request
-func (a *SpanAnalyticsApiService) PauseSpanQueryExecute(r ApiPauseSpanQueryRequest) (*http.Response, error) {
+func (a *SpanAnalyticsAPIService) PauseSpanQueryExecute(r ApiPauseSpanQueryRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.PauseSpanQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.PauseSpanQuery")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1064,7 +1070,7 @@ func (a *SpanAnalyticsApiService) PauseSpanQueryExecute(r ApiPauseSpanQueryReque
 
 type ApiResumeSpanQueryRequest struct {
 	ctx context.Context
-	ApiService *SpanAnalyticsApiService
+	ApiService *SpanAnalyticsAPIService
 	queryId string
 }
 
@@ -1081,7 +1087,7 @@ Resume a previously paused span search query with the given id.
  @param queryId Identifier of the query to resume.
  @return ApiResumeSpanQueryRequest
 */
-func (a *SpanAnalyticsApiService) ResumeSpanQuery(ctx context.Context, queryId string) ApiResumeSpanQueryRequest {
+func (a *SpanAnalyticsAPIService) ResumeSpanQuery(ctx context.Context, queryId string) ApiResumeSpanQueryRequest {
 	return ApiResumeSpanQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1090,14 +1096,14 @@ func (a *SpanAnalyticsApiService) ResumeSpanQuery(ctx context.Context, queryId s
 }
 
 // Execute executes the request
-func (a *SpanAnalyticsApiService) ResumeSpanQueryExecute(r ApiResumeSpanQueryRequest) (*http.Response, error) {
+func (a *SpanAnalyticsAPIService) ResumeSpanQueryExecute(r ApiResumeSpanQueryRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsApiService.ResumeSpanQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpanAnalyticsAPIService.ResumeSpanQuery")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}

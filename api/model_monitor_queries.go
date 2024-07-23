@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MonitorQueries type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &MonitorQueries{}
 // MonitorQueries Queries to be validated.
 type MonitorQueries struct {
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
-	MonitorType string `json:"monitorType"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics)$"`
 	// The relative time range of the monitor. Valid values of time ranges are `5m`, `10m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, or `24h`.
 	TimeRange string `json:"timeRange"`
 	// Queries to be validated.
 	Queries []UnvalidatedMonitorQuery `json:"queries"`
 }
+
+type _MonitorQueries MonitorQueries
 
 // NewMonitorQueries instantiates a new MonitorQueries object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o MonitorQueries) ToMap() (map[string]interface{}, error) {
 	toSerialize["timeRange"] = o.TimeRange
 	toSerialize["queries"] = o.Queries
 	return toSerialize, nil
+}
+
+func (o *MonitorQueries) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"monitorType",
+		"timeRange",
+		"queries",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorQueries := _MonitorQueries{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorQueries)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorQueries(varMonitorQueries)
+
+	return err
 }
 
 type NullableMonitorQueries struct {

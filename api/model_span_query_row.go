@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryRow type satisfies the MappedNullable interface at compile time
@@ -22,8 +24,10 @@ type SpanQueryRow struct {
 	// Query string using the log search syntax.
 	QueryString string `json:"queryString"`
 	// An identifier used to reference this particular row of the query request. Within a query, row ids must have distinct values.
-	RowId string `json:"rowId"`
+	RowId string `json:"rowId" validate:"regexp=^[a-zA-Z0-9_]*$"`
 }
+
+type _SpanQueryRow SpanQueryRow
 
 // NewSpanQueryRow instantiates a new SpanQueryRow object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o SpanQueryRow) ToMap() (map[string]interface{}, error) {
 	toSerialize["queryString"] = o.QueryString
 	toSerialize["rowId"] = o.RowId
 	return toSerialize, nil
+}
+
+func (o *SpanQueryRow) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryString",
+		"rowId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryRow := _SpanQueryRow{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryRow)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryRow(varSpanQueryRow)
+
+	return err
 }
 
 type NullableSpanQueryRow struct {

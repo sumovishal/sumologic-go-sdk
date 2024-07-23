@@ -20,12 +20,12 @@ import (
 )
 
 
-// ExtractionRuleManagementApiService ExtractionRuleManagementApi service
-type ExtractionRuleManagementApiService service
+// ExtractionRuleManagementAPIService ExtractionRuleManagementAPI service
+type ExtractionRuleManagementAPIService service
 
 type ApiCreateExtractionRuleRequest struct {
 	ctx context.Context
-	ApiService *ExtractionRuleManagementApiService
+	ApiService *ExtractionRuleManagementAPIService
 	extractionRuleDefinition *ExtractionRuleDefinition
 }
 
@@ -47,7 +47,7 @@ Create a new field extraction rule.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateExtractionRuleRequest
 */
-func (a *ExtractionRuleManagementApiService) CreateExtractionRule(ctx context.Context) ApiCreateExtractionRuleRequest {
+func (a *ExtractionRuleManagementAPIService) CreateExtractionRule(ctx context.Context) ApiCreateExtractionRuleRequest {
 	return ApiCreateExtractionRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *ExtractionRuleManagementApiService) CreateExtractionRule(ctx context.Co
 
 // Execute executes the request
 //  @return ExtractionRule
-func (a *ExtractionRuleManagementApiService) CreateExtractionRuleExecute(r ApiCreateExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
+func (a *ExtractionRuleManagementAPIService) CreateExtractionRuleExecute(r ApiCreateExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *ExtractionRuleManagementApiService) CreateExtractionRuleExecute(r ApiCr
 		localVarReturnValue  *ExtractionRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementApiService.CreateExtractionRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementAPIService.CreateExtractionRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *ExtractionRuleManagementApiService) CreateExtractionRuleExecute(r ApiCr
 
 type ApiDeleteExtractionRuleRequest struct {
 	ctx context.Context
-	ApiService *ExtractionRuleManagementApiService
+	ApiService *ExtractionRuleManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete a field extraction rule with the given identifier.
  @param id Identifier of the field extraction rule to delete.
  @return ApiDeleteExtractionRuleRequest
 */
-func (a *ExtractionRuleManagementApiService) DeleteExtractionRule(ctx context.Context, id string) ApiDeleteExtractionRuleRequest {
+func (a *ExtractionRuleManagementAPIService) DeleteExtractionRule(ctx context.Context, id string) ApiDeleteExtractionRuleRequest {
 	return ApiDeleteExtractionRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *ExtractionRuleManagementApiService) DeleteExtractionRule(ctx context.Co
 }
 
 // Execute executes the request
-func (a *ExtractionRuleManagementApiService) DeleteExtractionRuleExecute(r ApiDeleteExtractionRuleRequest) (*http.Response, error) {
+func (a *ExtractionRuleManagementAPIService) DeleteExtractionRuleExecute(r ApiDeleteExtractionRuleRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementApiService.DeleteExtractionRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementAPIService.DeleteExtractionRule")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *ExtractionRuleManagementApiService) DeleteExtractionRuleExecute(r ApiDe
 
 type ApiGetExtractionRuleRequest struct {
 	ctx context.Context
-	ApiService *ExtractionRuleManagementApiService
+	ApiService *ExtractionRuleManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a field extraction rule with the given identifier.
  @param id Identifier of field extraction rule to return.
  @return ApiGetExtractionRuleRequest
 */
-func (a *ExtractionRuleManagementApiService) GetExtractionRule(ctx context.Context, id string) ApiGetExtractionRuleRequest {
+func (a *ExtractionRuleManagementAPIService) GetExtractionRule(ctx context.Context, id string) ApiGetExtractionRuleRequest {
 	return ApiGetExtractionRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *ExtractionRuleManagementApiService) GetExtractionRule(ctx context.Conte
 
 // Execute executes the request
 //  @return ExtractionRule
-func (a *ExtractionRuleManagementApiService) GetExtractionRuleExecute(r ApiGetExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
+func (a *ExtractionRuleManagementAPIService) GetExtractionRuleExecute(r ApiGetExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *ExtractionRuleManagementApiService) GetExtractionRuleExecute(r ApiGetEx
 		localVarReturnValue  *ExtractionRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementApiService.GetExtractionRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementAPIService.GetExtractionRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *ExtractionRuleManagementApiService) GetExtractionRuleExecute(r ApiGetEx
 
 type ApiListExtractionRulesRequest struct {
 	ctx context.Context
-	ApiService *ExtractionRuleManagementApiService
+	ApiService *ExtractionRuleManagementAPIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ Get a list of all field extraction rules. The response is paginated with a defau
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListExtractionRulesRequest
 */
-func (a *ExtractionRuleManagementApiService) ListExtractionRules(ctx context.Context) ApiListExtractionRulesRequest {
+func (a *ExtractionRuleManagementAPIService) ListExtractionRules(ctx context.Context) ApiListExtractionRulesRequest {
 	return ApiListExtractionRulesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *ExtractionRuleManagementApiService) ListExtractionRules(ctx context.Con
 
 // Execute executes the request
 //  @return ListExtractionRulesResponse
-func (a *ExtractionRuleManagementApiService) ListExtractionRulesExecute(r ApiListExtractionRulesRequest) (*ListExtractionRulesResponse, *http.Response, error) {
+func (a *ExtractionRuleManagementAPIService) ListExtractionRulesExecute(r ApiListExtractionRulesRequest) (*ListExtractionRulesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *ExtractionRuleManagementApiService) ListExtractionRulesExecute(r ApiLis
 		localVarReturnValue  *ListExtractionRulesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementApiService.ListExtractionRules")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementAPIService.ListExtractionRules")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *ExtractionRuleManagementApiService) ListExtractionRulesExecute(r ApiLis
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *ExtractionRuleManagementApiService) ListExtractionRulesExecute(r ApiLis
 
 type ApiUpdateExtractionRuleRequest struct {
 	ctx context.Context
-	ApiService *ExtractionRuleManagementApiService
+	ApiService *ExtractionRuleManagementAPIService
 	id string
 	updateExtractionRuleDefinition *UpdateExtractionRuleDefinition
 }
@@ -506,7 +509,7 @@ Update an existing field extraction rule. All properties specified in the reques
  @param id Identifier of the field extraction rule to update.
  @return ApiUpdateExtractionRuleRequest
 */
-func (a *ExtractionRuleManagementApiService) UpdateExtractionRule(ctx context.Context, id string) ApiUpdateExtractionRuleRequest {
+func (a *ExtractionRuleManagementAPIService) UpdateExtractionRule(ctx context.Context, id string) ApiUpdateExtractionRuleRequest {
 	return ApiUpdateExtractionRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -516,7 +519,7 @@ func (a *ExtractionRuleManagementApiService) UpdateExtractionRule(ctx context.Co
 
 // Execute executes the request
 //  @return ExtractionRule
-func (a *ExtractionRuleManagementApiService) UpdateExtractionRuleExecute(r ApiUpdateExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
+func (a *ExtractionRuleManagementAPIService) UpdateExtractionRuleExecute(r ApiUpdateExtractionRuleRequest) (*ExtractionRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -524,7 +527,7 @@ func (a *ExtractionRuleManagementApiService) UpdateExtractionRuleExecute(r ApiUp
 		localVarReturnValue  *ExtractionRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementApiService.UpdateExtractionRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExtractionRuleManagementAPIService.UpdateExtractionRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

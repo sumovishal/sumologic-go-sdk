@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the PermissionIdentifier type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &PermissionIdentifier{}
 // PermissionIdentifier struct for PermissionIdentifier
 type PermissionIdentifier struct {
 	// Type of subject for the permission. Valid values are: `user` or `role` or `org`.
-	SubjectType string `json:"subjectType"`
+	SubjectType string `json:"subjectType" validate:"regexp=^(user|role|org)$"`
 	// The identifier that belongs to the subject type chosen above. For e.g. if the subjectType is set to `user`, subjectId should be the identifier of a user (same goes for `role` or `org` subjectType).
 	SubjectId string `json:"subjectId"`
 	// The identifier that belongs to the resource this permission assignment applies to.
 	TargetId string `json:"targetId"`
 }
+
+type _PermissionIdentifier PermissionIdentifier
 
 // NewPermissionIdentifier instantiates a new PermissionIdentifier object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o PermissionIdentifier) ToMap() (map[string]interface{}, error) {
 	toSerialize["subjectId"] = o.SubjectId
 	toSerialize["targetId"] = o.TargetId
 	return toSerialize, nil
+}
+
+func (o *PermissionIdentifier) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"subjectType",
+		"subjectId",
+		"targetId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPermissionIdentifier := _PermissionIdentifier{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPermissionIdentifier)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PermissionIdentifier(varPermissionIdentifier)
+
+	return err
 }
 
 type NullablePermissionIdentifier struct {

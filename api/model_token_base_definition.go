@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TokenBaseDefinition type satisfies the MappedNullable interface at compile time
@@ -24,10 +26,12 @@ type TokenBaseDefinition struct {
 	// Description of the token.
 	Description *string `json:"description,omitempty"`
 	// Status of the token. Can be `Active`, or `Inactive`.
-	Status string `json:"status"`
+	Status string `json:"status" validate:"regexp=^(Active|Inactive)$"`
 	// Type of the token. Valid values: 1) CollectorRegistration
-	Type string `json:"type"`
+	Type string `json:"type" validate:"regexp=^(CollectorRegistration)$"`
 }
+
+type _TokenBaseDefinition TokenBaseDefinition
 
 // NewTokenBaseDefinition instantiates a new TokenBaseDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -170,6 +174,45 @@ func (o TokenBaseDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["status"] = o.Status
 	toSerialize["type"] = o.Type
 	return toSerialize, nil
+}
+
+func (o *TokenBaseDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"status",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTokenBaseDefinition := _TokenBaseDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTokenBaseDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TokenBaseDefinition(varTokenBaseDefinition)
+
+	return err
 }
 
 type NullableTokenBaseDefinition struct {

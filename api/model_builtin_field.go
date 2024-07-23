@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BuiltinField type satisfies the MappedNullable interface at compile time
@@ -24,10 +26,12 @@ type BuiltinField struct {
 	// Identifier of the field.
 	FieldId string `json:"fieldId"`
 	// Field type. Possible values are `String`, `Long`, `Int`, `Double`, and `Boolean`.
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" validate:"regexp=^(String|Long|Int|Double|Boolean)$"`
 	// Indicates whether the field is enabled and its values are being accepted. Possible values are `Enabled` and `Disabled`.
-	State string `json:"state"`
+	State string `json:"state" validate:"regexp=^(Enabled|Disabled)$"`
 }
+
+type _BuiltinField BuiltinField
 
 // NewBuiltinField instantiates a new BuiltinField object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o BuiltinField) ToMap() (map[string]interface{}, error) {
 	toSerialize["dataType"] = o.DataType
 	toSerialize["state"] = o.State
 	return toSerialize, nil
+}
+
+func (o *BuiltinField) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fieldName",
+		"fieldId",
+		"dataType",
+		"state",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBuiltinField := _BuiltinField{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBuiltinField)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BuiltinField(varBuiltinField)
+
+	return err
 }
 
 type NullableBuiltinField struct {

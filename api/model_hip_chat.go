@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the HipChat type satisfies the MappedNullable interface at compile time
@@ -25,6 +27,8 @@ type HipChat struct {
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
 }
+
+type _HipChat HipChat
 
 // NewHipChat instantiates a new HipChat object
 // This constructor will assign default values to properties that have it defined,
@@ -124,6 +128,44 @@ func (o HipChat) ToMap() (map[string]interface{}, error) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
 	return toSerialize, nil
+}
+
+func (o *HipChat) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"connectionId",
+		"connectionType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varHipChat := _HipChat{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varHipChat)
+
+	if err != nil {
+		return err
+	}
+
+	*o = HipChat(varHipChat)
+
+	return err
 }
 
 type NullableHipChat struct {

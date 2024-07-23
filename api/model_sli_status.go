@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SliStatus type satisfies the MappedNullable interface at compile time
@@ -20,7 +22,7 @@ var _ MappedNullable = &SliStatus{}
 // SliStatus Status of the SLI computation. If the status is successful, also contains the SLI value and error budget remaining for the current compliance period.
 type SliStatus struct {
 	// Whether the SLI computation is complete / had an error / is in progress.
-	Status string `json:"status"`
+	Status string `json:"status" validate:"regexp=^(Success|Error|InProgress)$"`
 	// SLI percentage for the compliance period. Available if `status` is `Success`.
 	SliPercentage *float64 `json:"sliPercentage,omitempty"`
 	// Percentage of error budget remaining for the compliance period. Available if `status` is `Success`.
@@ -30,6 +32,8 @@ type SliStatus struct {
 	// SLI computation progress.
 	ProgressPercentage *float64 `json:"progressPercentage,omitempty"`
 }
+
+type _SliStatus SliStatus
 
 // NewSliStatus instantiates a new SliStatus object
 // This constructor will assign default values to properties that have it defined,
@@ -225,6 +229,43 @@ func (o SliStatus) ToMap() (map[string]interface{}, error) {
 		toSerialize["progressPercentage"] = o.ProgressPercentage
 	}
 	return toSerialize, nil
+}
+
+func (o *SliStatus) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"status",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSliStatus := _SliStatus{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSliStatus)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SliStatus(varSliStatus)
+
+	return err
 }
 
 type NullableSliStatus struct {

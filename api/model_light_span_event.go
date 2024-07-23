@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LightSpanEvent type satisfies the MappedNullable interface at compile time
@@ -25,6 +27,8 @@ type LightSpanEvent struct {
 	// Name of the event.
 	Name string `json:"name"`
 }
+
+type _LightSpanEvent LightSpanEvent
 
 // NewLightSpanEvent instantiates a new LightSpanEvent object
 // This constructor will assign default values to properties that have it defined,
@@ -106,6 +110,44 @@ func (o LightSpanEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize["timestamp"] = o.Timestamp
 	toSerialize["name"] = o.Name
 	return toSerialize, nil
+}
+
+func (o *LightSpanEvent) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"timestamp",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLightSpanEvent := _LightSpanEvent{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLightSpanEvent)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LightSpanEvent(varLightSpanEvent)
+
+	return err
 }
 
 type NullableLightSpanEvent struct {

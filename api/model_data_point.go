@@ -20,7 +20,7 @@ var _ MappedNullable = &DataPoint{}
 // DataPoint Data for visualizing monitor chart.
 type DataPoint struct {
 	// Type of the data point.
-	DataPointType *string `json:"dataPointType,omitempty"`
+	DataPointType *string `json:"dataPointType,omitempty" validate:"regexp=^(OutlierSeriesData|StaticSeriesData)$"`
 }
 
 // NewDataPoint instantiates a new DataPoint object

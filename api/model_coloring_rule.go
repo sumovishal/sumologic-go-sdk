@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ColoringRule type satisfies the MappedNullable interface at compile time
@@ -28,6 +30,8 @@ type ColoringRule struct {
 	// Color thresholds.
 	ColorThresholds []ColoringThreshold `json:"colorThresholds"`
 }
+
+type _ColoringRule ColoringRule
 
 // NewColoringRule instantiates a new ColoringRule object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o ColoringRule) ToMap() (map[string]interface{}, error) {
 	toSerialize["multipleSeriesAggregateFunction"] = o.MultipleSeriesAggregateFunction
 	toSerialize["colorThresholds"] = o.ColorThresholds
 	return toSerialize, nil
+}
+
+func (o *ColoringRule) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"scope",
+		"singleSeriesAggregateFunction",
+		"multipleSeriesAggregateFunction",
+		"colorThresholds",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varColoringRule := _ColoringRule{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varColoringRule)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ColoringRule(varColoringRule)
+
+	return err
 }
 
 type NullableColoringRule struct {

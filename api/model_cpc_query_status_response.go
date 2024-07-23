@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CpcQueryStatusResponse type satisfies the MappedNullable interface at compile time
@@ -22,8 +24,10 @@ type CpcQueryStatusResponse struct {
 	// A list of statuses on a per query row basis.
 	QueryRows []CpcQueryRowStatus `json:"queryRows"`
 	// Status of the query. Possible values: `Processing`, `Finished`, `Error`, `Canceled`.
-	Status string `json:"status"`
+	Status string `json:"status" validate:"regexp=^(Processing|Finished|Error|Canceled)$"`
 }
+
+type _CpcQueryStatusResponse CpcQueryStatusResponse
 
 // NewCpcQueryStatusResponse instantiates a new CpcQueryStatusResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o CpcQueryStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["queryRows"] = o.QueryRows
 	toSerialize["status"] = o.Status
 	return toSerialize, nil
+}
+
+func (o *CpcQueryStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryRows",
+		"status",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCpcQueryStatusResponse := _CpcQueryStatusResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCpcQueryStatusResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CpcQueryStatusResponse(varCpcQueryStatusResponse)
+
+	return err
 }
 
 type NullableCpcQueryStatusResponse struct {

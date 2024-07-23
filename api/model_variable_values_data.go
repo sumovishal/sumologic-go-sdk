@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the VariableValuesData type satisfies the MappedNullable interface at compile time
@@ -23,7 +25,7 @@ type VariableValuesData struct {
 	VariableValues []string `json:"variableValues"`
 	Status *DashboardSearchStatus `json:"status,omitempty"`
 	// The type of the variable.
-	VariableType *string `json:"variableType,omitempty"`
+	VariableType *string `json:"variableType,omitempty" validate:"regexp=^(LogQueryVariableSourceDefinition|MetadataVariableSourceDefinition|CsvVariableSourceDefinition)$"`
 	// The type of value of the variable. Allowed values are `String`, Any`, `Numeric`, `Integer`, `Long`, `Double`, `Boolean`. - `String` considers as a single phrase and will wrap in double-quotes. - `Any` is all characters. - `Numeric` consists of a numeric value for variables, it will be displayed differently in the UI. - `Integer` is a variable with an `Int` value. - `Long` is a variable with a `Long` value. - `Double` is a variable with a `Double` value. - `Boolean` is a variable with a `Boolean` value. 
 	ValueType *string `json:"valueType,omitempty"`
 	// Allow multiple selections in the values dropdown.
@@ -31,6 +33,8 @@ type VariableValuesData struct {
 	// Generic errors returned by backend from downstream assemblies. More specific errors will be thrown in the future.
 	Errors []ErrorDescription `json:"errors,omitempty"`
 }
+
+type _VariableValuesData VariableValuesData
 
 // NewVariableValuesData instantiates a new VariableValuesData object
 // This constructor will assign default values to properties that have it defined,
@@ -269,6 +273,43 @@ func (o VariableValuesData) ToMap() (map[string]interface{}, error) {
 		toSerialize["errors"] = o.Errors
 	}
 	return toSerialize, nil
+}
+
+func (o *VariableValuesData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"variableValues",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varVariableValuesData := _VariableValuesData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varVariableValuesData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VariableValuesData(varVariableValuesData)
+
+	return err
 }
 
 type NullableVariableValuesData struct {

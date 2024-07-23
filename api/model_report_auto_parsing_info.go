@@ -20,7 +20,7 @@ var _ MappedNullable = &ReportAutoParsingInfo{}
 // ReportAutoParsingInfo Auto-parsing information for the panel. This information tells us whether automatic field extraction from JSON log messages is enabled or not
 type ReportAutoParsingInfo struct {
 	// Can be `intelligent` or `performance`
-	Mode *string `json:"mode,omitempty"`
+	Mode *string `json:"mode,omitempty" validate:"regexp=^(intelligent|performance)$|^$"`
 }
 
 // NewReportAutoParsingInfo instantiates a new ReportAutoParsingInfo object

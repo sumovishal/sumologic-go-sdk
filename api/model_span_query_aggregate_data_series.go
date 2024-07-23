@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryAggregateDataSeries type satisfies the MappedNullable interface at compile time
@@ -28,12 +30,14 @@ type SpanQueryAggregateDataSeries struct {
 	AggregateInfo *SpanQueryAggregateAggregateData `json:"aggregateInfo,omitempty"`
 	MetaData *SpanQueryAggregateMetaData `json:"metaData,omitempty"`
 	// Type of the visual series.
-	SeriesType *string `json:"seriesType,omitempty"`
+	SeriesType *string `json:"seriesType,omitempty" validate:"regexp=^(TIMESERIES|NONTIMESERIES|TABLE)$"`
 	// Keys that will be plotted as a point on the x axis.
 	XAxisKeys []string `json:"xAxisKeys,omitempty"`
 	// Type of the values in the series.
-	ValueType *string `json:"valueType,omitempty"`
+	ValueType *string `json:"valueType,omitempty" validate:"regexp=^(STRING|DOUBLE)$"`
 }
+
+type _SpanQueryAggregateDataSeries SpanQueryAggregateDataSeries
 
 // NewSpanQueryAggregateDataSeries instantiates a new SpanQueryAggregateDataSeries object
 // This constructor will assign default values to properties that have it defined,
@@ -316,6 +320,45 @@ func (o SpanQueryAggregateDataSeries) ToMap() (map[string]interface{}, error) {
 		toSerialize["valueType"] = o.ValueType
 	}
 	return toSerialize, nil
+}
+
+func (o *SpanQueryAggregateDataSeries) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryId",
+		"name",
+		"dataPoints",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryAggregateDataSeries := _SpanQueryAggregateDataSeries{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryAggregateDataSeries)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryAggregateDataSeries(varSpanQueryAggregateDataSeries)
+
+	return err
 }
 
 type NullableSpanQueryAggregateDataSeries struct {

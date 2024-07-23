@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TriggerCondition type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &TriggerCondition{}
 // TriggerCondition struct for TriggerCondition
 type TriggerCondition struct {
 	// Detection method of the trigger condition. Valid values:   1. `StaticCondition`: A condition that triggers based off of a static threshold. This `detectionMethod` is deprecated, it is recommended to use other ones instead.   2. `LogsStaticCondition`: A logs condition that triggers based off of a static threshold.   3. `MetricsStaticCondition`: A metrics condition that triggers based off of a static threshold.   4. `LogsOutlierCondition`: A logs condition that triggers based off of a dynamic outlier threshold.   5. `MetricsOutlierCondition`: A metrics condition that triggers based off of a dynamic outlier threshold.   6. `LogsMissingDataCondition`: A logs missing data condition that triggers based off of no data available.   7. `MetricsMissingDataCondition`: A metrics missing data condition that triggers based off of no data available.   8. `SloSliCondition`: An SLO condition that triggers based off of current SLI value.   9. `SloBurnRateCondition`: An SLO condition that triggers based off of error budget burn rate.
-	DetectionMethod *string `json:"detectionMethod,omitempty"`
+	DetectionMethod *string `json:"detectionMethod,omitempty" validate:"regexp=^(StaticCondition|LogsStaticCondition|MetricsStaticCondition|LogsOutlierCondition|MetricsOutlierCondition|LogsMissingDataCondition|MetricsMissingDataCondition|SloSliCondition|SloBurnRateCondition|LogsAnomalyCondition|MetricsAnomalyCondition)$"`
 	// The type of trigger condition. Valid values:   1. `Critical`: A critical condition to trigger on.   2. `Warning`: A warning condition to trigger on.   3. `MissingData`: A condition that indicates data is missing.   4. `ResolvedCritical`: A condition to resolve a Critical trigger on.   5. `ResolvedWarning`: A condition to resolve a Warning trigger on.   6. `ResolvedMissingData`: A condition to resolve a MissingData trigger.
-	TriggerType string `json:"triggerType"`
+	TriggerType string `json:"triggerType" validate:"regexp=^(Critical|Warning|MissingData|ResolvedCritical|ResolvedWarning|ResolvedMissingData)$"`
 	// The resolution window that the recovery condition must be met in each evaluation that happens within this entire duration before the alert is recovered (resolved). If not specified, the time range of your trigger will be used. Valid values are: `0m`, `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`
 	ResolutionWindow NullableString `json:"resolutionWindow,omitempty"`
 }
+
+type _TriggerCondition TriggerCondition
 
 // NewTriggerCondition instantiates a new TriggerCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -165,6 +169,43 @@ func (o TriggerCondition) ToMap() (map[string]interface{}, error) {
 		toSerialize["resolutionWindow"] = o.ResolutionWindow.Get()
 	}
 	return toSerialize, nil
+}
+
+func (o *TriggerCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTriggerCondition := _TriggerCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTriggerCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TriggerCondition(varTriggerCondition)
+
+	return err
 }
 
 type NullableTriggerCondition struct {

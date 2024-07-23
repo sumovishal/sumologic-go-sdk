@@ -22,7 +22,7 @@ type MetricsQueryResultContext struct {
 	// Quantization granularity. Size of the quantization bucket/quant in milliseconds.
 	QuantizationGranularity *int64 `json:"quantizationGranularity,omitempty"`
 	// We use the term rollup to refer to the aggregation function Sumo Logic uses when quantizing metrics. Can be `Avg`, `Sum`, `Min`, `Max`, `Count` or `Rate`.
-	Rollup *string `json:"rollup,omitempty"`
+	Rollup *string `json:"rollup,omitempty" validate:"regexp=^(Avg|Sum|Min|Max|Count|Rate)$|^$"`
 	ActualQueryTimeRange *Iso8601TimeRange `json:"actualQueryTimeRange,omitempty"`
 }
 

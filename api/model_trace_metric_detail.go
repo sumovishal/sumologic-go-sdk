@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TraceMetricDetail type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type TraceMetricDetail struct {
 	// The type the values of this field will have. Possible values: `DoubleTracingValue`, `IntegerTracingValue`.
 	Type string `json:"type"`
 }
+
+type _TraceMetricDetail TraceMetricDetail
 
 // NewTraceMetricDetail instantiates a new TraceMetricDetail object
 // This constructor will assign default values to properties that have it defined,
@@ -142,6 +146,44 @@ func (o TraceMetricDetail) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["type"] = o.Type
 	return toSerialize, nil
+}
+
+func (o *TraceMetricDetail) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"metric",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTraceMetricDetail := _TraceMetricDetail{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTraceMetricDetail)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceMetricDetail(varTraceMetricDetail)
+
+	return err
 }
 
 type NullableTraceMetricDetail struct {

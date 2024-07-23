@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ServiceNow type satisfies the MappedNullable interface at compile time
@@ -23,12 +25,14 @@ type ServiceNow struct {
 	// The identifier of the connection.
 	ConnectionId string `json:"connectionId"`
 	// The subtype of the connection. Valid values are `Event` or `Incident`.
-	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
+	ConnectionSubtype *string `json:"connectionSubtype,omitempty" validate:"regexp=^(Event|Incident)$"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
 	// The override of the resolution JSON payload of the connection. Should be in JSON format.
 	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
 }
+
+type _ServiceNow ServiceNow
 
 // NewServiceNow instantiates a new ServiceNow object
 // This constructor will assign default values to properties that have it defined,
@@ -198,6 +202,44 @@ func (o ServiceNow) ToMap() (map[string]interface{}, error) {
 		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
 	}
 	return toSerialize, nil
+}
+
+func (o *ServiceNow) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"connectionId",
+		"connectionType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varServiceNow := _ServiceNow{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varServiceNow)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceNow(varServiceNow)
+
+	return err
 }
 
 type NullableServiceNow struct {

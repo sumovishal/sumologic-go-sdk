@@ -19,12 +19,12 @@ import (
 )
 
 
-// MetricsQueryApiService MetricsQueryApi service
-type MetricsQueryApiService service
+// MetricsQueryAPIService MetricsQueryAPI service
+type MetricsQueryAPIService service
 
 type ApiRunMetricsQueriesRequest struct {
 	ctx context.Context
-	ApiService *MetricsQueryApiService
+	ApiService *MetricsQueryAPIService
 	metricsQueryRequest *MetricsQueryRequest
 }
 
@@ -47,7 +47,7 @@ For more information see [Metrics Queries](https://help.sumologic.com/?cid=10144
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRunMetricsQueriesRequest
 */
-func (a *MetricsQueryApiService) RunMetricsQueries(ctx context.Context) ApiRunMetricsQueriesRequest {
+func (a *MetricsQueryAPIService) RunMetricsQueries(ctx context.Context) ApiRunMetricsQueriesRequest {
 	return ApiRunMetricsQueriesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *MetricsQueryApiService) RunMetricsQueries(ctx context.Context) ApiRunMe
 
 // Execute executes the request
 //  @return MetricsQueryResponse
-func (a *MetricsQueryApiService) RunMetricsQueriesExecute(r ApiRunMetricsQueriesRequest) (*MetricsQueryResponse, *http.Response, error) {
+func (a *MetricsQueryAPIService) RunMetricsQueriesExecute(r ApiRunMetricsQueriesRequest) (*MetricsQueryResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *MetricsQueryApiService) RunMetricsQueriesExecute(r ApiRunMetricsQueries
 		localVarReturnValue  *MetricsQueryResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsQueryApiService.RunMetricsQueries")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsQueryAPIService.RunMetricsQueries")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

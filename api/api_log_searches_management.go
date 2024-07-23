@@ -20,12 +20,12 @@ import (
 )
 
 
-// LogSearchesManagementApiService LogSearchesManagementApi service
-type LogSearchesManagementApiService service
+// LogSearchesManagementAPIService LogSearchesManagementAPI service
+type LogSearchesManagementAPIService service
 
 type ApiCreateLogSearchRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesManagementApiService
+	ApiService *LogSearchesManagementAPIService
 	saveLogSearchRequest *SaveLogSearchRequest
 }
 
@@ -47,7 +47,7 @@ Save the log search in the content library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateLogSearchRequest
 */
-func (a *LogSearchesManagementApiService) CreateLogSearch(ctx context.Context) ApiCreateLogSearchRequest {
+func (a *LogSearchesManagementAPIService) CreateLogSearch(ctx context.Context) ApiCreateLogSearchRequest {
 	return ApiCreateLogSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *LogSearchesManagementApiService) CreateLogSearch(ctx context.Context) A
 
 // Execute executes the request
 //  @return LogSearch
-func (a *LogSearchesManagementApiService) CreateLogSearchExecute(r ApiCreateLogSearchRequest) (*LogSearch, *http.Response, error) {
+func (a *LogSearchesManagementAPIService) CreateLogSearchExecute(r ApiCreateLogSearchRequest) (*LogSearch, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *LogSearchesManagementApiService) CreateLogSearchExecute(r ApiCreateLogS
 		localVarReturnValue  *LogSearch
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementApiService.CreateLogSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementAPIService.CreateLogSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *LogSearchesManagementApiService) CreateLogSearchExecute(r ApiCreateLogS
 
 type ApiDeleteLogSearchRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesManagementApiService
+	ApiService *LogSearchesManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete the saved log search from the content library.
  @param id Identifier of the saved log search.
  @return ApiDeleteLogSearchRequest
 */
-func (a *LogSearchesManagementApiService) DeleteLogSearch(ctx context.Context, id string) ApiDeleteLogSearchRequest {
+func (a *LogSearchesManagementAPIService) DeleteLogSearch(ctx context.Context, id string) ApiDeleteLogSearchRequest {
 	return ApiDeleteLogSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *LogSearchesManagementApiService) DeleteLogSearch(ctx context.Context, i
 }
 
 // Execute executes the request
-func (a *LogSearchesManagementApiService) DeleteLogSearchExecute(r ApiDeleteLogSearchRequest) (*http.Response, error) {
+func (a *LogSearchesManagementAPIService) DeleteLogSearchExecute(r ApiDeleteLogSearchRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementApiService.DeleteLogSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementAPIService.DeleteLogSearch")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *LogSearchesManagementApiService) DeleteLogSearchExecute(r ApiDeleteLogS
 
 type ApiGetLogSearchRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesManagementApiService
+	ApiService *LogSearchesManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a saved log search from the content library by identifier.
  @param id Identifier of the saved log search.
  @return ApiGetLogSearchRequest
 */
-func (a *LogSearchesManagementApiService) GetLogSearch(ctx context.Context, id string) ApiGetLogSearchRequest {
+func (a *LogSearchesManagementAPIService) GetLogSearch(ctx context.Context, id string) ApiGetLogSearchRequest {
 	return ApiGetLogSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *LogSearchesManagementApiService) GetLogSearch(ctx context.Context, id s
 
 // Execute executes the request
 //  @return LogSearch
-func (a *LogSearchesManagementApiService) GetLogSearchExecute(r ApiGetLogSearchRequest) (*LogSearch, *http.Response, error) {
+func (a *LogSearchesManagementAPIService) GetLogSearchExecute(r ApiGetLogSearchRequest) (*LogSearch, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *LogSearchesManagementApiService) GetLogSearchExecute(r ApiGetLogSearchR
 		localVarReturnValue  *LogSearch
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementApiService.GetLogSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementAPIService.GetLogSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *LogSearchesManagementApiService) GetLogSearchExecute(r ApiGetLogSearchR
 
 type ApiListLogSearchesRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesManagementApiService
+	ApiService *LogSearchesManagementAPIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ List all saved log searches viewable by the user.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListLogSearchesRequest
 */
-func (a *LogSearchesManagementApiService) ListLogSearches(ctx context.Context) ApiListLogSearchesRequest {
+func (a *LogSearchesManagementAPIService) ListLogSearches(ctx context.Context) ApiListLogSearchesRequest {
 	return ApiListLogSearchesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *LogSearchesManagementApiService) ListLogSearches(ctx context.Context) A
 
 // Execute executes the request
 //  @return PaginatedLogSearches
-func (a *LogSearchesManagementApiService) ListLogSearchesExecute(r ApiListLogSearchesRequest) (*PaginatedLogSearches, *http.Response, error) {
+func (a *LogSearchesManagementAPIService) ListLogSearchesExecute(r ApiListLogSearchesRequest) (*PaginatedLogSearches, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *LogSearchesManagementApiService) ListLogSearchesExecute(r ApiListLogSea
 		localVarReturnValue  *PaginatedLogSearches
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementApiService.ListLogSearches")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementAPIService.ListLogSearches")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *LogSearchesManagementApiService) ListLogSearchesExecute(r ApiListLogSea
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *LogSearchesManagementApiService) ListLogSearchesExecute(r ApiListLogSea
 
 type ApiUpdateLogSearchRequest struct {
 	ctx context.Context
-	ApiService *LogSearchesManagementApiService
+	ApiService *LogSearchesManagementAPIService
 	id string
 	logSearchDefinition *LogSearchDefinition
 }
@@ -506,7 +509,7 @@ Update the saved log search with the specified identifier. Partial update is not
  @param id Identifier of the saved log search.
  @return ApiUpdateLogSearchRequest
 */
-func (a *LogSearchesManagementApiService) UpdateLogSearch(ctx context.Context, id string) ApiUpdateLogSearchRequest {
+func (a *LogSearchesManagementAPIService) UpdateLogSearch(ctx context.Context, id string) ApiUpdateLogSearchRequest {
 	return ApiUpdateLogSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -516,7 +519,7 @@ func (a *LogSearchesManagementApiService) UpdateLogSearch(ctx context.Context, i
 
 // Execute executes the request
 //  @return LogSearch
-func (a *LogSearchesManagementApiService) UpdateLogSearchExecute(r ApiUpdateLogSearchRequest) (*LogSearch, *http.Response, error) {
+func (a *LogSearchesManagementAPIService) UpdateLogSearchExecute(r ApiUpdateLogSearchRequest) (*LogSearch, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -524,7 +527,7 @@ func (a *LogSearchesManagementApiService) UpdateLogSearchExecute(r ApiUpdateLogS
 		localVarReturnValue  *LogSearch
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementApiService.UpdateLogSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogSearchesManagementAPIService.UpdateLogSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

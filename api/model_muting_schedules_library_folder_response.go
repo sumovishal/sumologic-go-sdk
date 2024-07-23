@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,7 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingSchedulesLibraryFolderResponse type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,8 @@ type MutingSchedulesLibraryFolderResponse struct {
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []MutingSchedulesLibraryBaseResponse `json:"children"`
 }
+
+type _MutingSchedulesLibraryFolderResponse MutingSchedulesLibraryFolderResponse
 
 // NewMutingSchedulesLibraryFolderResponse instantiates a new MutingSchedulesLibraryFolderResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -128,6 +131,57 @@ func (o MutingSchedulesLibraryFolderResponse) ToMap() (map[string]interface{}, e
 	toSerialize["permissions"] = o.Permissions
 	toSerialize["children"] = o.Children
 	return toSerialize, nil
+}
+
+func (o *MutingSchedulesLibraryFolderResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"permissions",
+		"children",
+		"id",
+		"name",
+		"description",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"parentId",
+		"contentType",
+		"type",
+		"isSystem",
+		"isMutable",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingSchedulesLibraryFolderResponse := _MutingSchedulesLibraryFolderResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingSchedulesLibraryFolderResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingSchedulesLibraryFolderResponse(varMutingSchedulesLibraryFolderResponse)
+
+	return err
 }
 
 type NullableMutingSchedulesLibraryFolderResponse struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpansLimitItem type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &SpansLimitItem{}
 // SpansLimitItem A representation of the limit operator which reduces the number of aggregate results returned:  either the top k results or bottom k results. 
 type SpansLimitItem struct {
 	// Describes whether the results should be sorted in an ascending or a descending order.
-	Direction string `json:"direction"`
+	Direction string `json:"direction" validate:"regexp=^(asc|desc)$"`
 	// The number of aggregated results returned, e.g. if 10 is requested, then only the first 10 aggregated results are returned. 
 	LimitValue int32 `json:"limitValue"`
 }
+
+type _SpansLimitItem SpansLimitItem
 
 // NewSpansLimitItem instantiates a new SpansLimitItem object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o SpansLimitItem) ToMap() (map[string]interface{}, error) {
 	toSerialize["direction"] = o.Direction
 	toSerialize["limitValue"] = o.LimitValue
 	return toSerialize, nil
+}
+
+func (o *SpansLimitItem) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"direction",
+		"limitValue",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpansLimitItem := _SpansLimitItem{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpansLimitItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpansLimitItem(varSpansLimitItem)
+
+	return err
 }
 
 type NullableSpansLimitItem struct {

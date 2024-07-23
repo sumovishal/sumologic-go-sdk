@@ -24,9 +24,9 @@ type AlertsListPageObject struct {
 	// Name of the alert.
 	Name *string `json:"name,omitempty"`
 	// The severity of the Alert. Valid values:   1. `Critical`   2. `Warning`   3. `MissingData`
-	Severity *string `json:"severity,omitempty"`
+	Severity *string `json:"severity,omitempty" validate:"regexp=^(Critical|Warning|MissingData)$"`
 	// The status of the Alert. Valid values:   1. `Active`   2. `Resolved`
-	Status *string `json:"status,omitempty"`
+	Status *string `json:"status,omitempty" validate:"regexp=^(Active|Resolved)$"`
 	// List of AlertEntityInfo for primary entities. The primary entity is the most concrete entity  (e.g. k8s container) that can be assigned per time series or log group,  secondary entities are the less specific ones (e.g. k8s cluster or EC2 host). 
 	EntitiesInfo []AlertEntityInfo `json:"entitiesInfo,omitempty"`
 	// List of secondary AlertEntityInfo for primary entities. Primary/secondary entities are explained in description for `entitiesInfo`. 

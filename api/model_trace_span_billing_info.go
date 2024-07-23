@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TraceSpanBillingInfo type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type TraceSpanBillingInfo struct {
 	// Billing format of the span. Number of bytes of this representation of the span is equal to `billedBytes`.
 	BilledFormat string `json:"billedFormat"`
 }
+
+type _TraceSpanBillingInfo TraceSpanBillingInfo
 
 // NewTraceSpanBillingInfo instantiates a new TraceSpanBillingInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o TraceSpanBillingInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize["billedBytes"] = o.BilledBytes
 	toSerialize["billedFormat"] = o.BilledFormat
 	return toSerialize, nil
+}
+
+func (o *TraceSpanBillingInfo) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"billedBytes",
+		"billedFormat",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTraceSpanBillingInfo := _TraceSpanBillingInfo{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTraceSpanBillingInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceSpanBillingInfo(varTraceSpanBillingInfo)
+
+	return err
 }
 
 type NullableTraceSpanBillingInfo struct {

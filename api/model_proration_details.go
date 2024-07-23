@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ProrationDetails type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type ProrationDetails struct {
 	// Cost of the total prorated credits.
 	ProratedCost float64 `json:"proratedCost"`
 }
+
+type _ProrationDetails ProrationDetails
 
 // NewProrationDetails instantiates a new ProrationDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o ProrationDetails) ToMap() (map[string]interface{}, error) {
 	toSerialize["proratedCredits"] = o.ProratedCredits
 	toSerialize["proratedCost"] = o.ProratedCost
 	return toSerialize, nil
+}
+
+func (o *ProrationDetails) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"remainingDays",
+		"proratedCredits",
+		"proratedCost",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varProrationDetails := _ProrationDetails{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varProrationDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProrationDetails(varProrationDetails)
+
+	return err
 }
 
 type NullableProrationDetails struct {

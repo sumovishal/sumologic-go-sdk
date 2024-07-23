@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CompliancePeriodProgress type satisfies the MappedNullable interface at compile time
@@ -31,6 +33,8 @@ type CompliancePeriodProgress struct {
 	// Whether a permanent error is encountered and no further progress is expected.
 	IrrecoverableError bool `json:"irrecoverableError"`
 }
+
+type _CompliancePeriodProgress CompliancePeriodProgress
 
 // NewCompliancePeriodProgress instantiates a new CompliancePeriodProgress object
 // This constructor will assign default values to properties that have it defined,
@@ -190,6 +194,47 @@ func (o CompliancePeriodProgress) ToMap() (map[string]interface{}, error) {
 	toSerialize["progress"] = o.Progress
 	toSerialize["irrecoverableError"] = o.IrrecoverableError
 	return toSerialize, nil
+}
+
+func (o *CompliancePeriodProgress) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"relativeReference",
+		"startTime",
+		"endTime",
+		"progress",
+		"irrecoverableError",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCompliancePeriodProgress := _CompliancePeriodProgress{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCompliancePeriodProgress)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CompliancePeriodProgress(varCompliancePeriodProgress)
+
+	return err
 }
 
 type NullableCompliancePeriodProgress struct {

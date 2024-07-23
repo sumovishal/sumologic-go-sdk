@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AlertsLibraryAlertUpdate type satisfies the MappedNullable interface at compile time
@@ -28,9 +30,9 @@ type AlertsLibraryAlertUpdate struct {
 	// The time at which the incident started.
 	AbnormalityStartTime *time.Time `json:"abnormalityStartTime,omitempty"`
 	// The severity of the Alert. Valid values:   1. `Critical`   2. `Warning`   3. `MissingData`
-	AlertType *string `json:"alertType,omitempty"`
+	AlertType *string `json:"alertType,omitempty" validate:"regexp=^(Critical|Warning|MissingData)$"`
 	// The status of the Alert. Valid values:   1. `Triggered`   2. `Resolved`
-	Status *string `json:"status,omitempty"`
+	Status *string `json:"status,omitempty" validate:"regexp=^(Triggered|Resolved)$"`
 	// All queries from the monitor relevant to the alert.
 	MonitorQueries []AlertMonitorQuery `json:"monitorQueries,omitempty"`
 	// All queries from the monitor relevant to the alert with triggered time series filters.
@@ -44,7 +46,7 @@ type AlertsLibraryAlertUpdate struct {
 	// The of the query result which breached the trigger condition.
 	TriggerValue *float64 `json:"triggerValue,omitempty"`
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
-	MonitorType *string `json:"monitorType,omitempty"`
+	MonitorType *string `json:"monitorType,omitempty" validate:"regexp=^(Logs|Metrics)$"`
 	// One or more primary entity identifiers involved in this Alert. Primary/secondary entities are explained in description for `entities`. DEPRECATED, USE `entities` INSTEAD. 
 	// Deprecated
 	EntityIds []string `json:"entityIds,omitempty"`
@@ -59,6 +61,8 @@ type AlertsLibraryAlertUpdate struct {
 	// Flag of the alerts muting status.
 	IsMuted *bool `json:"isMuted,omitempty"`
 }
+
+type _AlertsLibraryAlertUpdate AlertsLibraryAlertUpdate
 
 // NewAlertsLibraryAlertUpdate instantiates a new AlertsLibraryAlertUpdate object
 // This constructor will assign default values to properties that have it defined,
@@ -789,6 +793,45 @@ func (o AlertsLibraryAlertUpdate) ToMap() (map[string]interface{}, error) {
 		toSerialize["isMuted"] = o.IsMuted
 	}
 	return toSerialize, nil
+}
+
+func (o *AlertsLibraryAlertUpdate) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"version",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAlertsLibraryAlertUpdate := _AlertsLibraryAlertUpdate{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAlertsLibraryAlertUpdate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AlertsLibraryAlertUpdate(varAlertsLibraryAlertUpdate)
+
+	return err
 }
 
 type NullableAlertsLibraryAlertUpdate struct {

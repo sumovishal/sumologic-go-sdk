@@ -24,9 +24,9 @@ type UsageReportRequest struct {
 	// End date, without the time, of usage data to fetch. If no value is provided endDate is used as the end of the subscription. The end date cannot be after the end of the subscription.
 	EndDate *string `json:"endDate,omitempty"`
 	// Perform a groupBy operation on the usage details. If no value is provided data is grouped by `Day` - `day`: Aggregate the data by day - `week`: Aggregate the data by week. Week starts at Monday and ends at sunday night. - `month`: Aggregate the data by calendar month.
-	GroupBy *string `json:"groupBy,omitempty"`
+	GroupBy *string `json:"groupBy,omitempty" validate:"regexp=^(day|week|month)$"`
 	// Specifies the type of report to be exported. Available types are `standard` and `detailed`. An additional `childDetailed` type is available for Sumo Orgs parents. Detailed report will have raw consumption along with the credits breakdown. If no value is provided Standard reports will be exported.
-	ReportType *string `json:"reportType,omitempty"`
+	ReportType *string `json:"reportType,omitempty" validate:"regexp=^(standard|detailed|childDetailed)$"`
 }
 
 // NewUsageReportRequest instantiates a new UsageReportRequest object

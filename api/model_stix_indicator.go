@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the StixIndicator type satisfies the MappedNullable interface at compile time
@@ -41,6 +43,8 @@ type StixIndicator struct {
 	// The time at which this Indicator should no longer be considered a valid indicator of the behaviors it is related to or represents.
 	ValidUntil *time.Time `json:"valid_until,omitempty"`
 }
+
+type _StixIndicator StixIndicator
 
 // NewStixIndicator instantiates a new StixIndicator object
 // This constructor will assign default values to properties that have it defined,
@@ -348,6 +352,50 @@ func (o StixIndicator) ToMap() (map[string]interface{}, error) {
 		toSerialize["valid_until"] = o.ValidUntil
 	}
 	return toSerialize, nil
+}
+
+func (o *StixIndicator) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+		"spec_version",
+		"id",
+		"created",
+		"modified",
+		"pattern",
+		"pattern_type",
+		"valid_from",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varStixIndicator := _StixIndicator{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varStixIndicator)
+
+	if err != nil {
+		return err
+	}
+
+	*o = StixIndicator(varStixIndicator)
+
+	return err
 }
 
 type NullableStixIndicator struct {

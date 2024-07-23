@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SelfServicePlan type satisfies the MappedNullable interface at compile time
@@ -20,7 +22,7 @@ var _ MappedNullable = &SelfServicePlan{}
 // SelfServicePlan Details about a Plan, along with its product groups and subscription options
 type SelfServicePlan struct {
 	// Unique identifier of the product in current plan. Valid values are: 1. `Free` 2. `Trial` 3. `Essentials` 4. `EnterpriseOps` 5. `EnterpriseSec` 6. `EnterpriseSuite` 
-	ProductId string `json:"productId"`
+	ProductId string `json:"productId" validate:"regexp=^(Essentials|Trial|Free|EnterpriseOps|EnterpriseSec|EnterpriseSuite)$"`
 	// Name for the product.
 	ProductName string `json:"productName"`
 	// A list of product group for preview.
@@ -28,6 +30,8 @@ type SelfServicePlan struct {
 	// A list of product subscription option.
 	ProductSubscriptionOptions []ProductSubscriptionOption `json:"productSubscriptionOptions"`
 }
+
+type _SelfServicePlan SelfServicePlan
 
 // NewSelfServicePlan instantiates a new SelfServicePlan object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o SelfServicePlan) ToMap() (map[string]interface{}, error) {
 	toSerialize["productGroups"] = o.ProductGroups
 	toSerialize["productSubscriptionOptions"] = o.ProductSubscriptionOptions
 	return toSerialize, nil
+}
+
+func (o *SelfServicePlan) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"productId",
+		"productName",
+		"productGroups",
+		"productSubscriptionOptions",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSelfServicePlan := _SelfServicePlan{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSelfServicePlan)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SelfServicePlan(varSelfServicePlan)
+
+	return err
 }
 
 type NullableSelfServicePlan struct {

@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RoleModelV2 type satisfies the MappedNullable interface at compile time
@@ -53,6 +55,8 @@ type RoleModelV2 struct {
 	// Role is system or user defined.
 	SystemDefined *bool `json:"systemDefined,omitempty"`
 }
+
+type _RoleModelV2 RoleModelV2
 
 // NewRoleModelV2 instantiates a new RoleModelV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -592,6 +596,48 @@ func (o RoleModelV2) ToMap() (map[string]interface{}, error) {
 		toSerialize["systemDefined"] = o.SystemDefined
 	}
 	return toSerialize, nil
+}
+
+func (o *RoleModelV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRoleModelV2 := _RoleModelV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRoleModelV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RoleModelV2(varRoleModelV2)
+
+	return err
 }
 
 type NullableRoleModelV2 struct {

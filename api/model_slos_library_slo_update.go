@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SlosLibrarySloUpdate type satisfies the MappedNullable interface at compile time
@@ -21,7 +23,7 @@ var _ MappedNullable = &SlosLibrarySloUpdate{}
 type SlosLibrarySloUpdate struct {
 	SlosLibraryBaseUpdate
 	// Type of SLI Signal (latency, error, throughput, availability or other).
-	SignalType string `json:"signalType"`
+	SignalType string `json:"signalType" validate:"regexp=^(Latency|Error|Throughput|Availability|Other)$"`
 	Compliance Compliance `json:"compliance"`
 	Indicator Sli `json:"indicator"`
 	// Name of the service.
@@ -31,6 +33,8 @@ type SlosLibrarySloUpdate struct {
 	// Tags to be associated with the SLO.
 	Tags *map[string]string `json:"tags,omitempty"`
 }
+
+type _SlosLibrarySloUpdate SlosLibrarySloUpdate
 
 // NewSlosLibrarySloUpdate instantiates a new SlosLibrarySloUpdate object
 // This constructor will assign default values to properties that have it defined,
@@ -256,6 +260,48 @@ func (o SlosLibrarySloUpdate) ToMap() (map[string]interface{}, error) {
 		toSerialize["tags"] = o.Tags
 	}
 	return toSerialize, nil
+}
+
+func (o *SlosLibrarySloUpdate) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"signalType",
+		"compliance",
+		"indicator",
+		"name",
+		"version",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSlosLibrarySloUpdate := _SlosLibrarySloUpdate{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSlosLibrarySloUpdate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SlosLibrarySloUpdate(varSlosLibrarySloUpdate)
+
+	return err
 }
 
 type NullableSlosLibrarySloUpdate struct {

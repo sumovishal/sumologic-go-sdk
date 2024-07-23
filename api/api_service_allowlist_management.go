@@ -19,12 +19,12 @@ import (
 )
 
 
-// ServiceAllowlistManagementApiService ServiceAllowlistManagementApi service
-type ServiceAllowlistManagementApiService service
+// ServiceAllowlistManagementAPIService ServiceAllowlistManagementAPI service
+type ServiceAllowlistManagementAPIService service
 
 type ApiAddAllowlistedCidrsRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 	cidrList *CidrList
 }
 
@@ -46,7 +46,7 @@ Add CIDR notations and/or IP addresses to the allowlist of the organization if n
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiAddAllowlistedCidrsRequest
 */
-func (a *ServiceAllowlistManagementApiService) AddAllowlistedCidrs(ctx context.Context) ApiAddAllowlistedCidrsRequest {
+func (a *ServiceAllowlistManagementAPIService) AddAllowlistedCidrs(ctx context.Context) ApiAddAllowlistedCidrsRequest {
 	return ApiAddAllowlistedCidrsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -55,7 +55,7 @@ func (a *ServiceAllowlistManagementApiService) AddAllowlistedCidrs(ctx context.C
 
 // Execute executes the request
 //  @return CidrList
-func (a *ServiceAllowlistManagementApiService) AddAllowlistedCidrsExecute(r ApiAddAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) AddAllowlistedCidrsExecute(r ApiAddAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -63,7 +63,7 @@ func (a *ServiceAllowlistManagementApiService) AddAllowlistedCidrsExecute(r ApiA
 		localVarReturnValue  *CidrList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.AddAllowlistedCidrs")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.AddAllowlistedCidrs")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -143,7 +143,7 @@ func (a *ServiceAllowlistManagementApiService) AddAllowlistedCidrsExecute(r ApiA
 
 type ApiDeleteAllowlistedCidrsRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 	cidrList *CidrList
 }
 
@@ -165,7 +165,7 @@ Remove allowlisted CIDR notations and/or IP addresses from the organization. Rem
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDeleteAllowlistedCidrsRequest
 */
-func (a *ServiceAllowlistManagementApiService) DeleteAllowlistedCidrs(ctx context.Context) ApiDeleteAllowlistedCidrsRequest {
+func (a *ServiceAllowlistManagementAPIService) DeleteAllowlistedCidrs(ctx context.Context) ApiDeleteAllowlistedCidrsRequest {
 	return ApiDeleteAllowlistedCidrsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -174,7 +174,7 @@ func (a *ServiceAllowlistManagementApiService) DeleteAllowlistedCidrs(ctx contex
 
 // Execute executes the request
 //  @return CidrList
-func (a *ServiceAllowlistManagementApiService) DeleteAllowlistedCidrsExecute(r ApiDeleteAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) DeleteAllowlistedCidrsExecute(r ApiDeleteAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -182,7 +182,7 @@ func (a *ServiceAllowlistManagementApiService) DeleteAllowlistedCidrsExecute(r A
 		localVarReturnValue  *CidrList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.DeleteAllowlistedCidrs")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.DeleteAllowlistedCidrs")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -262,7 +262,7 @@ func (a *ServiceAllowlistManagementApiService) DeleteAllowlistedCidrsExecute(r A
 
 type ApiDisableAllowlistingRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 	allowlistType *string
 }
 
@@ -284,7 +284,7 @@ Disable service allowlisting functionality for login/API authentication or conte
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDisableAllowlistingRequest
 */
-func (a *ServiceAllowlistManagementApiService) DisableAllowlisting(ctx context.Context) ApiDisableAllowlistingRequest {
+func (a *ServiceAllowlistManagementAPIService) DisableAllowlisting(ctx context.Context) ApiDisableAllowlistingRequest {
 	return ApiDisableAllowlistingRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -292,14 +292,14 @@ func (a *ServiceAllowlistManagementApiService) DisableAllowlisting(ctx context.C
 }
 
 // Execute executes the request
-func (a *ServiceAllowlistManagementApiService) DisableAllowlistingExecute(r ApiDisableAllowlistingRequest) (*http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) DisableAllowlistingExecute(r ApiDisableAllowlistingRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.DisableAllowlisting")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.DisableAllowlisting")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -369,7 +369,7 @@ func (a *ServiceAllowlistManagementApiService) DisableAllowlistingExecute(r ApiD
 
 type ApiEnableAllowlistingRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 	allowlistType *string
 }
 
@@ -391,7 +391,7 @@ Enable service allowlisting functionality for the organization. The service allo
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiEnableAllowlistingRequest
 */
-func (a *ServiceAllowlistManagementApiService) EnableAllowlisting(ctx context.Context) ApiEnableAllowlistingRequest {
+func (a *ServiceAllowlistManagementAPIService) EnableAllowlisting(ctx context.Context) ApiEnableAllowlistingRequest {
 	return ApiEnableAllowlistingRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -399,14 +399,14 @@ func (a *ServiceAllowlistManagementApiService) EnableAllowlisting(ctx context.Co
 }
 
 // Execute executes the request
-func (a *ServiceAllowlistManagementApiService) EnableAllowlistingExecute(r ApiEnableAllowlistingRequest) (*http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) EnableAllowlistingExecute(r ApiEnableAllowlistingRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.EnableAllowlisting")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.EnableAllowlisting")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -476,7 +476,7 @@ func (a *ServiceAllowlistManagementApiService) EnableAllowlistingExecute(r ApiEn
 
 type ApiGetAllowlistingStatusRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 }
 
 func (r ApiGetAllowlistingStatusRequest) Execute() (*AllowlistingStatus, *http.Response, error) {
@@ -491,7 +491,7 @@ Get the status of the service allowlisting functionality for login/API authentic
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAllowlistingStatusRequest
 */
-func (a *ServiceAllowlistManagementApiService) GetAllowlistingStatus(ctx context.Context) ApiGetAllowlistingStatusRequest {
+func (a *ServiceAllowlistManagementAPIService) GetAllowlistingStatus(ctx context.Context) ApiGetAllowlistingStatusRequest {
 	return ApiGetAllowlistingStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -500,7 +500,7 @@ func (a *ServiceAllowlistManagementApiService) GetAllowlistingStatus(ctx context
 
 // Execute executes the request
 //  @return AllowlistingStatus
-func (a *ServiceAllowlistManagementApiService) GetAllowlistingStatusExecute(r ApiGetAllowlistingStatusRequest) (*AllowlistingStatus, *http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) GetAllowlistingStatusExecute(r ApiGetAllowlistingStatusRequest) (*AllowlistingStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -508,7 +508,7 @@ func (a *ServiceAllowlistManagementApiService) GetAllowlistingStatusExecute(r Ap
 		localVarReturnValue  *AllowlistingStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.GetAllowlistingStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.GetAllowlistingStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -583,7 +583,7 @@ func (a *ServiceAllowlistManagementApiService) GetAllowlistingStatusExecute(r Ap
 
 type ApiListAllowlistedCidrsRequest struct {
 	ctx context.Context
-	ApiService *ServiceAllowlistManagementApiService
+	ApiService *ServiceAllowlistManagementAPIService
 }
 
 func (r ApiListAllowlistedCidrsRequest) Execute() (*CidrList, *http.Response, error) {
@@ -598,7 +598,7 @@ Get a list of all allowlisted CIDR notations and/or IP addresses for the organiz
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListAllowlistedCidrsRequest
 */
-func (a *ServiceAllowlistManagementApiService) ListAllowlistedCidrs(ctx context.Context) ApiListAllowlistedCidrsRequest {
+func (a *ServiceAllowlistManagementAPIService) ListAllowlistedCidrs(ctx context.Context) ApiListAllowlistedCidrsRequest {
 	return ApiListAllowlistedCidrsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -607,7 +607,7 @@ func (a *ServiceAllowlistManagementApiService) ListAllowlistedCidrs(ctx context.
 
 // Execute executes the request
 //  @return CidrList
-func (a *ServiceAllowlistManagementApiService) ListAllowlistedCidrsExecute(r ApiListAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
+func (a *ServiceAllowlistManagementAPIService) ListAllowlistedCidrsExecute(r ApiListAllowlistedCidrsRequest) (*CidrList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -615,7 +615,7 @@ func (a *ServiceAllowlistManagementApiService) ListAllowlistedCidrsExecute(r Api
 		localVarReturnValue  *CidrList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementApiService.ListAllowlistedCidrs")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAllowlistManagementAPIService.ListAllowlistedCidrs")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

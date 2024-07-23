@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AppItemsList type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type AppItemsList struct {
 	// Items associated with the app.
 	Items []AppListItem `json:"items"`
 }
+
+type _AppItemsList AppItemsList
 
 // NewAppItemsList instantiates a new AppItemsList object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o AppItemsList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["items"] = o.Items
 	return toSerialize, nil
+}
+
+func (o *AppItemsList) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"items",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAppItemsList := _AppItemsList{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAppItemsList)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AppItemsList(varAppItemsList)
+
+	return err
 }
 
 type NullableAppItemsList struct {

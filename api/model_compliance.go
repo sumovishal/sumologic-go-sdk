@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Compliance type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &Compliance{}
 // Compliance struct for Compliance
 type Compliance struct {
 	// Compliance Type (rolling or calendar)
-	ComplianceType string `json:"complianceType"`
+	ComplianceType string `json:"complianceType" validate:"regexp=^(Rolling|Calendar)$"`
 	// Target percentage for the SLI over the compliance period.
 	Target float32 `json:"target"`
 	// Time zone for the SLO compliance. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
 }
+
+type _Compliance Compliance
 
 // NewCompliance instantiates a new Compliance object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o Compliance) ToMap() (map[string]interface{}, error) {
 	toSerialize["target"] = o.Target
 	toSerialize["timezone"] = o.Timezone
 	return toSerialize, nil
+}
+
+func (o *Compliance) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"complianceType",
+		"target",
+		"timezone",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCompliance := _Compliance{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCompliance)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Compliance(varCompliance)
+
+	return err
 }
 
 type NullableCompliance struct {

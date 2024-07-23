@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the VariablesValuesData type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type VariablesValuesData struct {
 	// A rich form of data for the variable search, including variable values, status and variable type. This field is different from `data` in that it includes an object instead of list as the value in the map. The `data` field is kept for backwards compatibility, please use `richData` for all usages going forward.
 	RichData *map[string]VariableValuesData `json:"richData,omitempty"`
 }
+
+type _VariablesValuesData VariablesValuesData
 
 // NewVariablesValuesData instantiates a new VariablesValuesData object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o VariablesValuesData) ToMap() (map[string]interface{}, error) {
 		toSerialize["richData"] = o.RichData
 	}
 	return toSerialize, nil
+}
+
+func (o *VariablesValuesData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"data",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varVariablesValuesData := _VariablesValuesData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varVariablesValuesData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VariablesValuesData(varVariablesValuesData)
+
+	return err
 }
 
 type NullableVariablesValuesData struct {

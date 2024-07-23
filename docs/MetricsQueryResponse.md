@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **QueryResult** | Pointer to [**[]TimeSeriesRow**](TimeSeriesRow.md) | A list of the time series returned by metric query. | [optional] 
-**Errors** | [**ErrorResponse**](ErrorResponse.md) |  | 
+**Errors** | [**ErrorResponse**](ErrorResponse.md) | Errors, warnings, and information logged for the query. | 
 
 ## Methods
 

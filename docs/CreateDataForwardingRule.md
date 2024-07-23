@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **DestinationId** | **string** | The data forwarding destination id. | 
 **Enabled** | Pointer to **bool** | True when the data forwarding rule is enabled. | [optional] 
 **FileFormat** | Pointer to **string** | Specify the path prefix to a directory in the S3 bucket and how to format the file name. | [optional] 
+**Format** | Pointer to **string** | Format of the payload. | [optional] [default to "csv"]
 
 ## Methods
 
@@ -117,6 +118,31 @@ SetFileFormat sets FileFormat field to given value.
 `func (o *CreateDataForwardingRule) HasFileFormat() bool`
 
 HasFileFormat returns a boolean if a field has been set.
+
+### GetFormat
+
+`func (o *CreateDataForwardingRule) GetFormat() string`
+
+GetFormat returns the Format field if non-nil, zero value otherwise.
+
+### GetFormatOk
+
+`func (o *CreateDataForwardingRule) GetFormatOk() (*string, bool)`
+
+GetFormatOk returns a tuple with the Format field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFormat
+
+`func (o *CreateDataForwardingRule) SetFormat(v string)`
+
+SetFormat sets Format field to given value.
+
+### HasFormat
+
+`func (o *CreateDataForwardingRule) HasFormat() bool`
+
+HasFormat returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

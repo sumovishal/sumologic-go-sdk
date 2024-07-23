@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogsMissingDataCondition type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type LogsMissingDataCondition struct {
 	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
 }
+
+type _LogsMissingDataCondition LogsMissingDataCondition
 
 // NewLogsMissingDataCondition instantiates a new LogsMissingDataCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -89,6 +93,44 @@ func (o LogsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["timeRange"] = o.TimeRange
 	return toSerialize, nil
+}
+
+func (o *LogsMissingDataCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"timeRange",
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogsMissingDataCondition := _LogsMissingDataCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogsMissingDataCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogsMissingDataCondition(varLogsMissingDataCondition)
+
+	return err
 }
 
 type NullableLogsMissingDataCondition struct {

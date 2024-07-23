@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingInformationResponse type satisfies the MappedNullable interface at compile time
@@ -29,6 +31,8 @@ type MutingInformationResponse struct {
 	MutingSchedules []MutingScheduleResponse `json:"mutingSchedules,omitempty"`
 	AdhocMuting *AdhocMutingResponse `json:"adhocMuting,omitempty"`
 }
+
+type _MutingInformationResponse MutingInformationResponse
 
 // NewMutingInformationResponse instantiates a new MutingInformationResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -226,6 +230,43 @@ func (o MutingInformationResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["adhocMuting"] = o.AdhocMuting
 	}
 	return toSerialize, nil
+}
+
+func (o *MutingInformationResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"isMuted",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingInformationResponse := _MutingInformationResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingInformationResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingInformationResponse(varMutingInformationResponse)
+
+	return err
 }
 
 type NullableMutingInformationResponse struct {

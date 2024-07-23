@@ -21,12 +21,12 @@ import (
 )
 
 
-// LookupManagementApiService LookupManagementApi service
-type LookupManagementApiService service
+// LookupManagementAPIService LookupManagementAPI service
+type LookupManagementAPIService service
 
 type ApiCreateTableRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	lookupTableDefinition *LookupTableDefinition
 }
 
@@ -50,7 +50,7 @@ Please check [Content management API](#tag/contentManagement) and [Folder manage
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateTableRequest
 */
-func (a *LookupManagementApiService) CreateTable(ctx context.Context) ApiCreateTableRequest {
+func (a *LookupManagementAPIService) CreateTable(ctx context.Context) ApiCreateTableRequest {
 	return ApiCreateTableRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -59,7 +59,7 @@ func (a *LookupManagementApiService) CreateTable(ctx context.Context) ApiCreateT
 
 // Execute executes the request
 //  @return LookupTable
-func (a *LookupManagementApiService) CreateTableExecute(r ApiCreateTableRequest) (*LookupTable, *http.Response, error) {
+func (a *LookupManagementAPIService) CreateTableExecute(r ApiCreateTableRequest) (*LookupTable, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -67,7 +67,7 @@ func (a *LookupManagementApiService) CreateTableExecute(r ApiCreateTableRequest)
 		localVarReturnValue  *LookupTable
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.CreateTable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.CreateTable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -147,7 +147,7 @@ func (a *LookupManagementApiService) CreateTableExecute(r ApiCreateTableRequest)
 
 type ApiDeleteTableRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 }
 
@@ -164,7 +164,7 @@ Delete a lookup table completely. <br> **Warning:** `This operation cannot be un
  @param id Identifier of the lookup table.
  @return ApiDeleteTableRequest
 */
-func (a *LookupManagementApiService) DeleteTable(ctx context.Context, id string) ApiDeleteTableRequest {
+func (a *LookupManagementAPIService) DeleteTable(ctx context.Context, id string) ApiDeleteTableRequest {
 	return ApiDeleteTableRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -173,14 +173,14 @@ func (a *LookupManagementApiService) DeleteTable(ctx context.Context, id string)
 }
 
 // Execute executes the request
-func (a *LookupManagementApiService) DeleteTableExecute(r ApiDeleteTableRequest) (*http.Response, error) {
+func (a *LookupManagementAPIService) DeleteTableExecute(r ApiDeleteTableRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.DeleteTable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.DeleteTable")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -247,7 +247,7 @@ func (a *LookupManagementApiService) DeleteTableExecute(r ApiDeleteTableRequest)
 
 type ApiDeleteTableRowRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 	rowDeleteDefinition *RowDeleteDefinition
 }
@@ -271,7 +271,7 @@ Delete a row from lookup table by providing the row's primary keys' values. The 
  @param id Identifier of the lookup table.
  @return ApiDeleteTableRowRequest
 */
-func (a *LookupManagementApiService) DeleteTableRow(ctx context.Context, id string) ApiDeleteTableRowRequest {
+func (a *LookupManagementAPIService) DeleteTableRow(ctx context.Context, id string) ApiDeleteTableRowRequest {
 	return ApiDeleteTableRowRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -280,14 +280,14 @@ func (a *LookupManagementApiService) DeleteTableRow(ctx context.Context, id stri
 }
 
 // Execute executes the request
-func (a *LookupManagementApiService) DeleteTableRowExecute(r ApiDeleteTableRowRequest) (*http.Response, error) {
+func (a *LookupManagementAPIService) DeleteTableRowExecute(r ApiDeleteTableRowRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.DeleteTableRow")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.DeleteTableRow")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -359,7 +359,7 @@ func (a *LookupManagementApiService) DeleteTableRowExecute(r ApiDeleteTableRowRe
 
 type ApiLookupTableByIdRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 }
 
@@ -376,7 +376,7 @@ Get a lookup table for the given identifier.
  @param id Identifier of the lookup table.
  @return ApiLookupTableByIdRequest
 */
-func (a *LookupManagementApiService) LookupTableById(ctx context.Context, id string) ApiLookupTableByIdRequest {
+func (a *LookupManagementAPIService) LookupTableById(ctx context.Context, id string) ApiLookupTableByIdRequest {
 	return ApiLookupTableByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -386,7 +386,7 @@ func (a *LookupManagementApiService) LookupTableById(ctx context.Context, id str
 
 // Execute executes the request
 //  @return LookupTable
-func (a *LookupManagementApiService) LookupTableByIdExecute(r ApiLookupTableByIdRequest) (*LookupTable, *http.Response, error) {
+func (a *LookupManagementAPIService) LookupTableByIdExecute(r ApiLookupTableByIdRequest) (*LookupTable, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -394,7 +394,7 @@ func (a *LookupManagementApiService) LookupTableByIdExecute(r ApiLookupTableById
 		localVarReturnValue  *LookupTable
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.LookupTableById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.LookupTableById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -470,7 +470,7 @@ func (a *LookupManagementApiService) LookupTableByIdExecute(r ApiLookupTableById
 
 type ApiRequestJobStatusRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	jobId string
 }
 
@@ -487,7 +487,7 @@ Retrieve the status of a previously made request. If the request was successful,
  @param jobId An identifier returned in response to an asynchronous request.
  @return ApiRequestJobStatusRequest
 */
-func (a *LookupManagementApiService) RequestJobStatus(ctx context.Context, jobId string) ApiRequestJobStatusRequest {
+func (a *LookupManagementAPIService) RequestJobStatus(ctx context.Context, jobId string) ApiRequestJobStatusRequest {
 	return ApiRequestJobStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -497,7 +497,7 @@ func (a *LookupManagementApiService) RequestJobStatus(ctx context.Context, jobId
 
 // Execute executes the request
 //  @return LookupAsyncJobStatus
-func (a *LookupManagementApiService) RequestJobStatusExecute(r ApiRequestJobStatusRequest) (*LookupAsyncJobStatus, *http.Response, error) {
+func (a *LookupManagementAPIService) RequestJobStatusExecute(r ApiRequestJobStatusRequest) (*LookupAsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -505,7 +505,7 @@ func (a *LookupManagementApiService) RequestJobStatusExecute(r ApiRequestJobStat
 		localVarReturnValue  *LookupAsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.RequestJobStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.RequestJobStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -581,7 +581,7 @@ func (a *LookupManagementApiService) RequestJobStatusExecute(r ApiRequestJobStat
 
 type ApiTruncateTableRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 }
 
@@ -598,7 +598,7 @@ Delete all data from a lookup table.
  @param id Identifier of the table to clear.
  @return ApiTruncateTableRequest
 */
-func (a *LookupManagementApiService) TruncateTable(ctx context.Context, id string) ApiTruncateTableRequest {
+func (a *LookupManagementAPIService) TruncateTable(ctx context.Context, id string) ApiTruncateTableRequest {
 	return ApiTruncateTableRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -608,7 +608,7 @@ func (a *LookupManagementApiService) TruncateTable(ctx context.Context, id strin
 
 // Execute executes the request
 //  @return LookupRequestToken
-func (a *LookupManagementApiService) TruncateTableExecute(r ApiTruncateTableRequest) (*LookupRequestToken, *http.Response, error) {
+func (a *LookupManagementAPIService) TruncateTableExecute(r ApiTruncateTableRequest) (*LookupRequestToken, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -616,7 +616,7 @@ func (a *LookupManagementApiService) TruncateTableExecute(r ApiTruncateTableRequ
 		localVarReturnValue  *LookupRequestToken
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.TruncateTable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.TruncateTable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -692,7 +692,7 @@ func (a *LookupManagementApiService) TruncateTableExecute(r ApiTruncateTableRequ
 
 type ApiUpdateTableRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 	lookupUpdateDefinition *LookupUpdateDefinition
 }
@@ -716,7 +716,7 @@ Edit the lookup table data. All the fields are mandatory in the request.
  @param id Identifier of the lookup table.
  @return ApiUpdateTableRequest
 */
-func (a *LookupManagementApiService) UpdateTable(ctx context.Context, id string) ApiUpdateTableRequest {
+func (a *LookupManagementAPIService) UpdateTable(ctx context.Context, id string) ApiUpdateTableRequest {
 	return ApiUpdateTableRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -726,7 +726,7 @@ func (a *LookupManagementApiService) UpdateTable(ctx context.Context, id string)
 
 // Execute executes the request
 //  @return LookupTable
-func (a *LookupManagementApiService) UpdateTableExecute(r ApiUpdateTableRequest) (*LookupTable, *http.Response, error) {
+func (a *LookupManagementAPIService) UpdateTableExecute(r ApiUpdateTableRequest) (*LookupTable, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -734,7 +734,7 @@ func (a *LookupManagementApiService) UpdateTableExecute(r ApiUpdateTableRequest)
 		localVarReturnValue  *LookupTable
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.UpdateTable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.UpdateTable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -815,7 +815,7 @@ func (a *LookupManagementApiService) UpdateTableExecute(r ApiUpdateTableRequest)
 
 type ApiUpdateTableRowRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 	rowUpdateDefinition *RowUpdateDefinition
 }
@@ -839,7 +839,7 @@ Insert or update a row of a lookup table with the given identifier. A new row is
  @param id Identifier of the lookup table.
  @return ApiUpdateTableRowRequest
 */
-func (a *LookupManagementApiService) UpdateTableRow(ctx context.Context, id string) ApiUpdateTableRowRequest {
+func (a *LookupManagementAPIService) UpdateTableRow(ctx context.Context, id string) ApiUpdateTableRowRequest {
 	return ApiUpdateTableRowRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -848,14 +848,14 @@ func (a *LookupManagementApiService) UpdateTableRow(ctx context.Context, id stri
 }
 
 // Execute executes the request
-func (a *LookupManagementApiService) UpdateTableRowExecute(r ApiUpdateTableRowRequest) (*http.Response, error) {
+func (a *LookupManagementAPIService) UpdateTableRowExecute(r ApiUpdateTableRowRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.UpdateTableRow")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.UpdateTableRow")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -927,7 +927,7 @@ func (a *LookupManagementApiService) UpdateTableRowExecute(r ApiUpdateTableRowRe
 
 type ApiUploadFileRequest struct {
 	ctx context.Context
-	ApiService *LookupManagementApiService
+	ApiService *LookupManagementAPIService
 	id string
 	file *os.File
 	merge *bool
@@ -965,7 +965,7 @@ Create a request to populate a lookup table with a CSV file.
  @param id Identifier of the lookup table to populate.
  @return ApiUploadFileRequest
 */
-func (a *LookupManagementApiService) UploadFile(ctx context.Context, id string) ApiUploadFileRequest {
+func (a *LookupManagementAPIService) UploadFile(ctx context.Context, id string) ApiUploadFileRequest {
 	return ApiUploadFileRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -975,7 +975,7 @@ func (a *LookupManagementApiService) UploadFile(ctx context.Context, id string) 
 
 // Execute executes the request
 //  @return LookupRequestToken
-func (a *LookupManagementApiService) UploadFileExecute(r ApiUploadFileRequest) (*LookupRequestToken, *http.Response, error) {
+func (a *LookupManagementAPIService) UploadFileExecute(r ApiUploadFileRequest) (*LookupRequestToken, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -983,7 +983,7 @@ func (a *LookupManagementApiService) UploadFileExecute(r ApiUploadFileRequest) (
 		localVarReturnValue  *LookupRequestToken
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementApiService.UploadFile")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LookupManagementAPIService.UploadFile")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1000,9 +1000,15 @@ func (a *LookupManagementApiService) UploadFileExecute(r ApiUploadFileRequest) (
 
 	if r.merge != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "merge", r.merge, "")
+	} else {
+		var defaultValue bool = false
+		r.merge = &defaultValue
 	}
 	if r.fileEncoding != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "fileEncoding", r.fileEncoding, "")
+	} else {
+		var defaultValue string = "UTF-8"
+		r.fileEncoding = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -1026,8 +1032,6 @@ func (a *LookupManagementApiService) UploadFileExecute(r ApiUploadFileRequest) (
 	var fileLocalVarFileBytes    []byte
 
 	fileLocalVarFormFileName = "file"
-
-
 	fileLocalVarFile := r.file
 
 	if fileLocalVarFile != nil {

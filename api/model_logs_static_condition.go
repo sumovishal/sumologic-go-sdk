@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogsStaticCondition type satisfies the MappedNullable interface at compile time
@@ -25,10 +27,12 @@ type LogsStaticCondition struct {
 	// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
 	Threshold float64 `json:"threshold"`
 	// The comparison type for the `threshold` evaluation. This defines how you want the data value compared. Valid values:   1. `LessThan`: Less than than the configured threshold.   2. `GreaterThan`: Greater than the configured threshold.   3. `LessThanOrEqual`: Less than or equal to the configured threshold.   4. `GreaterThanOrEqual`: Greater than or equal to the configured threshold. ThresholdType value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
-	ThresholdType string `json:"thresholdType"`
+	ThresholdType string `json:"thresholdType" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
 	// The name of the field that the trigger condition will alert on. The trigger could compare the value of specified field with the threshold. If `field` is not specified, monitor would default to result count instead.
 	Field *string `json:"field,omitempty"`
 }
+
+type _LogsStaticCondition LogsStaticCondition
 
 // NewLogsStaticCondition instantiates a new LogsStaticCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -186,6 +190,46 @@ func (o LogsStaticCondition) ToMap() (map[string]interface{}, error) {
 		toSerialize["field"] = o.Field
 	}
 	return toSerialize, nil
+}
+
+func (o *LogsStaticCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"timeRange",
+		"threshold",
+		"thresholdType",
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogsStaticCondition := _LogsStaticCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogsStaticCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogsStaticCondition(varLogsStaticCondition)
+
+	return err
 }
 
 type NullableLogsStaticCondition struct {

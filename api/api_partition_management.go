@@ -20,12 +20,12 @@ import (
 )
 
 
-// PartitionManagementApiService PartitionManagementApi service
-type PartitionManagementApiService service
+// PartitionManagementAPIService PartitionManagementAPI service
+type PartitionManagementAPIService service
 
 type ApiCancelRetentionUpdateRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -42,7 +42,7 @@ Cancel update to retention of a partition for which retention was updated previo
  @param id Identifier of the partition to cancel the retention update for.
  @return ApiCancelRetentionUpdateRequest
 */
-func (a *PartitionManagementApiService) CancelRetentionUpdate(ctx context.Context, id string) ApiCancelRetentionUpdateRequest {
+func (a *PartitionManagementAPIService) CancelRetentionUpdate(ctx context.Context, id string) ApiCancelRetentionUpdateRequest {
 	return ApiCancelRetentionUpdateRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -51,14 +51,14 @@ func (a *PartitionManagementApiService) CancelRetentionUpdate(ctx context.Contex
 }
 
 // Execute executes the request
-func (a *PartitionManagementApiService) CancelRetentionUpdateExecute(r ApiCancelRetentionUpdateRequest) (*http.Response, error) {
+func (a *PartitionManagementAPIService) CancelRetentionUpdateExecute(r ApiCancelRetentionUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.CancelRetentionUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.CancelRetentionUpdate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -125,7 +125,7 @@ func (a *PartitionManagementApiService) CancelRetentionUpdateExecute(r ApiCancel
 
 type ApiCreatePartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	createPartitionDefinition *CreatePartitionDefinition
 }
 
@@ -147,7 +147,7 @@ Create a new partition.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreatePartitionRequest
 */
-func (a *PartitionManagementApiService) CreatePartition(ctx context.Context) ApiCreatePartitionRequest {
+func (a *PartitionManagementAPIService) CreatePartition(ctx context.Context) ApiCreatePartitionRequest {
 	return ApiCreatePartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -156,7 +156,7 @@ func (a *PartitionManagementApiService) CreatePartition(ctx context.Context) Api
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) CreatePartitionExecute(r ApiCreatePartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -164,7 +164,7 @@ func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartit
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.CreatePartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.CreatePartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartit
 
 type ApiDecommissionPartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Decommission a partition with the given identifier from the organization.
  @param id Identifier of the partition to decommission.
  @return ApiDecommissionPartitionRequest
 */
-func (a *PartitionManagementApiService) DecommissionPartition(ctx context.Context, id string) ApiDecommissionPartitionRequest {
+func (a *PartitionManagementAPIService) DecommissionPartition(ctx context.Context, id string) ApiDecommissionPartitionRequest {
 	return ApiDecommissionPartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -270,14 +270,14 @@ func (a *PartitionManagementApiService) DecommissionPartition(ctx context.Contex
 }
 
 // Execute executes the request
-func (a *PartitionManagementApiService) DecommissionPartitionExecute(r ApiDecommissionPartitionRequest) (*http.Response, error) {
+func (a *PartitionManagementAPIService) DecommissionPartitionExecute(r ApiDecommissionPartitionRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.DecommissionPartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.DecommissionPartition")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -344,7 +344,7 @@ func (a *PartitionManagementApiService) DecommissionPartitionExecute(r ApiDecomm
 
 type ApiGetPartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -361,7 +361,7 @@ Get a partition with the given identifier from the organization.
  @param id Identifier of partition to return.
  @return ApiGetPartitionRequest
 */
-func (a *PartitionManagementApiService) GetPartition(ctx context.Context, id string) ApiGetPartitionRequest {
+func (a *PartitionManagementAPIService) GetPartition(ctx context.Context, id string) ApiGetPartitionRequest {
 	return ApiGetPartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -371,7 +371,7 @@ func (a *PartitionManagementApiService) GetPartition(ctx context.Context, id str
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) GetPartitionExecute(r ApiGetPartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -379,7 +379,7 @@ func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionReq
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.GetPartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.GetPartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -455,7 +455,7 @@ func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionReq
 
 type ApiListPartitionsRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	limit *int32
 	token *string
 	viewTypes *[]string
@@ -491,7 +491,7 @@ Get a list of all partitions in the organization. The response is paginated with
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListPartitionsRequest
 */
-func (a *PartitionManagementApiService) ListPartitions(ctx context.Context) ApiListPartitionsRequest {
+func (a *PartitionManagementAPIService) ListPartitions(ctx context.Context) ApiListPartitionsRequest {
 	return ApiListPartitionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -500,7 +500,7 @@ func (a *PartitionManagementApiService) ListPartitions(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return ListPartitionsResponse
-func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartitionsRequest) (*ListPartitionsResponse, *http.Response, error) {
+func (a *PartitionManagementAPIService) ListPartitionsExecute(r ApiListPartitionsRequest) (*ListPartitionsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -508,7 +508,7 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 		localVarReturnValue  *ListPartitionsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.ListPartitions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.ListPartitions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -521,6 +521,9 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -592,7 +595,7 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 
 type ApiUpdatePartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 	updatePartitionDefinition *UpdatePartitionDefinition
 }
@@ -616,7 +619,7 @@ Update an existing partition in the organization.
  @param id Identifier of the partition to update.
  @return ApiUpdatePartitionRequest
 */
-func (a *PartitionManagementApiService) UpdatePartition(ctx context.Context, id string) ApiUpdatePartitionRequest {
+func (a *PartitionManagementAPIService) UpdatePartition(ctx context.Context, id string) ApiUpdatePartitionRequest {
 	return ApiUpdatePartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -626,7 +629,7 @@ func (a *PartitionManagementApiService) UpdatePartition(ctx context.Context, id 
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) UpdatePartitionExecute(r ApiUpdatePartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) UpdatePartitionExecute(r ApiUpdatePartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -634,7 +637,7 @@ func (a *PartitionManagementApiService) UpdatePartitionExecute(r ApiUpdatePartit
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.UpdatePartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.UpdatePartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

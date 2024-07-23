@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetricsQueryData type satisfies the MappedNullable interface at compile time
@@ -22,7 +24,7 @@ type MetricsQueryData struct {
 	// The metric of the query.
 	Metric string `json:"metric"`
 	// The type of aggregation. Can be `Count`, `Minimum`, `Maximum`, `Sum`, `Average` or `None`.
-	AggregationType *string `json:"aggregationType,omitempty"`
+	AggregationType *string `json:"aggregationType,omitempty" validate:"regexp=^(Count|Minimum|Maximum|Sum|Average|None)$|^$"`
 	// The field to group the results by.
 	GroupBy *string `json:"groupBy,omitempty"`
 	// A list of filters for the metrics query.
@@ -30,6 +32,8 @@ type MetricsQueryData struct {
 	// A list of operator data for the metrics query.
 	Operators []OperatorData `json:"operators,omitempty"`
 }
+
+type _MetricsQueryData MetricsQueryData
 
 // NewMetricsQueryData instantiates a new MetricsQueryData object
 // This constructor will assign default values to properties that have it defined,
@@ -216,6 +220,44 @@ func (o MetricsQueryData) ToMap() (map[string]interface{}, error) {
 		toSerialize["operators"] = o.Operators
 	}
 	return toSerialize, nil
+}
+
+func (o *MetricsQueryData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"metric",
+		"filters",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetricsQueryData := _MetricsQueryData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetricsQueryData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsQueryData(varMetricsQueryData)
+
+	return err
 }
 
 type NullableMetricsQueryData struct {

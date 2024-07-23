@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Plan type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &Plan{}
 // Plan Upgrade preview request for the account.
 type Plan struct {
 	// Unique identifier of the product in current plan. Valid values are: 1. `Free` 2. `Trial` 3. `Essentials` 4. `EnterpriseOps` 5. `EnterpriseSec` 6. `EnterpriseSuite` 
-	ProductId string `json:"productId"`
+	ProductId string `json:"productId" validate:"regexp=^(Essentials|Trial|Free|EnterpriseOps|EnterpriseSec|EnterpriseSuite)$"`
 	// Name for the product.
 	ProductName string `json:"productName"`
 	// A list of product group for preview.
 	ProductGroups []ProductGroup `json:"productGroups"`
 }
+
+type _Plan Plan
 
 // NewPlan instantiates a new Plan object
 // This constructor will assign default values to properties that have it defined,
@@ -133,6 +137,45 @@ func (o Plan) ToMap() (map[string]interface{}, error) {
 	toSerialize["productName"] = o.ProductName
 	toSerialize["productGroups"] = o.ProductGroups
 	return toSerialize, nil
+}
+
+func (o *Plan) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"productId",
+		"productName",
+		"productGroups",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPlan := _Plan{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPlan)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Plan(varPlan)
+
+	return err
 }
 
 type NullablePlan struct {

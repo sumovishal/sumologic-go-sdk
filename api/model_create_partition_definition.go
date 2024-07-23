@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CreatePartitionDefinition type satisfies the MappedNullable interface at compile time
@@ -30,6 +32,8 @@ type CreatePartitionDefinition struct {
 	// Whether the partition is compliant or not. Mark a partition as compliant if it contains data used for compliance or audit purpose. Retention for a compliant partition can only be increased and cannot be reduced after the partition is marked compliant. A partition once marked compliant, cannot be marked non-compliant later.
 	IsCompliant *bool `json:"isCompliant,omitempty"`
 }
+
+type _CreatePartitionDefinition CreatePartitionDefinition
 
 // NewCreatePartitionDefinition instantiates a new CreatePartitionDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -224,6 +228,44 @@ func (o CreatePartitionDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["isCompliant"] = o.IsCompliant
 	}
 	return toSerialize, nil
+}
+
+func (o *CreatePartitionDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"routingExpression",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCreatePartitionDefinition := _CreatePartitionDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCreatePartitionDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreatePartitionDefinition(varCreatePartitionDefinition)
+
+	return err
 }
 
 type NullableCreatePartitionDefinition struct {

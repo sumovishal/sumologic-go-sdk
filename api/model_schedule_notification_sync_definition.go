@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ScheduleNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type ScheduleNotificationSyncDefinition struct {
 	// Delivery channel for notifications.
 	TaskType string `json:"taskType"`
 }
+
+type _ScheduleNotificationSyncDefinition ScheduleNotificationSyncDefinition
 
 // NewScheduleNotificationSyncDefinition instantiates a new ScheduleNotificationSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o ScheduleNotificationSyncDefinition) ToMap() (map[string]interface{}, err
 	toSerialize := map[string]interface{}{}
 	toSerialize["taskType"] = o.TaskType
 	return toSerialize, nil
+}
+
+func (o *ScheduleNotificationSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"taskType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varScheduleNotificationSyncDefinition := _ScheduleNotificationSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varScheduleNotificationSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScheduleNotificationSyncDefinition(varScheduleNotificationSyncDefinition)
+
+	return err
 }
 
 type NullableScheduleNotificationSyncDefinition struct {

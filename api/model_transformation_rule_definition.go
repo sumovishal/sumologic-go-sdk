@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TransformationRuleDefinition type satisfies the MappedNullable interface at compile time
@@ -30,6 +32,8 @@ type TransformationRuleDefinition struct {
 	// Retention period in days for the metrics that are selected by the selector. The supported retention periods for selected metrics are 8 days, 400 days, and 0 (Do not store) if this rule contains dimension transformation.
 	Retention int64 `json:"retention"`
 }
+
+type _TransformationRuleDefinition TransformationRuleDefinition
 
 // NewTransformationRuleDefinition instantiates a new TransformationRuleDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -213,6 +217,45 @@ func (o TransformationRuleDefinition) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["retention"] = o.Retention
 	return toSerialize, nil
+}
+
+func (o *TransformationRuleDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"selector",
+		"retention",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTransformationRuleDefinition := _TransformationRuleDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTransformationRuleDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TransformationRuleDefinition(varTransformationRuleDefinition)
+
+	return err
 }
 
 type NullableTransformationRuleDefinition struct {

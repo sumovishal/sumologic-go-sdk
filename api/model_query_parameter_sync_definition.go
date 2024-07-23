@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the QueryParameterSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -31,6 +33,8 @@ type QueryParameterSyncDefinition struct {
 	Value string `json:"value"`
 	AutoComplete ParameterAutoCompleteSyncDefinition `json:"autoComplete"`
 }
+
+type _QueryParameterSyncDefinition QueryParameterSyncDefinition
 
 // NewQueryParameterSyncDefinition instantiates a new QueryParameterSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -216,6 +220,48 @@ func (o QueryParameterSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["value"] = o.Value
 	toSerialize["autoComplete"] = o.AutoComplete
 	return toSerialize, nil
+}
+
+func (o *QueryParameterSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"label",
+		"description",
+		"dataType",
+		"value",
+		"autoComplete",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varQueryParameterSyncDefinition := _QueryParameterSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varQueryParameterSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = QueryParameterSyncDefinition(varQueryParameterSyncDefinition)
+
+	return err
 }
 
 type NullableQueryParameterSyncDefinition struct {

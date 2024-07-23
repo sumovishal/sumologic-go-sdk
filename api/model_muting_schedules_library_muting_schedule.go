@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingSchedulesLibraryMutingSchedule type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type MutingSchedulesLibraryMutingSchedule struct {
 	Schedule ScheduleDefinition `json:"schedule"`
 	Monitor *MonitorScope `json:"monitor,omitempty"`
 }
+
+type _MutingSchedulesLibraryMutingSchedule MutingSchedulesLibraryMutingSchedule
 
 // NewMutingSchedulesLibraryMutingSchedule instantiates a new MutingSchedulesLibraryMutingSchedule object
 // This constructor will assign default values to properties that have it defined,
@@ -125,6 +129,45 @@ func (o MutingSchedulesLibraryMutingSchedule) ToMap() (map[string]interface{}, e
 		toSerialize["monitor"] = o.Monitor
 	}
 	return toSerialize, nil
+}
+
+func (o *MutingSchedulesLibraryMutingSchedule) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"schedule",
+		"name",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingSchedulesLibraryMutingSchedule := _MutingSchedulesLibraryMutingSchedule{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingSchedulesLibraryMutingSchedule)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingSchedulesLibraryMutingSchedule(varMutingSchedulesLibraryMutingSchedule)
+
+	return err
 }
 
 type NullableMutingSchedulesLibraryMutingSchedule struct {

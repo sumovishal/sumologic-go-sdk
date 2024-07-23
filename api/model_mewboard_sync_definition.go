@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MewboardSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -25,7 +27,7 @@ type MewboardSyncDefinition struct {
 	// The title of the dashboard.
 	Title string `json:"title"`
 	// Theme for the dashboard. Must be `light` or `dark`.
-	Theme *string `json:"theme,omitempty"`
+	Theme *string `json:"theme,omitempty" validate:"regexp=^(light|dark|Light|Dark)$"`
 	TopologyLabelMap *TopologyLabelMap `json:"topologyLabelMap,omitempty"`
 	// Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard.
 	RefreshInterval *int32 `json:"refreshInterval,omitempty"`
@@ -38,6 +40,8 @@ type MewboardSyncDefinition struct {
 	// Coloring rules to color the panel/data with.
 	ColoringRules []ColoringRule `json:"coloringRules,omitempty"`
 }
+
+type _MewboardSyncDefinition MewboardSyncDefinition
 
 // NewMewboardSyncDefinition instantiates a new MewboardSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -422,6 +426,45 @@ func (o MewboardSyncDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["coloringRules"] = o.ColoringRules
 	}
 	return toSerialize, nil
+}
+
+func (o *MewboardSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"title",
+		"type",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMewboardSyncDefinition := _MewboardSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMewboardSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MewboardSyncDefinition(varMewboardSyncDefinition)
+
+	return err
 }
 
 type NullableMewboardSyncDefinition struct {

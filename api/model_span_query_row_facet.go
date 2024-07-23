@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryRowFacet type satisfies the MappedNullable interface at compile time
@@ -24,12 +26,14 @@ type SpanQueryRowFacet struct {
 	// The number of unique values this field occured.
 	Cardinality int32 `json:"cardinality"`
 	// Data type of the field.
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" validate:"regexp=^(String|Int|Long|Double|Boolean)$"`
 	// Indicates whether the field is available in the span schema.
 	InSchema *bool `json:"inSchema,omitempty"`
 	// Map of field value frequencies.
 	ValueFrequency *map[string]int64 `json:"valueFrequency,omitempty"`
 }
+
+type _SpanQueryRowFacet SpanQueryRowFacet
 
 // NewSpanQueryRowFacet instantiates a new SpanQueryRowFacet object
 // This constructor will assign default values to properties that have it defined,
@@ -207,6 +211,45 @@ func (o SpanQueryRowFacet) ToMap() (map[string]interface{}, error) {
 		toSerialize["valueFrequency"] = o.ValueFrequency
 	}
 	return toSerialize, nil
+}
+
+func (o *SpanQueryRowFacet) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"cardinality",
+		"dataType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryRowFacet := _SpanQueryRowFacet{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryRowFacet)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryRowFacet(varSpanQueryRowFacet)
+
+	return err
 }
 
 type NullableSpanQueryRowFacet struct {

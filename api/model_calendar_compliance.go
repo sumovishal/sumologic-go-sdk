@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,19 +12,23 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CalendarCompliance type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CalendarCompliance{}
 
-// CalendarCompliance Window for Calendar Compliance.
+// CalendarCompliance struct for CalendarCompliance
 type CalendarCompliance struct {
 	Compliance
 	// Type of Calendar Window (week/month/quarter).
-	WindowType string `json:"windowType"`
+	WindowType string `json:"windowType" validate:"regexp=^(Week|Month|Quarter)$"`
 	// Start of the calendar window. For week, it would be the day of the week (for e.g Sunday, Monday etc). For month, it will always be the first day of the month (therefore not required to specify for monthly compliance). For quarter, it would be the first month of the quarter (for e.g January, February etc.)
 	StartFrom *string `json:"startFrom,omitempty"`
 }
+
+type _CalendarCompliance CalendarCompliance
 
 // NewCalendarCompliance instantiates a new CalendarCompliance object
 // This constructor will assign default values to properties that have it defined,
@@ -113,11 +117,59 @@ func (o CalendarCompliance) MarshalJSON() ([]byte, error) {
 
 func (o CalendarCompliance) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	serializedCompliance, errCompliance := json.Marshal(o.Compliance)
+	if errCompliance != nil {
+		return map[string]interface{}{}, errCompliance
+	}
+	errCompliance = json.Unmarshal([]byte(serializedCompliance), &toSerialize)
+	if errCompliance != nil {
+		return map[string]interface{}{}, errCompliance
+	}
 	toSerialize["windowType"] = o.WindowType
 	if !IsNil(o.StartFrom) {
 		toSerialize["startFrom"] = o.StartFrom
 	}
 	return toSerialize, nil
+}
+
+func (o *CalendarCompliance) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"windowType",
+		"complianceType",
+		"target",
+		"timezone",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCalendarCompliance := _CalendarCompliance{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCalendarCompliance)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CalendarCompliance(varCalendarCompliance)
+
+	return err
 }
 
 type NullableCalendarCompliance struct {

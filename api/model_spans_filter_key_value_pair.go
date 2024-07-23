@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpansFilterKeyValuePair type satisfies the MappedNullable interface at compile time
@@ -21,10 +23,12 @@ var _ MappedNullable = &SpansFilterKeyValuePair{}
 type SpansFilterKeyValuePair struct {
 	SpansFilter
 	// A symbol that indicates an operation to be performed between a `fieldName` and `fieldValue`.
-	Operator string `json:"operator"`
+	Operator string `json:"operator" validate:"regexp=^(<|<=|>|>=|=|!=)$"`
 	// The second argument of the operation applied to a `fieldName`.
 	FieldValue string `json:"fieldValue"`
 }
+
+type _SpansFilterKeyValuePair SpansFilterKeyValuePair
 
 // NewSpansFilterKeyValuePair instantiates a new SpansFilterKeyValuePair object
 // This constructor will assign default values to properties that have it defined,
@@ -116,6 +120,46 @@ func (o SpansFilterKeyValuePair) ToMap() (map[string]interface{}, error) {
 	toSerialize["operator"] = o.Operator
 	toSerialize["fieldValue"] = o.FieldValue
 	return toSerialize, nil
+}
+
+func (o *SpansFilterKeyValuePair) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"operator",
+		"fieldValue",
+		"type",
+		"fieldName",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpansFilterKeyValuePair := _SpansFilterKeyValuePair{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpansFilterKeyValuePair)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpansFilterKeyValuePair(varSpansFilterKeyValuePair)
+
+	return err
 }
 
 type NullableSpansFilterKeyValuePair struct {

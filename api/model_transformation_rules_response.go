@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TransformationRulesResponse type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type TransformationRulesResponse struct {
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
 }
+
+type _TransformationRulesResponse TransformationRulesResponse
 
 // NewTransformationRulesResponse instantiates a new TransformationRulesResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o TransformationRulesResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["next"] = o.Next
 	}
 	return toSerialize, nil
+}
+
+func (o *TransformationRulesResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"data",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTransformationRulesResponse := _TransformationRulesResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTransformationRulesResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TransformationRulesResponse(varTransformationRulesResponse)
+
+	return err
 }
 
 type NullableTransformationRulesResponse struct {

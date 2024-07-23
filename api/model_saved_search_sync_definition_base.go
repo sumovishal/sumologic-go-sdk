@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SavedSearchSyncDefinitionBase type satisfies the MappedNullable interface at compile time
@@ -33,6 +35,8 @@ type SavedSearchSyncDefinitionBase struct {
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty"`
 }
+
+type _SavedSearchSyncDefinitionBase SavedSearchSyncDefinitionBase
 
 // NewSavedSearchSyncDefinitionBase instantiates a new SavedSearchSyncDefinitionBase object
 // This constructor will assign default values to properties that have it defined,
@@ -251,6 +255,45 @@ func (o SavedSearchSyncDefinitionBase) ToMap() (map[string]interface{}, error) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
 	return toSerialize, nil
+}
+
+func (o *SavedSearchSyncDefinitionBase) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryText",
+		"byReceiptTime",
+		"queryParameters",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSavedSearchSyncDefinitionBase := _SavedSearchSyncDefinitionBase{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSavedSearchSyncDefinitionBase)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SavedSearchSyncDefinitionBase(varSavedSearchSyncDefinitionBase)
+
+	return err
 }
 
 type NullableSavedSearchSyncDefinitionBase struct {

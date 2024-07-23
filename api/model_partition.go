@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Partition type satisfies the MappedNullable interface at compile time
@@ -49,10 +51,12 @@ type Partition struct {
 	// This has the value `true` if the partition is active and `false` if it has been decommissioned.
 	IsActive *bool `json:"isActive,omitempty"`
 	// This has the value `DefaultIndex`, `AuditIndex`or `Partition` depending upon the type of partition.
-	IndexType *string `json:"indexType,omitempty"`
+	IndexType *string `json:"indexType,omitempty" validate:"regexp=^(DefaultIndex|AuditIndex|Partition)$"`
 	// Id of the data forwarding configuration to be used by the partition.
 	DataForwardingId *string `json:"dataForwardingId,omitempty"`
 }
+
+type _Partition Partition
 
 // NewPartition instantiates a new Partition object
 // This constructor will assign default values to properties that have it defined,
@@ -578,6 +582,50 @@ func (o Partition) ToMap() (map[string]interface{}, error) {
 		toSerialize["dataForwardingId"] = o.DataForwardingId
 	}
 	return toSerialize, nil
+}
+
+func (o *Partition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"routingExpression",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+		"totalBytes",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPartition := _Partition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPartition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Partition(varPartition)
+
+	return err
 }
 
 type NullablePartition struct {

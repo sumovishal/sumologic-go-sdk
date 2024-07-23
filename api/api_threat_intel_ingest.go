@@ -19,12 +19,12 @@ import (
 )
 
 
-// ThreatIntelIngestApiService ThreatIntelIngestApi service
-type ThreatIntelIngestApiService service
+// ThreatIntelIngestAPIService ThreatIntelIngestAPI service
+type ThreatIntelIngestAPIService service
 
 type ApiDatastoreGetRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 }
 
 func (r ApiDatastoreGetRequest) Execute() (*DatastoreStatusResponse, *http.Response, error) {
@@ -39,7 +39,7 @@ Get threat intel indicators DB information, such as storage utilization and indi
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDatastoreGetRequest
 */
-func (a *ThreatIntelIngestApiService) DatastoreGet(ctx context.Context) ApiDatastoreGetRequest {
+func (a *ThreatIntelIngestAPIService) DatastoreGet(ctx context.Context) ApiDatastoreGetRequest {
 	return ApiDatastoreGetRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -48,7 +48,7 @@ func (a *ThreatIntelIngestApiService) DatastoreGet(ctx context.Context) ApiDatas
 
 // Execute executes the request
 //  @return DatastoreStatusResponse
-func (a *ThreatIntelIngestApiService) DatastoreGetExecute(r ApiDatastoreGetRequest) (*DatastoreStatusResponse, *http.Response, error) {
+func (a *ThreatIntelIngestAPIService) DatastoreGetExecute(r ApiDatastoreGetRequest) (*DatastoreStatusResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -56,7 +56,7 @@ func (a *ThreatIntelIngestApiService) DatastoreGetExecute(r ApiDatastoreGetReque
 		localVarReturnValue  *DatastoreStatusResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.DatastoreGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.DatastoreGet")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -131,7 +131,7 @@ func (a *ThreatIntelIngestApiService) DatastoreGetExecute(r ApiDatastoreGetReque
 
 type ApiRemoveDatastoreRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 }
 
 func (r ApiRemoveDatastoreRequest) Execute() (*http.Response, error) {
@@ -146,7 +146,7 @@ Removes the entire database and all indicators associated with this tenant
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRemoveDatastoreRequest
 */
-func (a *ThreatIntelIngestApiService) RemoveDatastore(ctx context.Context) ApiRemoveDatastoreRequest {
+func (a *ThreatIntelIngestAPIService) RemoveDatastore(ctx context.Context) ApiRemoveDatastoreRequest {
 	return ApiRemoveDatastoreRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -154,14 +154,14 @@ func (a *ThreatIntelIngestApiService) RemoveDatastore(ctx context.Context) ApiRe
 }
 
 // Execute executes the request
-func (a *ThreatIntelIngestApiService) RemoveDatastoreExecute(r ApiRemoveDatastoreRequest) (*http.Response, error) {
+func (a *ThreatIntelIngestAPIService) RemoveDatastoreExecute(r ApiRemoveDatastoreRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.RemoveDatastore")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.RemoveDatastore")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -227,7 +227,7 @@ func (a *ThreatIntelIngestApiService) RemoveDatastoreExecute(r ApiRemoveDatastor
 
 type ApiRemoveIndicatorsRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 	removeIndicatorsRequest *RemoveIndicatorsRequest
 }
 
@@ -249,7 +249,7 @@ Removes indicators by specifying a list of indicator IDs
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRemoveIndicatorsRequest
 */
-func (a *ThreatIntelIngestApiService) RemoveIndicators(ctx context.Context) ApiRemoveIndicatorsRequest {
+func (a *ThreatIntelIngestAPIService) RemoveIndicators(ctx context.Context) ApiRemoveIndicatorsRequest {
 	return ApiRemoveIndicatorsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -257,14 +257,14 @@ func (a *ThreatIntelIngestApiService) RemoveIndicators(ctx context.Context) ApiR
 }
 
 // Execute executes the request
-func (a *ThreatIntelIngestApiService) RemoveIndicatorsExecute(r ApiRemoveIndicatorsRequest) (*http.Response, error) {
+func (a *ThreatIntelIngestAPIService) RemoveIndicatorsExecute(r ApiRemoveIndicatorsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.RemoveIndicators")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.RemoveIndicators")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -335,7 +335,7 @@ func (a *ThreatIntelIngestApiService) RemoveIndicatorsExecute(r ApiRemoveIndicat
 
 type ApiUploadBlobIndicatorsRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 	uploadBlobIndicatorsRequest *UploadBlobIndicatorsRequest
 }
 
@@ -357,7 +357,7 @@ Uploads indicators in a blob format to be parsed (CSV or JSON).
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUploadBlobIndicatorsRequest
 */
-func (a *ThreatIntelIngestApiService) UploadBlobIndicators(ctx context.Context) ApiUploadBlobIndicatorsRequest {
+func (a *ThreatIntelIngestAPIService) UploadBlobIndicators(ctx context.Context) ApiUploadBlobIndicatorsRequest {
 	return ApiUploadBlobIndicatorsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -365,14 +365,14 @@ func (a *ThreatIntelIngestApiService) UploadBlobIndicators(ctx context.Context) 
 }
 
 // Execute executes the request
-func (a *ThreatIntelIngestApiService) UploadBlobIndicatorsExecute(r ApiUploadBlobIndicatorsRequest) (*http.Response, error) {
+func (a *ThreatIntelIngestAPIService) UploadBlobIndicatorsExecute(r ApiUploadBlobIndicatorsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.UploadBlobIndicators")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.UploadBlobIndicators")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -443,7 +443,7 @@ func (a *ThreatIntelIngestApiService) UploadBlobIndicatorsExecute(r ApiUploadBlo
 
 type ApiUploadNormalizedIndicatorsRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 	normalizedIndicator *[]NormalizedIndicator
 }
 
@@ -465,7 +465,7 @@ Uploads a list indicators in a Sumo normalized format.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUploadNormalizedIndicatorsRequest
 */
-func (a *ThreatIntelIngestApiService) UploadNormalizedIndicators(ctx context.Context) ApiUploadNormalizedIndicatorsRequest {
+func (a *ThreatIntelIngestAPIService) UploadNormalizedIndicators(ctx context.Context) ApiUploadNormalizedIndicatorsRequest {
 	return ApiUploadNormalizedIndicatorsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -473,14 +473,14 @@ func (a *ThreatIntelIngestApiService) UploadNormalizedIndicators(ctx context.Con
 }
 
 // Execute executes the request
-func (a *ThreatIntelIngestApiService) UploadNormalizedIndicatorsExecute(r ApiUploadNormalizedIndicatorsRequest) (*http.Response, error) {
+func (a *ThreatIntelIngestAPIService) UploadNormalizedIndicatorsExecute(r ApiUploadNormalizedIndicatorsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.UploadNormalizedIndicators")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.UploadNormalizedIndicators")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -551,7 +551,7 @@ func (a *ThreatIntelIngestApiService) UploadNormalizedIndicatorsExecute(r ApiUpl
 
 type ApiUploadStixIndicatorsRequest struct {
 	ctx context.Context
-	ApiService *ThreatIntelIngestApiService
+	ApiService *ThreatIntelIngestAPIService
 	uploadStixIndicatorsRequest *UploadStixIndicatorsRequest
 }
 
@@ -573,7 +573,7 @@ Uploads a list indicators in in a STIX 2.1 json format.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUploadStixIndicatorsRequest
 */
-func (a *ThreatIntelIngestApiService) UploadStixIndicators(ctx context.Context) ApiUploadStixIndicatorsRequest {
+func (a *ThreatIntelIngestAPIService) UploadStixIndicators(ctx context.Context) ApiUploadStixIndicatorsRequest {
 	return ApiUploadStixIndicatorsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -581,14 +581,14 @@ func (a *ThreatIntelIngestApiService) UploadStixIndicators(ctx context.Context) 
 }
 
 // Execute executes the request
-func (a *ThreatIntelIngestApiService) UploadStixIndicatorsExecute(r ApiUploadStixIndicatorsRequest) (*http.Response, error) {
+func (a *ThreatIntelIngestAPIService) UploadStixIndicatorsExecute(r ApiUploadStixIndicatorsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestApiService.UploadStixIndicators")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ThreatIntelIngestAPIService.UploadStixIndicators")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}

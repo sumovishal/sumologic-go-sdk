@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the UpdateRoleDefinitionV2 type satisfies the MappedNullable interface at compile time
@@ -40,6 +42,8 @@ type UpdateRoleDefinitionV2 struct {
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
 }
+
+type _UpdateRoleDefinitionV2 UpdateRoleDefinitionV2
 
 // NewUpdateRoleDefinitionV2 instantiates a new UpdateRoleDefinitionV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -342,6 +346,51 @@ func (o UpdateRoleDefinitionV2) ToMap() (map[string]interface{}, error) {
 		toSerialize["autofillDependencies"] = o.AutofillDependencies
 	}
 	return toSerialize, nil
+}
+
+func (o *UpdateRoleDefinitionV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"description",
+		"logAnalyticsFilter",
+		"auditDataFilter",
+		"securityDataFilter",
+		"selectionType",
+		"selectedViews",
+		"users",
+		"capabilities",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varUpdateRoleDefinitionV2 := _UpdateRoleDefinitionV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varUpdateRoleDefinitionV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateRoleDefinitionV2(varUpdateRoleDefinitionV2)
+
+	return err
 }
 
 type NullableUpdateRoleDefinitionV2 struct {

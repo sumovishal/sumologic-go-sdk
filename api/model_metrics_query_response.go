@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetricsQueryResponse type satisfies the MappedNullable interface at compile time
@@ -21,14 +23,17 @@ var _ MappedNullable = &MetricsQueryResponse{}
 type MetricsQueryResponse struct {
 	// A list of the time series returned by metric query.
 	QueryResult []TimeSeriesRow `json:"queryResult,omitempty"`
-	Errors MetricsQueryResponseErrors `json:"errors"`
+	// Errors, warnings, and information logged for the query.
+	Errors ErrorResponse `json:"errors"`
 }
+
+type _MetricsQueryResponse MetricsQueryResponse
 
 // NewMetricsQueryResponse instantiates a new MetricsQueryResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMetricsQueryResponse(errors MetricsQueryResponseErrors) *MetricsQueryResponse {
+func NewMetricsQueryResponse(errors ErrorResponse) *MetricsQueryResponse {
 	this := MetricsQueryResponse{}
 	this.Errors = errors
 	return &this
@@ -75,9 +80,9 @@ func (o *MetricsQueryResponse) SetQueryResult(v []TimeSeriesRow) {
 }
 
 // GetErrors returns the Errors field value
-func (o *MetricsQueryResponse) GetErrors() MetricsQueryResponseErrors {
+func (o *MetricsQueryResponse) GetErrors() ErrorResponse {
 	if o == nil {
-		var ret MetricsQueryResponseErrors
+		var ret ErrorResponse
 		return ret
 	}
 
@@ -86,7 +91,7 @@ func (o *MetricsQueryResponse) GetErrors() MetricsQueryResponseErrors {
 
 // GetErrorsOk returns a tuple with the Errors field value
 // and a boolean to check if the value has been set.
-func (o *MetricsQueryResponse) GetErrorsOk() (*MetricsQueryResponseErrors, bool) {
+func (o *MetricsQueryResponse) GetErrorsOk() (*ErrorResponse, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -94,7 +99,7 @@ func (o *MetricsQueryResponse) GetErrorsOk() (*MetricsQueryResponseErrors, bool)
 }
 
 // SetErrors sets field value
-func (o *MetricsQueryResponse) SetErrors(v MetricsQueryResponseErrors) {
+func (o *MetricsQueryResponse) SetErrors(v ErrorResponse) {
 	o.Errors = v
 }
 
@@ -113,6 +118,43 @@ func (o MetricsQueryResponse) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["errors"] = o.Errors
 	return toSerialize, nil
+}
+
+func (o *MetricsQueryResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"errors",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetricsQueryResponse := _MetricsQueryResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetricsQueryResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsQueryResponse(varMetricsQueryResponse)
+
+	return err
 }
 
 type NullableMetricsQueryResponse struct {

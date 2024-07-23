@@ -20,12 +20,12 @@ import (
 )
 
 
-// DynamicParsingRuleManagementApiService DynamicParsingRuleManagementApi service
-type DynamicParsingRuleManagementApiService service
+// DynamicParsingRuleManagementAPIService DynamicParsingRuleManagementAPI service
+type DynamicParsingRuleManagementAPIService service
 
 type ApiCreateDynamicParsingRuleRequest struct {
 	ctx context.Context
-	ApiService *DynamicParsingRuleManagementApiService
+	ApiService *DynamicParsingRuleManagementAPIService
 	dynamicRuleDefinition *DynamicRuleDefinition
 }
 
@@ -47,7 +47,7 @@ Create a new dynamic parsing rule.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateDynamicParsingRuleRequest
 */
-func (a *DynamicParsingRuleManagementApiService) CreateDynamicParsingRule(ctx context.Context) ApiCreateDynamicParsingRuleRequest {
+func (a *DynamicParsingRuleManagementAPIService) CreateDynamicParsingRule(ctx context.Context) ApiCreateDynamicParsingRuleRequest {
 	return ApiCreateDynamicParsingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *DynamicParsingRuleManagementApiService) CreateDynamicParsingRule(ctx co
 
 // Execute executes the request
 //  @return DynamicRule
-func (a *DynamicParsingRuleManagementApiService) CreateDynamicParsingRuleExecute(r ApiCreateDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
+func (a *DynamicParsingRuleManagementAPIService) CreateDynamicParsingRuleExecute(r ApiCreateDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *DynamicParsingRuleManagementApiService) CreateDynamicParsingRuleExecute
 		localVarReturnValue  *DynamicRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementApiService.CreateDynamicParsingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementAPIService.CreateDynamicParsingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *DynamicParsingRuleManagementApiService) CreateDynamicParsingRuleExecute
 
 type ApiDeleteDynamicParsingRuleRequest struct {
 	ctx context.Context
-	ApiService *DynamicParsingRuleManagementApiService
+	ApiService *DynamicParsingRuleManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Delete a dynamic parsing rule with the given identifier.
  @param id Identifier of the dynamic parsing rule to delete.
  @return ApiDeleteDynamicParsingRuleRequest
 */
-func (a *DynamicParsingRuleManagementApiService) DeleteDynamicParsingRule(ctx context.Context, id string) ApiDeleteDynamicParsingRuleRequest {
+func (a *DynamicParsingRuleManagementAPIService) DeleteDynamicParsingRule(ctx context.Context, id string) ApiDeleteDynamicParsingRuleRequest {
 	return ApiDeleteDynamicParsingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *DynamicParsingRuleManagementApiService) DeleteDynamicParsingRule(ctx co
 }
 
 // Execute executes the request
-func (a *DynamicParsingRuleManagementApiService) DeleteDynamicParsingRuleExecute(r ApiDeleteDynamicParsingRuleRequest) (*http.Response, error) {
+func (a *DynamicParsingRuleManagementAPIService) DeleteDynamicParsingRuleExecute(r ApiDeleteDynamicParsingRuleRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementApiService.DeleteDynamicParsingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementAPIService.DeleteDynamicParsingRule")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *DynamicParsingRuleManagementApiService) DeleteDynamicParsingRuleExecute
 
 type ApiGetDynamicParsingRuleRequest struct {
 	ctx context.Context
-	ApiService *DynamicParsingRuleManagementApiService
+	ApiService *DynamicParsingRuleManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a dynamic parsing rule with the given identifier.
  @param id Identifier of dynamic parsing rule to return.
  @return ApiGetDynamicParsingRuleRequest
 */
-func (a *DynamicParsingRuleManagementApiService) GetDynamicParsingRule(ctx context.Context, id string) ApiGetDynamicParsingRuleRequest {
+func (a *DynamicParsingRuleManagementAPIService) GetDynamicParsingRule(ctx context.Context, id string) ApiGetDynamicParsingRuleRequest {
 	return ApiGetDynamicParsingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *DynamicParsingRuleManagementApiService) GetDynamicParsingRule(ctx conte
 
 // Execute executes the request
 //  @return DynamicRule
-func (a *DynamicParsingRuleManagementApiService) GetDynamicParsingRuleExecute(r ApiGetDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
+func (a *DynamicParsingRuleManagementAPIService) GetDynamicParsingRuleExecute(r ApiGetDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *DynamicParsingRuleManagementApiService) GetDynamicParsingRuleExecute(r 
 		localVarReturnValue  *DynamicRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementApiService.GetDynamicParsingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementAPIService.GetDynamicParsingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *DynamicParsingRuleManagementApiService) GetDynamicParsingRuleExecute(r 
 
 type ApiListDynamicParsingRulesRequest struct {
 	ctx context.Context
-	ApiService *DynamicParsingRuleManagementApiService
+	ApiService *DynamicParsingRuleManagementAPIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ Get a list of all dynamic parsing rules. The response is paginated with a defaul
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDynamicParsingRulesRequest
 */
-func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRules(ctx context.Context) ApiListDynamicParsingRulesRequest {
+func (a *DynamicParsingRuleManagementAPIService) ListDynamicParsingRules(ctx context.Context) ApiListDynamicParsingRulesRequest {
 	return ApiListDynamicParsingRulesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRules(ctx con
 
 // Execute executes the request
 //  @return ListDynamicRulesResponse
-func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRulesExecute(r ApiListDynamicParsingRulesRequest) (*ListDynamicRulesResponse, *http.Response, error) {
+func (a *DynamicParsingRuleManagementAPIService) ListDynamicParsingRulesExecute(r ApiListDynamicParsingRulesRequest) (*ListDynamicRulesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRulesExecute(
 		localVarReturnValue  *ListDynamicRulesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementApiService.ListDynamicParsingRules")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementAPIService.ListDynamicParsingRules")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRulesExecute(
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *DynamicParsingRuleManagementApiService) ListDynamicParsingRulesExecute(
 
 type ApiUpdateDynamicParsingRuleRequest struct {
 	ctx context.Context
-	ApiService *DynamicParsingRuleManagementApiService
+	ApiService *DynamicParsingRuleManagementAPIService
 	id string
 	dynamicRuleDefinition *DynamicRuleDefinition
 }
@@ -506,7 +509,7 @@ Update an existing dynamic parsing rule. All properties specified in the request
  @param id Identifier of the dynamic parsing rule to update.
  @return ApiUpdateDynamicParsingRuleRequest
 */
-func (a *DynamicParsingRuleManagementApiService) UpdateDynamicParsingRule(ctx context.Context, id string) ApiUpdateDynamicParsingRuleRequest {
+func (a *DynamicParsingRuleManagementAPIService) UpdateDynamicParsingRule(ctx context.Context, id string) ApiUpdateDynamicParsingRuleRequest {
 	return ApiUpdateDynamicParsingRuleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -516,7 +519,7 @@ func (a *DynamicParsingRuleManagementApiService) UpdateDynamicParsingRule(ctx co
 
 // Execute executes the request
 //  @return DynamicRule
-func (a *DynamicParsingRuleManagementApiService) UpdateDynamicParsingRuleExecute(r ApiUpdateDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
+func (a *DynamicParsingRuleManagementAPIService) UpdateDynamicParsingRuleExecute(r ApiUpdateDynamicParsingRuleRequest) (*DynamicRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -524,7 +527,7 @@ func (a *DynamicParsingRuleManagementApiService) UpdateDynamicParsingRuleExecute
 		localVarReturnValue  *DynamicRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementApiService.UpdateDynamicParsingRule")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DynamicParsingRuleManagementAPIService.UpdateDynamicParsingRule")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
