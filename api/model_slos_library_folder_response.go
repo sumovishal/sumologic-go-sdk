@@ -14,6 +14,7 @@ import (
 	"encoding/json"
 	"bytes"
 	"fmt"
+	"time"
 )
 
 // checks if the SlosLibraryFolderResponse type satisfies the MappedNullable interface at compile time
