@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the GenerateReportRequest type satisfies the MappedNullable interface at compile time
@@ -21,11 +23,13 @@ var _ MappedNullable = &GenerateReportRequest{}
 type GenerateReportRequest struct {
 	Action ReportAction `json:"action"`
 	// File format of the report. Can be `Pdf` or `Png`. `Pdf` is portable document format. `Png` is portable graphics image format.
-	ExportFormat string `json:"exportFormat"`
+	ExportFormat string `json:"exportFormat" validate:"regexp=^(Pdf|Png)$"`
 	// Time zone for the query time ranges. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
 	Template Template `json:"template"`
 }
+
+type _GenerateReportRequest GenerateReportRequest
 
 // NewGenerateReportRequest instantiates a new GenerateReportRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -159,6 +163,46 @@ func (o GenerateReportRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["timezone"] = o.Timezone
 	toSerialize["template"] = o.Template
 	return toSerialize, nil
+}
+
+func (o *GenerateReportRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"action",
+		"exportFormat",
+		"timezone",
+		"template",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varGenerateReportRequest := _GenerateReportRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varGenerateReportRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GenerateReportRequest(varGenerateReportRequest)
+
+	return err
 }
 
 type NullableGenerateReportRequest struct {

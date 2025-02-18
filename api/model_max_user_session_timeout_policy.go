@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MaxUserSessionTimeoutPolicy type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &MaxUserSessionTimeoutPolicy{}
 // MaxUserSessionTimeoutPolicy Max User Session Timeout policy.
 type MaxUserSessionTimeoutPolicy struct {
 	// Maximum web session timeout users are able to configure within their user preferences. Valid values are: `5m`, `15m`, `30m`, `1h`, `2h`, `6h`, `12h`, `1d`, `2d`, `3d`, `5d`, or `7d`
-	MaxUserSessionTimeout string `json:"maxUserSessionTimeout"`
+	MaxUserSessionTimeout string `json:"maxUserSessionTimeout" validate:"regexp=^(5m|15m|30m|1h|2h|6h|12h|1d|2d|3d|5d|7d)$"`
 }
+
+type _MaxUserSessionTimeoutPolicy MaxUserSessionTimeoutPolicy
 
 // NewMaxUserSessionTimeoutPolicy instantiates a new MaxUserSessionTimeoutPolicy object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o MaxUserSessionTimeoutPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["maxUserSessionTimeout"] = o.MaxUserSessionTimeout
 	return toSerialize, nil
+}
+
+func (o *MaxUserSessionTimeoutPolicy) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"maxUserSessionTimeout",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMaxUserSessionTimeoutPolicy := _MaxUserSessionTimeoutPolicy{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMaxUserSessionTimeoutPolicy)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MaxUserSessionTimeoutPolicy(varMaxUserSessionTimeoutPolicy)
+
+	return err
 }
 
 type NullableMaxUserSessionTimeoutPolicy struct {

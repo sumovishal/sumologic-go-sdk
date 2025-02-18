@@ -20,12 +20,12 @@ import (
 )
 
 
-// MetricsSearchesManagementApiService MetricsSearchesManagementApi service
-type MetricsSearchesManagementApiService service
+// MetricsSearchesManagementAPIService MetricsSearchesManagementAPI service
+type MetricsSearchesManagementAPIService service
 
 type ApiCreateMetricsSearchRequest struct {
 	ctx context.Context
-	ApiService *MetricsSearchesManagementApiService
+	ApiService *MetricsSearchesManagementAPIService
 	saveMetricsSearchRequest *SaveMetricsSearchRequest
 }
 
@@ -47,7 +47,7 @@ Saves a metrics search in the content library. Metrics search consists of one or
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateMetricsSearchRequest
 */
-func (a *MetricsSearchesManagementApiService) CreateMetricsSearch(ctx context.Context) ApiCreateMetricsSearchRequest {
+func (a *MetricsSearchesManagementAPIService) CreateMetricsSearch(ctx context.Context) ApiCreateMetricsSearchRequest {
 	return ApiCreateMetricsSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *MetricsSearchesManagementApiService) CreateMetricsSearch(ctx context.Co
 
 // Execute executes the request
 //  @return MetricsSearchInstance
-func (a *MetricsSearchesManagementApiService) CreateMetricsSearchExecute(r ApiCreateMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
+func (a *MetricsSearchesManagementAPIService) CreateMetricsSearchExecute(r ApiCreateMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *MetricsSearchesManagementApiService) CreateMetricsSearchExecute(r ApiCr
 		localVarReturnValue  *MetricsSearchInstance
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementApiService.CreateMetricsSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementAPIService.CreateMetricsSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *MetricsSearchesManagementApiService) CreateMetricsSearchExecute(r ApiCr
 
 type ApiDeleteMetricsSearchRequest struct {
 	ctx context.Context
-	ApiService *MetricsSearchesManagementApiService
+	ApiService *MetricsSearchesManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Deletes a metrics search from the content library.
  @param id Identifier of the metrics search.
  @return ApiDeleteMetricsSearchRequest
 */
-func (a *MetricsSearchesManagementApiService) DeleteMetricsSearch(ctx context.Context, id string) ApiDeleteMetricsSearchRequest {
+func (a *MetricsSearchesManagementAPIService) DeleteMetricsSearch(ctx context.Context, id string) ApiDeleteMetricsSearchRequest {
 	return ApiDeleteMetricsSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *MetricsSearchesManagementApiService) DeleteMetricsSearch(ctx context.Co
 }
 
 // Execute executes the request
-func (a *MetricsSearchesManagementApiService) DeleteMetricsSearchExecute(r ApiDeleteMetricsSearchRequest) (*http.Response, error) {
+func (a *MetricsSearchesManagementAPIService) DeleteMetricsSearchExecute(r ApiDeleteMetricsSearchRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementApiService.DeleteMetricsSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementAPIService.DeleteMetricsSearch")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *MetricsSearchesManagementApiService) DeleteMetricsSearchExecute(r ApiDe
 
 type ApiGetMetricsSearchRequest struct {
 	ctx context.Context
-	ApiService *MetricsSearchesManagementApiService
+	ApiService *MetricsSearchesManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Returns a metrics search with the specified identifier.
  @param id Identifier of the metrics search.
  @return ApiGetMetricsSearchRequest
 */
-func (a *MetricsSearchesManagementApiService) GetMetricsSearch(ctx context.Context, id string) ApiGetMetricsSearchRequest {
+func (a *MetricsSearchesManagementAPIService) GetMetricsSearch(ctx context.Context, id string) ApiGetMetricsSearchRequest {
 	return ApiGetMetricsSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *MetricsSearchesManagementApiService) GetMetricsSearch(ctx context.Conte
 
 // Execute executes the request
 //  @return MetricsSearchInstance
-func (a *MetricsSearchesManagementApiService) GetMetricsSearchExecute(r ApiGetMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
+func (a *MetricsSearchesManagementAPIService) GetMetricsSearchExecute(r ApiGetMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *MetricsSearchesManagementApiService) GetMetricsSearchExecute(r ApiGetMe
 		localVarReturnValue  *MetricsSearchInstance
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementApiService.GetMetricsSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementAPIService.GetMetricsSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *MetricsSearchesManagementApiService) GetMetricsSearchExecute(r ApiGetMe
 
 type ApiUpdateMetricsSearchRequest struct {
 	ctx context.Context
-	ApiService *MetricsSearchesManagementApiService
+	ApiService *MetricsSearchesManagementAPIService
 	id string
 	metricsSearchV1 *MetricsSearchV1
 }
@@ -379,7 +379,7 @@ Updates a metrics search with the specified identifier. Partial updates are not 
  @param id Identifier of the metrics search.
  @return ApiUpdateMetricsSearchRequest
 */
-func (a *MetricsSearchesManagementApiService) UpdateMetricsSearch(ctx context.Context, id string) ApiUpdateMetricsSearchRequest {
+func (a *MetricsSearchesManagementAPIService) UpdateMetricsSearch(ctx context.Context, id string) ApiUpdateMetricsSearchRequest {
 	return ApiUpdateMetricsSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -389,7 +389,7 @@ func (a *MetricsSearchesManagementApiService) UpdateMetricsSearch(ctx context.Co
 
 // Execute executes the request
 //  @return MetricsSearchInstance
-func (a *MetricsSearchesManagementApiService) UpdateMetricsSearchExecute(r ApiUpdateMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
+func (a *MetricsSearchesManagementAPIService) UpdateMetricsSearchExecute(r ApiUpdateMetricsSearchRequest) (*MetricsSearchInstance, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -397,7 +397,7 @@ func (a *MetricsSearchesManagementApiService) UpdateMetricsSearchExecute(r ApiUp
 		localVarReturnValue  *MetricsSearchInstance
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementApiService.UpdateMetricsSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsSearchesManagementAPIService.UpdateMetricsSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

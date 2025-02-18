@@ -20,12 +20,12 @@ import (
 )
 
 
-// TracesApiService TracesApi service
-type TracesApiService service
+// TracesAPIService TracesAPI service
+type TracesAPIService service
 
 type ApiCancelTraceQueryRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	queryId string
 }
 
@@ -42,7 +42,7 @@ Cancel a currently processed trace search query with the given id.
  @param queryId Identifier of the query to cancel.
  @return ApiCancelTraceQueryRequest
 */
-func (a *TracesApiService) CancelTraceQuery(ctx context.Context, queryId string) ApiCancelTraceQueryRequest {
+func (a *TracesAPIService) CancelTraceQuery(ctx context.Context, queryId string) ApiCancelTraceQueryRequest {
 	return ApiCancelTraceQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -51,14 +51,14 @@ func (a *TracesApiService) CancelTraceQuery(ctx context.Context, queryId string)
 }
 
 // Execute executes the request
-func (a *TracesApiService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest) (*http.Response, error) {
+func (a *TracesAPIService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.CancelTraceQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.CancelTraceQuery")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -125,7 +125,7 @@ func (a *TracesApiService) CancelTraceQueryExecute(r ApiCancelTraceQueryRequest)
 
 type ApiCreateTraceQueryRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	asyncTraceQueryRequest *AsyncTraceQueryRequest
 }
 
@@ -147,7 +147,7 @@ Execute a trace search query and get the id to fetch its status and results. Use
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateTraceQueryRequest
 */
-func (a *TracesApiService) CreateTraceQuery(ctx context.Context) ApiCreateTraceQueryRequest {
+func (a *TracesAPIService) CreateTraceQuery(ctx context.Context) ApiCreateTraceQueryRequest {
 	return ApiCreateTraceQueryRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -156,7 +156,7 @@ func (a *TracesApiService) CreateTraceQuery(ctx context.Context) ApiCreateTraceQ
 
 // Execute executes the request
 //  @return CreateTraceQueryResponse
-func (a *TracesApiService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest) (*CreateTraceQueryResponse, *http.Response, error) {
+func (a *TracesAPIService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest) (*CreateTraceQueryResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -164,7 +164,7 @@ func (a *TracesApiService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest)
 		localVarReturnValue  *CreateTraceQueryResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.CreateTraceQuery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.CreateTraceQuery")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *TracesApiService) CreateTraceQueryExecute(r ApiCreateTraceQueryRequest)
 
 type ApiGetCriticalPathRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 	limit *int32
 	token *string
@@ -275,7 +275,7 @@ Get a list of span segments composing the critical path of the trace. A span seg
  @param traceId Identifier of the trace.
  @return ApiGetCriticalPathRequest
 */
-func (a *TracesApiService) GetCriticalPath(ctx context.Context, traceId string) ApiGetCriticalPathRequest {
+func (a *TracesAPIService) GetCriticalPath(ctx context.Context, traceId string) ApiGetCriticalPathRequest {
 	return ApiGetCriticalPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -285,7 +285,7 @@ func (a *TracesApiService) GetCriticalPath(ctx context.Context, traceId string) 
 
 // Execute executes the request
 //  @return CriticalPathResponse
-func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (*CriticalPathResponse, *http.Response, error) {
+func (a *TracesAPIService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (*CriticalPathResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -293,7 +293,7 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 		localVarReturnValue  *CriticalPathResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetCriticalPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetCriticalPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -307,6 +307,9 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -375,7 +378,7 @@ func (a *TracesApiService) GetCriticalPathExecute(r ApiGetCriticalPathRequest) (
 
 type ApiGetCriticalPathServiceBreakdownRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 }
 
@@ -392,7 +395,7 @@ Get a critical path breakdown by services of the spans contributing to the criti
  @param traceId Identifier of the trace.
  @return ApiGetCriticalPathServiceBreakdownRequest
 */
-func (a *TracesApiService) GetCriticalPathServiceBreakdown(ctx context.Context, traceId string) ApiGetCriticalPathServiceBreakdownRequest {
+func (a *TracesAPIService) GetCriticalPathServiceBreakdown(ctx context.Context, traceId string) ApiGetCriticalPathServiceBreakdownRequest {
 	return ApiGetCriticalPathServiceBreakdownRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -402,7 +405,7 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdown(ctx context.Context, 
 
 // Execute executes the request
 //  @return CriticalPathServiceBreakdownResponse
-func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCriticalPathServiceBreakdownRequest) (*CriticalPathServiceBreakdownResponse, *http.Response, error) {
+func (a *TracesAPIService) GetCriticalPathServiceBreakdownExecute(r ApiGetCriticalPathServiceBreakdownRequest) (*CriticalPathServiceBreakdownResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -410,7 +413,7 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCritic
 		localVarReturnValue  *CriticalPathServiceBreakdownResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetCriticalPathServiceBreakdown")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetCriticalPathServiceBreakdown")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -486,7 +489,7 @@ func (a *TracesApiService) GetCriticalPathServiceBreakdownExecute(r ApiGetCritic
 
 type ApiGetMetricsRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 }
 
 func (r ApiGetMetricsRequest) Execute() (*TraceMetricsResponse, *http.Response, error) {
@@ -501,7 +504,7 @@ Get a list of available trace metrics that can be used in trace search queries.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetMetricsRequest
 */
-func (a *TracesApiService) GetMetrics(ctx context.Context) ApiGetMetricsRequest {
+func (a *TracesAPIService) GetMetrics(ctx context.Context) ApiGetMetricsRequest {
 	return ApiGetMetricsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -510,7 +513,7 @@ func (a *TracesApiService) GetMetrics(ctx context.Context) ApiGetMetricsRequest 
 
 // Execute executes the request
 //  @return TraceMetricsResponse
-func (a *TracesApiService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetricsResponse, *http.Response, error) {
+func (a *TracesAPIService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetricsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -518,7 +521,7 @@ func (a *TracesApiService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetr
 		localVarReturnValue  *TraceMetricsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetMetrics")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetMetrics")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -593,7 +596,7 @@ func (a *TracesApiService) GetMetricsExecute(r ApiGetMetricsRequest) (*TraceMetr
 
 type ApiGetSpanRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 	spanId string
 }
@@ -612,7 +615,7 @@ Get details of a span with the given identifier.
  @param spanId Identifier of the span to get the details.
  @return ApiGetSpanRequest
 */
-func (a *TracesApiService) GetSpan(ctx context.Context, traceId string, spanId string) ApiGetSpanRequest {
+func (a *TracesAPIService) GetSpan(ctx context.Context, traceId string, spanId string) ApiGetSpanRequest {
 	return ApiGetSpanRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -623,7 +626,7 @@ func (a *TracesApiService) GetSpan(ctx context.Context, traceId string, spanId s
 
 // Execute executes the request
 //  @return TraceSpanDetail
-func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail, *http.Response, error) {
+func (a *TracesAPIService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -631,7 +634,7 @@ func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail
 		localVarReturnValue  *TraceSpanDetail
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetSpan")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetSpan")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -708,7 +711,7 @@ func (a *TracesApiService) GetSpanExecute(r ApiGetSpanRequest) (*TraceSpanDetail
 
 type ApiGetSpanBillingInfoRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 	spanId string
 }
@@ -727,7 +730,7 @@ Get the billing information of the span.
  @param spanId Identifier of the span to get the billing info.
  @return ApiGetSpanBillingInfoRequest
 */
-func (a *TracesApiService) GetSpanBillingInfo(ctx context.Context, traceId string, spanId string) ApiGetSpanBillingInfoRequest {
+func (a *TracesAPIService) GetSpanBillingInfo(ctx context.Context, traceId string, spanId string) ApiGetSpanBillingInfoRequest {
 	return ApiGetSpanBillingInfoRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -738,7 +741,7 @@ func (a *TracesApiService) GetSpanBillingInfo(ctx context.Context, traceId strin
 
 // Execute executes the request
 //  @return TraceSpanBillingInfo
-func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequest) (*TraceSpanBillingInfo, *http.Response, error) {
+func (a *TracesAPIService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequest) (*TraceSpanBillingInfo, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -746,7 +749,7 @@ func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequ
 		localVarReturnValue  *TraceSpanBillingInfo
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetSpanBillingInfo")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetSpanBillingInfo")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -823,7 +826,7 @@ func (a *TracesApiService) GetSpanBillingInfoExecute(r ApiGetSpanBillingInfoRequ
 
 type ApiGetSpansRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 	limit *int32
 	token *string
@@ -854,7 +857,7 @@ Get a list of spans for the given trace. The response is paginated with a defaul
  @param traceId Identifier of the trace to get the spans.
  @return ApiGetSpansRequest
 */
-func (a *TracesApiService) GetSpans(ctx context.Context, traceId string) ApiGetSpansRequest {
+func (a *TracesAPIService) GetSpans(ctx context.Context, traceId string) ApiGetSpansRequest {
 	return ApiGetSpansRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -864,7 +867,7 @@ func (a *TracesApiService) GetSpans(ctx context.Context, traceId string) ApiGetS
 
 // Execute executes the request
 //  @return TraceSpansResponse
-func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansResponse, *http.Response, error) {
+func (a *TracesAPIService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -872,7 +875,7 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 		localVarReturnValue  *TraceSpansResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetSpans")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetSpans")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -886,6 +889,9 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -954,7 +960,7 @@ func (a *TracesApiService) GetSpansExecute(r ApiGetSpansRequest) (*TraceSpansRes
 
 type ApiGetTraceRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 }
 
@@ -971,7 +977,7 @@ Get details of a trace with the given identifier.
  @param traceId Identifier of the trace to get the details.
  @return ApiGetTraceRequest
 */
-func (a *TracesApiService) GetTrace(ctx context.Context, traceId string) ApiGetTraceRequest {
+func (a *TracesAPIService) GetTrace(ctx context.Context, traceId string) ApiGetTraceRequest {
 	return ApiGetTraceRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -981,7 +987,7 @@ func (a *TracesApiService) GetTrace(ctx context.Context, traceId string) ApiGetT
 
 // Execute executes the request
 //  @return TraceDetail
-func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, *http.Response, error) {
+func (a *TracesAPIService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -989,7 +995,7 @@ func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, 
 		localVarReturnValue  *TraceDetail
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTrace")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTrace")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1065,7 +1071,7 @@ func (a *TracesApiService) GetTraceExecute(r ApiGetTraceRequest) (*TraceDetail, 
 
 type ApiGetTraceLightEventsRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 	limit *int32
 	token *string
@@ -1096,7 +1102,7 @@ Gets a list of the events (without their attributes) attached to each span in a 
  @param traceId Identifier of the trace for which span events will be returned.
  @return ApiGetTraceLightEventsRequest
 */
-func (a *TracesApiService) GetTraceLightEvents(ctx context.Context, traceId string) ApiGetTraceLightEventsRequest {
+func (a *TracesAPIService) GetTraceLightEvents(ctx context.Context, traceId string) ApiGetTraceLightEventsRequest {
 	return ApiGetTraceLightEventsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1106,7 +1112,7 @@ func (a *TracesApiService) GetTraceLightEvents(ctx context.Context, traceId stri
 
 // Execute executes the request
 //  @return TraceLightEventsResponse
-func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRequest) (*TraceLightEventsResponse, *http.Response, error) {
+func (a *TracesAPIService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRequest) (*TraceLightEventsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1114,7 +1120,7 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 		localVarReturnValue  *TraceLightEventsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTraceLightEvents")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTraceLightEvents")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1134,6 +1140,9 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -1202,7 +1211,7 @@ func (a *TracesApiService) GetTraceLightEventsExecute(r ApiGetTraceLightEventsRe
 
 type ApiGetTraceQueryFieldValuesRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	field string
 	query *string
 	limit *int32
@@ -1247,7 +1256,7 @@ Get a list of available values for the given trace search query filter field. No
  @param field Field identifier.
  @return ApiGetTraceQueryFieldValuesRequest
 */
-func (a *TracesApiService) GetTraceQueryFieldValues(ctx context.Context, field string) ApiGetTraceQueryFieldValuesRequest {
+func (a *TracesAPIService) GetTraceQueryFieldValues(ctx context.Context, field string) ApiGetTraceQueryFieldValuesRequest {
 	return ApiGetTraceQueryFieldValuesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1257,7 +1266,7 @@ func (a *TracesApiService) GetTraceQueryFieldValues(ctx context.Context, field s
 
 // Execute executes the request
 //  @return TraceFieldValuesResponse
-func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFieldValuesRequest) (*TraceFieldValuesResponse, *http.Response, error) {
+func (a *TracesAPIService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFieldValuesRequest) (*TraceFieldValuesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1265,7 +1274,7 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 		localVarReturnValue  *TraceFieldValuesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTraceQueryFieldValues")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTraceQueryFieldValues")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1282,6 +1291,9 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 	}
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 10
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -1353,7 +1365,7 @@ func (a *TracesApiService) GetTraceQueryFieldValuesExecute(r ApiGetTraceQueryFie
 
 type ApiGetTraceQueryFieldsRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 }
 
 func (r ApiGetTraceQueryFieldsRequest) Execute() (*TraceFieldsResponse, *http.Response, error) {
@@ -1368,7 +1380,7 @@ Get a list of available fields which can be used in trace search queries.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetTraceQueryFieldsRequest
 */
-func (a *TracesApiService) GetTraceQueryFields(ctx context.Context) ApiGetTraceQueryFieldsRequest {
+func (a *TracesAPIService) GetTraceQueryFields(ctx context.Context) ApiGetTraceQueryFieldsRequest {
 	return ApiGetTraceQueryFieldsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1377,7 +1389,7 @@ func (a *TracesApiService) GetTraceQueryFields(ctx context.Context) ApiGetTraceQ
 
 // Execute executes the request
 //  @return TraceFieldsResponse
-func (a *TracesApiService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRequest) (*TraceFieldsResponse, *http.Response, error) {
+func (a *TracesAPIService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRequest) (*TraceFieldsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1385,7 +1397,7 @@ func (a *TracesApiService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRe
 		localVarReturnValue  *TraceFieldsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTraceQueryFields")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTraceQueryFields")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1460,7 +1472,7 @@ func (a *TracesApiService) GetTraceQueryFieldsExecute(r ApiGetTraceQueryFieldsRe
 
 type ApiGetTraceQueryResultRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	queryId string
 	rowId string
 	limit *int32
@@ -1493,7 +1505,7 @@ Get a list of traces matching a query with the specified id. The response is pag
  @param rowId Identifier of the query row.
  @return ApiGetTraceQueryResultRequest
 */
-func (a *TracesApiService) GetTraceQueryResult(ctx context.Context, queryId string, rowId string) ApiGetTraceQueryResultRequest {
+func (a *TracesAPIService) GetTraceQueryResult(ctx context.Context, queryId string, rowId string) ApiGetTraceQueryResultRequest {
 	return ApiGetTraceQueryResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1504,7 +1516,7 @@ func (a *TracesApiService) GetTraceQueryResult(ctx context.Context, queryId stri
 
 // Execute executes the request
 //  @return TraceQueryResultResponse
-func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRequest) (*TraceQueryResultResponse, *http.Response, error) {
+func (a *TracesAPIService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRequest) (*TraceQueryResultResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1512,7 +1524,7 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 		localVarReturnValue  *TraceQueryResultResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTraceQueryResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTraceQueryResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1527,6 +1539,9 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -1595,7 +1610,7 @@ func (a *TracesApiService) GetTraceQueryResultExecute(r ApiGetTraceQueryResultRe
 
 type ApiGetTraceQueryStatusRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	queryId string
 }
 
@@ -1612,7 +1627,7 @@ Get a status of a trace query with the given id. When the query has been complet
  @param queryId Identifier of the executed query.
  @return ApiGetTraceQueryStatusRequest
 */
-func (a *TracesApiService) GetTraceQueryStatus(ctx context.Context, queryId string) ApiGetTraceQueryStatusRequest {
+func (a *TracesAPIService) GetTraceQueryStatus(ctx context.Context, queryId string) ApiGetTraceQueryStatusRequest {
 	return ApiGetTraceQueryStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1622,7 +1637,7 @@ func (a *TracesApiService) GetTraceQueryStatus(ctx context.Context, queryId stri
 
 // Execute executes the request
 //  @return TraceQueryStatusResponse
-func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRequest) (*TraceQueryStatusResponse, *http.Response, error) {
+func (a *TracesAPIService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRequest) (*TraceQueryStatusResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1630,7 +1645,7 @@ func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRe
 		localVarReturnValue  *TraceQueryStatusResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.GetTraceQueryStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.GetTraceQueryStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1706,7 +1721,7 @@ func (a *TracesApiService) GetTraceQueryStatusExecute(r ApiGetTraceQueryStatusRe
 
 type ApiTraceExistsRequest struct {
 	ctx context.Context
-	ApiService *TracesApiService
+	ApiService *TracesAPIService
 	traceId string
 }
 
@@ -1723,7 +1738,7 @@ Check if the trace with the given identifier exists.
  @param traceId Identifier of the trace to check.
  @return ApiTraceExistsRequest
 */
-func (a *TracesApiService) TraceExists(ctx context.Context, traceId string) ApiTraceExistsRequest {
+func (a *TracesAPIService) TraceExists(ctx context.Context, traceId string) ApiTraceExistsRequest {
 	return ApiTraceExistsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1733,7 +1748,7 @@ func (a *TracesApiService) TraceExists(ctx context.Context, traceId string) ApiT
 
 // Execute executes the request
 //  @return TraceExistsResponse
-func (a *TracesApiService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceExistsResponse, *http.Response, error) {
+func (a *TracesAPIService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceExistsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1741,7 +1756,7 @@ func (a *TracesApiService) TraceExistsExecute(r ApiTraceExistsRequest) (*TraceEx
 		localVarReturnValue  *TraceExistsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesApiService.TraceExists")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TracesAPIService.TraceExists")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RemoveIndicatorsRequest type satisfies the MappedNullable interface at compile time
@@ -19,16 +21,21 @@ var _ MappedNullable = &RemoveIndicatorsRequest{}
 
 // RemoveIndicatorsRequest struct for RemoveIndicatorsRequest
 type RemoveIndicatorsRequest struct {
-	// A list of indicator IDs
+	// The source of the indicator ID to match against
+	Source string `json:"source"`
+	// The list of indicator IDs to match against
 	IndicatorIds []string `json:"indicatorIds"`
 }
+
+type _RemoveIndicatorsRequest RemoveIndicatorsRequest
 
 // NewRemoveIndicatorsRequest instantiates a new RemoveIndicatorsRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRemoveIndicatorsRequest(indicatorIds []string) *RemoveIndicatorsRequest {
+func NewRemoveIndicatorsRequest(source string, indicatorIds []string) *RemoveIndicatorsRequest {
 	this := RemoveIndicatorsRequest{}
+	this.Source = source
 	this.IndicatorIds = indicatorIds
 	return &this
 }
@@ -39,6 +46,30 @@ func NewRemoveIndicatorsRequest(indicatorIds []string) *RemoveIndicatorsRequest 
 func NewRemoveIndicatorsRequestWithDefaults() *RemoveIndicatorsRequest {
 	this := RemoveIndicatorsRequest{}
 	return &this
+}
+
+// GetSource returns the Source field value
+func (o *RemoveIndicatorsRequest) GetSource() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Source
+}
+
+// GetSourceOk returns a tuple with the Source field value
+// and a boolean to check if the value has been set.
+func (o *RemoveIndicatorsRequest) GetSourceOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Source, true
+}
+
+// SetSource sets field value
+func (o *RemoveIndicatorsRequest) SetSource(v string) {
+	o.Source = v
 }
 
 // GetIndicatorIds returns the IndicatorIds field value
@@ -75,8 +106,47 @@ func (o RemoveIndicatorsRequest) MarshalJSON() ([]byte, error) {
 
 func (o RemoveIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["source"] = o.Source
 	toSerialize["indicatorIds"] = o.IndicatorIds
 	return toSerialize, nil
+}
+
+func (o *RemoveIndicatorsRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"source",
+		"indicatorIds",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRemoveIndicatorsRequest := _RemoveIndicatorsRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRemoveIndicatorsRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RemoveIndicatorsRequest(varRemoveIndicatorsRequest)
+
+	return err
 }
 
 type NullableRemoveIndicatorsRequest struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CpcQueryResultResponse type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type CpcQueryResultResponse struct {
 	// A list of CPC query results on a per time bucket basis.  Each bucket result corresponds to the aggregated CPC data from a sample of traces matching search criteria falling within a specific time slice.
 	Buckets []CpcQueryBucketResult `json:"buckets"`
 }
+
+type _CpcQueryResultResponse CpcQueryResultResponse
 
 // NewCpcQueryResultResponse instantiates a new CpcQueryResultResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o CpcQueryResultResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["buckets"] = o.Buckets
 	return toSerialize, nil
+}
+
+func (o *CpcQueryResultResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"buckets",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCpcQueryResultResponse := _CpcQueryResultResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCpcQueryResultResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CpcQueryResultResponse(varCpcQueryResultResponse)
+
+	return err
 }
 
 type NullableCpcQueryResultResponse struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingScheduleResponse type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type MutingScheduleResponse struct {
 	// Id of the muting schedule in hex.
 	Id string `json:"id"`
 }
+
+type _MutingScheduleResponse MutingScheduleResponse
 
 // NewMutingScheduleResponse instantiates a new MutingScheduleResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o MutingScheduleResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	return toSerialize, nil
+}
+
+func (o *MutingScheduleResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingScheduleResponse := _MutingScheduleResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingScheduleResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingScheduleResponse(varMutingScheduleResponse)
+
+	return err
 }
 
 type NullableMutingScheduleResponse struct {

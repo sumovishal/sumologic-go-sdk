@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LookupUpdateDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type LookupUpdateDefinition struct {
 	// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will starting deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
 	SizeLimitAction *string `json:"sizeLimitAction,omitempty"`
 }
+
+type _LookupUpdateDefinition LookupUpdateDefinition
 
 // NewLookupUpdateDefinition instantiates a new LookupUpdateDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -148,6 +152,44 @@ func (o LookupUpdateDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["sizeLimitAction"] = o.SizeLimitAction
 	}
 	return toSerialize, nil
+}
+
+func (o *LookupUpdateDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"ttl",
+		"description",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLookupUpdateDefinition := _LookupUpdateDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLookupUpdateDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupUpdateDefinition(varLookupUpdateDefinition)
+
+	return err
 }
 
 type NullableLookupUpdateDefinition struct {

@@ -20,12 +20,12 @@ import (
 )
 
 
-// ArchiveManagementApiService ArchiveManagementApi service
-type ArchiveManagementApiService service
+// ArchiveManagementAPIService ArchiveManagementAPI service
+type ArchiveManagementAPIService service
 
 type ApiCreateArchiveJobRequest struct {
 	ctx context.Context
-	ApiService *ArchiveManagementApiService
+	ApiService *ArchiveManagementAPIService
 	sourceId string
 	createArchiveJobRequest *CreateArchiveJobRequest
 }
@@ -49,7 +49,7 @@ Create an ingestion job to pull data from your S3 bucket.
  @param sourceId The identifier of the Archive Source for which the job is to be added.
  @return ApiCreateArchiveJobRequest
 */
-func (a *ArchiveManagementApiService) CreateArchiveJob(ctx context.Context, sourceId string) ApiCreateArchiveJobRequest {
+func (a *ArchiveManagementAPIService) CreateArchiveJob(ctx context.Context, sourceId string) ApiCreateArchiveJobRequest {
 	return ApiCreateArchiveJobRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -59,7 +59,7 @@ func (a *ArchiveManagementApiService) CreateArchiveJob(ctx context.Context, sour
 
 // Execute executes the request
 //  @return ArchiveJob
-func (a *ArchiveManagementApiService) CreateArchiveJobExecute(r ApiCreateArchiveJobRequest) (*ArchiveJob, *http.Response, error) {
+func (a *ArchiveManagementAPIService) CreateArchiveJobExecute(r ApiCreateArchiveJobRequest) (*ArchiveJob, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -67,7 +67,7 @@ func (a *ArchiveManagementApiService) CreateArchiveJobExecute(r ApiCreateArchive
 		localVarReturnValue  *ArchiveJob
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementApiService.CreateArchiveJob")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementAPIService.CreateArchiveJob")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -148,7 +148,7 @@ func (a *ArchiveManagementApiService) CreateArchiveJobExecute(r ApiCreateArchive
 
 type ApiDeleteArchiveJobRequest struct {
 	ctx context.Context
-	ApiService *ArchiveManagementApiService
+	ApiService *ArchiveManagementAPIService
 	sourceId string
 	id string
 }
@@ -167,7 +167,7 @@ Delete an ingestion job with the given identifier from the organization. The del
  @param id The identifier of the ingestion job to delete.
  @return ApiDeleteArchiveJobRequest
 */
-func (a *ArchiveManagementApiService) DeleteArchiveJob(ctx context.Context, sourceId string, id string) ApiDeleteArchiveJobRequest {
+func (a *ArchiveManagementAPIService) DeleteArchiveJob(ctx context.Context, sourceId string, id string) ApiDeleteArchiveJobRequest {
 	return ApiDeleteArchiveJobRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -177,14 +177,14 @@ func (a *ArchiveManagementApiService) DeleteArchiveJob(ctx context.Context, sour
 }
 
 // Execute executes the request
-func (a *ArchiveManagementApiService) DeleteArchiveJobExecute(r ApiDeleteArchiveJobRequest) (*http.Response, error) {
+func (a *ArchiveManagementAPIService) DeleteArchiveJobExecute(r ApiDeleteArchiveJobRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementApiService.DeleteArchiveJob")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementAPIService.DeleteArchiveJob")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -252,7 +252,7 @@ func (a *ArchiveManagementApiService) DeleteArchiveJobExecute(r ApiDeleteArchive
 
 type ApiListArchiveJobsBySourceIdRequest struct {
 	ctx context.Context
-	ApiService *ArchiveManagementApiService
+	ApiService *ArchiveManagementAPIService
 	sourceId string
 	limit *int32
 	token *string
@@ -283,7 +283,7 @@ Get a list of all the ingestion jobs created on an Archive Source. The response 
  @param sourceId The identifier of an Archive Source.
  @return ApiListArchiveJobsBySourceIdRequest
 */
-func (a *ArchiveManagementApiService) ListArchiveJobsBySourceId(ctx context.Context, sourceId string) ApiListArchiveJobsBySourceIdRequest {
+func (a *ArchiveManagementAPIService) ListArchiveJobsBySourceId(ctx context.Context, sourceId string) ApiListArchiveJobsBySourceIdRequest {
 	return ApiListArchiveJobsBySourceIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -293,7 +293,7 @@ func (a *ArchiveManagementApiService) ListArchiveJobsBySourceId(ctx context.Cont
 
 // Execute executes the request
 //  @return ListArchiveJobsResponse
-func (a *ArchiveManagementApiService) ListArchiveJobsBySourceIdExecute(r ApiListArchiveJobsBySourceIdRequest) (*ListArchiveJobsResponse, *http.Response, error) {
+func (a *ArchiveManagementAPIService) ListArchiveJobsBySourceIdExecute(r ApiListArchiveJobsBySourceIdRequest) (*ListArchiveJobsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -301,7 +301,7 @@ func (a *ArchiveManagementApiService) ListArchiveJobsBySourceIdExecute(r ApiList
 		localVarReturnValue  *ListArchiveJobsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementApiService.ListArchiveJobsBySourceId")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementAPIService.ListArchiveJobsBySourceId")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -315,6 +315,9 @@ func (a *ArchiveManagementApiService) ListArchiveJobsBySourceIdExecute(r ApiList
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 10
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -383,7 +386,7 @@ func (a *ArchiveManagementApiService) ListArchiveJobsBySourceIdExecute(r ApiList
 
 type ApiListArchiveJobsCountPerSourceRequest struct {
 	ctx context.Context
-	ApiService *ArchiveManagementApiService
+	ApiService *ArchiveManagementAPIService
 }
 
 func (r ApiListArchiveJobsCountPerSourceRequest) Execute() (*ListArchiveJobsCount, *http.Response, error) {
@@ -398,7 +401,7 @@ Get a list of all Archive Sources with the count and status of ingestion jobs.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListArchiveJobsCountPerSourceRequest
 */
-func (a *ArchiveManagementApiService) ListArchiveJobsCountPerSource(ctx context.Context) ApiListArchiveJobsCountPerSourceRequest {
+func (a *ArchiveManagementAPIService) ListArchiveJobsCountPerSource(ctx context.Context) ApiListArchiveJobsCountPerSourceRequest {
 	return ApiListArchiveJobsCountPerSourceRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -407,7 +410,7 @@ func (a *ArchiveManagementApiService) ListArchiveJobsCountPerSource(ctx context.
 
 // Execute executes the request
 //  @return ListArchiveJobsCount
-func (a *ArchiveManagementApiService) ListArchiveJobsCountPerSourceExecute(r ApiListArchiveJobsCountPerSourceRequest) (*ListArchiveJobsCount, *http.Response, error) {
+func (a *ArchiveManagementAPIService) ListArchiveJobsCountPerSourceExecute(r ApiListArchiveJobsCountPerSourceRequest) (*ListArchiveJobsCount, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -415,7 +418,7 @@ func (a *ArchiveManagementApiService) ListArchiveJobsCountPerSourceExecute(r Api
 		localVarReturnValue  *ListArchiveJobsCount
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementApiService.ListArchiveJobsCountPerSource")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArchiveManagementAPIService.ListArchiveJobsCountPerSource")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

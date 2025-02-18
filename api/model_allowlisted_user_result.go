@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AllowlistedUserResult type satisfies the MappedNullable interface at compile time
@@ -35,6 +37,8 @@ type AllowlistedUserResult struct {
 	// Timestamp of the last login of the user.
 	LastLogin time.Time `json:"lastLogin"`
 }
+
+type _AllowlistedUserResult AllowlistedUserResult
 
 // NewAllowlistedUserResult instantiates a new AllowlistedUserResult object
 // This constructor will assign default values to properties that have it defined,
@@ -246,6 +250,49 @@ func (o AllowlistedUserResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["isActive"] = o.IsActive
 	toSerialize["lastLogin"] = o.LastLogin
 	return toSerialize, nil
+}
+
+func (o *AllowlistedUserResult) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"userId",
+		"firstName",
+		"lastName",
+		"email",
+		"canManageSaml",
+		"isActive",
+		"lastLogin",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAllowlistedUserResult := _AllowlistedUserResult{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAllowlistedUserResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AllowlistedUserResult(varAllowlistedUserResult)
+
+	return err
 }
 
 type NullableAllowlistedUserResult struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MutingSchedulesLibraryMutingScheduleExport type satisfies the MappedNullable interface at compile time
@@ -22,7 +24,10 @@ type MutingSchedulesLibraryMutingScheduleExport struct {
 	MutingSchedulesLibraryBaseExport
 	Schedule ScheduleDefinition `json:"schedule"`
 	Monitor *MonitorScope `json:"monitor,omitempty"`
+	NotificationGroups []GroupDefinition `json:"notificationGroups,omitempty"`
 }
+
+type _MutingSchedulesLibraryMutingScheduleExport MutingSchedulesLibraryMutingScheduleExport
 
 // NewMutingSchedulesLibraryMutingScheduleExport instantiates a new MutingSchedulesLibraryMutingScheduleExport object
 // This constructor will assign default values to properties that have it defined,
@@ -100,6 +105,38 @@ func (o *MutingSchedulesLibraryMutingScheduleExport) SetMonitor(v MonitorScope) 
 	o.Monitor = &v
 }
 
+// GetNotificationGroups returns the NotificationGroups field value if set, zero value otherwise.
+func (o *MutingSchedulesLibraryMutingScheduleExport) GetNotificationGroups() []GroupDefinition {
+	if o == nil || IsNil(o.NotificationGroups) {
+		var ret []GroupDefinition
+		return ret
+	}
+	return o.NotificationGroups
+}
+
+// GetNotificationGroupsOk returns a tuple with the NotificationGroups field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MutingSchedulesLibraryMutingScheduleExport) GetNotificationGroupsOk() ([]GroupDefinition, bool) {
+	if o == nil || IsNil(o.NotificationGroups) {
+		return nil, false
+	}
+	return o.NotificationGroups, true
+}
+
+// HasNotificationGroups returns a boolean if a field has been set.
+func (o *MutingSchedulesLibraryMutingScheduleExport) HasNotificationGroups() bool {
+	if o != nil && !IsNil(o.NotificationGroups) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationGroups gets a reference to the given []GroupDefinition and assigns it to the NotificationGroups field.
+func (o *MutingSchedulesLibraryMutingScheduleExport) SetNotificationGroups(v []GroupDefinition) {
+	o.NotificationGroups = v
+}
+
 func (o MutingSchedulesLibraryMutingScheduleExport) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -122,7 +159,49 @@ func (o MutingSchedulesLibraryMutingScheduleExport) ToMap() (map[string]interfac
 	if !IsNil(o.Monitor) {
 		toSerialize["monitor"] = o.Monitor
 	}
+	if !IsNil(o.NotificationGroups) {
+		toSerialize["notificationGroups"] = o.NotificationGroups
+	}
 	return toSerialize, nil
+}
+
+func (o *MutingSchedulesLibraryMutingScheduleExport) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"schedule",
+		"name",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMutingSchedulesLibraryMutingScheduleExport := _MutingSchedulesLibraryMutingScheduleExport{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMutingSchedulesLibraryMutingScheduleExport)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MutingSchedulesLibraryMutingScheduleExport(varMutingSchedulesLibraryMutingScheduleExport)
+
+	return err
 }
 
 type NullableMutingSchedulesLibraryMutingScheduleExport struct {

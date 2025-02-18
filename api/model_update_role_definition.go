@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the UpdateRoleDefinition type satisfies the MappedNullable interface at compile time
@@ -32,6 +34,8 @@ type UpdateRoleDefinition struct {
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
 }
+
+type _UpdateRoleDefinition UpdateRoleDefinition
 
 // NewUpdateRoleDefinition instantiates a new UpdateRoleDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -230,6 +234,47 @@ func (o UpdateRoleDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["autofillDependencies"] = o.AutofillDependencies
 	}
 	return toSerialize, nil
+}
+
+func (o *UpdateRoleDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"description",
+		"filterPredicate",
+		"users",
+		"capabilities",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varUpdateRoleDefinition := _UpdateRoleDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varUpdateRoleDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateRoleDefinition(varUpdateRoleDefinition)
+
+	return err
 }
 
 type NullableUpdateRoleDefinition struct {

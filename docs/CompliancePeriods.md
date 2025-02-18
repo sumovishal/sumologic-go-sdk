@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Timezone** | **string** | Time zone for the compliance periods as per the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | 
-**Periods** | [**[]CompliancePeriodProgress**](CompliancePeriodProgress.md) |  | 
+**Periods** | [**[]CompliancePeriodProgress**](CompliancePeriodProgress.md) | List of CompliancePeriodProgress. | 
 
 ## Methods
 

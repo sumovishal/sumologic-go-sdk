@@ -37,6 +37,14 @@ type ScannedBytes struct {
 	Rce *int64 `json:"rce,omitempty"`
 	// The total number of scanned bytes from flex tier data for the query in bytes.
 	Flex *int64 `json:"flex,omitempty"`
+	// The total number of scanned bytes from continuous security tier data for the query in bytes.
+	ContinuousSecurity *int64 `json:"continuousSecurity,omitempty"`
+	// The total number of scanned bytes from flex security tier data for the query in bytes.
+	FlexSecurity *int64 `json:"flexSecurity,omitempty"`
+	// The total number of scanned bytes from flex upfront tier data for the query in bytes.
+	FlexUpfront *int64 `json:"flexUpfront,omitempty"`
+	// The total number of scanned bytes from flex metered tier data for the query in bytes.
+	FlexMetered *int64 `json:"flexMetered,omitempty"`
 }
 
 // NewScannedBytes instantiates a new ScannedBytes object
@@ -344,6 +352,134 @@ func (o *ScannedBytes) SetFlex(v int64) {
 	o.Flex = &v
 }
 
+// GetContinuousSecurity returns the ContinuousSecurity field value if set, zero value otherwise.
+func (o *ScannedBytes) GetContinuousSecurity() int64 {
+	if o == nil || IsNil(o.ContinuousSecurity) {
+		var ret int64
+		return ret
+	}
+	return *o.ContinuousSecurity
+}
+
+// GetContinuousSecurityOk returns a tuple with the ContinuousSecurity field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScannedBytes) GetContinuousSecurityOk() (*int64, bool) {
+	if o == nil || IsNil(o.ContinuousSecurity) {
+		return nil, false
+	}
+	return o.ContinuousSecurity, true
+}
+
+// HasContinuousSecurity returns a boolean if a field has been set.
+func (o *ScannedBytes) HasContinuousSecurity() bool {
+	if o != nil && !IsNil(o.ContinuousSecurity) {
+		return true
+	}
+
+	return false
+}
+
+// SetContinuousSecurity gets a reference to the given int64 and assigns it to the ContinuousSecurity field.
+func (o *ScannedBytes) SetContinuousSecurity(v int64) {
+	o.ContinuousSecurity = &v
+}
+
+// GetFlexSecurity returns the FlexSecurity field value if set, zero value otherwise.
+func (o *ScannedBytes) GetFlexSecurity() int64 {
+	if o == nil || IsNil(o.FlexSecurity) {
+		var ret int64
+		return ret
+	}
+	return *o.FlexSecurity
+}
+
+// GetFlexSecurityOk returns a tuple with the FlexSecurity field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScannedBytes) GetFlexSecurityOk() (*int64, bool) {
+	if o == nil || IsNil(o.FlexSecurity) {
+		return nil, false
+	}
+	return o.FlexSecurity, true
+}
+
+// HasFlexSecurity returns a boolean if a field has been set.
+func (o *ScannedBytes) HasFlexSecurity() bool {
+	if o != nil && !IsNil(o.FlexSecurity) {
+		return true
+	}
+
+	return false
+}
+
+// SetFlexSecurity gets a reference to the given int64 and assigns it to the FlexSecurity field.
+func (o *ScannedBytes) SetFlexSecurity(v int64) {
+	o.FlexSecurity = &v
+}
+
+// GetFlexUpfront returns the FlexUpfront field value if set, zero value otherwise.
+func (o *ScannedBytes) GetFlexUpfront() int64 {
+	if o == nil || IsNil(o.FlexUpfront) {
+		var ret int64
+		return ret
+	}
+	return *o.FlexUpfront
+}
+
+// GetFlexUpfrontOk returns a tuple with the FlexUpfront field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScannedBytes) GetFlexUpfrontOk() (*int64, bool) {
+	if o == nil || IsNil(o.FlexUpfront) {
+		return nil, false
+	}
+	return o.FlexUpfront, true
+}
+
+// HasFlexUpfront returns a boolean if a field has been set.
+func (o *ScannedBytes) HasFlexUpfront() bool {
+	if o != nil && !IsNil(o.FlexUpfront) {
+		return true
+	}
+
+	return false
+}
+
+// SetFlexUpfront gets a reference to the given int64 and assigns it to the FlexUpfront field.
+func (o *ScannedBytes) SetFlexUpfront(v int64) {
+	o.FlexUpfront = &v
+}
+
+// GetFlexMetered returns the FlexMetered field value if set, zero value otherwise.
+func (o *ScannedBytes) GetFlexMetered() int64 {
+	if o == nil || IsNil(o.FlexMetered) {
+		var ret int64
+		return ret
+	}
+	return *o.FlexMetered
+}
+
+// GetFlexMeteredOk returns a tuple with the FlexMetered field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScannedBytes) GetFlexMeteredOk() (*int64, bool) {
+	if o == nil || IsNil(o.FlexMetered) {
+		return nil, false
+	}
+	return o.FlexMetered, true
+}
+
+// HasFlexMetered returns a boolean if a field has been set.
+func (o *ScannedBytes) HasFlexMetered() bool {
+	if o != nil && !IsNil(o.FlexMetered) {
+		return true
+	}
+
+	return false
+}
+
+// SetFlexMetered gets a reference to the given int64 and assigns it to the FlexMetered field.
+func (o *ScannedBytes) SetFlexMetered(v int64) {
+	o.FlexMetered = &v
+}
+
 func (o ScannedBytes) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -380,6 +516,18 @@ func (o ScannedBytes) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Flex) {
 		toSerialize["flex"] = o.Flex
+	}
+	if !IsNil(o.ContinuousSecurity) {
+		toSerialize["continuousSecurity"] = o.ContinuousSecurity
+	}
+	if !IsNil(o.FlexSecurity) {
+		toSerialize["flexSecurity"] = o.FlexSecurity
+	}
+	if !IsNil(o.FlexUpfront) {
+		toSerialize["flexUpfront"] = o.FlexUpfront
+	}
+	if !IsNil(o.FlexMetered) {
+		toSerialize["flexMetered"] = o.FlexMetered
 	}
 	return toSerialize, nil
 }

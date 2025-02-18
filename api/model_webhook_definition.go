@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the WebhookDefinition type satisfies the MappedNullable interface at compile time
@@ -29,12 +31,14 @@ type WebhookDefinition struct {
 	// Default payload of the webhook.
 	DefaultPayload string `json:"defaultPayload"`
 	// Type of webhook connection. Valid values are `AWSLambda`, `Azure`, `Datadog`, `HipChat`, `Jira`, `NewRelic`, `Opsgenie`, `PagerDuty`, `Slack`, `MicrosoftTeams`, `ServiceNow`, `SumoCloudSOAR` and `Webhook`.
-	WebhookType *string `json:"webhookType,omitempty"`
+	WebhookType *string `json:"webhookType,omitempty" validate:"regexp=^(AWSLambda|Azure|Datadog|HipChat|PagerDuty|Slack|Webhook|NewRelic|Jira|Opsgenie|MicrosoftTeams|ServiceNow|SumoCloudSOAR)$"`
 	// The subtype of the connection. Valid values are `Event` or `Incident`.
-	ConnectionSubtype *string `json:"connectionSubtype,omitempty"`
+	ConnectionSubtype *string `json:"connectionSubtype,omitempty" validate:"regexp=^(Event|Incident)$"`
 	// Resolution payload of the webhook.
 	ResolutionPayload *string `json:"resolutionPayload,omitempty"`
 }
+
+type _WebhookDefinition WebhookDefinition
 
 // NewWebhookDefinition instantiates a new WebhookDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -303,6 +307,46 @@ func (o WebhookDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["resolutionPayload"] = o.ResolutionPayload
 	}
 	return toSerialize, nil
+}
+
+func (o *WebhookDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"defaultPayload",
+		"type",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varWebhookDefinition := _WebhookDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varWebhookDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = WebhookDefinition(varWebhookDefinition)
+
+	return err
 }
 
 type NullableWebhookDefinition struct {

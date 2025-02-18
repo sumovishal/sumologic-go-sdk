@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MonitorTemplatesLibraryMonitorTemplate type satisfies the MappedNullable interface at compile time
@@ -21,9 +23,7 @@ var _ MappedNullable = &MonitorTemplatesLibraryMonitorTemplate{}
 type MonitorTemplatesLibraryMonitorTemplate struct {
 	MonitorTemplatesLibraryBase
 	// The type of monitor template. Valid values:   1. `Logs`: A logs query monitor template.   2. `Metrics`: A metrics query monitor template.   3. `Slo`: A SLO based monitor template.
-	MonitorType string `json:"monitorType"`
-	// The app id which related to the monitor template. It will be UUID string
-	AppId string `json:"appId"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics|Slo)$"`
 	// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
 	EvaluationDelay *string `json:"evaluationDelay,omitempty"`
 	// The name of the alert(s) triggered from the monitor created based on the template. Monitor name will be used if not specified.
@@ -40,18 +40,19 @@ type MonitorTemplatesLibraryMonitorTemplate struct {
 	Playbook *string `json:"playbook,omitempty"`
 }
 
+type _MonitorTemplatesLibraryMonitorTemplate MonitorTemplatesLibraryMonitorTemplate
+
 // NewMonitorTemplatesLibraryMonitorTemplate instantiates a new MonitorTemplatesLibraryMonitorTemplate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMonitorTemplatesLibraryMonitorTemplate(monitorType string, appId string, queries []MonitorQuery, triggers []TriggerCondition, name string, type_ string) *MonitorTemplatesLibraryMonitorTemplate {
+func NewMonitorTemplatesLibraryMonitorTemplate(monitorType string, queries []MonitorQuery, triggers []TriggerCondition, name string, type_ string) *MonitorTemplatesLibraryMonitorTemplate {
 	this := MonitorTemplatesLibraryMonitorTemplate{}
 	this.Name = name
 	var description string = ""
 	this.Description = &description
 	this.Type = type_
 	this.MonitorType = monitorType
-	this.AppId = appId
 	var evaluationDelay string = "0m"
 	this.EvaluationDelay = &evaluationDelay
 	this.Queries = queries
@@ -103,30 +104,6 @@ func (o *MonitorTemplatesLibraryMonitorTemplate) GetMonitorTypeOk() (*string, bo
 // SetMonitorType sets field value
 func (o *MonitorTemplatesLibraryMonitorTemplate) SetMonitorType(v string) {
 	o.MonitorType = v
-}
-
-// GetAppId returns the AppId field value
-func (o *MonitorTemplatesLibraryMonitorTemplate) GetAppId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.AppId
-}
-
-// GetAppIdOk returns a tuple with the AppId field value
-// and a boolean to check if the value has been set.
-func (o *MonitorTemplatesLibraryMonitorTemplate) GetAppIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.AppId, true
-}
-
-// SetAppId sets field value
-func (o *MonitorTemplatesLibraryMonitorTemplate) SetAppId(v string) {
-	o.AppId = v
 }
 
 // GetEvaluationDelay returns the EvaluationDelay field value if set, zero value otherwise.
@@ -356,7 +333,6 @@ func (o MonitorTemplatesLibraryMonitorTemplate) ToMap() (map[string]interface{},
 		return map[string]interface{}{}, errMonitorTemplatesLibraryBase
 	}
 	toSerialize["monitorType"] = o.MonitorType
-	toSerialize["appId"] = o.AppId
 	if !IsNil(o.EvaluationDelay) {
 		toSerialize["evaluationDelay"] = o.EvaluationDelay
 	}
@@ -375,6 +351,47 @@ func (o MonitorTemplatesLibraryMonitorTemplate) ToMap() (map[string]interface{},
 		toSerialize["playbook"] = o.Playbook
 	}
 	return toSerialize, nil
+}
+
+func (o *MonitorTemplatesLibraryMonitorTemplate) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"monitorType",
+		"queries",
+		"triggers",
+		"name",
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorTemplatesLibraryMonitorTemplate := _MonitorTemplatesLibraryMonitorTemplate{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorTemplatesLibraryMonitorTemplate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorTemplatesLibraryMonitorTemplate(varMonitorTemplatesLibraryMonitorTemplate)
+
+	return err
 }
 
 type NullableMonitorTemplatesLibraryMonitorTemplate struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TracesListPanel type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type TracesListPanel struct {
 	Queries []Query `json:"queries,omitempty"`
 	TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
 }
+
+type _TracesListPanel TracesListPanel
 
 // NewTracesListPanel instantiates a new TracesListPanel object
 // This constructor will assign default values to properties that have it defined,
@@ -135,6 +139,44 @@ func (o TracesListPanel) ToMap() (map[string]interface{}, error) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
 	return toSerialize, nil
+}
+
+func (o *TracesListPanel) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"key",
+		"panelType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTracesListPanel := _TracesListPanel{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTracesListPanel)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TracesListPanel(varTracesListPanel)
+
+	return err
 }
 
 type NullableTracesListPanel struct {

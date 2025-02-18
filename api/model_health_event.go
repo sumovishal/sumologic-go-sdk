@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the HealthEvent type satisfies the MappedNullable interface at compile time
@@ -33,6 +35,8 @@ type HealthEvent struct {
 	// The criticality of the event. It is either `Error` or `Warning`
 	SeverityLevel string `json:"severityLevel"`
 }
+
+type _HealthEvent HealthEvent
 
 // NewHealthEvent instantiates a new HealthEvent object
 // This constructor will assign default values to properties that have it defined,
@@ -244,6 +248,49 @@ func (o HealthEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize["subsystem"] = o.Subsystem
 	toSerialize["severityLevel"] = o.SeverityLevel
 	return toSerialize, nil
+}
+
+func (o *HealthEvent) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"eventId",
+		"eventName",
+		"details",
+		"resourceIdentity",
+		"eventTime",
+		"subsystem",
+		"severityLevel",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varHealthEvent := _HealthEvent{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varHealthEvent)
+
+	if err != nil {
+		return err
+	}
+
+	*o = HealthEvent(varHealthEvent)
+
+	return err
 }
 
 type NullableHealthEvent struct {

@@ -6,9 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | The name of the partition. | 
 **RoutingExpression** | **string** | The query that defines the data to be included in the partition. | 
-**AnalyticsTier** | Pointer to **string** | The Data Tier where the data in the partition will reside. Possible values are:               1. &#x60;continuous&#x60;               2. &#x60;frequent&#x60;               3. &#x60;infrequent&#x60; Note: The \&quot;infrequent\&quot; and \&quot;frequent\&quot; tiers are only available to Cloud Flex Credits Enterprise Suite accounts. | [optional] [default to "continuous"]
+**AnalyticsTier** | Pointer to **string** | The Data Tier where the data in the partition will reside. Possible values are:               1. &#x60;continuous&#x60;               2. &#x60;frequent&#x60;               3. &#x60;infrequent&#x60; Note: The \&quot;infrequent\&quot; and \&quot;frequent\&quot; tiers are only available to Cloud Flex Credits Enterprise Suite accounts. | [optional] 
 **RetentionPeriod** | Pointer to **int32** | The number of days to retain data in the partition, or -1 to use the default value for your account.  Only relevant if your account has variable retention enabled. | [optional] [default to -1]
 **IsCompliant** | Pointer to **bool** | Whether the partition is compliant or not. Mark a partition as compliant if it contains data used for compliance or audit purpose. Retention for a compliant partition can only be increased and cannot be reduced after the partition is marked compliant. A partition once marked compliant, cannot be marked non-compliant later. | [optional] [default to false]
+**IsIncludedInDefaultSearch** | Pointer to **bool** | Indicates whether the partition is included in the default search scope. When executing a  query such as \&quot;error | count,\&quot; certain partitions are automatically part of the search scope.  However, for specific partitions, the user must explicitly mention the partition using the _index  term, as in \&quot;_index&#x3D;webApp error | count\&quot;. This property governs the default inclusion of the  partition in the search scope. Configuring this property is exclusively permitted for flex partitions. | [optional] 
 
 ## Methods
 
@@ -143,6 +144,31 @@ SetIsCompliant sets IsCompliant field to given value.
 `func (o *CreatePartitionDefinition) HasIsCompliant() bool`
 
 HasIsCompliant returns a boolean if a field has been set.
+
+### GetIsIncludedInDefaultSearch
+
+`func (o *CreatePartitionDefinition) GetIsIncludedInDefaultSearch() bool`
+
+GetIsIncludedInDefaultSearch returns the IsIncludedInDefaultSearch field if non-nil, zero value otherwise.
+
+### GetIsIncludedInDefaultSearchOk
+
+`func (o *CreatePartitionDefinition) GetIsIncludedInDefaultSearchOk() (*bool, bool)`
+
+GetIsIncludedInDefaultSearchOk returns a tuple with the IsIncludedInDefaultSearch field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsIncludedInDefaultSearch
+
+`func (o *CreatePartitionDefinition) SetIsIncludedInDefaultSearch(v bool)`
+
+SetIsIncludedInDefaultSearch sets IsIncludedInDefaultSearch field to given value.
+
+### HasIsIncludedInDefaultSearch
+
+`func (o *CreatePartitionDefinition) HasIsIncludedInDefaultSearch() bool`
+
+HasIsIncludedInDefaultSearch returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

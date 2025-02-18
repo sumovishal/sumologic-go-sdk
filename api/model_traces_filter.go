@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TracesFilter type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &TracesFilter{}
 // TracesFilter The filter for traces query.
 type TracesFilter struct {
 	// The type of the filter.
-	Type string `json:"type"`
+	Type string `json:"type" validate:"regexp=^(FieldDescriptor|DurationMetricDescriptor|NumericMetricDescriptor|CPCOfFilterDescriptor|MaxCPCOfFilterDescriptor|MaxCPCFilterDescriptor)$|^$"`
 }
+
+type _TracesFilter TracesFilter
 
 // NewTracesFilter instantiates a new TracesFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o TracesFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	return toSerialize, nil
+}
+
+func (o *TracesFilter) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"type",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTracesFilter := _TracesFilter{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTracesFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TracesFilter(varTracesFilter)
+
+	return err
 }
 
 type NullableTracesFilter struct {

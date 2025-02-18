@@ -21,12 +21,12 @@ import (
 )
 
 
-// DashboardManagementApiService DashboardManagementApi service
-type DashboardManagementApiService service
+// DashboardManagementAPIService DashboardManagementAPI service
+type DashboardManagementAPIService service
 
 type ApiCreateDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardRequest *DashboardRequest
 }
 
@@ -48,7 +48,7 @@ Creates a new dashboard.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateDashboardRequest
 */
-func (a *DashboardManagementApiService) CreateDashboard(ctx context.Context) ApiCreateDashboardRequest {
+func (a *DashboardManagementAPIService) CreateDashboard(ctx context.Context) ApiCreateDashboardRequest {
 	return ApiCreateDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -57,7 +57,7 @@ func (a *DashboardManagementApiService) CreateDashboard(ctx context.Context) Api
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) CreateDashboardExecute(r ApiCreateDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -65,7 +65,7 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.CreateDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.CreateDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -145,7 +145,7 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 
 type ApiDeleteDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 }
 
@@ -162,7 +162,7 @@ Delete a dashboard by the given identifier.
  @param id Identifier of the dashboard to delete.
  @return ApiDeleteDashboardRequest
 */
-func (a *DashboardManagementApiService) DeleteDashboard(ctx context.Context, id string) ApiDeleteDashboardRequest {
+func (a *DashboardManagementAPIService) DeleteDashboard(ctx context.Context, id string) ApiDeleteDashboardRequest {
 	return ApiDeleteDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -171,14 +171,14 @@ func (a *DashboardManagementApiService) DeleteDashboard(ctx context.Context, id 
 }
 
 // Execute executes the request
-func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashboardRequest) (*http.Response, error) {
+func (a *DashboardManagementAPIService) DeleteDashboardExecute(r ApiDeleteDashboardRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.DeleteDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.DeleteDashboard")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -245,7 +245,7 @@ func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashbo
 
 type ApiGenerateDashboardReportRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	generateReportRequest *GenerateReportRequest
 }
 
@@ -268,7 +268,7 @@ Schedule an asynchronous job to generate a report from a template. All items in 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGenerateDashboardReportRequest
 */
-func (a *DashboardManagementApiService) GenerateDashboardReport(ctx context.Context) ApiGenerateDashboardReportRequest {
+func (a *DashboardManagementAPIService) GenerateDashboardReport(ctx context.Context) ApiGenerateDashboardReportRequest {
 	return ApiGenerateDashboardReportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -277,7 +277,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReport(ctx context.Cont
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGenerateDashboardReportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *DashboardManagementAPIService) GenerateDashboardReportExecute(r ApiGenerateDashboardReportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -285,7 +285,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GenerateDashboardReport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GenerateDashboardReport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -365,7 +365,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 
 type ApiGetAsyncReportGenerationResultRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -382,7 +382,7 @@ Get the result of an asynchronous report generation request for the given job id
  @param jobId The identifier of the asynchronous report generation job.
  @return ApiGetAsyncReportGenerationResultRequest
 */
-func (a *DashboardManagementApiService) GetAsyncReportGenerationResult(ctx context.Context, jobId string) ApiGetAsyncReportGenerationResultRequest {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationResult(ctx context.Context, jobId string) ApiGetAsyncReportGenerationResultRequest {
 	return ApiGetAsyncReportGenerationResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -392,7 +392,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResult(ctx conte
 
 // Execute executes the request
 //  @return *os.File
-func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (*os.File, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (*os.File, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -400,7 +400,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 		localVarReturnValue  *os.File
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetAsyncReportGenerationResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetAsyncReportGenerationResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -476,7 +476,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 
 type ApiGetAsyncReportGenerationStatusRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -493,7 +493,7 @@ Get the status of an asynchronous report generation request for the given job id
  @param jobId The identifier of the asynchronous report generation job.
  @return ApiGetAsyncReportGenerationStatusRequest
 */
-func (a *DashboardManagementApiService) GetAsyncReportGenerationStatus(ctx context.Context, jobId string) ApiGetAsyncReportGenerationStatusRequest {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationStatus(ctx context.Context, jobId string) ApiGetAsyncReportGenerationStatusRequest {
 	return ApiGetAsyncReportGenerationStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -503,7 +503,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatus(ctx conte
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r ApiGetAsyncReportGenerationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationStatusExecute(r ApiGetAsyncReportGenerationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -511,7 +511,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetAsyncReportGenerationStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetAsyncReportGenerationStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -587,7 +587,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 
 type ApiGetDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 }
 
@@ -604,7 +604,7 @@ Get a dashboard by the given identifier.
  @param id UUID of the dashboard to return.
  @return ApiGetDashboardRequest
 */
-func (a *DashboardManagementApiService) GetDashboard(ctx context.Context, id string) ApiGetDashboardRequest {
+func (a *DashboardManagementAPIService) GetDashboard(ctx context.Context, id string) ApiGetDashboardRequest {
 	return ApiGetDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -614,7 +614,7 @@ func (a *DashboardManagementApiService) GetDashboard(ctx context.Context, id str
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardExecute(r ApiGetDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -622,7 +622,7 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -698,7 +698,7 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 
 type ApiGetDashboardMigrationResultRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -715,7 +715,7 @@ Get the result of an asynchronous Dashboard Migration request for the given job 
  @param jobId The identifier of the asynchronous Dashboard Migration job.
  @return ApiGetDashboardMigrationResultRequest
 */
-func (a *DashboardManagementApiService) GetDashboardMigrationResult(ctx context.Context, jobId string) ApiGetDashboardMigrationResultRequest {
+func (a *DashboardManagementAPIService) GetDashboardMigrationResult(ctx context.Context, jobId string) ApiGetDashboardMigrationResultRequest {
 	return ApiGetDashboardMigrationResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -725,7 +725,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResult(ctx context.
 
 // Execute executes the request
 //  @return DashboardMigrationResult
-func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r ApiGetDashboardMigrationResultRequest) (*DashboardMigrationResult, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardMigrationResultExecute(r ApiGetDashboardMigrationResultRequest) (*DashboardMigrationResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -733,7 +733,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r Api
 		localVarReturnValue  *DashboardMigrationResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboardMigrationResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -809,7 +809,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r Api
 
 type ApiGetDashboardMigrationStatusRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -826,7 +826,7 @@ Get the status of an asynchronous Dashboard Migration job for the given job iden
  @param jobId The identifier of the asynchronous Dashboard Migration job.
  @return ApiGetDashboardMigrationStatusRequest
 */
-func (a *DashboardManagementApiService) GetDashboardMigrationStatus(ctx context.Context, jobId string) ApiGetDashboardMigrationStatusRequest {
+func (a *DashboardManagementAPIService) GetDashboardMigrationStatus(ctx context.Context, jobId string) ApiGetDashboardMigrationStatusRequest {
 	return ApiGetDashboardMigrationStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -836,7 +836,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatus(ctx context.
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r ApiGetDashboardMigrationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardMigrationStatusExecute(r ApiGetDashboardMigrationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -844,7 +844,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r Api
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboardMigrationStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -920,7 +920,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r Api
 
 type ApiListDashboardsRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	limit *int32
 	token *string
 	mode *string
@@ -956,7 +956,7 @@ List all dashboards under the Personal folder created by the user or under folde
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDashboardsRequest
 */
-func (a *DashboardManagementApiService) ListDashboards(ctx context.Context) ApiListDashboardsRequest {
+func (a *DashboardManagementAPIService) ListDashboards(ctx context.Context) ApiListDashboardsRequest {
 	return ApiListDashboardsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -965,7 +965,7 @@ func (a *DashboardManagementApiService) ListDashboards(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return PaginatedDashboards
-func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboardsRequest) (*PaginatedDashboards, *http.Response, error) {
+func (a *DashboardManagementAPIService) ListDashboardsExecute(r ApiListDashboardsRequest) (*PaginatedDashboards, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -973,7 +973,7 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 		localVarReturnValue  *PaginatedDashboards
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.ListDashboards")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.ListDashboards")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -986,6 +986,9 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -1057,7 +1060,7 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 
 type ApiMigrateReportToDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardMigrationRequest *DashboardMigrationRequest
 }
 
@@ -1081,7 +1084,7 @@ Note: This feature is in beta and may not support all existing features of legac
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMigrateReportToDashboardRequest
 */
-func (a *DashboardManagementApiService) MigrateReportToDashboard(ctx context.Context) ApiMigrateReportToDashboardRequest {
+func (a *DashboardManagementAPIService) MigrateReportToDashboard(ctx context.Context) ApiMigrateReportToDashboardRequest {
 	return ApiMigrateReportToDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1090,7 +1093,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboard(ctx context.Con
 
 // Execute executes the request
 //  @return BeginAsyncJobResponseV2
-func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMigrateReportToDashboardRequest) (*BeginAsyncJobResponseV2, *http.Response, error) {
+func (a *DashboardManagementAPIService) MigrateReportToDashboardExecute(r ApiMigrateReportToDashboardRequest) (*BeginAsyncJobResponseV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1098,7 +1101,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMig
 		localVarReturnValue  *BeginAsyncJobResponseV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.MigrateReportToDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.MigrateReportToDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1178,7 +1181,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMig
 
 type ApiPreviewMigrateReportToDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardMigrationRequest *DashboardMigrationRequest
 }
 
@@ -1200,7 +1203,7 @@ Get a preview of migrating Legacy Dashboards to Dashboard(New)
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiPreviewMigrateReportToDashboardRequest
 */
-func (a *DashboardManagementApiService) PreviewMigrateReportToDashboard(ctx context.Context) ApiPreviewMigrateReportToDashboardRequest {
+func (a *DashboardManagementAPIService) PreviewMigrateReportToDashboard(ctx context.Context) ApiPreviewMigrateReportToDashboardRequest {
 	return ApiPreviewMigrateReportToDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1209,7 +1212,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboard(ctx cont
 
 // Execute executes the request
 //  @return MigrationPreviewResponse
-func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r ApiPreviewMigrateReportToDashboardRequest) (*MigrationPreviewResponse, *http.Response, error) {
+func (a *DashboardManagementAPIService) PreviewMigrateReportToDashboardExecute(r ApiPreviewMigrateReportToDashboardRequest) (*MigrationPreviewResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1217,7 +1220,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r
 		localVarReturnValue  *MigrationPreviewResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.PreviewMigrateReportToDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.PreviewMigrateReportToDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1297,7 +1300,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r
 
 type ApiUpdateDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 	dashboardRequest *DashboardRequest
 }
@@ -1321,7 +1324,7 @@ Update a dashboard by the given identifier.
  @param id Identifier of the dashboard to update.
  @return ApiUpdateDashboardRequest
 */
-func (a *DashboardManagementApiService) UpdateDashboard(ctx context.Context, id string) ApiUpdateDashboardRequest {
+func (a *DashboardManagementAPIService) UpdateDashboard(ctx context.Context, id string) ApiUpdateDashboardRequest {
 	return ApiUpdateDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1331,7 +1334,7 @@ func (a *DashboardManagementApiService) UpdateDashboard(ctx context.Context, id 
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) UpdateDashboardExecute(r ApiUpdateDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1339,7 +1342,7 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.UpdateDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.UpdateDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

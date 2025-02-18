@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the IngestBudgetV2 type satisfies the MappedNullable interface at compile time
@@ -33,7 +35,7 @@ type IngestBudgetV2 struct {
 	// Description of the ingest budget.
 	Description *string `json:"description,omitempty"`
 	// Action to take when ingest budget's capacity is reached. All actions are audited. Supported values are:   * `stopCollecting`   * `keepCollecting`
-	Action string `json:"action"`
+	Action string `json:"action" validate:"regexp=^(keepCollecting|stopCollecting)$"`
 	// The threshold as a percentage of when an ingest budget's capacity usage is logged in the Audit Index.
 	AuditThreshold *int32 `json:"auditThreshold,omitempty"`
 	// Unique identifier for the ingest budget.
@@ -41,7 +43,7 @@ type IngestBudgetV2 struct {
 	// Current usage since the last reset, in bytes.
 	UsageBytes *int64 `json:"usageBytes,omitempty"`
 	// Status of the current usage. Can be `Normal`, `Approaching`, `Exceeded`, or `Unknown` (unable to retrieve usage).
-	UsageStatus *string `json:"usageStatus,omitempty"`
+	UsageStatus *string `json:"usageStatus,omitempty" validate:"regexp=^(Normal|Approaching|Exceeded|Unknown)$"`
 	// The creation timestamp in UTC of the Ingest Budget.
 	CreatedAt time.Time `json:"createdAt"`
 	// The identifier of the user who created the Ingest Budget.
@@ -53,6 +55,8 @@ type IngestBudgetV2 struct {
 	// The version of the Ingest Budget
 	BudgetVersion *int32 `json:"budgetVersion,omitempty"`
 }
+
+type _IngestBudgetV2 IngestBudgetV2
 
 // NewIngestBudgetV2 instantiates a new IngestBudgetV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -569,6 +573,51 @@ func (o IngestBudgetV2) ToMap() (map[string]interface{}, error) {
 		toSerialize["budgetVersion"] = o.BudgetVersion
 	}
 	return toSerialize, nil
+}
+
+func (o *IngestBudgetV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"scope",
+		"capacityBytes",
+		"action",
+		"id",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varIngestBudgetV2 := _IngestBudgetV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varIngestBudgetV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = IngestBudgetV2(varIngestBudgetV2)
+
+	return err
 }
 
 type NullableIngestBudgetV2 struct {

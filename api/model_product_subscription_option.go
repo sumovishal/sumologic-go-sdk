@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ProductSubscriptionOption type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &ProductSubscriptionOption{}
 // ProductSubscriptionOption Subscription option containing billing frequency and discount details.
 type ProductSubscriptionOption struct {
 	// Identifier for the plans billing term. Valid values are:  1. Monthly  2. Annually 
-	BillingFrequency string `json:"billingFrequency"`
+	BillingFrequency string `json:"billingFrequency" validate:"regexp=^(Monthly|Annually)$"`
 	// Discount percentage for this plan's subscription.
 	DiscountPercentage int32 `json:"discountPercentage"`
 }
+
+type _ProductSubscriptionOption ProductSubscriptionOption
 
 // NewProductSubscriptionOption instantiates a new ProductSubscriptionOption object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o ProductSubscriptionOption) ToMap() (map[string]interface{}, error) {
 	toSerialize["billingFrequency"] = o.BillingFrequency
 	toSerialize["discountPercentage"] = o.DiscountPercentage
 	return toSerialize, nil
+}
+
+func (o *ProductSubscriptionOption) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"billingFrequency",
+		"discountPercentage",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varProductSubscriptionOption := _ProductSubscriptionOption{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varProductSubscriptionOption)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProductSubscriptionOption(varProductSubscriptionOption)
+
+	return err
 }
 
 type NullableProductSubscriptionOption struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogSearchNotificationThresholdSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &LogSearchNotificationThresholdSyncDefinition{}
 // LogSearchNotificationThresholdSyncDefinition struct for LogSearchNotificationThresholdSyncDefinition
 type LogSearchNotificationThresholdSyncDefinition struct {
 	// This property is deprecated. The system will automatically infer the value of this field from the query going forward, so the user-specified value will no longer be honored. Threshold type. Possible values are:  1. `message`  2. `group`  Use `group` as threshold type if the search query is of aggregate type. For non-aggregate queries, set it to `message`.
-	ThresholdType *string `json:"thresholdType,omitempty"`
+	ThresholdType *string `json:"thresholdType,omitempty" validate:"regexp=^(message|group)$"`
 	// Criterion to be applied when comparing actual result count with expected count. Possible values are:  1. `eq`  2. `gt`  3. `ge`  4. `lt`  5. `le`
-	Operator string `json:"operator"`
+	Operator string `json:"operator" validate:"regexp=^(eq|gt|ge|lt|le)$"`
 	// Expected result count.
 	Count int32 `json:"count"`
 }
+
+type _LogSearchNotificationThresholdSyncDefinition LogSearchNotificationThresholdSyncDefinition
 
 // NewLogSearchNotificationThresholdSyncDefinition instantiates a new LogSearchNotificationThresholdSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -142,6 +146,44 @@ func (o LogSearchNotificationThresholdSyncDefinition) ToMap() (map[string]interf
 	toSerialize["operator"] = o.Operator
 	toSerialize["count"] = o.Count
 	return toSerialize, nil
+}
+
+func (o *LogSearchNotificationThresholdSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"operator",
+		"count",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogSearchNotificationThresholdSyncDefinition := _LogSearchNotificationThresholdSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogSearchNotificationThresholdSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchNotificationThresholdSyncDefinition(varLogSearchNotificationThresholdSyncDefinition)
+
+	return err
 }
 
 type NullableLogSearchNotificationThresholdSyncDefinition struct {

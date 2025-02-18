@@ -19,12 +19,12 @@ import (
 )
 
 
-// MetricsQueryApiService MetricsQueryApi service
-type MetricsQueryApiService service
+// MetricsQueryAPIService MetricsQueryAPI service
+type MetricsQueryAPIService service
 
 type ApiRunMetricsQueriesRequest struct {
 	ctx context.Context
-	ApiService *MetricsQueryApiService
+	ApiService *MetricsQueryAPIService
 	metricsQueryRequest *MetricsQueryRequest
 }
 
@@ -41,13 +41,12 @@ func (r ApiRunMetricsQueriesRequest) Execute() (*MetricsQueryResponse, *http.Res
 /*
 RunMetricsQueries Run metrics queries
 
-Execute up to six metrics queries. If you specify multiple queries, each is returned as a separate set of time series. A metric query returns a maximum of 300 data points per metric. A metric query will process a maximum of 15K unique time series to calculate the query results. Query results are limited to 1000 unique time series.
-For more information see [Metrics Queries](https://help.sumologic.com/?cid=10144).
+Execute multiple metrics queries. Limits of this API are described in [Metrics Query Error Messages](https://help.sumologic.com/docs/metrics/metrics-queries/metric-query-error-messages/). For general information about Metrics Queries see [Metrics Queries](https://help.sumologic.com/docs/metrics/metrics-queries/).
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRunMetricsQueriesRequest
 */
-func (a *MetricsQueryApiService) RunMetricsQueries(ctx context.Context) ApiRunMetricsQueriesRequest {
+func (a *MetricsQueryAPIService) RunMetricsQueries(ctx context.Context) ApiRunMetricsQueriesRequest {
 	return ApiRunMetricsQueriesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +55,7 @@ func (a *MetricsQueryApiService) RunMetricsQueries(ctx context.Context) ApiRunMe
 
 // Execute executes the request
 //  @return MetricsQueryResponse
-func (a *MetricsQueryApiService) RunMetricsQueriesExecute(r ApiRunMetricsQueriesRequest) (*MetricsQueryResponse, *http.Response, error) {
+func (a *MetricsQueryAPIService) RunMetricsQueriesExecute(r ApiRunMetricsQueriesRequest) (*MetricsQueryResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +63,7 @@ func (a *MetricsQueryApiService) RunMetricsQueriesExecute(r ApiRunMetricsQueries
 		localVarReturnValue  *MetricsQueryResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsQueryApiService.RunMetricsQueries")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MetricsQueryAPIService.RunMetricsQueries")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

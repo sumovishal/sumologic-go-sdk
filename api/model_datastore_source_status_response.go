@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DatastoreSourceStatusResponse type satisfies the MappedNullable interface at compile time
@@ -19,23 +21,31 @@ var _ MappedNullable = &DatastoreSourceStatusResponse{}
 
 // DatastoreSourceStatusResponse DB sizes and indicator counts for an individual source
 type DatastoreSourceStatusResponse struct {
-	// The indicator source
+	// The source name
 	Source string `json:"source"`
+	// The source description
+	Description *string `json:"description,omitempty"`
 	// Disk utilization in bytes estimate for the indicator source
-	DiskSize int64 `json:"diskSize"`
+	DiskSize *int64 `json:"diskSize,omitempty"`
 	// Number of indicators for the indicator source
-	IndicatorCount int64 `json:"indicatorCount"`
+	IndicatorCount *int64 `json:"indicatorCount,omitempty"`
+	// True if sumo provided source
+	SumoProvided *bool `json:"sumoProvided,omitempty"`
+	// True if can be used in cat operator
+	SupportsCat *bool `json:"supportsCat,omitempty"`
+	// True if enabled
+	Enabled *bool `json:"enabled,omitempty"`
 }
+
+type _DatastoreSourceStatusResponse DatastoreSourceStatusResponse
 
 // NewDatastoreSourceStatusResponse instantiates a new DatastoreSourceStatusResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatastoreSourceStatusResponse(source string, diskSize int64, indicatorCount int64) *DatastoreSourceStatusResponse {
+func NewDatastoreSourceStatusResponse(source string) *DatastoreSourceStatusResponse {
 	this := DatastoreSourceStatusResponse{}
 	this.Source = source
-	this.DiskSize = diskSize
-	this.IndicatorCount = indicatorCount
 	return &this
 }
 
@@ -71,52 +81,196 @@ func (o *DatastoreSourceStatusResponse) SetSource(v string) {
 	o.Source = v
 }
 
-// GetDiskSize returns the DiskSize field value
+// GetDescription returns the Description field value if set, zero value otherwise.
+func (o *DatastoreSourceStatusResponse) GetDescription() string {
+	if o == nil || IsNil(o.Description) {
+		var ret string
+		return ret
+	}
+	return *o.Description
+}
+
+// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreSourceStatusResponse) GetDescriptionOk() (*string, bool) {
+	if o == nil || IsNil(o.Description) {
+		return nil, false
+	}
+	return o.Description, true
+}
+
+// HasDescription returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasDescription() bool {
+	if o != nil && !IsNil(o.Description) {
+		return true
+	}
+
+	return false
+}
+
+// SetDescription gets a reference to the given string and assigns it to the Description field.
+func (o *DatastoreSourceStatusResponse) SetDescription(v string) {
+	o.Description = &v
+}
+
+// GetDiskSize returns the DiskSize field value if set, zero value otherwise.
 func (o *DatastoreSourceStatusResponse) GetDiskSize() int64 {
-	if o == nil {
+	if o == nil || IsNil(o.DiskSize) {
 		var ret int64
 		return ret
 	}
-
-	return o.DiskSize
+	return *o.DiskSize
 }
 
-// GetDiskSizeOk returns a tuple with the DiskSize field value
+// GetDiskSizeOk returns a tuple with the DiskSize field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DatastoreSourceStatusResponse) GetDiskSizeOk() (*int64, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.DiskSize) {
 		return nil, false
 	}
-	return &o.DiskSize, true
+	return o.DiskSize, true
 }
 
-// SetDiskSize sets field value
+// HasDiskSize returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasDiskSize() bool {
+	if o != nil && !IsNil(o.DiskSize) {
+		return true
+	}
+
+	return false
+}
+
+// SetDiskSize gets a reference to the given int64 and assigns it to the DiskSize field.
 func (o *DatastoreSourceStatusResponse) SetDiskSize(v int64) {
-	o.DiskSize = v
+	o.DiskSize = &v
 }
 
-// GetIndicatorCount returns the IndicatorCount field value
+// GetIndicatorCount returns the IndicatorCount field value if set, zero value otherwise.
 func (o *DatastoreSourceStatusResponse) GetIndicatorCount() int64 {
-	if o == nil {
+	if o == nil || IsNil(o.IndicatorCount) {
 		var ret int64
 		return ret
 	}
-
-	return o.IndicatorCount
+	return *o.IndicatorCount
 }
 
-// GetIndicatorCountOk returns a tuple with the IndicatorCount field value
+// GetIndicatorCountOk returns a tuple with the IndicatorCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DatastoreSourceStatusResponse) GetIndicatorCountOk() (*int64, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.IndicatorCount) {
 		return nil, false
 	}
-	return &o.IndicatorCount, true
+	return o.IndicatorCount, true
 }
 
-// SetIndicatorCount sets field value
+// HasIndicatorCount returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasIndicatorCount() bool {
+	if o != nil && !IsNil(o.IndicatorCount) {
+		return true
+	}
+
+	return false
+}
+
+// SetIndicatorCount gets a reference to the given int64 and assigns it to the IndicatorCount field.
 func (o *DatastoreSourceStatusResponse) SetIndicatorCount(v int64) {
-	o.IndicatorCount = v
+	o.IndicatorCount = &v
+}
+
+// GetSumoProvided returns the SumoProvided field value if set, zero value otherwise.
+func (o *DatastoreSourceStatusResponse) GetSumoProvided() bool {
+	if o == nil || IsNil(o.SumoProvided) {
+		var ret bool
+		return ret
+	}
+	return *o.SumoProvided
+}
+
+// GetSumoProvidedOk returns a tuple with the SumoProvided field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreSourceStatusResponse) GetSumoProvidedOk() (*bool, bool) {
+	if o == nil || IsNil(o.SumoProvided) {
+		return nil, false
+	}
+	return o.SumoProvided, true
+}
+
+// HasSumoProvided returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasSumoProvided() bool {
+	if o != nil && !IsNil(o.SumoProvided) {
+		return true
+	}
+
+	return false
+}
+
+// SetSumoProvided gets a reference to the given bool and assigns it to the SumoProvided field.
+func (o *DatastoreSourceStatusResponse) SetSumoProvided(v bool) {
+	o.SumoProvided = &v
+}
+
+// GetSupportsCat returns the SupportsCat field value if set, zero value otherwise.
+func (o *DatastoreSourceStatusResponse) GetSupportsCat() bool {
+	if o == nil || IsNil(o.SupportsCat) {
+		var ret bool
+		return ret
+	}
+	return *o.SupportsCat
+}
+
+// GetSupportsCatOk returns a tuple with the SupportsCat field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreSourceStatusResponse) GetSupportsCatOk() (*bool, bool) {
+	if o == nil || IsNil(o.SupportsCat) {
+		return nil, false
+	}
+	return o.SupportsCat, true
+}
+
+// HasSupportsCat returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasSupportsCat() bool {
+	if o != nil && !IsNil(o.SupportsCat) {
+		return true
+	}
+
+	return false
+}
+
+// SetSupportsCat gets a reference to the given bool and assigns it to the SupportsCat field.
+func (o *DatastoreSourceStatusResponse) SetSupportsCat(v bool) {
+	o.SupportsCat = &v
+}
+
+// GetEnabled returns the Enabled field value if set, zero value otherwise.
+func (o *DatastoreSourceStatusResponse) GetEnabled() bool {
+	if o == nil || IsNil(o.Enabled) {
+		var ret bool
+		return ret
+	}
+	return *o.Enabled
+}
+
+// GetEnabledOk returns a tuple with the Enabled field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatastoreSourceStatusResponse) GetEnabledOk() (*bool, bool) {
+	if o == nil || IsNil(o.Enabled) {
+		return nil, false
+	}
+	return o.Enabled, true
+}
+
+// HasEnabled returns a boolean if a field has been set.
+func (o *DatastoreSourceStatusResponse) HasEnabled() bool {
+	if o != nil && !IsNil(o.Enabled) {
+		return true
+	}
+
+	return false
+}
+
+// SetEnabled gets a reference to the given bool and assigns it to the Enabled field.
+func (o *DatastoreSourceStatusResponse) SetEnabled(v bool) {
+	o.Enabled = &v
 }
 
 func (o DatastoreSourceStatusResponse) MarshalJSON() ([]byte, error) {
@@ -130,9 +284,62 @@ func (o DatastoreSourceStatusResponse) MarshalJSON() ([]byte, error) {
 func (o DatastoreSourceStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source"] = o.Source
-	toSerialize["diskSize"] = o.DiskSize
-	toSerialize["indicatorCount"] = o.IndicatorCount
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.DiskSize) {
+		toSerialize["diskSize"] = o.DiskSize
+	}
+	if !IsNil(o.IndicatorCount) {
+		toSerialize["indicatorCount"] = o.IndicatorCount
+	}
+	if !IsNil(o.SumoProvided) {
+		toSerialize["sumoProvided"] = o.SumoProvided
+	}
+	if !IsNil(o.SupportsCat) {
+		toSerialize["supportsCat"] = o.SupportsCat
+	}
+	if !IsNil(o.Enabled) {
+		toSerialize["enabled"] = o.Enabled
+	}
 	return toSerialize, nil
+}
+
+func (o *DatastoreSourceStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"source",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDatastoreSourceStatusResponse := _DatastoreSourceStatusResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDatastoreSourceStatusResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DatastoreSourceStatusResponse(varDatastoreSourceStatusResponse)
+
+	return err
 }
 
 type NullableDatastoreSourceStatusResponse struct {

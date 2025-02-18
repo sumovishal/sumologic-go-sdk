@@ -20,12 +20,12 @@ import (
 )
 
 
-// FieldManagementV1ApiService FieldManagementV1Api service
-type FieldManagementV1ApiService service
+// FieldManagementV1APIService FieldManagementV1API service
+type FieldManagementV1APIService service
 
 type ApiCreateFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	fieldName *FieldName
 }
 
@@ -47,7 +47,7 @@ Adding a field will define it in the Fields schema allowing it to be assigned as
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateFieldRequest
 */
-func (a *FieldManagementV1ApiService) CreateField(ctx context.Context) ApiCreateFieldRequest {
+func (a *FieldManagementV1APIService) CreateField(ctx context.Context) ApiCreateFieldRequest {
 	return ApiCreateFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *FieldManagementV1ApiService) CreateField(ctx context.Context) ApiCreate
 
 // Execute executes the request
 //  @return CustomField
-func (a *FieldManagementV1ApiService) CreateFieldExecute(r ApiCreateFieldRequest) (*CustomField, *http.Response, error) {
+func (a *FieldManagementV1APIService) CreateFieldExecute(r ApiCreateFieldRequest) (*CustomField, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *FieldManagementV1ApiService) CreateFieldExecute(r ApiCreateFieldRequest
 		localVarReturnValue  *CustomField
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.CreateField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.CreateField")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *FieldManagementV1ApiService) CreateFieldExecute(r ApiCreateFieldRequest
 
 type ApiDeleteFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Deleting a field does not delete historical data assigned with that field. If yo
  @param id Identifier of a field to delete.
  @return ApiDeleteFieldRequest
 */
-func (a *FieldManagementV1ApiService) DeleteField(ctx context.Context, id string) ApiDeleteFieldRequest {
+func (a *FieldManagementV1APIService) DeleteField(ctx context.Context, id string) ApiDeleteFieldRequest {
 	return ApiDeleteFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *FieldManagementV1ApiService) DeleteField(ctx context.Context, id string
 }
 
 // Execute executes the request
-func (a *FieldManagementV1ApiService) DeleteFieldExecute(r ApiDeleteFieldRequest) (*http.Response, error) {
+func (a *FieldManagementV1APIService) DeleteFieldExecute(r ApiDeleteFieldRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.DeleteField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.DeleteField")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *FieldManagementV1ApiService) DeleteFieldExecute(r ApiDeleteFieldRequest
 
 type ApiDisableFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	id string
 }
 
@@ -261,7 +261,7 @@ After disabling a field Sumo Logic will start dropping its incoming values at in
  @param id Identifier of a field to disable.
  @return ApiDisableFieldRequest
 */
-func (a *FieldManagementV1ApiService) DisableField(ctx context.Context, id string) ApiDisableFieldRequest {
+func (a *FieldManagementV1APIService) DisableField(ctx context.Context, id string) ApiDisableFieldRequest {
 	return ApiDisableFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -270,14 +270,14 @@ func (a *FieldManagementV1ApiService) DisableField(ctx context.Context, id strin
 }
 
 // Execute executes the request
-func (a *FieldManagementV1ApiService) DisableFieldExecute(r ApiDisableFieldRequest) (*http.Response, error) {
+func (a *FieldManagementV1APIService) DisableFieldExecute(r ApiDisableFieldRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.DisableField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.DisableField")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -344,7 +344,7 @@ func (a *FieldManagementV1ApiService) DisableFieldExecute(r ApiDisableFieldReque
 
 type ApiEnableFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	id string
 }
 
@@ -361,7 +361,7 @@ Fields have to be enabled to be assigned to your data. This operation ensures th
  @param id Identifier of a field to enable.
  @return ApiEnableFieldRequest
 */
-func (a *FieldManagementV1ApiService) EnableField(ctx context.Context, id string) ApiEnableFieldRequest {
+func (a *FieldManagementV1APIService) EnableField(ctx context.Context, id string) ApiEnableFieldRequest {
 	return ApiEnableFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -370,14 +370,14 @@ func (a *FieldManagementV1ApiService) EnableField(ctx context.Context, id string
 }
 
 // Execute executes the request
-func (a *FieldManagementV1ApiService) EnableFieldExecute(r ApiEnableFieldRequest) (*http.Response, error) {
+func (a *FieldManagementV1APIService) EnableFieldExecute(r ApiEnableFieldRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.EnableField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.EnableField")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -444,7 +444,7 @@ func (a *FieldManagementV1ApiService) EnableFieldExecute(r ApiEnableFieldRequest
 
 type ApiGetBuiltInFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	id string
 }
 
@@ -461,7 +461,7 @@ Get the details of a built-in field.
  @param id Identifier of a built-in field.
  @return ApiGetBuiltInFieldRequest
 */
-func (a *FieldManagementV1ApiService) GetBuiltInField(ctx context.Context, id string) ApiGetBuiltInFieldRequest {
+func (a *FieldManagementV1APIService) GetBuiltInField(ctx context.Context, id string) ApiGetBuiltInFieldRequest {
 	return ApiGetBuiltInFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -471,7 +471,7 @@ func (a *FieldManagementV1ApiService) GetBuiltInField(ctx context.Context, id st
 
 // Execute executes the request
 //  @return BuiltinField
-func (a *FieldManagementV1ApiService) GetBuiltInFieldExecute(r ApiGetBuiltInFieldRequest) (*BuiltinField, *http.Response, error) {
+func (a *FieldManagementV1APIService) GetBuiltInFieldExecute(r ApiGetBuiltInFieldRequest) (*BuiltinField, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -479,7 +479,7 @@ func (a *FieldManagementV1ApiService) GetBuiltInFieldExecute(r ApiGetBuiltInFiel
 		localVarReturnValue  *BuiltinField
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.GetBuiltInField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.GetBuiltInField")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -555,7 +555,7 @@ func (a *FieldManagementV1ApiService) GetBuiltInFieldExecute(r ApiGetBuiltInFiel
 
 type ApiGetCustomFieldRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 	id string
 }
 
@@ -572,7 +572,7 @@ Get the details of a custom field.
  @param id Identifier of a field.
  @return ApiGetCustomFieldRequest
 */
-func (a *FieldManagementV1ApiService) GetCustomField(ctx context.Context, id string) ApiGetCustomFieldRequest {
+func (a *FieldManagementV1APIService) GetCustomField(ctx context.Context, id string) ApiGetCustomFieldRequest {
 	return ApiGetCustomFieldRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -582,7 +582,7 @@ func (a *FieldManagementV1ApiService) GetCustomField(ctx context.Context, id str
 
 // Execute executes the request
 //  @return CustomField
-func (a *FieldManagementV1ApiService) GetCustomFieldExecute(r ApiGetCustomFieldRequest) (*CustomField, *http.Response, error) {
+func (a *FieldManagementV1APIService) GetCustomFieldExecute(r ApiGetCustomFieldRequest) (*CustomField, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -590,7 +590,7 @@ func (a *FieldManagementV1ApiService) GetCustomFieldExecute(r ApiGetCustomFieldR
 		localVarReturnValue  *CustomField
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.GetCustomField")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.GetCustomField")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -666,7 +666,7 @@ func (a *FieldManagementV1ApiService) GetCustomFieldExecute(r ApiGetCustomFieldR
 
 type ApiGetFieldQuotaRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 }
 
 func (r ApiGetFieldQuotaRequest) Execute() (*FieldQuotaUsage, *http.Response, error) {
@@ -681,7 +681,7 @@ Every account has a limited number of fields available. This endpoint returns yo
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetFieldQuotaRequest
 */
-func (a *FieldManagementV1ApiService) GetFieldQuota(ctx context.Context) ApiGetFieldQuotaRequest {
+func (a *FieldManagementV1APIService) GetFieldQuota(ctx context.Context) ApiGetFieldQuotaRequest {
 	return ApiGetFieldQuotaRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -690,7 +690,7 @@ func (a *FieldManagementV1ApiService) GetFieldQuota(ctx context.Context) ApiGetF
 
 // Execute executes the request
 //  @return FieldQuotaUsage
-func (a *FieldManagementV1ApiService) GetFieldQuotaExecute(r ApiGetFieldQuotaRequest) (*FieldQuotaUsage, *http.Response, error) {
+func (a *FieldManagementV1APIService) GetFieldQuotaExecute(r ApiGetFieldQuotaRequest) (*FieldQuotaUsage, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -698,7 +698,7 @@ func (a *FieldManagementV1ApiService) GetFieldQuotaExecute(r ApiGetFieldQuotaReq
 		localVarReturnValue  *FieldQuotaUsage
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.GetFieldQuota")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.GetFieldQuota")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -773,7 +773,7 @@ func (a *FieldManagementV1ApiService) GetFieldQuotaExecute(r ApiGetFieldQuotaReq
 
 type ApiListBuiltInFieldsRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 }
 
 func (r ApiListBuiltInFieldsRequest) Execute() (*ListBuiltinFieldsResponse, *http.Response, error) {
@@ -788,7 +788,7 @@ Built-in fields are created automatically by Sumo Logic for standard configurati
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListBuiltInFieldsRequest
 */
-func (a *FieldManagementV1ApiService) ListBuiltInFields(ctx context.Context) ApiListBuiltInFieldsRequest {
+func (a *FieldManagementV1APIService) ListBuiltInFields(ctx context.Context) ApiListBuiltInFieldsRequest {
 	return ApiListBuiltInFieldsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -797,7 +797,7 @@ func (a *FieldManagementV1ApiService) ListBuiltInFields(ctx context.Context) Api
 
 // Execute executes the request
 //  @return ListBuiltinFieldsResponse
-func (a *FieldManagementV1ApiService) ListBuiltInFieldsExecute(r ApiListBuiltInFieldsRequest) (*ListBuiltinFieldsResponse, *http.Response, error) {
+func (a *FieldManagementV1APIService) ListBuiltInFieldsExecute(r ApiListBuiltInFieldsRequest) (*ListBuiltinFieldsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -805,7 +805,7 @@ func (a *FieldManagementV1ApiService) ListBuiltInFieldsExecute(r ApiListBuiltInF
 		localVarReturnValue  *ListBuiltinFieldsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.ListBuiltInFields")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.ListBuiltInFields")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -880,7 +880,7 @@ func (a *FieldManagementV1ApiService) ListBuiltInFieldsExecute(r ApiListBuiltInF
 
 type ApiListCustomFieldsRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 }
 
 func (r ApiListCustomFieldsRequest) Execute() (*ListCustomFieldsResponse, *http.Response, error) {
@@ -895,7 +895,7 @@ Request a list of all the custom fields configured in your account.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListCustomFieldsRequest
 */
-func (a *FieldManagementV1ApiService) ListCustomFields(ctx context.Context) ApiListCustomFieldsRequest {
+func (a *FieldManagementV1APIService) ListCustomFields(ctx context.Context) ApiListCustomFieldsRequest {
 	return ApiListCustomFieldsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -904,7 +904,7 @@ func (a *FieldManagementV1ApiService) ListCustomFields(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return ListCustomFieldsResponse
-func (a *FieldManagementV1ApiService) ListCustomFieldsExecute(r ApiListCustomFieldsRequest) (*ListCustomFieldsResponse, *http.Response, error) {
+func (a *FieldManagementV1APIService) ListCustomFieldsExecute(r ApiListCustomFieldsRequest) (*ListCustomFieldsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -912,7 +912,7 @@ func (a *FieldManagementV1ApiService) ListCustomFieldsExecute(r ApiListCustomFie
 		localVarReturnValue  *ListCustomFieldsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.ListCustomFields")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.ListCustomFields")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -987,7 +987,7 @@ func (a *FieldManagementV1ApiService) ListCustomFieldsExecute(r ApiListCustomFie
 
 type ApiListDroppedFieldsRequest struct {
 	ctx context.Context
-	ApiService *FieldManagementV1ApiService
+	ApiService *FieldManagementV1APIService
 }
 
 func (r ApiListDroppedFieldsRequest) Execute() (*ListDroppedFieldsResponse, *http.Response, error) {
@@ -1002,7 +1002,7 @@ Dropped fields are fields sent to Sumo Logic, but are ignored since they are not
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDroppedFieldsRequest
 */
-func (a *FieldManagementV1ApiService) ListDroppedFields(ctx context.Context) ApiListDroppedFieldsRequest {
+func (a *FieldManagementV1APIService) ListDroppedFields(ctx context.Context) ApiListDroppedFieldsRequest {
 	return ApiListDroppedFieldsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1011,7 +1011,7 @@ func (a *FieldManagementV1ApiService) ListDroppedFields(ctx context.Context) Api
 
 // Execute executes the request
 //  @return ListDroppedFieldsResponse
-func (a *FieldManagementV1ApiService) ListDroppedFieldsExecute(r ApiListDroppedFieldsRequest) (*ListDroppedFieldsResponse, *http.Response, error) {
+func (a *FieldManagementV1APIService) ListDroppedFieldsExecute(r ApiListDroppedFieldsRequest) (*ListDroppedFieldsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1019,7 +1019,7 @@ func (a *FieldManagementV1ApiService) ListDroppedFieldsExecute(r ApiListDroppedF
 		localVarReturnValue  *ListDroppedFieldsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1ApiService.ListDroppedFields")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FieldManagementV1APIService.ListDroppedFields")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Panel type satisfies the MappedNullable interface at compile time
@@ -32,6 +34,8 @@ type Panel struct {
 	// Type of panel.
 	PanelType string `json:"panelType"`
 }
+
+type _Panel Panel
 
 // NewPanel instantiates a new Panel object
 // This constructor will assign default values to properties that have it defined,
@@ -257,6 +261,44 @@ func (o Panel) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["panelType"] = o.PanelType
 	return toSerialize, nil
+}
+
+func (o *Panel) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"key",
+		"panelType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPanel := _Panel{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPanel)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Panel(varPanel)
+
+	return err
 }
 
 type NullablePanel struct {

@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ConfigureSubdomainRequest type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &ConfigureSubdomainRequest{}
 // ConfigureSubdomainRequest struct for ConfigureSubdomainRequest
 type ConfigureSubdomainRequest struct {
 	// The new subdomain.
-	Subdomain string `json:"subdomain"`
+	Subdomain string `json:"subdomain" validate:"regexp=^(?!xn--)[a-z0-9]([a-z0-9-]*[a-z0-9])?$"`
 }
+
+type _ConfigureSubdomainRequest ConfigureSubdomainRequest
 
 // NewConfigureSubdomainRequest instantiates a new ConfigureSubdomainRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o ConfigureSubdomainRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["subdomain"] = o.Subdomain
 	return toSerialize, nil
+}
+
+func (o *ConfigureSubdomainRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"subdomain",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varConfigureSubdomainRequest := _ConfigureSubdomainRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varConfigureSubdomainRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ConfigureSubdomainRequest(varConfigureSubdomainRequest)
+
+	return err
 }
 
 type NullableConfigureSubdomainRequest struct {

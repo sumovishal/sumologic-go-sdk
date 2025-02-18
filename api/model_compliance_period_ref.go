@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CompliancePeriodRef type satisfies the MappedNullable interface at compile time
@@ -20,10 +22,12 @@ var _ MappedNullable = &CompliancePeriodRef{}
 // CompliancePeriodRef Reference to the compliance period of the SLO.
 type CompliancePeriodRef struct {
 	// Type of reference to the compliance period. Must be `Relative`.
-	ComplianceRefType string `json:"complianceRefType"`
+	ComplianceRefType string `json:"complianceRefType" validate:"regexp=^(Relative)$"`
 	// Relative shift of compliance period from the latest/current compliance period.
 	RelativeShift *int32 `json:"relativeShift,omitempty"`
 }
+
+type _CompliancePeriodRef CompliancePeriodRef
 
 // NewCompliancePeriodRef instantiates a new CompliancePeriodRef object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o CompliancePeriodRef) ToMap() (map[string]interface{}, error) {
 		toSerialize["relativeShift"] = o.RelativeShift
 	}
 	return toSerialize, nil
+}
+
+func (o *CompliancePeriodRef) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"complianceRefType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCompliancePeriodRef := _CompliancePeriodRef{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCompliancePeriodRef)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CompliancePeriodRef(varCompliancePeriodRef)
+
+	return err
 }
 
 type NullableCompliancePeriodRef struct {

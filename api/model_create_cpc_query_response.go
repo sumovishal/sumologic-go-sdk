@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CreateCpcQueryResponse type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type CreateCpcQueryResponse struct {
 	// The id of the created query.
 	QueryId string `json:"queryId"`
 }
+
+type _CreateCpcQueryResponse CreateCpcQueryResponse
 
 // NewCreateCpcQueryResponse instantiates a new CreateCpcQueryResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o CreateCpcQueryResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryId"] = o.QueryId
 	return toSerialize, nil
+}
+
+func (o *CreateCpcQueryResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCreateCpcQueryResponse := _CreateCpcQueryResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCreateCpcQueryResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateCpcQueryResponse(varCreateCpcQueryResponse)
+
+	return err
 }
 
 type NullableCreateCpcQueryResponse struct {

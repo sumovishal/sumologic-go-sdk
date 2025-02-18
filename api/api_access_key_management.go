@@ -20,12 +20,12 @@ import (
 )
 
 
-// AccessKeyManagementApiService AccessKeyManagementApi service
-type AccessKeyManagementApiService service
+// AccessKeyManagementAPIService AccessKeyManagementAPI service
+type AccessKeyManagementAPIService service
 
 type ApiCreateAccessKeyRequest struct {
 	ctx context.Context
-	ApiService *AccessKeyManagementApiService
+	ApiService *AccessKeyManagementAPIService
 	accessKeyCreateRequest *AccessKeyCreateRequest
 }
 
@@ -48,7 +48,7 @@ Creates a new access ID and key pair. The new access key can be used from the do
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateAccessKeyRequest
 */
-func (a *AccessKeyManagementApiService) CreateAccessKey(ctx context.Context) ApiCreateAccessKeyRequest {
+func (a *AccessKeyManagementAPIService) CreateAccessKey(ctx context.Context) ApiCreateAccessKeyRequest {
 	return ApiCreateAccessKeyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -57,7 +57,7 @@ func (a *AccessKeyManagementApiService) CreateAccessKey(ctx context.Context) Api
 
 // Execute executes the request
 //  @return AccessKey
-func (a *AccessKeyManagementApiService) CreateAccessKeyExecute(r ApiCreateAccessKeyRequest) (*AccessKey, *http.Response, error) {
+func (a *AccessKeyManagementAPIService) CreateAccessKeyExecute(r ApiCreateAccessKeyRequest) (*AccessKey, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -65,7 +65,7 @@ func (a *AccessKeyManagementApiService) CreateAccessKeyExecute(r ApiCreateAccess
 		localVarReturnValue  *AccessKey
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementApiService.CreateAccessKey")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementAPIService.CreateAccessKey")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -145,7 +145,7 @@ func (a *AccessKeyManagementApiService) CreateAccessKeyExecute(r ApiCreateAccess
 
 type ApiDeleteAccessKeyRequest struct {
 	ctx context.Context
-	ApiService *AccessKeyManagementApiService
+	ApiService *AccessKeyManagementAPIService
 	id string
 }
 
@@ -162,7 +162,7 @@ Deletes the access key with the given accessId.
  @param id The accessId of the access key to delete.
  @return ApiDeleteAccessKeyRequest
 */
-func (a *AccessKeyManagementApiService) DeleteAccessKey(ctx context.Context, id string) ApiDeleteAccessKeyRequest {
+func (a *AccessKeyManagementAPIService) DeleteAccessKey(ctx context.Context, id string) ApiDeleteAccessKeyRequest {
 	return ApiDeleteAccessKeyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -171,14 +171,14 @@ func (a *AccessKeyManagementApiService) DeleteAccessKey(ctx context.Context, id 
 }
 
 // Execute executes the request
-func (a *AccessKeyManagementApiService) DeleteAccessKeyExecute(r ApiDeleteAccessKeyRequest) (*http.Response, error) {
+func (a *AccessKeyManagementAPIService) DeleteAccessKeyExecute(r ApiDeleteAccessKeyRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementApiService.DeleteAccessKey")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementAPIService.DeleteAccessKey")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -245,7 +245,7 @@ func (a *AccessKeyManagementApiService) DeleteAccessKeyExecute(r ApiDeleteAccess
 
 type ApiListAccessKeysRequest struct {
 	ctx context.Context
-	ApiService *AccessKeyManagementApiService
+	ApiService *AccessKeyManagementAPIService
 	limit *int32
 	token *string
 }
@@ -274,7 +274,7 @@ List all access keys in your account.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListAccessKeysRequest
 */
-func (a *AccessKeyManagementApiService) ListAccessKeys(ctx context.Context) ApiListAccessKeysRequest {
+func (a *AccessKeyManagementAPIService) ListAccessKeys(ctx context.Context) ApiListAccessKeysRequest {
 	return ApiListAccessKeysRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -283,7 +283,7 @@ func (a *AccessKeyManagementApiService) ListAccessKeys(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return PaginatedListAccessKeysResult
-func (a *AccessKeyManagementApiService) ListAccessKeysExecute(r ApiListAccessKeysRequest) (*PaginatedListAccessKeysResult, *http.Response, error) {
+func (a *AccessKeyManagementAPIService) ListAccessKeysExecute(r ApiListAccessKeysRequest) (*PaginatedListAccessKeysResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -291,7 +291,7 @@ func (a *AccessKeyManagementApiService) ListAccessKeysExecute(r ApiListAccessKey
 		localVarReturnValue  *PaginatedListAccessKeysResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementApiService.ListAccessKeys")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementAPIService.ListAccessKeys")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -304,6 +304,9 @@ func (a *AccessKeyManagementApiService) ListAccessKeysExecute(r ApiListAccessKey
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -372,7 +375,7 @@ func (a *AccessKeyManagementApiService) ListAccessKeysExecute(r ApiListAccessKey
 
 type ApiListPersonalAccessKeysRequest struct {
 	ctx context.Context
-	ApiService *AccessKeyManagementApiService
+	ApiService *AccessKeyManagementAPIService
 }
 
 func (r ApiListPersonalAccessKeysRequest) Execute() (*ListAccessKeysResult, *http.Response, error) {
@@ -387,7 +390,7 @@ List all access keys that belong to your user.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListPersonalAccessKeysRequest
 */
-func (a *AccessKeyManagementApiService) ListPersonalAccessKeys(ctx context.Context) ApiListPersonalAccessKeysRequest {
+func (a *AccessKeyManagementAPIService) ListPersonalAccessKeys(ctx context.Context) ApiListPersonalAccessKeysRequest {
 	return ApiListPersonalAccessKeysRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -396,7 +399,7 @@ func (a *AccessKeyManagementApiService) ListPersonalAccessKeys(ctx context.Conte
 
 // Execute executes the request
 //  @return ListAccessKeysResult
-func (a *AccessKeyManagementApiService) ListPersonalAccessKeysExecute(r ApiListPersonalAccessKeysRequest) (*ListAccessKeysResult, *http.Response, error) {
+func (a *AccessKeyManagementAPIService) ListPersonalAccessKeysExecute(r ApiListPersonalAccessKeysRequest) (*ListAccessKeysResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -404,7 +407,7 @@ func (a *AccessKeyManagementApiService) ListPersonalAccessKeysExecute(r ApiListP
 		localVarReturnValue  *ListAccessKeysResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementApiService.ListPersonalAccessKeys")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementAPIService.ListPersonalAccessKeys")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -479,7 +482,7 @@ func (a *AccessKeyManagementApiService) ListPersonalAccessKeysExecute(r ApiListP
 
 type ApiUpdateAccessKeyRequest struct {
 	ctx context.Context
-	ApiService *AccessKeyManagementApiService
+	ApiService *AccessKeyManagementAPIService
 	id string
 	accessKeyUpdateRequest *AccessKeyUpdateRequest
 }
@@ -502,7 +505,7 @@ Updates the properties of existing accessKey by accessId. It can be used to enab
  @param id The accessId of the access key to update.
  @return ApiUpdateAccessKeyRequest
 */
-func (a *AccessKeyManagementApiService) UpdateAccessKey(ctx context.Context, id string) ApiUpdateAccessKeyRequest {
+func (a *AccessKeyManagementAPIService) UpdateAccessKey(ctx context.Context, id string) ApiUpdateAccessKeyRequest {
 	return ApiUpdateAccessKeyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -512,7 +515,7 @@ func (a *AccessKeyManagementApiService) UpdateAccessKey(ctx context.Context, id 
 
 // Execute executes the request
 //  @return AccessKeyPublic
-func (a *AccessKeyManagementApiService) UpdateAccessKeyExecute(r ApiUpdateAccessKeyRequest) (*AccessKeyPublic, *http.Response, error) {
+func (a *AccessKeyManagementAPIService) UpdateAccessKeyExecute(r ApiUpdateAccessKeyRequest) (*AccessKeyPublic, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -520,7 +523,7 @@ func (a *AccessKeyManagementApiService) UpdateAccessKeyExecute(r ApiUpdateAccess
 		localVarReturnValue  *AccessKeyPublic
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementApiService.UpdateAccessKey")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccessKeyManagementAPIService.UpdateAccessKey")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

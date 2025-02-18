@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Dashboard type satisfies the MappedNullable interface at compile time
@@ -39,7 +41,7 @@ type Dashboard struct {
 	// Variables to apply to the panels.
 	Variables []Variable `json:"variables,omitempty"`
 	// Theme for the dashboard. Either `Light` or `Dark`.
-	Theme *string `json:"theme,omitempty"`
+	Theme *string `json:"theme,omitempty" validate:"regexp=^(light|dark|Light|Dark)$"`
 	// Is the dashboard public
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// Whether to highlight threshold violations.
@@ -50,7 +52,11 @@ type Dashboard struct {
 	ContentId *string `json:"contentId,omitempty"`
 	// Scheduled report identifier for the dashboard. Only most recently modified report schedule is rerun per dashboard. This id is used to manage the schedule details through the scheduled report API. 
 	ScheduleId *string `json:"scheduleId,omitempty"`
+	// Count of report schedules for the dashboard.
+	ScheduleCount *int32 `json:"scheduleCount,omitempty"`
 }
+
+type _Dashboard Dashboard
 
 // NewDashboard instantiates a new Dashboard object
 // This constructor will assign default values to properties that have it defined,
@@ -615,6 +621,38 @@ func (o *Dashboard) SetScheduleId(v string) {
 	o.ScheduleId = &v
 }
 
+// GetScheduleCount returns the ScheduleCount field value if set, zero value otherwise.
+func (o *Dashboard) GetScheduleCount() int32 {
+	if o == nil || IsNil(o.ScheduleCount) {
+		var ret int32
+		return ret
+	}
+	return *o.ScheduleCount
+}
+
+// GetScheduleCountOk returns a tuple with the ScheduleCount field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Dashboard) GetScheduleCountOk() (*int32, bool) {
+	if o == nil || IsNil(o.ScheduleCount) {
+		return nil, false
+	}
+	return o.ScheduleCount, true
+}
+
+// HasScheduleCount returns a boolean if a field has been set.
+func (o *Dashboard) HasScheduleCount() bool {
+	if o != nil && !IsNil(o.ScheduleCount) {
+		return true
+	}
+
+	return false
+}
+
+// SetScheduleCount gets a reference to the given int32 and assigns it to the ScheduleCount field.
+func (o *Dashboard) SetScheduleCount(v int32) {
+	o.ScheduleCount = &v
+}
+
 func (o Dashboard) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -672,7 +710,48 @@ func (o Dashboard) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScheduleId) {
 		toSerialize["scheduleId"] = o.ScheduleId
 	}
+	if !IsNil(o.ScheduleCount) {
+		toSerialize["scheduleCount"] = o.ScheduleCount
+	}
 	return toSerialize, nil
+}
+
+func (o *Dashboard) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"title",
+		"timeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDashboard := _Dashboard{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDashboard)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Dashboard(varDashboard)
+
+	return err
 }
 
 type NullableDashboard struct {

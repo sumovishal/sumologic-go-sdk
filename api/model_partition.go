@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Partition type satisfies the MappedNullable interface at compile time
@@ -30,6 +32,8 @@ type Partition struct {
 	RetentionPeriod *int32 `json:"retentionPeriod,omitempty"`
 	// Whether the partition is compliant or not. Mark a partition as compliant if it contains data used for compliance or audit purpose. Retention for a compliant partition can only be increased and cannot be reduced after the partition is marked compliant. A partition once marked compliant, cannot be marked non-compliant later.
 	IsCompliant *bool `json:"isCompliant,omitempty"`
+	// Indicates whether the partition is included in the default search scope. When executing a  query such as \"error | count,\" certain partitions are automatically part of the search scope.  However, for specific partitions, the user must explicitly mention the partition using the _index  term, as in \"_index=webApp error | count\". This property governs the default inclusion of the  partition in the search scope. Configuring this property is exclusively permitted for flex partitions.
+	IsIncludedInDefaultSearch *bool `json:"isIncludedInDefaultSearch,omitempty"`
 	// If the retention period is scheduled to be updated in the future (i.e., if retention period is previously reduced with value of reduceRetentionPeriodImmediately as false), this property gives the future value of retention period while retentionPeriod gives the current value. retentionPeriod will take up the value of newRetentionPeriod after the scheduled time.
 	NewRetentionPeriod *int32 `json:"newRetentionPeriod,omitempty"`
 	// When the newRetentionPeriod will become effective in UTC format.
@@ -49,10 +53,12 @@ type Partition struct {
 	// This has the value `true` if the partition is active and `false` if it has been decommissioned.
 	IsActive *bool `json:"isActive,omitempty"`
 	// This has the value `DefaultIndex`, `AuditIndex`or `Partition` depending upon the type of partition.
-	IndexType *string `json:"indexType,omitempty"`
+	IndexType *string `json:"indexType,omitempty" validate:"regexp=^(DefaultIndex|AuditIndex|Partition)$"`
 	// Id of the data forwarding configuration to be used by the partition.
 	DataForwardingId *string `json:"dataForwardingId,omitempty"`
 }
+
+type _Partition Partition
 
 // NewPartition instantiates a new Partition object
 // This constructor will assign default values to properties that have it defined,
@@ -229,6 +235,38 @@ func (o *Partition) HasIsCompliant() bool {
 // SetIsCompliant gets a reference to the given bool and assigns it to the IsCompliant field.
 func (o *Partition) SetIsCompliant(v bool) {
 	o.IsCompliant = &v
+}
+
+// GetIsIncludedInDefaultSearch returns the IsIncludedInDefaultSearch field value if set, zero value otherwise.
+func (o *Partition) GetIsIncludedInDefaultSearch() bool {
+	if o == nil || IsNil(o.IsIncludedInDefaultSearch) {
+		var ret bool
+		return ret
+	}
+	return *o.IsIncludedInDefaultSearch
+}
+
+// GetIsIncludedInDefaultSearchOk returns a tuple with the IsIncludedInDefaultSearch field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Partition) GetIsIncludedInDefaultSearchOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsIncludedInDefaultSearch) {
+		return nil, false
+	}
+	return o.IsIncludedInDefaultSearch, true
+}
+
+// HasIsIncludedInDefaultSearch returns a boolean if a field has been set.
+func (o *Partition) HasIsIncludedInDefaultSearch() bool {
+	if o != nil && !IsNil(o.IsIncludedInDefaultSearch) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsIncludedInDefaultSearch gets a reference to the given bool and assigns it to the IsIncludedInDefaultSearch field.
+func (o *Partition) SetIsIncludedInDefaultSearch(v bool) {
+	o.IsIncludedInDefaultSearch = &v
 }
 
 // GetNewRetentionPeriod returns the NewRetentionPeriod field value if set, zero value otherwise.
@@ -556,6 +594,9 @@ func (o Partition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsCompliant) {
 		toSerialize["isCompliant"] = o.IsCompliant
 	}
+	if !IsNil(o.IsIncludedInDefaultSearch) {
+		toSerialize["isIncludedInDefaultSearch"] = o.IsIncludedInDefaultSearch
+	}
 	if !IsNil(o.NewRetentionPeriod) {
 		toSerialize["newRetentionPeriod"] = o.NewRetentionPeriod
 	}
@@ -578,6 +619,50 @@ func (o Partition) ToMap() (map[string]interface{}, error) {
 		toSerialize["dataForwardingId"] = o.DataForwardingId
 	}
 	return toSerialize, nil
+}
+
+func (o *Partition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"routingExpression",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+		"totalBytes",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPartition := _Partition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPartition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Partition(varPartition)
+
+	return err
 }
 
 type NullablePartition struct {

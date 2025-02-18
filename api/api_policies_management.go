@@ -19,12 +19,12 @@ import (
 )
 
 
-// PoliciesManagementApiService PoliciesManagementApi service
-type PoliciesManagementApiService service
+// PoliciesManagementAPIService PoliciesManagementAPI service
+type PoliciesManagementAPIService service
 
 type ApiGetAuditPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetAuditPolicyRequest) Execute() (*AuditPolicy, *http.Response, error) {
@@ -39,7 +39,7 @@ Get the Audit policy. This policy specifies whether audit records for your accou
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAuditPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetAuditPolicy(ctx context.Context) ApiGetAuditPolicyRequest {
+func (a *PoliciesManagementAPIService) GetAuditPolicy(ctx context.Context) ApiGetAuditPolicyRequest {
 	return ApiGetAuditPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -48,7 +48,7 @@ func (a *PoliciesManagementApiService) GetAuditPolicy(ctx context.Context) ApiGe
 
 // Execute executes the request
 //  @return AuditPolicy
-func (a *PoliciesManagementApiService) GetAuditPolicyExecute(r ApiGetAuditPolicyRequest) (*AuditPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetAuditPolicyExecute(r ApiGetAuditPolicyRequest) (*AuditPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -56,7 +56,7 @@ func (a *PoliciesManagementApiService) GetAuditPolicyExecute(r ApiGetAuditPolicy
 		localVarReturnValue  *AuditPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetAuditPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetAuditPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -131,7 +131,7 @@ func (a *PoliciesManagementApiService) GetAuditPolicyExecute(r ApiGetAuditPolicy
 
 type ApiGetDataAccessLevelPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetDataAccessLevelPolicyRequest) Execute() (*DataAccessLevelPolicy, *http.Response, error) {
@@ -146,7 +146,7 @@ Get the Data Access Level policy. When enabled, this policy sets the default dat
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetDataAccessLevelPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetDataAccessLevelPolicy(ctx context.Context) ApiGetDataAccessLevelPolicyRequest {
+func (a *PoliciesManagementAPIService) GetDataAccessLevelPolicy(ctx context.Context) ApiGetDataAccessLevelPolicyRequest {
 	return ApiGetDataAccessLevelPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -155,7 +155,7 @@ func (a *PoliciesManagementApiService) GetDataAccessLevelPolicy(ctx context.Cont
 
 // Execute executes the request
 //  @return DataAccessLevelPolicy
-func (a *PoliciesManagementApiService) GetDataAccessLevelPolicyExecute(r ApiGetDataAccessLevelPolicyRequest) (*DataAccessLevelPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetDataAccessLevelPolicyExecute(r ApiGetDataAccessLevelPolicyRequest) (*DataAccessLevelPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -163,7 +163,7 @@ func (a *PoliciesManagementApiService) GetDataAccessLevelPolicyExecute(r ApiGetD
 		localVarReturnValue  *DataAccessLevelPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetDataAccessLevelPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetDataAccessLevelPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -238,7 +238,7 @@ func (a *PoliciesManagementApiService) GetDataAccessLevelPolicyExecute(r ApiGetD
 
 type ApiGetMaxUserSessionTimeoutPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetMaxUserSessionTimeoutPolicyRequest) Execute() (*MaxUserSessionTimeoutPolicy, *http.Response, error) {
@@ -253,7 +253,7 @@ Get the Max User Session Timeout policy. When enabled, this policy sets the maxi
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetMaxUserSessionTimeoutPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetMaxUserSessionTimeoutPolicy(ctx context.Context) ApiGetMaxUserSessionTimeoutPolicyRequest {
+func (a *PoliciesManagementAPIService) GetMaxUserSessionTimeoutPolicy(ctx context.Context) ApiGetMaxUserSessionTimeoutPolicyRequest {
 	return ApiGetMaxUserSessionTimeoutPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -262,7 +262,7 @@ func (a *PoliciesManagementApiService) GetMaxUserSessionTimeoutPolicy(ctx contex
 
 // Execute executes the request
 //  @return MaxUserSessionTimeoutPolicy
-func (a *PoliciesManagementApiService) GetMaxUserSessionTimeoutPolicyExecute(r ApiGetMaxUserSessionTimeoutPolicyRequest) (*MaxUserSessionTimeoutPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetMaxUserSessionTimeoutPolicyExecute(r ApiGetMaxUserSessionTimeoutPolicyRequest) (*MaxUserSessionTimeoutPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -270,7 +270,7 @@ func (a *PoliciesManagementApiService) GetMaxUserSessionTimeoutPolicyExecute(r A
 		localVarReturnValue  *MaxUserSessionTimeoutPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetMaxUserSessionTimeoutPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetMaxUserSessionTimeoutPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -345,7 +345,7 @@ func (a *PoliciesManagementApiService) GetMaxUserSessionTimeoutPolicyExecute(r A
 
 type ApiGetSearchAuditPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetSearchAuditPolicyRequest) Execute() (*SearchAuditPolicy, *http.Response, error) {
@@ -360,7 +360,7 @@ Get the Search Audit policy. This policy specifies whether search records for yo
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetSearchAuditPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetSearchAuditPolicy(ctx context.Context) ApiGetSearchAuditPolicyRequest {
+func (a *PoliciesManagementAPIService) GetSearchAuditPolicy(ctx context.Context) ApiGetSearchAuditPolicyRequest {
 	return ApiGetSearchAuditPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -369,7 +369,7 @@ func (a *PoliciesManagementApiService) GetSearchAuditPolicy(ctx context.Context)
 
 // Execute executes the request
 //  @return SearchAuditPolicy
-func (a *PoliciesManagementApiService) GetSearchAuditPolicyExecute(r ApiGetSearchAuditPolicyRequest) (*SearchAuditPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetSearchAuditPolicyExecute(r ApiGetSearchAuditPolicyRequest) (*SearchAuditPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -377,7 +377,7 @@ func (a *PoliciesManagementApiService) GetSearchAuditPolicyExecute(r ApiGetSearc
 		localVarReturnValue  *SearchAuditPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetSearchAuditPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetSearchAuditPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -452,7 +452,7 @@ func (a *PoliciesManagementApiService) GetSearchAuditPolicyExecute(r ApiGetSearc
 
 type ApiGetShareDashboardsOutsideOrganizationPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetShareDashboardsOutsideOrganizationPolicyRequest) Execute() (*ShareDashboardsOutsideOrganizationPolicy, *http.Response, error) {
@@ -467,7 +467,7 @@ Get the Share Dashboards Outside Organization policy. This policy allows users t
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetShareDashboardsOutsideOrganizationPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetShareDashboardsOutsideOrganizationPolicy(ctx context.Context) ApiGetShareDashboardsOutsideOrganizationPolicyRequest {
+func (a *PoliciesManagementAPIService) GetShareDashboardsOutsideOrganizationPolicy(ctx context.Context) ApiGetShareDashboardsOutsideOrganizationPolicyRequest {
 	return ApiGetShareDashboardsOutsideOrganizationPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -476,7 +476,7 @@ func (a *PoliciesManagementApiService) GetShareDashboardsOutsideOrganizationPoli
 
 // Execute executes the request
 //  @return ShareDashboardsOutsideOrganizationPolicy
-func (a *PoliciesManagementApiService) GetShareDashboardsOutsideOrganizationPolicyExecute(r ApiGetShareDashboardsOutsideOrganizationPolicyRequest) (*ShareDashboardsOutsideOrganizationPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetShareDashboardsOutsideOrganizationPolicyExecute(r ApiGetShareDashboardsOutsideOrganizationPolicyRequest) (*ShareDashboardsOutsideOrganizationPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -484,7 +484,7 @@ func (a *PoliciesManagementApiService) GetShareDashboardsOutsideOrganizationPoli
 		localVarReturnValue  *ShareDashboardsOutsideOrganizationPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetShareDashboardsOutsideOrganizationPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetShareDashboardsOutsideOrganizationPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -559,7 +559,7 @@ func (a *PoliciesManagementApiService) GetShareDashboardsOutsideOrganizationPoli
 
 type ApiGetUserConcurrentSessionsLimitPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 }
 
 func (r ApiGetUserConcurrentSessionsLimitPolicyRequest) Execute() (*UserConcurrentSessionsLimitPolicy, *http.Response, error) {
@@ -574,7 +574,7 @@ Get the User Concurrent Sessions Limit policy. When enabled, the number of concu
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetUserConcurrentSessionsLimitPolicyRequest
 */
-func (a *PoliciesManagementApiService) GetUserConcurrentSessionsLimitPolicy(ctx context.Context) ApiGetUserConcurrentSessionsLimitPolicyRequest {
+func (a *PoliciesManagementAPIService) GetUserConcurrentSessionsLimitPolicy(ctx context.Context) ApiGetUserConcurrentSessionsLimitPolicyRequest {
 	return ApiGetUserConcurrentSessionsLimitPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -583,7 +583,7 @@ func (a *PoliciesManagementApiService) GetUserConcurrentSessionsLimitPolicy(ctx 
 
 // Execute executes the request
 //  @return UserConcurrentSessionsLimitPolicy
-func (a *PoliciesManagementApiService) GetUserConcurrentSessionsLimitPolicyExecute(r ApiGetUserConcurrentSessionsLimitPolicyRequest) (*UserConcurrentSessionsLimitPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) GetUserConcurrentSessionsLimitPolicyExecute(r ApiGetUserConcurrentSessionsLimitPolicyRequest) (*UserConcurrentSessionsLimitPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -591,7 +591,7 @@ func (a *PoliciesManagementApiService) GetUserConcurrentSessionsLimitPolicyExecu
 		localVarReturnValue  *UserConcurrentSessionsLimitPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.GetUserConcurrentSessionsLimitPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.GetUserConcurrentSessionsLimitPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -666,7 +666,7 @@ func (a *PoliciesManagementApiService) GetUserConcurrentSessionsLimitPolicyExecu
 
 type ApiSetAuditPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	auditPolicy *AuditPolicy
 }
 
@@ -687,7 +687,7 @@ Set the Audit policy. This policy specifies whether audit records for your accou
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetAuditPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetAuditPolicy(ctx context.Context) ApiSetAuditPolicyRequest {
+func (a *PoliciesManagementAPIService) SetAuditPolicy(ctx context.Context) ApiSetAuditPolicyRequest {
 	return ApiSetAuditPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -696,7 +696,7 @@ func (a *PoliciesManagementApiService) SetAuditPolicy(ctx context.Context) ApiSe
 
 // Execute executes the request
 //  @return AuditPolicy
-func (a *PoliciesManagementApiService) SetAuditPolicyExecute(r ApiSetAuditPolicyRequest) (*AuditPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetAuditPolicyExecute(r ApiSetAuditPolicyRequest) (*AuditPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -704,7 +704,7 @@ func (a *PoliciesManagementApiService) SetAuditPolicyExecute(r ApiSetAuditPolicy
 		localVarReturnValue  *AuditPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetAuditPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetAuditPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -784,7 +784,7 @@ func (a *PoliciesManagementApiService) SetAuditPolicyExecute(r ApiSetAuditPolicy
 
 type ApiSetDataAccessLevelPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	dataAccessLevelPolicy *DataAccessLevelPolicy
 }
 
@@ -805,7 +805,7 @@ Set the Data Access Level policy. When enabled, this policy sets the default dat
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetDataAccessLevelPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetDataAccessLevelPolicy(ctx context.Context) ApiSetDataAccessLevelPolicyRequest {
+func (a *PoliciesManagementAPIService) SetDataAccessLevelPolicy(ctx context.Context) ApiSetDataAccessLevelPolicyRequest {
 	return ApiSetDataAccessLevelPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -814,7 +814,7 @@ func (a *PoliciesManagementApiService) SetDataAccessLevelPolicy(ctx context.Cont
 
 // Execute executes the request
 //  @return DataAccessLevelPolicy
-func (a *PoliciesManagementApiService) SetDataAccessLevelPolicyExecute(r ApiSetDataAccessLevelPolicyRequest) (*DataAccessLevelPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetDataAccessLevelPolicyExecute(r ApiSetDataAccessLevelPolicyRequest) (*DataAccessLevelPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -822,7 +822,7 @@ func (a *PoliciesManagementApiService) SetDataAccessLevelPolicyExecute(r ApiSetD
 		localVarReturnValue  *DataAccessLevelPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetDataAccessLevelPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetDataAccessLevelPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -902,7 +902,7 @@ func (a *PoliciesManagementApiService) SetDataAccessLevelPolicyExecute(r ApiSetD
 
 type ApiSetMaxUserSessionTimeoutPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	maxUserSessionTimeoutPolicy *MaxUserSessionTimeoutPolicy
 }
 
@@ -923,7 +923,7 @@ Set the Max User Session Timeout policy. When enabled, this policy sets the maxi
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetMaxUserSessionTimeoutPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetMaxUserSessionTimeoutPolicy(ctx context.Context) ApiSetMaxUserSessionTimeoutPolicyRequest {
+func (a *PoliciesManagementAPIService) SetMaxUserSessionTimeoutPolicy(ctx context.Context) ApiSetMaxUserSessionTimeoutPolicyRequest {
 	return ApiSetMaxUserSessionTimeoutPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -932,7 +932,7 @@ func (a *PoliciesManagementApiService) SetMaxUserSessionTimeoutPolicy(ctx contex
 
 // Execute executes the request
 //  @return MaxUserSessionTimeoutPolicy
-func (a *PoliciesManagementApiService) SetMaxUserSessionTimeoutPolicyExecute(r ApiSetMaxUserSessionTimeoutPolicyRequest) (*MaxUserSessionTimeoutPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetMaxUserSessionTimeoutPolicyExecute(r ApiSetMaxUserSessionTimeoutPolicyRequest) (*MaxUserSessionTimeoutPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -940,7 +940,7 @@ func (a *PoliciesManagementApiService) SetMaxUserSessionTimeoutPolicyExecute(r A
 		localVarReturnValue  *MaxUserSessionTimeoutPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetMaxUserSessionTimeoutPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetMaxUserSessionTimeoutPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1020,7 +1020,7 @@ func (a *PoliciesManagementApiService) SetMaxUserSessionTimeoutPolicyExecute(r A
 
 type ApiSetSearchAuditPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	searchAuditPolicy *SearchAuditPolicy
 }
 
@@ -1041,7 +1041,7 @@ Set the Search Audit policy. This policy specifies whether search records for yo
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetSearchAuditPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetSearchAuditPolicy(ctx context.Context) ApiSetSearchAuditPolicyRequest {
+func (a *PoliciesManagementAPIService) SetSearchAuditPolicy(ctx context.Context) ApiSetSearchAuditPolicyRequest {
 	return ApiSetSearchAuditPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1050,7 +1050,7 @@ func (a *PoliciesManagementApiService) SetSearchAuditPolicy(ctx context.Context)
 
 // Execute executes the request
 //  @return SearchAuditPolicy
-func (a *PoliciesManagementApiService) SetSearchAuditPolicyExecute(r ApiSetSearchAuditPolicyRequest) (*SearchAuditPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetSearchAuditPolicyExecute(r ApiSetSearchAuditPolicyRequest) (*SearchAuditPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1058,7 +1058,7 @@ func (a *PoliciesManagementApiService) SetSearchAuditPolicyExecute(r ApiSetSearc
 		localVarReturnValue  *SearchAuditPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetSearchAuditPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetSearchAuditPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1138,7 +1138,7 @@ func (a *PoliciesManagementApiService) SetSearchAuditPolicyExecute(r ApiSetSearc
 
 type ApiSetShareDashboardsOutsideOrganizationPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	shareDashboardsOutsideOrganizationPolicy *ShareDashboardsOutsideOrganizationPolicy
 }
 
@@ -1159,7 +1159,7 @@ Set the Share Dashboards Outside Organization policy. This policy allows users t
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetShareDashboardsOutsideOrganizationPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetShareDashboardsOutsideOrganizationPolicy(ctx context.Context) ApiSetShareDashboardsOutsideOrganizationPolicyRequest {
+func (a *PoliciesManagementAPIService) SetShareDashboardsOutsideOrganizationPolicy(ctx context.Context) ApiSetShareDashboardsOutsideOrganizationPolicyRequest {
 	return ApiSetShareDashboardsOutsideOrganizationPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1168,7 +1168,7 @@ func (a *PoliciesManagementApiService) SetShareDashboardsOutsideOrganizationPoli
 
 // Execute executes the request
 //  @return ShareDashboardsOutsideOrganizationPolicy
-func (a *PoliciesManagementApiService) SetShareDashboardsOutsideOrganizationPolicyExecute(r ApiSetShareDashboardsOutsideOrganizationPolicyRequest) (*ShareDashboardsOutsideOrganizationPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetShareDashboardsOutsideOrganizationPolicyExecute(r ApiSetShareDashboardsOutsideOrganizationPolicyRequest) (*ShareDashboardsOutsideOrganizationPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1176,7 +1176,7 @@ func (a *PoliciesManagementApiService) SetShareDashboardsOutsideOrganizationPoli
 		localVarReturnValue  *ShareDashboardsOutsideOrganizationPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetShareDashboardsOutsideOrganizationPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetShareDashboardsOutsideOrganizationPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1256,7 +1256,7 @@ func (a *PoliciesManagementApiService) SetShareDashboardsOutsideOrganizationPoli
 
 type ApiSetUserConcurrentSessionsLimitPolicyRequest struct {
 	ctx context.Context
-	ApiService *PoliciesManagementApiService
+	ApiService *PoliciesManagementAPIService
 	userConcurrentSessionsLimitPolicy *UserConcurrentSessionsLimitPolicy
 }
 
@@ -1277,7 +1277,7 @@ Set the User Concurrent Sessions Limit policy. When enabled, the number of concu
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSetUserConcurrentSessionsLimitPolicyRequest
 */
-func (a *PoliciesManagementApiService) SetUserConcurrentSessionsLimitPolicy(ctx context.Context) ApiSetUserConcurrentSessionsLimitPolicyRequest {
+func (a *PoliciesManagementAPIService) SetUserConcurrentSessionsLimitPolicy(ctx context.Context) ApiSetUserConcurrentSessionsLimitPolicyRequest {
 	return ApiSetUserConcurrentSessionsLimitPolicyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1286,7 +1286,7 @@ func (a *PoliciesManagementApiService) SetUserConcurrentSessionsLimitPolicy(ctx 
 
 // Execute executes the request
 //  @return UserConcurrentSessionsLimitPolicy
-func (a *PoliciesManagementApiService) SetUserConcurrentSessionsLimitPolicyExecute(r ApiSetUserConcurrentSessionsLimitPolicyRequest) (*UserConcurrentSessionsLimitPolicy, *http.Response, error) {
+func (a *PoliciesManagementAPIService) SetUserConcurrentSessionsLimitPolicyExecute(r ApiSetUserConcurrentSessionsLimitPolicyRequest) (*UserConcurrentSessionsLimitPolicy, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1294,7 +1294,7 @@ func (a *PoliciesManagementApiService) SetUserConcurrentSessionsLimitPolicyExecu
 		localVarReturnValue  *UserConcurrentSessionsLimitPolicy
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementApiService.SetUserConcurrentSessionsLimitPolicy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PoliciesManagementAPIService.SetUserConcurrentSessionsLimitPolicy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

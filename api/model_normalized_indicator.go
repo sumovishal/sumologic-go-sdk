@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the NormalizedIndicator type satisfies the MappedNullable interface at compile time
@@ -28,8 +30,6 @@ type NormalizedIndicator struct {
 	Type string `json:"type"`
 	// User-provided text to identify the source of the indicator
 	Source string `json:"source"`
-	// When this indicator was first loaded into Sumo. Timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
-	Imported time.Time `json:"imported"`
 	// When this indicator was most recently updated in Sumo. Timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	Updated *time.Time `json:"updated,omitempty"`
 	// Beginning time this indicator is valid. Timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
@@ -40,21 +40,26 @@ type NormalizedIndicator struct {
 	Confidence int32 `json:"confidence"`
 	// Type of indicator ( https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_cvhfwe3t9vuo )
 	ThreatType string `json:"threatType"`
+	// Actors as a comma separated list.
+	Actors *string `json:"actors,omitempty"`
+	// Kill Chain as a comma separated list.
+	KillChain *string `json:"killChain,omitempty"`
 	// Flattened fields from the original indicator object (e.g. flattened STIX fields)
 	Fields *map[string]string `json:"fields,omitempty"`
 }
+
+type _NormalizedIndicator NormalizedIndicator
 
 // NewNormalizedIndicator instantiates a new NormalizedIndicator object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewNormalizedIndicator(id string, indicator string, type_ string, source string, imported time.Time, validFrom time.Time, confidence int32, threatType string) *NormalizedIndicator {
+func NewNormalizedIndicator(id string, indicator string, type_ string, source string, validFrom time.Time, confidence int32, threatType string) *NormalizedIndicator {
 	this := NormalizedIndicator{}
 	this.Id = id
 	this.Indicator = indicator
 	this.Type = type_
 	this.Source = source
-	this.Imported = imported
 	this.ValidFrom = validFrom
 	this.Confidence = confidence
 	this.ThreatType = threatType
@@ -163,30 +168,6 @@ func (o *NormalizedIndicator) GetSourceOk() (*string, bool) {
 // SetSource sets field value
 func (o *NormalizedIndicator) SetSource(v string) {
 	o.Source = v
-}
-
-// GetImported returns the Imported field value
-func (o *NormalizedIndicator) GetImported() time.Time {
-	if o == nil {
-		var ret time.Time
-		return ret
-	}
-
-	return o.Imported
-}
-
-// GetImportedOk returns a tuple with the Imported field value
-// and a boolean to check if the value has been set.
-func (o *NormalizedIndicator) GetImportedOk() (*time.Time, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Imported, true
-}
-
-// SetImported sets field value
-func (o *NormalizedIndicator) SetImported(v time.Time) {
-	o.Imported = v
 }
 
 // GetUpdated returns the Updated field value if set, zero value otherwise.
@@ -325,6 +306,70 @@ func (o *NormalizedIndicator) SetThreatType(v string) {
 	o.ThreatType = v
 }
 
+// GetActors returns the Actors field value if set, zero value otherwise.
+func (o *NormalizedIndicator) GetActors() string {
+	if o == nil || IsNil(o.Actors) {
+		var ret string
+		return ret
+	}
+	return *o.Actors
+}
+
+// GetActorsOk returns a tuple with the Actors field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *NormalizedIndicator) GetActorsOk() (*string, bool) {
+	if o == nil || IsNil(o.Actors) {
+		return nil, false
+	}
+	return o.Actors, true
+}
+
+// HasActors returns a boolean if a field has been set.
+func (o *NormalizedIndicator) HasActors() bool {
+	if o != nil && !IsNil(o.Actors) {
+		return true
+	}
+
+	return false
+}
+
+// SetActors gets a reference to the given string and assigns it to the Actors field.
+func (o *NormalizedIndicator) SetActors(v string) {
+	o.Actors = &v
+}
+
+// GetKillChain returns the KillChain field value if set, zero value otherwise.
+func (o *NormalizedIndicator) GetKillChain() string {
+	if o == nil || IsNil(o.KillChain) {
+		var ret string
+		return ret
+	}
+	return *o.KillChain
+}
+
+// GetKillChainOk returns a tuple with the KillChain field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *NormalizedIndicator) GetKillChainOk() (*string, bool) {
+	if o == nil || IsNil(o.KillChain) {
+		return nil, false
+	}
+	return o.KillChain, true
+}
+
+// HasKillChain returns a boolean if a field has been set.
+func (o *NormalizedIndicator) HasKillChain() bool {
+	if o != nil && !IsNil(o.KillChain) {
+		return true
+	}
+
+	return false
+}
+
+// SetKillChain gets a reference to the given string and assigns it to the KillChain field.
+func (o *NormalizedIndicator) SetKillChain(v string) {
+	o.KillChain = &v
+}
+
 // GetFields returns the Fields field value if set, zero value otherwise.
 func (o *NormalizedIndicator) GetFields() map[string]string {
 	if o == nil || IsNil(o.Fields) {
@@ -371,7 +416,6 @@ func (o NormalizedIndicator) ToMap() (map[string]interface{}, error) {
 	toSerialize["indicator"] = o.Indicator
 	toSerialize["type"] = o.Type
 	toSerialize["source"] = o.Source
-	toSerialize["imported"] = o.Imported
 	if !IsNil(o.Updated) {
 		toSerialize["updated"] = o.Updated
 	}
@@ -381,10 +425,59 @@ func (o NormalizedIndicator) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["confidence"] = o.Confidence
 	toSerialize["threatType"] = o.ThreatType
+	if !IsNil(o.Actors) {
+		toSerialize["actors"] = o.Actors
+	}
+	if !IsNil(o.KillChain) {
+		toSerialize["killChain"] = o.KillChain
+	}
 	if !IsNil(o.Fields) {
 		toSerialize["fields"] = o.Fields
 	}
 	return toSerialize, nil
+}
+
+func (o *NormalizedIndicator) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"indicator",
+		"type",
+		"source",
+		"validFrom",
+		"confidence",
+		"threatType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varNormalizedIndicator := _NormalizedIndicator{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varNormalizedIndicator)
+
+	if err != nil {
+		return err
+	}
+
+	*o = NormalizedIndicator(varNormalizedIndicator)
+
+	return err
 }
 
 type NullableNormalizedIndicator struct {

@@ -12,7 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
-	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the UploadStixIndicatorsRequest type satisfies the MappedNullable interface at compile time
@@ -22,20 +23,19 @@ var _ MappedNullable = &UploadStixIndicatorsRequest{}
 type UploadStixIndicatorsRequest struct {
 	// User-provided text to identify the source of the indicator
 	Source string `json:"source"`
-	// When this indicator was first loaded into Sumo. Timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
-	Imported time.Time `json:"imported"`
 	// The list of stix threat intel indicators to upload.
 	Indicators []StixIndicator `json:"indicators"`
 }
+
+type _UploadStixIndicatorsRequest UploadStixIndicatorsRequest
 
 // NewUploadStixIndicatorsRequest instantiates a new UploadStixIndicatorsRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadStixIndicatorsRequest(source string, imported time.Time, indicators []StixIndicator) *UploadStixIndicatorsRequest {
+func NewUploadStixIndicatorsRequest(source string, indicators []StixIndicator) *UploadStixIndicatorsRequest {
 	this := UploadStixIndicatorsRequest{}
 	this.Source = source
-	this.Imported = imported
 	this.Indicators = indicators
 	return &this
 }
@@ -70,30 +70,6 @@ func (o *UploadStixIndicatorsRequest) GetSourceOk() (*string, bool) {
 // SetSource sets field value
 func (o *UploadStixIndicatorsRequest) SetSource(v string) {
 	o.Source = v
-}
-
-// GetImported returns the Imported field value
-func (o *UploadStixIndicatorsRequest) GetImported() time.Time {
-	if o == nil {
-		var ret time.Time
-		return ret
-	}
-
-	return o.Imported
-}
-
-// GetImportedOk returns a tuple with the Imported field value
-// and a boolean to check if the value has been set.
-func (o *UploadStixIndicatorsRequest) GetImportedOk() (*time.Time, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Imported, true
-}
-
-// SetImported sets field value
-func (o *UploadStixIndicatorsRequest) SetImported(v time.Time) {
-	o.Imported = v
 }
 
 // GetIndicators returns the Indicators field value
@@ -131,9 +107,46 @@ func (o UploadStixIndicatorsRequest) MarshalJSON() ([]byte, error) {
 func (o UploadStixIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source"] = o.Source
-	toSerialize["imported"] = o.Imported
 	toSerialize["indicators"] = o.Indicators
 	return toSerialize, nil
+}
+
+func (o *UploadStixIndicatorsRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"source",
+		"indicators",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varUploadStixIndicatorsRequest := _UploadStixIndicatorsRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varUploadStixIndicatorsRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UploadStixIndicatorsRequest(varUploadStixIndicatorsRequest)
+
+	return err
 }
 
 type NullableUploadStixIndicatorsRequest struct {

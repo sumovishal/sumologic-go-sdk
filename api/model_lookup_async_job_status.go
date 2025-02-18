@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LookupAsyncJobStatus type satisfies the MappedNullable interface at compile time
@@ -45,6 +47,8 @@ type LookupAsyncJobStatus struct {
 	// Timestamp in UTC when status was last updated.
 	ModifiedAt time.Time `json:"modifiedAt"`
 }
+
+type _LookupAsyncJobStatus LookupAsyncJobStatus
 
 // NewLookupAsyncJobStatus instantiates a new LookupAsyncJobStatus object
 // This constructor will assign default values to properties that have it defined,
@@ -422,6 +426,50 @@ func (o LookupAsyncJobStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdAt"] = o.CreatedAt
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	return toSerialize, nil
+}
+
+func (o *LookupAsyncJobStatus) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"jobId",
+		"status",
+		"lookupContentId",
+		"lookupName",
+		"lookupContentPath",
+		"userId",
+		"createdAt",
+		"modifiedAt",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLookupAsyncJobStatus := _LookupAsyncJobStatus{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLookupAsyncJobStatus)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupAsyncJobStatus(varLookupAsyncJobStatus)
+
+	return err
 }
 
 type NullableLookupAsyncJobStatus struct {

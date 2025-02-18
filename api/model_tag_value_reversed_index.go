@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TagValueReversedIndex type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type TagValueReversedIndex struct {
 	// List of span ids which have the given tag and value.
 	SpanIds []string `json:"spanIds"`
 }
+
+type _TagValueReversedIndex TagValueReversedIndex
 
 // NewTagValueReversedIndex instantiates a new TagValueReversedIndex object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o TagValueReversedIndex) ToMap() (map[string]interface{}, error) {
 	toSerialize["tagValue"] = o.TagValue
 	toSerialize["spanIds"] = o.SpanIds
 	return toSerialize, nil
+}
+
+func (o *TagValueReversedIndex) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"tagValue",
+		"spanIds",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTagValueReversedIndex := _TagValueReversedIndex{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTagValueReversedIndex)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TagValueReversedIndex(varTagValueReversedIndex)
+
+	return err
 }
 
 type NullableTagValueReversedIndex struct {

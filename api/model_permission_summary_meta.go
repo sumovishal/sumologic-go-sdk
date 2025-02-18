@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the PermissionSummaryMeta type satisfies the MappedNullable interface at compile time
@@ -32,6 +34,8 @@ type PermissionSummaryMeta struct {
 	// A true value implies that the permission is defined by the system on the resource and can not be modified by the user. A false value implies that the permission is defined by the user on the resource and can be modified by the user.
 	IsSystemDefined bool `json:"isSystemDefined"`
 }
+
+type _PermissionSummaryMeta PermissionSummaryMeta
 
 // NewPermissionSummaryMeta instantiates a new PermissionSummaryMeta object
 // This constructor will assign default values to properties that have it defined,
@@ -217,6 +221,48 @@ func (o PermissionSummaryMeta) ToMap() (map[string]interface{}, error) {
 	toSerialize["isRecursive"] = o.IsRecursive
 	toSerialize["isSystemDefined"] = o.IsSystemDefined
 	return toSerialize, nil
+}
+
+func (o *PermissionSummaryMeta) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"isInherited",
+		"isExplicit",
+		"isRevoked",
+		"isRecursive",
+		"isSystemDefined",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPermissionSummaryMeta := _PermissionSummaryMeta{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPermissionSummaryMeta)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PermissionSummaryMeta(varPermissionSummaryMeta)
+
+	return err
 }
 
 type NullablePermissionSummaryMeta struct {

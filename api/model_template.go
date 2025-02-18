@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Template type satisfies the MappedNullable interface at compile time
@@ -20,8 +22,10 @@ var _ MappedNullable = &Template{}
 // Template struct for Template
 type Template struct {
 	// The type of template. `DashboardTemplate` provides a snapshot view of the exported dashboard. `DashboardReportModeTemplate` provides a printer-friendly view of the exported dashboard. New templates may be supported in the future.
-	TemplateType string `json:"templateType"`
+	TemplateType string `json:"templateType" validate:"regexp=^(DashboardTemplate|DashboardReportModeTemplate)$"`
 }
+
+type _Template Template
 
 // NewTemplate instantiates a new Template object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o Template) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["templateType"] = o.TemplateType
 	return toSerialize, nil
+}
+
+func (o *Template) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"templateType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplate := _Template{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTemplate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Template(varTemplate)
+
+	return err
 }
 
 type NullableTemplate struct {

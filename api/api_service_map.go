@@ -19,12 +19,12 @@ import (
 )
 
 
-// ServiceMapApiService ServiceMapApi service
-type ServiceMapApiService service
+// ServiceMapAPIService ServiceMapAPI service
+type ServiceMapAPIService service
 
 type ApiGetServiceMapRequest struct {
 	ctx context.Context
-	ApiService *ServiceMapApiService
+	ApiService *ServiceMapAPIService
 }
 
 func (r ApiGetServiceMapRequest) Execute() (*ServiceMapResponse, *http.Response, error) {
@@ -39,7 +39,7 @@ Run a search request to get a map of services and connections between them.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetServiceMapRequest
 */
-func (a *ServiceMapApiService) GetServiceMap(ctx context.Context) ApiGetServiceMapRequest {
+func (a *ServiceMapAPIService) GetServiceMap(ctx context.Context) ApiGetServiceMapRequest {
 	return ApiGetServiceMapRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -48,7 +48,7 @@ func (a *ServiceMapApiService) GetServiceMap(ctx context.Context) ApiGetServiceM
 
 // Execute executes the request
 //  @return ServiceMapResponse
-func (a *ServiceMapApiService) GetServiceMapExecute(r ApiGetServiceMapRequest) (*ServiceMapResponse, *http.Response, error) {
+func (a *ServiceMapAPIService) GetServiceMapExecute(r ApiGetServiceMapRequest) (*ServiceMapResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -56,7 +56,7 @@ func (a *ServiceMapApiService) GetServiceMapExecute(r ApiGetServiceMapRequest) (
 		localVarReturnValue  *ServiceMapResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceMapApiService.GetServiceMap")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceMapAPIService.GetServiceMap")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

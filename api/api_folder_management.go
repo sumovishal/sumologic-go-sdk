@@ -20,12 +20,12 @@ import (
 )
 
 
-// FolderManagementApiService FolderManagementApi service
-type FolderManagementApiService service
+// FolderManagementAPIService FolderManagementAPI service
+type FolderManagementAPIService service
 
 type ApiCreateFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	folderDefinition *FolderDefinition
 	isAdminMode *string
 }
@@ -54,7 +54,7 @@ Creates a new folder under the given parent folder. Set the header parameter `is
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateFolderRequest
 */
-func (a *FolderManagementApiService) CreateFolder(ctx context.Context) ApiCreateFolderRequest {
+func (a *FolderManagementAPIService) CreateFolder(ctx context.Context) ApiCreateFolderRequest {
 	return ApiCreateFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -63,7 +63,7 @@ func (a *FolderManagementApiService) CreateFolder(ctx context.Context) ApiCreate
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) CreateFolderExecute(r ApiCreateFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -71,7 +71,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.CreateFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.CreateFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -154,7 +154,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 
 type ApiGetAdminRecommendedFolderAsyncRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	isAdminMode *string
 }
 
@@ -178,7 +178,7 @@ _You get back a identifier of asynchronous job in response to this endpoint. See
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAdminRecommendedFolderAsyncRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsync(ctx context.Context) ApiGetAdminRecommendedFolderAsyncRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsync(ctx context.Context) ApiGetAdminRecommendedFolderAsyncRequest {
 	return ApiGetAdminRecommendedFolderAsyncRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -187,7 +187,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsync(ctx context.
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r ApiGetAdminRecommendedFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncExecute(r ApiGetAdminRecommendedFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -195,7 +195,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsync")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsync")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -273,7 +273,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 
 type ApiGetAdminRecommendedFolderAsyncResultRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -290,7 +290,7 @@ Get result of an Admin Recommended job for the given job identifier. The result 
  @param jobId The identifier of the asynchronous Admin Recommended folder job.
  @return ApiGetAdminRecommendedFolderAsyncResultRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResult(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncResultRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncResult(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncResultRequest {
 	return ApiGetAdminRecommendedFolderAsyncResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -300,7 +300,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResult(ctx co
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute(r ApiGetAdminRecommendedFolderAsyncResultRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncResultExecute(r ApiGetAdminRecommendedFolderAsyncResultRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -308,7 +308,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsyncResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsyncResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -384,7 +384,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 
 type ApiGetAdminRecommendedFolderAsyncStatusRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -401,7 +401,7 @@ Get the status of an asynchronous Admin Recommended folder job for the given job
  @param jobId The identifier of the asynchronous Admin Recommended folder job.
  @return ApiGetAdminRecommendedFolderAsyncStatusRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatus(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncStatusRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncStatus(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncStatusRequest {
 	return ApiGetAdminRecommendedFolderAsyncStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -411,7 +411,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatus(ctx co
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute(r ApiGetAdminRecommendedFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncStatusExecute(r ApiGetAdminRecommendedFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -419,7 +419,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsyncStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsyncStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -495,7 +495,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 
 type ApiGetFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	id string
 	isAdminMode *string
 }
@@ -519,7 +519,7 @@ Get a folder with the given identifier. Set the header parameter `isAdminMode` t
  @param id Identifier of the folder to fetch.
  @return ApiGetFolderRequest
 */
-func (a *FolderManagementApiService) GetFolder(ctx context.Context, id string) ApiGetFolderRequest {
+func (a *FolderManagementAPIService) GetFolder(ctx context.Context, id string) ApiGetFolderRequest {
 	return ApiGetFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -529,7 +529,7 @@ func (a *FolderManagementApiService) GetFolder(ctx context.Context, id string) A
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetFolderExecute(r ApiGetFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -537,7 +537,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -616,7 +616,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 
 type ApiGetGlobalFolderAsyncRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	isAdminMode *string
 }
 
@@ -642,7 +642,7 @@ _You get back a identifier of asynchronous job in response to this endpoint. See
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetGlobalFolderAsyncRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsync(ctx context.Context) ApiGetGlobalFolderAsyncRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsync(ctx context.Context) ApiGetGlobalFolderAsyncRequest {
 	return ApiGetGlobalFolderAsyncRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -651,7 +651,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsync(ctx context.Context) A
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncExecute(r ApiGetGlobalFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -659,7 +659,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsync")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsync")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -737,7 +737,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 
 type ApiGetGlobalFolderAsyncResultRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -754,7 +754,7 @@ Get result of a Global View job for the given job identifier. The result will be
  @param jobId The identifier of the asynchronous Global View job.
  @return ApiGetGlobalFolderAsyncResultRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsyncResult(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncResultRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncResult(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncResultRequest {
 	return ApiGetGlobalFolderAsyncResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -764,7 +764,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResult(ctx context.Cont
 
 // Execute executes the request
 //  @return ContentList
-func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetGlobalFolderAsyncResultRequest) (*ContentList, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncResultExecute(r ApiGetGlobalFolderAsyncResultRequest) (*ContentList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -772,7 +772,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 		localVarReturnValue  *ContentList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsyncResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsyncResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -848,7 +848,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 
 type ApiGetGlobalFolderAsyncStatusRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -865,7 +865,7 @@ Get the status of an asynchronous Global View job for the given job identifier. 
  @param jobId The identifier of the asynchronous Global View job.
  @return ApiGetGlobalFolderAsyncStatusRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsyncStatus(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncStatusRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncStatus(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncStatusRequest {
 	return ApiGetGlobalFolderAsyncStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -875,7 +875,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatus(ctx context.Cont
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetGlobalFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncStatusExecute(r ApiGetGlobalFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -883,7 +883,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsyncStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsyncStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -959,7 +959,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 
 type ApiGetPersonalFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 }
 
 func (r ApiGetPersonalFolderRequest) Execute() (*Folder, *http.Response, error) {
@@ -974,7 +974,7 @@ Get the personal folder of the current user.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetPersonalFolderRequest
 */
-func (a *FolderManagementApiService) GetPersonalFolder(ctx context.Context) ApiGetPersonalFolderRequest {
+func (a *FolderManagementAPIService) GetPersonalFolder(ctx context.Context) ApiGetPersonalFolderRequest {
 	return ApiGetPersonalFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -983,7 +983,7 @@ func (a *FolderManagementApiService) GetPersonalFolder(ctx context.Context) ApiG
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetPersonalFolderExecute(r ApiGetPersonalFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -991,7 +991,7 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetPersonalFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetPersonalFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1066,7 +1066,7 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 
 type ApiUpdateFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	id string
 	updateFolderRequest *UpdateFolderRequest
 	isAdminMode *string
@@ -1097,7 +1097,7 @@ Update an existing folder with the given identifier. Set the header parameter `i
  @param id Identifier of the folder to update.
  @return ApiUpdateFolderRequest
 */
-func (a *FolderManagementApiService) UpdateFolder(ctx context.Context, id string) ApiUpdateFolderRequest {
+func (a *FolderManagementAPIService) UpdateFolder(ctx context.Context, id string) ApiUpdateFolderRequest {
 	return ApiUpdateFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1107,7 +1107,7 @@ func (a *FolderManagementApiService) UpdateFolder(ctx context.Context, id string
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) UpdateFolderExecute(r ApiUpdateFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1115,7 +1115,7 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.UpdateFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.UpdateFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

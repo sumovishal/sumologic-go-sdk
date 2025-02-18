@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SaveMetricsSearchRequest type satisfies the MappedNullable interface at compile time
@@ -20,7 +22,7 @@ var _ MappedNullable = &SaveMetricsSearchRequest{}
 // SaveMetricsSearchRequest The definition of the metrics search to save in the content library.
 type SaveMetricsSearchRequest struct {
 	// Item title in the content library.
-	Title string `json:"title"`
+	Title string `json:"title" validate:"regexp=^[a-zA-Z0-9 +%-@.,_()]+$"`
 	// Item description in the content library.
 	Description string `json:"description"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
@@ -35,6 +37,8 @@ type SaveMetricsSearchRequest struct {
 	// Identifier of a folder to which the metrics search should be added.
 	ParentId string `json:"parentId"`
 }
+
+type _SaveMetricsSearchRequest SaveMetricsSearchRequest
 
 // NewSaveMetricsSearchRequest instantiates a new SaveMetricsSearchRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -303,6 +307,47 @@ func (o SaveMetricsSearchRequest) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["parentId"] = o.ParentId
 	return toSerialize, nil
+}
+
+func (o *SaveMetricsSearchRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"title",
+		"description",
+		"timeRange",
+		"metricsQueries",
+		"parentId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSaveMetricsSearchRequest := _SaveMetricsSearchRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSaveMetricsSearchRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SaveMetricsSearchRequest(varSaveMetricsSearchRequest)
+
+	return err
 }
 
 type NullableSaveMetricsSearchRequest struct {

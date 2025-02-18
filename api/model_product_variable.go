@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ProductVariable type satisfies the MappedNullable interface at compile time
@@ -22,12 +24,14 @@ type ProductVariable struct {
 	// Name of a product variable.
 	ProductVariableName string `json:"productVariableName"`
 	// Unique Identifier of the product variable.
-	ProductVariableId string `json:"productVariableId"`
+	ProductVariableId string `json:"productVariableId" validate:"regexp=^(continuousIngest|continuousStorage|frequentIngest|frequentStorage|infrequentIngest|infrequentStorage|infrequentScannedData|cseIngest|cseStorage|metrics)$"`
 	// Unit of measure for the productvariable.
 	Unit string `json:"unit"`
 	// Possible values allowed for the productvariable.
 	PossibleValues []int64 `json:"possibleValues"`
 }
+
+type _ProductVariable ProductVariable
 
 // NewProductVariable instantiates a new ProductVariable object
 // This constructor will assign default values to properties that have it defined,
@@ -161,6 +165,46 @@ func (o ProductVariable) ToMap() (map[string]interface{}, error) {
 	toSerialize["unit"] = o.Unit
 	toSerialize["possibleValues"] = o.PossibleValues
 	return toSerialize, nil
+}
+
+func (o *ProductVariable) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"productVariableName",
+		"productVariableId",
+		"unit",
+		"possibleValues",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varProductVariable := _ProductVariable{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varProductVariable)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProductVariable(varProductVariable)
+
+	return err
 }
 
 type NullableProductVariable struct {

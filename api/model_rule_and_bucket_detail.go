@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the RuleAndBucketDetail type satisfies the MappedNullable interface at compile time
@@ -29,7 +31,7 @@ type RuleAndBucketDetail struct {
 	// Specify the path prefix to a directory in the S3 bucket and how to format the file name.
 	FileFormat *string `json:"fileFormat,omitempty"`
 	// Format of the payload.
-	Format *string `json:"format,omitempty"`
+	Format *string `json:"format,omitempty" validate:"regexp=^(csv|json)$"`
 	// Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	CreatedAt time.Time `json:"createdAt"`
 	// Identifier of the user who created the resource.
@@ -42,6 +44,8 @@ type RuleAndBucketDetail struct {
 	Id *string `json:"id,omitempty"`
 	Bucket map[string]interface{} `json:"bucket,omitempty"`
 }
+
+type _RuleAndBucketDetail RuleAndBucketDetail
 
 // NewRuleAndBucketDetail instantiates a new RuleAndBucketDetail object
 // This constructor will assign default values to properties that have it defined,
@@ -406,6 +410,48 @@ func (o RuleAndBucketDetail) ToMap() (map[string]interface{}, error) {
 		toSerialize["bucket"] = o.Bucket
 	}
 	return toSerialize, nil
+}
+
+func (o *RuleAndBucketDetail) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"indexId",
+		"destinationId",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varRuleAndBucketDetail := _RuleAndBucketDetail{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varRuleAndBucketDetail)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RuleAndBucketDetail(varRuleAndBucketDetail)
+
+	return err
 }
 
 type NullableRuleAndBucketDetail struct {

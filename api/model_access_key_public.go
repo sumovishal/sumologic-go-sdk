@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AccessKeyPublic type satisfies the MappedNullable interface at compile time
@@ -37,6 +39,8 @@ type AccessKeyPublic struct {
 	// Last used timestamp in UTC.  <br> **Note:** Property not in use, it is part of an upcoming feature.
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 }
+
+type _AccessKeyPublic AccessKeyPublic
 
 // NewAccessKeyPublic instantiates a new AccessKeyPublic object
 // This constructor will assign default values to properties that have it defined,
@@ -292,6 +296,48 @@ func (o AccessKeyPublic) ToMap() (map[string]interface{}, error) {
 		toSerialize["lastUsed"] = o.LastUsed
 	}
 	return toSerialize, nil
+}
+
+func (o *AccessKeyPublic) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"label",
+		"disabled",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAccessKeyPublic := _AccessKeyPublic{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAccessKeyPublic)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AccessKeyPublic(varAccessKeyPublic)
+
+	return err
 }
 
 type NullableAccessKeyPublic struct {

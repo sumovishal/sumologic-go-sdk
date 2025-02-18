@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the AdhocMutingResponse type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type AdhocMutingResponse struct {
 	// End time of the adhoc muting period in Epoch.If muting indefinitely, this will be empty.
 	EndTime *int64 `json:"endTime,omitempty"`
 }
+
+type _AdhocMutingResponse AdhocMutingResponse
 
 // NewAdhocMutingResponse instantiates a new AdhocMutingResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -114,6 +118,43 @@ func (o AdhocMutingResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["endTime"] = o.EndTime
 	}
 	return toSerialize, nil
+}
+
+func (o *AdhocMutingResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"startTime",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAdhocMutingResponse := _AdhocMutingResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varAdhocMutingResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AdhocMutingResponse(varAdhocMutingResponse)
+
+	return err
 }
 
 type NullableAdhocMutingResponse struct {

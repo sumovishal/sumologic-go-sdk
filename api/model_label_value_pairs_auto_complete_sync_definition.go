@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LabelValuePairsAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -23,6 +25,8 @@ type LabelValuePairsAutoCompleteSyncDefinition struct {
 	// The autocomplete key to be used to fetch autocomplete values.
 	AutoCompleteKey string `json:"autoCompleteKey"`
 }
+
+type _LabelValuePairsAutoCompleteSyncDefinition LabelValuePairsAutoCompleteSyncDefinition
 
 // NewLabelValuePairsAutoCompleteSyncDefinition instantiates a new LabelValuePairsAutoCompleteSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -87,6 +91,44 @@ func (o LabelValuePairsAutoCompleteSyncDefinition) ToMap() (map[string]interface
 	}
 	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
 	return toSerialize, nil
+}
+
+func (o *LabelValuePairsAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"autoCompleteKey",
+		"autoCompleteType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLabelValuePairsAutoCompleteSyncDefinition := _LabelValuePairsAutoCompleteSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLabelValuePairsAutoCompleteSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LabelValuePairsAutoCompleteSyncDefinition(varLabelValuePairsAutoCompleteSyncDefinition)
+
+	return err
 }
 
 type NullableLabelValuePairsAutoCompleteSyncDefinition struct {

@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 	"time"
 )
 
@@ -22,7 +24,7 @@ var _ MappedNullable = &SlosLibrarySloResponse{}
 type SlosLibrarySloResponse struct {
 	SlosLibraryBaseResponse
 	// Type of SLI Signal (latency, error, throughput, availability or other).
-	SignalType string `json:"signalType"`
+	SignalType string `json:"signalType" validate:"regexp=^(Latency|Error|Throughput|Availability|Other)$"`
 	Compliance Compliance `json:"compliance"`
 	Indicator Sli `json:"indicator"`
 	// Name of the service.
@@ -34,6 +36,8 @@ type SlosLibrarySloResponse struct {
 	// Current SLO Version. This is incremented on every change of a critical field of the SLO (i.e, SLI or Compliance period timezone), that requires a recompute of the SLI values over the compliance period.
 	SloVersion *int64 `json:"sloVersion,omitempty"`
 }
+
+type _SlosLibrarySloResponse SlosLibrarySloResponse
 
 // NewSlosLibrarySloResponse instantiates a new SlosLibrarySloResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -302,6 +306,58 @@ func (o SlosLibrarySloResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["sloVersion"] = o.SloVersion
 	}
 	return toSerialize, nil
+}
+
+func (o *SlosLibrarySloResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"signalType",
+		"compliance",
+		"indicator",
+		"id",
+		"name",
+		"description",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"parentId",
+		"contentType",
+		"type",
+		"isSystem",
+		"isMutable",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSlosLibrarySloResponse := _SlosLibrarySloResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSlosLibrarySloResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SlosLibrarySloResponse(varSlosLibrarySloResponse)
+
+	return err
 }
 
 type NullableSlosLibrarySloResponse struct {

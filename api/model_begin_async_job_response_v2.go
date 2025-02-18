@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BeginAsyncJobResponseV2 type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type BeginAsyncJobResponseV2 struct {
 	// Identifier of the asynchronous job. Use it to get status of the job.
 	JobId string `json:"jobId"`
 }
+
+type _BeginAsyncJobResponseV2 BeginAsyncJobResponseV2
 
 // NewBeginAsyncJobResponseV2 instantiates a new BeginAsyncJobResponseV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o BeginAsyncJobResponseV2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["jobId"] = o.JobId
 	return toSerialize, nil
+}
+
+func (o *BeginAsyncJobResponseV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"jobId",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBeginAsyncJobResponseV2 := _BeginAsyncJobResponseV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBeginAsyncJobResponseV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BeginAsyncJobResponseV2(varBeginAsyncJobResponseV2)
+
+	return err
 }
 
 type NullableBeginAsyncJobResponseV2 struct {

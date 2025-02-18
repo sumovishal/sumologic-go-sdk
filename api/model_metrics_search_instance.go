@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetricsSearchInstance type satisfies the MappedNullable interface at compile time
@@ -21,7 +23,7 @@ var _ MappedNullable = &MetricsSearchInstance{}
 // MetricsSearchInstance struct for MetricsSearchInstance
 type MetricsSearchInstance struct {
 	// Item title in the content library.
-	Title string `json:"title"`
+	Title string `json:"title" validate:"regexp=^[a-zA-Z0-9 +%-@.,_()]+$"`
 	// Item description in the content library.
 	Description string `json:"description"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
@@ -46,6 +48,8 @@ type MetricsSearchInstance struct {
 	// Identifier of the parent element in the content library, such as folder.
 	ParentId *string `json:"parentId,omitempty"`
 }
+
+type _MetricsSearchInstance MetricsSearchInstance
 
 // NewMetricsSearchInstance instantiates a new MetricsSearchInstance object
 // This constructor will assign default values to properties that have it defined,
@@ -453,6 +457,51 @@ func (o MetricsSearchInstance) ToMap() (map[string]interface{}, error) {
 		toSerialize["parentId"] = o.ParentId
 	}
 	return toSerialize, nil
+}
+
+func (o *MetricsSearchInstance) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"title",
+		"description",
+		"timeRange",
+		"metricsQueries",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetricsSearchInstance := _MetricsSearchInstance{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetricsSearchInstance)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsSearchInstance(varMetricsSearchInstance)
+
+	return err
 }
 
 type NullableMetricsSearchInstance struct {

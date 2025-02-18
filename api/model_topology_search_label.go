@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the TopologySearchLabel type satisfies the MappedNullable interface at compile time
@@ -26,6 +28,8 @@ type TopologySearchLabel struct {
 	// Whether the content item is required to contain this label in order to be matched. If true, content items without this label will not be matched. If false, content items without this label will be matched. 
 	IsRequired *bool `json:"isRequired,omitempty"`
 }
+
+type _TopologySearchLabel TopologySearchLabel
 
 // NewTopologySearchLabel instantiates a new TopologySearchLabel object
 // This constructor will assign default values to properties that have it defined,
@@ -142,6 +146,44 @@ func (o TopologySearchLabel) ToMap() (map[string]interface{}, error) {
 		toSerialize["isRequired"] = o.IsRequired
 	}
 	return toSerialize, nil
+}
+
+func (o *TopologySearchLabel) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"key",
+		"value",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTopologySearchLabel := _TopologySearchLabel{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTopologySearchLabel)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TopologySearchLabel(varTopologySearchLabel)
+
+	return err
 }
 
 type NullableTopologySearchLabel struct {

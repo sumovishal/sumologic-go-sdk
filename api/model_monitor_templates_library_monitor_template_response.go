@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 	"time"
 )
 
@@ -22,9 +24,7 @@ var _ MappedNullable = &MonitorTemplatesLibraryMonitorTemplateResponse{}
 type MonitorTemplatesLibraryMonitorTemplateResponse struct {
 	MonitorTemplatesLibraryBaseResponse
 	// The type of monitor template. Valid values:   1. `Logs`: A logs query monitor template.   2. `Metrics`: A metrics query monitor template.   3. `Slo`: A SLO based monitor template.
-	MonitorType string `json:"monitorType"`
-	// The app id which related to the monitor template. It will be UUID string
-	AppId string `json:"appId"`
+	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics|Slo)$"`
 	// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
 	EvaluationDelay *string `json:"evaluationDelay,omitempty"`
 	// The name of the alert(s) triggered from the monitor created based on the template. Monitor name will be used if not specified.
@@ -41,11 +41,13 @@ type MonitorTemplatesLibraryMonitorTemplateResponse struct {
 	Playbook *string `json:"playbook,omitempty"`
 }
 
+type _MonitorTemplatesLibraryMonitorTemplateResponse MonitorTemplatesLibraryMonitorTemplateResponse
+
 // NewMonitorTemplatesLibraryMonitorTemplateResponse instantiates a new MonitorTemplatesLibraryMonitorTemplateResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMonitorTemplatesLibraryMonitorTemplateResponse(monitorType string, appId string, queries []MonitorQuery, triggers []TriggerCondition, id string, name string, description string, version int64, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, parentId string, contentType string, type_ string, isSystem bool, isMutable bool) *MonitorTemplatesLibraryMonitorTemplateResponse {
+func NewMonitorTemplatesLibraryMonitorTemplateResponse(monitorType string, queries []MonitorQuery, triggers []TriggerCondition, id string, name string, description string, version int64, createdAt time.Time, createdBy string, modifiedAt time.Time, modifiedBy string, parentId string, contentType string, type_ string, isSystem bool, isMutable bool) *MonitorTemplatesLibraryMonitorTemplateResponse {
 	this := MonitorTemplatesLibraryMonitorTemplateResponse{}
 	this.Id = id
 	this.Name = name
@@ -61,7 +63,6 @@ func NewMonitorTemplatesLibraryMonitorTemplateResponse(monitorType string, appId
 	this.IsSystem = isSystem
 	this.IsMutable = isMutable
 	this.MonitorType = monitorType
-	this.AppId = appId
 	var evaluationDelay string = "0m"
 	this.EvaluationDelay = &evaluationDelay
 	this.Queries = queries
@@ -113,30 +114,6 @@ func (o *MonitorTemplatesLibraryMonitorTemplateResponse) GetMonitorTypeOk() (*st
 // SetMonitorType sets field value
 func (o *MonitorTemplatesLibraryMonitorTemplateResponse) SetMonitorType(v string) {
 	o.MonitorType = v
-}
-
-// GetAppId returns the AppId field value
-func (o *MonitorTemplatesLibraryMonitorTemplateResponse) GetAppId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.AppId
-}
-
-// GetAppIdOk returns a tuple with the AppId field value
-// and a boolean to check if the value has been set.
-func (o *MonitorTemplatesLibraryMonitorTemplateResponse) GetAppIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.AppId, true
-}
-
-// SetAppId sets field value
-func (o *MonitorTemplatesLibraryMonitorTemplateResponse) SetAppId(v string) {
-	o.AppId = v
 }
 
 // GetEvaluationDelay returns the EvaluationDelay field value if set, zero value otherwise.
@@ -366,7 +343,6 @@ func (o MonitorTemplatesLibraryMonitorTemplateResponse) ToMap() (map[string]inte
 		return map[string]interface{}{}, errMonitorTemplatesLibraryBaseResponse
 	}
 	toSerialize["monitorType"] = o.MonitorType
-	toSerialize["appId"] = o.AppId
 	if !IsNil(o.EvaluationDelay) {
 		toSerialize["evaluationDelay"] = o.EvaluationDelay
 	}
@@ -385,6 +361,58 @@ func (o MonitorTemplatesLibraryMonitorTemplateResponse) ToMap() (map[string]inte
 		toSerialize["playbook"] = o.Playbook
 	}
 	return toSerialize, nil
+}
+
+func (o *MonitorTemplatesLibraryMonitorTemplateResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"monitorType",
+		"queries",
+		"triggers",
+		"id",
+		"name",
+		"description",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"parentId",
+		"contentType",
+		"type",
+		"isSystem",
+		"isMutable",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorTemplatesLibraryMonitorTemplateResponse := _MonitorTemplatesLibraryMonitorTemplateResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorTemplatesLibraryMonitorTemplateResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorTemplatesLibraryMonitorTemplateResponse(varMonitorTemplatesLibraryMonitorTemplateResponse)
+
+	return err
 }
 
 type NullableMonitorTemplatesLibraryMonitorTemplateResponse struct {

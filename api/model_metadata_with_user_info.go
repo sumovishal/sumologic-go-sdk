@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetadataWithUserInfo type satisfies the MappedNullable interface at compile time
@@ -27,6 +29,8 @@ type MetadataWithUserInfo struct {
 	ModifiedAt NullableTime `json:"modifiedAt"`
 	ModifiedByUser UserInfo `json:"modifiedByUser"`
 }
+
+type _MetadataWithUserInfo MetadataWithUserInfo
 
 // NewMetadataWithUserInfo instantiates a new MetadataWithUserInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -164,6 +168,46 @@ func (o MetadataWithUserInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedAt"] = o.ModifiedAt.Get()
 	toSerialize["modifiedByUser"] = o.ModifiedByUser
 	return toSerialize, nil
+}
+
+func (o *MetadataWithUserInfo) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"createdAt",
+		"createdByUser",
+		"modifiedAt",
+		"modifiedByUser",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetadataWithUserInfo := _MetadataWithUserInfo{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetadataWithUserInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetadataWithUserInfo(varMetadataWithUserInfo)
+
+	return err
 }
 
 type NullableMetadataWithUserInfo struct {

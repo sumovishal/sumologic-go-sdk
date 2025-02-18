@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the UpdateBucketDefinition type satisfies the MappedNullable interface at compile time
@@ -38,6 +40,8 @@ type UpdateBucketDefinition struct {
 	// True if the destination is Active.
 	Enabled *bool `json:"enabled,omitempty"`
 }
+
+type _UpdateBucketDefinition UpdateBucketDefinition
 
 // NewUpdateBucketDefinition instantiates a new UpdateBucketDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -373,6 +377,43 @@ func (o UpdateBucketDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["enabled"] = o.Enabled
 	}
 	return toSerialize, nil
+}
+
+func (o *UpdateBucketDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"authenticationMode",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varUpdateBucketDefinition := _UpdateBucketDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varUpdateBucketDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateBucketDefinition(varUpdateBucketDefinition)
+
+	return err
 }
 
 type NullableUpdateBucketDefinition struct {

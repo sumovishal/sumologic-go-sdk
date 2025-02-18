@@ -20,12 +20,12 @@ import (
 )
 
 
-// RoleManagementApiService RoleManagementApi service
-type RoleManagementApiService service
+// RoleManagementAPIService RoleManagementAPI service
+type RoleManagementAPIService service
 
 type ApiAssignRoleToUserRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	roleId string
 	userId string
 }
@@ -44,7 +44,7 @@ Assign a role to a user in the organization.
  @param userId Identifier of the user to assign the role to.
  @return ApiAssignRoleToUserRequest
 */
-func (a *RoleManagementApiService) AssignRoleToUser(ctx context.Context, roleId string, userId string) ApiAssignRoleToUserRequest {
+func (a *RoleManagementAPIService) AssignRoleToUser(ctx context.Context, roleId string, userId string) ApiAssignRoleToUserRequest {
 	return ApiAssignRoleToUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -55,7 +55,7 @@ func (a *RoleManagementApiService) AssignRoleToUser(ctx context.Context, roleId 
 
 // Execute executes the request
 //  @return RoleModel
-func (a *RoleManagementApiService) AssignRoleToUserExecute(r ApiAssignRoleToUserRequest) (*RoleModel, *http.Response, error) {
+func (a *RoleManagementAPIService) AssignRoleToUserExecute(r ApiAssignRoleToUserRequest) (*RoleModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -63,7 +63,7 @@ func (a *RoleManagementApiService) AssignRoleToUserExecute(r ApiAssignRoleToUser
 		localVarReturnValue  *RoleModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.AssignRoleToUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.AssignRoleToUser")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -140,7 +140,7 @@ func (a *RoleManagementApiService) AssignRoleToUserExecute(r ApiAssignRoleToUser
 
 type ApiCreateRoleRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	createRoleDefinition *CreateRoleDefinition
 }
 
@@ -162,7 +162,7 @@ Create a new role in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateRoleRequest
 */
-func (a *RoleManagementApiService) CreateRole(ctx context.Context) ApiCreateRoleRequest {
+func (a *RoleManagementAPIService) CreateRole(ctx context.Context) ApiCreateRoleRequest {
 	return ApiCreateRoleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -171,7 +171,7 @@ func (a *RoleManagementApiService) CreateRole(ctx context.Context) ApiCreateRole
 
 // Execute executes the request
 //  @return RoleModel
-func (a *RoleManagementApiService) CreateRoleExecute(r ApiCreateRoleRequest) (*RoleModel, *http.Response, error) {
+func (a *RoleManagementAPIService) CreateRoleExecute(r ApiCreateRoleRequest) (*RoleModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -179,7 +179,7 @@ func (a *RoleManagementApiService) CreateRoleExecute(r ApiCreateRoleRequest) (*R
 		localVarReturnValue  *RoleModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.CreateRole")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.CreateRole")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -259,7 +259,7 @@ func (a *RoleManagementApiService) CreateRoleExecute(r ApiCreateRoleRequest) (*R
 
 type ApiDeleteRoleRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	id string
 }
 
@@ -276,7 +276,7 @@ Delete a role with the given identifier from the organization.
  @param id Identifier of the role to delete.
  @return ApiDeleteRoleRequest
 */
-func (a *RoleManagementApiService) DeleteRole(ctx context.Context, id string) ApiDeleteRoleRequest {
+func (a *RoleManagementAPIService) DeleteRole(ctx context.Context, id string) ApiDeleteRoleRequest {
 	return ApiDeleteRoleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -285,14 +285,14 @@ func (a *RoleManagementApiService) DeleteRole(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-func (a *RoleManagementApiService) DeleteRoleExecute(r ApiDeleteRoleRequest) (*http.Response, error) {
+func (a *RoleManagementAPIService) DeleteRoleExecute(r ApiDeleteRoleRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.DeleteRole")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.DeleteRole")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -359,7 +359,7 @@ func (a *RoleManagementApiService) DeleteRoleExecute(r ApiDeleteRoleRequest) (*h
 
 type ApiGetRoleRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	id string
 }
 
@@ -376,7 +376,7 @@ Get a role with the given identifier in the organization.
  @param id Identifier of the role to fetch.
  @return ApiGetRoleRequest
 */
-func (a *RoleManagementApiService) GetRole(ctx context.Context, id string) ApiGetRoleRequest {
+func (a *RoleManagementAPIService) GetRole(ctx context.Context, id string) ApiGetRoleRequest {
 	return ApiGetRoleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -386,7 +386,7 @@ func (a *RoleManagementApiService) GetRole(ctx context.Context, id string) ApiGe
 
 // Execute executes the request
 //  @return RoleModel
-func (a *RoleManagementApiService) GetRoleExecute(r ApiGetRoleRequest) (*RoleModel, *http.Response, error) {
+func (a *RoleManagementAPIService) GetRoleExecute(r ApiGetRoleRequest) (*RoleModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -394,7 +394,7 @@ func (a *RoleManagementApiService) GetRoleExecute(r ApiGetRoleRequest) (*RoleMod
 		localVarReturnValue  *RoleModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.GetRole")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.GetRole")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -470,7 +470,7 @@ func (a *RoleManagementApiService) GetRoleExecute(r ApiGetRoleRequest) (*RoleMod
 
 type ApiListRolesRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	limit *int32
 	token *string
 	sortBy *string
@@ -513,7 +513,7 @@ Get a list of all the roles in the organization. The response is paginated with 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListRolesRequest
 */
-func (a *RoleManagementApiService) ListRoles(ctx context.Context) ApiListRolesRequest {
+func (a *RoleManagementAPIService) ListRoles(ctx context.Context) ApiListRolesRequest {
 	return ApiListRolesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -522,7 +522,7 @@ func (a *RoleManagementApiService) ListRoles(ctx context.Context) ApiListRolesRe
 
 // Execute executes the request
 //  @return ListRoleModelsResponse
-func (a *RoleManagementApiService) ListRolesExecute(r ApiListRolesRequest) (*ListRoleModelsResponse, *http.Response, error) {
+func (a *RoleManagementAPIService) ListRolesExecute(r ApiListRolesRequest) (*ListRoleModelsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -530,7 +530,7 @@ func (a *RoleManagementApiService) ListRolesExecute(r ApiListRolesRequest) (*Lis
 		localVarReturnValue  *ListRoleModelsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.ListRoles")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.ListRoles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -543,6 +543,9 @@ func (a *RoleManagementApiService) ListRolesExecute(r ApiListRolesRequest) (*Lis
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -617,7 +620,7 @@ func (a *RoleManagementApiService) ListRolesExecute(r ApiListRolesRequest) (*Lis
 
 type ApiRemoveRoleFromUserRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	roleId string
 	userId string
 }
@@ -636,7 +639,7 @@ Remove a role from a user in the organization.
  @param userId Identifier of the user to remove the role from.
  @return ApiRemoveRoleFromUserRequest
 */
-func (a *RoleManagementApiService) RemoveRoleFromUser(ctx context.Context, roleId string, userId string) ApiRemoveRoleFromUserRequest {
+func (a *RoleManagementAPIService) RemoveRoleFromUser(ctx context.Context, roleId string, userId string) ApiRemoveRoleFromUserRequest {
 	return ApiRemoveRoleFromUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -646,14 +649,14 @@ func (a *RoleManagementApiService) RemoveRoleFromUser(ctx context.Context, roleI
 }
 
 // Execute executes the request
-func (a *RoleManagementApiService) RemoveRoleFromUserExecute(r ApiRemoveRoleFromUserRequest) (*http.Response, error) {
+func (a *RoleManagementAPIService) RemoveRoleFromUserExecute(r ApiRemoveRoleFromUserRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.RemoveRoleFromUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.RemoveRoleFromUser")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -721,7 +724,7 @@ func (a *RoleManagementApiService) RemoveRoleFromUserExecute(r ApiRemoveRoleFrom
 
 type ApiUpdateRoleRequest struct {
 	ctx context.Context
-	ApiService *RoleManagementApiService
+	ApiService *RoleManagementAPIService
 	id string
 	updateRoleDefinition *UpdateRoleDefinition
 }
@@ -745,7 +748,7 @@ Update an existing role in the organization.
  @param id Identifier of the role to update.
  @return ApiUpdateRoleRequest
 */
-func (a *RoleManagementApiService) UpdateRole(ctx context.Context, id string) ApiUpdateRoleRequest {
+func (a *RoleManagementAPIService) UpdateRole(ctx context.Context, id string) ApiUpdateRoleRequest {
 	return ApiUpdateRoleRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -755,7 +758,7 @@ func (a *RoleManagementApiService) UpdateRole(ctx context.Context, id string) Ap
 
 // Execute executes the request
 //  @return RoleModel
-func (a *RoleManagementApiService) UpdateRoleExecute(r ApiUpdateRoleRequest) (*RoleModel, *http.Response, error) {
+func (a *RoleManagementAPIService) UpdateRoleExecute(r ApiUpdateRoleRequest) (*RoleModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -763,7 +766,7 @@ func (a *RoleManagementApiService) UpdateRoleExecute(r ApiUpdateRoleRequest) (*R
 		localVarReturnValue  *RoleModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementApiService.UpdateRole")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RoleManagementAPIService.UpdateRole")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

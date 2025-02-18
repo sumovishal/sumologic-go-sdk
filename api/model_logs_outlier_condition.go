@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogsOutlierCondition type satisfies the MappedNullable interface at compile time
@@ -25,12 +27,14 @@ type LogsOutlierCondition struct {
 	// Sets the required number of consecutive indicator data points (outliers) to trigger a violation.
 	Consecutive *int64 `json:"consecutive,omitempty"`
 	// Specifies which direction should trigger violations.
-	Direction *string `json:"direction,omitempty"`
+	Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
 	// Sets the number of standard deviations for calculating violations.
 	Threshold *float64 `json:"threshold,omitempty"`
 	// The name of the field that the trigger condition will alert on.
 	Field *string `json:"field,omitempty"`
 }
+
+type _LogsOutlierCondition LogsOutlierCondition
 
 // NewLogsOutlierCondition instantiates a new LogsOutlierCondition object
 // This constructor will assign default values to properties that have it defined,
@@ -262,6 +266,43 @@ func (o LogsOutlierCondition) ToMap() (map[string]interface{}, error) {
 		toSerialize["field"] = o.Field
 	}
 	return toSerialize, nil
+}
+
+func (o *LogsOutlierCondition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"triggerType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogsOutlierCondition := _LogsOutlierCondition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogsOutlierCondition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogsOutlierCondition(varLogsOutlierCondition)
+
+	return err
 }
 
 type NullableLogsOutlierCondition struct {

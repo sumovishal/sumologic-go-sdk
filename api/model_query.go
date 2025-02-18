@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the Query type satisfies the MappedNullable interface at compile time
@@ -22,23 +24,25 @@ type Query struct {
 	// The metrics, traces or logs query.
 	QueryString string `json:"queryString"`
 	// The type of the query, either `Metrics`, `Traces`, `Spans` or `Logs`.
-	QueryType string `json:"queryType"`
+	QueryType string `json:"queryType" validate:"regexp=^(Logs|Metrics|Traces|Spans)$"`
 	// The key for metric, traces or log queries. Used as an identifier for queries. It is displayed on the panel builder and used for display overrides and query toggling. 
 	QueryKey string `json:"queryKey"`
 	// The mode of the metrics query that the user was editing. Can be `Basic` or `Advanced`. Will ONLY be specified for metrics queries. 
-	MetricsQueryMode *string `json:"metricsQueryMode,omitempty"`
+	MetricsQueryMode *string `json:"metricsQueryMode,omitempty" validate:"regexp=^(Basic|Advanced|basic|advanced)$"`
 	MetricsQueryData *MetricsQueryData `json:"metricsQueryData,omitempty"`
 	TracesQueryData *TracesQueryData `json:"tracesQueryData,omitempty"`
 	SpansQueryData *SpansQueryData `json:"spansQueryData,omitempty"`
 	// This field only applies for queryType of `Logs` but other query types may be supported in the future. Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `Auto`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
-	ParseMode *string `json:"parseMode,omitempty"`
+	ParseMode *string `json:"parseMode,omitempty" validate:"regexp=^(Auto|Manual)$"`
 	// This field only applies for queryType of `Logs` but other query types may be supported in the future. Define the time source of this query. Possible values are `Message` and `Receipt`. `Message` will use the timeStamp on the message, while `Receipt` will use the timestamp it was received by Sumo.
-	TimeSource *string `json:"timeSource,omitempty"`
+	TimeSource *string `json:"timeSource,omitempty" validate:"regexp=^(Message|Receipt)$"`
 	// This field only applies for queryType of `Metrics` but other query types may be supported in the future. Determines if the row should be returned in the response. Can be used in conjunction with a join, if only the result of the join is needed, and not the intermediate rows. Setting `transient` to `true`  wherever the intermediate results aren't required speeds up the computation and reduces the amount of data  transferred over the network.
 	Transient *bool `json:"transient,omitempty"`
 	// This field only applies for queryType of `Metrics` but other query types may be supported in the future. Specifies the output cardinality limitations for the query, which is the maximum number of timeseries returned in the result.
 	OutputCardinalityLimit *int32 `json:"outputCardinalityLimit,omitempty"`
 }
+
+type _Query Query
 
 // NewQuery instantiates a new Query object
 // This constructor will assign default values to properties that have it defined,
@@ -442,6 +446,45 @@ func (o Query) ToMap() (map[string]interface{}, error) {
 		toSerialize["outputCardinalityLimit"] = o.OutputCardinalityLimit
 	}
 	return toSerialize, nil
+}
+
+func (o *Query) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryString",
+		"queryType",
+		"queryKey",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varQuery := _Query{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varQuery)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Query(varQuery)
+
+	return err
 }
 
 type NullableQuery struct {

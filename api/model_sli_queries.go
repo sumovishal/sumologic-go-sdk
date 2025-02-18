@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SliQueries type satisfies the MappedNullable interface at compile time
@@ -21,12 +23,14 @@ var _ MappedNullable = &SliQueries{}
 type SliQueries struct {
 	QueryGroup SliQueryGroup `json:"queryGroup"`
 	// Type of queries for SLI (Logs/Metrics).
-	QueryType string `json:"queryType"`
+	QueryType string `json:"queryType" validate:"regexp=^(Logs|Metrics)$"`
 	// SLI evaluation type.
-	EvaluationType *string `json:"evaluationType,omitempty"`
+	EvaluationType *string `json:"evaluationType,omitempty" validate:"regexp=^(Window|Request|Monitor)$"`
 	// Size of the SLI aggregation window (valid only for `Window` evaluation type).
 	WindowSize *string `json:"windowSize,omitempty"`
 }
+
+type _SliQueries SliQueries
 
 // NewSliQueries instantiates a new SliQueries object
 // This constructor will assign default values to properties that have it defined,
@@ -178,6 +182,44 @@ func (o SliQueries) ToMap() (map[string]interface{}, error) {
 		toSerialize["windowSize"] = o.WindowSize
 	}
 	return toSerialize, nil
+}
+
+func (o *SliQueries) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryGroup",
+		"queryType",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSliQueries := _SliQueries{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSliQueries)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SliQueries(varSliQueries)
+
+	return err
 }
 
 type NullableSliQueries struct {

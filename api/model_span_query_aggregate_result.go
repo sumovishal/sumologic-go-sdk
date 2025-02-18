@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQueryAggregateResult type satisfies the MappedNullable interface at compile time
@@ -20,12 +22,14 @@ var _ MappedNullable = &SpanQueryAggregateResult{}
 // SpanQueryAggregateResult struct for SpanQueryAggregateResult
 type SpanQueryAggregateResult struct {
 	// Status of the query. Possible values: `Processing`, `Finished`, `Error`, `Paused`.
-	Status string `json:"status"`
+	Status string `json:"status" validate:"regexp=^(Processing|Finished|Error|Paused)$"`
 	// Descriptive message of the status
 	StatusMessage *string `json:"statusMessage,omitempty"`
 	// The series returned from a search.
 	Series []SpanQueryAggregateDataSeries `json:"series"`
 }
+
+type _SpanQueryAggregateResult SpanQueryAggregateResult
 
 // NewSpanQueryAggregateResult instantiates a new SpanQueryAggregateResult object
 // This constructor will assign default values to properties that have it defined,
@@ -142,6 +146,44 @@ func (o SpanQueryAggregateResult) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["series"] = o.Series
 	return toSerialize, nil
+}
+
+func (o *SpanQueryAggregateResult) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"status",
+		"series",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQueryAggregateResult := _SpanQueryAggregateResult{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQueryAggregateResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQueryAggregateResult(varSpanQueryAggregateResult)
+
+	return err
 }
 
 type NullableSpanQueryAggregateResult struct {

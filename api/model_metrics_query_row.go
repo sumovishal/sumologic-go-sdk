@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MetricsQueryRow type satisfies the MappedNullable interface at compile time
@@ -20,16 +22,18 @@ var _ MappedNullable = &MetricsQueryRow{}
 // MetricsQueryRow struct for MetricsQueryRow
 type MetricsQueryRow struct {
 	// Row id for the query row, A to Z letter.
-	RowId string `json:"rowId"`
+	RowId string `json:"rowId" validate:"regexp=[A-Z]"`
 	// A metric query consists of a metric, one or more filters and optionally, one or more [Metrics Operators](https://help.sumologic.com/?cid=10144). Strictly speaking, both filters and operators are optional.  Most of the [Metrics Operators](https://help.sumologic.com/?cid=10144) are allowed in the query string except `fillmissing`, `outlier`, `quantize` and `timeshift`.    * `fillmissing`: Not supported in API.   * `outlier`: Not supported in API.   * `quantize`: Only supported through `quantization` param.   * `timeshift`: Only supported through `timeshift` param.   In practice, your metric queries will almost always contain filters that narrow the scope of your query. For more information about the query language see [Metrics Queries](https://help.sumologic.com/?cid=1079).
 	Query string `json:"query"`
 	// Segregates time series data by time period. This allows you to create aggregated results in buckets of fixed intervals (for example, 5-minute intervals). The value is in milliseconds.
 	Quantization *int64 `json:"quantization,omitempty"`
 	// We use the term rollup to refer to the aggregation function Sumo Logic uses when quantizing metrics. Can be `Avg`, `Sum`, `Min`, `Max`, `Count` or `None`.
-	Rollup *string `json:"rollup,omitempty"`
+	Rollup *string `json:"rollup,omitempty" validate:"regexp=^(Count|Min|Max|Sum|Avg|None)$|^$"`
 	// Shifts the time series from your metrics query by the specified amount of time. This can help when comparing a time series across multiple time periods. Specified as a signed duration in milliseconds.
 	Timeshift *int64 `json:"timeshift,omitempty"`
 }
+
+type _MetricsQueryRow MetricsQueryRow
 
 // NewMetricsQueryRow instantiates a new MetricsQueryRow object
 // This constructor will assign default values to properties that have it defined,
@@ -216,6 +220,44 @@ func (o MetricsQueryRow) ToMap() (map[string]interface{}, error) {
 		toSerialize["timeshift"] = o.Timeshift
 	}
 	return toSerialize, nil
+}
+
+func (o *MetricsQueryRow) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"rowId",
+		"query",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMetricsQueryRow := _MetricsQueryRow{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMetricsQueryRow)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsQueryRow(varMetricsQueryRow)
+
+	return err
 }
 
 type NullableMetricsQueryRow struct {

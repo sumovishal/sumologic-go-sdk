@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogSearchEstimatedUsageRequestV2 type satisfies the MappedNullable interface at compile time
@@ -29,6 +31,8 @@ type LogSearchEstimatedUsageRequestV2 struct {
 	// Time zone to get the estimated usage details. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). 
 	Timezone string `json:"timezone"`
 }
+
+type _LogSearchEstimatedUsageRequestV2 LogSearchEstimatedUsageRequestV2
 
 // NewLogSearchEstimatedUsageRequestV2 instantiates a new LogSearchEstimatedUsageRequestV2 object
 // This constructor will assign default values to properties that have it defined,
@@ -210,6 +214,45 @@ func (o LogSearchEstimatedUsageRequestV2) ToMap() (map[string]interface{}, error
 	}
 	toSerialize["timezone"] = o.Timezone
 	return toSerialize, nil
+}
+
+func (o *LogSearchEstimatedUsageRequestV2) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryString",
+		"timeRange",
+		"timezone",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogSearchEstimatedUsageRequestV2 := _LogSearchEstimatedUsageRequestV2{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogSearchEstimatedUsageRequestV2)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchEstimatedUsageRequestV2(varLogSearchEstimatedUsageRequestV2)
+
+	return err
 }
 
 type NullableLogSearchEstimatedUsageRequestV2 struct {

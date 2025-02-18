@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the MonitorQuery type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type MonitorQuery struct {
 	// The logs or metrics query that defines the stream of data the monitor runs on.
 	Query string `json:"query"`
 }
+
+type _MonitorQuery MonitorQuery
 
 // NewMonitorQuery instantiates a new MonitorQuery object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o MonitorQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize["rowId"] = o.RowId
 	toSerialize["query"] = o.Query
 	return toSerialize, nil
+}
+
+func (o *MonitorQuery) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"rowId",
+		"query",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorQuery := _MonitorQuery{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorQuery)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorQuery(varMonitorQuery)
+
+	return err
 }
 
 type NullableMonitorQuery struct {

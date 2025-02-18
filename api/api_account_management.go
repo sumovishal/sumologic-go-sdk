@@ -20,12 +20,12 @@ import (
 )
 
 
-// AccountManagementApiService AccountManagementApi service
-type AccountManagementApiService service
+// AccountManagementAPIService AccountManagementAPI service
+type AccountManagementAPIService service
 
 type ApiCreateSubdomainRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 	configureSubdomainRequest *ConfigureSubdomainRequest
 }
 
@@ -47,7 +47,7 @@ Create a subdomain. Only the Account Owner can create a subdomain.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateSubdomainRequest
 */
-func (a *AccountManagementApiService) CreateSubdomain(ctx context.Context) ApiCreateSubdomainRequest {
+func (a *AccountManagementAPIService) CreateSubdomain(ctx context.Context) ApiCreateSubdomainRequest {
 	return ApiCreateSubdomainRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *AccountManagementApiService) CreateSubdomain(ctx context.Context) ApiCr
 
 // Execute executes the request
 //  @return SubdomainDefinitionResponse
-func (a *AccountManagementApiService) CreateSubdomainExecute(r ApiCreateSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) CreateSubdomainExecute(r ApiCreateSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *AccountManagementApiService) CreateSubdomainExecute(r ApiCreateSubdomai
 		localVarReturnValue  *SubdomainDefinitionResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.CreateSubdomain")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.CreateSubdomain")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *AccountManagementApiService) CreateSubdomainExecute(r ApiCreateSubdomai
 
 type ApiDeletePendingUpdateRequestRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiDeletePendingUpdateRequestRequest) Execute() (*http.Response, error) {
@@ -159,7 +159,7 @@ Delete the pending plan update request which would be applicable from next billi
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDeletePendingUpdateRequestRequest
 */
-func (a *AccountManagementApiService) DeletePendingUpdateRequest(ctx context.Context) ApiDeletePendingUpdateRequestRequest {
+func (a *AccountManagementAPIService) DeletePendingUpdateRequest(ctx context.Context) ApiDeletePendingUpdateRequestRequest {
 	return ApiDeletePendingUpdateRequestRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -167,14 +167,14 @@ func (a *AccountManagementApiService) DeletePendingUpdateRequest(ctx context.Con
 }
 
 // Execute executes the request
-func (a *AccountManagementApiService) DeletePendingUpdateRequestExecute(r ApiDeletePendingUpdateRequestRequest) (*http.Response, error) {
+func (a *AccountManagementAPIService) DeletePendingUpdateRequestExecute(r ApiDeletePendingUpdateRequestRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.DeletePendingUpdateRequest")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.DeletePendingUpdateRequest")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -240,7 +240,7 @@ func (a *AccountManagementApiService) DeletePendingUpdateRequestExecute(r ApiDel
 
 type ApiDeleteSubdomainRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiDeleteSubdomainRequest) Execute() (*http.Response, error) {
@@ -255,7 +255,7 @@ Delete the configured subdomain.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDeleteSubdomainRequest
 */
-func (a *AccountManagementApiService) DeleteSubdomain(ctx context.Context) ApiDeleteSubdomainRequest {
+func (a *AccountManagementAPIService) DeleteSubdomain(ctx context.Context) ApiDeleteSubdomainRequest {
 	return ApiDeleteSubdomainRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -263,14 +263,14 @@ func (a *AccountManagementApiService) DeleteSubdomain(ctx context.Context) ApiDe
 }
 
 // Execute executes the request
-func (a *AccountManagementApiService) DeleteSubdomainExecute(r ApiDeleteSubdomainRequest) (*http.Response, error) {
+func (a *AccountManagementAPIService) DeleteSubdomainExecute(r ApiDeleteSubdomainRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.DeleteSubdomain")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.DeleteSubdomain")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -336,7 +336,7 @@ func (a *AccountManagementApiService) DeleteSubdomainExecute(r ApiDeleteSubdomai
 
 type ApiExportUsageReportRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 	usageReportRequest *UsageReportRequest
 }
 
@@ -358,7 +358,7 @@ Export the credit usage details as csv for the specific period of time given as 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiExportUsageReportRequest
 */
-func (a *AccountManagementApiService) ExportUsageReport(ctx context.Context) ApiExportUsageReportRequest {
+func (a *AccountManagementAPIService) ExportUsageReport(ctx context.Context) ApiExportUsageReportRequest {
 	return ApiExportUsageReportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -367,7 +367,7 @@ func (a *AccountManagementApiService) ExportUsageReport(ctx context.Context) Api
 
 // Execute executes the request
 //  @return UsageReportResponse
-func (a *AccountManagementApiService) ExportUsageReportExecute(r ApiExportUsageReportRequest) (*UsageReportResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) ExportUsageReportExecute(r ApiExportUsageReportRequest) (*UsageReportResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -375,7 +375,7 @@ func (a *AccountManagementApiService) ExportUsageReportExecute(r ApiExportUsageR
 		localVarReturnValue  *UsageReportResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.ExportUsageReport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.ExportUsageReport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -455,7 +455,7 @@ func (a *AccountManagementApiService) ExportUsageReportExecute(r ApiExportUsageR
 
 type ApiGetAccountOwnerRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiGetAccountOwnerRequest) Execute() (string, *http.Response, error) {
@@ -470,7 +470,7 @@ Returns the user identifier of the account owner.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAccountOwnerRequest
 */
-func (a *AccountManagementApiService) GetAccountOwner(ctx context.Context) ApiGetAccountOwnerRequest {
+func (a *AccountManagementAPIService) GetAccountOwner(ctx context.Context) ApiGetAccountOwnerRequest {
 	return ApiGetAccountOwnerRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -479,7 +479,7 @@ func (a *AccountManagementApiService) GetAccountOwner(ctx context.Context) ApiGe
 
 // Execute executes the request
 //  @return string
-func (a *AccountManagementApiService) GetAccountOwnerExecute(r ApiGetAccountOwnerRequest) (string, *http.Response, error) {
+func (a *AccountManagementAPIService) GetAccountOwnerExecute(r ApiGetAccountOwnerRequest) (string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -487,7 +487,7 @@ func (a *AccountManagementApiService) GetAccountOwnerExecute(r ApiGetAccountOwne
 		localVarReturnValue  string
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.GetAccountOwner")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetAccountOwner")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -562,7 +562,7 @@ func (a *AccountManagementApiService) GetAccountOwnerExecute(r ApiGetAccountOwne
 
 type ApiGetPendingUpdateRequestRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiGetPendingUpdateRequestRequest) Execute() (*PendingUpdateRequest, *http.Response, error) {
@@ -577,7 +577,7 @@ Get the pending plan update request which will be applicable from next billing c
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetPendingUpdateRequestRequest
 */
-func (a *AccountManagementApiService) GetPendingUpdateRequest(ctx context.Context) ApiGetPendingUpdateRequestRequest {
+func (a *AccountManagementAPIService) GetPendingUpdateRequest(ctx context.Context) ApiGetPendingUpdateRequestRequest {
 	return ApiGetPendingUpdateRequestRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -586,7 +586,7 @@ func (a *AccountManagementApiService) GetPendingUpdateRequest(ctx context.Contex
 
 // Execute executes the request
 //  @return PendingUpdateRequest
-func (a *AccountManagementApiService) GetPendingUpdateRequestExecute(r ApiGetPendingUpdateRequestRequest) (*PendingUpdateRequest, *http.Response, error) {
+func (a *AccountManagementAPIService) GetPendingUpdateRequestExecute(r ApiGetPendingUpdateRequestRequest) (*PendingUpdateRequest, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -594,7 +594,7 @@ func (a *AccountManagementApiService) GetPendingUpdateRequestExecute(r ApiGetPen
 		localVarReturnValue  *PendingUpdateRequest
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.GetPendingUpdateRequest")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetPendingUpdateRequest")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -669,7 +669,7 @@ func (a *AccountManagementApiService) GetPendingUpdateRequestExecute(r ApiGetPen
 
 type ApiGetStatusRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiGetStatusRequest) Execute() (*AccountStatusResponse, *http.Response, error) {
@@ -684,7 +684,7 @@ Get information related to the account's plan, pricing model, expiration and pay
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetStatusRequest
 */
-func (a *AccountManagementApiService) GetStatus(ctx context.Context) ApiGetStatusRequest {
+func (a *AccountManagementAPIService) GetStatus(ctx context.Context) ApiGetStatusRequest {
 	return ApiGetStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -693,7 +693,7 @@ func (a *AccountManagementApiService) GetStatus(ctx context.Context) ApiGetStatu
 
 // Execute executes the request
 //  @return AccountStatusResponse
-func (a *AccountManagementApiService) GetStatusExecute(r ApiGetStatusRequest) (*AccountStatusResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) GetStatusExecute(r ApiGetStatusRequest) (*AccountStatusResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -701,7 +701,7 @@ func (a *AccountManagementApiService) GetStatusExecute(r ApiGetStatusRequest) (*
 		localVarReturnValue  *AccountStatusResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.GetStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -776,7 +776,7 @@ func (a *AccountManagementApiService) GetStatusExecute(r ApiGetStatusRequest) (*
 
 type ApiGetStatusForReportRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 	jobId string
 }
 
@@ -793,7 +793,7 @@ Get the report download URL and status using Job Id.
  @param jobId Job Id for the report to be exported.
  @return ApiGetStatusForReportRequest
 */
-func (a *AccountManagementApiService) GetStatusForReport(ctx context.Context, jobId string) ApiGetStatusForReportRequest {
+func (a *AccountManagementAPIService) GetStatusForReport(ctx context.Context, jobId string) ApiGetStatusForReportRequest {
 	return ApiGetStatusForReportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -803,7 +803,7 @@ func (a *AccountManagementApiService) GetStatusForReport(ctx context.Context, jo
 
 // Execute executes the request
 //  @return UsageReportStatusResponse
-func (a *AccountManagementApiService) GetStatusForReportExecute(r ApiGetStatusForReportRequest) (*UsageReportStatusResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) GetStatusForReportExecute(r ApiGetStatusForReportRequest) (*UsageReportStatusResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -811,7 +811,7 @@ func (a *AccountManagementApiService) GetStatusForReportExecute(r ApiGetStatusFo
 		localVarReturnValue  *UsageReportStatusResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.GetStatusForReport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetStatusForReport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -887,7 +887,7 @@ func (a *AccountManagementApiService) GetStatusForReportExecute(r ApiGetStatusFo
 
 type ApiGetSubdomainRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 }
 
 func (r ApiGetSubdomainRequest) Execute() (*SubdomainDefinitionResponse, *http.Response, error) {
@@ -902,7 +902,7 @@ Get the configured subdomain.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetSubdomainRequest
 */
-func (a *AccountManagementApiService) GetSubdomain(ctx context.Context) ApiGetSubdomainRequest {
+func (a *AccountManagementAPIService) GetSubdomain(ctx context.Context) ApiGetSubdomainRequest {
 	return ApiGetSubdomainRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -911,7 +911,7 @@ func (a *AccountManagementApiService) GetSubdomain(ctx context.Context) ApiGetSu
 
 // Execute executes the request
 //  @return SubdomainDefinitionResponse
-func (a *AccountManagementApiService) GetSubdomainExecute(r ApiGetSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) GetSubdomainExecute(r ApiGetSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -919,7 +919,7 @@ func (a *AccountManagementApiService) GetSubdomainExecute(r ApiGetSubdomainReque
 		localVarReturnValue  *SubdomainDefinitionResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.GetSubdomain")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetSubdomain")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -992,9 +992,126 @@ func (a *AccountManagementApiService) GetSubdomainExecute(r ApiGetSubdomainReque
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetUsageForecastRequest struct {
+	ctx context.Context
+	ApiService *AccountManagementAPIService
+	numberOfDays *float32
+}
+
+// Number of days to use for calculating average usage and forecast.
+func (r ApiGetUsageForecastRequest) NumberOfDays(numberOfDays float32) ApiGetUsageForecastRequest {
+	r.numberOfDays = &numberOfDays
+	return r
+}
+
+func (r ApiGetUsageForecastRequest) Execute() (*UsageForecastResponse, *http.Response, error) {
+	return r.ApiService.GetUsageForecastExecute(r)
+}
+
+/*
+GetUsageForecast Get usage forecast with respect to last number of days specified.
+
+Get usage forecast with respect to last number of days specified. If nothing is provided for  last number of days, the average of term period will be taken to do the forecast.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetUsageForecastRequest
+*/
+func (a *AccountManagementAPIService) GetUsageForecast(ctx context.Context) ApiGetUsageForecastRequest {
+	return ApiGetUsageForecastRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return UsageForecastResponse
+func (a *AccountManagementAPIService) GetUsageForecastExecute(r ApiGetUsageForecastRequest) (*UsageForecastResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *UsageForecastResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.GetUsageForecast")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/usageForecast"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.numberOfDays != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "numberOfDays", r.numberOfDays, "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiRecoverSubdomainsRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 	email *string
 }
 
@@ -1016,7 +1133,7 @@ Send an email with the subdomain information for a user with the given email add
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRecoverSubdomainsRequest
 */
-func (a *AccountManagementApiService) RecoverSubdomains(ctx context.Context) ApiRecoverSubdomainsRequest {
+func (a *AccountManagementAPIService) RecoverSubdomains(ctx context.Context) ApiRecoverSubdomainsRequest {
 	return ApiRecoverSubdomainsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1024,14 +1141,14 @@ func (a *AccountManagementApiService) RecoverSubdomains(ctx context.Context) Api
 }
 
 // Execute executes the request
-func (a *AccountManagementApiService) RecoverSubdomainsExecute(r ApiRecoverSubdomainsRequest) (*http.Response, error) {
+func (a *AccountManagementAPIService) RecoverSubdomainsExecute(r ApiRecoverSubdomainsRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.RecoverSubdomains")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.RecoverSubdomains")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1101,7 +1218,7 @@ func (a *AccountManagementApiService) RecoverSubdomainsExecute(r ApiRecoverSubdo
 
 type ApiUpdateSubdomainRequest struct {
 	ctx context.Context
-	ApiService *AccountManagementApiService
+	ApiService *AccountManagementAPIService
 	configureSubdomainRequest *ConfigureSubdomainRequest
 }
 
@@ -1123,7 +1240,7 @@ Update a subdomain. Only the Account Owner can update the subdomain.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUpdateSubdomainRequest
 */
-func (a *AccountManagementApiService) UpdateSubdomain(ctx context.Context) ApiUpdateSubdomainRequest {
+func (a *AccountManagementAPIService) UpdateSubdomain(ctx context.Context) ApiUpdateSubdomainRequest {
 	return ApiUpdateSubdomainRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1132,7 +1249,7 @@ func (a *AccountManagementApiService) UpdateSubdomain(ctx context.Context) ApiUp
 
 // Execute executes the request
 //  @return SubdomainDefinitionResponse
-func (a *AccountManagementApiService) UpdateSubdomainExecute(r ApiUpdateSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
+func (a *AccountManagementAPIService) UpdateSubdomainExecute(r ApiUpdateSubdomainRequest) (*SubdomainDefinitionResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1140,7 +1257,7 @@ func (a *AccountManagementApiService) UpdateSubdomainExecute(r ApiUpdateSubdomai
 		localVarReturnValue  *SubdomainDefinitionResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementApiService.UpdateSubdomain")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountManagementAPIService.UpdateSubdomain")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

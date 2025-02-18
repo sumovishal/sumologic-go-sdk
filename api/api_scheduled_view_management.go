@@ -20,12 +20,12 @@ import (
 )
 
 
-// ScheduledViewManagementApiService ScheduledViewManagementApi service
-type ScheduledViewManagementApiService service
+// ScheduledViewManagementAPIService ScheduledViewManagementAPI service
+type ScheduledViewManagementAPIService service
 
 type ApiCreateScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	createScheduledViewDefinition *CreateScheduledViewDefinition
 }
 
@@ -47,7 +47,7 @@ Creates a new scheduled view in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) CreateScheduledView(ctx context.Context) ApiCreateScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) CreateScheduledView(ctx context.Context) ApiCreateScheduledViewRequest {
 	return ApiCreateScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -56,7 +56,7 @@ func (a *ScheduledViewManagementApiService) CreateScheduledView(ctx context.Cont
 
 // Execute executes the request
 //  @return ScheduledView
-func (a *ScheduledViewManagementApiService) CreateScheduledViewExecute(r ApiCreateScheduledViewRequest) (*ScheduledView, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) CreateScheduledViewExecute(r ApiCreateScheduledViewRequest) (*ScheduledView, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -64,7 +64,7 @@ func (a *ScheduledViewManagementApiService) CreateScheduledViewExecute(r ApiCrea
 		localVarReturnValue  *ScheduledView
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.CreateScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.CreateScheduledView")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -144,7 +144,7 @@ func (a *ScheduledViewManagementApiService) CreateScheduledViewExecute(r ApiCrea
 
 type ApiDisableScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	id string
 }
 
@@ -161,7 +161,7 @@ Disable a scheduled view with the given identifier.
  @param id Identifier of the scheduled view to disable.
  @return ApiDisableScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) DisableScheduledView(ctx context.Context, id string) ApiDisableScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) DisableScheduledView(ctx context.Context, id string) ApiDisableScheduledViewRequest {
 	return ApiDisableScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -170,14 +170,14 @@ func (a *ScheduledViewManagementApiService) DisableScheduledView(ctx context.Con
 }
 
 // Execute executes the request
-func (a *ScheduledViewManagementApiService) DisableScheduledViewExecute(r ApiDisableScheduledViewRequest) (*http.Response, error) {
+func (a *ScheduledViewManagementAPIService) DisableScheduledViewExecute(r ApiDisableScheduledViewRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.DisableScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.DisableScheduledView")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *ScheduledViewManagementApiService) DisableScheduledViewExecute(r ApiDis
 
 type ApiGetScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Get a scheduled view with the given identifier.
  @param id Identifier of the scheduled view to fetch.
  @return ApiGetScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) GetScheduledView(ctx context.Context, id string) ApiGetScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) GetScheduledView(ctx context.Context, id string) ApiGetScheduledViewRequest {
 	return ApiGetScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -271,7 +271,7 @@ func (a *ScheduledViewManagementApiService) GetScheduledView(ctx context.Context
 
 // Execute executes the request
 //  @return ScheduledView
-func (a *ScheduledViewManagementApiService) GetScheduledViewExecute(r ApiGetScheduledViewRequest) (*ScheduledView, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) GetScheduledViewExecute(r ApiGetScheduledViewRequest) (*ScheduledView, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -279,7 +279,7 @@ func (a *ScheduledViewManagementApiService) GetScheduledViewExecute(r ApiGetSche
 		localVarReturnValue  *ScheduledView
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.GetScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.GetScheduledView")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *ScheduledViewManagementApiService) GetScheduledViewExecute(r ApiGetSche
 
 type ApiListScheduledViewsRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	limit *int32
 	token *string
 }
@@ -384,7 +384,7 @@ Get a list of all scheduled views in the organization. The response is paginated
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListScheduledViewsRequest
 */
-func (a *ScheduledViewManagementApiService) ListScheduledViews(ctx context.Context) ApiListScheduledViewsRequest {
+func (a *ScheduledViewManagementAPIService) ListScheduledViews(ctx context.Context) ApiListScheduledViewsRequest {
 	return ApiListScheduledViewsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -393,7 +393,7 @@ func (a *ScheduledViewManagementApiService) ListScheduledViews(ctx context.Conte
 
 // Execute executes the request
 //  @return ListScheduledViewsResponse
-func (a *ScheduledViewManagementApiService) ListScheduledViewsExecute(r ApiListScheduledViewsRequest) (*ListScheduledViewsResponse, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) ListScheduledViewsExecute(r ApiListScheduledViewsRequest) (*ListScheduledViewsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -401,7 +401,7 @@ func (a *ScheduledViewManagementApiService) ListScheduledViewsExecute(r ApiListS
 		localVarReturnValue  *ListScheduledViewsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.ListScheduledViews")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.ListScheduledViews")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -414,6 +414,9 @@ func (a *ScheduledViewManagementApiService) ListScheduledViewsExecute(r ApiListS
 
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
@@ -482,7 +485,7 @@ func (a *ScheduledViewManagementApiService) ListScheduledViewsExecute(r ApiListS
 
 type ApiPauseScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	id string
 }
 
@@ -499,7 +502,7 @@ Pause a scheduled view with the given identifier.
  @param id Identifier of the scheduled view to pause.
  @return ApiPauseScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) PauseScheduledView(ctx context.Context, id string) ApiPauseScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) PauseScheduledView(ctx context.Context, id string) ApiPauseScheduledViewRequest {
 	return ApiPauseScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -509,7 +512,7 @@ func (a *ScheduledViewManagementApiService) PauseScheduledView(ctx context.Conte
 
 // Execute executes the request
 //  @return ScheduledView
-func (a *ScheduledViewManagementApiService) PauseScheduledViewExecute(r ApiPauseScheduledViewRequest) (*ScheduledView, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) PauseScheduledViewExecute(r ApiPauseScheduledViewRequest) (*ScheduledView, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -517,7 +520,7 @@ func (a *ScheduledViewManagementApiService) PauseScheduledViewExecute(r ApiPause
 		localVarReturnValue  *ScheduledView
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.PauseScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.PauseScheduledView")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -593,7 +596,7 @@ func (a *ScheduledViewManagementApiService) PauseScheduledViewExecute(r ApiPause
 
 type ApiStartScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	id string
 }
 
@@ -610,7 +613,7 @@ Start a scheduled view with the given identifier.
  @param id Identifier of the scheduled view to start.
  @return ApiStartScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) StartScheduledView(ctx context.Context, id string) ApiStartScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) StartScheduledView(ctx context.Context, id string) ApiStartScheduledViewRequest {
 	return ApiStartScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -620,7 +623,7 @@ func (a *ScheduledViewManagementApiService) StartScheduledView(ctx context.Conte
 
 // Execute executes the request
 //  @return ScheduledView
-func (a *ScheduledViewManagementApiService) StartScheduledViewExecute(r ApiStartScheduledViewRequest) (*ScheduledView, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) StartScheduledViewExecute(r ApiStartScheduledViewRequest) (*ScheduledView, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -628,7 +631,7 @@ func (a *ScheduledViewManagementApiService) StartScheduledViewExecute(r ApiStart
 		localVarReturnValue  *ScheduledView
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.StartScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.StartScheduledView")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -704,7 +707,7 @@ func (a *ScheduledViewManagementApiService) StartScheduledViewExecute(r ApiStart
 
 type ApiUpdateScheduledViewRequest struct {
 	ctx context.Context
-	ApiService *ScheduledViewManagementApiService
+	ApiService *ScheduledViewManagementAPIService
 	id string
 	updateScheduledViewDefinition *UpdateScheduledViewDefinition
 }
@@ -728,7 +731,7 @@ Update an existing scheduled view.
  @param id Identifier of the scheduled view to update.
  @return ApiUpdateScheduledViewRequest
 */
-func (a *ScheduledViewManagementApiService) UpdateScheduledView(ctx context.Context, id string) ApiUpdateScheduledViewRequest {
+func (a *ScheduledViewManagementAPIService) UpdateScheduledView(ctx context.Context, id string) ApiUpdateScheduledViewRequest {
 	return ApiUpdateScheduledViewRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -738,7 +741,7 @@ func (a *ScheduledViewManagementApiService) UpdateScheduledView(ctx context.Cont
 
 // Execute executes the request
 //  @return ScheduledView
-func (a *ScheduledViewManagementApiService) UpdateScheduledViewExecute(r ApiUpdateScheduledViewRequest) (*ScheduledView, *http.Response, error) {
+func (a *ScheduledViewManagementAPIService) UpdateScheduledViewExecute(r ApiUpdateScheduledViewRequest) (*ScheduledView, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -746,7 +749,7 @@ func (a *ScheduledViewManagementApiService) UpdateScheduledViewExecute(r ApiUpda
 		localVarReturnValue  *ScheduledView
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementApiService.UpdateScheduledView")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScheduledViewManagementAPIService.UpdateScheduledView")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

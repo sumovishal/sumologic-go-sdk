@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SpanQuerySpanData type satisfies the MappedNullable interface at compile time
@@ -38,12 +40,14 @@ type SpanQuerySpanData struct {
 	StartedAt time.Time `json:"startedAt"`
 	Status *TraceSpanStatus `json:"status,omitempty"`
 	// Span kind describes the relationship between the Span, its parents, and its children in a Trace. Possible values: `CLIENT`, `SERVER`, `PRODUCER`, `CONSUMER`, `INTERNAL`.
-	Kind *string `json:"kind,omitempty"`
+	Kind *string `json:"kind,omitempty" validate:"regexp=^(CLIENT|SERVER|PRODUCER|CONSUMER|INTERNAL)$"`
 	// Tags attached to this span as JSON.
 	TagsJSON *string `json:"tagsJSON,omitempty"`
 	// Metadata attached to the span.
 	Metadata *map[string]string `json:"metadata,omitempty"`
 }
+
+type _SpanQuerySpanData SpanQuerySpanData
 
 // NewSpanQuerySpanData instantiates a new SpanQuerySpanData object
 // This constructor will assign default values to properties that have it defined,
@@ -475,6 +479,44 @@ func (o SpanQuerySpanData) ToMap() (map[string]interface{}, error) {
 		toSerialize["metadata"] = o.Metadata
 	}
 	return toSerialize, nil
+}
+
+func (o *SpanQuerySpanData) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"duration",
+		"startedAt",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSpanQuerySpanData := _SpanQuerySpanData{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSpanQuerySpanData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanQuerySpanData(varSpanQuerySpanData)
+
+	return err
 }
 
 type NullableSpanQuerySpanData struct {

@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the PermissionStatement type satisfies the MappedNullable interface at compile time
@@ -23,7 +25,7 @@ type PermissionStatement struct {
 	// List of permissions.
 	Permissions []string `json:"permissions"`
 	// Type of subject for the permission. Valid values are: `role` or `org`.
-	SubjectType string `json:"subjectType"`
+	SubjectType string `json:"subjectType" validate:"regexp=^(role|org)$"`
 	// The identifier that belongs to the subject type chosen above. For e.g. if the subjectType is set to `role`, subjectId should be the identifier of a role.  Similarly, if the subjectType is `org`, the subjectId should be the identifier of the same org,  which owns the resource target.
 	SubjectId string `json:"subjectId"`
 	// The identifier that belongs to the resource this permission assignment applies to.
@@ -37,6 +39,8 @@ type PermissionStatement struct {
 	// Identifier of the user who last modified the resource.
 	ModifiedBy string `json:"modifiedBy"`
 }
+
+type _PermissionStatement PermissionStatement
 
 // NewPermissionStatement instantiates a new PermissionStatement object
 // This constructor will assign default values to properties that have it defined,
@@ -274,6 +278,50 @@ func (o PermissionStatement) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
 	return toSerialize, nil
+}
+
+func (o *PermissionStatement) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"permissions",
+		"subjectType",
+		"subjectId",
+		"targetId",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varPermissionStatement := _PermissionStatement{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varPermissionStatement)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PermissionStatement(varPermissionStatement)
+
+	return err
 }
 
 type NullablePermissionStatement struct {

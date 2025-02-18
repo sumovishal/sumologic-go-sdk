@@ -21,12 +21,12 @@ import (
 )
 
 
-// SlosLibraryManagementApiService SlosLibraryManagementApi service
-type SlosLibraryManagementApiService service
+// SlosLibraryManagementAPIService SlosLibraryManagementAPI service
+type SlosLibraryManagementAPIService service
 
 type ApiGetSloUsageInfoRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 }
 
 func (r ApiGetSloUsageInfoRequest) Execute() ([]SloUsage, *http.Response, error) {
@@ -41,7 +41,7 @@ Get the current number and the allowed number of log and metrics SLOs.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetSloUsageInfoRequest
 */
-func (a *SlosLibraryManagementApiService) GetSloUsageInfo(ctx context.Context) ApiGetSloUsageInfoRequest {
+func (a *SlosLibraryManagementAPIService) GetSloUsageInfo(ctx context.Context) ApiGetSloUsageInfoRequest {
 	return ApiGetSloUsageInfoRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -50,7 +50,7 @@ func (a *SlosLibraryManagementApiService) GetSloUsageInfo(ctx context.Context) A
 
 // Execute executes the request
 //  @return []SloUsage
-func (a *SlosLibraryManagementApiService) GetSloUsageInfoExecute(r ApiGetSloUsageInfoRequest) ([]SloUsage, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) GetSloUsageInfoExecute(r ApiGetSloUsageInfoRequest) ([]SloUsage, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -58,7 +58,7 @@ func (a *SlosLibraryManagementApiService) GetSloUsageInfoExecute(r ApiGetSloUsag
 		localVarReturnValue  []SloUsage
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.GetSloUsageInfo")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.GetSloUsageInfo")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -133,7 +133,7 @@ func (a *SlosLibraryManagementApiService) GetSloUsageInfoExecute(r ApiGetSloUsag
 
 type ApiGetSlosFullPathRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 }
 
@@ -150,7 +150,7 @@ Get the full path of the slo or folder in the slos library.
  @param id Identifier of the slo or folder.
  @return ApiGetSlosFullPathRequest
 */
-func (a *SlosLibraryManagementApiService) GetSlosFullPath(ctx context.Context, id string) ApiGetSlosFullPathRequest {
+func (a *SlosLibraryManagementAPIService) GetSlosFullPath(ctx context.Context, id string) ApiGetSlosFullPathRequest {
 	return ApiGetSlosFullPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -160,7 +160,7 @@ func (a *SlosLibraryManagementApiService) GetSlosFullPath(ctx context.Context, i
 
 // Execute executes the request
 //  @return Path
-func (a *SlosLibraryManagementApiService) GetSlosFullPathExecute(r ApiGetSlosFullPathRequest) (*Path, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) GetSlosFullPathExecute(r ApiGetSlosFullPathRequest) (*Path, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -168,7 +168,7 @@ func (a *SlosLibraryManagementApiService) GetSlosFullPathExecute(r ApiGetSlosFul
 		localVarReturnValue  *Path
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.GetSlosFullPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.GetSlosFullPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *SlosLibraryManagementApiService) GetSlosFullPathExecute(r ApiGetSlosFul
 
 type ApiGetSlosLibraryRootRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 }
 
 func (r ApiGetSlosLibraryRootRequest) Execute() (*SlosLibraryFolderResponse, *http.Response, error) {
@@ -259,7 +259,7 @@ Get the root folder in the slos library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetSlosLibraryRootRequest
 */
-func (a *SlosLibraryManagementApiService) GetSlosLibraryRoot(ctx context.Context) ApiGetSlosLibraryRootRequest {
+func (a *SlosLibraryManagementAPIService) GetSlosLibraryRoot(ctx context.Context) ApiGetSlosLibraryRootRequest {
 	return ApiGetSlosLibraryRootRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -268,7 +268,7 @@ func (a *SlosLibraryManagementApiService) GetSlosLibraryRoot(ctx context.Context
 
 // Execute executes the request
 //  @return SlosLibraryFolderResponse
-func (a *SlosLibraryManagementApiService) GetSlosLibraryRootExecute(r ApiGetSlosLibraryRootRequest) (*SlosLibraryFolderResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) GetSlosLibraryRootExecute(r ApiGetSlosLibraryRootRequest) (*SlosLibraryFolderResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -276,7 +276,7 @@ func (a *SlosLibraryManagementApiService) GetSlosLibraryRootExecute(r ApiGetSlos
 		localVarReturnValue  *SlosLibraryFolderResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.GetSlosLibraryRoot")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.GetSlosLibraryRoot")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -351,7 +351,7 @@ func (a *SlosLibraryManagementApiService) GetSlosLibraryRootExecute(r ApiGetSlos
 
 type ApiSliRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	ids *[]string
 }
 
@@ -373,7 +373,7 @@ Bulk fetch SLI values, error budget remaining and SLI computation status for the
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSliRequest
 */
-func (a *SlosLibraryManagementApiService) Sli(ctx context.Context) ApiSliRequest {
+func (a *SlosLibraryManagementAPIService) Sli(ctx context.Context) ApiSliRequest {
 	return ApiSliRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -382,7 +382,7 @@ func (a *SlosLibraryManagementApiService) Sli(ctx context.Context) ApiSliRequest
 
 // Execute executes the request
 //  @return map[string]SliStatus
-func (a *SlosLibraryManagementApiService) SliExecute(r ApiSliRequest) (*map[string]SliStatus, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SliExecute(r ApiSliRequest) (*map[string]SliStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -390,7 +390,7 @@ func (a *SlosLibraryManagementApiService) SliExecute(r ApiSliRequest) (*map[stri
 		localVarReturnValue  *map[string]SliStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.Sli")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.Sli")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -409,7 +409,7 @@ func (a *SlosLibraryManagementApiService) SliExecute(r ApiSliRequest) (*map[stri
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
@@ -479,7 +479,7 @@ func (a *SlosLibraryManagementApiService) SliExecute(r ApiSliRequest) (*map[stri
 
 type ApiSlosCopyRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 	contentCopyParams *ContentCopyParams
 }
@@ -503,7 +503,7 @@ Copy a slo or folder in the slos library.
  @param id Identifier of the slo or folder to copy.
  @return ApiSlosCopyRequest
 */
-func (a *SlosLibraryManagementApiService) SlosCopy(ctx context.Context, id string) ApiSlosCopyRequest {
+func (a *SlosLibraryManagementAPIService) SlosCopy(ctx context.Context, id string) ApiSlosCopyRequest {
 	return ApiSlosCopyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -513,7 +513,7 @@ func (a *SlosLibraryManagementApiService) SlosCopy(ctx context.Context, id strin
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosCopyExecute(r ApiSlosCopyRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosCopyExecute(r ApiSlosCopyRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -521,7 +521,7 @@ func (a *SlosLibraryManagementApiService) SlosCopyExecute(r ApiSlosCopyRequest) 
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosCopy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosCopy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -602,7 +602,7 @@ func (a *SlosLibraryManagementApiService) SlosCopyExecute(r ApiSlosCopyRequest) 
 
 type ApiSlosCreateRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	parentId *string
 	slosLibraryBase *SlosLibraryBase
 }
@@ -631,7 +631,7 @@ Create a slo or folder in the slos library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSlosCreateRequest
 */
-func (a *SlosLibraryManagementApiService) SlosCreate(ctx context.Context) ApiSlosCreateRequest {
+func (a *SlosLibraryManagementAPIService) SlosCreate(ctx context.Context) ApiSlosCreateRequest {
 	return ApiSlosCreateRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -640,7 +640,7 @@ func (a *SlosLibraryManagementApiService) SlosCreate(ctx context.Context) ApiSlo
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosCreateExecute(r ApiSlosCreateRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosCreateExecute(r ApiSlosCreateRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -648,7 +648,7 @@ func (a *SlosLibraryManagementApiService) SlosCreateExecute(r ApiSlosCreateReque
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -732,7 +732,7 @@ func (a *SlosLibraryManagementApiService) SlosCreateExecute(r ApiSlosCreateReque
 
 type ApiSlosDeleteByIdRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 }
 
@@ -749,7 +749,7 @@ Delete a slo or folder from the slos library.
  @param id Identifier of the slo or folder to delete.
  @return ApiSlosDeleteByIdRequest
 */
-func (a *SlosLibraryManagementApiService) SlosDeleteById(ctx context.Context, id string) ApiSlosDeleteByIdRequest {
+func (a *SlosLibraryManagementAPIService) SlosDeleteById(ctx context.Context, id string) ApiSlosDeleteByIdRequest {
 	return ApiSlosDeleteByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -758,14 +758,14 @@ func (a *SlosLibraryManagementApiService) SlosDeleteById(ctx context.Context, id
 }
 
 // Execute executes the request
-func (a *SlosLibraryManagementApiService) SlosDeleteByIdExecute(r ApiSlosDeleteByIdRequest) (*http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosDeleteByIdExecute(r ApiSlosDeleteByIdRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosDeleteById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosDeleteById")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -832,7 +832,7 @@ func (a *SlosLibraryManagementApiService) SlosDeleteByIdExecute(r ApiSlosDeleteB
 
 type ApiSlosDeleteByIdsRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	ids *[]string
 }
 
@@ -854,7 +854,7 @@ Bulk delete a slo or folder by the given identifiers in the slos library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSlosDeleteByIdsRequest
 */
-func (a *SlosLibraryManagementApiService) SlosDeleteByIds(ctx context.Context) ApiSlosDeleteByIdsRequest {
+func (a *SlosLibraryManagementAPIService) SlosDeleteByIds(ctx context.Context) ApiSlosDeleteByIdsRequest {
 	return ApiSlosDeleteByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -863,7 +863,7 @@ func (a *SlosLibraryManagementApiService) SlosDeleteByIds(ctx context.Context) A
 
 // Execute executes the request
 //  @return map[string]SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosDeleteByIdsExecute(r ApiSlosDeleteByIdsRequest) (*map[string]SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosDeleteByIdsExecute(r ApiSlosDeleteByIdsRequest) (*map[string]SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -871,7 +871,7 @@ func (a *SlosLibraryManagementApiService) SlosDeleteByIdsExecute(r ApiSlosDelete
 		localVarReturnValue  *map[string]SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosDeleteByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosDeleteByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -890,7 +890,7 @@ func (a *SlosLibraryManagementApiService) SlosDeleteByIdsExecute(r ApiSlosDelete
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
@@ -960,7 +960,7 @@ func (a *SlosLibraryManagementApiService) SlosDeleteByIdsExecute(r ApiSlosDelete
 
 type ApiSlosExportItemRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 }
 
@@ -977,7 +977,7 @@ Export a slo or folder. If the given identifier is a folder, everything under th
  @param id Identifier of the slo or folder to export.
  @return ApiSlosExportItemRequest
 */
-func (a *SlosLibraryManagementApiService) SlosExportItem(ctx context.Context, id string) ApiSlosExportItemRequest {
+func (a *SlosLibraryManagementAPIService) SlosExportItem(ctx context.Context, id string) ApiSlosExportItemRequest {
 	return ApiSlosExportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -987,7 +987,7 @@ func (a *SlosLibraryManagementApiService) SlosExportItem(ctx context.Context, id
 
 // Execute executes the request
 //  @return SlosLibraryBaseExport
-func (a *SlosLibraryManagementApiService) SlosExportItemExecute(r ApiSlosExportItemRequest) (*SlosLibraryBaseExport, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosExportItemExecute(r ApiSlosExportItemRequest) (*SlosLibraryBaseExport, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -995,7 +995,7 @@ func (a *SlosLibraryManagementApiService) SlosExportItemExecute(r ApiSlosExportI
 		localVarReturnValue  *SlosLibraryBaseExport
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosExportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosExportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1071,7 +1071,7 @@ func (a *SlosLibraryManagementApiService) SlosExportItemExecute(r ApiSlosExportI
 
 type ApiSlosGetByPathRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	path *string
 }
 
@@ -1093,7 +1093,7 @@ Read a slo or folder by its path in the slos library structure.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSlosGetByPathRequest
 */
-func (a *SlosLibraryManagementApiService) SlosGetByPath(ctx context.Context) ApiSlosGetByPathRequest {
+func (a *SlosLibraryManagementAPIService) SlosGetByPath(ctx context.Context) ApiSlosGetByPathRequest {
 	return ApiSlosGetByPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1102,7 +1102,7 @@ func (a *SlosLibraryManagementApiService) SlosGetByPath(ctx context.Context) Api
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosGetByPathExecute(r ApiSlosGetByPathRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosGetByPathExecute(r ApiSlosGetByPathRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1110,7 +1110,7 @@ func (a *SlosLibraryManagementApiService) SlosGetByPathExecute(r ApiSlosGetByPat
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosGetByPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosGetByPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1189,7 +1189,7 @@ func (a *SlosLibraryManagementApiService) SlosGetByPathExecute(r ApiSlosGetByPat
 
 type ApiSlosImportItemRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	parentId string
 	slosLibraryBaseExport *SlosLibraryBaseExport
 }
@@ -1213,7 +1213,7 @@ Import a slo or folder.
  @param parentId Identifier of the parent folder in which to import the slo or folder.
  @return ApiSlosImportItemRequest
 */
-func (a *SlosLibraryManagementApiService) SlosImportItem(ctx context.Context, parentId string) ApiSlosImportItemRequest {
+func (a *SlosLibraryManagementAPIService) SlosImportItem(ctx context.Context, parentId string) ApiSlosImportItemRequest {
 	return ApiSlosImportItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1223,7 +1223,7 @@ func (a *SlosLibraryManagementApiService) SlosImportItem(ctx context.Context, pa
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosImportItemExecute(r ApiSlosImportItemRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosImportItemExecute(r ApiSlosImportItemRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1231,7 +1231,7 @@ func (a *SlosLibraryManagementApiService) SlosImportItemExecute(r ApiSlosImportI
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosImportItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosImportItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1312,7 +1312,7 @@ func (a *SlosLibraryManagementApiService) SlosImportItemExecute(r ApiSlosImportI
 
 type ApiSlosMoveRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 	parentId *string
 }
@@ -1336,7 +1336,7 @@ Move a slo or folder to a different location in the slos library.
  @param id Identifier of the slo or folder to move.
  @return ApiSlosMoveRequest
 */
-func (a *SlosLibraryManagementApiService) SlosMove(ctx context.Context, id string) ApiSlosMoveRequest {
+func (a *SlosLibraryManagementAPIService) SlosMove(ctx context.Context, id string) ApiSlosMoveRequest {
 	return ApiSlosMoveRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1346,7 +1346,7 @@ func (a *SlosLibraryManagementApiService) SlosMove(ctx context.Context, id strin
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosMoveExecute(r ApiSlosMoveRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosMoveExecute(r ApiSlosMoveRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1354,7 +1354,7 @@ func (a *SlosLibraryManagementApiService) SlosMoveExecute(r ApiSlosMoveRequest) 
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosMove")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosMove")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1434,7 +1434,7 @@ func (a *SlosLibraryManagementApiService) SlosMoveExecute(r ApiSlosMoveRequest) 
 
 type ApiSlosReadByIdRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 }
 
@@ -1451,7 +1451,7 @@ Get a slo or folder from the slos library.
  @param id Identifier of the slo or folder to read.
  @return ApiSlosReadByIdRequest
 */
-func (a *SlosLibraryManagementApiService) SlosReadById(ctx context.Context, id string) ApiSlosReadByIdRequest {
+func (a *SlosLibraryManagementAPIService) SlosReadById(ctx context.Context, id string) ApiSlosReadByIdRequest {
 	return ApiSlosReadByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1461,7 +1461,7 @@ func (a *SlosLibraryManagementApiService) SlosReadById(ctx context.Context, id s
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosReadByIdExecute(r ApiSlosReadByIdRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosReadByIdExecute(r ApiSlosReadByIdRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1469,7 +1469,7 @@ func (a *SlosLibraryManagementApiService) SlosReadByIdExecute(r ApiSlosReadByIdR
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosReadById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosReadById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1545,13 +1545,20 @@ func (a *SlosLibraryManagementApiService) SlosReadByIdExecute(r ApiSlosReadByIdR
 
 type ApiSlosReadByIdsRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	ids *[]string
+	skipChildren *bool
 }
 
 // A comma-separated list of identifiers.
 func (r ApiSlosReadByIdsRequest) Ids(ids []string) ApiSlosReadByIdsRequest {
 	r.ids = &ids
+	return r
+}
+
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiSlosReadByIdsRequest) SkipChildren(skipChildren bool) ApiSlosReadByIdsRequest {
+	r.skipChildren = &skipChildren
 	return r
 }
 
@@ -1567,7 +1574,7 @@ Bulk read a slo or folder by the given identifiers from the slos library.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSlosReadByIdsRequest
 */
-func (a *SlosLibraryManagementApiService) SlosReadByIds(ctx context.Context) ApiSlosReadByIdsRequest {
+func (a *SlosLibraryManagementAPIService) SlosReadByIds(ctx context.Context) ApiSlosReadByIdsRequest {
 	return ApiSlosReadByIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1576,7 +1583,7 @@ func (a *SlosLibraryManagementApiService) SlosReadByIds(ctx context.Context) Api
 
 // Execute executes the request
 //  @return map[string]SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosReadByIdsExecute(r ApiSlosReadByIdsRequest) (*map[string]SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosReadByIdsExecute(r ApiSlosReadByIdsRequest) (*map[string]SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1584,7 +1591,7 @@ func (a *SlosLibraryManagementApiService) SlosReadByIdsExecute(r ApiSlosReadById
 		localVarReturnValue  *map[string]SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosReadByIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosReadByIds")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1603,11 +1610,14 @@ func (a *SlosLibraryManagementApiService) SlosReadByIdsExecute(r ApiSlosReadById
 		if reflect.TypeOf(t).Kind() == reflect.Slice {
 			s := reflect.ValueOf(t)
 			for i := 0; i < s.Len(); i++ {
-				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i), "multi")
+				parameterAddToHeaderOrQuery(localVarQueryParams, "ids", s.Index(i).Interface(), "multi")
 			}
 		} else {
 			parameterAddToHeaderOrQuery(localVarQueryParams, "ids", t, "multi")
 		}
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1673,10 +1683,11 @@ func (a *SlosLibraryManagementApiService) SlosReadByIdsExecute(r ApiSlosReadById
 
 type ApiSlosSearchRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	query *string
 	limit *int32
 	offset *int32
+	skipChildren *bool
 }
 
 // The search query to find slo or folder. Below is the list of different filters with examples:   - **createdBy** : Filter by the user&#39;s identifier who created the content. Example: &#x60;createdBy:000000000000968B&#x60;.   - **createdBefore** : Filter by the content objects created before the given timestamp(in milliseconds). Example: &#x60;createdBefore:1457997222&#x60;.   - **createdAfter** : Filter by the content objects created after the given timestamp(in milliseconds). Example: &#x60;createdAfter:1457997111&#x60;.   - **modifiedBefore** : Filter by the content objects modified before the given timestamp(in milliseconds). Example: &#x60;modifiedBefore:1457997222&#x60;.   - **modifiedAfter** : Filter by the content objects modified after the given timestamp(in milliseconds). Example: &#x60;modifiedAfter:1457997111&#x60;.   - **type** : Filter by the type of the content object. Example: &#x60;type:folder&#x60;.  You can also use multiple filters in one query. For example to search for all content objects created by user with identifier 000000000000968B with creation timestamp after 1457997222 containing the text Test, the query would look like:    &#x60;createdBy:000000000000968B createdAfter:1457997222 Test&#x60;
@@ -1697,6 +1708,12 @@ func (r ApiSlosSearchRequest) Offset(offset int32) ApiSlosSearchRequest {
 	return r
 }
 
+// a boolean parameter to control skipping fetching children of requested folder(s)
+func (r ApiSlosSearchRequest) SkipChildren(skipChildren bool) ApiSlosSearchRequest {
+	r.skipChildren = &skipChildren
+	return r
+}
+
 func (r ApiSlosSearchRequest) Execute() ([]SlosLibraryItemWithPath, *http.Response, error) {
 	return r.ApiService.SlosSearchExecute(r)
 }
@@ -1709,7 +1726,7 @@ Search for a slo or folder in the slos library structure.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiSlosSearchRequest
 */
-func (a *SlosLibraryManagementApiService) SlosSearch(ctx context.Context) ApiSlosSearchRequest {
+func (a *SlosLibraryManagementAPIService) SlosSearch(ctx context.Context) ApiSlosSearchRequest {
 	return ApiSlosSearchRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1718,7 +1735,7 @@ func (a *SlosLibraryManagementApiService) SlosSearch(ctx context.Context) ApiSlo
 
 // Execute executes the request
 //  @return []SlosLibraryItemWithPath
-func (a *SlosLibraryManagementApiService) SlosSearchExecute(r ApiSlosSearchRequest) ([]SlosLibraryItemWithPath, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosSearchExecute(r ApiSlosSearchRequest) ([]SlosLibraryItemWithPath, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1726,7 +1743,7 @@ func (a *SlosLibraryManagementApiService) SlosSearchExecute(r ApiSlosSearchReque
 		localVarReturnValue  []SlosLibraryItemWithPath
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosSearch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosSearch")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1743,9 +1760,18 @@ func (a *SlosLibraryManagementApiService) SlosSearchExecute(r ApiSlosSearchReque
 	parameterAddToHeaderOrQuery(localVarQueryParams, "query", r.query, "")
 	if r.limit != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+	} else {
+		var defaultValue int32 = 1000
+		r.limit = &defaultValue
 	}
 	if r.offset != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "offset", r.offset, "")
+	} else {
+		var defaultValue int32 = 0
+		r.offset = &defaultValue
+	}
+	if r.skipChildren != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "skipChildren", r.skipChildren, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1811,7 +1837,7 @@ func (a *SlosLibraryManagementApiService) SlosSearchExecute(r ApiSlosSearchReque
 
 type ApiSlosUpdateByIdRequest struct {
 	ctx context.Context
-	ApiService *SlosLibraryManagementApiService
+	ApiService *SlosLibraryManagementAPIService
 	id string
 	slosLibraryBaseUpdate *SlosLibraryBaseUpdate
 }
@@ -1835,7 +1861,7 @@ Update a slo or folder in the slos library.
  @param id Identifier of the slo or folder to update.
  @return ApiSlosUpdateByIdRequest
 */
-func (a *SlosLibraryManagementApiService) SlosUpdateById(ctx context.Context, id string) ApiSlosUpdateByIdRequest {
+func (a *SlosLibraryManagementAPIService) SlosUpdateById(ctx context.Context, id string) ApiSlosUpdateByIdRequest {
 	return ApiSlosUpdateByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1845,7 +1871,7 @@ func (a *SlosLibraryManagementApiService) SlosUpdateById(ctx context.Context, id
 
 // Execute executes the request
 //  @return SlosLibraryBaseResponse
-func (a *SlosLibraryManagementApiService) SlosUpdateByIdExecute(r ApiSlosUpdateByIdRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
+func (a *SlosLibraryManagementAPIService) SlosUpdateByIdExecute(r ApiSlosUpdateByIdRequest) (*SlosLibraryBaseResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1853,7 +1879,7 @@ func (a *SlosLibraryManagementApiService) SlosUpdateByIdExecute(r ApiSlosUpdateB
 		localVarReturnValue  *SlosLibraryBaseResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementApiService.SlosUpdateById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SlosLibraryManagementAPIService.SlosUpdateById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

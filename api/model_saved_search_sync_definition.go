@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SavedSearchSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -35,6 +37,8 @@ type SavedSearchSyncDefinition struct {
 	// Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \"-1d -12h\" represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \"01-04-2017 20:32:00 to 01-04-2017 20:35:00\" represents a time range   from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM.
 	DefaultTimeRange string `json:"defaultTimeRange"`
 }
+
+type _SavedSearchSyncDefinition SavedSearchSyncDefinition
 
 // NewSavedSearchSyncDefinition instantiates a new SavedSearchSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -279,6 +283,46 @@ func (o SavedSearchSyncDefinition) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["defaultTimeRange"] = o.DefaultTimeRange
 	return toSerialize, nil
+}
+
+func (o *SavedSearchSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"queryText",
+		"byReceiptTime",
+		"queryParameters",
+		"defaultTimeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSavedSearchSyncDefinition := _SavedSearchSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSavedSearchSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SavedSearchSyncDefinition(varSavedSearchSyncDefinition)
+
+	return err
 }
 
 type NullableSavedSearchSyncDefinition struct {

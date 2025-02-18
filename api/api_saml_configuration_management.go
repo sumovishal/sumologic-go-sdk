@@ -20,12 +20,12 @@ import (
 )
 
 
-// SamlConfigurationManagementApiService SamlConfigurationManagementApi service
-type SamlConfigurationManagementApiService service
+// SamlConfigurationManagementAPIService SamlConfigurationManagementAPI service
+type SamlConfigurationManagementAPIService service
 
 type ApiCreateAllowlistedUserRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 	userId string
 }
 
@@ -42,7 +42,7 @@ Allowlist a user from SAML lockdown allowing them to sign in using a password in
  @param userId Identifier of the user.
  @return ApiCreateAllowlistedUserRequest
 */
-func (a *SamlConfigurationManagementApiService) CreateAllowlistedUser(ctx context.Context, userId string) ApiCreateAllowlistedUserRequest {
+func (a *SamlConfigurationManagementAPIService) CreateAllowlistedUser(ctx context.Context, userId string) ApiCreateAllowlistedUserRequest {
 	return ApiCreateAllowlistedUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -52,7 +52,7 @@ func (a *SamlConfigurationManagementApiService) CreateAllowlistedUser(ctx contex
 
 // Execute executes the request
 //  @return AllowlistedUserResult
-func (a *SamlConfigurationManagementApiService) CreateAllowlistedUserExecute(r ApiCreateAllowlistedUserRequest) (*AllowlistedUserResult, *http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) CreateAllowlistedUserExecute(r ApiCreateAllowlistedUserRequest) (*AllowlistedUserResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -60,7 +60,7 @@ func (a *SamlConfigurationManagementApiService) CreateAllowlistedUserExecute(r A
 		localVarReturnValue  *AllowlistedUserResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.CreateAllowlistedUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.CreateAllowlistedUser")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -136,7 +136,7 @@ func (a *SamlConfigurationManagementApiService) CreateAllowlistedUserExecute(r A
 
 type ApiCreateIdentityProviderRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 	samlIdentityProviderRequest *SamlIdentityProviderRequest
 }
 
@@ -158,7 +158,7 @@ Create a new SAML configuration in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateIdentityProviderRequest
 */
-func (a *SamlConfigurationManagementApiService) CreateIdentityProvider(ctx context.Context) ApiCreateIdentityProviderRequest {
+func (a *SamlConfigurationManagementAPIService) CreateIdentityProvider(ctx context.Context) ApiCreateIdentityProviderRequest {
 	return ApiCreateIdentityProviderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -167,7 +167,7 @@ func (a *SamlConfigurationManagementApiService) CreateIdentityProvider(ctx conte
 
 // Execute executes the request
 //  @return SamlIdentityProvider
-func (a *SamlConfigurationManagementApiService) CreateIdentityProviderExecute(r ApiCreateIdentityProviderRequest) (*SamlIdentityProvider, *http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) CreateIdentityProviderExecute(r ApiCreateIdentityProviderRequest) (*SamlIdentityProvider, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -175,7 +175,7 @@ func (a *SamlConfigurationManagementApiService) CreateIdentityProviderExecute(r 
 		localVarReturnValue  *SamlIdentityProvider
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.CreateIdentityProvider")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.CreateIdentityProvider")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -255,7 +255,7 @@ func (a *SamlConfigurationManagementApiService) CreateIdentityProviderExecute(r 
 
 type ApiDeleteAllowlistedUserRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 	userId string
 }
 
@@ -272,7 +272,7 @@ Remove an allowlisted user requiring them to sign in using SAML.
  @param userId Identifier of user that will no longer be allowlisted from SAML Lockdown.
  @return ApiDeleteAllowlistedUserRequest
 */
-func (a *SamlConfigurationManagementApiService) DeleteAllowlistedUser(ctx context.Context, userId string) ApiDeleteAllowlistedUserRequest {
+func (a *SamlConfigurationManagementAPIService) DeleteAllowlistedUser(ctx context.Context, userId string) ApiDeleteAllowlistedUserRequest {
 	return ApiDeleteAllowlistedUserRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -281,14 +281,14 @@ func (a *SamlConfigurationManagementApiService) DeleteAllowlistedUser(ctx contex
 }
 
 // Execute executes the request
-func (a *SamlConfigurationManagementApiService) DeleteAllowlistedUserExecute(r ApiDeleteAllowlistedUserRequest) (*http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) DeleteAllowlistedUserExecute(r ApiDeleteAllowlistedUserRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.DeleteAllowlistedUser")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.DeleteAllowlistedUser")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *SamlConfigurationManagementApiService) DeleteAllowlistedUserExecute(r A
 
 type ApiDeleteIdentityProviderRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 	id string
 }
 
@@ -372,7 +372,7 @@ Delete a SAML configuration with the given identifier from the organization.
  @param id Identifier of the SAML configuration to delete.
  @return ApiDeleteIdentityProviderRequest
 */
-func (a *SamlConfigurationManagementApiService) DeleteIdentityProvider(ctx context.Context, id string) ApiDeleteIdentityProviderRequest {
+func (a *SamlConfigurationManagementAPIService) DeleteIdentityProvider(ctx context.Context, id string) ApiDeleteIdentityProviderRequest {
 	return ApiDeleteIdentityProviderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -381,14 +381,14 @@ func (a *SamlConfigurationManagementApiService) DeleteIdentityProvider(ctx conte
 }
 
 // Execute executes the request
-func (a *SamlConfigurationManagementApiService) DeleteIdentityProviderExecute(r ApiDeleteIdentityProviderRequest) (*http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) DeleteIdentityProviderExecute(r ApiDeleteIdentityProviderRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.DeleteIdentityProvider")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.DeleteIdentityProvider")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -455,7 +455,7 @@ func (a *SamlConfigurationManagementApiService) DeleteIdentityProviderExecute(r 
 
 type ApiDisableSamlLockdownRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 }
 
 func (r ApiDisableSamlLockdownRequest) Execute() (*http.Response, error) {
@@ -470,7 +470,7 @@ Disable SAML lockdown for the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiDisableSamlLockdownRequest
 */
-func (a *SamlConfigurationManagementApiService) DisableSamlLockdown(ctx context.Context) ApiDisableSamlLockdownRequest {
+func (a *SamlConfigurationManagementAPIService) DisableSamlLockdown(ctx context.Context) ApiDisableSamlLockdownRequest {
 	return ApiDisableSamlLockdownRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -478,14 +478,14 @@ func (a *SamlConfigurationManagementApiService) DisableSamlLockdown(ctx context.
 }
 
 // Execute executes the request
-func (a *SamlConfigurationManagementApiService) DisableSamlLockdownExecute(r ApiDisableSamlLockdownRequest) (*http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) DisableSamlLockdownExecute(r ApiDisableSamlLockdownRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.DisableSamlLockdown")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.DisableSamlLockdown")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -551,7 +551,7 @@ func (a *SamlConfigurationManagementApiService) DisableSamlLockdownExecute(r Api
 
 type ApiEnableSamlLockdownRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 }
 
 func (r ApiEnableSamlLockdownRequest) Execute() (*http.Response, error) {
@@ -566,7 +566,7 @@ Enabling SAML lockdown requires users to sign in using SAML preventing them from
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiEnableSamlLockdownRequest
 */
-func (a *SamlConfigurationManagementApiService) EnableSamlLockdown(ctx context.Context) ApiEnableSamlLockdownRequest {
+func (a *SamlConfigurationManagementAPIService) EnableSamlLockdown(ctx context.Context) ApiEnableSamlLockdownRequest {
 	return ApiEnableSamlLockdownRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -574,14 +574,14 @@ func (a *SamlConfigurationManagementApiService) EnableSamlLockdown(ctx context.C
 }
 
 // Execute executes the request
-func (a *SamlConfigurationManagementApiService) EnableSamlLockdownExecute(r ApiEnableSamlLockdownRequest) (*http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) EnableSamlLockdownExecute(r ApiEnableSamlLockdownRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.EnableSamlLockdown")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.EnableSamlLockdown")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -647,7 +647,7 @@ func (a *SamlConfigurationManagementApiService) EnableSamlLockdownExecute(r ApiE
 
 type ApiGetAllowlistedUsersRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 }
 
 func (r ApiGetAllowlistedUsersRequest) Execute() ([]AllowlistedUserResult, *http.Response, error) {
@@ -662,7 +662,7 @@ Get a list of allowlisted users.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAllowlistedUsersRequest
 */
-func (a *SamlConfigurationManagementApiService) GetAllowlistedUsers(ctx context.Context) ApiGetAllowlistedUsersRequest {
+func (a *SamlConfigurationManagementAPIService) GetAllowlistedUsers(ctx context.Context) ApiGetAllowlistedUsersRequest {
 	return ApiGetAllowlistedUsersRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -671,7 +671,7 @@ func (a *SamlConfigurationManagementApiService) GetAllowlistedUsers(ctx context.
 
 // Execute executes the request
 //  @return []AllowlistedUserResult
-func (a *SamlConfigurationManagementApiService) GetAllowlistedUsersExecute(r ApiGetAllowlistedUsersRequest) ([]AllowlistedUserResult, *http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) GetAllowlistedUsersExecute(r ApiGetAllowlistedUsersRequest) ([]AllowlistedUserResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -679,7 +679,7 @@ func (a *SamlConfigurationManagementApiService) GetAllowlistedUsersExecute(r Api
 		localVarReturnValue  []AllowlistedUserResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.GetAllowlistedUsers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.GetAllowlistedUsers")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -754,7 +754,7 @@ func (a *SamlConfigurationManagementApiService) GetAllowlistedUsersExecute(r Api
 
 type ApiGetIdentityProvidersRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 }
 
 func (r ApiGetIdentityProvidersRequest) Execute() ([]SamlIdentityProvider, *http.Response, error) {
@@ -769,7 +769,7 @@ Get a list of all SAML configurations in the organization.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetIdentityProvidersRequest
 */
-func (a *SamlConfigurationManagementApiService) GetIdentityProviders(ctx context.Context) ApiGetIdentityProvidersRequest {
+func (a *SamlConfigurationManagementAPIService) GetIdentityProviders(ctx context.Context) ApiGetIdentityProvidersRequest {
 	return ApiGetIdentityProvidersRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -778,7 +778,7 @@ func (a *SamlConfigurationManagementApiService) GetIdentityProviders(ctx context
 
 // Execute executes the request
 //  @return []SamlIdentityProvider
-func (a *SamlConfigurationManagementApiService) GetIdentityProvidersExecute(r ApiGetIdentityProvidersRequest) ([]SamlIdentityProvider, *http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) GetIdentityProvidersExecute(r ApiGetIdentityProvidersRequest) ([]SamlIdentityProvider, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -786,7 +786,7 @@ func (a *SamlConfigurationManagementApiService) GetIdentityProvidersExecute(r Ap
 		localVarReturnValue  []SamlIdentityProvider
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.GetIdentityProviders")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.GetIdentityProviders")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -859,9 +859,120 @@ func (a *SamlConfigurationManagementApiService) GetIdentityProvidersExecute(r Ap
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetSamlMetadataRequest struct {
+	ctx context.Context
+	ApiService *SamlConfigurationManagementAPIService
+	id string
+}
+
+func (r ApiGetSamlMetadataRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.GetSamlMetadataExecute(r)
+}
+
+/*
+GetSamlMetadata Get SAML configuration metadata XML.
+
+Get metadata XML for a specific SAML configuration within the organization.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id Identifier of the SAML configuration for which metadata should be returned.
+ @return ApiGetSamlMetadataRequest
+*/
+func (a *SamlConfigurationManagementAPIService) GetSamlMetadata(ctx context.Context, id string) ApiGetSamlMetadataRequest {
+	return ApiGetSamlMetadataRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return string
+func (a *SamlConfigurationManagementAPIService) GetSamlMetadataExecute(r ApiGetSamlMetadataRequest) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.GetSamlMetadata")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/saml/identityProviders/{id}/metadata"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/xml", "application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiUpdateIdentityProviderRequest struct {
 	ctx context.Context
-	ApiService *SamlConfigurationManagementApiService
+	ApiService *SamlConfigurationManagementAPIService
 	id string
 	samlIdentityProviderRequest *SamlIdentityProviderRequest
 }
@@ -885,7 +996,7 @@ Update an existing SAML configuration in the organization.
  @param id Identifier of the SAML configuration to update.
  @return ApiUpdateIdentityProviderRequest
 */
-func (a *SamlConfigurationManagementApiService) UpdateIdentityProvider(ctx context.Context, id string) ApiUpdateIdentityProviderRequest {
+func (a *SamlConfigurationManagementAPIService) UpdateIdentityProvider(ctx context.Context, id string) ApiUpdateIdentityProviderRequest {
 	return ApiUpdateIdentityProviderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -895,7 +1006,7 @@ func (a *SamlConfigurationManagementApiService) UpdateIdentityProvider(ctx conte
 
 // Execute executes the request
 //  @return SamlIdentityProvider
-func (a *SamlConfigurationManagementApiService) UpdateIdentityProviderExecute(r ApiUpdateIdentityProviderRequest) (*SamlIdentityProvider, *http.Response, error) {
+func (a *SamlConfigurationManagementAPIService) UpdateIdentityProviderExecute(r ApiUpdateIdentityProviderRequest) (*SamlIdentityProvider, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -903,7 +1014,7 @@ func (a *SamlConfigurationManagementApiService) UpdateIdentityProviderExecute(r 
 		localVarReturnValue  *SamlIdentityProvider
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementApiService.UpdateIdentityProvider")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SamlConfigurationManagementAPIService.UpdateIdentityProvider")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

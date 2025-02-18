@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CseInsightConfidenceRequest type satisfies the MappedNullable interface at compile time
@@ -22,6 +24,8 @@ type CseInsightConfidenceRequest struct {
 	// List of CSE Insight Created logs for which the confidence score should be calculated.
 	CseInsight string `json:"cseInsight"`
 }
+
+type _CseInsightConfidenceRequest CseInsightConfidenceRequest
 
 // NewCseInsightConfidenceRequest instantiates a new CseInsightConfidenceRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -77,6 +81,43 @@ func (o CseInsightConfidenceRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["cseInsight"] = o.CseInsight
 	return toSerialize, nil
+}
+
+func (o *CseInsightConfidenceRequest) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"cseInsight",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCseInsightConfidenceRequest := _CseInsightConfidenceRequest{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCseInsightConfidenceRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CseInsightConfidenceRequest(varCseInsightConfidenceRequest)
+
+	return err
 }
 
 type NullableCseInsightConfidenceRequest struct {

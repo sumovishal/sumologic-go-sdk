@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+Go client for Sumo Logic API. 
 
 API version: 1.0.0
 */
@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 	"time"
 )
 
@@ -26,6 +28,8 @@ type MonitorsLibraryFolderResponse struct {
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []MonitorsLibraryBaseResponse `json:"children"`
 }
+
+type _MonitorsLibraryFolderResponse MonitorsLibraryFolderResponse
 
 // NewMonitorsLibraryFolderResponse instantiates a new MonitorsLibraryFolderResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -128,6 +132,57 @@ func (o MonitorsLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["permissions"] = o.Permissions
 	toSerialize["children"] = o.Children
 	return toSerialize, nil
+}
+
+func (o *MonitorsLibraryFolderResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"permissions",
+		"children",
+		"id",
+		"name",
+		"description",
+		"version",
+		"createdAt",
+		"createdBy",
+		"modifiedAt",
+		"modifiedBy",
+		"parentId",
+		"contentType",
+		"type",
+		"isSystem",
+		"isMutable",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varMonitorsLibraryFolderResponse := _MonitorsLibraryFolderResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varMonitorsLibraryFolderResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorsLibraryFolderResponse(varMonitorsLibraryFolderResponse)
+
+	return err
 }
 
 type NullableMonitorsLibraryFolderResponse struct {

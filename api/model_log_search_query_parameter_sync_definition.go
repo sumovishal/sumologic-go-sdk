@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the LogSearchQueryParameterSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -20,15 +22,17 @@ var _ MappedNullable = &LogSearchQueryParameterSyncDefinition{}
 // LogSearchQueryParameterSyncDefinition struct for LogSearchQueryParameterSyncDefinition
 type LogSearchQueryParameterSyncDefinition struct {
 	// The name of the parameter.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"regexp=^[a-zA-Z0-9_]+$"`
 	// A description of the parameter.
-	Description *string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty" validate:"regexp=^[a-zA-Z0-9@ \\\\-_\\\\.]+$"`
 	// The data type of the parameter. Supported values are:   1. `NUMBER`   2. `STRING`   3. `ANY`   4. `KEYWORD`
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" validate:"regexp=^(NUMBER|STRING|ANY|KEYWORD)$"`
 	// A value for the parameter. Should be compatible with the type set in dataType field.
 	Value string `json:"value"`
 	AutoComplete LogSearchParameterAutoCompleteSyncDefinition `json:"autoComplete"`
 }
+
+type _LogSearchQueryParameterSyncDefinition LogSearchQueryParameterSyncDefinition
 
 // NewLogSearchQueryParameterSyncDefinition instantiates a new LogSearchQueryParameterSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -197,6 +201,46 @@ func (o LogSearchQueryParameterSyncDefinition) ToMap() (map[string]interface{}, 
 	toSerialize["value"] = o.Value
 	toSerialize["autoComplete"] = o.AutoComplete
 	return toSerialize, nil
+}
+
+func (o *LogSearchQueryParameterSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+		"dataType",
+		"value",
+		"autoComplete",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varLogSearchQueryParameterSyncDefinition := _LogSearchQueryParameterSyncDefinition{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varLogSearchQueryParameterSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchQueryParameterSyncDefinition(varLogSearchQueryParameterSyncDefinition)
+
+	return err
 }
 
 type NullableLogSearchQueryParameterSyncDefinition struct {

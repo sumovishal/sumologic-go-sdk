@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the CustomFieldUsage type satisfies the MappedNullable interface at compile time
@@ -24,9 +26,9 @@ type CustomFieldUsage struct {
 	// Identifier of the field.
 	FieldId string `json:"fieldId"`
 	// Field type. Possible values are `String`, `Long`, `Int`, `Double`, `Boolean`.
-	DataType string `json:"dataType"`
+	DataType string `json:"dataType" validate:"regexp=^(String|Long|Int|Double|Boolean)$"`
 	// Indicates whether the field is enabled and its values are being accepted. Possible values are `Enabled` and `Disabled`.
-	State string `json:"state"`
+	State string `json:"state" validate:"regexp=^(Enabled|Disabled)$"`
 	// An array of hexadecimal identifiers of field extraction rules which use this field.
 	FieldExtractionRules []string `json:"fieldExtractionRules,omitempty"`
 	// An array of hexadecimal identifiers of roles which use this field in the search filter.
@@ -38,6 +40,8 @@ type CustomFieldUsage struct {
 	// Total number of sources using this field.
 	SourcesCount *int32 `json:"sourcesCount,omitempty"`
 }
+
+type _CustomFieldUsage CustomFieldUsage
 
 // NewCustomFieldUsage instantiates a new CustomFieldUsage object
 // This constructor will assign default values to properties that have it defined,
@@ -346,6 +350,46 @@ func (o CustomFieldUsage) ToMap() (map[string]interface{}, error) {
 		toSerialize["sourcesCount"] = o.SourcesCount
 	}
 	return toSerialize, nil
+}
+
+func (o *CustomFieldUsage) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fieldName",
+		"fieldId",
+		"dataType",
+		"state",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCustomFieldUsage := _CustomFieldUsage{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCustomFieldUsage)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CustomFieldUsage(varCustomFieldUsage)
+
+	return err
 }
 
 type NullableCustomFieldUsage struct {

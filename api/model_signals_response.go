@@ -13,6 +13,8 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the SignalsResponse type satisfies the MappedNullable interface at compile time
@@ -21,7 +23,7 @@ var _ MappedNullable = &SignalsResponse{}
 // SignalsResponse Signal response object.
 type SignalsResponse struct {
 	// The type of the signal to compute. Can be `LogFluctuation`, `DimensionalityExplanation`, `GisBenchmark` or `Anomalies` 
-	SignalType string `json:"signalType"`
+	SignalType string `json:"signalType" validate:"regexp=^(LogFluctuation|DimensionalityExplanation|GisBenchmark|Anomalies)$|^$"`
 	// The id for the signal result in hex format.
 	SignalId string `json:"signalId"`
 	// Start time of the signal.
@@ -35,6 +37,8 @@ type SignalsResponse struct {
 	// Raw data queries for the computed signal.
 	OpenInQueries []OpenInQuery `json:"openInQueries"`
 }
+
+type _SignalsResponse SignalsResponse
 
 // NewSignalsResponse instantiates a new SignalsResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -246,6 +250,49 @@ func (o SignalsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["payload"] = o.Payload
 	toSerialize["openInQueries"] = o.OpenInQueries
 	return toSerialize, nil
+}
+
+func (o *SignalsResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"signalType",
+		"signalId",
+		"startTime",
+		"endTime",
+		"summary",
+		"payload",
+		"openInQueries",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varSignalsResponse := _SignalsResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSignalsResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SignalsResponse(varSignalsResponse)
+
+	return err
 }
 
 type NullableSignalsResponse struct {

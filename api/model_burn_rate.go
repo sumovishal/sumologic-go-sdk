@@ -12,6 +12,8 @@ package sumologic
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the BurnRate type satisfies the MappedNullable interface at compile time
@@ -24,6 +26,8 @@ type BurnRate struct {
 	// The relative time range for measuring error budget depletion.
 	TimeRange string `json:"timeRange"`
 }
+
+type _BurnRate BurnRate
 
 // NewBurnRate instantiates a new BurnRate object
 // This constructor will assign default values to properties that have it defined,
@@ -105,6 +109,44 @@ func (o BurnRate) ToMap() (map[string]interface{}, error) {
 	toSerialize["burnRateThreshold"] = o.BurnRateThreshold
 	toSerialize["timeRange"] = o.TimeRange
 	return toSerialize, nil
+}
+
+func (o *BurnRate) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"burnRateThreshold",
+		"timeRange",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBurnRate := _BurnRate{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varBurnRate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BurnRate(varBurnRate)
+
+	return err
 }
 
 type NullableBurnRate struct {
