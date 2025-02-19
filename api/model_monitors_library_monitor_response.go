@@ -11,6 +11,7 @@ API version: 1.0.0
 package sumologic
 
 import (
+	"time"
 	"encoding/json"
 	"bytes"
 	"fmt"

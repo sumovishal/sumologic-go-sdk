@@ -35,10 +35,10 @@ func NewMetricsAnomalyCondition(triggerType string, timeRange string, anomalyDet
 	var detectionMethod string = "StaticCondition"
 	this.DetectionMethod = &detectionMethod
 	this.TriggerType = triggerType
-	this.TimeRange = timeRange
+	this.TimeRange = &timeRange
 	var sensitivity float64 = 0.5
 	this.Sensitivity = &sensitivity
-	this.AnomalyDetectorType = anomalyDetectorType
+	this.AnomalyDetectorType = &anomalyDetectorType
 	var minAnomalyCount int32 = 1
 	this.MinAnomalyCount = &minAnomalyCount
 	var direction string = "Both"
