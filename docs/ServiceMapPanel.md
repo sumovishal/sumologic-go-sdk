@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Application** | Pointer to **string** | Filter services by the application custom tag. | [optional] 
 **Service** | Pointer to **string** | Show only the specific service and its connections to other services. | [optional] 
 **ShowRemoteServices** | Pointer to **bool** | Show remote services, like databases or external calls, automatically detected in client traffic. | [optional] 
+**Environment** | Pointer to **string** | Show only service map data specific to the provided environment. | [optional] 
 
 ## Methods
 
@@ -101,6 +102,31 @@ SetShowRemoteServices sets ShowRemoteServices field to given value.
 `func (o *ServiceMapPanel) HasShowRemoteServices() bool`
 
 HasShowRemoteServices returns a boolean if a field has been set.
+
+### GetEnvironment
+
+`func (o *ServiceMapPanel) GetEnvironment() string`
+
+GetEnvironment returns the Environment field if non-nil, zero value otherwise.
+
+### GetEnvironmentOk
+
+`func (o *ServiceMapPanel) GetEnvironmentOk() (*string, bool)`
+
+GetEnvironmentOk returns a tuple with the Environment field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEnvironment
+
+`func (o *ServiceMapPanel) SetEnvironment(v string)`
+
+SetEnvironment sets Environment field to given value.
+
+### HasEnvironment
+
+`func (o *ServiceMapPanel) HasEnvironment() bool`
+
+HasEnvironment returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

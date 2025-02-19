@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+# Getting Started Welcome to the Sumo Logic API reference. You can use these APIs to interact with the Sumo Logic platform. For information on Collector and Search Job APIs, see our [API home page](https://help.sumologic.com/docs/api). ## API Endpoints Sumo Logic has several deployments in different geographic locations. You'll need to use the Sumo Logic API endpoint corresponding to your geographic location. See the table below for the different API endpoints by deployment. For details determining your account's deployment, see [API endpoints](https://help.sumologic.com/?cid=3011).    <table>     <tr>       <td> <strong>Deployment</strong> </td>       <td> <strong>Endpoint</strong> </td>     </tr>     <tr>       <td> AU </td>       <td> https://api.au.sumologic.com/api/ </td>     </tr>     <tr>       <td> CA </td>       <td> https://api.ca.sumologic.com/api/ </td>     </tr>     <tr>       <td> DE </td>       <td> https://api.de.sumologic.com/api/ </td>     </tr>     <tr>       <td> EU </td>       <td> https://api.eu.sumologic.com/api/ </td>     </tr>     <tr>       <td> FED </td>       <td> https://api.fed.sumologic.com/api/ </td>     </tr>     <tr>       <td> IN </td>       <td> https://api.in.sumologic.com/api/ </td>     </tr>     <tr>       <td> JP </td>       <td> https://api.jp.sumologic.com/api/ </td>     </tr>     <tr>       <td> KR </td>       <td> https://api.kr.sumologic.com/api/ </td>     </tr>     <tr>       <td> US1 </td>       <td> https://api.sumologic.com/api/ </td>     </tr>     <tr>       <td> US2 </td>       <td> https://api.us2.sumologic.com/api/ </td>     </tr>   </table>  ## Authentication Sumo Logic supports the following options for API authentication: - Access ID and Access Key - Base64 encoded Access ID and Access Key  See [Access Keys](https://help.sumologic.com/docs/manage/security/access-keys) to generate an Access Key. Make sure to copy the key you create, because it is displayed only once. When you have an Access ID and Access Key you can execute requests such as the following:   ```bash   curl -u \"<accessId>:<accessKey>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```  Where `deployment` is either `au`, `ca`, `de`, `eu`, `fed`, `in`, `jp`, `us1`, or `us2`. See [API endpoints](#section/API-Endpoints) for details.  If you prefer to use basic access authentication, you can do a Base64 encoding of your `<accessId>:<accessKey>` to authenticate your HTTPS request. The following is an example request, replace the placeholder `<encoded>` with your encoded Access ID and Access Key string:   ```bash   curl -H \"Authorization: Basic <encoded>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```   Refer to [API Authentication](https://help.sumologic.com/?cid=3012) for a Base64 example.  ## Status Codes Generic status codes that apply to all our APIs. See the [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) for reference.   <table>     <tr>       <td> <strong>HTTP Status Code</strong> </td>       <td> <strong>Error Code</strong> </td>       <td> <strong>Description</strong> </td>     </tr>     <tr>       <td> 301 </td>       <td> moved </td>       <td> The requested resource SHOULD be accessed through returned URI in Location Header. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---301-error---moved) for details.</td>     </tr>     <tr>       <td> 401 </td>       <td> unauthorized </td>       <td> Credential could not be verified.</td>     </tr>     <tr>       <td> 403 </td>       <td> forbidden </td>       <td> This operation is not allowed for your account type or the user doesn't have the role capability to perform this action. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---401-error---credential-could-not-be-verified) for details.</td>     </tr>     <tr>       <td> 404 </td>       <td> notfound </td>       <td> Requested resource could not be found. </td>     </tr>     <tr>       <td> 405 </td>       <td> method.unsupported </td>       <td> Unsupported method for URL. </td>     </tr>     <tr>       <td> 415 </td>       <td> contenttype.invalid </td>       <td> Invalid content type. </td>     </tr>     <tr>       <td> 429 </td>       <td> rate.limit.exceeded </td>       <td> The API request rate is higher than 4 request per second or inflight API requests are higher than 10 request per second. </td>     </tr>     <tr>       <td> 500 </td>       <td> internal.error </td>       <td> Internal server error. </td>     </tr>     <tr>       <td> 503 </td>       <td> service.unavailable </td>       <td> Service is currently unavailable. </td>     </tr>   </table>  ## Filtering Some API endpoints support filtering results on a specified set of fields. Each endpoint that supports filtering will list the fields that can be filtered. Multiple fields can be combined by using an ampersand `&` character.  For example, to get 20 users whose `firstName` is `John` and `lastName` is `Doe`:   ```bash   api.sumologic.com/v1/users?limit=20&firstName=John&lastName=Doe   ```  ## Sorting Some API endpoints support sorting fields by using the `sortBy` query parameter. The default sort order is ascending. Prefix the field with a minus sign `-` to sort in descending order.  For example, to get 20 users sorted by their `email` in descending order:   ```bash   api.sumologic.com/v1/users?limit=20&sort=-email   ```  ## Asynchronous Request Asynchronous requests do not wait for results, instead they immediately respond back with a job identifier while the job runs in the background. You can use the job identifier to track the status of the asynchronous job request. Here is a typical flow for an asynchronous request. 1. Start an asynchronous job. On success, a job identifier is returned. The job identifier uniquely identifies   your asynchronous job.  2. Once started, use the job identifier from step 1 to track the status of your asynchronous job. An asynchronous   request will typically provide an endpoint to poll for the status of asynchronous job. A successful response   from the status endpoint will have the following structure:   ```json   {       \"status\": \"Status of asynchronous request\",       \"statusMessage\": \"Optional message with additional information in case request succeeds\",       \"error\": \"Error object in case request fails\"   }   ```   The `status` field can have one of the following values:     1. `Success`: The job succeeded. The `statusMessage` field might have additional information.     2. `InProgress`: The job is still running.     3. `Failed`: The job failed. The `error` field in the response will have more information about the failure.  3. Some asynchronous APIs may provide a third endpoint (like [export result](#operation/getAsyncExportResult))   to fetch the result of an asynchronous job.   ### Example Let's say we want to export a folder with the identifier `0000000006A2E86F`. We will use the [async export](#operation/beginAsyncExport) API to export all the content under the folder with `id=0000000006A2E86F`. 1. Start an export job for the folder   ```bash   curl -X POST -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export   ```   See [authentication section](#section/Authentication) for more details about `accessId`, `accessKey`, and   `deployment`.   On success, you will get back a job identifier. In the response below, `C03E086C137F38B4` is the job identifier.   ```bash   {       \"id\": \"C03E086C137F38B4\"   }   ```  2. Now poll for the status of the asynchronous job with the [status](#operation/getAsyncExportStatus) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/status   ```   You may get a response like   ```json   {       \"status\": \"InProgress\",       \"statusMessage\": null,       \"error\": null   }   ```   It implies the job is still in progress. Keep polling till the status is either `Success` or `Failed`.  3. When the asynchronous job completes (`status != \"InProgress\"`), you can fetch the results with the   [export result](#operation/getAsyncExportResult) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/result   ```    The asynchronous job may fail (`status == \"Failed\"`). You can look at the `error` field for more details.   ```json   {       \"status\": \"Failed\",       \"errors\": {           \"code\": \"content1:too_many_items\",           \"message\": \"Too many objects: object count(1100) was greater than limit 1000\"       }   }   ```   ## Rate Limiting * A rate limit of four API requests per second (240 requests per minute) applies to all API calls from a user. * A rate limit of 10 concurrent requests to any API endpoint applies to an access key.  If a rate is exceeded, a rate limit exceeded 429 status code is returned.  ## Generating Clients You can use [OpenAPI Generator](https://openapi-generator.tech) to generate clients from the YAML file to access the API.  ### Using [NPM](https://www.npmjs.com/get-npm) 1. Install [NPM package wrapper](https://github.com/openapitools/openapi-generator-cli) globally, exposing the CLI   on the command line:   ```bash   npm install @openapitools/openapi-generator-cli -g   ```   You can see detailed instructions [here](https://openapi-generator.tech/docs/installation#npm).  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ```   ### Using [Homebrew](https://brew.sh/) 1. Install OpenAPI Generator   ```bash   brew install openapi-generator   ```  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client side code inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ``` 
 
 API version: 1.0.0
 */
@@ -21,12 +21,12 @@ import (
 )
 
 
-// DashboardManagementApiService DashboardManagementApi service
-type DashboardManagementApiService service
+// DashboardManagementAPIService DashboardManagementAPI service
+type DashboardManagementAPIService service
 
 type ApiCreateDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardRequest *DashboardRequest
 }
 
@@ -48,7 +48,7 @@ Creates a new dashboard.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateDashboardRequest
 */
-func (a *DashboardManagementApiService) CreateDashboard(ctx context.Context) ApiCreateDashboardRequest {
+func (a *DashboardManagementAPIService) CreateDashboard(ctx context.Context) ApiCreateDashboardRequest {
 	return ApiCreateDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -57,7 +57,7 @@ func (a *DashboardManagementApiService) CreateDashboard(ctx context.Context) Api
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) CreateDashboardExecute(r ApiCreateDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -65,7 +65,7 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.CreateDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.CreateDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -143,9 +143,128 @@ func (a *DashboardManagementApiService) CreateDashboardExecute(r ApiCreateDashbo
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiCreateScheduleReportRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementAPIService
+	reportScheduleRequest *ReportScheduleRequest
+}
+
+// Request for scheduling dashboard report.
+func (r ApiCreateScheduleReportRequest) ReportScheduleRequest(reportScheduleRequest ReportScheduleRequest) ApiCreateScheduleReportRequest {
+	r.reportScheduleRequest = &reportScheduleRequest
+	return r
+}
+
+func (r ApiCreateScheduleReportRequest) Execute() (*ReportSchedule, *http.Response, error) {
+	return r.ApiService.CreateScheduleReportExecute(r)
+}
+
+/*
+CreateScheduleReport Schedule dashboard report
+
+Schedule dashboard report to send at a specific date and time. The report should be sent as attachment or downloadable URL in one of the following notification types: 'Email', 'AWSLambda', 'AzureFunctions', 'Datadog', 'HipChat', 'Jira', 'NewRelic', 'Opsgenie', 'PagerDuty', 'Slack', 'MicrosoftTeams', 'ServiceNow', 'SumoCloudSOAR' and 'Webhook'.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCreateScheduleReportRequest
+*/
+func (a *DashboardManagementAPIService) CreateScheduleReport(ctx context.Context) ApiCreateScheduleReportRequest {
+	return ApiCreateScheduleReportRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ReportSchedule
+func (a *DashboardManagementAPIService) CreateScheduleReportExecute(r ApiCreateScheduleReportRequest) (*ReportSchedule, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ReportSchedule
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.CreateScheduleReport")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/reportSchedules"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.reportScheduleRequest == nil {
+		return localVarReturnValue, nil, reportError("reportScheduleRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.reportScheduleRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiDeleteDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 }
 
@@ -162,7 +281,7 @@ Delete a dashboard by the given identifier.
  @param id Identifier of the dashboard to delete.
  @return ApiDeleteDashboardRequest
 */
-func (a *DashboardManagementApiService) DeleteDashboard(ctx context.Context, id string) ApiDeleteDashboardRequest {
+func (a *DashboardManagementAPIService) DeleteDashboard(ctx context.Context, id string) ApiDeleteDashboardRequest {
 	return ApiDeleteDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -171,14 +290,14 @@ func (a *DashboardManagementApiService) DeleteDashboard(ctx context.Context, id 
 }
 
 // Execute executes the request
-func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashboardRequest) (*http.Response, error) {
+func (a *DashboardManagementAPIService) DeleteDashboardExecute(r ApiDeleteDashboardRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.DeleteDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.DeleteDashboard")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -243,9 +362,109 @@ func (a *DashboardManagementApiService) DeleteDashboardExecute(r ApiDeleteDashbo
 	return localVarHTTPResponse, nil
 }
 
+type ApiDeleteReportScheduleRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementAPIService
+	scheduleId string
+}
+
+func (r ApiDeleteReportScheduleRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteReportScheduleExecute(r)
+}
+
+/*
+DeleteReportSchedule Delete dashboard report schedule.
+
+Delete the schedule of a scheduled dashboard report by the given identifier. The scheduled dashboard report will no longer be generated and sent.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param scheduleId UUID of the dashboard report schedule to delete.
+ @return ApiDeleteReportScheduleRequest
+*/
+func (a *DashboardManagementAPIService) DeleteReportSchedule(ctx context.Context, scheduleId string) ApiDeleteReportScheduleRequest {
+	return ApiDeleteReportScheduleRequest{
+		ApiService: a,
+		ctx: ctx,
+		scheduleId: scheduleId,
+	}
+}
+
+// Execute executes the request
+func (a *DashboardManagementAPIService) DeleteReportScheduleExecute(r ApiDeleteReportScheduleRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.DeleteReportSchedule")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/reportSchedules/{scheduleId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"scheduleId"+"}", url.PathEscape(parameterValueToString(r.scheduleId, "scheduleId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
 type ApiGenerateDashboardReportRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	generateReportRequest *GenerateReportRequest
 }
 
@@ -268,7 +487,7 @@ Schedule an asynchronous job to generate a report from a template. All items in 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGenerateDashboardReportRequest
 */
-func (a *DashboardManagementApiService) GenerateDashboardReport(ctx context.Context) ApiGenerateDashboardReportRequest {
+func (a *DashboardManagementAPIService) GenerateDashboardReport(ctx context.Context) ApiGenerateDashboardReportRequest {
 	return ApiGenerateDashboardReportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -277,7 +496,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReport(ctx context.Cont
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGenerateDashboardReportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *DashboardManagementAPIService) GenerateDashboardReportExecute(r ApiGenerateDashboardReportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -285,7 +504,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GenerateDashboardReport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GenerateDashboardReport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -365,7 +584,7 @@ func (a *DashboardManagementApiService) GenerateDashboardReportExecute(r ApiGene
 
 type ApiGetAsyncReportGenerationResultRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -382,7 +601,7 @@ Get the result of an asynchronous report generation request for the given job id
  @param jobId The identifier of the asynchronous report generation job.
  @return ApiGetAsyncReportGenerationResultRequest
 */
-func (a *DashboardManagementApiService) GetAsyncReportGenerationResult(ctx context.Context, jobId string) ApiGetAsyncReportGenerationResultRequest {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationResult(ctx context.Context, jobId string) ApiGetAsyncReportGenerationResultRequest {
 	return ApiGetAsyncReportGenerationResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -392,7 +611,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResult(ctx conte
 
 // Execute executes the request
 //  @return *os.File
-func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (*os.File, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationResultExecute(r ApiGetAsyncReportGenerationResultRequest) (*os.File, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -400,7 +619,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 		localVarReturnValue  *os.File
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetAsyncReportGenerationResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetAsyncReportGenerationResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -476,7 +695,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationResultExecute(r 
 
 type ApiGetAsyncReportGenerationStatusRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -493,7 +712,7 @@ Get the status of an asynchronous report generation request for the given job id
  @param jobId The identifier of the asynchronous report generation job.
  @return ApiGetAsyncReportGenerationStatusRequest
 */
-func (a *DashboardManagementApiService) GetAsyncReportGenerationStatus(ctx context.Context, jobId string) ApiGetAsyncReportGenerationStatusRequest {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationStatus(ctx context.Context, jobId string) ApiGetAsyncReportGenerationStatusRequest {
 	return ApiGetAsyncReportGenerationStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -503,7 +722,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatus(ctx conte
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r ApiGetAsyncReportGenerationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetAsyncReportGenerationStatusExecute(r ApiGetAsyncReportGenerationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -511,7 +730,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetAsyncReportGenerationStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetAsyncReportGenerationStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -587,7 +806,7 @@ func (a *DashboardManagementApiService) GetAsyncReportGenerationStatusExecute(r 
 
 type ApiGetDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 }
 
@@ -604,7 +823,7 @@ Get a dashboard by the given identifier.
  @param id UUID of the dashboard to return.
  @return ApiGetDashboardRequest
 */
-func (a *DashboardManagementApiService) GetDashboard(ctx context.Context, id string) ApiGetDashboardRequest {
+func (a *DashboardManagementAPIService) GetDashboard(ctx context.Context, id string) ApiGetDashboardRequest {
 	return ApiGetDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -614,7 +833,7 @@ func (a *DashboardManagementApiService) GetDashboard(ctx context.Context, id str
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardExecute(r ApiGetDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -622,7 +841,7 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -698,7 +917,7 @@ func (a *DashboardManagementApiService) GetDashboardExecute(r ApiGetDashboardReq
 
 type ApiGetDashboardMigrationResultRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -715,7 +934,7 @@ Get the result of an asynchronous Dashboard Migration request for the given job 
  @param jobId The identifier of the asynchronous Dashboard Migration job.
  @return ApiGetDashboardMigrationResultRequest
 */
-func (a *DashboardManagementApiService) GetDashboardMigrationResult(ctx context.Context, jobId string) ApiGetDashboardMigrationResultRequest {
+func (a *DashboardManagementAPIService) GetDashboardMigrationResult(ctx context.Context, jobId string) ApiGetDashboardMigrationResultRequest {
 	return ApiGetDashboardMigrationResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -725,7 +944,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResult(ctx context.
 
 // Execute executes the request
 //  @return DashboardMigrationResult
-func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r ApiGetDashboardMigrationResultRequest) (*DashboardMigrationResult, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardMigrationResultExecute(r ApiGetDashboardMigrationResultRequest) (*DashboardMigrationResult, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -733,7 +952,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r Api
 		localVarReturnValue  *DashboardMigrationResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboardMigrationResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -809,7 +1028,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationResultExecute(r Api
 
 type ApiGetDashboardMigrationStatusRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	jobId string
 }
 
@@ -826,7 +1045,7 @@ Get the status of an asynchronous Dashboard Migration job for the given job iden
  @param jobId The identifier of the asynchronous Dashboard Migration job.
  @return ApiGetDashboardMigrationStatusRequest
 */
-func (a *DashboardManagementApiService) GetDashboardMigrationStatus(ctx context.Context, jobId string) ApiGetDashboardMigrationStatusRequest {
+func (a *DashboardManagementAPIService) GetDashboardMigrationStatus(ctx context.Context, jobId string) ApiGetDashboardMigrationStatusRequest {
 	return ApiGetDashboardMigrationStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -836,7 +1055,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatus(ctx context.
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r ApiGetDashboardMigrationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *DashboardManagementAPIService) GetDashboardMigrationStatusExecute(r ApiGetDashboardMigrationStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -844,7 +1063,7 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r Api
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.GetDashboardMigrationStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetDashboardMigrationStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -918,9 +1137,120 @@ func (a *DashboardManagementApiService) GetDashboardMigrationStatusExecute(r Api
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetReportScheduleRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementAPIService
+	scheduleId string
+}
+
+func (r ApiGetReportScheduleRequest) Execute() (*ReportSchedule, *http.Response, error) {
+	return r.ApiService.GetReportScheduleExecute(r)
+}
+
+/*
+GetReportSchedule Get dashboard report schedule.
+
+Get the schedule of a scheduled dashboard report by the given identifier.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param scheduleId Identifier of the dashboard report schedule to return.
+ @return ApiGetReportScheduleRequest
+*/
+func (a *DashboardManagementAPIService) GetReportSchedule(ctx context.Context, scheduleId string) ApiGetReportScheduleRequest {
+	return ApiGetReportScheduleRequest{
+		ApiService: a,
+		ctx: ctx,
+		scheduleId: scheduleId,
+	}
+}
+
+// Execute executes the request
+//  @return ReportSchedule
+func (a *DashboardManagementAPIService) GetReportScheduleExecute(r ApiGetReportScheduleRequest) (*ReportSchedule, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ReportSchedule
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.GetReportSchedule")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/reportSchedules/{scheduleId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"scheduleId"+"}", url.PathEscape(parameterValueToString(r.scheduleId, "scheduleId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiListDashboardsRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	limit *int32
 	token *string
 	mode *string
@@ -956,7 +1286,7 @@ List all dashboards under the Personal folder created by the user or under folde
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListDashboardsRequest
 */
-func (a *DashboardManagementApiService) ListDashboards(ctx context.Context) ApiListDashboardsRequest {
+func (a *DashboardManagementAPIService) ListDashboards(ctx context.Context) ApiListDashboardsRequest {
 	return ApiListDashboardsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -965,7 +1295,7 @@ func (a *DashboardManagementApiService) ListDashboards(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return PaginatedDashboards
-func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboardsRequest) (*PaginatedDashboards, *http.Response, error) {
+func (a *DashboardManagementAPIService) ListDashboardsExecute(r ApiListDashboardsRequest) (*PaginatedDashboards, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -973,7 +1303,7 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 		localVarReturnValue  *PaginatedDashboards
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.ListDashboards")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.ListDashboards")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -985,13 +1315,156 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "form", "")
 	}
 	if r.mode != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "mode", r.mode, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mode", r.mode, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListReportSchedulesRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementAPIService
+	dashboardId *string
+	limit *int32
+	token *string
+}
+
+// UUID of the dashboard that the report shedules are associated with.
+func (r ApiListReportSchedulesRequest) DashboardId(dashboardId string) ApiListReportSchedulesRequest {
+	r.dashboardId = &dashboardId
+	return r
+}
+
+// Limit the number of dashboard report schedules returned in the response. The number of dashboard report schedules returned may be less than the &#x60;limit&#x60;.
+func (r ApiListReportSchedulesRequest) Limit(limit int32) ApiListReportSchedulesRequest {
+	r.limit = &limit
+	return r
+}
+
+// Continuation token to get the next page of results. A page object with the next continuation token is returned in the response body. Subsequent GET requests should specify the continuation token to get the next page of results. &#x60;token&#x60; is set to null when no more pages are left.
+func (r ApiListReportSchedulesRequest) Token(token string) ApiListReportSchedulesRequest {
+	r.token = &token
+	return r
+}
+
+func (r ApiListReportSchedulesRequest) Execute() (*PaginatedReportSchedules, *http.Response, error) {
+	return r.ApiService.ListReportSchedulesExecute(r)
+}
+
+/*
+ListReportSchedules List all dashboard report schedules.
+
+List all dashboard report schedules created by the user.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListReportSchedulesRequest
+*/
+func (a *DashboardManagementAPIService) ListReportSchedules(ctx context.Context) ApiListReportSchedulesRequest {
+	return ApiListReportSchedulesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PaginatedReportSchedules
+func (a *DashboardManagementAPIService) ListReportSchedulesExecute(r ApiListReportSchedulesRequest) (*PaginatedReportSchedules, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedReportSchedules
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.ListReportSchedules")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/reportSchedules"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.dashboardId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "dashboardId", r.dashboardId, "form", "")
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
+	}
+	if r.token != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1057,7 +1530,7 @@ func (a *DashboardManagementApiService) ListDashboardsExecute(r ApiListDashboard
 
 type ApiMigrateReportToDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardMigrationRequest *DashboardMigrationRequest
 }
 
@@ -1081,7 +1554,7 @@ Note: This feature is in beta and may not support all existing features of legac
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiMigrateReportToDashboardRequest
 */
-func (a *DashboardManagementApiService) MigrateReportToDashboard(ctx context.Context) ApiMigrateReportToDashboardRequest {
+func (a *DashboardManagementAPIService) MigrateReportToDashboard(ctx context.Context) ApiMigrateReportToDashboardRequest {
 	return ApiMigrateReportToDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1090,7 +1563,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboard(ctx context.Con
 
 // Execute executes the request
 //  @return BeginAsyncJobResponseV2
-func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMigrateReportToDashboardRequest) (*BeginAsyncJobResponseV2, *http.Response, error) {
+func (a *DashboardManagementAPIService) MigrateReportToDashboardExecute(r ApiMigrateReportToDashboardRequest) (*BeginAsyncJobResponseV2, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1098,7 +1571,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMig
 		localVarReturnValue  *BeginAsyncJobResponseV2
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.MigrateReportToDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.MigrateReportToDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1178,7 +1651,7 @@ func (a *DashboardManagementApiService) MigrateReportToDashboardExecute(r ApiMig
 
 type ApiPreviewMigrateReportToDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	dashboardMigrationRequest *DashboardMigrationRequest
 }
 
@@ -1200,7 +1673,7 @@ Get a preview of migrating Legacy Dashboards to Dashboard(New)
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiPreviewMigrateReportToDashboardRequest
 */
-func (a *DashboardManagementApiService) PreviewMigrateReportToDashboard(ctx context.Context) ApiPreviewMigrateReportToDashboardRequest {
+func (a *DashboardManagementAPIService) PreviewMigrateReportToDashboard(ctx context.Context) ApiPreviewMigrateReportToDashboardRequest {
 	return ApiPreviewMigrateReportToDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1209,7 +1682,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboard(ctx cont
 
 // Execute executes the request
 //  @return MigrationPreviewResponse
-func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r ApiPreviewMigrateReportToDashboardRequest) (*MigrationPreviewResponse, *http.Response, error) {
+func (a *DashboardManagementAPIService) PreviewMigrateReportToDashboardExecute(r ApiPreviewMigrateReportToDashboardRequest) (*MigrationPreviewResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1217,7 +1690,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r
 		localVarReturnValue  *MigrationPreviewResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.PreviewMigrateReportToDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.PreviewMigrateReportToDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1297,7 +1770,7 @@ func (a *DashboardManagementApiService) PreviewMigrateReportToDashboardExecute(r
 
 type ApiUpdateDashboardRequest struct {
 	ctx context.Context
-	ApiService *DashboardManagementApiService
+	ApiService *DashboardManagementAPIService
 	id string
 	dashboardRequest *DashboardRequest
 }
@@ -1321,7 +1794,7 @@ Update a dashboard by the given identifier.
  @param id Identifier of the dashboard to update.
  @return ApiUpdateDashboardRequest
 */
-func (a *DashboardManagementApiService) UpdateDashboard(ctx context.Context, id string) ApiUpdateDashboardRequest {
+func (a *DashboardManagementAPIService) UpdateDashboard(ctx context.Context, id string) ApiUpdateDashboardRequest {
 	return ApiUpdateDashboardRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1331,7 +1804,7 @@ func (a *DashboardManagementApiService) UpdateDashboard(ctx context.Context, id 
 
 // Execute executes the request
 //  @return Dashboard
-func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashboardRequest) (*Dashboard, *http.Response, error) {
+func (a *DashboardManagementAPIService) UpdateDashboardExecute(r ApiUpdateDashboardRequest) (*Dashboard, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1339,7 +1812,7 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 		localVarReturnValue  *Dashboard
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementApiService.UpdateDashboard")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.UpdateDashboard")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1373,6 +1846,129 @@ func (a *DashboardManagementApiService) UpdateDashboardExecute(r ApiUpdateDashbo
 	}
 	// body params
 	localVarPostBody = r.dashboardRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdateReportScheduleRequest struct {
+	ctx context.Context
+	ApiService *DashboardManagementAPIService
+	scheduleId string
+	reportScheduleRequest *ReportScheduleRequest
+}
+
+// Request to update on the dashboard report schedule.
+func (r ApiUpdateReportScheduleRequest) ReportScheduleRequest(reportScheduleRequest ReportScheduleRequest) ApiUpdateReportScheduleRequest {
+	r.reportScheduleRequest = &reportScheduleRequest
+	return r
+}
+
+func (r ApiUpdateReportScheduleRequest) Execute() (*ReportSchedule, *http.Response, error) {
+	return r.ApiService.UpdateReportScheduleExecute(r)
+}
+
+/*
+UpdateReportSchedule Update dashboard report schedule.
+
+Update the schedule of a scheduled dashboard report by the given identifier.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param scheduleId identifier of the dashboard report schedule to update.
+ @return ApiUpdateReportScheduleRequest
+*/
+func (a *DashboardManagementAPIService) UpdateReportSchedule(ctx context.Context, scheduleId string) ApiUpdateReportScheduleRequest {
+	return ApiUpdateReportScheduleRequest{
+		ApiService: a,
+		ctx: ctx,
+		scheduleId: scheduleId,
+	}
+}
+
+// Execute executes the request
+//  @return ReportSchedule
+func (a *DashboardManagementAPIService) UpdateReportScheduleExecute(r ApiUpdateReportScheduleRequest) (*ReportSchedule, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ReportSchedule
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardManagementAPIService.UpdateReportSchedule")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/reportSchedules/{scheduleId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"scheduleId"+"}", url.PathEscape(parameterValueToString(r.scheduleId, "scheduleId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.reportScheduleRequest == nil {
+		return localVarReturnValue, nil, reportError("reportScheduleRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.reportScheduleRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

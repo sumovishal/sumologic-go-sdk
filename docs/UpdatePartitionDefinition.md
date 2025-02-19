@@ -5,8 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **RetentionPeriod** | Pointer to **int32** | The number of days to retain data in the partition, or -1 to use the default value for your account. Only relevant if your account has variable retention enabled. | [optional] 
-**ReduceRetentionPeriodImmediately** | Pointer to **bool** | This is required if the newly specified &#x60;retentionPeriod&#x60; is less than the existing retention period.  In such a situation, a value of &#x60;true&#x60; says that data between the existing retention period and the new retention period should be deleted immediately; if &#x60;false&#x60;, such data will be deleted after seven days. This property is optional and ignored if the specified &#x60;retentionPeriod&#x60; is greater than or equal to the current retention period. | [optional] [default to false]
+**ReduceRetentionPeriodImmediately** | Pointer to **bool** | This is required if the newly specified &#x60;retentionPeriod&#x60; is less than the existing retention period.  In such a situation, a value of &#x60;true&#x60; says that data between the existing retention period and the new  retention period should be deleted immediately; if &#x60;false&#x60;, such data will be deleted after seven days.  This property is optional and ignored if the specified &#x60;retentionPeriod&#x60; is greater than or equal to the  current retention period. | [optional] [default to false]
 **IsCompliant** | Pointer to **bool** | Whether to mark a partition as compliant. Mark a partition as compliant if it contains data used for compliance or audit purpose. Retention for a compliant partition can only be increased and cannot be reduced after the partition marked as compliant. A partition once marked compliant, cannot be marked non-compliant later. | [optional] [default to false]
+**IsIncludedInDefaultSearch** | Pointer to **bool** | Indicates whether the partition is included in the default search scope. When executing a  query such as \&quot;error | count,\&quot; certain partitions are automatically part of the search scope.  However, for specific partitions, the user must explicitly mention the partition using the _index  term, as in \&quot;_index&#x3D;webApp error | count\&quot;. This property governs the default inclusion of the  partition in the search scope. Configuring this property is exclusively permitted for flex partitions. | [optional] 
 **RoutingExpression** | Pointer to **string** | The query that defines the data to be included in the partition. | [optional] 
 
 ## Methods
@@ -102,6 +103,31 @@ SetIsCompliant sets IsCompliant field to given value.
 `func (o *UpdatePartitionDefinition) HasIsCompliant() bool`
 
 HasIsCompliant returns a boolean if a field has been set.
+
+### GetIsIncludedInDefaultSearch
+
+`func (o *UpdatePartitionDefinition) GetIsIncludedInDefaultSearch() bool`
+
+GetIsIncludedInDefaultSearch returns the IsIncludedInDefaultSearch field if non-nil, zero value otherwise.
+
+### GetIsIncludedInDefaultSearchOk
+
+`func (o *UpdatePartitionDefinition) GetIsIncludedInDefaultSearchOk() (*bool, bool)`
+
+GetIsIncludedInDefaultSearchOk returns a tuple with the IsIncludedInDefaultSearch field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsIncludedInDefaultSearch
+
+`func (o *UpdatePartitionDefinition) SetIsIncludedInDefaultSearch(v bool)`
+
+SetIsIncludedInDefaultSearch sets IsIncludedInDefaultSearch field to given value.
+
+### HasIsIncludedInDefaultSearch
+
+`func (o *UpdatePartitionDefinition) HasIsIncludedInDefaultSearch() bool`
+
+HasIsIncludedInDefaultSearch returns a boolean if a field has been set.
 
 ### GetRoutingExpression
 

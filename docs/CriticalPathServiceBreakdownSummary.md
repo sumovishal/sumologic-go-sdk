@@ -6,12 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Elements** | [**[]CriticalPathServiceBreakdownElementBase**](CriticalPathServiceBreakdownElementBase.md) | List of the elements representing the critical path service duration breakdown - contains the first few services with the longest overall duration of the spans contributing to the critical path. | 
 **OtherServicesDuration** | **int64** | Overall processing time in nanoseconds consumed by the rest of the spans in the critical path (a sum of the duration times of the spans&#39; critical path segments). | 
+**IdleTime** | **int64** | Overall time in nanoseconds when no particular operation was in progress. | 
 
 ## Methods
 
 ### NewCriticalPathServiceBreakdownSummary
 
-`func NewCriticalPathServiceBreakdownSummary(elements []CriticalPathServiceBreakdownElementBase, otherServicesDuration int64, ) *CriticalPathServiceBreakdownSummary`
+`func NewCriticalPathServiceBreakdownSummary(elements []CriticalPathServiceBreakdownElementBase, otherServicesDuration int64, idleTime int64, ) *CriticalPathServiceBreakdownSummary`
 
 NewCriticalPathServiceBreakdownSummary instantiates a new CriticalPathServiceBreakdownSummary object
 This constructor will assign default values to properties that have it defined,
@@ -64,6 +65,26 @@ and a boolean to check if the value has been set.
 `func (o *CriticalPathServiceBreakdownSummary) SetOtherServicesDuration(v int64)`
 
 SetOtherServicesDuration sets OtherServicesDuration field to given value.
+
+
+### GetIdleTime
+
+`func (o *CriticalPathServiceBreakdownSummary) GetIdleTime() int64`
+
+GetIdleTime returns the IdleTime field if non-nil, zero value otherwise.
+
+### GetIdleTimeOk
+
+`func (o *CriticalPathServiceBreakdownSummary) GetIdleTimeOk() (*int64, bool)`
+
+GetIdleTimeOk returns a tuple with the IdleTime field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIdleTime
+
+`func (o *CriticalPathServiceBreakdownSummary) SetIdleTime(v int64)`
+
+SetIdleTime sets IdleTime field to given value.
 
 
 

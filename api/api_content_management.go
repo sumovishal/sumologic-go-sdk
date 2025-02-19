@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+# Getting Started Welcome to the Sumo Logic API reference. You can use these APIs to interact with the Sumo Logic platform. For information on Collector and Search Job APIs, see our [API home page](https://help.sumologic.com/docs/api). ## API Endpoints Sumo Logic has several deployments in different geographic locations. You'll need to use the Sumo Logic API endpoint corresponding to your geographic location. See the table below for the different API endpoints by deployment. For details determining your account's deployment, see [API endpoints](https://help.sumologic.com/?cid=3011).    <table>     <tr>       <td> <strong>Deployment</strong> </td>       <td> <strong>Endpoint</strong> </td>     </tr>     <tr>       <td> AU </td>       <td> https://api.au.sumologic.com/api/ </td>     </tr>     <tr>       <td> CA </td>       <td> https://api.ca.sumologic.com/api/ </td>     </tr>     <tr>       <td> DE </td>       <td> https://api.de.sumologic.com/api/ </td>     </tr>     <tr>       <td> EU </td>       <td> https://api.eu.sumologic.com/api/ </td>     </tr>     <tr>       <td> FED </td>       <td> https://api.fed.sumologic.com/api/ </td>     </tr>     <tr>       <td> IN </td>       <td> https://api.in.sumologic.com/api/ </td>     </tr>     <tr>       <td> JP </td>       <td> https://api.jp.sumologic.com/api/ </td>     </tr>     <tr>       <td> KR </td>       <td> https://api.kr.sumologic.com/api/ </td>     </tr>     <tr>       <td> US1 </td>       <td> https://api.sumologic.com/api/ </td>     </tr>     <tr>       <td> US2 </td>       <td> https://api.us2.sumologic.com/api/ </td>     </tr>   </table>  ## Authentication Sumo Logic supports the following options for API authentication: - Access ID and Access Key - Base64 encoded Access ID and Access Key  See [Access Keys](https://help.sumologic.com/docs/manage/security/access-keys) to generate an Access Key. Make sure to copy the key you create, because it is displayed only once. When you have an Access ID and Access Key you can execute requests such as the following:   ```bash   curl -u \"<accessId>:<accessKey>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```  Where `deployment` is either `au`, `ca`, `de`, `eu`, `fed`, `in`, `jp`, `us1`, or `us2`. See [API endpoints](#section/API-Endpoints) for details.  If you prefer to use basic access authentication, you can do a Base64 encoding of your `<accessId>:<accessKey>` to authenticate your HTTPS request. The following is an example request, replace the placeholder `<encoded>` with your encoded Access ID and Access Key string:   ```bash   curl -H \"Authorization: Basic <encoded>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```   Refer to [API Authentication](https://help.sumologic.com/?cid=3012) for a Base64 example.  ## Status Codes Generic status codes that apply to all our APIs. See the [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) for reference.   <table>     <tr>       <td> <strong>HTTP Status Code</strong> </td>       <td> <strong>Error Code</strong> </td>       <td> <strong>Description</strong> </td>     </tr>     <tr>       <td> 301 </td>       <td> moved </td>       <td> The requested resource SHOULD be accessed through returned URI in Location Header. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---301-error---moved) for details.</td>     </tr>     <tr>       <td> 401 </td>       <td> unauthorized </td>       <td> Credential could not be verified.</td>     </tr>     <tr>       <td> 403 </td>       <td> forbidden </td>       <td> This operation is not allowed for your account type or the user doesn't have the role capability to perform this action. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---401-error---credential-could-not-be-verified) for details.</td>     </tr>     <tr>       <td> 404 </td>       <td> notfound </td>       <td> Requested resource could not be found. </td>     </tr>     <tr>       <td> 405 </td>       <td> method.unsupported </td>       <td> Unsupported method for URL. </td>     </tr>     <tr>       <td> 415 </td>       <td> contenttype.invalid </td>       <td> Invalid content type. </td>     </tr>     <tr>       <td> 429 </td>       <td> rate.limit.exceeded </td>       <td> The API request rate is higher than 4 request per second or inflight API requests are higher than 10 request per second. </td>     </tr>     <tr>       <td> 500 </td>       <td> internal.error </td>       <td> Internal server error. </td>     </tr>     <tr>       <td> 503 </td>       <td> service.unavailable </td>       <td> Service is currently unavailable. </td>     </tr>   </table>  ## Filtering Some API endpoints support filtering results on a specified set of fields. Each endpoint that supports filtering will list the fields that can be filtered. Multiple fields can be combined by using an ampersand `&` character.  For example, to get 20 users whose `firstName` is `John` and `lastName` is `Doe`:   ```bash   api.sumologic.com/v1/users?limit=20&firstName=John&lastName=Doe   ```  ## Sorting Some API endpoints support sorting fields by using the `sortBy` query parameter. The default sort order is ascending. Prefix the field with a minus sign `-` to sort in descending order.  For example, to get 20 users sorted by their `email` in descending order:   ```bash   api.sumologic.com/v1/users?limit=20&sort=-email   ```  ## Asynchronous Request Asynchronous requests do not wait for results, instead they immediately respond back with a job identifier while the job runs in the background. You can use the job identifier to track the status of the asynchronous job request. Here is a typical flow for an asynchronous request. 1. Start an asynchronous job. On success, a job identifier is returned. The job identifier uniquely identifies   your asynchronous job.  2. Once started, use the job identifier from step 1 to track the status of your asynchronous job. An asynchronous   request will typically provide an endpoint to poll for the status of asynchronous job. A successful response   from the status endpoint will have the following structure:   ```json   {       \"status\": \"Status of asynchronous request\",       \"statusMessage\": \"Optional message with additional information in case request succeeds\",       \"error\": \"Error object in case request fails\"   }   ```   The `status` field can have one of the following values:     1. `Success`: The job succeeded. The `statusMessage` field might have additional information.     2. `InProgress`: The job is still running.     3. `Failed`: The job failed. The `error` field in the response will have more information about the failure.  3. Some asynchronous APIs may provide a third endpoint (like [export result](#operation/getAsyncExportResult))   to fetch the result of an asynchronous job.   ### Example Let's say we want to export a folder with the identifier `0000000006A2E86F`. We will use the [async export](#operation/beginAsyncExport) API to export all the content under the folder with `id=0000000006A2E86F`. 1. Start an export job for the folder   ```bash   curl -X POST -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export   ```   See [authentication section](#section/Authentication) for more details about `accessId`, `accessKey`, and   `deployment`.   On success, you will get back a job identifier. In the response below, `C03E086C137F38B4` is the job identifier.   ```bash   {       \"id\": \"C03E086C137F38B4\"   }   ```  2. Now poll for the status of the asynchronous job with the [status](#operation/getAsyncExportStatus) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/status   ```   You may get a response like   ```json   {       \"status\": \"InProgress\",       \"statusMessage\": null,       \"error\": null   }   ```   It implies the job is still in progress. Keep polling till the status is either `Success` or `Failed`.  3. When the asynchronous job completes (`status != \"InProgress\"`), you can fetch the results with the   [export result](#operation/getAsyncExportResult) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/result   ```    The asynchronous job may fail (`status == \"Failed\"`). You can look at the `error` field for more details.   ```json   {       \"status\": \"Failed\",       \"errors\": {           \"code\": \"content1:too_many_items\",           \"message\": \"Too many objects: object count(1100) was greater than limit 1000\"       }   }   ```   ## Rate Limiting * A rate limit of four API requests per second (240 requests per minute) applies to all API calls from a user. * A rate limit of 10 concurrent requests to any API endpoint applies to an access key.  If a rate is exceeded, a rate limit exceeded 429 status code is returned.  ## Generating Clients You can use [OpenAPI Generator](https://openapi-generator.tech) to generate clients from the YAML file to access the API.  ### Using [NPM](https://www.npmjs.com/get-npm) 1. Install [NPM package wrapper](https://github.com/openapitools/openapi-generator-cli) globally, exposing the CLI   on the command line:   ```bash   npm install @openapitools/openapi-generator-cli -g   ```   You can see detailed instructions [here](https://openapi-generator.tech/docs/installation#npm).  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ```   ### Using [Homebrew](https://brew.sh/) 1. Install OpenAPI Generator   ```bash   brew install openapi-generator   ```  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client side code inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ``` 
 
 API version: 1.0.0
 */
@@ -20,12 +20,12 @@ import (
 )
 
 
-// ContentManagementApiService ContentManagementApi service
-type ContentManagementApiService service
+// ContentManagementAPIService ContentManagementAPI service
+type ContentManagementAPIService service
 
 type ApiAsyncCopyStatusRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	id string
 	jobId string
 	isAdminMode *string
@@ -52,7 +52,7 @@ Get the status of the copy request with the given job identifier. On success, fi
  @param jobId The identifier of the asynchronous copy request job.
  @return ApiAsyncCopyStatusRequest
 */
-func (a *ContentManagementApiService) AsyncCopyStatus(ctx context.Context, id string, jobId string) ApiAsyncCopyStatusRequest {
+func (a *ContentManagementAPIService) AsyncCopyStatus(ctx context.Context, id string, jobId string) ApiAsyncCopyStatusRequest {
 	return ApiAsyncCopyStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -63,7 +63,7 @@ func (a *ContentManagementApiService) AsyncCopyStatus(ctx context.Context, id st
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *ContentManagementAPIService) AsyncCopyStatusExecute(r ApiAsyncCopyStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -71,7 +71,7 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.AsyncCopyStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.AsyncCopyStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -102,7 +102,7 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -151,7 +151,7 @@ func (a *ContentManagementApiService) AsyncCopyStatusExecute(r ApiAsyncCopyStatu
 
 type ApiBeginAsyncCopyRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	id string
 	destinationFolder *string
 	isAdminMode *string
@@ -182,7 +182,7 @@ Start an asynchronous content copy job with the given identifier to the destinat
  @param id The identifier of the content item to copy. Identifiers from the Library in the Sumo user interface are provided in decimal format which is incompatible with this API. The identifier needs to be in hexadecimal format.
  @return ApiBeginAsyncCopyRequest
 */
-func (a *ContentManagementApiService) BeginAsyncCopy(ctx context.Context, id string) ApiBeginAsyncCopyRequest {
+func (a *ContentManagementAPIService) BeginAsyncCopy(ctx context.Context, id string) ApiBeginAsyncCopyRequest {
 	return ApiBeginAsyncCopyRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -192,7 +192,7 @@ func (a *ContentManagementApiService) BeginAsyncCopy(ctx context.Context, id str
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *ContentManagementAPIService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -200,7 +200,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.BeginAsyncCopy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.BeginAsyncCopy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -215,7 +215,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		return localVarReturnValue, nil, reportError("destinationFolder is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolder", r.destinationFolder, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolder", r.destinationFolder, "form", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -234,7 +234,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -283,7 +283,7 @@ func (a *ContentManagementApiService) BeginAsyncCopyExecute(r ApiBeginAsyncCopyR
 
 type ApiBeginAsyncDeleteRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	id string
 	isAdminMode *string
 }
@@ -307,7 +307,7 @@ Start an asynchronous content deletion job with the given identifier.
  @param id Identifier of the content to delete. Identifiers from the Library in the Sumo user interface are provided in decimal format which is incompatible with this API. The identifier needs to be in hexadecimal format.
  @return ApiBeginAsyncDeleteRequest
 */
-func (a *ContentManagementApiService) BeginAsyncDelete(ctx context.Context, id string) ApiBeginAsyncDeleteRequest {
+func (a *ContentManagementAPIService) BeginAsyncDelete(ctx context.Context, id string) ApiBeginAsyncDeleteRequest {
 	return ApiBeginAsyncDeleteRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -317,7 +317,7 @@ func (a *ContentManagementApiService) BeginAsyncDelete(ctx context.Context, id s
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDeleteRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *ContentManagementAPIService) BeginAsyncDeleteExecute(r ApiBeginAsyncDeleteRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -325,7 +325,7 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.BeginAsyncDelete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.BeginAsyncDelete")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -355,7 +355,7 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -404,7 +404,7 @@ func (a *ContentManagementApiService) BeginAsyncDeleteExecute(r ApiBeginAsyncDel
 
 type ApiBeginAsyncExportRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	id string
 	isAdminMode *string
 }
@@ -430,7 +430,7 @@ The results from the export are compatible with the Library import feature in th
  @param id The identifier of the content item to export. Identifiers from the Library in the Sumo user interface are provided in decimal format which is incompatible with this API. The identifier needs to be in hexadecimal format.
  @return ApiBeginAsyncExportRequest
 */
-func (a *ContentManagementApiService) BeginAsyncExport(ctx context.Context, id string) ApiBeginAsyncExportRequest {
+func (a *ContentManagementAPIService) BeginAsyncExport(ctx context.Context, id string) ApiBeginAsyncExportRequest {
 	return ApiBeginAsyncExportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -440,7 +440,7 @@ func (a *ContentManagementApiService) BeginAsyncExport(ctx context.Context, id s
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *ContentManagementAPIService) BeginAsyncExportExecute(r ApiBeginAsyncExportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -448,7 +448,7 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.BeginAsyncExport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.BeginAsyncExport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -478,7 +478,7 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -527,7 +527,7 @@ func (a *ContentManagementApiService) BeginAsyncExportExecute(r ApiBeginAsyncExp
 
 type ApiBeginAsyncImportRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	folderId string
 	contentSyncDefinition *ContentSyncDefinition
 	isAdminMode *string
@@ -565,7 +565,7 @@ Schedule an asynchronous import of content inside an existing folder with the gi
  @param folderId The identifier of the folder to import into. Identifiers from the Library in the Sumo user interface are provided in decimal format which is incompatible with this API. The identifier needs to be in hexadecimal format.
  @return ApiBeginAsyncImportRequest
 */
-func (a *ContentManagementApiService) BeginAsyncImport(ctx context.Context, folderId string) ApiBeginAsyncImportRequest {
+func (a *ContentManagementAPIService) BeginAsyncImport(ctx context.Context, folderId string) ApiBeginAsyncImportRequest {
 	return ApiBeginAsyncImportRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -575,7 +575,7 @@ func (a *ContentManagementApiService) BeginAsyncImport(ctx context.Context, fold
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *ContentManagementAPIService) BeginAsyncImportExecute(r ApiBeginAsyncImportRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -583,7 +583,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.BeginAsyncImport")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.BeginAsyncImport")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -599,7 +599,10 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 	}
 
 	if r.overwrite != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "overwrite", r.overwrite, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "overwrite", r.overwrite, "form", "")
+	} else {
+		var defaultValue bool = false
+		r.overwrite = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
@@ -619,7 +622,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.contentSyncDefinition
@@ -670,7 +673,7 @@ func (a *ContentManagementApiService) BeginAsyncImportExecute(r ApiBeginAsyncImp
 
 type ApiGetAsyncDeleteStatusRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	id string
 	jobId string
 	isAdminMode *string
@@ -696,7 +699,7 @@ Get the status of an asynchronous content deletion job request for the given job
  @param jobId The identifier of the asynchronous job.
  @return ApiGetAsyncDeleteStatusRequest
 */
-func (a *ContentManagementApiService) GetAsyncDeleteStatus(ctx context.Context, id string, jobId string) ApiGetAsyncDeleteStatusRequest {
+func (a *ContentManagementAPIService) GetAsyncDeleteStatus(ctx context.Context, id string, jobId string) ApiGetAsyncDeleteStatusRequest {
 	return ApiGetAsyncDeleteStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -707,7 +710,7 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatus(ctx context.Context, 
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncDeleteStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *ContentManagementAPIService) GetAsyncDeleteStatusExecute(r ApiGetAsyncDeleteStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -715,7 +718,7 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetAsyncDeleteStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetAsyncDeleteStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -746,7 +749,7 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -795,7 +798,7 @@ func (a *ContentManagementApiService) GetAsyncDeleteStatusExecute(r ApiGetAsyncD
 
 type ApiGetAsyncExportResultRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	contentId string
 	jobId string
 	isAdminMode *string
@@ -821,7 +824,7 @@ Get results from content export job for the given job identifier. The results fr
  @param jobId The identifier of the asynchronous job.
  @return ApiGetAsyncExportResultRequest
 */
-func (a *ContentManagementApiService) GetAsyncExportResult(ctx context.Context, contentId string, jobId string) ApiGetAsyncExportResultRequest {
+func (a *ContentManagementAPIService) GetAsyncExportResult(ctx context.Context, contentId string, jobId string) ApiGetAsyncExportResultRequest {
 	return ApiGetAsyncExportResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -832,7 +835,7 @@ func (a *ContentManagementApiService) GetAsyncExportResult(ctx context.Context, 
 
 // Execute executes the request
 //  @return ContentSyncDefinition
-func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncExportResultRequest) (*ContentSyncDefinition, *http.Response, error) {
+func (a *ContentManagementAPIService) GetAsyncExportResultExecute(r ApiGetAsyncExportResultRequest) (*ContentSyncDefinition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -840,7 +843,7 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 		localVarReturnValue  *ContentSyncDefinition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetAsyncExportResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetAsyncExportResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -871,7 +874,7 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -920,7 +923,7 @@ func (a *ContentManagementApiService) GetAsyncExportResultExecute(r ApiGetAsyncE
 
 type ApiGetAsyncExportStatusRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	contentId string
 	jobId string
 	isAdminMode *string
@@ -946,7 +949,7 @@ Get the status of an asynchronous content export request for the given job ident
  @param jobId The identifier of the asynchronous export job.
  @return ApiGetAsyncExportStatusRequest
 */
-func (a *ContentManagementApiService) GetAsyncExportStatus(ctx context.Context, contentId string, jobId string) ApiGetAsyncExportStatusRequest {
+func (a *ContentManagementAPIService) GetAsyncExportStatus(ctx context.Context, contentId string, jobId string) ApiGetAsyncExportStatusRequest {
 	return ApiGetAsyncExportStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -957,7 +960,7 @@ func (a *ContentManagementApiService) GetAsyncExportStatus(ctx context.Context, 
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncExportStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *ContentManagementAPIService) GetAsyncExportStatusExecute(r ApiGetAsyncExportStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -965,7 +968,7 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetAsyncExportStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetAsyncExportStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -996,7 +999,7 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -1045,7 +1048,7 @@ func (a *ContentManagementApiService) GetAsyncExportStatusExecute(r ApiGetAsyncE
 
 type ApiGetAsyncImportStatusRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	folderId string
 	jobId string
 	isAdminMode *string
@@ -1071,7 +1074,7 @@ Get the status of a content import job for the given job identifier.
  @param jobId The identifier of the import request.
  @return ApiGetAsyncImportStatusRequest
 */
-func (a *ContentManagementApiService) GetAsyncImportStatus(ctx context.Context, folderId string, jobId string) ApiGetAsyncImportStatusRequest {
+func (a *ContentManagementAPIService) GetAsyncImportStatus(ctx context.Context, folderId string, jobId string) ApiGetAsyncImportStatusRequest {
 	return ApiGetAsyncImportStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1082,7 +1085,7 @@ func (a *ContentManagementApiService) GetAsyncImportStatus(ctx context.Context, 
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncImportStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *ContentManagementAPIService) GetAsyncImportStatusExecute(r ApiGetAsyncImportStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1090,7 +1093,7 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetAsyncImportStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetAsyncImportStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1121,7 +1124,7 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -1170,7 +1173,7 @@ func (a *ContentManagementApiService) GetAsyncImportStatusExecute(r ApiGetAsyncI
 
 type ApiGetItemByPathRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	path *string
 }
 
@@ -1202,7 +1205,7 @@ For items in "Admin Recommended" folder, the base path is "/Library/Admin Recomm
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetItemByPathRequest
 */
-func (a *ContentManagementApiService) GetItemByPath(ctx context.Context) ApiGetItemByPathRequest {
+func (a *ContentManagementAPIService) GetItemByPath(ctx context.Context) ApiGetItemByPathRequest {
 	return ApiGetItemByPathRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1211,7 +1214,7 @@ func (a *ContentManagementApiService) GetItemByPath(ctx context.Context) ApiGetI
 
 // Execute executes the request
 //  @return Content
-func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathRequest) (*Content, *http.Response, error) {
+func (a *ContentManagementAPIService) GetItemByPathExecute(r ApiGetItemByPathRequest) (*Content, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1219,7 +1222,7 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 		localVarReturnValue  *Content
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetItemByPath")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetItemByPath")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1233,7 +1236,7 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 		return localVarReturnValue, nil, reportError("path is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "path", r.path, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "path", r.path, "form", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1298,7 +1301,7 @@ func (a *ContentManagementApiService) GetItemByPathExecute(r ApiGetItemByPathReq
 
 type ApiGetPathByIdRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	contentId string
 }
 
@@ -1316,7 +1319,7 @@ Get full path of a content item with the given identifier.
  @param contentId Identifier of the content item to get the path.
  @return ApiGetPathByIdRequest
 */
-func (a *ContentManagementApiService) GetPathById(ctx context.Context, contentId string) ApiGetPathByIdRequest {
+func (a *ContentManagementAPIService) GetPathById(ctx context.Context, contentId string) ApiGetPathByIdRequest {
 	return ApiGetPathByIdRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1326,7 +1329,7 @@ func (a *ContentManagementApiService) GetPathById(ctx context.Context, contentId
 
 // Execute executes the request
 //  @return ContentPath
-func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest) (*ContentPath, *http.Response, error) {
+func (a *ContentManagementAPIService) GetPathByIdExecute(r ApiGetPathByIdRequest) (*ContentPath, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -1334,7 +1337,7 @@ func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest
 		localVarReturnValue  *ContentPath
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.GetPathById")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.GetPathById")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1410,7 +1413,7 @@ func (a *ContentManagementApiService) GetPathByIdExecute(r ApiGetPathByIdRequest
 
 type ApiMoveItemRequest struct {
 	ctx context.Context
-	ApiService *ContentManagementApiService
+	ApiService *ContentManagementAPIService
 	destinationFolderId *string
 	id string
 	isAdminMode *string
@@ -1442,7 +1445,7 @@ Moves an item from its current location to another folder.
  @param id Identifier of the item the user wants to move.
  @return ApiMoveItemRequest
 */
-func (a *ContentManagementApiService) MoveItem(ctx context.Context, id string) ApiMoveItemRequest {
+func (a *ContentManagementAPIService) MoveItem(ctx context.Context, id string) ApiMoveItemRequest {
 	return ApiMoveItemRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1451,14 +1454,14 @@ func (a *ContentManagementApiService) MoveItem(ctx context.Context, id string) A
 }
 
 // Execute executes the request
-func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*http.Response, error) {
+func (a *ContentManagementAPIService) MoveItemExecute(r ApiMoveItemRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementApiService.MoveItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ContentManagementAPIService.MoveItem")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1473,7 +1476,7 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 		return nil, reportError("destinationFolderId is required and must be specified")
 	}
 
-	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolderId", r.destinationFolderId, "")
+	parameterAddToHeaderOrQuery(localVarQueryParams, "destinationFolderId", r.destinationFolderId, "form", "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1492,7 +1495,7 @@ func (a *ContentManagementApiService) MoveItemExecute(r ApiMoveItemRequest) (*ht
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

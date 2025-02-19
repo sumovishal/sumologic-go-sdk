@@ -11,6 +11,9 @@ Name | Type | Description | Notes
 **CreatedAt** | **time.Time** | Creation timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format. | 
 **CreatedBy** | **string** | Identifier of the user who created the access key. | 
 **ModifiedAt** | **time.Time** | Last modification timestamp in UTC. | 
+**LastUsed** | Pointer to **time.Time** | Last used timestamp in UTC.  &lt;br&gt; **Note:** Property not in use, it is part of an upcoming feature. | [optional] 
+**Scopes** | Pointer to **[]string** | Scopes assigned to the key. ### Alerting   - adminMonitorsV2   - viewMonitorsV2   - manageMonitorsV2  ### Data Management   - manageApps   - viewCollectors   - manageCollectors   - viewConnections   - manageConnections   - contentAdmin   - viewFieldExtractionRules   - manageFieldExtractionRules               - viewFields   - manageFields   - manageBudgets   - viewLibrary   - manageLibrary   - viewPartitions   - managePartitions    - manageS3DataForwarding   - viewScheduledViews   - manageScheduledViews   - manageTokens  ### Logs   - runLogSearch  ### Metrics   - runMetricsQuery   ### Reliability Management   - viewSlos   - manageSlos  ### Security   - manageAccessKeys   - viewPersonalAccessKeys   - managePersonalAccessKeys  ### UserManagement   - viewUsersAndRoles   - manageUsersAndRoles | [optional] 
+**EffectiveScopes** | Pointer to **[]string** | Effective scopes based on the intersection of the user&#39;s RBAC capabilities and the assigned scopes. | [optional] 
 **Key** | **string** | The key for the created access key. This field will have values only in the response for an access key create request. The value will be an empty string while listing all keys. | 
 
 ## Methods
@@ -176,6 +179,81 @@ and a boolean to check if the value has been set.
 
 SetModifiedAt sets ModifiedAt field to given value.
 
+
+### GetLastUsed
+
+`func (o *AccessKey) GetLastUsed() time.Time`
+
+GetLastUsed returns the LastUsed field if non-nil, zero value otherwise.
+
+### GetLastUsedOk
+
+`func (o *AccessKey) GetLastUsedOk() (*time.Time, bool)`
+
+GetLastUsedOk returns a tuple with the LastUsed field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLastUsed
+
+`func (o *AccessKey) SetLastUsed(v time.Time)`
+
+SetLastUsed sets LastUsed field to given value.
+
+### HasLastUsed
+
+`func (o *AccessKey) HasLastUsed() bool`
+
+HasLastUsed returns a boolean if a field has been set.
+
+### GetScopes
+
+`func (o *AccessKey) GetScopes() []string`
+
+GetScopes returns the Scopes field if non-nil, zero value otherwise.
+
+### GetScopesOk
+
+`func (o *AccessKey) GetScopesOk() (*[]string, bool)`
+
+GetScopesOk returns a tuple with the Scopes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScopes
+
+`func (o *AccessKey) SetScopes(v []string)`
+
+SetScopes sets Scopes field to given value.
+
+### HasScopes
+
+`func (o *AccessKey) HasScopes() bool`
+
+HasScopes returns a boolean if a field has been set.
+
+### GetEffectiveScopes
+
+`func (o *AccessKey) GetEffectiveScopes() []string`
+
+GetEffectiveScopes returns the EffectiveScopes field if non-nil, zero value otherwise.
+
+### GetEffectiveScopesOk
+
+`func (o *AccessKey) GetEffectiveScopesOk() (*[]string, bool)`
+
+GetEffectiveScopesOk returns a tuple with the EffectiveScopes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEffectiveScopes
+
+`func (o *AccessKey) SetEffectiveScopes(v []string)`
+
+SetEffectiveScopes sets EffectiveScopes field to given value.
+
+### HasEffectiveScopes
+
+`func (o *AccessKey) HasEffectiveScopes() bool`
+
+HasEffectiveScopes returns a boolean if a field has been set.
 
 ### GetKey
 

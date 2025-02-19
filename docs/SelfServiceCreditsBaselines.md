@@ -8,6 +8,9 @@ Name | Type | Description | Notes
 **ContinuousStorage** | Pointer to **int64** | Number of days of continuous logs storage to allocate to the organization, in Days. | [optional] [default to 0]
 **Metrics** | Pointer to **int64** | The amount of Metrics usage to allocate to the organization, in DPMs (Data Points per Minute). | [optional] [default to 0]
 **TracingIngest** | Pointer to **int64** | The amount of tracing data ingest to allocate to the organization, in GBs. | [optional] [default to 0]
+**FlexIngest** | Pointer to **int64** | The amount of flex logs ingest to allocate to the organization, in GBs. | [optional] [default to 0]
+**FlexStorage** | Pointer to **int64** | Number of days of flex logs storage to allocate to the organization, in Days. | [optional] [default to 0]
+**FlexScanRatio** | Pointer to **int64** | The amount of flex logs ingest scan ratio. | [optional] [default to 0]
 
 ## Methods
 
@@ -127,6 +130,81 @@ SetTracingIngest sets TracingIngest field to given value.
 `func (o *SelfServiceCreditsBaselines) HasTracingIngest() bool`
 
 HasTracingIngest returns a boolean if a field has been set.
+
+### GetFlexIngest
+
+`func (o *SelfServiceCreditsBaselines) GetFlexIngest() int64`
+
+GetFlexIngest returns the FlexIngest field if non-nil, zero value otherwise.
+
+### GetFlexIngestOk
+
+`func (o *SelfServiceCreditsBaselines) GetFlexIngestOk() (*int64, bool)`
+
+GetFlexIngestOk returns a tuple with the FlexIngest field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFlexIngest
+
+`func (o *SelfServiceCreditsBaselines) SetFlexIngest(v int64)`
+
+SetFlexIngest sets FlexIngest field to given value.
+
+### HasFlexIngest
+
+`func (o *SelfServiceCreditsBaselines) HasFlexIngest() bool`
+
+HasFlexIngest returns a boolean if a field has been set.
+
+### GetFlexStorage
+
+`func (o *SelfServiceCreditsBaselines) GetFlexStorage() int64`
+
+GetFlexStorage returns the FlexStorage field if non-nil, zero value otherwise.
+
+### GetFlexStorageOk
+
+`func (o *SelfServiceCreditsBaselines) GetFlexStorageOk() (*int64, bool)`
+
+GetFlexStorageOk returns a tuple with the FlexStorage field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFlexStorage
+
+`func (o *SelfServiceCreditsBaselines) SetFlexStorage(v int64)`
+
+SetFlexStorage sets FlexStorage field to given value.
+
+### HasFlexStorage
+
+`func (o *SelfServiceCreditsBaselines) HasFlexStorage() bool`
+
+HasFlexStorage returns a boolean if a field has been set.
+
+### GetFlexScanRatio
+
+`func (o *SelfServiceCreditsBaselines) GetFlexScanRatio() int64`
+
+GetFlexScanRatio returns the FlexScanRatio field if non-nil, zero value otherwise.
+
+### GetFlexScanRatioOk
+
+`func (o *SelfServiceCreditsBaselines) GetFlexScanRatioOk() (*int64, bool)`
+
+GetFlexScanRatioOk returns a tuple with the FlexScanRatio field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFlexScanRatio
+
+`func (o *SelfServiceCreditsBaselines) SetFlexScanRatio(v int64)`
+
+SetFlexScanRatio sets FlexScanRatio field to given value.
+
+### HasFlexScanRatio
+
+`func (o *SelfServiceCreditsBaselines) HasFlexScanRatio() bool`
+
+HasFlexScanRatio returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

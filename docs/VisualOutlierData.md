@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AnomalyScore** | **float64** | A measure of how anomalous the data point is. | 
 **Baseline** | **float64** | The estimated value of the data point. | 
 **Unit** | **float64** | The variation in the estimated value of the data point. | 
 **LowerBound** | **float64** | The lower bound of the outlier band | 
@@ -15,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewVisualOutlierData
 
-`func NewVisualOutlierData(anomalyScore float64, baseline float64, unit float64, lowerBound float64, upperBound float64, isOutlier bool, ) *VisualOutlierData`
+`func NewVisualOutlierData(baseline float64, unit float64, lowerBound float64, upperBound float64, isOutlier bool, ) *VisualOutlierData`
 
 NewVisualOutlierData instantiates a new VisualOutlierData object
 This constructor will assign default values to properties that have it defined,
@@ -29,26 +28,6 @@ will change when the set of required properties is changed
 NewVisualOutlierDataWithDefaults instantiates a new VisualOutlierData object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetAnomalyScore
-
-`func (o *VisualOutlierData) GetAnomalyScore() float64`
-
-GetAnomalyScore returns the AnomalyScore field if non-nil, zero value otherwise.
-
-### GetAnomalyScoreOk
-
-`func (o *VisualOutlierData) GetAnomalyScoreOk() (*float64, bool)`
-
-GetAnomalyScoreOk returns a tuple with the AnomalyScore field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAnomalyScore
-
-`func (o *VisualOutlierData) SetAnomalyScore(v float64)`
-
-SetAnomalyScore sets AnomalyScore field to given value.
-
 
 ### GetBaseline
 

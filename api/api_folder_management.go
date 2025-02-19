@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+# Getting Started Welcome to the Sumo Logic API reference. You can use these APIs to interact with the Sumo Logic platform. For information on Collector and Search Job APIs, see our [API home page](https://help.sumologic.com/docs/api). ## API Endpoints Sumo Logic has several deployments in different geographic locations. You'll need to use the Sumo Logic API endpoint corresponding to your geographic location. See the table below for the different API endpoints by deployment. For details determining your account's deployment, see [API endpoints](https://help.sumologic.com/?cid=3011).    <table>     <tr>       <td> <strong>Deployment</strong> </td>       <td> <strong>Endpoint</strong> </td>     </tr>     <tr>       <td> AU </td>       <td> https://api.au.sumologic.com/api/ </td>     </tr>     <tr>       <td> CA </td>       <td> https://api.ca.sumologic.com/api/ </td>     </tr>     <tr>       <td> DE </td>       <td> https://api.de.sumologic.com/api/ </td>     </tr>     <tr>       <td> EU </td>       <td> https://api.eu.sumologic.com/api/ </td>     </tr>     <tr>       <td> FED </td>       <td> https://api.fed.sumologic.com/api/ </td>     </tr>     <tr>       <td> IN </td>       <td> https://api.in.sumologic.com/api/ </td>     </tr>     <tr>       <td> JP </td>       <td> https://api.jp.sumologic.com/api/ </td>     </tr>     <tr>       <td> KR </td>       <td> https://api.kr.sumologic.com/api/ </td>     </tr>     <tr>       <td> US1 </td>       <td> https://api.sumologic.com/api/ </td>     </tr>     <tr>       <td> US2 </td>       <td> https://api.us2.sumologic.com/api/ </td>     </tr>   </table>  ## Authentication Sumo Logic supports the following options for API authentication: - Access ID and Access Key - Base64 encoded Access ID and Access Key  See [Access Keys](https://help.sumologic.com/docs/manage/security/access-keys) to generate an Access Key. Make sure to copy the key you create, because it is displayed only once. When you have an Access ID and Access Key you can execute requests such as the following:   ```bash   curl -u \"<accessId>:<accessKey>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```  Where `deployment` is either `au`, `ca`, `de`, `eu`, `fed`, `in`, `jp`, `us1`, or `us2`. See [API endpoints](#section/API-Endpoints) for details.  If you prefer to use basic access authentication, you can do a Base64 encoding of your `<accessId>:<accessKey>` to authenticate your HTTPS request. The following is an example request, replace the placeholder `<encoded>` with your encoded Access ID and Access Key string:   ```bash   curl -H \"Authorization: Basic <encoded>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```   Refer to [API Authentication](https://help.sumologic.com/?cid=3012) for a Base64 example.  ## Status Codes Generic status codes that apply to all our APIs. See the [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) for reference.   <table>     <tr>       <td> <strong>HTTP Status Code</strong> </td>       <td> <strong>Error Code</strong> </td>       <td> <strong>Description</strong> </td>     </tr>     <tr>       <td> 301 </td>       <td> moved </td>       <td> The requested resource SHOULD be accessed through returned URI in Location Header. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---301-error---moved) for details.</td>     </tr>     <tr>       <td> 401 </td>       <td> unauthorized </td>       <td> Credential could not be verified.</td>     </tr>     <tr>       <td> 403 </td>       <td> forbidden </td>       <td> This operation is not allowed for your account type or the user doesn't have the role capability to perform this action. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---401-error---credential-could-not-be-verified) for details.</td>     </tr>     <tr>       <td> 404 </td>       <td> notfound </td>       <td> Requested resource could not be found. </td>     </tr>     <tr>       <td> 405 </td>       <td> method.unsupported </td>       <td> Unsupported method for URL. </td>     </tr>     <tr>       <td> 415 </td>       <td> contenttype.invalid </td>       <td> Invalid content type. </td>     </tr>     <tr>       <td> 429 </td>       <td> rate.limit.exceeded </td>       <td> The API request rate is higher than 4 request per second or inflight API requests are higher than 10 request per second. </td>     </tr>     <tr>       <td> 500 </td>       <td> internal.error </td>       <td> Internal server error. </td>     </tr>     <tr>       <td> 503 </td>       <td> service.unavailable </td>       <td> Service is currently unavailable. </td>     </tr>   </table>  ## Filtering Some API endpoints support filtering results on a specified set of fields. Each endpoint that supports filtering will list the fields that can be filtered. Multiple fields can be combined by using an ampersand `&` character.  For example, to get 20 users whose `firstName` is `John` and `lastName` is `Doe`:   ```bash   api.sumologic.com/v1/users?limit=20&firstName=John&lastName=Doe   ```  ## Sorting Some API endpoints support sorting fields by using the `sortBy` query parameter. The default sort order is ascending. Prefix the field with a minus sign `-` to sort in descending order.  For example, to get 20 users sorted by their `email` in descending order:   ```bash   api.sumologic.com/v1/users?limit=20&sort=-email   ```  ## Asynchronous Request Asynchronous requests do not wait for results, instead they immediately respond back with a job identifier while the job runs in the background. You can use the job identifier to track the status of the asynchronous job request. Here is a typical flow for an asynchronous request. 1. Start an asynchronous job. On success, a job identifier is returned. The job identifier uniquely identifies   your asynchronous job.  2. Once started, use the job identifier from step 1 to track the status of your asynchronous job. An asynchronous   request will typically provide an endpoint to poll for the status of asynchronous job. A successful response   from the status endpoint will have the following structure:   ```json   {       \"status\": \"Status of asynchronous request\",       \"statusMessage\": \"Optional message with additional information in case request succeeds\",       \"error\": \"Error object in case request fails\"   }   ```   The `status` field can have one of the following values:     1. `Success`: The job succeeded. The `statusMessage` field might have additional information.     2. `InProgress`: The job is still running.     3. `Failed`: The job failed. The `error` field in the response will have more information about the failure.  3. Some asynchronous APIs may provide a third endpoint (like [export result](#operation/getAsyncExportResult))   to fetch the result of an asynchronous job.   ### Example Let's say we want to export a folder with the identifier `0000000006A2E86F`. We will use the [async export](#operation/beginAsyncExport) API to export all the content under the folder with `id=0000000006A2E86F`. 1. Start an export job for the folder   ```bash   curl -X POST -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export   ```   See [authentication section](#section/Authentication) for more details about `accessId`, `accessKey`, and   `deployment`.   On success, you will get back a job identifier. In the response below, `C03E086C137F38B4` is the job identifier.   ```bash   {       \"id\": \"C03E086C137F38B4\"   }   ```  2. Now poll for the status of the asynchronous job with the [status](#operation/getAsyncExportStatus) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/status   ```   You may get a response like   ```json   {       \"status\": \"InProgress\",       \"statusMessage\": null,       \"error\": null   }   ```   It implies the job is still in progress. Keep polling till the status is either `Success` or `Failed`.  3. When the asynchronous job completes (`status != \"InProgress\"`), you can fetch the results with the   [export result](#operation/getAsyncExportResult) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/result   ```    The asynchronous job may fail (`status == \"Failed\"`). You can look at the `error` field for more details.   ```json   {       \"status\": \"Failed\",       \"errors\": {           \"code\": \"content1:too_many_items\",           \"message\": \"Too many objects: object count(1100) was greater than limit 1000\"       }   }   ```   ## Rate Limiting * A rate limit of four API requests per second (240 requests per minute) applies to all API calls from a user. * A rate limit of 10 concurrent requests to any API endpoint applies to an access key.  If a rate is exceeded, a rate limit exceeded 429 status code is returned.  ## Generating Clients You can use [OpenAPI Generator](https://openapi-generator.tech) to generate clients from the YAML file to access the API.  ### Using [NPM](https://www.npmjs.com/get-npm) 1. Install [NPM package wrapper](https://github.com/openapitools/openapi-generator-cli) globally, exposing the CLI   on the command line:   ```bash   npm install @openapitools/openapi-generator-cli -g   ```   You can see detailed instructions [here](https://openapi-generator.tech/docs/installation#npm).  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ```   ### Using [Homebrew](https://brew.sh/) 1. Install OpenAPI Generator   ```bash   brew install openapi-generator   ```  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client side code inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ``` 
 
 API version: 1.0.0
 */
@@ -20,12 +20,12 @@ import (
 )
 
 
-// FolderManagementApiService FolderManagementApi service
-type FolderManagementApiService service
+// FolderManagementAPIService FolderManagementAPI service
+type FolderManagementAPIService service
 
 type ApiCreateFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	folderDefinition *FolderDefinition
 	isAdminMode *string
 }
@@ -54,7 +54,7 @@ Creates a new folder under the given parent folder. Set the header parameter `is
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateFolderRequest
 */
-func (a *FolderManagementApiService) CreateFolder(ctx context.Context) ApiCreateFolderRequest {
+func (a *FolderManagementAPIService) CreateFolder(ctx context.Context) ApiCreateFolderRequest {
 	return ApiCreateFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -63,7 +63,7 @@ func (a *FolderManagementApiService) CreateFolder(ctx context.Context) ApiCreate
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) CreateFolderExecute(r ApiCreateFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -71,7 +71,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.CreateFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.CreateFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -103,7 +103,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.folderDefinition
@@ -154,7 +154,7 @@ func (a *FolderManagementApiService) CreateFolderExecute(r ApiCreateFolderReques
 
 type ApiGetAdminRecommendedFolderAsyncRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	isAdminMode *string
 }
 
@@ -178,7 +178,7 @@ _You get back a identifier of asynchronous job in response to this endpoint. See
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetAdminRecommendedFolderAsyncRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsync(ctx context.Context) ApiGetAdminRecommendedFolderAsyncRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsync(ctx context.Context) ApiGetAdminRecommendedFolderAsyncRequest {
 	return ApiGetAdminRecommendedFolderAsyncRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -187,7 +187,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsync(ctx context.
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r ApiGetAdminRecommendedFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncExecute(r ApiGetAdminRecommendedFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -195,7 +195,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsync")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsync")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -224,7 +224,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -273,7 +273,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncExecute(r Api
 
 type ApiGetAdminRecommendedFolderAsyncResultRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -290,7 +290,7 @@ Get result of an Admin Recommended job for the given job identifier. The result 
  @param jobId The identifier of the asynchronous Admin Recommended folder job.
  @return ApiGetAdminRecommendedFolderAsyncResultRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResult(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncResultRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncResult(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncResultRequest {
 	return ApiGetAdminRecommendedFolderAsyncResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -300,7 +300,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResult(ctx co
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute(r ApiGetAdminRecommendedFolderAsyncResultRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncResultExecute(r ApiGetAdminRecommendedFolderAsyncResultRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -308,7 +308,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsyncResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsyncResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -384,7 +384,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncResultExecute
 
 type ApiGetAdminRecommendedFolderAsyncStatusRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -401,7 +401,7 @@ Get the status of an asynchronous Admin Recommended folder job for the given job
  @param jobId The identifier of the asynchronous Admin Recommended folder job.
  @return ApiGetAdminRecommendedFolderAsyncStatusRequest
 */
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatus(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncStatusRequest {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncStatus(ctx context.Context, jobId string) ApiGetAdminRecommendedFolderAsyncStatusRequest {
 	return ApiGetAdminRecommendedFolderAsyncStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -411,7 +411,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatus(ctx co
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute(r ApiGetAdminRecommendedFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *FolderManagementAPIService) GetAdminRecommendedFolderAsyncStatusExecute(r ApiGetAdminRecommendedFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -419,7 +419,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetAdminRecommendedFolderAsyncStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetAdminRecommendedFolderAsyncStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -495,7 +495,7 @@ func (a *FolderManagementApiService) GetAdminRecommendedFolderAsyncStatusExecute
 
 type ApiGetFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	id string
 	isAdminMode *string
 }
@@ -519,7 +519,7 @@ Get a folder with the given identifier. Set the header parameter `isAdminMode` t
  @param id Identifier of the folder to fetch.
  @return ApiGetFolderRequest
 */
-func (a *FolderManagementApiService) GetFolder(ctx context.Context, id string) ApiGetFolderRequest {
+func (a *FolderManagementAPIService) GetFolder(ctx context.Context, id string) ApiGetFolderRequest {
 	return ApiGetFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -529,7 +529,7 @@ func (a *FolderManagementApiService) GetFolder(ctx context.Context, id string) A
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetFolderExecute(r ApiGetFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -537,7 +537,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -567,7 +567,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -616,7 +616,7 @@ func (a *FolderManagementApiService) GetFolderExecute(r ApiGetFolderRequest) (*F
 
 type ApiGetGlobalFolderAsyncRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	isAdminMode *string
 }
 
@@ -642,7 +642,7 @@ _You get back a identifier of asynchronous job in response to this endpoint. See
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetGlobalFolderAsyncRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsync(ctx context.Context) ApiGetGlobalFolderAsyncRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsync(ctx context.Context) ApiGetGlobalFolderAsyncRequest {
 	return ApiGetGlobalFolderAsyncRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -651,7 +651,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsync(ctx context.Context) A
 
 // Execute executes the request
 //  @return BeginAsyncJobResponse
-func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncExecute(r ApiGetGlobalFolderAsyncRequest) (*BeginAsyncJobResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -659,7 +659,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 		localVarReturnValue  *BeginAsyncJobResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsync")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsync")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -688,7 +688,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -737,7 +737,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncExecute(r ApiGetGlobalF
 
 type ApiGetGlobalFolderAsyncResultRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -754,7 +754,7 @@ Get result of a Global View job for the given job identifier. The result will be
  @param jobId The identifier of the asynchronous Global View job.
  @return ApiGetGlobalFolderAsyncResultRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsyncResult(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncResultRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncResult(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncResultRequest {
 	return ApiGetGlobalFolderAsyncResultRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -764,7 +764,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResult(ctx context.Cont
 
 // Execute executes the request
 //  @return ContentList
-func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetGlobalFolderAsyncResultRequest) (*ContentList, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncResultExecute(r ApiGetGlobalFolderAsyncResultRequest) (*ContentList, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -772,7 +772,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 		localVarReturnValue  *ContentList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsyncResult")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsyncResult")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -848,7 +848,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncResultExecute(r ApiGetG
 
 type ApiGetGlobalFolderAsyncStatusRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	jobId string
 }
 
@@ -865,7 +865,7 @@ Get the status of an asynchronous Global View job for the given job identifier. 
  @param jobId The identifier of the asynchronous Global View job.
  @return ApiGetGlobalFolderAsyncStatusRequest
 */
-func (a *FolderManagementApiService) GetGlobalFolderAsyncStatus(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncStatusRequest {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncStatus(ctx context.Context, jobId string) ApiGetGlobalFolderAsyncStatusRequest {
 	return ApiGetGlobalFolderAsyncStatusRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -875,7 +875,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatus(ctx context.Cont
 
 // Execute executes the request
 //  @return AsyncJobStatus
-func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetGlobalFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
+func (a *FolderManagementAPIService) GetGlobalFolderAsyncStatusExecute(r ApiGetGlobalFolderAsyncStatusRequest) (*AsyncJobStatus, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -883,7 +883,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 		localVarReturnValue  *AsyncJobStatus
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetGlobalFolderAsyncStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetGlobalFolderAsyncStatus")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -959,7 +959,7 @@ func (a *FolderManagementApiService) GetGlobalFolderAsyncStatusExecute(r ApiGetG
 
 type ApiGetPersonalFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 }
 
 func (r ApiGetPersonalFolderRequest) Execute() (*Folder, *http.Response, error) {
@@ -974,7 +974,7 @@ Get the personal folder of the current user.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetPersonalFolderRequest
 */
-func (a *FolderManagementApiService) GetPersonalFolder(ctx context.Context) ApiGetPersonalFolderRequest {
+func (a *FolderManagementAPIService) GetPersonalFolder(ctx context.Context) ApiGetPersonalFolderRequest {
 	return ApiGetPersonalFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -983,7 +983,7 @@ func (a *FolderManagementApiService) GetPersonalFolder(ctx context.Context) ApiG
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) GetPersonalFolderExecute(r ApiGetPersonalFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -991,7 +991,7 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.GetPersonalFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.GetPersonalFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1066,7 +1066,7 @@ func (a *FolderManagementApiService) GetPersonalFolderExecute(r ApiGetPersonalFo
 
 type ApiUpdateFolderRequest struct {
 	ctx context.Context
-	ApiService *FolderManagementApiService
+	ApiService *FolderManagementAPIService
 	id string
 	updateFolderRequest *UpdateFolderRequest
 	isAdminMode *string
@@ -1097,7 +1097,7 @@ Update an existing folder with the given identifier. Set the header parameter `i
  @param id Identifier of the folder to update.
  @return ApiUpdateFolderRequest
 */
-func (a *FolderManagementApiService) UpdateFolder(ctx context.Context, id string) ApiUpdateFolderRequest {
+func (a *FolderManagementAPIService) UpdateFolder(ctx context.Context, id string) ApiUpdateFolderRequest {
 	return ApiUpdateFolderRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1107,7 +1107,7 @@ func (a *FolderManagementApiService) UpdateFolder(ctx context.Context, id string
 
 // Execute executes the request
 //  @return Folder
-func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderRequest) (*Folder, *http.Response, error) {
+func (a *FolderManagementAPIService) UpdateFolderExecute(r ApiUpdateFolderRequest) (*Folder, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -1115,7 +1115,7 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 		localVarReturnValue  *Folder
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementApiService.UpdateFolder")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FolderManagementAPIService.UpdateFolder")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1148,7 +1148,7 @@ func (a *FolderManagementApiService) UpdateFolderExecute(r ApiUpdateFolderReques
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.isAdminMode != nil {
-		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "")
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "isAdminMode", r.isAdminMode, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.updateFolderRequest

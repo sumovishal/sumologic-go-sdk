@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Label** | **string** | A name for the access key to be created. | 
 **CorsHeaders** | Pointer to **[]string** | An array of domains for which the access key is valid. Whether Sumo Logic accepts or rejects an API request depends on whether it contains an ORIGIN header and the entries in the allowlist. Sumo Logic will reject:   1. Requests with an ORIGIN header but the allowlist is empty.   2. Requests with an ORIGIN header that don&#39;t match any entry in the allowlist. | [optional] 
+**Scopes** | Pointer to **[]string** | Scopes assigned to the key. ### Alerting   - adminMonitorsV2   - viewMonitorsV2   - manageMonitorsV2  ### Data Management   - manageApps   - viewCollectors   - manageCollectors   - viewConnections   - manageConnections   - contentAdmin   - viewFieldExtractionRules   - manageFieldExtractionRules               - viewFields   - manageFields   - manageBudgets   - viewLibrary   - manageLibrary   - viewPartitions   - managePartitions   - manageS3DataForwarding   - viewScheduledViews   - manageScheduledViews   - manageTokens  ### Logs   - runLogSearch  ### Metrics   - runMetricsQuery   ### Reliability Management   - viewSlos   - manageSlos  ### Security   - manageAccessKeys   - viewPersonalAccessKeys   - managePersonalAccessKeys  ### UserManagement   - viewUsersAndRoles   - manageUsersAndRoles | [optional] 
 
 ## Methods
 
@@ -70,6 +71,31 @@ SetCorsHeaders sets CorsHeaders field to given value.
 `func (o *AccessKeyCreateRequest) HasCorsHeaders() bool`
 
 HasCorsHeaders returns a boolean if a field has been set.
+
+### GetScopes
+
+`func (o *AccessKeyCreateRequest) GetScopes() []string`
+
+GetScopes returns the Scopes field if non-nil, zero value otherwise.
+
+### GetScopesOk
+
+`func (o *AccessKeyCreateRequest) GetScopesOk() (*[]string, bool)`
+
+GetScopesOk returns a tuple with the Scopes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScopes
+
+`func (o *AccessKeyCreateRequest) SetScopes(v []string)`
+
+SetScopes sets Scopes field to given value.
+
+### HasScopes
+
+`func (o *AccessKeyCreateRequest) HasScopes() bool`
+
+HasScopes returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

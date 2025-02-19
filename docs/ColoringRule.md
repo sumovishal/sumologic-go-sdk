@@ -7,13 +7,13 @@ Name | Type | Description | Notes
 **Scope** | **string** | Regex string to match queries to apply coloring to. | 
 **SingleSeriesAggregateFunction** | **string** | Function to aggregate one series into one single value. | 
 **MultipleSeriesAggregateFunction** | **string** | Function to aggregate the aggregate values of multiple time series into one single value. | 
-**ColorThresholds** | Pointer to [**[]ColoringThreshold**](ColoringThreshold.md) | Color thresholds. | [optional] 
+**ColorThresholds** | [**[]ColoringThreshold**](ColoringThreshold.md) | Color thresholds. | 
 
 ## Methods
 
 ### NewColoringRule
 
-`func NewColoringRule(scope string, singleSeriesAggregateFunction string, multipleSeriesAggregateFunction string, ) *ColoringRule`
+`func NewColoringRule(scope string, singleSeriesAggregateFunction string, multipleSeriesAggregateFunction string, colorThresholds []ColoringThreshold, ) *ColoringRule`
 
 NewColoringRule instantiates a new ColoringRule object
 This constructor will assign default values to properties that have it defined,
@@ -107,11 +107,6 @@ and a boolean to check if the value has been set.
 
 SetColorThresholds sets ColorThresholds field to given value.
 
-### HasColorThresholds
-
-`func (o *ColoringRule) HasColorThresholds() bool`
-
-HasColorThresholds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 **DestinationId** | Pointer to **string** | Data forwarding destination id. | [optional] 
 **Enabled** | Pointer to **bool** | True when the data forwarding rule is enabled. | [optional] 
 **FileFormat** | Pointer to **string** | Specify the path prefix to a directory in the S3 bucket and how to format the file name. | [optional] 
+**PayloadSchema** | Pointer to **string** | Schema for the payload. Default value of the payload schema is \&quot;allFields\&quot; for scheduled view, and \&quot;builtInFields\&quot; for partition. \&quot;raw\&quot; payloadSchema should be used in conjunction with \&quot;text\&quot; format and vice-versa. | [optional] 
+**Format** | Pointer to **string** | Format of the payload. Default format will be \&quot;csv\&quot;. \&quot;text\&quot; format should be used in conjunction with \&quot;raw\&quot; payloadSchema and vice-versa. | [optional] 
 
 ## Methods
 
@@ -101,6 +103,56 @@ SetFileFormat sets FileFormat field to given value.
 `func (o *UpdateDataForwardingRule) HasFileFormat() bool`
 
 HasFileFormat returns a boolean if a field has been set.
+
+### GetPayloadSchema
+
+`func (o *UpdateDataForwardingRule) GetPayloadSchema() string`
+
+GetPayloadSchema returns the PayloadSchema field if non-nil, zero value otherwise.
+
+### GetPayloadSchemaOk
+
+`func (o *UpdateDataForwardingRule) GetPayloadSchemaOk() (*string, bool)`
+
+GetPayloadSchemaOk returns a tuple with the PayloadSchema field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPayloadSchema
+
+`func (o *UpdateDataForwardingRule) SetPayloadSchema(v string)`
+
+SetPayloadSchema sets PayloadSchema field to given value.
+
+### HasPayloadSchema
+
+`func (o *UpdateDataForwardingRule) HasPayloadSchema() bool`
+
+HasPayloadSchema returns a boolean if a field has been set.
+
+### GetFormat
+
+`func (o *UpdateDataForwardingRule) GetFormat() string`
+
+GetFormat returns the Format field if non-nil, zero value otherwise.
+
+### GetFormatOk
+
+`func (o *UpdateDataForwardingRule) GetFormatOk() (*string, bool)`
+
+GetFormatOk returns a tuple with the Format field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFormat
+
+`func (o *UpdateDataForwardingRule) SetFormat(v string)`
+
+SetFormat sets Format field to given value.
+
+### HasFormat
+
+`func (o *UpdateDataForwardingRule) HasFormat() bool`
+
+HasFormat returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

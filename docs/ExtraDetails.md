@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Details** | Pointer to [**[]KeyValuePair**](KeyValuePair.md) |  | [optional] 
+**Details** | Pointer to [**[]KeyValuePair**](KeyValuePair.md) | Additional data from Sumo Logic related to the Alert. | [optional] 
 
 ## Methods
 

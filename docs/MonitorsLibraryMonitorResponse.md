@@ -6,15 +6,20 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **MonitorType** | **string** | The type of monitor. Valid values:   1. &#x60;Logs&#x60;: A logs query monitor.   2. &#x60;Metrics&#x60;: A metrics query monitor.   3. &#x60;Slo&#x60;: A SLO based monitor. Currently SLO based monitor is available in closed beta (Notify your Sumo Logic representative in order to get the early access). | 
 **EvaluationDelay** | Pointer to **string** | The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time. | [optional] [default to "0m"]
-**AlertName** | Pointer to **string** | The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified. | [optional] 
+**AlertName** | Pointer to **string** | The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified. All template variables can be used here except {{AlertName}}, {{AlertResponseURL}}, {{ResultsJson}}, and {{Playbook}}. | [optional] 
+**RunAs** | Pointer to **map[string]interface{}** |  | [optional] 
+**NotificationGroupFields** | Pointer to **[]string** | The set of fields to be used to group alert notifications for a monitor. The value of this field will be considered only when &#39;groupNotifications&#39; is true. The fields with very high cardinality such as &#x60;_blockid&#x60;, &#x60;_raw&#x60;, &#x60;_messagetime&#x60;, &#x60;_receipttime&#x60;, and &#x60;_messageid&#x60; are not allowed for Alert Grouping. | [optional] 
 **Queries** | [**[]MonitorQuery**](MonitorQuery.md) | All queries from the monitor. | 
 **Triggers** | [**[]TriggerCondition**](TriggerCondition.md) | Defines the conditions of when to send notifications. | 
+**TimeZone** | Pointer to **string** | Time zone identifier for monitor notifications. Follow the format in [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). | [optional] 
 **Notifications** | Pointer to [**[]MonitorNotification**](MonitorNotification.md) | The notifications the monitor will send when the respective trigger condition is met. | [optional] [default to []]
 **IsDisabled** | Pointer to **bool** | Whether or not the monitor is disabled. Disabled monitors will not run, and will not generate or send notifications. | [optional] [default to false]
 **Status** | Pointer to **[]string** | The current status of the monitor. Each monitor can have one or more status values. Valid values:   1. &#x60;Normal&#x60;: The monitor is running normally and does not have any currently triggered conditions.   2. &#x60;Critical&#x60;: The Critical trigger condition has been met.   3. &#x60;Warning&#x60;: The Warning trigger condition has been met.   4. &#x60;MissingData&#x60;: The MissingData trigger condition has been met.   5. &#x60;Disabled&#x60;: The monitor has been disabled and is not currently running. | [optional] 
 **GroupNotifications** | Pointer to **bool** | Whether or not to group notifications for individual items that meet the trigger condition. | [optional] [default to true]
 **Warnings** | Pointer to **map[string]string** | Monitor manager warnings | [optional] 
 **Playbook** | Pointer to **string** | Notes such as links and instruction to help you resolve alerts triggered by this monitor. {{Markdown}} supported. It will be enabled only if available for your organization. Please contact your Sumo Logic account team to learn more. | [optional] [default to ""]
+**SloId** | Pointer to **string** | Identifier of the SLO definition for the monitor. This is only applicable for SLO type monitors. | [optional] 
+**AutomatedPlaybookIds** | Pointer to **[]string** | The set of automated playbook ids for a monitor. | [optional] [default to []]
 
 ## Methods
 
@@ -105,6 +110,56 @@ SetAlertName sets AlertName field to given value.
 
 HasAlertName returns a boolean if a field has been set.
 
+### GetRunAs
+
+`func (o *MonitorsLibraryMonitorResponse) GetRunAs() map[string]interface{}`
+
+GetRunAs returns the RunAs field if non-nil, zero value otherwise.
+
+### GetRunAsOk
+
+`func (o *MonitorsLibraryMonitorResponse) GetRunAsOk() (*map[string]interface{}, bool)`
+
+GetRunAsOk returns a tuple with the RunAs field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRunAs
+
+`func (o *MonitorsLibraryMonitorResponse) SetRunAs(v map[string]interface{})`
+
+SetRunAs sets RunAs field to given value.
+
+### HasRunAs
+
+`func (o *MonitorsLibraryMonitorResponse) HasRunAs() bool`
+
+HasRunAs returns a boolean if a field has been set.
+
+### GetNotificationGroupFields
+
+`func (o *MonitorsLibraryMonitorResponse) GetNotificationGroupFields() []string`
+
+GetNotificationGroupFields returns the NotificationGroupFields field if non-nil, zero value otherwise.
+
+### GetNotificationGroupFieldsOk
+
+`func (o *MonitorsLibraryMonitorResponse) GetNotificationGroupFieldsOk() (*[]string, bool)`
+
+GetNotificationGroupFieldsOk returns a tuple with the NotificationGroupFields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNotificationGroupFields
+
+`func (o *MonitorsLibraryMonitorResponse) SetNotificationGroupFields(v []string)`
+
+SetNotificationGroupFields sets NotificationGroupFields field to given value.
+
+### HasNotificationGroupFields
+
+`func (o *MonitorsLibraryMonitorResponse) HasNotificationGroupFields() bool`
+
+HasNotificationGroupFields returns a boolean if a field has been set.
+
 ### GetQueries
 
 `func (o *MonitorsLibraryMonitorResponse) GetQueries() []MonitorQuery`
@@ -144,6 +199,31 @@ and a boolean to check if the value has been set.
 
 SetTriggers sets Triggers field to given value.
 
+
+### GetTimeZone
+
+`func (o *MonitorsLibraryMonitorResponse) GetTimeZone() string`
+
+GetTimeZone returns the TimeZone field if non-nil, zero value otherwise.
+
+### GetTimeZoneOk
+
+`func (o *MonitorsLibraryMonitorResponse) GetTimeZoneOk() (*string, bool)`
+
+GetTimeZoneOk returns a tuple with the TimeZone field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTimeZone
+
+`func (o *MonitorsLibraryMonitorResponse) SetTimeZone(v string)`
+
+SetTimeZone sets TimeZone field to given value.
+
+### HasTimeZone
+
+`func (o *MonitorsLibraryMonitorResponse) HasTimeZone() bool`
+
+HasTimeZone returns a boolean if a field has been set.
 
 ### GetNotifications
 
@@ -294,6 +374,56 @@ SetPlaybook sets Playbook field to given value.
 `func (o *MonitorsLibraryMonitorResponse) HasPlaybook() bool`
 
 HasPlaybook returns a boolean if a field has been set.
+
+### GetSloId
+
+`func (o *MonitorsLibraryMonitorResponse) GetSloId() string`
+
+GetSloId returns the SloId field if non-nil, zero value otherwise.
+
+### GetSloIdOk
+
+`func (o *MonitorsLibraryMonitorResponse) GetSloIdOk() (*string, bool)`
+
+GetSloIdOk returns a tuple with the SloId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSloId
+
+`func (o *MonitorsLibraryMonitorResponse) SetSloId(v string)`
+
+SetSloId sets SloId field to given value.
+
+### HasSloId
+
+`func (o *MonitorsLibraryMonitorResponse) HasSloId() bool`
+
+HasSloId returns a boolean if a field has been set.
+
+### GetAutomatedPlaybookIds
+
+`func (o *MonitorsLibraryMonitorResponse) GetAutomatedPlaybookIds() []string`
+
+GetAutomatedPlaybookIds returns the AutomatedPlaybookIds field if non-nil, zero value otherwise.
+
+### GetAutomatedPlaybookIdsOk
+
+`func (o *MonitorsLibraryMonitorResponse) GetAutomatedPlaybookIdsOk() (*[]string, bool)`
+
+GetAutomatedPlaybookIdsOk returns a tuple with the AutomatedPlaybookIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAutomatedPlaybookIds
+
+`func (o *MonitorsLibraryMonitorResponse) SetAutomatedPlaybookIds(v []string)`
+
+SetAutomatedPlaybookIds sets AutomatedPlaybookIds field to given value.
+
+### HasAutomatedPlaybookIds
+
+`func (o *MonitorsLibraryMonitorResponse) HasAutomatedPlaybookIds() bool`
+
+HasAutomatedPlaybookIds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

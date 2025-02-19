@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API. 
+# Getting Started Welcome to the Sumo Logic API reference. You can use these APIs to interact with the Sumo Logic platform. For information on Collector and Search Job APIs, see our [API home page](https://help.sumologic.com/docs/api). ## API Endpoints Sumo Logic has several deployments in different geographic locations. You'll need to use the Sumo Logic API endpoint corresponding to your geographic location. See the table below for the different API endpoints by deployment. For details determining your account's deployment, see [API endpoints](https://help.sumologic.com/?cid=3011).    <table>     <tr>       <td> <strong>Deployment</strong> </td>       <td> <strong>Endpoint</strong> </td>     </tr>     <tr>       <td> AU </td>       <td> https://api.au.sumologic.com/api/ </td>     </tr>     <tr>       <td> CA </td>       <td> https://api.ca.sumologic.com/api/ </td>     </tr>     <tr>       <td> DE </td>       <td> https://api.de.sumologic.com/api/ </td>     </tr>     <tr>       <td> EU </td>       <td> https://api.eu.sumologic.com/api/ </td>     </tr>     <tr>       <td> FED </td>       <td> https://api.fed.sumologic.com/api/ </td>     </tr>     <tr>       <td> IN </td>       <td> https://api.in.sumologic.com/api/ </td>     </tr>     <tr>       <td> JP </td>       <td> https://api.jp.sumologic.com/api/ </td>     </tr>     <tr>       <td> KR </td>       <td> https://api.kr.sumologic.com/api/ </td>     </tr>     <tr>       <td> US1 </td>       <td> https://api.sumologic.com/api/ </td>     </tr>     <tr>       <td> US2 </td>       <td> https://api.us2.sumologic.com/api/ </td>     </tr>   </table>  ## Authentication Sumo Logic supports the following options for API authentication: - Access ID and Access Key - Base64 encoded Access ID and Access Key  See [Access Keys](https://help.sumologic.com/docs/manage/security/access-keys) to generate an Access Key. Make sure to copy the key you create, because it is displayed only once. When you have an Access ID and Access Key you can execute requests such as the following:   ```bash   curl -u \"<accessId>:<accessKey>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```  Where `deployment` is either `au`, `ca`, `de`, `eu`, `fed`, `in`, `jp`, `us1`, or `us2`. See [API endpoints](#section/API-Endpoints) for details.  If you prefer to use basic access authentication, you can do a Base64 encoding of your `<accessId>:<accessKey>` to authenticate your HTTPS request. The following is an example request, replace the placeholder `<encoded>` with your encoded Access ID and Access Key string:   ```bash   curl -H \"Authorization: Basic <encoded>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```   Refer to [API Authentication](https://help.sumologic.com/?cid=3012) for a Base64 example.  ## Status Codes Generic status codes that apply to all our APIs. See the [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) for reference.   <table>     <tr>       <td> <strong>HTTP Status Code</strong> </td>       <td> <strong>Error Code</strong> </td>       <td> <strong>Description</strong> </td>     </tr>     <tr>       <td> 301 </td>       <td> moved </td>       <td> The requested resource SHOULD be accessed through returned URI in Location Header. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---301-error---moved) for details.</td>     </tr>     <tr>       <td> 401 </td>       <td> unauthorized </td>       <td> Credential could not be verified.</td>     </tr>     <tr>       <td> 403 </td>       <td> forbidden </td>       <td> This operation is not allowed for your account type or the user doesn't have the role capability to perform this action. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---401-error---credential-could-not-be-verified) for details.</td>     </tr>     <tr>       <td> 404 </td>       <td> notfound </td>       <td> Requested resource could not be found. </td>     </tr>     <tr>       <td> 405 </td>       <td> method.unsupported </td>       <td> Unsupported method for URL. </td>     </tr>     <tr>       <td> 415 </td>       <td> contenttype.invalid </td>       <td> Invalid content type. </td>     </tr>     <tr>       <td> 429 </td>       <td> rate.limit.exceeded </td>       <td> The API request rate is higher than 4 request per second or inflight API requests are higher than 10 request per second. </td>     </tr>     <tr>       <td> 500 </td>       <td> internal.error </td>       <td> Internal server error. </td>     </tr>     <tr>       <td> 503 </td>       <td> service.unavailable </td>       <td> Service is currently unavailable. </td>     </tr>   </table>  ## Filtering Some API endpoints support filtering results on a specified set of fields. Each endpoint that supports filtering will list the fields that can be filtered. Multiple fields can be combined by using an ampersand `&` character.  For example, to get 20 users whose `firstName` is `John` and `lastName` is `Doe`:   ```bash   api.sumologic.com/v1/users?limit=20&firstName=John&lastName=Doe   ```  ## Sorting Some API endpoints support sorting fields by using the `sortBy` query parameter. The default sort order is ascending. Prefix the field with a minus sign `-` to sort in descending order.  For example, to get 20 users sorted by their `email` in descending order:   ```bash   api.sumologic.com/v1/users?limit=20&sort=-email   ```  ## Asynchronous Request Asynchronous requests do not wait for results, instead they immediately respond back with a job identifier while the job runs in the background. You can use the job identifier to track the status of the asynchronous job request. Here is a typical flow for an asynchronous request. 1. Start an asynchronous job. On success, a job identifier is returned. The job identifier uniquely identifies   your asynchronous job.  2. Once started, use the job identifier from step 1 to track the status of your asynchronous job. An asynchronous   request will typically provide an endpoint to poll for the status of asynchronous job. A successful response   from the status endpoint will have the following structure:   ```json   {       \"status\": \"Status of asynchronous request\",       \"statusMessage\": \"Optional message with additional information in case request succeeds\",       \"error\": \"Error object in case request fails\"   }   ```   The `status` field can have one of the following values:     1. `Success`: The job succeeded. The `statusMessage` field might have additional information.     2. `InProgress`: The job is still running.     3. `Failed`: The job failed. The `error` field in the response will have more information about the failure.  3. Some asynchronous APIs may provide a third endpoint (like [export result](#operation/getAsyncExportResult))   to fetch the result of an asynchronous job.   ### Example Let's say we want to export a folder with the identifier `0000000006A2E86F`. We will use the [async export](#operation/beginAsyncExport) API to export all the content under the folder with `id=0000000006A2E86F`. 1. Start an export job for the folder   ```bash   curl -X POST -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export   ```   See [authentication section](#section/Authentication) for more details about `accessId`, `accessKey`, and   `deployment`.   On success, you will get back a job identifier. In the response below, `C03E086C137F38B4` is the job identifier.   ```bash   {       \"id\": \"C03E086C137F38B4\"   }   ```  2. Now poll for the status of the asynchronous job with the [status](#operation/getAsyncExportStatus) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/status   ```   You may get a response like   ```json   {       \"status\": \"InProgress\",       \"statusMessage\": null,       \"error\": null   }   ```   It implies the job is still in progress. Keep polling till the status is either `Success` or `Failed`.  3. When the asynchronous job completes (`status != \"InProgress\"`), you can fetch the results with the   [export result](#operation/getAsyncExportResult) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/result   ```    The asynchronous job may fail (`status == \"Failed\"`). You can look at the `error` field for more details.   ```json   {       \"status\": \"Failed\",       \"errors\": {           \"code\": \"content1:too_many_items\",           \"message\": \"Too many objects: object count(1100) was greater than limit 1000\"       }   }   ```   ## Rate Limiting * A rate limit of four API requests per second (240 requests per minute) applies to all API calls from a user. * A rate limit of 10 concurrent requests to any API endpoint applies to an access key.  If a rate is exceeded, a rate limit exceeded 429 status code is returned.  ## Generating Clients You can use [OpenAPI Generator](https://openapi-generator.tech) to generate clients from the YAML file to access the API.  ### Using [NPM](https://www.npmjs.com/get-npm) 1. Install [NPM package wrapper](https://github.com/openapitools/openapi-generator-cli) globally, exposing the CLI   on the command line:   ```bash   npm install @openapitools/openapi-generator-cli -g   ```   You can see detailed instructions [here](https://openapi-generator.tech/docs/installation#npm).  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ```   ### Using [Homebrew](https://brew.sh/) 1. Install OpenAPI Generator   ```bash   brew install openapi-generator   ```  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client side code inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ``` 
 
 API version: 1.0.0
 */
@@ -20,12 +20,12 @@ import (
 )
 
 
-// PartitionManagementApiService PartitionManagementApi service
-type PartitionManagementApiService service
+// PartitionManagementAPIService PartitionManagementAPI service
+type PartitionManagementAPIService service
 
 type ApiCancelRetentionUpdateRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -42,7 +42,7 @@ Cancel update to retention of a partition for which retention was updated previo
  @param id Identifier of the partition to cancel the retention update for.
  @return ApiCancelRetentionUpdateRequest
 */
-func (a *PartitionManagementApiService) CancelRetentionUpdate(ctx context.Context, id string) ApiCancelRetentionUpdateRequest {
+func (a *PartitionManagementAPIService) CancelRetentionUpdate(ctx context.Context, id string) ApiCancelRetentionUpdateRequest {
 	return ApiCancelRetentionUpdateRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -51,14 +51,14 @@ func (a *PartitionManagementApiService) CancelRetentionUpdate(ctx context.Contex
 }
 
 // Execute executes the request
-func (a *PartitionManagementApiService) CancelRetentionUpdateExecute(r ApiCancelRetentionUpdateRequest) (*http.Response, error) {
+func (a *PartitionManagementAPIService) CancelRetentionUpdateExecute(r ApiCancelRetentionUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.CancelRetentionUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.CancelRetentionUpdate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -125,7 +125,7 @@ func (a *PartitionManagementApiService) CancelRetentionUpdateExecute(r ApiCancel
 
 type ApiCreatePartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	createPartitionDefinition *CreatePartitionDefinition
 }
 
@@ -147,7 +147,7 @@ Create a new partition.
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreatePartitionRequest
 */
-func (a *PartitionManagementApiService) CreatePartition(ctx context.Context) ApiCreatePartitionRequest {
+func (a *PartitionManagementAPIService) CreatePartition(ctx context.Context) ApiCreatePartitionRequest {
 	return ApiCreatePartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -156,7 +156,7 @@ func (a *PartitionManagementApiService) CreatePartition(ctx context.Context) Api
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) CreatePartitionExecute(r ApiCreatePartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -164,7 +164,7 @@ func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartit
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.CreatePartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.CreatePartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -244,7 +244,7 @@ func (a *PartitionManagementApiService) CreatePartitionExecute(r ApiCreatePartit
 
 type ApiDecommissionPartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -261,7 +261,7 @@ Decommission a partition with the given identifier from the organization.
  @param id Identifier of the partition to decommission.
  @return ApiDecommissionPartitionRequest
 */
-func (a *PartitionManagementApiService) DecommissionPartition(ctx context.Context, id string) ApiDecommissionPartitionRequest {
+func (a *PartitionManagementAPIService) DecommissionPartition(ctx context.Context, id string) ApiDecommissionPartitionRequest {
 	return ApiDecommissionPartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -270,14 +270,14 @@ func (a *PartitionManagementApiService) DecommissionPartition(ctx context.Contex
 }
 
 // Execute executes the request
-func (a *PartitionManagementApiService) DecommissionPartitionExecute(r ApiDecommissionPartitionRequest) (*http.Response, error) {
+func (a *PartitionManagementAPIService) DecommissionPartitionExecute(r ApiDecommissionPartitionRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.DecommissionPartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.DecommissionPartition")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -344,7 +344,7 @@ func (a *PartitionManagementApiService) DecommissionPartitionExecute(r ApiDecomm
 
 type ApiGetPartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 }
 
@@ -361,7 +361,7 @@ Get a partition with the given identifier from the organization.
  @param id Identifier of partition to return.
  @return ApiGetPartitionRequest
 */
-func (a *PartitionManagementApiService) GetPartition(ctx context.Context, id string) ApiGetPartitionRequest {
+func (a *PartitionManagementAPIService) GetPartition(ctx context.Context, id string) ApiGetPartitionRequest {
 	return ApiGetPartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -371,7 +371,7 @@ func (a *PartitionManagementApiService) GetPartition(ctx context.Context, id str
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) GetPartitionExecute(r ApiGetPartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -379,7 +379,7 @@ func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionReq
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.GetPartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.GetPartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -453,9 +453,116 @@ func (a *PartitionManagementApiService) GetPartitionExecute(r ApiGetPartitionReq
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetPartitionsQuotaRequest struct {
+	ctx context.Context
+	ApiService *PartitionManagementAPIService
+}
+
+func (r ApiGetPartitionsQuotaRequest) Execute() (*PartitionsQuotaUsage, *http.Response, error) {
+	return r.ApiService.GetPartitionsQuotaExecute(r)
+}
+
+/*
+GetPartitionsQuota Provides information about partitions quota.
+
+Every customer can use a limited number of partitions. This endpoint allows learning about these limitations and remaining quota.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetPartitionsQuotaRequest
+*/
+func (a *PartitionManagementAPIService) GetPartitionsQuota(ctx context.Context) ApiGetPartitionsQuotaRequest {
+	return ApiGetPartitionsQuotaRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PartitionsQuotaUsage
+func (a *PartitionManagementAPIService) GetPartitionsQuotaExecute(r ApiGetPartitionsQuotaRequest) (*PartitionsQuotaUsage, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PartitionsQuotaUsage
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.GetPartitionsQuota")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/partitions/quota"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiListPartitionsRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	limit *int32
 	token *string
 	viewTypes *[]string
@@ -491,7 +598,7 @@ Get a list of all partitions in the organization. The response is paginated with
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListPartitionsRequest
 */
-func (a *PartitionManagementApiService) ListPartitions(ctx context.Context) ApiListPartitionsRequest {
+func (a *PartitionManagementAPIService) ListPartitions(ctx context.Context) ApiListPartitionsRequest {
 	return ApiListPartitionsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -500,7 +607,7 @@ func (a *PartitionManagementApiService) ListPartitions(ctx context.Context) ApiL
 
 // Execute executes the request
 //  @return ListPartitionsResponse
-func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartitionsRequest) (*ListPartitionsResponse, *http.Response, error) {
+func (a *PartitionManagementAPIService) ListPartitionsExecute(r ApiListPartitionsRequest) (*ListPartitionsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -508,7 +615,7 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 		localVarReturnValue  *ListPartitionsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.ListPartitions")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.ListPartitions")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -520,13 +627,16 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 	localVarFormParams := url.Values{}
 
 	if r.limit != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 100
+		r.limit = &defaultValue
 	}
 	if r.token != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "token", r.token, "form", "")
 	}
 	if r.viewTypes != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "viewTypes", r.viewTypes, "csv")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "viewTypes", r.viewTypes, "form", "csv")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -592,7 +702,7 @@ func (a *PartitionManagementApiService) ListPartitionsExecute(r ApiListPartition
 
 type ApiUpdatePartitionRequest struct {
 	ctx context.Context
-	ApiService *PartitionManagementApiService
+	ApiService *PartitionManagementAPIService
 	id string
 	updatePartitionDefinition *UpdatePartitionDefinition
 }
@@ -616,7 +726,7 @@ Update an existing partition in the organization.
  @param id Identifier of the partition to update.
  @return ApiUpdatePartitionRequest
 */
-func (a *PartitionManagementApiService) UpdatePartition(ctx context.Context, id string) ApiUpdatePartitionRequest {
+func (a *PartitionManagementAPIService) UpdatePartition(ctx context.Context, id string) ApiUpdatePartitionRequest {
 	return ApiUpdatePartitionRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -626,7 +736,7 @@ func (a *PartitionManagementApiService) UpdatePartition(ctx context.Context, id 
 
 // Execute executes the request
 //  @return Partition
-func (a *PartitionManagementApiService) UpdatePartitionExecute(r ApiUpdatePartitionRequest) (*Partition, *http.Response, error) {
+func (a *PartitionManagementAPIService) UpdatePartitionExecute(r ApiUpdatePartitionRequest) (*Partition, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
@@ -634,7 +744,7 @@ func (a *PartitionManagementApiService) UpdatePartitionExecute(r ApiUpdatePartit
 		localVarReturnValue  *Partition
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementApiService.UpdatePartition")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PartitionManagementAPIService.UpdatePartition")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

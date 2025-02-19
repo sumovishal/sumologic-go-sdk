@@ -1,7 +1,7 @@
 /*
 Sumo Logic API
 
-Go client for Sumo Logic API.
+# Getting Started Welcome to the Sumo Logic API reference. You can use these APIs to interact with the Sumo Logic platform. For information on Collector and Search Job APIs, see our [API home page](https://help.sumologic.com/docs/api). ## API Endpoints Sumo Logic has several deployments in different geographic locations. You'll need to use the Sumo Logic API endpoint corresponding to your geographic location. See the table below for the different API endpoints by deployment. For details determining your account's deployment, see [API endpoints](https://help.sumologic.com/?cid=3011).    <table>     <tr>       <td> <strong>Deployment</strong> </td>       <td> <strong>Endpoint</strong> </td>     </tr>     <tr>       <td> AU </td>       <td> https://api.au.sumologic.com/api/ </td>     </tr>     <tr>       <td> CA </td>       <td> https://api.ca.sumologic.com/api/ </td>     </tr>     <tr>       <td> DE </td>       <td> https://api.de.sumologic.com/api/ </td>     </tr>     <tr>       <td> EU </td>       <td> https://api.eu.sumologic.com/api/ </td>     </tr>     <tr>       <td> FED </td>       <td> https://api.fed.sumologic.com/api/ </td>     </tr>     <tr>       <td> IN </td>       <td> https://api.in.sumologic.com/api/ </td>     </tr>     <tr>       <td> JP </td>       <td> https://api.jp.sumologic.com/api/ </td>     </tr>     <tr>       <td> KR </td>       <td> https://api.kr.sumologic.com/api/ </td>     </tr>     <tr>       <td> US1 </td>       <td> https://api.sumologic.com/api/ </td>     </tr>     <tr>       <td> US2 </td>       <td> https://api.us2.sumologic.com/api/ </td>     </tr>   </table>  ## Authentication Sumo Logic supports the following options for API authentication: - Access ID and Access Key - Base64 encoded Access ID and Access Key  See [Access Keys](https://help.sumologic.com/docs/manage/security/access-keys) to generate an Access Key. Make sure to copy the key you create, because it is displayed only once. When you have an Access ID and Access Key you can execute requests such as the following:   ```bash   curl -u \"<accessId>:<accessKey>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```  Where `deployment` is either `au`, `ca`, `de`, `eu`, `fed`, `in`, `jp`, `us1`, or `us2`. See [API endpoints](#section/API-Endpoints) for details.  If you prefer to use basic access authentication, you can do a Base64 encoding of your `<accessId>:<accessKey>` to authenticate your HTTPS request. The following is an example request, replace the placeholder `<encoded>` with your encoded Access ID and Access Key string:   ```bash   curl -H \"Authorization: Basic <encoded>\" -X GET https://api.<deployment>.sumologic.com/api/v1/users   ```   Refer to [API Authentication](https://help.sumologic.com/?cid=3012) for a Base64 example.  ## Status Codes Generic status codes that apply to all our APIs. See the [HTTP status code registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml) for reference.   <table>     <tr>       <td> <strong>HTTP Status Code</strong> </td>       <td> <strong>Error Code</strong> </td>       <td> <strong>Description</strong> </td>     </tr>     <tr>       <td> 301 </td>       <td> moved </td>       <td> The requested resource SHOULD be accessed through returned URI in Location Header. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---301-error---moved) for details.</td>     </tr>     <tr>       <td> 401 </td>       <td> unauthorized </td>       <td> Credential could not be verified.</td>     </tr>     <tr>       <td> 403 </td>       <td> forbidden </td>       <td> This operation is not allowed for your account type or the user doesn't have the role capability to perform this action. See [troubleshooting](https://help.sumologic.com/docs/api/troubleshooting/#api---401-error---credential-could-not-be-verified) for details.</td>     </tr>     <tr>       <td> 404 </td>       <td> notfound </td>       <td> Requested resource could not be found. </td>     </tr>     <tr>       <td> 405 </td>       <td> method.unsupported </td>       <td> Unsupported method for URL. </td>     </tr>     <tr>       <td> 415 </td>       <td> contenttype.invalid </td>       <td> Invalid content type. </td>     </tr>     <tr>       <td> 429 </td>       <td> rate.limit.exceeded </td>       <td> The API request rate is higher than 4 request per second or inflight API requests are higher than 10 request per second. </td>     </tr>     <tr>       <td> 500 </td>       <td> internal.error </td>       <td> Internal server error. </td>     </tr>     <tr>       <td> 503 </td>       <td> service.unavailable </td>       <td> Service is currently unavailable. </td>     </tr>   </table>  ## Filtering Some API endpoints support filtering results on a specified set of fields. Each endpoint that supports filtering will list the fields that can be filtered. Multiple fields can be combined by using an ampersand `&` character.  For example, to get 20 users whose `firstName` is `John` and `lastName` is `Doe`:   ```bash   api.sumologic.com/v1/users?limit=20&firstName=John&lastName=Doe   ```  ## Sorting Some API endpoints support sorting fields by using the `sortBy` query parameter. The default sort order is ascending. Prefix the field with a minus sign `-` to sort in descending order.  For example, to get 20 users sorted by their `email` in descending order:   ```bash   api.sumologic.com/v1/users?limit=20&sort=-email   ```  ## Asynchronous Request Asynchronous requests do not wait for results, instead they immediately respond back with a job identifier while the job runs in the background. You can use the job identifier to track the status of the asynchronous job request. Here is a typical flow for an asynchronous request. 1. Start an asynchronous job. On success, a job identifier is returned. The job identifier uniquely identifies   your asynchronous job.  2. Once started, use the job identifier from step 1 to track the status of your asynchronous job. An asynchronous   request will typically provide an endpoint to poll for the status of asynchronous job. A successful response   from the status endpoint will have the following structure:   ```json   {       \"status\": \"Status of asynchronous request\",       \"statusMessage\": \"Optional message with additional information in case request succeeds\",       \"error\": \"Error object in case request fails\"   }   ```   The `status` field can have one of the following values:     1. `Success`: The job succeeded. The `statusMessage` field might have additional information.     2. `InProgress`: The job is still running.     3. `Failed`: The job failed. The `error` field in the response will have more information about the failure.  3. Some asynchronous APIs may provide a third endpoint (like [export result](#operation/getAsyncExportResult))   to fetch the result of an asynchronous job.   ### Example Let's say we want to export a folder with the identifier `0000000006A2E86F`. We will use the [async export](#operation/beginAsyncExport) API to export all the content under the folder with `id=0000000006A2E86F`. 1. Start an export job for the folder   ```bash   curl -X POST -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export   ```   See [authentication section](#section/Authentication) for more details about `accessId`, `accessKey`, and   `deployment`.   On success, you will get back a job identifier. In the response below, `C03E086C137F38B4` is the job identifier.   ```bash   {       \"id\": \"C03E086C137F38B4\"   }   ```  2. Now poll for the status of the asynchronous job with the [status](#operation/getAsyncExportStatus) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/status   ```   You may get a response like   ```json   {       \"status\": \"InProgress\",       \"statusMessage\": null,       \"error\": null   }   ```   It implies the job is still in progress. Keep polling till the status is either `Success` or `Failed`.  3. When the asynchronous job completes (`status != \"InProgress\"`), you can fetch the results with the   [export result](#operation/getAsyncExportResult) endpoint.   ```bash   curl -X GET -u \"<accessId>:<accessKey>\" https://api.<deployment>.sumologic.com/api/v2/content/0000000006A2E86F/export/C03E086C137F38B4/result   ```    The asynchronous job may fail (`status == \"Failed\"`). You can look at the `error` field for more details.   ```json   {       \"status\": \"Failed\",       \"errors\": {           \"code\": \"content1:too_many_items\",           \"message\": \"Too many objects: object count(1100) was greater than limit 1000\"       }   }   ```   ## Rate Limiting * A rate limit of four API requests per second (240 requests per minute) applies to all API calls from a user. * A rate limit of 10 concurrent requests to any API endpoint applies to an access key.  If a rate is exceeded, a rate limit exceeded 429 status code is returned.  ## Generating Clients You can use [OpenAPI Generator](https://openapi-generator.tech) to generate clients from the YAML file to access the API.  ### Using [NPM](https://www.npmjs.com/get-npm) 1. Install [NPM package wrapper](https://github.com/openapitools/openapi-generator-cli) globally, exposing the CLI   on the command line:   ```bash   npm install @openapitools/openapi-generator-cli -g   ```   You can see detailed instructions [here](https://openapi-generator.tech/docs/installation#npm).  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ```   ### Using [Homebrew](https://brew.sh/) 1. Install OpenAPI Generator   ```bash   brew install openapi-generator   ```  2. Download the [YAML file](/docs/sumologic-api.yaml) and save it locally. Let's say the file is saved as `sumologic-api.yaml`. 3. Use the following command to generate `python` client side code inside the `sumo/client/python` directory:   ```bash   openapi-generator generate -i sumologic-api.yaml -g python -o sumo/client/python   ``` 
 
 API version: 1.0.0
 */
@@ -35,8 +35,8 @@ import (
 )
 
 var (
-	jsonCheck = regexp.MustCompile(`(?i:(?:application|text)/(?:vnd\.[^;]+\+)?json)`)
-	xmlCheck  = regexp.MustCompile(`(?i:(?:application|text)/xml)`)
+	JsonCheck       = regexp.MustCompile(`(?i:(?:application|text)/(?:[^;]+\+)?json)`)
+	XmlCheck        = regexp.MustCompile(`(?i:(?:application|text)/(?:[^;]+\+)?xml)`)
 	queryParamSplit = regexp.MustCompile(`(^|&)([^&]+)`)
 	queryDescape    = strings.NewReplacer( "%5B", "[", "%5D", "]" )
 )
@@ -49,81 +49,101 @@ type APIClient struct {
 
 	// API Services
 
-	AccessKeyManagementApi *AccessKeyManagementApiService
+	AccessKeyManagementAPI *AccessKeyManagementAPIService
 
-	AccountManagementApi *AccountManagementApiService
+	AccountManagementAPI *AccountManagementAPIService
 
-	AppManagementApi *AppManagementApiService
+	AppManagementAPI *AppManagementAPIService
 
-	ArchiveManagementApi *ArchiveManagementApiService
+	AppManagementV2API *AppManagementV2APIService
 
-	ConnectionManagementApi *ConnectionManagementApiService
+	ArchiveManagementAPI *ArchiveManagementAPIService
 
-	ContentManagementApi *ContentManagementApiService
+	BudgetManagementAPI *BudgetManagementAPIService
 
-	ContentPermissionsApi *ContentPermissionsApiService
+	ConnectionManagementAPI *ConnectionManagementAPIService
 
-	DashboardManagementApi *DashboardManagementApiService
+	ContentManagementAPI *ContentManagementAPIService
 
-	DynamicParsingRuleManagementApi *DynamicParsingRuleManagementApiService
+	ContentPermissionsAPI *ContentPermissionsAPIService
 
-	ExtractionRuleManagementApi *ExtractionRuleManagementApiService
+	DashboardManagementAPI *DashboardManagementAPIService
 
-	FieldManagementV1Api *FieldManagementV1ApiService
+	DynamicParsingRuleManagementAPI *DynamicParsingRuleManagementAPIService
 
-	FolderManagementApi *FolderManagementApiService
+	ExtractionRuleManagementAPI *ExtractionRuleManagementAPIService
 
-	HealthEventsApi *HealthEventsApiService
+	FieldManagementV1API *FieldManagementV1APIService
 
-	IngestBudgetManagementV1Api *IngestBudgetManagementV1ApiService
+	FolderManagementAPI *FolderManagementAPIService
 
-	IngestBudgetManagementV2Api *IngestBudgetManagementV2ApiService
+	HealthEventsAPI *HealthEventsAPIService
 
-	LogSearchesEstimatedUsageApi *LogSearchesEstimatedUsageApiService
+	IngestBudgetManagementV1API *IngestBudgetManagementV1APIService
 
-	LogSearchesManagementApi *LogSearchesManagementApiService
+	IngestBudgetManagementV2API *IngestBudgetManagementV2APIService
 
-	LogsDataForwardingManagementApi *LogsDataForwardingManagementApiService
+	LogSearchesEstimatedUsageAPI *LogSearchesEstimatedUsageAPIService
 
-	LookupManagementApi *LookupManagementApiService
+	LogSearchesManagementAPI *LogSearchesManagementAPIService
 
-	MetricsQueryApi *MetricsQueryApiService
+	LogsDataForwardingManagementAPI *LogsDataForwardingManagementAPIService
 
-	MetricsSearchesManagementApi *MetricsSearchesManagementApiService
+	LookupManagementAPI *LookupManagementAPIService
 
-	MonitorsLibraryManagementApi *MonitorsLibraryManagementApiService
+	MetricsQueryAPI *MetricsQueryAPIService
 
-	MutingSchedulesLibraryManagementApi *MutingSchedulesLibraryManagementApiService
+	MetricsSearchesManagementAPI *MetricsSearchesManagementAPIService
 
-	PartitionManagementApi *PartitionManagementApiService
+	MetricsSearchesManagementV2API *MetricsSearchesManagementV2APIService
 
-	PasswordPolicyApi *PasswordPolicyApiService
+	MonitorsLibraryManagementAPI *MonitorsLibraryManagementAPIService
 
-	PoliciesManagementApi *PoliciesManagementApiService
+	MutingSchedulesLibraryManagementAPI *MutingSchedulesLibraryManagementAPIService
 
-	RoleManagementApi *RoleManagementApiService
+	OrgsManagementAPI *OrgsManagementAPIService
 
-	SamlConfigurationManagementApi *SamlConfigurationManagementApiService
+	OtCollectorManagementExternalAPI *OtCollectorManagementExternalAPIService
 
-	ScheduledViewManagementApi *ScheduledViewManagementApiService
+	ParsersLibraryManagementAPI *ParsersLibraryManagementAPIService
 
-	ServiceAllowlistManagementApi *ServiceAllowlistManagementApiService
+	PartitionManagementAPI *PartitionManagementAPIService
 
-	ServiceMapApi *ServiceMapApiService
+	PasswordPolicyAPI *PasswordPolicyAPIService
 
-	SlosLibraryManagementApi *SlosLibraryManagementApiService
+	PoliciesManagementAPI *PoliciesManagementAPIService
 
-	SpanAnalyticsApi *SpanAnalyticsApiService
+	RoleManagementAPI *RoleManagementAPIService
 
-	ThreatIntelIngestApi *ThreatIntelIngestApiService
+	RoleManagementV2API *RoleManagementV2APIService
 
-	TokensLibraryManagementApi *TokensLibraryManagementApiService
+	SamlConfigurationManagementAPI *SamlConfigurationManagementAPIService
 
-	TracesApi *TracesApiService
+	ScheduledViewManagementAPI *ScheduledViewManagementAPIService
 
-	TransformationRuleManagementApi *TransformationRuleManagementApiService
+	SchemaBaseManagementAPI *SchemaBaseManagementAPIService
 
-	UserManagementApi *UserManagementApiService
+	ServiceAllowlistManagementAPI *ServiceAllowlistManagementAPIService
+
+	ServiceMapAPI *ServiceMapAPIService
+
+	SlosLibraryManagementAPI *SlosLibraryManagementAPIService
+
+	SourceTemplateManagementExternalAPI *SourceTemplateManagementExternalAPIService
+
+	SpanAnalyticsAPI *SpanAnalyticsAPIService
+
+	ThreatIntelIngestAPI *ThreatIntelIngestAPIService
+
+	ThreatIntelIngestProducerAPI *ThreatIntelIngestProducerAPIService
+
+	TokensLibraryManagementAPI *TokensLibraryManagementAPIService
+
+	TracesAPI *TracesAPIService
+
+	TransformationRuleManagementAPI *TransformationRuleManagementAPIService
+
+	UserManagementAPI *UserManagementAPIService
 }
 
 type service struct {
@@ -142,44 +162,54 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.AccessKeyManagementApi = (*AccessKeyManagementApiService)(&c.common)
-	c.AccountManagementApi = (*AccountManagementApiService)(&c.common)
-	c.AppManagementApi = (*AppManagementApiService)(&c.common)
-	c.ArchiveManagementApi = (*ArchiveManagementApiService)(&c.common)
-	c.ConnectionManagementApi = (*ConnectionManagementApiService)(&c.common)
-	c.ContentManagementApi = (*ContentManagementApiService)(&c.common)
-	c.ContentPermissionsApi = (*ContentPermissionsApiService)(&c.common)
-	c.DashboardManagementApi = (*DashboardManagementApiService)(&c.common)
-	c.DynamicParsingRuleManagementApi = (*DynamicParsingRuleManagementApiService)(&c.common)
-	c.ExtractionRuleManagementApi = (*ExtractionRuleManagementApiService)(&c.common)
-	c.FieldManagementV1Api = (*FieldManagementV1ApiService)(&c.common)
-	c.FolderManagementApi = (*FolderManagementApiService)(&c.common)
-	c.HealthEventsApi = (*HealthEventsApiService)(&c.common)
-	c.IngestBudgetManagementV1Api = (*IngestBudgetManagementV1ApiService)(&c.common)
-	c.IngestBudgetManagementV2Api = (*IngestBudgetManagementV2ApiService)(&c.common)
-	c.LogSearchesEstimatedUsageApi = (*LogSearchesEstimatedUsageApiService)(&c.common)
-	c.LogSearchesManagementApi = (*LogSearchesManagementApiService)(&c.common)
-	c.LogsDataForwardingManagementApi = (*LogsDataForwardingManagementApiService)(&c.common)
-	c.LookupManagementApi = (*LookupManagementApiService)(&c.common)
-	c.MetricsQueryApi = (*MetricsQueryApiService)(&c.common)
-	c.MetricsSearchesManagementApi = (*MetricsSearchesManagementApiService)(&c.common)
-	c.MonitorsLibraryManagementApi = (*MonitorsLibraryManagementApiService)(&c.common)
-	c.MutingSchedulesLibraryManagementApi = (*MutingSchedulesLibraryManagementApiService)(&c.common)
-	c.PartitionManagementApi = (*PartitionManagementApiService)(&c.common)
-	c.PasswordPolicyApi = (*PasswordPolicyApiService)(&c.common)
-	c.PoliciesManagementApi = (*PoliciesManagementApiService)(&c.common)
-	c.RoleManagementApi = (*RoleManagementApiService)(&c.common)
-	c.SamlConfigurationManagementApi = (*SamlConfigurationManagementApiService)(&c.common)
-	c.ScheduledViewManagementApi = (*ScheduledViewManagementApiService)(&c.common)
-	c.ServiceAllowlistManagementApi = (*ServiceAllowlistManagementApiService)(&c.common)
-	c.ServiceMapApi = (*ServiceMapApiService)(&c.common)
-	c.SlosLibraryManagementApi = (*SlosLibraryManagementApiService)(&c.common)
-	c.SpanAnalyticsApi = (*SpanAnalyticsApiService)(&c.common)
-	c.ThreatIntelIngestApi = (*ThreatIntelIngestApiService)(&c.common)
-	c.TokensLibraryManagementApi = (*TokensLibraryManagementApiService)(&c.common)
-	c.TracesApi = (*TracesApiService)(&c.common)
-	c.TransformationRuleManagementApi = (*TransformationRuleManagementApiService)(&c.common)
-	c.UserManagementApi = (*UserManagementApiService)(&c.common)
+	c.AccessKeyManagementAPI = (*AccessKeyManagementAPIService)(&c.common)
+	c.AccountManagementAPI = (*AccountManagementAPIService)(&c.common)
+	c.AppManagementAPI = (*AppManagementAPIService)(&c.common)
+	c.AppManagementV2API = (*AppManagementV2APIService)(&c.common)
+	c.ArchiveManagementAPI = (*ArchiveManagementAPIService)(&c.common)
+	c.BudgetManagementAPI = (*BudgetManagementAPIService)(&c.common)
+	c.ConnectionManagementAPI = (*ConnectionManagementAPIService)(&c.common)
+	c.ContentManagementAPI = (*ContentManagementAPIService)(&c.common)
+	c.ContentPermissionsAPI = (*ContentPermissionsAPIService)(&c.common)
+	c.DashboardManagementAPI = (*DashboardManagementAPIService)(&c.common)
+	c.DynamicParsingRuleManagementAPI = (*DynamicParsingRuleManagementAPIService)(&c.common)
+	c.ExtractionRuleManagementAPI = (*ExtractionRuleManagementAPIService)(&c.common)
+	c.FieldManagementV1API = (*FieldManagementV1APIService)(&c.common)
+	c.FolderManagementAPI = (*FolderManagementAPIService)(&c.common)
+	c.HealthEventsAPI = (*HealthEventsAPIService)(&c.common)
+	c.IngestBudgetManagementV1API = (*IngestBudgetManagementV1APIService)(&c.common)
+	c.IngestBudgetManagementV2API = (*IngestBudgetManagementV2APIService)(&c.common)
+	c.LogSearchesEstimatedUsageAPI = (*LogSearchesEstimatedUsageAPIService)(&c.common)
+	c.LogSearchesManagementAPI = (*LogSearchesManagementAPIService)(&c.common)
+	c.LogsDataForwardingManagementAPI = (*LogsDataForwardingManagementAPIService)(&c.common)
+	c.LookupManagementAPI = (*LookupManagementAPIService)(&c.common)
+	c.MetricsQueryAPI = (*MetricsQueryAPIService)(&c.common)
+	c.MetricsSearchesManagementAPI = (*MetricsSearchesManagementAPIService)(&c.common)
+	c.MetricsSearchesManagementV2API = (*MetricsSearchesManagementV2APIService)(&c.common)
+	c.MonitorsLibraryManagementAPI = (*MonitorsLibraryManagementAPIService)(&c.common)
+	c.MutingSchedulesLibraryManagementAPI = (*MutingSchedulesLibraryManagementAPIService)(&c.common)
+	c.OrgsManagementAPI = (*OrgsManagementAPIService)(&c.common)
+	c.OtCollectorManagementExternalAPI = (*OtCollectorManagementExternalAPIService)(&c.common)
+	c.ParsersLibraryManagementAPI = (*ParsersLibraryManagementAPIService)(&c.common)
+	c.PartitionManagementAPI = (*PartitionManagementAPIService)(&c.common)
+	c.PasswordPolicyAPI = (*PasswordPolicyAPIService)(&c.common)
+	c.PoliciesManagementAPI = (*PoliciesManagementAPIService)(&c.common)
+	c.RoleManagementAPI = (*RoleManagementAPIService)(&c.common)
+	c.RoleManagementV2API = (*RoleManagementV2APIService)(&c.common)
+	c.SamlConfigurationManagementAPI = (*SamlConfigurationManagementAPIService)(&c.common)
+	c.ScheduledViewManagementAPI = (*ScheduledViewManagementAPIService)(&c.common)
+	c.SchemaBaseManagementAPI = (*SchemaBaseManagementAPIService)(&c.common)
+	c.ServiceAllowlistManagementAPI = (*ServiceAllowlistManagementAPIService)(&c.common)
+	c.ServiceMapAPI = (*ServiceMapAPIService)(&c.common)
+	c.SlosLibraryManagementAPI = (*SlosLibraryManagementAPIService)(&c.common)
+	c.SourceTemplateManagementExternalAPI = (*SourceTemplateManagementExternalAPIService)(&c.common)
+	c.SpanAnalyticsAPI = (*SpanAnalyticsAPIService)(&c.common)
+	c.ThreatIntelIngestAPI = (*ThreatIntelIngestAPIService)(&c.common)
+	c.ThreatIntelIngestProducerAPI = (*ThreatIntelIngestProducerAPIService)(&c.common)
+	c.TokensLibraryManagementAPI = (*TokensLibraryManagementAPIService)(&c.common)
+	c.TracesAPI = (*TracesAPIService)(&c.common)
+	c.TransformationRuleManagementAPI = (*TransformationRuleManagementAPIService)(&c.common)
+	c.UserManagementAPI = (*UserManagementAPIService)(&c.common)
 
 	return c
 }
@@ -253,7 +283,7 @@ func parameterValueToString( obj interface{}, key string ) string {
 
 // parameterAddToHeaderOrQuery adds the provided object to the request header or url query
 // supporting deep object syntax
-func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix string, obj interface{}, collectionType string) {
+func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix string, obj interface{}, style string, collectionType string) {
 	var v = reflect.ValueOf(obj)
 	var value = ""
 	if v == reflect.ValueOf(nil) {
@@ -269,11 +299,11 @@ func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix stri
 					if err != nil {
 						return
 					}
-					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, dataMap, collectionType)
+					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, dataMap, style, collectionType)
 					return
 				}
 				if t, ok := obj.(time.Time); ok {
-					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, t.Format(time.RFC3339), collectionType)
+					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, t.Format(time.RFC3339Nano), style, collectionType)
 					return
 				}
 				value = v.Type().String() + " value"
@@ -285,7 +315,11 @@ func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix stri
 				var lenIndValue = indValue.Len()
 				for i:=0;i<lenIndValue;i++ {
 					var arrayValue = indValue.Index(i)
-					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, arrayValue.Interface(), collectionType)
+					var keyPrefixForCollectionType = keyPrefix
+					if style == "deepObject" {
+						keyPrefixForCollectionType = keyPrefix + "[" + strconv.Itoa(i) + "]"
+					}
+					parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefixForCollectionType, arrayValue.Interface(), style, collectionType)
 				}
 				return
 
@@ -297,14 +331,14 @@ func parameterAddToHeaderOrQuery(headerOrQueryParams interface{}, keyPrefix stri
 				iter := indValue.MapRange()
 				for iter.Next() {
 					k,v := iter.Key(), iter.Value()
-					parameterAddToHeaderOrQuery(headerOrQueryParams, fmt.Sprintf("%s[%s]", keyPrefix, k.String()), v.Interface(), collectionType)
+					parameterAddToHeaderOrQuery(headerOrQueryParams, fmt.Sprintf("%s[%s]", keyPrefix, k.String()), v.Interface(), style, collectionType)
 				}
 				return
 
 			case reflect.Interface:
 				fallthrough
 			case reflect.Ptr:
-				parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, v.Elem().Interface(), collectionType)
+				parameterAddToHeaderOrQuery(headerOrQueryParams, keyPrefix, v.Elem().Interface(), style, collectionType)
 				return
 
 			case reflect.Int, reflect.Int8, reflect.Int16,
@@ -413,7 +447,7 @@ func (c *APIClient) prepareRequest(
 	// add form parameters and file if available.
 	if strings.HasPrefix(headerParams["Content-Type"], "multipart/form-data") && len(formParams) > 0 || (len(formFiles) > 0) {
 		if body != nil {
-			return nil, errors.New("cannot specify postBody and multipart form at the same time")
+			return nil, errors.New("Cannot specify postBody and multipart form at the same time.")
 		}
 		body = &bytes.Buffer{}
 		w := multipart.NewWriter(body)
@@ -454,7 +488,7 @@ func (c *APIClient) prepareRequest(
 
 	if strings.HasPrefix(headerParams["Content-Type"], "application/x-www-form-urlencoded") && len(formParams) > 0 {
 		if body != nil {
-			return nil, errors.New("cannot specify postBody and x-www-form-urlencoded form at the same time")
+			return nil, errors.New("Cannot specify postBody and x-www-form-urlencoded form at the same time.")
 		}
 		body = &bytes.Buffer{}
 		body.WriteString(formParams.Encode())
@@ -566,20 +600,20 @@ func (c *APIClient) decode(v interface{}, b []byte, contentType string) (err err
 		_, err = (*f).Seek(0, io.SeekStart)
 		return
 	}
-	if xmlCheck.MatchString(contentType) {
+	if XmlCheck.MatchString(contentType) {
 		if err = xml.Unmarshal(b, v); err != nil {
 			return err
 		}
 		return nil
 	}
-	if jsonCheck.MatchString(contentType) {
+	if JsonCheck.MatchString(contentType) {
 		if actualObj, ok := v.(interface{ GetActualInstance() interface{} }); ok { // oneOf, anyOf schemas
 			if unmarshalObj, ok := actualObj.(interface{ UnmarshalJSON([]byte) error }); ok { // make sure it has UnmarshalJSON defined
 				if err = unmarshalObj.UnmarshalJSON(b); err != nil {
 					return err
 				}
 			} else {
-				return errors.New("unknown type with GetActualInstance but no unmarshalObj.UnmarshalJSON defined")
+				return errors.New("Unknown type with GetActualInstance but no unmarshalObj.UnmarshalJSON defined")
 			}
 		} else if err = json.Unmarshal(b, v); err != nil { // simple model
 			return err
@@ -609,18 +643,6 @@ func addFile(w *multipart.Writer, fieldName, path string) error {
 	return err
 }
 
-// Prevent trying to import "fmt"
-func reportError(format string, a ...interface{}) error {
-	return fmt.Errorf(format, a...)
-}
-
-// A wrapper for strict JSON decoding
-func newStrictDecoder(data []byte) *json.Decoder {
-	dec := json.NewDecoder(bytes.NewBuffer(data))
-	dec.DisallowUnknownFields()
-	return dec
-}
-
 // Set request body from an interface{}
 func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err error) {
 	if bodyBuf == nil {
@@ -637,10 +659,14 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 		_, err = bodyBuf.WriteString(s)
 	} else if s, ok := body.(*string); ok {
 		_, err = bodyBuf.WriteString(*s)
-	} else if jsonCheck.MatchString(contentType) {
+	} else if JsonCheck.MatchString(contentType) {
 		err = json.NewEncoder(bodyBuf).Encode(body)
-	} else if xmlCheck.MatchString(contentType) {
-		err = xml.NewEncoder(bodyBuf).Encode(body)
+	} else if XmlCheck.MatchString(contentType) {
+		var bs []byte
+		bs, err = xml.Marshal(body)
+		if err == nil {
+			bodyBuf.Write(bs)
+		}
 	}
 
 	if err != nil {
@@ -648,7 +674,7 @@ func setBody(body interface{}, contentType string) (bodyBuf *bytes.Buffer, err e
 	}
 
 	if bodyBuf.Len() == 0 {
-		err = fmt.Errorf("invalid body type %s", contentType)
+		err = fmt.Errorf("invalid body type %s\n", contentType)
 		return nil, err
 	}
 	return bodyBuf, nil

@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **ModifiedAt** | Pointer to **time.Time** | Last modification timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format. | [optional] 
 **CreatedByOptimizeIt** | Pointer to **bool** | If the scheduled view is created by OptimizeIt. | [optional] 
 **Error** | Pointer to **string** | Errors related to the scheduled view. | [optional] 
-**Status** | Pointer to **string** | Status of the scheduled view. | [optional] 
+**Status** | Pointer to **string** | Status of the scheduled view. Possible values are:   1. &#x60;NOT_STARTED&#x60;   2. &#x60;FILLING&#x60;   3. &#x60;STOPPED&#x60;   4. &#x60;COMPLETE&#x60;   5. &#x60;FAILED&#x60;   6. &#x60;PAUSED&#x60; | [optional] 
 **TotalBytes** | Pointer to **int64** | Total storage consumed by the scheduled view. | [optional] 
 **TotalMessageCount** | Pointer to **int64** | Total number of messages for the scheduled view. | [optional] 
 **CreatedBy** | Pointer to **string** | Identifier of the user who created the scheduled view. | [optional] 
