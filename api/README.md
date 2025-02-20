@@ -272,7 +272,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import sumologic "github.com/GIT_USER_ID/GIT_REPO_ID"
+import sumologic "github.com/sumovishal/sumologic-go-sdk"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
