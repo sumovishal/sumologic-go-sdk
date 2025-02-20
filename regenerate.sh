@@ -1,5 +1,14 @@
 #!/bin/sh
 
+wget https://api.sumologic.com/docs/sumologic-api.yaml
+
+rm -rf api docs
+
+openapi-generator-cli generate -c config.yaml
+
+rm sumologic-api.yaml
+mv api/docs .
+
 # Workaround for https://github.com/OpenAPITools/openapi-generator/issues/19394
 sed -i '' -e 's/var defaultValue \[\]string = \["\(.*\)"]/var defaultValue []string = []string{"\1"}/g' api/api_connection_management.go
 
@@ -26,3 +35,6 @@ sed -i '' -e 's/this.AnomalyDetectorType = anomalyDetectorType/this.AnomalyDetec
 sed -i '' -e 's/this.Field = field/this.Field = \&field/' api/model_logs_anomaly_condition.go
 sed -i '' -e 's/this.TimeRange = timeRange/this.TimeRange = \&timeRange/' api/model_metrics_anomaly_condition.go
 sed -i '' -e 's/this.AnomalyDetectorType = anomalyDetectorType/this.AnomalyDetectorType = \&anomalyDetectorType/' api/model_metrics_anomaly_condition.go
+
+# verify that the SKD builds
+go build
