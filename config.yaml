@@ -4,3 +4,7 @@ inputSpec: sumologic-api.yaml
 generatorName: go
 gitUserId: sumovishal
 gitRepoId: sumologic-go-sdk
+
+# Several of our resources are polymorphic-ish with a `type` field that can be one of several values.
+# Some of the subtypes have additional fields that are not present in the supertype.
+disallowAdditionalPropertiesIfNotPresent: false
