@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type BaseExtractionRuleDefinition struct {
 	Scope string `json:"scope"`
 	// Describes the fields to be parsed.
 	ParseExpression string `json:"parseExpression"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BaseExtractionRuleDefinition BaseExtractionRuleDefinition
@@ -136,6 +136,11 @@ func (o BaseExtractionRuleDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["scope"] = o.Scope
 	toSerialize["parseExpression"] = o.ParseExpression
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *BaseExtractionRuleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varBaseExtractionRuleDefinition := _BaseExtractionRuleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBaseExtractionRuleDefinition)
+	err = json.Unmarshal(data, &varBaseExtractionRuleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BaseExtractionRuleDefinition(varBaseExtractionRuleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "parseExpression")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

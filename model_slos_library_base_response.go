@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type SlosLibraryBaseResponse struct {
 	IsMutable bool `json:"isMutable"`
 	// Aggregated permission summary for the calling user. If detailed permission statements are required, please call list permissions endpoint.
 	Permissions []string `json:"permissions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryBaseResponse SlosLibraryBaseResponse
@@ -454,6 +454,11 @@ func (o SlosLibraryBaseResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Permissions) {
 		toSerialize["permissions"] = o.Permissions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -493,15 +498,33 @@ func (o *SlosLibraryBaseResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSlosLibraryBaseResponse := _SlosLibraryBaseResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryBaseResponse)
+	err = json.Unmarshal(data, &varSlosLibraryBaseResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SlosLibraryBaseResponse(varSlosLibraryBaseResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "contentType")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "isSystem")
+		delete(additionalProperties, "isMutable")
+		delete(additionalProperties, "permissions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

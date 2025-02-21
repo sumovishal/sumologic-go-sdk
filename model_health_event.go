@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type HealthEvent struct {
 	Subsystem string `json:"subsystem"`
 	// The criticality of the event. It is either `Error` or `Warning`
 	SeverityLevel string `json:"severityLevel"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _HealthEvent HealthEvent
@@ -247,6 +247,11 @@ func (o HealthEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize["eventTime"] = o.EventTime
 	toSerialize["subsystem"] = o.Subsystem
 	toSerialize["severityLevel"] = o.SeverityLevel
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -280,15 +285,26 @@ func (o *HealthEvent) UnmarshalJSON(data []byte) (err error) {
 
 	varHealthEvent := _HealthEvent{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varHealthEvent)
+	err = json.Unmarshal(data, &varHealthEvent)
 
 	if err != nil {
 		return err
 	}
 
 	*o = HealthEvent(varHealthEvent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventId")
+		delete(additionalProperties, "eventName")
+		delete(additionalProperties, "details")
+		delete(additionalProperties, "resourceIdentity")
+		delete(additionalProperties, "eventTime")
+		delete(additionalProperties, "subsystem")
+		delete(additionalProperties, "severityLevel")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

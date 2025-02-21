@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ReportAction{}
 type ReportAction struct {
 	// Type of action.
 	ActionType string `json:"actionType" validate:"regexp=^DirectDownloadReportAction$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ReportAction ReportAction
@@ -80,6 +80,11 @@ func (o ReportAction) MarshalJSON() ([]byte, error) {
 func (o ReportAction) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["actionType"] = o.ActionType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ReportAction) UnmarshalJSON(data []byte) (err error) {
 
 	varReportAction := _ReportAction{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varReportAction)
+	err = json.Unmarshal(data, &varReportAction)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ReportAction(varReportAction)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "actionType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

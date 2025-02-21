@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type SavedSearchSyncDefinition struct {
 	ParsingMode *string `json:"parsingMode,omitempty"`
 	// Default time range for the search. Possible types of time ranges are:   - relative time range: e.g. \"-1d -12h\" represents a time range from one day ago to 12 hours ago.   - absolute time range: e.g. \"01-04-2017 20:32:00 to 01-04-2017 20:35:00\" represents a time range   from April 1st, 2017 at 8:32 PM until April 1st, 2017 at 8:35 PM.
 	DefaultTimeRange string `json:"defaultTimeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SavedSearchSyncDefinition SavedSearchSyncDefinition
@@ -282,6 +282,11 @@ func (o SavedSearchSyncDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
 	toSerialize["defaultTimeRange"] = o.DefaultTimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -312,15 +317,26 @@ func (o *SavedSearchSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varSavedSearchSyncDefinition := _SavedSearchSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSavedSearchSyncDefinition)
+	err = json.Unmarshal(data, &varSavedSearchSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SavedSearchSyncDefinition(varSavedSearchSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryText")
+		delete(additionalProperties, "byReceiptTime")
+		delete(additionalProperties, "viewName")
+		delete(additionalProperties, "viewStartTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "parsingMode")
+		delete(additionalProperties, "defaultTimeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

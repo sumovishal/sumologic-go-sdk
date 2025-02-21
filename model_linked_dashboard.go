@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type LinkedDashboard struct {
 	IncludeTimeRange *bool `json:"includeTimeRange,omitempty"`
 	// Include variables from the current dashboard to the linked dashboard.
 	IncludeVariables *bool `json:"includeVariables,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LinkedDashboard LinkedDashboard
@@ -199,6 +199,11 @@ func (o LinkedDashboard) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IncludeVariables) {
 		toSerialize["includeVariables"] = o.IncludeVariables
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -226,15 +231,23 @@ func (o *LinkedDashboard) UnmarshalJSON(data []byte) (err error) {
 
 	varLinkedDashboard := _LinkedDashboard{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLinkedDashboard)
+	err = json.Unmarshal(data, &varLinkedDashboard)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LinkedDashboard(varLinkedDashboard)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "relativePath")
+		delete(additionalProperties, "includeTimeRange")
+		delete(additionalProperties, "includeVariables")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &EstimatedUsageDetails{}
 type EstimatedUsageDetails struct {
 	// Amount of data scanned in bytes, to run the query.
 	DataScannedInBytes *int64 `json:"dataScannedInBytes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _EstimatedUsageDetails EstimatedUsageDetails
 
 // NewEstimatedUsageDetails instantiates a new EstimatedUsageDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o EstimatedUsageDetails) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataScannedInBytes) {
 		toSerialize["dataScannedInBytes"] = o.DataScannedInBytes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *EstimatedUsageDetails) UnmarshalJSON(data []byte) (err error) {
+	varEstimatedUsageDetails := _EstimatedUsageDetails{}
+
+	err = json.Unmarshal(data, &varEstimatedUsageDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = EstimatedUsageDetails(varEstimatedUsageDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dataScannedInBytes")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableEstimatedUsageDetails struct {

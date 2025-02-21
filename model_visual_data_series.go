@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type VisualDataSeries struct {
 	// Keys that will be plotted as a point on the x axis and their data type
 	XAxisKeyTypes *map[string]string `json:"xAxisKeyTypes,omitempty"`
 	QueryInfo *MetricsQueryResultInfo `json:"queryInfo,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VisualDataSeries VisualDataSeries
@@ -429,6 +429,11 @@ func (o VisualDataSeries) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.QueryInfo) {
 		toSerialize["queryInfo"] = o.QueryInfo
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -458,15 +463,30 @@ func (o *VisualDataSeries) UnmarshalJSON(data []byte) (err error) {
 
 	varVisualDataSeries := _VisualDataSeries{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVisualDataSeries)
+	err = json.Unmarshal(data, &varVisualDataSeries)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VisualDataSeries(varVisualDataSeries)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "dataPoints")
+		delete(additionalProperties, "aggregateInfo")
+		delete(additionalProperties, "metaData")
+		delete(additionalProperties, "seriesType")
+		delete(additionalProperties, "xAxisKeys")
+		delete(additionalProperties, "valueType")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "xAxisKeyTypes")
+		delete(additionalProperties, "queryInfo")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

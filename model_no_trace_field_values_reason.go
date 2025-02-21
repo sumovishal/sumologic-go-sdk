@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type NoTraceFieldValuesReason struct {
 	Code string `json:"code" validate:"regexp=^(HighCardinalityField|AutocompleteDisabled)$"`
 	// A short English-language description of the reason.
 	Message string `json:"message"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NoTraceFieldValuesReason NoTraceFieldValuesReason
@@ -108,6 +108,11 @@ func (o NoTraceFieldValuesReason) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["code"] = o.Code
 	toSerialize["message"] = o.Message
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *NoTraceFieldValuesReason) UnmarshalJSON(data []byte) (err error) {
 
 	varNoTraceFieldValuesReason := _NoTraceFieldValuesReason{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNoTraceFieldValuesReason)
+	err = json.Unmarshal(data, &varNoTraceFieldValuesReason)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NoTraceFieldValuesReason(varNoTraceFieldValuesReason)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

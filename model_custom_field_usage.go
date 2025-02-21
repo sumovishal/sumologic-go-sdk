@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type CustomFieldUsage struct {
 	CollectorsCount *int32 `json:"collectorsCount,omitempty"`
 	// Total number of sources using this field.
 	SourcesCount *int32 `json:"sourcesCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CustomFieldUsage CustomFieldUsage
@@ -349,6 +349,11 @@ func (o CustomFieldUsage) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SourcesCount) {
 		toSerialize["sourcesCount"] = o.SourcesCount
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -379,15 +384,28 @@ func (o *CustomFieldUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varCustomFieldUsage := _CustomFieldUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCustomFieldUsage)
+	err = json.Unmarshal(data, &varCustomFieldUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CustomFieldUsage(varCustomFieldUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldId")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "fieldExtractionRules")
+		delete(additionalProperties, "roles")
+		delete(additionalProperties, "partitions")
+		delete(additionalProperties, "collectorsCount")
+		delete(additionalProperties, "sourcesCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

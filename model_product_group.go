@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type ProductGroup struct {
 	Description *string `json:"description,omitempty"`
 	// Link to learn more about the Product group
 	LearnMoreLink *string `json:"learnMoreLink,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProductGroup ProductGroup
@@ -256,6 +256,11 @@ func (o ProductGroup) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LearnMoreLink) {
 		toSerialize["learnMoreLink"] = o.LearnMoreLink
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -284,15 +289,25 @@ func (o *ProductGroup) UnmarshalJSON(data []byte) (err error) {
 
 	varProductGroup := _ProductGroup{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProductGroup)
+	err = json.Unmarshal(data, &varProductGroup)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProductGroup(varProductGroup)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productGroupName")
+		delete(additionalProperties, "productGroupId")
+		delete(additionalProperties, "productVariables")
+		delete(additionalProperties, "provisioningSupported")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "learnMoreLink")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

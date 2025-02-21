@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type UsageReportStatusResponse struct {
 	StatusMessage *string `json:"statusMessage,omitempty"`
 	// S3 presigned download URL for the report. It is valid for 10 minutes.
 	ReportDownloadURL *string `json:"reportDownloadURL,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UsageReportStatusResponse UsageReportStatusResponse
@@ -293,6 +293,11 @@ func (o UsageReportStatusResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ReportDownloadURL) {
 		toSerialize["reportDownloadURL"] = o.ReportDownloadURL
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -321,15 +326,26 @@ func (o *UsageReportStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUsageReportStatusResponse := _UsageReportStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUsageReportStatusResponse)
+	err = json.Unmarshal(data, &varUsageReportStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UsageReportStatusResponse(varUsageReportStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "detail")
+		delete(additionalProperties, "meta")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		delete(additionalProperties, "reportDownloadURL")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

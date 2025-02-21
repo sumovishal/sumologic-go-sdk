@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TraceSpanBillingInfo struct {
 	BilledBytes int32 `json:"billedBytes"`
 	// Billing format of the span. Number of bytes of this representation of the span is equal to `billedBytes`.
 	BilledFormat string `json:"billedFormat"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpanBillingInfo TraceSpanBillingInfo
@@ -108,6 +108,11 @@ func (o TraceSpanBillingInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["billedBytes"] = o.BilledBytes
 	toSerialize["billedFormat"] = o.BilledFormat
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *TraceSpanBillingInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpanBillingInfo := _TraceSpanBillingInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpanBillingInfo)
+	err = json.Unmarshal(data, &varTraceSpanBillingInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpanBillingInfo(varTraceSpanBillingInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billedBytes")
+		delete(additionalProperties, "billedFormat")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

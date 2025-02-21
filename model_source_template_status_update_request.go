@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SourceTemplateStatusUpdateRequest{}
 type SourceTemplateStatusUpdateRequest struct {
 	// status to set for the source template (enable or disable).
 	Status string `json:"status"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SourceTemplateStatusUpdateRequest SourceTemplateStatusUpdateRequest
@@ -80,6 +80,11 @@ func (o SourceTemplateStatusUpdateRequest) MarshalJSON() ([]byte, error) {
 func (o SourceTemplateStatusUpdateRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["status"] = o.Status
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SourceTemplateStatusUpdateRequest) UnmarshalJSON(data []byte) (err erro
 
 	varSourceTemplateStatusUpdateRequest := _SourceTemplateStatusUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSourceTemplateStatusUpdateRequest)
+	err = json.Unmarshal(data, &varSourceTemplateStatusUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SourceTemplateStatusUpdateRequest(varSourceTemplateStatusUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

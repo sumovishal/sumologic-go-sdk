@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsExcessiveFilesPendingUploadTracker type satisfies the MappedNullable interface at compile time
@@ -36,6 +37,7 @@ type CSEWindowsExcessiveFilesPendingUploadTracker struct {
 	NumberOfFilesPending *string `json:"numberOfFilesPending,omitempty"`
 	// The oldest timestamp in the queue.
 	OldestTimestampInQueue *string `json:"oldestTimestampInQueue,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsExcessiveFilesPendingUploadTracker CSEWindowsExcessiveFilesPendingUploadTracker
@@ -323,6 +325,11 @@ func (o CSEWindowsExcessiveFilesPendingUploadTracker) ToMap() (map[string]interf
 	if !IsNil(o.OldestTimestampInQueue) {
 		toSerialize["oldestTimestampInQueue"] = o.OldestTimestampInQueue
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -350,17 +357,80 @@ func (o *CSEWindowsExcessiveFilesPendingUploadTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varCSEWindowsExcessiveFilesPendingUploadTracker := _CSEWindowsExcessiveFilesPendingUploadTracker{}
+	type CSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The HostName + EventLog name for EventLogs and Domain name for Directory.
+		Source *string `json:"source,omitempty"`
+		// The last error message.
+		LastErrorMessage *string `json:"lastErrorMessage,omitempty"`
+		// The number of files pending upload.
+		NumberOfFilesPending *string `json:"numberOfFilesPending,omitempty"`
+		// The oldest timestamp in the queue.
+		OldestTimestampInQueue *string `json:"oldestTimestampInQueue,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsExcessiveFilesPendingUploadTracker)
+	varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct := CSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsExcessiveFilesPendingUploadTracker := _CSEWindowsExcessiveFilesPendingUploadTracker{}
+		varCSEWindowsExcessiveFilesPendingUploadTracker.EventType = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsExcessiveFilesPendingUploadTracker.SensorId = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsExcessiveFilesPendingUploadTracker.SensorHostname = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsExcessiveFilesPendingUploadTracker.Source = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.Source
+		varCSEWindowsExcessiveFilesPendingUploadTracker.LastErrorMessage = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.LastErrorMessage
+		varCSEWindowsExcessiveFilesPendingUploadTracker.NumberOfFilesPending = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.NumberOfFilesPending
+		varCSEWindowsExcessiveFilesPendingUploadTracker.OldestTimestampInQueue = varCSEWindowsExcessiveFilesPendingUploadTrackerWithoutEmbeddedStruct.OldestTimestampInQueue
+		*o = CSEWindowsExcessiveFilesPendingUploadTracker(varCSEWindowsExcessiveFilesPendingUploadTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsExcessiveFilesPendingUploadTracker(varCSEWindowsExcessiveFilesPendingUploadTracker)
+	varCSEWindowsExcessiveFilesPendingUploadTracker := _CSEWindowsExcessiveFilesPendingUploadTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsExcessiveFilesPendingUploadTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsExcessiveFilesPendingUploadTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "lastErrorMessage")
+		delete(additionalProperties, "numberOfFilesPending")
+		delete(additionalProperties, "oldestTimestampInQueue")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

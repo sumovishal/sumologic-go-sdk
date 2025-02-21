@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UpdateFolderRequest struct {
 	Name string `json:"name"`
 	// The description of the folder.
 	Description *string `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateFolderRequest UpdateFolderRequest
@@ -117,6 +117,11 @@ func (o UpdateFolderRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *UpdateFolderRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateFolderRequest := _UpdateFolderRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateFolderRequest)
+	err = json.Unmarshal(data, &varUpdateFolderRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateFolderRequest(varUpdateFolderRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

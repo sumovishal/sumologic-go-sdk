@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type ScheduledSearchEstimatedUsageRequest struct {
 	QueryParameters []QueryParameterSyncDefinition `json:"queryParameters,omitempty"`
 	// Time zone identifier for the estimates. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	TimeZone string `json:"timeZone"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduledSearchEstimatedUsageRequest ScheduledSearchEstimatedUsageRequest
@@ -278,6 +278,11 @@ func (o ScheduledSearchEstimatedUsageRequest) ToMap() (map[string]interface{}, e
 		toSerialize["queryParameters"] = o.QueryParameters
 	}
 	toSerialize["timeZone"] = o.TimeZone
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -308,15 +313,26 @@ func (o *ScheduledSearchEstimatedUsageRequest) UnmarshalJSON(data []byte) (err e
 
 	varScheduledSearchEstimatedUsageRequest := _ScheduledSearchEstimatedUsageRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduledSearchEstimatedUsageRequest)
+	err = json.Unmarshal(data, &varScheduledSearchEstimatedUsageRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduledSearchEstimatedUsageRequest(varScheduledSearchEstimatedUsageRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "cronSchedule")
+		delete(additionalProperties, "scheduleType")
+		delete(additionalProperties, "byReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "timeZone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

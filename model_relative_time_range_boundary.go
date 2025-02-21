@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the RelativeTimeRangeBoundary type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type RelativeTimeRangeBoundary struct {
 	TimeRangeBoundary
 	// Relative time as a string consisting of following elements: - `-` (optional): minus sign indicates time in the past, - `<number>`: number of time units, - `<time_unit>`: time unit; possible values are: `w` (week), `d` (day), `h` (hour), `m` (minute), `s` (second). Multiple pairs of `<number><time_unit>` may be provided, and they may be in any order. For example, `-2w5d3h` points to the moment in time 2 weeks, 5 days and 3 hours ago.
 	RelativeTime string `json:"relativeTime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RelativeTimeRangeBoundary RelativeTimeRangeBoundary
@@ -90,6 +92,11 @@ func (o RelativeTimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	toSerialize["relativeTime"] = o.RelativeTime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *RelativeTimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varRelativeTimeRangeBoundary := _RelativeTimeRangeBoundary{}
+	type RelativeTimeRangeBoundaryWithoutEmbeddedStruct struct {
+		// Relative time as a string consisting of following elements: - `-` (optional): minus sign indicates time in the past, - `<number>`: number of time units, - `<time_unit>`: time unit; possible values are: `w` (week), `d` (day), `h` (hour), `m` (minute), `s` (second). Multiple pairs of `<number><time_unit>` may be provided, and they may be in any order. For example, `-2w5d3h` points to the moment in time 2 weeks, 5 days and 3 hours ago.
+		RelativeTime string `json:"relativeTime"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRelativeTimeRangeBoundary)
+	varRelativeTimeRangeBoundaryWithoutEmbeddedStruct := RelativeTimeRangeBoundaryWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varRelativeTimeRangeBoundaryWithoutEmbeddedStruct)
+	if err == nil {
+		varRelativeTimeRangeBoundary := _RelativeTimeRangeBoundary{}
+		varRelativeTimeRangeBoundary.RelativeTime = varRelativeTimeRangeBoundaryWithoutEmbeddedStruct.RelativeTime
+		*o = RelativeTimeRangeBoundary(varRelativeTimeRangeBoundary)
+	} else {
 		return err
 	}
 
-	*o = RelativeTimeRangeBoundary(varRelativeTimeRangeBoundary)
+	varRelativeTimeRangeBoundary := _RelativeTimeRangeBoundary{}
+
+	err = json.Unmarshal(data, &varRelativeTimeRangeBoundary)
+	if err == nil {
+		o.TimeRangeBoundary = varRelativeTimeRangeBoundary.TimeRangeBoundary
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "relativeTime")
+
+		// remove fields from embedded structs
+		reflectTimeRangeBoundary := reflect.ValueOf(o.TimeRangeBoundary)
+		for i := 0; i < reflectTimeRangeBoundary.Type().NumField(); i++ {
+			t := reflectTimeRangeBoundary.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

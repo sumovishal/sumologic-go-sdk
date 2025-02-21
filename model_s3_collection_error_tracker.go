@@ -21,7 +21,10 @@ var _ MappedNullable = &S3CollectionErrorTracker{}
 type S3CollectionErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _S3CollectionErrorTracker S3CollectionErrorTracker
 
 // NewS3CollectionErrorTracker instantiates a new S3CollectionErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o S3CollectionErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *S3CollectionErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varS3CollectionErrorTracker := _S3CollectionErrorTracker{}
+
+	err = json.Unmarshal(data, &varS3CollectionErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = S3CollectionErrorTracker(varS3CollectionErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableS3CollectionErrorTracker struct {

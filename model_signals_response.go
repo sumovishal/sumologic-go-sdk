@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type SignalsResponse struct {
 	Payload string `json:"payload"`
 	// Raw data queries for the computed signal.
 	OpenInQueries []OpenInQuery `json:"openInQueries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SignalsResponse SignalsResponse
@@ -249,6 +249,11 @@ func (o SignalsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["summary"] = o.Summary
 	toSerialize["payload"] = o.Payload
 	toSerialize["openInQueries"] = o.OpenInQueries
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -282,15 +287,26 @@ func (o *SignalsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSignalsResponse := _SignalsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSignalsResponse)
+	err = json.Unmarshal(data, &varSignalsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SignalsResponse(varSignalsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "signalType")
+		delete(additionalProperties, "signalId")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		delete(additionalProperties, "summary")
+		delete(additionalProperties, "payload")
+		delete(additionalProperties, "openInQueries")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

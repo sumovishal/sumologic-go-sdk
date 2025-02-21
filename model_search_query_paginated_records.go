@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SearchQueryPaginatedRecords struct {
 	Fields []Field `json:"fields"`
 	// Map of the field names to the field values.
 	Records []map[string]string `json:"records,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SearchQueryPaginatedRecords SearchQueryPaginatedRecords
@@ -117,6 +117,11 @@ func (o SearchQueryPaginatedRecords) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Records) {
 		toSerialize["records"] = o.Records
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *SearchQueryPaginatedRecords) UnmarshalJSON(data []byte) (err error) {
 
 	varSearchQueryPaginatedRecords := _SearchQueryPaginatedRecords{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSearchQueryPaginatedRecords)
+	err = json.Unmarshal(data, &varSearchQueryPaginatedRecords)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SearchQueryPaginatedRecords(varSearchQueryPaginatedRecords)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "records")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &ScheduledSearchEstimatedUsageResponse{}
 type ScheduledSearchEstimatedUsageResponse struct {
 	// Scan estimate detail for a particular tier.
 	ScanEstimates []ScanEstimateDetails `json:"scanEstimates,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ScheduledSearchEstimatedUsageResponse ScheduledSearchEstimatedUsageResponse
 
 // NewScheduledSearchEstimatedUsageResponse instantiates a new ScheduledSearchEstimatedUsageResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o ScheduledSearchEstimatedUsageResponse) ToMap() (map[string]interface{}, 
 	if !IsNil(o.ScanEstimates) {
 		toSerialize["scanEstimates"] = o.ScanEstimates
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ScheduledSearchEstimatedUsageResponse) UnmarshalJSON(data []byte) (err error) {
+	varScheduledSearchEstimatedUsageResponse := _ScheduledSearchEstimatedUsageResponse{}
+
+	err = json.Unmarshal(data, &varScheduledSearchEstimatedUsageResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScheduledSearchEstimatedUsageResponse(varScheduledSearchEstimatedUsageResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "scanEstimates")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableScheduledSearchEstimatedUsageResponse struct {

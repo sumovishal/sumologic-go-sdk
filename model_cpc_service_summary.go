@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CpcServiceSummary struct {
 	// The color hex code assigned to the service.
 	Color string `json:"color"`
 	CpcSummary CpcSummary `json:"cpcSummary"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcServiceSummary CpcServiceSummary
@@ -135,6 +135,11 @@ func (o CpcServiceSummary) ToMap() (map[string]interface{}, error) {
 	toSerialize["service"] = o.Service
 	toSerialize["color"] = o.Color
 	toSerialize["cpcSummary"] = o.CpcSummary
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -164,15 +169,22 @@ func (o *CpcServiceSummary) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcServiceSummary := _CpcServiceSummary{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcServiceSummary)
+	err = json.Unmarshal(data, &varCpcServiceSummary)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcServiceSummary(varCpcServiceSummary)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "color")
+		delete(additionalProperties, "cpcSummary")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

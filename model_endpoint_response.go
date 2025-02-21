@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type EndpointResponse struct {
 	InputSchema string `json:"inputSchema"`
 	// Schema of the output table from endpoint.
 	OutputSchema string `json:"outputSchema"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EndpointResponse EndpointResponse
@@ -192,6 +192,11 @@ func (o EndpointResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["url"] = o.Url
 	toSerialize["inputSchema"] = o.InputSchema
 	toSerialize["outputSchema"] = o.OutputSchema
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,24 @@ func (o *EndpointResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varEndpointResponse := _EndpointResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEndpointResponse)
+	err = json.Unmarshal(data, &varEndpointResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EndpointResponse(varEndpointResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "inputSchema")
+		delete(additionalProperties, "outputSchema")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

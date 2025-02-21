@@ -21,7 +21,10 @@ var _ MappedNullable = &OTCProcessErrorTracker{}
 type OTCProcessErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OTCProcessErrorTracker OTCProcessErrorTracker
 
 // NewOTCProcessErrorTracker instantiates a new OTCProcessErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o OTCProcessErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OTCProcessErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varOTCProcessErrorTracker := _OTCProcessErrorTracker{}
+
+	err = json.Unmarshal(data, &varOTCProcessErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OTCProcessErrorTracker(varOTCProcessErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOTCProcessErrorTracker struct {

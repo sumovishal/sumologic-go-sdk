@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AggregationQueryBucketResult{}
 type AggregationQueryBucketResult struct {
 	BucketKey BucketKey `json:"bucketKey"`
 	BucketValue BucketValue `json:"bucketValue"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregationQueryBucketResult AggregationQueryBucketResult
@@ -106,6 +106,11 @@ func (o AggregationQueryBucketResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketKey"] = o.BucketKey
 	toSerialize["bucketValue"] = o.BucketValue
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *AggregationQueryBucketResult) UnmarshalJSON(data []byte) (err error) {
 
 	varAggregationQueryBucketResult := _AggregationQueryBucketResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregationQueryBucketResult)
+	err = json.Unmarshal(data, &varAggregationQueryBucketResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AggregationQueryBucketResult(varAggregationQueryBucketResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketKey")
+		delete(additionalProperties, "bucketValue")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

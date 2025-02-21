@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &Sli{}
 type Sli struct {
 	// Evaluate SLI using successful/total windows, or occurrence of successful events over entire compliance period, or based on monitor evaluation.
 	EvaluationType string `json:"evaluationType" validate:"regexp=^(Window|Request|Monitor)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Sli Sli
@@ -80,6 +80,11 @@ func (o Sli) MarshalJSON() ([]byte, error) {
 func (o Sli) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["evaluationType"] = o.EvaluationType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *Sli) UnmarshalJSON(data []byte) (err error) {
 
 	varSli := _Sli{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSli)
+	err = json.Unmarshal(data, &varSli)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Sli(varSli)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "evaluationType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the StringMatchCorrelationExpression type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type StringMatchCorrelationExpression struct {
 	EventFieldName string `json:"eventFieldName"`
 	// Type of string matching algorithm which tells how to match eventFieldName and queryFieldName.
 	StringMatchingAlgorithm string `json:"stringMatchingAlgorithm" validate:"regexp=^(ExactMatch)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _StringMatchCorrelationExpression StringMatchCorrelationExpression
@@ -146,6 +148,11 @@ func (o StringMatchCorrelationExpression) ToMap() (map[string]interface{}, error
 	toSerialize["queryFieldName"] = o.QueryFieldName
 	toSerialize["eventFieldName"] = o.EventFieldName
 	toSerialize["stringMatchingAlgorithm"] = o.StringMatchingAlgorithm
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -174,17 +181,64 @@ func (o *StringMatchCorrelationExpression) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varStringMatchCorrelationExpression := _StringMatchCorrelationExpression{}
+	type StringMatchCorrelationExpressionWithoutEmbeddedStruct struct {
+		// Name of the query field returned by a log search query.
+		QueryFieldName string `json:"queryFieldName"`
+		// Name of the field from event query output.
+		EventFieldName string `json:"eventFieldName"`
+		// Type of string matching algorithm which tells how to match eventFieldName and queryFieldName.
+		StringMatchingAlgorithm string `json:"stringMatchingAlgorithm" validate:"regexp=^(ExactMatch)$"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varStringMatchCorrelationExpression)
+	varStringMatchCorrelationExpressionWithoutEmbeddedStruct := StringMatchCorrelationExpressionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varStringMatchCorrelationExpressionWithoutEmbeddedStruct)
+	if err == nil {
+		varStringMatchCorrelationExpression := _StringMatchCorrelationExpression{}
+		varStringMatchCorrelationExpression.QueryFieldName = varStringMatchCorrelationExpressionWithoutEmbeddedStruct.QueryFieldName
+		varStringMatchCorrelationExpression.EventFieldName = varStringMatchCorrelationExpressionWithoutEmbeddedStruct.EventFieldName
+		varStringMatchCorrelationExpression.StringMatchingAlgorithm = varStringMatchCorrelationExpressionWithoutEmbeddedStruct.StringMatchingAlgorithm
+		*o = StringMatchCorrelationExpression(varStringMatchCorrelationExpression)
+	} else {
 		return err
 	}
 
-	*o = StringMatchCorrelationExpression(varStringMatchCorrelationExpression)
+	varStringMatchCorrelationExpression := _StringMatchCorrelationExpression{}
+
+	err = json.Unmarshal(data, &varStringMatchCorrelationExpression)
+	if err == nil {
+		o.CorrelationExpression = varStringMatchCorrelationExpression.CorrelationExpression
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryFieldName")
+		delete(additionalProperties, "eventFieldName")
+		delete(additionalProperties, "stringMatchingAlgorithm")
+
+		// remove fields from embedded structs
+		reflectCorrelationExpression := reflect.ValueOf(o.CorrelationExpression)
+		for i := 0; i < reflectCorrelationExpression.Type().NumField(); i++ {
+			t := reflectCorrelationExpression.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MonitorQuery struct {
 	RowId string `json:"rowId"`
 	// The logs or metrics query that defines the stream of data the monitor runs on.
 	Query string `json:"query"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorQuery MonitorQuery
@@ -108,6 +108,11 @@ func (o MonitorQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["rowId"] = o.RowId
 	toSerialize["query"] = o.Query
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MonitorQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorQuery := _MonitorQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorQuery)
+	err = json.Unmarshal(data, &varMonitorQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorQuery(varMonitorQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

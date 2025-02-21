@@ -22,7 +22,10 @@ type CreateJobResponse struct {
 	// The search job identifier.
 	Id *string `json:"id,omitempty"`
 	Link *Link `json:"link,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CreateJobResponse CreateJobResponse
 
 // NewCreateJobResponse instantiates a new CreateJobResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o CreateJobResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Link) {
 		toSerialize["link"] = o.Link
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CreateJobResponse) UnmarshalJSON(data []byte) (err error) {
+	varCreateJobResponse := _CreateJobResponse{}
+
+	err = json.Unmarshal(data, &varCreateJobResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateJobResponse(varCreateJobResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "link")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCreateJobResponse struct {

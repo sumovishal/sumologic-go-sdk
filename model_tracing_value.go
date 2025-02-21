@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TracingValue{}
 type TracingValue struct {
 	// Type of the value model.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TracingValue TracingValue
@@ -80,6 +80,11 @@ func (o TracingValue) MarshalJSON() ([]byte, error) {
 func (o TracingValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TracingValue) UnmarshalJSON(data []byte) (err error) {
 
 	varTracingValue := _TracingValue{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTracingValue)
+	err = json.Unmarshal(data, &varTracingValue)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TracingValue(varTracingValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

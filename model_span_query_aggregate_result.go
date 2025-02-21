@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SpanQueryAggregateResult struct {
 	StatusMessage *string `json:"statusMessage,omitempty"`
 	// The series returned from a search.
 	Series []SpanQueryAggregateDataSeries `json:"series"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregateResult SpanQueryAggregateResult
@@ -145,6 +145,11 @@ func (o SpanQueryAggregateResult) ToMap() (map[string]interface{}, error) {
 		toSerialize["statusMessage"] = o.StatusMessage
 	}
 	toSerialize["series"] = o.Series
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *SpanQueryAggregateResult) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryAggregateResult := _SpanQueryAggregateResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregateResult)
+	err = json.Unmarshal(data, &varSpanQueryAggregateResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregateResult(varSpanQueryAggregateResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		delete(additionalProperties, "series")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

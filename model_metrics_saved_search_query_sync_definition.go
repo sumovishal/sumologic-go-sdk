@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MetricsSavedSearchQuerySyncDefinition struct {
 	RowId string `json:"rowId"`
 	// Metrics query.
 	Query string `json:"query"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSavedSearchQuerySyncDefinition MetricsSavedSearchQuerySyncDefinition
@@ -108,6 +108,11 @@ func (o MetricsSavedSearchQuerySyncDefinition) ToMap() (map[string]interface{}, 
 	toSerialize := map[string]interface{}{}
 	toSerialize["rowId"] = o.RowId
 	toSerialize["query"] = o.Query
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MetricsSavedSearchQuerySyncDefinition) UnmarshalJSON(data []byte) (err 
 
 	varMetricsSavedSearchQuerySyncDefinition := _MetricsSavedSearchQuerySyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSavedSearchQuerySyncDefinition)
+	err = json.Unmarshal(data, &varMetricsSavedSearchQuerySyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSavedSearchQuerySyncDefinition(varMetricsSavedSearchQuerySyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

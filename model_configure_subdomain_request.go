@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ConfigureSubdomainRequest{}
 type ConfigureSubdomainRequest struct {
 	// The new subdomain.
 	Subdomain string `json:"subdomain" validate:"regexp=^(?!xn--)[a-z0-9]([a-z0-9-]*[a-z0-9])?$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ConfigureSubdomainRequest ConfigureSubdomainRequest
@@ -80,6 +80,11 @@ func (o ConfigureSubdomainRequest) MarshalJSON() ([]byte, error) {
 func (o ConfigureSubdomainRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["subdomain"] = o.Subdomain
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ConfigureSubdomainRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varConfigureSubdomainRequest := _ConfigureSubdomainRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varConfigureSubdomainRequest)
+	err = json.Unmarshal(data, &varConfigureSubdomainRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ConfigureSubdomainRequest(varConfigureSubdomainRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subdomain")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

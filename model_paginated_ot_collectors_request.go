@@ -30,7 +30,10 @@ type PaginatedOTCollectorsRequest struct {
 	Limit *int32 `json:"limit,omitempty"`
 	// count of filtered otCollectors.
 	IncludeCount NullableBool `json:"includeCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PaginatedOTCollectorsRequest PaginatedOTCollectorsRequest
 
 // NewPaginatedOTCollectorsRequest instantiates a new PaginatedOTCollectorsRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -279,7 +282,38 @@ func (o PaginatedOTCollectorsRequest) ToMap() (map[string]interface{}, error) {
 	if o.IncludeCount.IsSet() {
 		toSerialize["includeCount"] = o.IncludeCount.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PaginatedOTCollectorsRequest) UnmarshalJSON(data []byte) (err error) {
+	varPaginatedOTCollectorsRequest := _PaginatedOTCollectorsRequest{}
+
+	err = json.Unmarshal(data, &varPaginatedOTCollectorsRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PaginatedOTCollectorsRequest(varPaginatedOTCollectorsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "filters")
+		delete(additionalProperties, "sortBy")
+		delete(additionalProperties, "next")
+		delete(additionalProperties, "limit")
+		delete(additionalProperties, "includeCount")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePaginatedOTCollectorsRequest struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SpanCalculationAggregator{}
 type SpanCalculationAggregator struct {
 	// A specific aggregation type applied to spans.
 	Key string `json:"key" validate:"regexp=^(sum|avg|max|min|pct)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanCalculationAggregator SpanCalculationAggregator
@@ -80,6 +80,11 @@ func (o SpanCalculationAggregator) MarshalJSON() ([]byte, error) {
 func (o SpanCalculationAggregator) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["key"] = o.Key
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SpanCalculationAggregator) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanCalculationAggregator := _SpanCalculationAggregator{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanCalculationAggregator)
+	err = json.Unmarshal(data, &varSpanCalculationAggregator)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanCalculationAggregator(varSpanCalculationAggregator)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

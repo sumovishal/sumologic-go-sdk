@@ -21,7 +21,10 @@ var _ MappedNullable = &RelatedAlertsLibraryAlertResponse{}
 type RelatedAlertsLibraryAlertResponse struct {
 	// All alerts related to the given alert and their relationship tags.
 	Data []RelatedAlert `json:"data,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _RelatedAlertsLibraryAlertResponse RelatedAlertsLibraryAlertResponse
 
 // NewRelatedAlertsLibraryAlertResponse instantiates a new RelatedAlertsLibraryAlertResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o RelatedAlertsLibraryAlertResponse) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Data) {
 		toSerialize["data"] = o.Data
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *RelatedAlertsLibraryAlertResponse) UnmarshalJSON(data []byte) (err error) {
+	varRelatedAlertsLibraryAlertResponse := _RelatedAlertsLibraryAlertResponse{}
+
+	err = json.Unmarshal(data, &varRelatedAlertsLibraryAlertResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RelatedAlertsLibraryAlertResponse(varRelatedAlertsLibraryAlertResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableRelatedAlertsLibraryAlertResponse struct {

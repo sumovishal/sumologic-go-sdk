@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &BucketKey{}
 type BucketKey struct {
 	// Bucket value type of the object model.
 	BucketKeyType string `json:"bucketKeyType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BucketKey BucketKey
@@ -80,6 +80,11 @@ func (o BucketKey) MarshalJSON() ([]byte, error) {
 func (o BucketKey) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketKeyType"] = o.BucketKeyType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *BucketKey) UnmarshalJSON(data []byte) (err error) {
 
 	varBucketKey := _BucketKey{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBucketKey)
+	err = json.Unmarshal(data, &varBucketKey)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BucketKey(varBucketKey)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketKeyType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

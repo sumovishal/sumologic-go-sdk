@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SignalContext{}
 type SignalContext struct {
 	// Type of context of the request object.
 	ContextType string `json:"contextType" validate:"regexp=^(Alert)$|^$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SignalContext SignalContext
@@ -80,6 +80,11 @@ func (o SignalContext) MarshalJSON() ([]byte, error) {
 func (o SignalContext) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["contextType"] = o.ContextType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SignalContext) UnmarshalJSON(data []byte) (err error) {
 
 	varSignalContext := _SignalContext{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSignalContext)
+	err = json.Unmarshal(data, &varSignalContext)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SignalContext(varSignalContext)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "contextType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

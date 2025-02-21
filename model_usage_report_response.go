@@ -21,7 +21,10 @@ var _ MappedNullable = &UsageReportResponse{}
 type UsageReportResponse struct {
 	// Job Id for export
 	JobId *string `json:"jobId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UsageReportResponse UsageReportResponse
 
 // NewUsageReportResponse instantiates a new UsageReportResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o UsageReportResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.JobId) {
 		toSerialize["jobId"] = o.JobId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UsageReportResponse) UnmarshalJSON(data []byte) (err error) {
+	varUsageReportResponse := _UsageReportResponse{}
+
+	err = json.Unmarshal(data, &varUsageReportResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UsageReportResponse(varUsageReportResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "jobId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUsageReportResponse struct {

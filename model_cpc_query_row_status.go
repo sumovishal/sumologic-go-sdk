@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CpcQueryRowStatus struct {
 	Buckets []CpcQueryBucketStatus `json:"buckets"`
 	// Status of the query. Possible values: `Processing`, `Finished`, `Error`, `Canceled`.
 	Status string `json:"status" validate:"regexp=^(Processing|Finished|Error|Canceled)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryRowStatus CpcQueryRowStatus
@@ -136,6 +136,11 @@ func (o CpcQueryRowStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize["rowId"] = o.RowId
 	toSerialize["buckets"] = o.Buckets
 	toSerialize["status"] = o.Status
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CpcQueryRowStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryRowStatus := _CpcQueryRowStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryRowStatus)
+	err = json.Unmarshal(data, &varCpcQueryRowStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryRowStatus(varCpcQueryRowStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "buckets")
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

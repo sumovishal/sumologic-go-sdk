@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type CreateScheduledViewDefinition struct {
 	DataForwardingId *string `json:"dataForwardingId,omitempty"`
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty" validate:"regexp=^(AutoParse|Manual)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateScheduledViewDefinition CreateScheduledViewDefinition
@@ -256,6 +256,11 @@ func (o CreateScheduledViewDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParsingMode) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -285,15 +290,25 @@ func (o *CreateScheduledViewDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateScheduledViewDefinition := _CreateScheduledViewDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateScheduledViewDefinition)
+	err = json.Unmarshal(data, &varCreateScheduledViewDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateScheduledViewDefinition(varCreateScheduledViewDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "indexName")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "dataForwardingId")
+		delete(additionalProperties, "parsingMode")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

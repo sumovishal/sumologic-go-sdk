@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the NewRelic type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type NewRelic struct {
 	ConnectionId string `json:"connectionId"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NewRelic NewRelic
@@ -127,6 +129,11 @@ func (o NewRelic) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -153,17 +160,60 @@ func (o *NewRelic) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varNewRelic := _NewRelic{}
+	type NewRelicWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNewRelic)
+	varNewRelicWithoutEmbeddedStruct := NewRelicWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varNewRelicWithoutEmbeddedStruct)
+	if err == nil {
+		varNewRelic := _NewRelic{}
+		varNewRelic.ConnectionId = varNewRelicWithoutEmbeddedStruct.ConnectionId
+		varNewRelic.PayloadOverride = varNewRelicWithoutEmbeddedStruct.PayloadOverride
+		*o = NewRelic(varNewRelic)
+	} else {
 		return err
 	}
 
-	*o = NewRelic(varNewRelic)
+	varNewRelic := _NewRelic{}
+
+	err = json.Unmarshal(data, &varNewRelic)
+	if err == nil {
+		o.Action = varNewRelic.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "payloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

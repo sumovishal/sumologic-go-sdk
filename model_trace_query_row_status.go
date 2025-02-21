@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type TraceQueryRowStatus struct {
 	StatusMessage *string `json:"statusMessage,omitempty"`
 	// Number of results matching the query
 	Count int64 `json:"count"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceQueryRowStatus TraceQueryRowStatus
@@ -173,6 +173,11 @@ func (o TraceQueryRowStatus) ToMap() (map[string]interface{}, error) {
 		toSerialize["statusMessage"] = o.StatusMessage
 	}
 	toSerialize["count"] = o.Count
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *TraceQueryRowStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceQueryRowStatus := _TraceQueryRowStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceQueryRowStatus)
+	err = json.Unmarshal(data, &varTraceQueryRowStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceQueryRowStatus(varTraceQueryRowStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

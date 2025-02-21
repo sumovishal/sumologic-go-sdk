@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type MutingSchedulesLibraryItemWithPath struct {
 	Item MutingSchedulesLibraryBaseResponse `json:"item"`
 	// Path of the mutingschedule or folder.
 	Path string `json:"path"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryItemWithPath MutingSchedulesLibraryItemWithPath
@@ -107,6 +107,11 @@ func (o MutingSchedulesLibraryItemWithPath) ToMap() (map[string]interface{}, err
 	toSerialize := map[string]interface{}{}
 	toSerialize["item"] = o.Item
 	toSerialize["path"] = o.Path
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *MutingSchedulesLibraryItemWithPath) UnmarshalJSON(data []byte) (err err
 
 	varMutingSchedulesLibraryItemWithPath := _MutingSchedulesLibraryItemWithPath{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryItemWithPath)
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryItemWithPath)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MutingSchedulesLibraryItemWithPath(varMutingSchedulesLibraryItemWithPath)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "item")
+		delete(additionalProperties, "path")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

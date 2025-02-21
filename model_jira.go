@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the Jira type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type Jira struct {
 	ConnectionId string `json:"connectionId"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Jira Jira
@@ -127,6 +129,11 @@ func (o Jira) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -153,17 +160,60 @@ func (o *Jira) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varJira := _Jira{}
+	type JiraWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varJira)
+	varJiraWithoutEmbeddedStruct := JiraWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varJiraWithoutEmbeddedStruct)
+	if err == nil {
+		varJira := _Jira{}
+		varJira.ConnectionId = varJiraWithoutEmbeddedStruct.ConnectionId
+		varJira.PayloadOverride = varJiraWithoutEmbeddedStruct.PayloadOverride
+		*o = Jira(varJira)
+	} else {
 		return err
 	}
 
-	*o = Jira(varJira)
+	varJira := _Jira{}
+
+	err = json.Unmarshal(data, &varJira)
+	if err == nil {
+		o.Action = varJira.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "payloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

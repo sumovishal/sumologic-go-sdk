@@ -21,7 +21,10 @@ var _ MappedNullable = &SeriesAxisRange{}
 type SeriesAxisRange struct {
 	X *AxisRange `json:"x,omitempty"`
 	Y *AxisRange `json:"y,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SeriesAxisRange SeriesAxisRange
 
 // NewSeriesAxisRange instantiates a new SeriesAxisRange object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o SeriesAxisRange) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Y) {
 		toSerialize["y"] = o.Y
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SeriesAxisRange) UnmarshalJSON(data []byte) (err error) {
+	varSeriesAxisRange := _SeriesAxisRange{}
+
+	err = json.Unmarshal(data, &varSeriesAxisRange)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SeriesAxisRange(varSeriesAxisRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSeriesAxisRange struct {

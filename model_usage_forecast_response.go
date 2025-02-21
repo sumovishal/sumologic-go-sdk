@@ -29,7 +29,10 @@ type UsageForecastResponse struct {
 	ForecastedUsagePercentage *float64 `json:"forecastedUsagePercentage,omitempty"`
 	// Days remaining till all the credits are consumed.
 	RemainingDays *float64 `json:"remainingDays,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UsageForecastResponse UsageForecastResponse
 
 // NewUsageForecastResponse instantiates a new UsageForecastResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o UsageForecastResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RemainingDays) {
 		toSerialize["remainingDays"] = o.RemainingDays
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UsageForecastResponse) UnmarshalJSON(data []byte) (err error) {
+	varUsageForecastResponse := _UsageForecastResponse{}
+
+	err = json.Unmarshal(data, &varUsageForecastResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UsageForecastResponse(varUsageForecastResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "averageUsage")
+		delete(additionalProperties, "usagePercentage")
+		delete(additionalProperties, "forecastedUsage")
+		delete(additionalProperties, "forecastedUsagePercentage")
+		delete(additionalProperties, "remainingDays")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUsageForecastResponse struct {

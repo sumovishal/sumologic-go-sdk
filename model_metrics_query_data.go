@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type MetricsQueryData struct {
 	Filters []MetricsFilter `json:"filters"`
 	// A list of operator data for the metrics query.
 	Operators []OperatorData `json:"operators,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsQueryData MetricsQueryData
@@ -219,6 +219,11 @@ func (o MetricsQueryData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Operators) {
 		toSerialize["operators"] = o.Operators
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -247,15 +252,24 @@ func (o *MetricsQueryData) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsQueryData := _MetricsQueryData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsQueryData)
+	err = json.Unmarshal(data, &varMetricsQueryData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsQueryData(varMetricsQueryData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metric")
+		delete(additionalProperties, "aggregationType")
+		delete(additionalProperties, "groupBy")
+		delete(additionalProperties, "filters")
+		delete(additionalProperties, "operators")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

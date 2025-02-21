@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TraceExistsResponse struct {
 	Exists bool `json:"exists"`
 	// A path to the trace view page in Sumo Logic UI.
 	Url *string `json:"url,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceExistsResponse TraceExistsResponse
@@ -117,6 +117,11 @@ func (o TraceExistsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *TraceExistsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceExistsResponse := _TraceExistsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceExistsResponse)
+	err = json.Unmarshal(data, &varTraceExistsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceExistsResponse(varTraceExistsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "exists")
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

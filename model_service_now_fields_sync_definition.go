@@ -27,7 +27,10 @@ type ServiceNowFieldsSyncDefinition struct {
 	Resource *string `json:"resource,omitempty"`
 	// The physical or virtual device on which the event occurred.
 	Node *string `json:"node,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ServiceNowFieldsSyncDefinition ServiceNowFieldsSyncDefinition
 
 // NewServiceNowFieldsSyncDefinition instantiates a new ServiceNowFieldsSyncDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o ServiceNowFieldsSyncDefinition) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Node) {
 		toSerialize["node"] = o.Node
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ServiceNowFieldsSyncDefinition) UnmarshalJSON(data []byte) (err error) {
+	varServiceNowFieldsSyncDefinition := _ServiceNowFieldsSyncDefinition{}
+
+	err = json.Unmarshal(data, &varServiceNowFieldsSyncDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceNowFieldsSyncDefinition(varServiceNowFieldsSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "severity")
+		delete(additionalProperties, "resource")
+		delete(additionalProperties, "node")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableServiceNowFieldsSyncDefinition struct {

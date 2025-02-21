@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -46,6 +45,7 @@ type RoleModel struct {
 	Id string `json:"id"`
 	// Role is system or user defined.
 	SystemDefined *bool `json:"systemDefined,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RoleModel RoleModel
@@ -447,6 +447,11 @@ func (o RoleModel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SystemDefined) {
 		toSerialize["systemDefined"] = o.SystemDefined
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -479,15 +484,31 @@ func (o *RoleModel) UnmarshalJSON(data []byte) (err error) {
 
 	varRoleModel := _RoleModel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRoleModel)
+	err = json.Unmarshal(data, &varRoleModel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RoleModel(varRoleModel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "filterPredicate")
+		delete(additionalProperties, "users")
+		delete(additionalProperties, "capabilities")
+		delete(additionalProperties, "autofillDependencies")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "systemDefined")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

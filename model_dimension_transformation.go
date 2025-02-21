@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DimensionTransformation{}
 type DimensionTransformation struct {
 	// This is the base type of all dimension transformations.
 	TransformationType string `json:"transformationType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DimensionTransformation DimensionTransformation
@@ -80,6 +80,11 @@ func (o DimensionTransformation) MarshalJSON() ([]byte, error) {
 func (o DimensionTransformation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["transformationType"] = o.TransformationType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DimensionTransformation) UnmarshalJSON(data []byte) (err error) {
 
 	varDimensionTransformation := _DimensionTransformation{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDimensionTransformation)
+	err = json.Unmarshal(data, &varDimensionTransformation)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DimensionTransformation(varDimensionTransformation)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "transformationType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

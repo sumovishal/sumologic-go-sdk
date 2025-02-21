@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AuthnCertificateResult{}
 type AuthnCertificateResult struct {
 	// Authentication Request Signing Certificate for the user.
 	Certificate string `json:"certificate"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AuthnCertificateResult AuthnCertificateResult
@@ -80,6 +80,11 @@ func (o AuthnCertificateResult) MarshalJSON() ([]byte, error) {
 func (o AuthnCertificateResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["certificate"] = o.Certificate
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AuthnCertificateResult) UnmarshalJSON(data []byte) (err error) {
 
 	varAuthnCertificateResult := _AuthnCertificateResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAuthnCertificateResult)
+	err = json.Unmarshal(data, &varAuthnCertificateResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AuthnCertificateResult(varAuthnCertificateResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "certificate")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

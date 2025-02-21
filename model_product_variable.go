@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ProductVariable struct {
 	Unit string `json:"unit"`
 	// Possible values allowed for the productvariable.
 	PossibleValues []int64 `json:"possibleValues"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProductVariable ProductVariable
@@ -164,6 +164,11 @@ func (o ProductVariable) ToMap() (map[string]interface{}, error) {
 	toSerialize["productVariableId"] = o.ProductVariableId
 	toSerialize["unit"] = o.Unit
 	toSerialize["possibleValues"] = o.PossibleValues
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *ProductVariable) UnmarshalJSON(data []byte) (err error) {
 
 	varProductVariable := _ProductVariable{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProductVariable)
+	err = json.Unmarshal(data, &varProductVariable)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProductVariable(varProductVariable)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productVariableName")
+		delete(additionalProperties, "productVariableId")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "possibleValues")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

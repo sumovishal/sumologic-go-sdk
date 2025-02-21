@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ContentSyncStatusResponse struct {
 	Status string `json:"status"`
 	// Content Sync Job progress percentage.
 	Progress int32 `json:"progress"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentSyncStatusResponse ContentSyncStatusResponse
@@ -108,6 +108,11 @@ func (o ContentSyncStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["status"] = o.Status
 	toSerialize["progress"] = o.Progress
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ContentSyncStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varContentSyncStatusResponse := _ContentSyncStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentSyncStatusResponse)
+	err = json.Unmarshal(data, &varContentSyncStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentSyncStatusResponse(varContentSyncStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "progress")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

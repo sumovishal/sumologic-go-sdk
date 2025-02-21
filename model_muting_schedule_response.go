@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &MutingScheduleResponse{}
 type MutingScheduleResponse struct {
 	// Id of the muting schedule in hex.
 	Id string `json:"id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingScheduleResponse MutingScheduleResponse
@@ -80,6 +80,11 @@ func (o MutingScheduleResponse) MarshalJSON() ([]byte, error) {
 func (o MutingScheduleResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *MutingScheduleResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varMutingScheduleResponse := _MutingScheduleResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingScheduleResponse)
+	err = json.Unmarshal(data, &varMutingScheduleResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MutingScheduleResponse(varMutingScheduleResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

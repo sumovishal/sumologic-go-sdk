@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsCardinalityLimitExceededTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type MetricsCardinalityLimitExceededTracker struct {
 	TrackerIdentity
 	// The retention of metrics that exceeded the limit.
 	Retention *string `json:"retention,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsCardinalityLimitExceededTracker MetricsCardinalityLimitExceededTracker
@@ -101,6 +103,11 @@ func (o MetricsCardinalityLimitExceededTracker) ToMap() (map[string]interface{},
 	if !IsNil(o.Retention) {
 		toSerialize["retention"] = o.Retention
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *MetricsCardinalityLimitExceededTracker) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varMetricsCardinalityLimitExceededTracker := _MetricsCardinalityLimitExceededTracker{}
+	type MetricsCardinalityLimitExceededTrackerWithoutEmbeddedStruct struct {
+		// The retention of metrics that exceeded the limit.
+		Retention *string `json:"retention,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsCardinalityLimitExceededTracker)
+	varMetricsCardinalityLimitExceededTrackerWithoutEmbeddedStruct := MetricsCardinalityLimitExceededTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsCardinalityLimitExceededTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsCardinalityLimitExceededTracker := _MetricsCardinalityLimitExceededTracker{}
+		varMetricsCardinalityLimitExceededTracker.Retention = varMetricsCardinalityLimitExceededTrackerWithoutEmbeddedStruct.Retention
+		*o = MetricsCardinalityLimitExceededTracker(varMetricsCardinalityLimitExceededTracker)
+	} else {
 		return err
 	}
 
-	*o = MetricsCardinalityLimitExceededTracker(varMetricsCardinalityLimitExceededTracker)
+	varMetricsCardinalityLimitExceededTracker := _MetricsCardinalityLimitExceededTracker{}
+
+	err = json.Unmarshal(data, &varMetricsCardinalityLimitExceededTracker)
+	if err == nil {
+		o.TrackerIdentity = varMetricsCardinalityLimitExceededTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "retention")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

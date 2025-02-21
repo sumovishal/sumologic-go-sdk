@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansTimeGroupBy type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SpansTimeGroupBy struct {
 	SpansGroupBy
 	// A fixed interval grouping in the following format <#><time_period>,  supported <time_period> values are weeks (w), days (d), hours (h), minutes (m), and seconds (s). 
 	FieldValue string `json:"fieldValue" validate:"regexp=^[0-9]+(w|d|h|m|s)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansTimeGroupBy SpansTimeGroupBy
@@ -90,6 +92,11 @@ func (o SpansTimeGroupBy) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errSpansGroupBy
 	}
 	toSerialize["fieldValue"] = o.FieldValue
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *SpansTimeGroupBy) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansTimeGroupBy := _SpansTimeGroupBy{}
+	type SpansTimeGroupByWithoutEmbeddedStruct struct {
+		// A fixed interval grouping in the following format <#><time_period>,  supported <time_period> values are weeks (w), days (d), hours (h), minutes (m), and seconds (s). 
+		FieldValue string `json:"fieldValue" validate:"regexp=^[0-9]+(w|d|h|m|s)$"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansTimeGroupBy)
+	varSpansTimeGroupByWithoutEmbeddedStruct := SpansTimeGroupByWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansTimeGroupByWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansTimeGroupBy := _SpansTimeGroupBy{}
+		varSpansTimeGroupBy.FieldValue = varSpansTimeGroupByWithoutEmbeddedStruct.FieldValue
+		*o = SpansTimeGroupBy(varSpansTimeGroupBy)
+	} else {
 		return err
 	}
 
-	*o = SpansTimeGroupBy(varSpansTimeGroupBy)
+	varSpansTimeGroupBy := _SpansTimeGroupBy{}
+
+	err = json.Unmarshal(data, &varSpansTimeGroupBy)
+	if err == nil {
+		o.SpansGroupBy = varSpansTimeGroupBy.SpansGroupBy
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldValue")
+
+		// remove fields from embedded structs
+		reflectSpansGroupBy := reflect.ValueOf(o.SpansGroupBy)
+		for i := 0; i < reflectSpansGroupBy.Type().NumField(); i++ {
+			t := reflectSpansGroupBy.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

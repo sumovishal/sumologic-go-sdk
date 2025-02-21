@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DashboardSearchSessionIds struct {
 	Data map[string]string `json:"data"`
 	// Error description for the session keys that failed validation.
 	Errors *map[string]ErrorResponse `json:"errors,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardSearchSessionIds DashboardSearchSessionIds
@@ -117,6 +117,11 @@ func (o DashboardSearchSessionIds) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Errors) {
 		toSerialize["errors"] = o.Errors
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *DashboardSearchSessionIds) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardSearchSessionIds := _DashboardSearchSessionIds{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardSearchSessionIds)
+	err = json.Unmarshal(data, &varDashboardSearchSessionIds)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardSearchSessionIds(varDashboardSearchSessionIds)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "errors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

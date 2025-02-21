@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &PlaybookRunningListRequest{}
 type PlaybookRunningListRequest struct {
 	// The alert id.
 	AlertId string `json:"alertId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PlaybookRunningListRequest PlaybookRunningListRequest
@@ -80,6 +80,11 @@ func (o PlaybookRunningListRequest) MarshalJSON() ([]byte, error) {
 func (o PlaybookRunningListRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["alertId"] = o.AlertId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *PlaybookRunningListRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varPlaybookRunningListRequest := _PlaybookRunningListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPlaybookRunningListRequest)
+	err = json.Unmarshal(data, &varPlaybookRunningListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PlaybookRunningListRequest(varPlaybookRunningListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "alertId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

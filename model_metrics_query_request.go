@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type MetricsQueryRequest struct {
 	// A list of metrics queries.
 	Queries []MetricsQueryRow `json:"queries"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsQueryRequest MetricsQueryRequest
@@ -107,6 +107,11 @@ func (o MetricsQueryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queries"] = o.Queries
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *MetricsQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsQueryRequest := _MetricsQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsQueryRequest)
+	err = json.Unmarshal(data, &varMetricsQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsQueryRequest(varMetricsQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

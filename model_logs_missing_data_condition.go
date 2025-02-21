@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsMissingDataCondition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type LogsMissingDataCondition struct {
 	TriggerCondition
 	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsMissingDataCondition LogsMissingDataCondition
@@ -92,6 +94,11 @@ func (o LogsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTriggerCondition
 	}
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -118,17 +125,56 @@ func (o *LogsMissingDataCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogsMissingDataCondition := _LogsMissingDataCondition{}
+	type LogsMissingDataConditionWithoutEmbeddedStruct struct {
+		// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
+		TimeRange string `json:"timeRange"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsMissingDataCondition)
+	varLogsMissingDataConditionWithoutEmbeddedStruct := LogsMissingDataConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsMissingDataConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsMissingDataCondition := _LogsMissingDataCondition{}
+		varLogsMissingDataCondition.TimeRange = varLogsMissingDataConditionWithoutEmbeddedStruct.TimeRange
+		*o = LogsMissingDataCondition(varLogsMissingDataCondition)
+	} else {
 		return err
 	}
 
-	*o = LogsMissingDataCondition(varLogsMissingDataCondition)
+	varLogsMissingDataCondition := _LogsMissingDataCondition{}
+
+	err = json.Unmarshal(data, &varLogsMissingDataCondition)
+	if err == nil {
+		o.TriggerCondition = varLogsMissingDataCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeRange")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

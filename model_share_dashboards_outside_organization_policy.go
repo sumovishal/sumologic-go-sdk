@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ShareDashboardsOutsideOrganizationPolicy{}
 type ShareDashboardsOutsideOrganizationPolicy struct {
 	// Whether the Share Dashboards Outside Organization policy is enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ShareDashboardsOutsideOrganizationPolicy ShareDashboardsOutsideOrganizationPolicy
@@ -80,6 +80,11 @@ func (o ShareDashboardsOutsideOrganizationPolicy) MarshalJSON() ([]byte, error) 
 func (o ShareDashboardsOutsideOrganizationPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ShareDashboardsOutsideOrganizationPolicy) UnmarshalJSON(data []byte) (e
 
 	varShareDashboardsOutsideOrganizationPolicy := _ShareDashboardsOutsideOrganizationPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varShareDashboardsOutsideOrganizationPolicy)
+	err = json.Unmarshal(data, &varShareDashboardsOutsideOrganizationPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ShareDashboardsOutsideOrganizationPolicy(varShareDashboardsOutsideOrganizationPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

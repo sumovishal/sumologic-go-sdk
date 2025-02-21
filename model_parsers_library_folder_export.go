@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryFolderExport type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type ParsersLibraryFolderExport struct {
 	ParsersLibraryExportBase
 	// Children of the folder
 	Children []ParsersLibraryExportBase `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryFolderExport ParsersLibraryFolderExport
@@ -101,6 +103,11 @@ func (o ParsersLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *ParsersLibraryFolderExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryFolderExport := _ParsersLibraryFolderExport{}
+	type ParsersLibraryFolderExportWithoutEmbeddedStruct struct {
+		// Children of the folder
+		Children []ParsersLibraryExportBase `json:"children,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryFolderExport)
+	varParsersLibraryFolderExportWithoutEmbeddedStruct := ParsersLibraryFolderExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryFolderExportWithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryFolderExport := _ParsersLibraryFolderExport{}
+		varParsersLibraryFolderExport.Children = varParsersLibraryFolderExportWithoutEmbeddedStruct.Children
+		*o = ParsersLibraryFolderExport(varParsersLibraryFolderExport)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryFolderExport(varParsersLibraryFolderExport)
+	varParsersLibraryFolderExport := _ParsersLibraryFolderExport{}
+
+	err = json.Unmarshal(data, &varParsersLibraryFolderExport)
+	if err == nil {
+		o.ParsersLibraryExportBase = varParsersLibraryFolderExport.ParsersLibraryExportBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectParsersLibraryExportBase := reflect.ValueOf(o.ParsersLibraryExportBase)
+		for i := 0; i < reflectParsersLibraryExportBase.Type().NumField(); i++ {
+			t := reflectParsersLibraryExportBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

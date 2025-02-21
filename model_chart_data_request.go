@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type ChartDataRequest struct {
 	// Defines the conditions of when to send notifications.
 	Triggers []TriggerCondition `json:"triggers,omitempty"`
 	TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChartDataRequest ChartDataRequest
@@ -181,6 +181,11 @@ func (o ChartDataRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -209,15 +214,23 @@ func (o *ChartDataRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChartDataRequest := _ChartDataRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChartDataRequest)
+	err = json.Unmarshal(data, &varChartDataRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChartDataRequest(varChartDataRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "triggers")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

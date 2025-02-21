@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type BulkAsyncStatusResponse struct {
 	JobStatuses map[string]AsyncJobStatus `json:"jobStatuses"`
 	// Map of content identifiers to error messages for all failed job requests
 	Errors map[string]BulkErrorResponse `json:"errors"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BulkAsyncStatusResponse BulkAsyncStatusResponse
@@ -108,6 +108,11 @@ func (o BulkAsyncStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["jobStatuses"] = o.JobStatuses
 	toSerialize["errors"] = o.Errors
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *BulkAsyncStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varBulkAsyncStatusResponse := _BulkAsyncStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBulkAsyncStatusResponse)
+	err = json.Unmarshal(data, &varBulkAsyncStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BulkAsyncStatusResponse(varBulkAsyncStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "jobStatuses")
+		delete(additionalProperties, "errors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

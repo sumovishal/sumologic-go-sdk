@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type LogSearchScheduleSyncDefinition struct {
 	MuteErrorEmails *bool `json:"muteErrorEmails,omitempty"`
 	// A list of scheduled search template parameters to be used while executing the query. This is different from the queryParameters field in parent object as this field will be  used for execution as  per the schedule. The parent object field is for search itself, not part of execution.  Learn more about the search templates here :  https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
 	Parameters []ScheduleSearchParameterSyncDefinition `json:"parameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchScheduleSyncDefinition LogSearchScheduleSyncDefinition
@@ -346,6 +346,11 @@ func (o LogSearchScheduleSyncDefinition) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.Parameters) {
 		toSerialize["parameters"] = o.Parameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -376,15 +381,28 @@ func (o *LogSearchScheduleSyncDefinition) UnmarshalJSON(data []byte) (err error)
 
 	varLogSearchScheduleSyncDefinition := _LogSearchScheduleSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchScheduleSyncDefinition)
+	err = json.Unmarshal(data, &varLogSearchScheduleSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchScheduleSyncDefinition(varLogSearchScheduleSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cronExpression")
+		delete(additionalProperties, "displayableTimeRange")
+		delete(additionalProperties, "parseableTimeRange")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "notification")
+		delete(additionalProperties, "scheduleType")
+		delete(additionalProperties, "muteErrorEmails")
+		delete(additionalProperties, "parameters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

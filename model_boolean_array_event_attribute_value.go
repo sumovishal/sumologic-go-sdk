@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the BooleanArrayEventAttributeValue type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,7 @@ var _ MappedNullable = &BooleanArrayEventAttributeValue{}
 type BooleanArrayEventAttributeValue struct {
 	EventAttributeValue
 	Values []bool `json:"values"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BooleanArrayEventAttributeValue BooleanArrayEventAttributeValue
@@ -89,6 +91,11 @@ func (o BooleanArrayEventAttributeValue) ToMap() (map[string]interface{}, error)
 		return map[string]interface{}{}, errEventAttributeValue
 	}
 	toSerialize["values"] = o.Values
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -115,17 +122,55 @@ func (o *BooleanArrayEventAttributeValue) UnmarshalJSON(data []byte) (err error)
 		}
 	}
 
-	varBooleanArrayEventAttributeValue := _BooleanArrayEventAttributeValue{}
+	type BooleanArrayEventAttributeValueWithoutEmbeddedStruct struct {
+		Values []bool `json:"values"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBooleanArrayEventAttributeValue)
+	varBooleanArrayEventAttributeValueWithoutEmbeddedStruct := BooleanArrayEventAttributeValueWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varBooleanArrayEventAttributeValueWithoutEmbeddedStruct)
+	if err == nil {
+		varBooleanArrayEventAttributeValue := _BooleanArrayEventAttributeValue{}
+		varBooleanArrayEventAttributeValue.Values = varBooleanArrayEventAttributeValueWithoutEmbeddedStruct.Values
+		*o = BooleanArrayEventAttributeValue(varBooleanArrayEventAttributeValue)
+	} else {
 		return err
 	}
 
-	*o = BooleanArrayEventAttributeValue(varBooleanArrayEventAttributeValue)
+	varBooleanArrayEventAttributeValue := _BooleanArrayEventAttributeValue{}
+
+	err = json.Unmarshal(data, &varBooleanArrayEventAttributeValue)
+	if err == nil {
+		o.EventAttributeValue = varBooleanArrayEventAttributeValue.EventAttributeValue
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "values")
+
+		// remove fields from embedded structs
+		reflectEventAttributeValue := reflect.ValueOf(o.EventAttributeValue)
+		for i := 0; i < reflectEventAttributeValue.Type().NumField(); i++ {
+			t := reflectEventAttributeValue.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

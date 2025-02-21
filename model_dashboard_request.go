@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -46,6 +45,7 @@ type DashboardRequest struct {
 	IsPublic *bool `json:"isPublic,omitempty"`
 	// Whether to highlight threshold violations.
 	HighlightViolations *bool `json:"highlightViolations,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardRequest DashboardRequest
@@ -565,6 +565,11 @@ func (o DashboardRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.HighlightViolations) {
 		toSerialize["highlightViolations"] = o.HighlightViolations
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -593,15 +598,33 @@ func (o *DashboardRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardRequest := _DashboardRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardRequest)
+	err = json.Unmarshal(data, &varDashboardRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardRequest(varDashboardRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "folderId")
+		delete(additionalProperties, "topologyLabelMap")
+		delete(additionalProperties, "domain")
+		delete(additionalProperties, "hierarchies")
+		delete(additionalProperties, "refreshInterval")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "panels")
+		delete(additionalProperties, "layout")
+		delete(additionalProperties, "variables")
+		delete(additionalProperties, "theme")
+		delete(additionalProperties, "isPublic")
+		delete(additionalProperties, "highlightViolations")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

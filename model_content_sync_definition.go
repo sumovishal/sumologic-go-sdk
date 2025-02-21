@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ContentSyncDefinition struct {
 	Type string `json:"type"`
 	// The name of the item.
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentSyncDefinition ContentSyncDefinition
@@ -108,6 +108,11 @@ func (o ContentSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ContentSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varContentSyncDefinition := _ContentSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentSyncDefinition)
+	err = json.Unmarshal(data, &varContentSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentSyncDefinition(varContentSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

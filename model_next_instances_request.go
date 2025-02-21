@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type NextInstancesRequest struct {
 	StartTime string `json:"startTime"`
 	// RRule (Recurrence Rule)
 	Rrule string `json:"rrule"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NextInstancesRequest NextInstancesRequest
@@ -164,6 +164,11 @@ func (o NextInstancesRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["startDate"] = o.StartDate
 	toSerialize["startTime"] = o.StartTime
 	toSerialize["rrule"] = o.Rrule
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *NextInstancesRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varNextInstancesRequest := _NextInstancesRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNextInstancesRequest)
+	err = json.Unmarshal(data, &varNextInstancesRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NextInstancesRequest(varNextInstancesRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "rrule")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ScheduleSearchParameterSyncDefinition struct {
 	Name string `json:"name"`
 	// Value of scheduled search parameter.
 	Value string `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduleSearchParameterSyncDefinition ScheduleSearchParameterSyncDefinition
@@ -108,6 +108,11 @@ func (o ScheduleSearchParameterSyncDefinition) ToMap() (map[string]interface{}, 
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ScheduleSearchParameterSyncDefinition) UnmarshalJSON(data []byte) (err 
 
 	varScheduleSearchParameterSyncDefinition := _ScheduleSearchParameterSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduleSearchParameterSyncDefinition)
+	err = json.Unmarshal(data, &varScheduleSearchParameterSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduleSearchParameterSyncDefinition(varScheduleSearchParameterSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

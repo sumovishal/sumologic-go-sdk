@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &Template{}
 type Template struct {
 	// The type of template. `DashboardTemplate` provides a snapshot view of the exported dashboard. `DashboardReportModeTemplate` provides a printer-friendly view of the exported dashboard. New templates may be supported in the future.
 	TemplateType string `json:"templateType" validate:"regexp=^(DashboardTemplate|DashboardReportModeTemplate)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Template Template
@@ -80,6 +80,11 @@ func (o Template) MarshalJSON() ([]byte, error) {
 func (o Template) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["templateType"] = o.TemplateType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *Template) UnmarshalJSON(data []byte) (err error) {
 
 	varTemplate := _Template{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTemplate)
+	err = json.Unmarshal(data, &varTemplate)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Template(varTemplate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "templateType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

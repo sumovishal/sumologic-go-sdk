@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AttributeReversedIndex struct {
 	AttributeName string `json:"attributeName"`
 	// List of value statistics of the given attribute.
 	AttributeValueStatistics []AttributeValueReversedIndex `json:"attributeValueStatistics"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AttributeReversedIndex AttributeReversedIndex
@@ -108,6 +108,11 @@ func (o AttributeReversedIndex) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["attributeName"] = o.AttributeName
 	toSerialize["attributeValueStatistics"] = o.AttributeValueStatistics
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *AttributeReversedIndex) UnmarshalJSON(data []byte) (err error) {
 
 	varAttributeReversedIndex := _AttributeReversedIndex{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAttributeReversedIndex)
+	err = json.Unmarshal(data, &varAttributeReversedIndex)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AttributeReversedIndex(varAttributeReversedIndex)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "attributeName")
+		delete(additionalProperties, "attributeValueStatistics")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

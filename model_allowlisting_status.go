@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AllowlistingStatus struct {
 	ContentEnabled bool `json:"contentEnabled"`
 	// Whether service allowlisting is enabled for Login.
 	LoginEnabled bool `json:"loginEnabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AllowlistingStatus AllowlistingStatus
@@ -108,6 +108,11 @@ func (o AllowlistingStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["contentEnabled"] = o.ContentEnabled
 	toSerialize["loginEnabled"] = o.LoginEnabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *AllowlistingStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varAllowlistingStatus := _AllowlistingStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAllowlistingStatus)
+	err = json.Unmarshal(data, &varAllowlistingStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AllowlistingStatus(varAllowlistingStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "contentEnabled")
+		delete(additionalProperties, "loginEnabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

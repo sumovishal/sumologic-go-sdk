@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ReportScheduleRequestEmailNotification type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type ReportScheduleRequestEmailNotification struct {
 	// This property is deprecated, please use the root-level timeZone property instead.
 	// Deprecated
 	TimeZone *string `json:"timeZone,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ReportScheduleRequestEmailNotification ReportScheduleRequestEmailNotification
@@ -105,6 +107,11 @@ func (o ReportScheduleRequestEmailNotification) ToMap() (map[string]interface{},
 	if !IsNil(o.TimeZone) {
 		toSerialize["timeZone"] = o.TimeZone
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -132,17 +139,57 @@ func (o *ReportScheduleRequestEmailNotification) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varReportScheduleRequestEmailNotification := _ReportScheduleRequestEmailNotification{}
+	type ReportScheduleRequestEmailNotificationWithoutEmbeddedStruct struct {
+		// This property is deprecated, please use the root-level timeZone property instead.
+		// Deprecated
+		TimeZone *string `json:"timeZone,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varReportScheduleRequestEmailNotification)
+	varReportScheduleRequestEmailNotificationWithoutEmbeddedStruct := ReportScheduleRequestEmailNotificationWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varReportScheduleRequestEmailNotificationWithoutEmbeddedStruct)
+	if err == nil {
+		varReportScheduleRequestEmailNotification := _ReportScheduleRequestEmailNotification{}
+		varReportScheduleRequestEmailNotification.TimeZone = varReportScheduleRequestEmailNotificationWithoutEmbeddedStruct.TimeZone
+		*o = ReportScheduleRequestEmailNotification(varReportScheduleRequestEmailNotification)
+	} else {
 		return err
 	}
 
-	*o = ReportScheduleRequestEmailNotification(varReportScheduleRequestEmailNotification)
+	varReportScheduleRequestEmailNotification := _ReportScheduleRequestEmailNotification{}
+
+	err = json.Unmarshal(data, &varReportScheduleRequestEmailNotification)
+	if err == nil {
+		o.Email = varReportScheduleRequestEmailNotification.Email
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeZone")
+
+		// remove fields from embedded structs
+		reflectEmail := reflect.ValueOf(o.Email)
+		for i := 0; i < reflectEmail.Type().NumField(); i++ {
+			t := reflectEmail.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

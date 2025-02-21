@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the TextPanel type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type TextPanel struct {
 	Panel
 	// Text to display in the panel.
 	Text string `json:"text"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TextPanel TextPanel
@@ -93,6 +95,11 @@ func (o TextPanel) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errPanel
 	}
 	toSerialize["text"] = o.Text
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -120,17 +127,56 @@ func (o *TextPanel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTextPanel := _TextPanel{}
+	type TextPanelWithoutEmbeddedStruct struct {
+		// Text to display in the panel.
+		Text string `json:"text"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTextPanel)
+	varTextPanelWithoutEmbeddedStruct := TextPanelWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varTextPanelWithoutEmbeddedStruct)
+	if err == nil {
+		varTextPanel := _TextPanel{}
+		varTextPanel.Text = varTextPanelWithoutEmbeddedStruct.Text
+		*o = TextPanel(varTextPanel)
+	} else {
 		return err
 	}
 
-	*o = TextPanel(varTextPanel)
+	varTextPanel := _TextPanel{}
+
+	err = json.Unmarshal(data, &varTextPanel)
+	if err == nil {
+		o.Panel = varTextPanel.Panel
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "text")
+
+		// remove fields from embedded structs
+		reflectPanel := reflect.ValueOf(o.Panel)
+		for i := 0; i < reflectPanel.Type().NumField(); i++ {
+			t := reflectPanel.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

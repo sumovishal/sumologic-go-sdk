@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OTCProcessHighMemoryUsageTracker type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type OTCProcessHighMemoryUsageTracker struct {
 	MemoryUsage *string `json:"memoryUsage,omitempty"`
 	// The collector memory limit (if set) in bytes, e.g. `4000000000`
 	MemoryLimit *string `json:"memoryLimit,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCProcessHighMemoryUsageTracker OTCProcessHighMemoryUsageTracker
@@ -249,6 +251,11 @@ func (o OTCProcessHighMemoryUsageTracker) ToMap() (map[string]interface{}, error
 	if !IsNil(o.MemoryLimit) {
 		toSerialize["memoryLimit"] = o.MemoryLimit
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,17 +283,72 @@ func (o *OTCProcessHighMemoryUsageTracker) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varOTCProcessHighMemoryUsageTracker := _OTCProcessHighMemoryUsageTracker{}
+	type OTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The collector instance ID, e.g. `974b444b-4b45-4f32-aa03-1dbf2a16826d`.
+		InstanceId *string `json:"instanceId,omitempty"`
+		// The collector instance address, e.g. `172.16.1.14`.
+		InstanceAddress *string `json:"instanceAddress,omitempty"`
+		// The collector memory usage in bytes, e.g. `142606592`
+		MemoryUsage *string `json:"memoryUsage,omitempty"`
+		// The collector memory limit (if set) in bytes, e.g. `4000000000`
+		MemoryLimit *string `json:"memoryLimit,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCProcessHighMemoryUsageTracker)
+	varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct := OTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOTCProcessHighMemoryUsageTracker := _OTCProcessHighMemoryUsageTracker{}
+		varOTCProcessHighMemoryUsageTracker.EventType = varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct.EventType
+		varOTCProcessHighMemoryUsageTracker.InstanceId = varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct.InstanceId
+		varOTCProcessHighMemoryUsageTracker.InstanceAddress = varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct.InstanceAddress
+		varOTCProcessHighMemoryUsageTracker.MemoryUsage = varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct.MemoryUsage
+		varOTCProcessHighMemoryUsageTracker.MemoryLimit = varOTCProcessHighMemoryUsageTrackerWithoutEmbeddedStruct.MemoryLimit
+		*o = OTCProcessHighMemoryUsageTracker(varOTCProcessHighMemoryUsageTracker)
+	} else {
 		return err
 	}
 
-	*o = OTCProcessHighMemoryUsageTracker(varOTCProcessHighMemoryUsageTracker)
+	varOTCProcessHighMemoryUsageTracker := _OTCProcessHighMemoryUsageTracker{}
+
+	err = json.Unmarshal(data, &varOTCProcessHighMemoryUsageTracker)
+	if err == nil {
+		o.TrackerIdentity = varOTCProcessHighMemoryUsageTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "instanceAddress")
+		delete(additionalProperties, "memoryUsage")
+		delete(additionalProperties, "memoryLimit")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

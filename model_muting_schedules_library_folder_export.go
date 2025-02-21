@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MutingSchedulesLibraryFolderExport type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type MutingSchedulesLibraryFolderExport struct {
 	MutingSchedulesLibraryBaseExport
 	// The items in the folder. A multi-type list of types mutingschedule or folder.
 	Children []MutingSchedulesLibraryBaseExport `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryFolderExport MutingSchedulesLibraryFolderExport
@@ -100,6 +102,11 @@ func (o MutingSchedulesLibraryFolderExport) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -126,17 +133,56 @@ func (o *MutingSchedulesLibraryFolderExport) UnmarshalJSON(data []byte) (err err
 		}
 	}
 
-	varMutingSchedulesLibraryFolderExport := _MutingSchedulesLibraryFolderExport{}
+	type MutingSchedulesLibraryFolderExportWithoutEmbeddedStruct struct {
+		// The items in the folder. A multi-type list of types mutingschedule or folder.
+		Children []MutingSchedulesLibraryBaseExport `json:"children,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryFolderExport)
+	varMutingSchedulesLibraryFolderExportWithoutEmbeddedStruct := MutingSchedulesLibraryFolderExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolderExportWithoutEmbeddedStruct)
+	if err == nil {
+		varMutingSchedulesLibraryFolderExport := _MutingSchedulesLibraryFolderExport{}
+		varMutingSchedulesLibraryFolderExport.Children = varMutingSchedulesLibraryFolderExportWithoutEmbeddedStruct.Children
+		*o = MutingSchedulesLibraryFolderExport(varMutingSchedulesLibraryFolderExport)
+	} else {
 		return err
 	}
 
-	*o = MutingSchedulesLibraryFolderExport(varMutingSchedulesLibraryFolderExport)
+	varMutingSchedulesLibraryFolderExport := _MutingSchedulesLibraryFolderExport{}
+
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolderExport)
+	if err == nil {
+		o.MutingSchedulesLibraryBaseExport = varMutingSchedulesLibraryFolderExport.MutingSchedulesLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectMutingSchedulesLibraryBaseExport := reflect.ValueOf(o.MutingSchedulesLibraryBaseExport)
+		for i := 0; i < reflectMutingSchedulesLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectMutingSchedulesLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

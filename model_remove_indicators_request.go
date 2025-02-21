@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type RemoveIndicatorsRequest struct {
 	Source string `json:"source"`
 	// The list of indicator IDs to match against
 	IndicatorIds []string `json:"indicatorIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RemoveIndicatorsRequest RemoveIndicatorsRequest
@@ -108,6 +108,11 @@ func (o RemoveIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source"] = o.Source
 	toSerialize["indicatorIds"] = o.IndicatorIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *RemoveIndicatorsRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varRemoveIndicatorsRequest := _RemoveIndicatorsRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRemoveIndicatorsRequest)
+	err = json.Unmarshal(data, &varRemoveIndicatorsRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RemoveIndicatorsRequest(varRemoveIndicatorsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "indicatorIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

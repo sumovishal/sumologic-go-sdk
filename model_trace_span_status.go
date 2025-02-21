@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TraceSpanStatus struct {
 	Code string `json:"code"`
 	// Optional descriptive message about the status, could be an http status code or the kind of an error, e.g. OSError.
 	Message *string `json:"message,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpanStatus TraceSpanStatus
@@ -117,6 +117,11 @@ func (o TraceSpanStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Message) {
 		toSerialize["message"] = o.Message
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *TraceSpanStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpanStatus := _TraceSpanStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpanStatus)
+	err = json.Unmarshal(data, &varTraceSpanStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpanStatus(varTraceSpanStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

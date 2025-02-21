@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UserConcurrentSessionsLimitPolicy struct {
 	Enabled bool `json:"enabled"`
 	// Maximum number of concurrent sessions a user may have.
 	MaxConcurrentSessions *int32 `json:"maxConcurrentSessions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserConcurrentSessionsLimitPolicy UserConcurrentSessionsLimitPolicy
@@ -121,6 +121,11 @@ func (o UserConcurrentSessionsLimitPolicy) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.MaxConcurrentSessions) {
 		toSerialize["maxConcurrentSessions"] = o.MaxConcurrentSessions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -148,15 +153,21 @@ func (o *UserConcurrentSessionsLimitPolicy) UnmarshalJSON(data []byte) (err erro
 
 	varUserConcurrentSessionsLimitPolicy := _UserConcurrentSessionsLimitPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserConcurrentSessionsLimitPolicy)
+	err = json.Unmarshal(data, &varUserConcurrentSessionsLimitPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserConcurrentSessionsLimitPolicy(varUserConcurrentSessionsLimitPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "maxConcurrentSessions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SpansFilter struct {
 	Type string `json:"type" validate:"regexp=^(StandaloneKey|KeyValuePair)$"`
 	// The name of the filtering field.
 	FieldName string `json:"fieldName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansFilter SpansFilter
@@ -108,6 +108,11 @@ func (o SpansFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["fieldName"] = o.FieldName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SpansFilter) UnmarshalJSON(data []byte) (err error) {
 
 	varSpansFilter := _SpansFilter{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansFilter)
+	err = json.Unmarshal(data, &varSpansFilter)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpansFilter(varSpansFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "fieldName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

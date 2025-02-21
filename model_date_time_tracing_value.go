@@ -13,8 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the DateTimeTracingValue type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type DateTimeTracingValue struct {
 	TracingValue
 	// Timestamp in UTC in the [ISO 8601 / RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	Value time.Time `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DateTimeTracingValue DateTimeTracingValue
@@ -91,6 +93,11 @@ func (o DateTimeTracingValue) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTracingValue
 	}
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -117,17 +124,56 @@ func (o *DateTimeTracingValue) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varDateTimeTracingValue := _DateTimeTracingValue{}
+	type DateTimeTracingValueWithoutEmbeddedStruct struct {
+		// Timestamp in UTC in the [ISO 8601 / RFC3339](https://tools.ietf.org/html/rfc3339) format.
+		Value time.Time `json:"value"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDateTimeTracingValue)
+	varDateTimeTracingValueWithoutEmbeddedStruct := DateTimeTracingValueWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varDateTimeTracingValueWithoutEmbeddedStruct)
+	if err == nil {
+		varDateTimeTracingValue := _DateTimeTracingValue{}
+		varDateTimeTracingValue.Value = varDateTimeTracingValueWithoutEmbeddedStruct.Value
+		*o = DateTimeTracingValue(varDateTimeTracingValue)
+	} else {
 		return err
 	}
 
-	*o = DateTimeTracingValue(varDateTimeTracingValue)
+	varDateTimeTracingValue := _DateTimeTracingValue{}
+
+	err = json.Unmarshal(data, &varDateTimeTracingValue)
+	if err == nil {
+		o.TracingValue = varDateTimeTracingValue.TracingValue
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+
+		// remove fields from embedded structs
+		reflectTracingValue := reflect.ValueOf(o.TracingValue)
+		for i := 0; i < reflectTracingValue.Type().NumField(); i++ {
+			t := reflectTracingValue.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

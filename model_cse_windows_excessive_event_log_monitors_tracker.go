@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsExcessiveEventLogMonitorsTracker type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type CSEWindowsExcessiveEventLogMonitorsTracker struct {
 	SensorHostname *string `json:"sensorHostname,omitempty"`
 	// The sensor's user name.
 	SensorUserName *string `json:"sensorUserName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsExcessiveEventLogMonitorsTracker CSEWindowsExcessiveEventLogMonitorsTracker
@@ -212,6 +214,11 @@ func (o CSEWindowsExcessiveEventLogMonitorsTracker) ToMap() (map[string]interfac
 	if !IsNil(o.SensorUserName) {
 		toSerialize["sensorUserName"] = o.SensorUserName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,17 +246,68 @@ func (o *CSEWindowsExcessiveEventLogMonitorsTracker) UnmarshalJSON(data []byte) 
 		}
 	}
 
-	varCSEWindowsExcessiveEventLogMonitorsTracker := _CSEWindowsExcessiveEventLogMonitorsTracker{}
+	type CSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The sensor's user name.
+		SensorUserName *string `json:"sensorUserName,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsExcessiveEventLogMonitorsTracker)
+	varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct := CSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsExcessiveEventLogMonitorsTracker := _CSEWindowsExcessiveEventLogMonitorsTracker{}
+		varCSEWindowsExcessiveEventLogMonitorsTracker.EventType = varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsExcessiveEventLogMonitorsTracker.SensorId = varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsExcessiveEventLogMonitorsTracker.SensorHostname = varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsExcessiveEventLogMonitorsTracker.SensorUserName = varCSEWindowsExcessiveEventLogMonitorsTrackerWithoutEmbeddedStruct.SensorUserName
+		*o = CSEWindowsExcessiveEventLogMonitorsTracker(varCSEWindowsExcessiveEventLogMonitorsTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsExcessiveEventLogMonitorsTracker(varCSEWindowsExcessiveEventLogMonitorsTracker)
+	varCSEWindowsExcessiveEventLogMonitorsTracker := _CSEWindowsExcessiveEventLogMonitorsTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsExcessiveEventLogMonitorsTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsExcessiveEventLogMonitorsTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "sensorUserName")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

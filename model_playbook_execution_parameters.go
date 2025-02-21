@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PlaybookExecutionParameters struct {
 	PlaybookId string `json:"playbookId"`
 	// The alert id which needs to run the playbook.
 	AlertId string `json:"alertId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PlaybookExecutionParameters PlaybookExecutionParameters
@@ -108,6 +108,11 @@ func (o PlaybookExecutionParameters) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["playbookId"] = o.PlaybookId
 	toSerialize["alertId"] = o.AlertId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *PlaybookExecutionParameters) UnmarshalJSON(data []byte) (err error) {
 
 	varPlaybookExecutionParameters := _PlaybookExecutionParameters{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPlaybookExecutionParameters)
+	err = json.Unmarshal(data, &varPlaybookExecutionParameters)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PlaybookExecutionParameters(varPlaybookExecutionParameters)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "playbookId")
+		delete(additionalProperties, "alertId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

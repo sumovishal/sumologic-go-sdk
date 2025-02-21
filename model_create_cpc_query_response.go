@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CreateCpcQueryResponse{}
 type CreateCpcQueryResponse struct {
 	// The id of the created query.
 	QueryId string `json:"queryId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCpcQueryResponse CreateCpcQueryResponse
@@ -80,6 +80,11 @@ func (o CreateCpcQueryResponse) MarshalJSON() ([]byte, error) {
 func (o CreateCpcQueryResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryId"] = o.QueryId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CreateCpcQueryResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCpcQueryResponse := _CreateCpcQueryResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCpcQueryResponse)
+	err = json.Unmarshal(data, &varCreateCpcQueryResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCpcQueryResponse(varCreateCpcQueryResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

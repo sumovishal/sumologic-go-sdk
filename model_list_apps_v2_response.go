@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListAppsV2Response{}
 type ListAppsV2Response struct {
 	// An array of apps.
 	Apps []AppV2 `json:"apps"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListAppsV2Response ListAppsV2Response
@@ -80,6 +80,11 @@ func (o ListAppsV2Response) MarshalJSON() ([]byte, error) {
 func (o ListAppsV2Response) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["apps"] = o.Apps
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListAppsV2Response) UnmarshalJSON(data []byte) (err error) {
 
 	varListAppsV2Response := _ListAppsV2Response{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListAppsV2Response)
+	err = json.Unmarshal(data, &varListAppsV2Response)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListAppsV2Response(varListAppsV2Response)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "apps")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

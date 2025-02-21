@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DisableUnusedAccessKeysPolicy{}
 type DisableUnusedAccessKeysPolicy struct {
 	// The number of days it will take for an unused access key to automatically disable. Setting it to 0 (never) means that the accessKeys will not be disabled automatically.
 	UnusedAccessKeysDisableAfterInDays int32 `json:"unusedAccessKeysDisableAfterInDays"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DisableUnusedAccessKeysPolicy DisableUnusedAccessKeysPolicy
@@ -80,6 +80,11 @@ func (o DisableUnusedAccessKeysPolicy) MarshalJSON() ([]byte, error) {
 func (o DisableUnusedAccessKeysPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["unusedAccessKeysDisableAfterInDays"] = o.UnusedAccessKeysDisableAfterInDays
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DisableUnusedAccessKeysPolicy) UnmarshalJSON(data []byte) (err error) {
 
 	varDisableUnusedAccessKeysPolicy := _DisableUnusedAccessKeysPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDisableUnusedAccessKeysPolicy)
+	err = json.Unmarshal(data, &varDisableUnusedAccessKeysPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DisableUnusedAccessKeysPolicy(varDisableUnusedAccessKeysPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "unusedAccessKeysDisableAfterInDays")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

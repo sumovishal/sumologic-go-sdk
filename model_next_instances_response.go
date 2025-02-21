@@ -21,7 +21,10 @@ var _ MappedNullable = &NextInstancesResponse{}
 type NextInstancesResponse struct {
 	// list of next instances in epoch
 	NextInstances []int64 `json:"nextInstances,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _NextInstancesResponse NextInstancesResponse
 
 // NewNextInstancesResponse instantiates a new NextInstancesResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o NextInstancesResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NextInstances) {
 		toSerialize["nextInstances"] = o.NextInstances
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *NextInstancesResponse) UnmarshalJSON(data []byte) (err error) {
+	varNextInstancesResponse := _NextInstancesResponse{}
+
+	err = json.Unmarshal(data, &varNextInstancesResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = NextInstancesResponse(varNextInstancesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "nextInstances")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableNextInstancesResponse struct {

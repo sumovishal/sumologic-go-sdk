@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SubdomainUrlResponse{}
 type SubdomainUrlResponse struct {
 	// Login URL corresponding to the subdomain.
 	Url string `json:"url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubdomainUrlResponse SubdomainUrlResponse
@@ -80,6 +80,11 @@ func (o SubdomainUrlResponse) MarshalJSON() ([]byte, error) {
 func (o SubdomainUrlResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SubdomainUrlResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSubdomainUrlResponse := _SubdomainUrlResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubdomainUrlResponse)
+	err = json.Unmarshal(data, &varSubdomainUrlResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubdomainUrlResponse(varSubdomainUrlResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

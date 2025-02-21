@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CorrelatedEvent struct {
 	StartTimeMs int64 `json:"startTimeMs"`
 	// JSON string containing metadata of the event.
 	MetadataJson *string `json:"metadataJson,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CorrelatedEvent CorrelatedEvent
@@ -238,6 +238,11 @@ func (o CorrelatedEvent) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MetadataJson) {
 		toSerialize["metadataJson"] = o.MetadataJson
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -268,15 +273,25 @@ func (o *CorrelatedEvent) UnmarshalJSON(data []byte) (err error) {
 
 	varCorrelatedEvent := _CorrelatedEvent{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCorrelatedEvent)
+	err = json.Unmarshal(data, &varCorrelatedEvent)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CorrelatedEvent(varCorrelatedEvent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "eventSource")
+		delete(additionalProperties, "startTimeMs")
+		delete(additionalProperties, "metadataJson")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

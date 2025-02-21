@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type SaveMetricsSearchRequest struct {
 	Properties *string `json:"properties,omitempty"`
 	// Identifier of a folder to which the metrics search should be added.
 	ParentId string `json:"parentId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SaveMetricsSearchRequest SaveMetricsSearchRequest
@@ -306,6 +306,11 @@ func (o SaveMetricsSearchRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["properties"] = o.Properties
 	}
 	toSerialize["parentId"] = o.ParentId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -337,15 +342,27 @@ func (o *SaveMetricsSearchRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSaveMetricsSearchRequest := _SaveMetricsSearchRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSaveMetricsSearchRequest)
+	err = json.Unmarshal(data, &varSaveMetricsSearchRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SaveMetricsSearchRequest(varSaveMetricsSearchRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "logQuery")
+		delete(additionalProperties, "metricsQueries")
+		delete(additionalProperties, "desiredQuantizationInSecs")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

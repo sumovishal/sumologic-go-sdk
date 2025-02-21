@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AddOrReplaceTransformation type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type AddOrReplaceTransformation struct {
 	DimensionToReplace string `json:"dimensionToReplace"`
 	// The value for the dimension.
 	Value string `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AddOrReplaceTransformation AddOrReplaceTransformation
@@ -118,6 +120,11 @@ func (o AddOrReplaceTransformation) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["dimensionToReplace"] = o.DimensionToReplace
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,17 +152,60 @@ func (o *AddOrReplaceTransformation) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAddOrReplaceTransformation := _AddOrReplaceTransformation{}
+	type AddOrReplaceTransformationWithoutEmbeddedStruct struct {
+		// The dimension that needs to be modified or added.
+		DimensionToReplace string `json:"dimensionToReplace"`
+		// The value for the dimension.
+		Value string `json:"value"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAddOrReplaceTransformation)
+	varAddOrReplaceTransformationWithoutEmbeddedStruct := AddOrReplaceTransformationWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAddOrReplaceTransformationWithoutEmbeddedStruct)
+	if err == nil {
+		varAddOrReplaceTransformation := _AddOrReplaceTransformation{}
+		varAddOrReplaceTransformation.DimensionToReplace = varAddOrReplaceTransformationWithoutEmbeddedStruct.DimensionToReplace
+		varAddOrReplaceTransformation.Value = varAddOrReplaceTransformationWithoutEmbeddedStruct.Value
+		*o = AddOrReplaceTransformation(varAddOrReplaceTransformation)
+	} else {
 		return err
 	}
 
-	*o = AddOrReplaceTransformation(varAddOrReplaceTransformation)
+	varAddOrReplaceTransformation := _AddOrReplaceTransformation{}
+
+	err = json.Unmarshal(data, &varAddOrReplaceTransformation)
+	if err == nil {
+		o.DimensionTransformation = varAddOrReplaceTransformation.DimensionTransformation
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dimensionToReplace")
+		delete(additionalProperties, "value")
+
+		// remove fields from embedded structs
+		reflectDimensionTransformation := reflect.ValueOf(o.DimensionTransformation)
+		for i := 0; i < reflectDimensionTransformation.Type().NumField(); i++ {
+			t := reflectDimensionTransformation.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

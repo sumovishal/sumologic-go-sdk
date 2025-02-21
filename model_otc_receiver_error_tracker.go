@@ -21,7 +21,10 @@ var _ MappedNullable = &OTCReceiverErrorTracker{}
 type OTCReceiverErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OTCReceiverErrorTracker OTCReceiverErrorTracker
 
 // NewOTCReceiverErrorTracker instantiates a new OTCReceiverErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o OTCReceiverErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OTCReceiverErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varOTCReceiverErrorTracker := _OTCReceiverErrorTracker{}
+
+	err = json.Unmarshal(data, &varOTCReceiverErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OTCReceiverErrorTracker(varOTCReceiverErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOTCReceiverErrorTracker struct {

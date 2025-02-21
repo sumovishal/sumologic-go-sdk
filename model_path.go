@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Path struct {
 	PathItems []PathItem `json:"pathItems"`
 	// String representation of the path.
 	Path string `json:"path"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Path Path
@@ -108,6 +108,11 @@ func (o Path) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["pathItems"] = o.PathItems
 	toSerialize["path"] = o.Path
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Path) UnmarshalJSON(data []byte) (err error) {
 
 	varPath := _Path{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPath)
+	err = json.Unmarshal(data, &varPath)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Path(varPath)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pathItems")
+		delete(additionalProperties, "path")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

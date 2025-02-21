@@ -42,7 +42,10 @@ type SourceTemplateDefinition struct {
 	Status *string `json:"status,omitempty"`
 	// A boolean parameter to get if the source template is enabled.
 	IsEnabled *bool `json:"isEnabled,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SourceTemplateDefinition SourceTemplateDefinition
 
 // NewSourceTemplateDefinition instantiates a new SourceTemplateDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -499,7 +502,44 @@ func (o SourceTemplateDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsEnabled) {
 		toSerialize["isEnabled"] = o.IsEnabled
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SourceTemplateDefinition) UnmarshalJSON(data []byte) (err error) {
+	varSourceTemplateDefinition := _SourceTemplateDefinition{}
+
+	err = json.Unmarshal(data, &varSourceTemplateDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SourceTemplateDefinition(varSourceTemplateDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemaRef")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "inputJson")
+		delete(additionalProperties, "config")
+		delete(additionalProperties, "selector")
+		delete(additionalProperties, "totalCollectorLinked")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "isEnabled")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSourceTemplateDefinition struct {

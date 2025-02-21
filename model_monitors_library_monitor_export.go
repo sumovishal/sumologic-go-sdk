@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MonitorsLibraryMonitorExport type satisfies the MappedNullable interface at compile time
@@ -49,6 +50,7 @@ type MonitorsLibraryMonitorExport struct {
 	SloId *string `json:"sloId,omitempty"`
 	// The set of automated playbook ids for a monitor.
 	AutomatedPlaybookIds []string `json:"automatedPlaybookIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorsLibraryMonitorExport MonitorsLibraryMonitorExport
@@ -569,6 +571,11 @@ func (o MonitorsLibraryMonitorExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutomatedPlaybookIds) {
 		toSerialize["automatedPlaybookIds"] = o.AutomatedPlaybookIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -598,17 +605,107 @@ func (o *MonitorsLibraryMonitorExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMonitorsLibraryMonitorExport := _MonitorsLibraryMonitorExport{}
+	type MonitorsLibraryMonitorExportWithoutEmbeddedStruct struct {
+		// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.   3. `Slo`: A SLO based monitor. Currently SLO based monitor is available in closed beta (Notify your Sumo Logic representative in order to get the early access).
+		MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics|Slo)$"`
+		// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
+		EvaluationDelay *string `json:"evaluationDelay,omitempty"`
+		// The name of the alert(s) triggered from this monitor. Monitor name will be used if not specified. All template variables can be used here except {{AlertName}}, {{AlertResponseURL}}, {{ResultsJson}}, and {{Playbook}}.
+		AlertName *string `json:"alertName,omitempty"`
+		RunAs map[string]interface{} `json:"runAs,omitempty"`
+		// The set of fields to be used to group alert notifications for a monitor. The value of this field will be considered only when 'groupNotifications' is true. The fields with very high cardinality such as `_blockid`, `_raw`, `_messagetime`, `_receipttime`, and `_messageid` are not allowed for Alert Grouping.
+		NotificationGroupFields []string `json:"notificationGroupFields,omitempty"`
+		// All queries from the monitor.
+		Queries []MonitorQuery `json:"queries"`
+		// Defines the conditions of when to send notifications.
+		Triggers []TriggerCondition `json:"triggers"`
+		// Time zone identifier for monitor notifications. Follow the format in [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
+		TimeZone *string `json:"timeZone,omitempty"`
+		// The notifications the monitor will send when the respective trigger condition is met.
+		Notifications []MonitorNotification `json:"notifications,omitempty"`
+		// Whether or not the monitor is disabled. Disabled monitors will not run, and will not generate or send notifications.
+		IsDisabled *bool `json:"isDisabled,omitempty"`
+		// Whether or not to group notifications for individual items that meet the trigger condition.
+		GroupNotifications *bool `json:"groupNotifications,omitempty"`
+		// Notes such as links and instruction to help you resolve alerts triggered by this monitor. {{Markdown}} supported. It will be enabled only if available for your organization. Please contact your Sumo Logic account team to learn more.
+		Playbook *string `json:"playbook,omitempty"`
+		// Identifier of the SLO definition for the monitor. This is only applicable for SLO type monitors.
+		SloId *string `json:"sloId,omitempty"`
+		// The set of automated playbook ids for a monitor.
+		AutomatedPlaybookIds []string `json:"automatedPlaybookIds,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorsLibraryMonitorExport)
+	varMonitorsLibraryMonitorExportWithoutEmbeddedStruct := MonitorsLibraryMonitorExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMonitorsLibraryMonitorExportWithoutEmbeddedStruct)
+	if err == nil {
+		varMonitorsLibraryMonitorExport := _MonitorsLibraryMonitorExport{}
+		varMonitorsLibraryMonitorExport.MonitorType = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.MonitorType
+		varMonitorsLibraryMonitorExport.EvaluationDelay = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.EvaluationDelay
+		varMonitorsLibraryMonitorExport.AlertName = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.AlertName
+		varMonitorsLibraryMonitorExport.RunAs = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.RunAs
+		varMonitorsLibraryMonitorExport.NotificationGroupFields = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.NotificationGroupFields
+		varMonitorsLibraryMonitorExport.Queries = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.Queries
+		varMonitorsLibraryMonitorExport.Triggers = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.Triggers
+		varMonitorsLibraryMonitorExport.TimeZone = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.TimeZone
+		varMonitorsLibraryMonitorExport.Notifications = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.Notifications
+		varMonitorsLibraryMonitorExport.IsDisabled = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.IsDisabled
+		varMonitorsLibraryMonitorExport.GroupNotifications = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.GroupNotifications
+		varMonitorsLibraryMonitorExport.Playbook = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.Playbook
+		varMonitorsLibraryMonitorExport.SloId = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.SloId
+		varMonitorsLibraryMonitorExport.AutomatedPlaybookIds = varMonitorsLibraryMonitorExportWithoutEmbeddedStruct.AutomatedPlaybookIds
+		*o = MonitorsLibraryMonitorExport(varMonitorsLibraryMonitorExport)
+	} else {
 		return err
 	}
 
-	*o = MonitorsLibraryMonitorExport(varMonitorsLibraryMonitorExport)
+	varMonitorsLibraryMonitorExport := _MonitorsLibraryMonitorExport{}
+
+	err = json.Unmarshal(data, &varMonitorsLibraryMonitorExport)
+	if err == nil {
+		o.MonitorsLibraryBaseExport = varMonitorsLibraryMonitorExport.MonitorsLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "evaluationDelay")
+		delete(additionalProperties, "alertName")
+		delete(additionalProperties, "runAs")
+		delete(additionalProperties, "notificationGroupFields")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "triggers")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "notifications")
+		delete(additionalProperties, "isDisabled")
+		delete(additionalProperties, "groupNotifications")
+		delete(additionalProperties, "playbook")
+		delete(additionalProperties, "sloId")
+		delete(additionalProperties, "automatedPlaybookIds")
+
+		// remove fields from embedded structs
+		reflectMonitorsLibraryBaseExport := reflect.ValueOf(o.MonitorsLibraryBaseExport)
+		for i := 0; i < reflectMonitorsLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectMonitorsLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

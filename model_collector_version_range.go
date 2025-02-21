@@ -23,7 +23,10 @@ type CollectorVersionRange struct {
 	MinVersion *string `json:"minVersion,omitempty"`
 	// Maximum compatible version of the otcollector. if this is null, then latest otcollector is also compatible.
 	MaxVersion NullableString `json:"maxVersion,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CollectorVersionRange CollectorVersionRange
 
 // NewCollectorVersionRange instantiates a new CollectorVersionRange object
 // This constructor will assign default values to properties that have it defined,
@@ -132,7 +135,34 @@ func (o CollectorVersionRange) ToMap() (map[string]interface{}, error) {
 	if o.MaxVersion.IsSet() {
 		toSerialize["maxVersion"] = o.MaxVersion.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CollectorVersionRange) UnmarshalJSON(data []byte) (err error) {
+	varCollectorVersionRange := _CollectorVersionRange{}
+
+	err = json.Unmarshal(data, &varCollectorVersionRange)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CollectorVersionRange(varCollectorVersionRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "minVersion")
+		delete(additionalProperties, "maxVersion")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCollectorVersionRange struct {

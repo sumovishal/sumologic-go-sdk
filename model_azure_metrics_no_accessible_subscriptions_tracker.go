@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AzureMetricsNoAccessibleSubscriptionsTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &AzureMetricsNoAccessibleSubscriptionsTracker{}
 // AzureMetricsNoAccessibleSubscriptionsTracker struct for AzureMetricsNoAccessibleSubscriptionsTracker
 type AzureMetricsNoAccessibleSubscriptionsTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _AzureMetricsNoAccessibleSubscriptionsTracker AzureMetricsNoAccessibleSubscriptionsTracker
@@ -64,6 +66,11 @@ func (o AzureMetricsNoAccessibleSubscriptionsTracker) ToMap() (map[string]interf
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *AzureMetricsNoAccessibleSubscriptionsTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varAzureMetricsNoAccessibleSubscriptionsTracker := _AzureMetricsNoAccessibleSubscriptionsTracker{}
+	type AzureMetricsNoAccessibleSubscriptionsTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAzureMetricsNoAccessibleSubscriptionsTracker)
+	varAzureMetricsNoAccessibleSubscriptionsTrackerWithoutEmbeddedStruct := AzureMetricsNoAccessibleSubscriptionsTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAzureMetricsNoAccessibleSubscriptionsTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varAzureMetricsNoAccessibleSubscriptionsTracker := _AzureMetricsNoAccessibleSubscriptionsTracker{}
+		*o = AzureMetricsNoAccessibleSubscriptionsTracker(varAzureMetricsNoAccessibleSubscriptionsTracker)
+	} else {
 		return err
 	}
 
-	*o = AzureMetricsNoAccessibleSubscriptionsTracker(varAzureMetricsNoAccessibleSubscriptionsTracker)
+	varAzureMetricsNoAccessibleSubscriptionsTracker := _AzureMetricsNoAccessibleSubscriptionsTracker{}
+
+	err = json.Unmarshal(data, &varAzureMetricsNoAccessibleSubscriptionsTracker)
+	if err == nil {
+		o.TrackerIdentity = varAzureMetricsNoAccessibleSubscriptionsTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

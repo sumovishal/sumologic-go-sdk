@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the IngestBudgetExceededTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type IngestBudgetExceededTracker struct {
 	TrackerIdentity
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestBudgetExceededTracker IngestBudgetExceededTracker
@@ -101,6 +103,11 @@ func (o IngestBudgetExceededTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *IngestBudgetExceededTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varIngestBudgetExceededTracker := _IngestBudgetExceededTracker{}
+	type IngestBudgetExceededTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestBudgetExceededTracker)
+	varIngestBudgetExceededTrackerWithoutEmbeddedStruct := IngestBudgetExceededTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIngestBudgetExceededTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varIngestBudgetExceededTracker := _IngestBudgetExceededTracker{}
+		varIngestBudgetExceededTracker.EventType = varIngestBudgetExceededTrackerWithoutEmbeddedStruct.EventType
+		*o = IngestBudgetExceededTracker(varIngestBudgetExceededTracker)
+	} else {
 		return err
 	}
 
-	*o = IngestBudgetExceededTracker(varIngestBudgetExceededTracker)
+	varIngestBudgetExceededTracker := _IngestBudgetExceededTracker{}
+
+	err = json.Unmarshal(data, &varIngestBudgetExceededTracker)
+	if err == nil {
+		o.TrackerIdentity = varIngestBudgetExceededTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

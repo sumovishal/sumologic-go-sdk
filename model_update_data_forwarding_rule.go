@@ -29,7 +29,10 @@ type UpdateDataForwardingRule struct {
 	PayloadSchema *string `json:"payloadSchema,omitempty" validate:"regexp=^(builtInFields|allFields|raw)$"`
 	// Format of the payload. Default format will be \"csv\". \"text\" format should be used in conjunction with \"raw\" payloadSchema and vice-versa.
 	Format *string `json:"format,omitempty" validate:"regexp=^(csv|json|text)$"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateDataForwardingRule UpdateDataForwardingRule
 
 // NewUpdateDataForwardingRule instantiates a new UpdateDataForwardingRule object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o UpdateDataForwardingRule) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Format) {
 		toSerialize["format"] = o.Format
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateDataForwardingRule) UnmarshalJSON(data []byte) (err error) {
+	varUpdateDataForwardingRule := _UpdateDataForwardingRule{}
+
+	err = json.Unmarshal(data, &varUpdateDataForwardingRule)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateDataForwardingRule(varUpdateDataForwardingRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "destinationId")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "fileFormat")
+		delete(additionalProperties, "payloadSchema")
+		delete(additionalProperties, "format")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateDataForwardingRule struct {

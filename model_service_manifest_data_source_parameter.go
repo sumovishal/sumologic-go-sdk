@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type ServiceManifestDataSourceParameter struct {
 	Example *string `json:"example,omitempty"`
 	// Should the UI display?
 	Hidden *bool `json:"hidden,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceManifestDataSourceParameter ServiceManifestDataSourceParameter
@@ -297,6 +297,11 @@ func (o ServiceManifestDataSourceParameter) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Hidden) {
 		toSerialize["hidden"] = o.Hidden
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -325,15 +330,26 @@ func (o *ServiceManifestDataSourceParameter) UnmarshalJSON(data []byte) (err err
 
 	varServiceManifestDataSourceParameter := _ServiceManifestDataSourceParameter{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceManifestDataSourceParameter)
+	err = json.Unmarshal(data, &varServiceManifestDataSourceParameter)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceManifestDataSourceParameter(varServiceManifestDataSourceParameter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "parameterType")
+		delete(additionalProperties, "parameterId")
+		delete(additionalProperties, "dataSourceType")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "example")
+		delete(additionalProperties, "hidden")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ScanBudgetUsage struct {
 	Usage int64 `json:"usage"`
 	// Budget usage percentage.
 	UsagePercentage int64 `json:"usagePercentage"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScanBudgetUsage ScanBudgetUsage
@@ -136,6 +136,11 @@ func (o ScanBudgetUsage) ToMap() (map[string]interface{}, error) {
 	toSerialize["budgetId"] = o.BudgetId
 	toSerialize["usage"] = o.Usage
 	toSerialize["usagePercentage"] = o.UsagePercentage
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *ScanBudgetUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varScanBudgetUsage := _ScanBudgetUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScanBudgetUsage)
+	err = json.Unmarshal(data, &varScanBudgetUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScanBudgetUsage(varScanBudgetUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "budgetId")
+		delete(additionalProperties, "usage")
+		delete(additionalProperties, "usagePercentage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

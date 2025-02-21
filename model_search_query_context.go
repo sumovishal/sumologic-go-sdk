@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SearchQueryContext type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SearchQueryContext struct {
 	EventContext
 	// The query id of the log search.
 	QueryId string `json:"queryId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SearchQueryContext SearchQueryContext
@@ -90,6 +92,11 @@ func (o SearchQueryContext) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errEventContext
 	}
 	toSerialize["queryId"] = o.QueryId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *SearchQueryContext) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSearchQueryContext := _SearchQueryContext{}
+	type SearchQueryContextWithoutEmbeddedStruct struct {
+		// The query id of the log search.
+		QueryId string `json:"queryId"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSearchQueryContext)
+	varSearchQueryContextWithoutEmbeddedStruct := SearchQueryContextWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSearchQueryContextWithoutEmbeddedStruct)
+	if err == nil {
+		varSearchQueryContext := _SearchQueryContext{}
+		varSearchQueryContext.QueryId = varSearchQueryContextWithoutEmbeddedStruct.QueryId
+		*o = SearchQueryContext(varSearchQueryContext)
+	} else {
 		return err
 	}
 
-	*o = SearchQueryContext(varSearchQueryContext)
+	varSearchQueryContext := _SearchQueryContext{}
+
+	err = json.Unmarshal(data, &varSearchQueryContext)
+	if err == nil {
+		o.EventContext = varSearchQueryContext.EventContext
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryId")
+
+		// remove fields from embedded structs
+		reflectEventContext := reflect.ValueOf(o.EventContext)
+		for i := 0; i < reflectEventContext.Type().NumField(); i++ {
+			t := reflectEventContext.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

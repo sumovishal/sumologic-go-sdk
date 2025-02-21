@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CseSignalNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CseSignalNotificationSyncDefinition struct {
 	ScheduleNotificationSyncDefinition
 	// Name of the Cloud SIEM Enterprise Record to be created.
 	RecordType string `json:"recordType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CseSignalNotificationSyncDefinition CseSignalNotificationSyncDefinition
@@ -90,6 +92,11 @@ func (o CseSignalNotificationSyncDefinition) ToMap() (map[string]interface{}, er
 		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	toSerialize["recordType"] = o.RecordType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *CseSignalNotificationSyncDefinition) UnmarshalJSON(data []byte) (err er
 		}
 	}
 
-	varCseSignalNotificationSyncDefinition := _CseSignalNotificationSyncDefinition{}
+	type CseSignalNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// Name of the Cloud SIEM Enterprise Record to be created.
+		RecordType string `json:"recordType"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCseSignalNotificationSyncDefinition)
+	varCseSignalNotificationSyncDefinitionWithoutEmbeddedStruct := CseSignalNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCseSignalNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varCseSignalNotificationSyncDefinition := _CseSignalNotificationSyncDefinition{}
+		varCseSignalNotificationSyncDefinition.RecordType = varCseSignalNotificationSyncDefinitionWithoutEmbeddedStruct.RecordType
+		*o = CseSignalNotificationSyncDefinition(varCseSignalNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = CseSignalNotificationSyncDefinition(varCseSignalNotificationSyncDefinition)
+	varCseSignalNotificationSyncDefinition := _CseSignalNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varCseSignalNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varCseSignalNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "recordType")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

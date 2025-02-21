@@ -21,7 +21,10 @@ var _ MappedNullable = &AlertsListPageResponse{}
 type AlertsListPageResponse struct {
 	// List of alerts summaries.
 	Data []AlertsListPageObject `json:"data,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AlertsListPageResponse AlertsListPageResponse
 
 // NewAlertsListPageResponse instantiates a new AlertsListPageResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o AlertsListPageResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Data) {
 		toSerialize["data"] = o.Data
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AlertsListPageResponse) UnmarshalJSON(data []byte) (err error) {
+	varAlertsListPageResponse := _AlertsListPageResponse{}
+
+	err = json.Unmarshal(data, &varAlertsListPageResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AlertsListPageResponse(varAlertsListPageResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAlertsListPageResponse struct {

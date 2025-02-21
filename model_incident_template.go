@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type IncidentTemplate struct {
 	Id int32 `json:"id"`
 	// Name of the incident template.
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IncidentTemplate IncidentTemplate
@@ -108,6 +108,11 @@ func (o IncidentTemplate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *IncidentTemplate) UnmarshalJSON(data []byte) (err error) {
 
 	varIncidentTemplate := _IncidentTemplate{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIncidentTemplate)
+	err = json.Unmarshal(data, &varIncidentTemplate)
 
 	if err != nil {
 		return err
 	}
 
 	*o = IncidentTemplate(varIncidentTemplate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

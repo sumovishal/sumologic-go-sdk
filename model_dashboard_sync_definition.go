@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the DashboardSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type DashboardSyncDefinition struct {
 	Panels []ReportPanelSyncDefinition `json:"panels"`
 	// The filters for the dashboard. Filters allow you to control the amount of information displayed in your dashboards.
 	Filters []ReportFilterSyncDefinition `json:"filters"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardSyncDefinition DashboardSyncDefinition
@@ -203,6 +205,11 @@ func (o DashboardSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["properties"] = o.Properties
 	toSerialize["panels"] = o.Panels
 	toSerialize["filters"] = o.Filters
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -234,17 +241,72 @@ func (o *DashboardSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varDashboardSyncDefinition := _DashboardSyncDefinition{}
+	type DashboardSyncDefinitionWithoutEmbeddedStruct struct {
+		// A description of the dashboard.
+		Description string `json:"description"`
+		// Supported values are:   - `1` for small   - `2` for medium   - `3` for large
+		DetailLevel int32 `json:"detailLevel"`
+		// Visual settings for the panel.
+		Properties string `json:"properties"`
+		// The panels of the dashboard. _Dashboard links are not supported._
+		Panels []ReportPanelSyncDefinition `json:"panels"`
+		// The filters for the dashboard. Filters allow you to control the amount of information displayed in your dashboards.
+		Filters []ReportFilterSyncDefinition `json:"filters"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardSyncDefinition)
+	varDashboardSyncDefinitionWithoutEmbeddedStruct := DashboardSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varDashboardSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varDashboardSyncDefinition := _DashboardSyncDefinition{}
+		varDashboardSyncDefinition.Description = varDashboardSyncDefinitionWithoutEmbeddedStruct.Description
+		varDashboardSyncDefinition.DetailLevel = varDashboardSyncDefinitionWithoutEmbeddedStruct.DetailLevel
+		varDashboardSyncDefinition.Properties = varDashboardSyncDefinitionWithoutEmbeddedStruct.Properties
+		varDashboardSyncDefinition.Panels = varDashboardSyncDefinitionWithoutEmbeddedStruct.Panels
+		varDashboardSyncDefinition.Filters = varDashboardSyncDefinitionWithoutEmbeddedStruct.Filters
+		*o = DashboardSyncDefinition(varDashboardSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = DashboardSyncDefinition(varDashboardSyncDefinition)
+	varDashboardSyncDefinition := _DashboardSyncDefinition{}
+
+	err = json.Unmarshal(data, &varDashboardSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varDashboardSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "detailLevel")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "panels")
+		delete(additionalProperties, "filters")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

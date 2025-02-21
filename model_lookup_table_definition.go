@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type LookupTableDefinition struct {
 	Name string `json:"name"`
 	// The parent-folder-path identifier of the lookup table in the Library.
 	ParentFolderId string `json:"parentFolderId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupTableDefinition LookupTableDefinition
@@ -274,6 +274,11 @@ func (o LookupTableDefinition) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["name"] = o.Name
 	toSerialize["parentFolderId"] = o.ParentFolderId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -305,15 +310,26 @@ func (o *LookupTableDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupTableDefinition := _LookupTableDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupTableDefinition)
+	err = json.Unmarshal(data, &varLookupTableDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupTableDefinition(varLookupTableDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "primaryKeys")
+		delete(additionalProperties, "ttl")
+		delete(additionalProperties, "sizeLimitAction")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "parentFolderId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

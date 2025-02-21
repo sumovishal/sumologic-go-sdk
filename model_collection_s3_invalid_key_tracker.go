@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionS3InvalidKeyTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type CollectionS3InvalidKeyTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The access key used to make the request. In the case of IAM roles, this is the temporary key used for authentication.
 	AccessKey *string `json:"accessKey,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionS3InvalidKeyTracker CollectionS3InvalidKeyTracker
@@ -138,6 +140,11 @@ func (o CollectionS3InvalidKeyTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AccessKey) {
 		toSerialize["accessKey"] = o.AccessKey
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *CollectionS3InvalidKeyTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varCollectionS3InvalidKeyTracker := _CollectionS3InvalidKeyTracker{}
+	type CollectionS3InvalidKeyTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The access key used to make the request. In the case of IAM roles, this is the temporary key used for authentication.
+		AccessKey *string `json:"accessKey,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionS3InvalidKeyTracker)
+	varCollectionS3InvalidKeyTrackerWithoutEmbeddedStruct := CollectionS3InvalidKeyTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionS3InvalidKeyTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionS3InvalidKeyTracker := _CollectionS3InvalidKeyTracker{}
+		varCollectionS3InvalidKeyTracker.EventType = varCollectionS3InvalidKeyTrackerWithoutEmbeddedStruct.EventType
+		varCollectionS3InvalidKeyTracker.AccessKey = varCollectionS3InvalidKeyTrackerWithoutEmbeddedStruct.AccessKey
+		*o = CollectionS3InvalidKeyTracker(varCollectionS3InvalidKeyTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionS3InvalidKeyTracker(varCollectionS3InvalidKeyTracker)
+	varCollectionS3InvalidKeyTracker := _CollectionS3InvalidKeyTracker{}
+
+	err = json.Unmarshal(data, &varCollectionS3InvalidKeyTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionS3InvalidKeyTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "accessKey")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type LinkingUpdatedSourceTemplateDetails struct {
 	SourceTemplateDefinition SourceTemplateDefinition `json:"sourceTemplateDefinition"`
 	// tags which are responsible for source template and collector linking impact.
 	ReasonTags [][]CollectorTag `json:"reasonTags"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LinkingUpdatedSourceTemplateDetails LinkingUpdatedSourceTemplateDetails
@@ -107,6 +107,11 @@ func (o LinkingUpdatedSourceTemplateDetails) ToMap() (map[string]interface{}, er
 	toSerialize := map[string]interface{}{}
 	toSerialize["sourceTemplateDefinition"] = o.SourceTemplateDefinition
 	toSerialize["reasonTags"] = o.ReasonTags
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *LinkingUpdatedSourceTemplateDetails) UnmarshalJSON(data []byte) (err er
 
 	varLinkingUpdatedSourceTemplateDetails := _LinkingUpdatedSourceTemplateDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLinkingUpdatedSourceTemplateDetails)
+	err = json.Unmarshal(data, &varLinkingUpdatedSourceTemplateDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LinkingUpdatedSourceTemplateDetails(varLinkingUpdatedSourceTemplateDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sourceTemplateDefinition")
+		delete(additionalProperties, "reasonTags")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

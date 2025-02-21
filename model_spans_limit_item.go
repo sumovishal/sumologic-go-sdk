@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SpansLimitItem struct {
 	Direction string `json:"direction" validate:"regexp=^(asc|desc)$"`
 	// The number of aggregated results returned, e.g. if 10 is requested, then only the first 10 aggregated results are returned. 
 	LimitValue int32 `json:"limitValue"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansLimitItem SpansLimitItem
@@ -108,6 +108,11 @@ func (o SpansLimitItem) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["direction"] = o.Direction
 	toSerialize["limitValue"] = o.LimitValue
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SpansLimitItem) UnmarshalJSON(data []byte) (err error) {
 
 	varSpansLimitItem := _SpansLimitItem{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansLimitItem)
+	err = json.Unmarshal(data, &varSpansLimitItem)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpansLimitItem(varSpansLimitItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "direction")
+		delete(additionalProperties, "limitValue")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

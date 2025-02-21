@@ -23,7 +23,10 @@ type EstimatedUsageDetailsWithTier struct {
 	Tier *string `json:"tier,omitempty"`
 	// Amount of data scanned in bytes, to run the query.
 	DataScannedInBytes *int64 `json:"dataScannedInBytes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _EstimatedUsageDetailsWithTier EstimatedUsageDetailsWithTier
 
 // NewEstimatedUsageDetailsWithTier instantiates a new EstimatedUsageDetailsWithTier object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o EstimatedUsageDetailsWithTier) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataScannedInBytes) {
 		toSerialize["dataScannedInBytes"] = o.DataScannedInBytes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *EstimatedUsageDetailsWithTier) UnmarshalJSON(data []byte) (err error) {
+	varEstimatedUsageDetailsWithTier := _EstimatedUsageDetailsWithTier{}
+
+	err = json.Unmarshal(data, &varEstimatedUsageDetailsWithTier)
+
+	if err != nil {
+		return err
+	}
+
+	*o = EstimatedUsageDetailsWithTier(varEstimatedUsageDetailsWithTier)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tier")
+		delete(additionalProperties, "dataScannedInBytes")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableEstimatedUsageDetailsWithTier struct {

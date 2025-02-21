@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type SpanQueryResponse struct {
 	// Indicates whether there was an error while executing the query.
 	HasErrors *bool `json:"hasErrors,omitempty"`
 	TimeRange *BeginBoundedTimeRange `json:"timeRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryResponse SpanQueryResponse
@@ -185,6 +185,11 @@ func (o SpanQueryResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -213,15 +218,23 @@ func (o *SpanQueryResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryResponse := _SpanQueryResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryResponse)
+	err = json.Unmarshal(data, &varSpanQueryResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryResponse(varSpanQueryResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryId")
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "hasErrors")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

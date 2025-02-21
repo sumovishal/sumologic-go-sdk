@@ -21,7 +21,10 @@ var _ MappedNullable = &MonitorGroupInfo{}
 type MonitorGroupInfo struct {
 	// The monitor group keys.
 	Keys []string `json:"keys,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MonitorGroupInfo MonitorGroupInfo
 
 // NewMonitorGroupInfo instantiates a new MonitorGroupInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o MonitorGroupInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Keys) {
 		toSerialize["keys"] = o.Keys
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MonitorGroupInfo) UnmarshalJSON(data []byte) (err error) {
+	varMonitorGroupInfo := _MonitorGroupInfo{}
+
+	err = json.Unmarshal(data, &varMonitorGroupInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorGroupInfo(varMonitorGroupInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "keys")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMonitorGroupInfo struct {

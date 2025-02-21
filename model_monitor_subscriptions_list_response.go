@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MonitorSubscriptionsListResponse struct {
 	Subscriptions []MonitorSubscription `json:"subscriptions"`
 	// If true, the list contains all existing subscriptions.
 	Exhaustive bool `json:"exhaustive"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorSubscriptionsListResponse MonitorSubscriptionsListResponse
@@ -108,6 +108,11 @@ func (o MonitorSubscriptionsListResponse) ToMap() (map[string]interface{}, error
 	toSerialize := map[string]interface{}{}
 	toSerialize["subscriptions"] = o.Subscriptions
 	toSerialize["exhaustive"] = o.Exhaustive
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MonitorSubscriptionsListResponse) UnmarshalJSON(data []byte) (err error
 
 	varMonitorSubscriptionsListResponse := _MonitorSubscriptionsListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorSubscriptionsListResponse)
+	err = json.Unmarshal(data, &varMonitorSubscriptionsListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorSubscriptionsListResponse(varMonitorSubscriptionsListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subscriptions")
+		delete(additionalProperties, "exhaustive")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

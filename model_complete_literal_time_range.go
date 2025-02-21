@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CompleteLiteralTimeRange type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CompleteLiteralTimeRange struct {
 	ResolvableTimeRange
 	// Name of the complete time range. Possible values are: - `today`, - `yesterday`, - `previous_week`, - `previous_month`.
 	RangeName string `json:"rangeName" validate:"regexp=^(today|yesterday|previous_week|previous_month)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CompleteLiteralTimeRange CompleteLiteralTimeRange
@@ -90,6 +92,11 @@ func (o CompleteLiteralTimeRange) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errResolvableTimeRange
 	}
 	toSerialize["rangeName"] = o.RangeName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *CompleteLiteralTimeRange) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varCompleteLiteralTimeRange := _CompleteLiteralTimeRange{}
+	type CompleteLiteralTimeRangeWithoutEmbeddedStruct struct {
+		// Name of the complete time range. Possible values are: - `today`, - `yesterday`, - `previous_week`, - `previous_month`.
+		RangeName string `json:"rangeName" validate:"regexp=^(today|yesterday|previous_week|previous_month)$"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompleteLiteralTimeRange)
+	varCompleteLiteralTimeRangeWithoutEmbeddedStruct := CompleteLiteralTimeRangeWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCompleteLiteralTimeRangeWithoutEmbeddedStruct)
+	if err == nil {
+		varCompleteLiteralTimeRange := _CompleteLiteralTimeRange{}
+		varCompleteLiteralTimeRange.RangeName = varCompleteLiteralTimeRangeWithoutEmbeddedStruct.RangeName
+		*o = CompleteLiteralTimeRange(varCompleteLiteralTimeRange)
+	} else {
 		return err
 	}
 
-	*o = CompleteLiteralTimeRange(varCompleteLiteralTimeRange)
+	varCompleteLiteralTimeRange := _CompleteLiteralTimeRange{}
+
+	err = json.Unmarshal(data, &varCompleteLiteralTimeRange)
+	if err == nil {
+		o.ResolvableTimeRange = varCompleteLiteralTimeRange.ResolvableTimeRange
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rangeName")
+
+		// remove fields from embedded structs
+		reflectResolvableTimeRange := reflect.ValueOf(o.ResolvableTimeRange)
+		for i := 0; i < reflectResolvableTimeRange.Type().NumField(); i++ {
+			t := reflectResolvableTimeRange.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

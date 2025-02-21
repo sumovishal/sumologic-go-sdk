@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UnvalidatedMonitorQuery struct {
 	RowId string `json:"rowId"`
 	// The logs or metrics query that defines the stream of data the monitor runs on.
 	Query string `json:"query"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UnvalidatedMonitorQuery UnvalidatedMonitorQuery
@@ -108,6 +108,11 @@ func (o UnvalidatedMonitorQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["rowId"] = o.RowId
 	toSerialize["query"] = o.Query
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *UnvalidatedMonitorQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varUnvalidatedMonitorQuery := _UnvalidatedMonitorQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUnvalidatedMonitorQuery)
+	err = json.Unmarshal(data, &varUnvalidatedMonitorQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UnvalidatedMonitorQuery(varUnvalidatedMonitorQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

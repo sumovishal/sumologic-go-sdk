@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type PlaybookRunningResult struct {
 	Status string `json:"status"`
 	// The status code of the playbook running.
 	StatusCode int32 `json:"statusCode"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PlaybookRunningResult PlaybookRunningResult
@@ -297,6 +297,11 @@ func (o PlaybookRunningResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["status"] = o.Status
 	toSerialize["statusCode"] = o.StatusCode
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -329,15 +334,27 @@ func (o *PlaybookRunningResult) UnmarshalJSON(data []byte) (err error) {
 
 	varPlaybookRunningResult := _PlaybookRunningResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPlaybookRunningResult)
+	err = json.Unmarshal(data, &varPlaybookRunningResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PlaybookRunningResult(varPlaybookRunningResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "endDate")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "playbookId")
+		delete(additionalProperties, "isChild")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusCode")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

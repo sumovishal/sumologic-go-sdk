@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ConnectionDefinition struct {
 	Name string `json:"name"`
 	// Description of the connection.
 	Description *string `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ConnectionDefinition ConnectionDefinition
@@ -149,6 +149,11 @@ func (o ConnectionDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -177,15 +182,22 @@ func (o *ConnectionDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varConnectionDefinition := _ConnectionDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varConnectionDefinition)
+	err = json.Unmarshal(data, &varConnectionDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ConnectionDefinition(varConnectionDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

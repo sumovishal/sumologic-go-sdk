@@ -24,7 +24,10 @@ type ViewRetentionProperties struct {
 	NewRetentionPeriod *int32 `json:"newRetentionPeriod,omitempty"`
 	// When the newRetentionPeriod will become effective in UTC format.
 	RetentionEffectiveAt *time.Time `json:"retentionEffectiveAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ViewRetentionProperties ViewRetentionProperties
 
 // NewViewRetentionProperties instantiates a new ViewRetentionProperties object
 // This constructor will assign default values to properties that have it defined,
@@ -123,7 +126,34 @@ func (o ViewRetentionProperties) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RetentionEffectiveAt) {
 		toSerialize["retentionEffectiveAt"] = o.RetentionEffectiveAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ViewRetentionProperties) UnmarshalJSON(data []byte) (err error) {
+	varViewRetentionProperties := _ViewRetentionProperties{}
+
+	err = json.Unmarshal(data, &varViewRetentionProperties)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ViewRetentionProperties(varViewRetentionProperties)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "newRetentionPeriod")
+		delete(additionalProperties, "retentionEffectiveAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableViewRetentionProperties struct {

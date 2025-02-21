@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type CpcSummary struct {
 	AvgTimeInTrace float64 `json:"avgTimeInTrace"`
 	// The total time in nanoseconds spent by a given service (or a group of services) in the critical path  of analyzed traces.
 	TotalTimeTaken int64 `json:"totalTimeTaken"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcSummary CpcSummary
@@ -164,6 +164,11 @@ func (o CpcSummary) ToMap() (map[string]interface{}, error) {
 	toSerialize["avgPercentageInTrace"] = o.AvgPercentageInTrace
 	toSerialize["avgTimeInTrace"] = o.AvgTimeInTrace
 	toSerialize["totalTimeTaken"] = o.TotalTimeTaken
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *CpcSummary) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcSummary := _CpcSummary{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcSummary)
+	err = json.Unmarshal(data, &varCpcSummary)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcSummary(varCpcSummary)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "numOfTraces")
+		delete(additionalProperties, "avgPercentageInTrace")
+		delete(additionalProperties, "avgTimeInTrace")
+		delete(additionalProperties, "totalTimeTaken")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

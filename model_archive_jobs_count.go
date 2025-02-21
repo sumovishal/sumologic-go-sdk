@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type ArchiveJobsCount struct {
 	Failed int64 `json:"failed"`
 	// The total number of archive jobs with succeeded status for the archive source.
 	Succeeded int64 `json:"succeeded"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ArchiveJobsCount ArchiveJobsCount
@@ -220,6 +220,11 @@ func (o ArchiveJobsCount) ToMap() (map[string]interface{}, error) {
 	toSerialize["ingesting"] = o.Ingesting
 	toSerialize["failed"] = o.Failed
 	toSerialize["succeeded"] = o.Succeeded
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -252,15 +257,25 @@ func (o *ArchiveJobsCount) UnmarshalJSON(data []byte) (err error) {
 
 	varArchiveJobsCount := _ArchiveJobsCount{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varArchiveJobsCount)
+	err = json.Unmarshal(data, &varArchiveJobsCount)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ArchiveJobsCount(varArchiveJobsCount)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sourceId")
+		delete(additionalProperties, "pending")
+		delete(additionalProperties, "scanning")
+		delete(additionalProperties, "ingesting")
+		delete(additionalProperties, "failed")
+		delete(additionalProperties, "succeeded")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -54,6 +53,7 @@ type Dashboard struct {
 	ScheduleId *string `json:"scheduleId,omitempty"`
 	// Count of report schedules for the dashboard.
 	ScheduleCount *int32 `json:"scheduleCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Dashboard Dashboard
@@ -713,6 +713,11 @@ func (o Dashboard) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScheduleCount) {
 		toSerialize["scheduleCount"] = o.ScheduleCount
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -741,15 +746,37 @@ func (o *Dashboard) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboard := _Dashboard{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboard)
+	err = json.Unmarshal(data, &varDashboard)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Dashboard(varDashboard)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "folderId")
+		delete(additionalProperties, "topologyLabelMap")
+		delete(additionalProperties, "domain")
+		delete(additionalProperties, "hierarchies")
+		delete(additionalProperties, "refreshInterval")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "panels")
+		delete(additionalProperties, "layout")
+		delete(additionalProperties, "variables")
+		delete(additionalProperties, "theme")
+		delete(additionalProperties, "isPublic")
+		delete(additionalProperties, "highlightViolations")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "contentId")
+		delete(additionalProperties, "scheduleId")
+		delete(additionalProperties, "scheduleCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type SpansQueryData struct {
 	GroupBy []SpansGroupBy `json:"groupBy"`
 	// A list of limits that will be applied to the spans query.
 	Limit []SpansLimitItem `json:"limit"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansQueryData SpansQueryData
@@ -164,6 +164,11 @@ func (o SpansQueryData) ToMap() (map[string]interface{}, error) {
 	toSerialize["visualizations"] = o.Visualizations
 	toSerialize["groupBy"] = o.GroupBy
 	toSerialize["limit"] = o.Limit
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *SpansQueryData) UnmarshalJSON(data []byte) (err error) {
 
 	varSpansQueryData := _SpansQueryData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansQueryData)
+	err = json.Unmarshal(data, &varSpansQueryData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpansQueryData(varSpansQueryData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "filters")
+		delete(additionalProperties, "visualizations")
+		delete(additionalProperties, "groupBy")
+		delete(additionalProperties, "limit")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

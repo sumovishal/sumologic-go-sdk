@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type Consumable struct {
 	// Unique identifier of the consumable. Valid values are: 1. `Storage` 2. `Metrics` 3. `Continuous` 4. `Credits` 
 	ConsumableId string `json:"consumableId" validate:"regexp=^(Storage|Metrics|Continuous|Credits)$"`
 	Quantity Quantity `json:"quantity"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Consumable Consumable
@@ -107,6 +107,11 @@ func (o Consumable) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["consumableId"] = o.ConsumableId
 	toSerialize["quantity"] = o.Quantity
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *Consumable) UnmarshalJSON(data []byte) (err error) {
 
 	varConsumable := _Consumable{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varConsumable)
+	err = json.Unmarshal(data, &varConsumable)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Consumable(varConsumable)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "consumableId")
+		delete(additionalProperties, "quantity")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

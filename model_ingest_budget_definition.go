@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type IngestBudgetDefinition struct {
 	Action string `json:"action" validate:"regexp=^(keepCollecting|stopCollecting)$"`
 	// The threshold as a percentage of when an ingest budget's capacity usage is logged in the Audit Index.
 	AuditThreshold *int32 `json:"auditThreshold,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestBudgetDefinition IngestBudgetDefinition
@@ -294,6 +294,11 @@ func (o IngestBudgetDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AuditThreshold) {
 		toSerialize["auditThreshold"] = o.AuditThreshold
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -326,15 +331,27 @@ func (o *IngestBudgetDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varIngestBudgetDefinition := _IngestBudgetDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestBudgetDefinition)
+	err = json.Unmarshal(data, &varIngestBudgetDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = IngestBudgetDefinition(varIngestBudgetDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "fieldValue")
+		delete(additionalProperties, "capacityBytes")
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "resetTime")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "auditThreshold")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

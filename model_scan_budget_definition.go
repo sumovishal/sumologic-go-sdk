@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type ScanBudgetDefinition struct {
 	Action string `json:"action" validate:"regexp=^(StopForeGroundScan|Warn)$"`
 	// Signifies the state of the budget. (Active/Inactive)
 	Status *string `json:"status,omitempty" validate:"regexp=^(active|inactive)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScanBudgetDefinition ScanBudgetDefinition
@@ -340,6 +340,11 @@ func (o ScanBudgetDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -375,15 +380,29 @@ func (o *ScanBudgetDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varScanBudgetDefinition := _ScanBudgetDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScanBudgetDefinition)
+	err = json.Unmarshal(data, &varScanBudgetDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScanBudgetDefinition(varScanBudgetDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "capacity")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "budgetType")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "window")
+		delete(additionalProperties, "applicableOn")
+		delete(additionalProperties, "groupBy")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TopologyLabelMap{}
 type TopologyLabelMap struct {
 	// Map from topology labels to `TopologyLabelValuesList`.
 	Data map[string][]string `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TopologyLabelMap TopologyLabelMap
@@ -80,6 +80,11 @@ func (o TopologyLabelMap) MarshalJSON() ([]byte, error) {
 func (o TopologyLabelMap) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TopologyLabelMap) UnmarshalJSON(data []byte) (err error) {
 
 	varTopologyLabelMap := _TopologyLabelMap{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTopologyLabelMap)
+	err = json.Unmarshal(data, &varTopologyLabelMap)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TopologyLabelMap(varTopologyLabelMap)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

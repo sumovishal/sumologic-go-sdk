@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the InstalledCollectorOfflineTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type InstalledCollectorOfflineTracker struct {
 	TrackerIdentity
 	// The number of minutes since the last heartbeat for the collector was received.
 	MinutesSinceLastHeartbeat *string `json:"minutesSinceLastHeartbeat,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InstalledCollectorOfflineTracker InstalledCollectorOfflineTracker
@@ -101,6 +103,11 @@ func (o InstalledCollectorOfflineTracker) ToMap() (map[string]interface{}, error
 	if !IsNil(o.MinutesSinceLastHeartbeat) {
 		toSerialize["minutesSinceLastHeartbeat"] = o.MinutesSinceLastHeartbeat
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *InstalledCollectorOfflineTracker) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varInstalledCollectorOfflineTracker := _InstalledCollectorOfflineTracker{}
+	type InstalledCollectorOfflineTrackerWithoutEmbeddedStruct struct {
+		// The number of minutes since the last heartbeat for the collector was received.
+		MinutesSinceLastHeartbeat *string `json:"minutesSinceLastHeartbeat,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInstalledCollectorOfflineTracker)
+	varInstalledCollectorOfflineTrackerWithoutEmbeddedStruct := InstalledCollectorOfflineTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varInstalledCollectorOfflineTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varInstalledCollectorOfflineTracker := _InstalledCollectorOfflineTracker{}
+		varInstalledCollectorOfflineTracker.MinutesSinceLastHeartbeat = varInstalledCollectorOfflineTrackerWithoutEmbeddedStruct.MinutesSinceLastHeartbeat
+		*o = InstalledCollectorOfflineTracker(varInstalledCollectorOfflineTracker)
+	} else {
 		return err
 	}
 
-	*o = InstalledCollectorOfflineTracker(varInstalledCollectorOfflineTracker)
+	varInstalledCollectorOfflineTracker := _InstalledCollectorOfflineTracker{}
+
+	err = json.Unmarshal(data, &varInstalledCollectorOfflineTracker)
+	if err == nil {
+		o.TrackerIdentity = varInstalledCollectorOfflineTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "minutesSinceLastHeartbeat")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

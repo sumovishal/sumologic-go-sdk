@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsErrorAppendingToQueueFilesTracker type satisfies the MappedNullable interface at compile time
@@ -40,6 +41,7 @@ type CSEWindowsErrorAppendingToQueueFilesTracker struct {
 	CurrentPercentageAvailableDiskSpace *string `json:"currentPercentageAvailableDiskSpace,omitempty"`
 	// The last error.
 	LastError *string `json:"lastError,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsErrorAppendingToQueueFilesTracker CSEWindowsErrorAppendingToQueueFilesTracker
@@ -397,6 +399,11 @@ func (o CSEWindowsErrorAppendingToQueueFilesTracker) ToMap() (map[string]interfa
 	if !IsNil(o.LastError) {
 		toSerialize["lastError"] = o.LastError
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -424,17 +431,88 @@ func (o *CSEWindowsErrorAppendingToQueueFilesTracker) UnmarshalJSON(data []byte)
 		}
 	}
 
-	varCSEWindowsErrorAppendingToQueueFilesTracker := _CSEWindowsErrorAppendingToQueueFilesTracker{}
+	type CSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The path of the folder.
+		FolderPath *string `json:"folderPath,omitempty"`
+		// The complete file path.
+		FolderSizeLimit *string `json:"folderSizeLimit,omitempty"`
+		// Current size of the folder.
+		CurrentFolderSize *string `json:"currentFolderSize,omitempty"`
+		// The percentage available disk space limit.
+		PercentageAvailableDiskSpaceLimit *string `json:"percentageAvailableDiskSpaceLimit,omitempty"`
+		// The current percentage available disk space.
+		CurrentPercentageAvailableDiskSpace *string `json:"currentPercentageAvailableDiskSpace,omitempty"`
+		// The last error.
+		LastError *string `json:"lastError,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsErrorAppendingToQueueFilesTracker)
+	varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct := CSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsErrorAppendingToQueueFilesTracker := _CSEWindowsErrorAppendingToQueueFilesTracker{}
+		varCSEWindowsErrorAppendingToQueueFilesTracker.EventType = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsErrorAppendingToQueueFilesTracker.SensorId = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsErrorAppendingToQueueFilesTracker.SensorHostname = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsErrorAppendingToQueueFilesTracker.FolderPath = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.FolderPath
+		varCSEWindowsErrorAppendingToQueueFilesTracker.FolderSizeLimit = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.FolderSizeLimit
+		varCSEWindowsErrorAppendingToQueueFilesTracker.CurrentFolderSize = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.CurrentFolderSize
+		varCSEWindowsErrorAppendingToQueueFilesTracker.PercentageAvailableDiskSpaceLimit = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.PercentageAvailableDiskSpaceLimit
+		varCSEWindowsErrorAppendingToQueueFilesTracker.CurrentPercentageAvailableDiskSpace = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.CurrentPercentageAvailableDiskSpace
+		varCSEWindowsErrorAppendingToQueueFilesTracker.LastError = varCSEWindowsErrorAppendingToQueueFilesTrackerWithoutEmbeddedStruct.LastError
+		*o = CSEWindowsErrorAppendingToQueueFilesTracker(varCSEWindowsErrorAppendingToQueueFilesTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsErrorAppendingToQueueFilesTracker(varCSEWindowsErrorAppendingToQueueFilesTracker)
+	varCSEWindowsErrorAppendingToQueueFilesTracker := _CSEWindowsErrorAppendingToQueueFilesTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsErrorAppendingToQueueFilesTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsErrorAppendingToQueueFilesTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "folderPath")
+		delete(additionalProperties, "folderSizeLimit")
+		delete(additionalProperties, "currentFolderSize")
+		delete(additionalProperties, "percentageAvailableDiskSpaceLimit")
+		delete(additionalProperties, "currentPercentageAvailableDiskSpace")
+		delete(additionalProperties, "lastError")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

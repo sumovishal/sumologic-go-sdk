@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OTCReceiverSpansDroppedTracker type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type OTCReceiverSpansDroppedTracker struct {
 	ReceiverId *string `json:"receiverId,omitempty"`
 	// The count of dropped spans.
 	Count *string `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCReceiverSpansDroppedTracker OTCReceiverSpansDroppedTracker
@@ -249,6 +251,11 @@ func (o OTCReceiverSpansDroppedTracker) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,17 +283,72 @@ func (o *OTCReceiverSpansDroppedTracker) UnmarshalJSON(data []byte) (err error) 
 		}
 	}
 
-	varOTCReceiverSpansDroppedTracker := _OTCReceiverSpansDroppedTracker{}
+	type OTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The collector instance ID, e.g. `974b444b-4b45-4f32-aa03-1dbf2a16826d`.
+		InstanceId *string `json:"instanceId,omitempty"`
+		// The collector instance address, e.g. `172.16.1.14`.
+		InstanceAddress *string `json:"instanceAddress,omitempty"`
+		// The collector receiver ID, e.g. `otlphttp/2`.
+		ReceiverId *string `json:"receiverId,omitempty"`
+		// The count of dropped spans.
+		Count *string `json:"count,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCReceiverSpansDroppedTracker)
+	varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct := OTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOTCReceiverSpansDroppedTracker := _OTCReceiverSpansDroppedTracker{}
+		varOTCReceiverSpansDroppedTracker.EventType = varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct.EventType
+		varOTCReceiverSpansDroppedTracker.InstanceId = varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct.InstanceId
+		varOTCReceiverSpansDroppedTracker.InstanceAddress = varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct.InstanceAddress
+		varOTCReceiverSpansDroppedTracker.ReceiverId = varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct.ReceiverId
+		varOTCReceiverSpansDroppedTracker.Count = varOTCReceiverSpansDroppedTrackerWithoutEmbeddedStruct.Count
+		*o = OTCReceiverSpansDroppedTracker(varOTCReceiverSpansDroppedTracker)
+	} else {
 		return err
 	}
 
-	*o = OTCReceiverSpansDroppedTracker(varOTCReceiverSpansDroppedTracker)
+	varOTCReceiverSpansDroppedTracker := _OTCReceiverSpansDroppedTracker{}
+
+	err = json.Unmarshal(data, &varOTCReceiverSpansDroppedTracker)
+	if err == nil {
+		o.TrackerIdentity = varOTCReceiverSpansDroppedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "instanceAddress")
+		delete(additionalProperties, "receiverId")
+		delete(additionalProperties, "count")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

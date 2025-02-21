@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CpcQueryResultRequest{}
 type CpcQueryResultRequest struct {
 	// A list of the identifiers of CPC query buckets for which aggregated Critical Path Contribution data should be fetched.
 	BucketIds []string `json:"bucketIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryResultRequest CpcQueryResultRequest
@@ -80,6 +80,11 @@ func (o CpcQueryResultRequest) MarshalJSON() ([]byte, error) {
 func (o CpcQueryResultRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketIds"] = o.BucketIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CpcQueryResultRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryResultRequest := _CpcQueryResultRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryResultRequest)
+	err = json.Unmarshal(data, &varCpcQueryResultRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryResultRequest(varCpcQueryResultRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -22,7 +22,10 @@ type SCIMCreateUserDefinitionEmailsInner struct {
 	Value *string `json:"value,omitempty"`
 	Type *string `json:"type,omitempty"`
 	Primary *bool `json:"primary,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SCIMCreateUserDefinitionEmailsInner SCIMCreateUserDefinitionEmailsInner
 
 // NewSCIMCreateUserDefinitionEmailsInner instantiates a new SCIMCreateUserDefinitionEmailsInner object
 // This constructor will assign default values to properties that have it defined,
@@ -160,7 +163,35 @@ func (o SCIMCreateUserDefinitionEmailsInner) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Primary) {
 		toSerialize["primary"] = o.Primary
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SCIMCreateUserDefinitionEmailsInner) UnmarshalJSON(data []byte) (err error) {
+	varSCIMCreateUserDefinitionEmailsInner := _SCIMCreateUserDefinitionEmailsInner{}
+
+	err = json.Unmarshal(data, &varSCIMCreateUserDefinitionEmailsInner)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SCIMCreateUserDefinitionEmailsInner(varSCIMCreateUserDefinitionEmailsInner)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "primary")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSCIMCreateUserDefinitionEmailsInner struct {

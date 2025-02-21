@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TraceMetricDetail struct {
 	Description *string `json:"description,omitempty"`
 	// The type the values of this field will have. Possible values: `DoubleTracingValue`, `IntegerTracingValue`.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceMetricDetail TraceMetricDetail
@@ -145,6 +145,11 @@ func (o TraceMetricDetail) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *TraceMetricDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceMetricDetail := _TraceMetricDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceMetricDetail)
+	err = json.Unmarshal(data, &varTraceMetricDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceMetricDetail(varTraceMetricDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metric")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

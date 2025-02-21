@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AlertsLibraryFolderResponse type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type AlertsLibraryFolderResponse struct {
 	AlertsLibraryBaseResponse
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []AlertsLibraryBaseResponse `json:"children"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryFolderResponse AlertsLibraryFolderResponse
@@ -103,6 +105,11 @@ func (o AlertsLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errAlertsLibraryBaseResponse
 	}
 	toSerialize["children"] = o.Children
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -141,17 +148,56 @@ func (o *AlertsLibraryFolderResponse) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAlertsLibraryFolderResponse := _AlertsLibraryFolderResponse{}
+	type AlertsLibraryFolderResponseWithoutEmbeddedStruct struct {
+		// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
+		Children []AlertsLibraryBaseResponse `json:"children"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryFolderResponse)
+	varAlertsLibraryFolderResponseWithoutEmbeddedStruct := AlertsLibraryFolderResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAlertsLibraryFolderResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varAlertsLibraryFolderResponse := _AlertsLibraryFolderResponse{}
+		varAlertsLibraryFolderResponse.Children = varAlertsLibraryFolderResponseWithoutEmbeddedStruct.Children
+		*o = AlertsLibraryFolderResponse(varAlertsLibraryFolderResponse)
+	} else {
 		return err
 	}
 
-	*o = AlertsLibraryFolderResponse(varAlertsLibraryFolderResponse)
+	varAlertsLibraryFolderResponse := _AlertsLibraryFolderResponse{}
+
+	err = json.Unmarshal(data, &varAlertsLibraryFolderResponse)
+	if err == nil {
+		o.AlertsLibraryBaseResponse = varAlertsLibraryFolderResponse.AlertsLibraryBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectAlertsLibraryBaseResponse := reflect.ValueOf(o.AlertsLibraryBaseResponse)
+		for i := 0; i < reflectAlertsLibraryBaseResponse.Type().NumField(); i++ {
+			t := reflectAlertsLibraryBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

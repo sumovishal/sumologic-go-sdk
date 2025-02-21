@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PaginatedReportSchedules struct {
 	ReportSchedules []ReportSchedule `json:"reportSchedules"`
 	// Next continuation token. `token` is set to null when no more pages are left.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaginatedReportSchedules PaginatedReportSchedules
@@ -117,6 +117,11 @@ func (o PaginatedReportSchedules) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *PaginatedReportSchedules) UnmarshalJSON(data []byte) (err error) {
 
 	varPaginatedReportSchedules := _PaginatedReportSchedules{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaginatedReportSchedules)
+	err = json.Unmarshal(data, &varPaginatedReportSchedules)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaginatedReportSchedules(varPaginatedReportSchedules)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "reportSchedules")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

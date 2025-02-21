@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CreateServiceAccountDefinition struct {
 	Email string `json:"email"`
 	// List of roleIds associated with the service account.
 	RoleIds []string `json:"roleIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateServiceAccountDefinition CreateServiceAccountDefinition
@@ -136,6 +136,11 @@ func (o CreateServiceAccountDefinition) ToMap() (map[string]interface{}, error) 
 	toSerialize["name"] = o.Name
 	toSerialize["email"] = o.Email
 	toSerialize["roleIds"] = o.RoleIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CreateServiceAccountDefinition) UnmarshalJSON(data []byte) (err error) 
 
 	varCreateServiceAccountDefinition := _CreateServiceAccountDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateServiceAccountDefinition)
+	err = json.Unmarshal(data, &varCreateServiceAccountDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateServiceAccountDefinition(varCreateServiceAccountDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "roleIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DataPointCount{}
 type DataPointCount struct {
 	// The number of data points
 	Count int32 `json:"count"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DataPointCount DataPointCount
@@ -80,6 +80,11 @@ func (o DataPointCount) MarshalJSON() ([]byte, error) {
 func (o DataPointCount) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["count"] = o.Count
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DataPointCount) UnmarshalJSON(data []byte) (err error) {
 
 	varDataPointCount := _DataPointCount{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDataPointCount)
+	err = json.Unmarshal(data, &varDataPointCount)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DataPointCount(varDataPointCount)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

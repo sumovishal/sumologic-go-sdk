@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type Plan struct {
 	ProductName string `json:"productName"`
 	// A list of product group for preview.
 	ProductGroups []ProductGroup `json:"productGroups"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Plan Plan
@@ -136,6 +136,11 @@ func (o Plan) ToMap() (map[string]interface{}, error) {
 	toSerialize["productId"] = o.ProductId
 	toSerialize["productName"] = o.ProductName
 	toSerialize["productGroups"] = o.ProductGroups
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *Plan) UnmarshalJSON(data []byte) (err error) {
 
 	varPlan := _Plan{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPlan)
+	err = json.Unmarshal(data, &varPlan)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Plan(varPlan)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productId")
+		delete(additionalProperties, "productName")
+		delete(additionalProperties, "productGroups")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

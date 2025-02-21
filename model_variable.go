@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type Variable struct {
 	HideFromUI *bool `json:"hideFromUI,omitempty"`
 	// The type of value of the variable. Allowed values are `String`, Any` and `Numeric`. - `String` considers as a single phrase and will wrap in double-quotes. - `Any` is all characters. - `Numeric` consists of a numeric value for variables, it will be displayed differently in the UI. - `Integer` is a variable with an `Int` value. - `Long` is a variable with a `Long` value. - `Double` is a variable with a `Double` value. - `Boolean` is a variable with a `Boolean` value. 
 	ValueType *string `json:"valueType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Variable Variable
@@ -382,6 +382,11 @@ func (o Variable) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ValueType) {
 		toSerialize["valueType"] = o.ValueType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -410,15 +415,28 @@ func (o *Variable) UnmarshalJSON(data []byte) (err error) {
 
 	varVariable := _Variable{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVariable)
+	err = json.Unmarshal(data, &varVariable)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Variable(varVariable)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "displayName")
+		delete(additionalProperties, "defaultValue")
+		delete(additionalProperties, "sourceDefinition")
+		delete(additionalProperties, "allowMultiSelect")
+		delete(additionalProperties, "includeAllOption")
+		delete(additionalProperties, "hideFromUI")
+		delete(additionalProperties, "valueType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ConfidenceScoreResponse{}
 type ConfidenceScoreResponse struct {
 	// List of confidence scores to the CSE Insights.
 	ConfidenceScore string `json:"confidenceScore"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ConfidenceScoreResponse ConfidenceScoreResponse
@@ -80,6 +80,11 @@ func (o ConfidenceScoreResponse) MarshalJSON() ([]byte, error) {
 func (o ConfidenceScoreResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["confidenceScore"] = o.ConfidenceScore
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ConfidenceScoreResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varConfidenceScoreResponse := _ConfidenceScoreResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varConfidenceScoreResponse)
+	err = json.Unmarshal(data, &varConfidenceScoreResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ConfidenceScoreResponse(varConfidenceScoreResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "confidenceScore")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

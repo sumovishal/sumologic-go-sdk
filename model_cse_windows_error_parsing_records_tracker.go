@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsErrorParsingRecordsTracker type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type CSEWindowsErrorParsingRecordsTracker struct {
 	ErrorCount *string `json:"errorCount,omitempty"`
 	// The last error message.
 	LastErrorMessage *string `json:"lastErrorMessage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsErrorParsingRecordsTracker CSEWindowsErrorParsingRecordsTracker
@@ -286,6 +288,11 @@ func (o CSEWindowsErrorParsingRecordsTracker) ToMap() (map[string]interface{}, e
 	if !IsNil(o.LastErrorMessage) {
 		toSerialize["lastErrorMessage"] = o.LastErrorMessage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -313,17 +320,76 @@ func (o *CSEWindowsErrorParsingRecordsTracker) UnmarshalJSON(data []byte) (err e
 		}
 	}
 
-	varCSEWindowsErrorParsingRecordsTracker := _CSEWindowsErrorParsingRecordsTracker{}
+	type CSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The HostName + EventLog name for EventLogs and Domain name for Directory.
+		Source *string `json:"source,omitempty"`
+		// The error count.
+		ErrorCount *string `json:"errorCount,omitempty"`
+		// The last error message.
+		LastErrorMessage *string `json:"lastErrorMessage,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsErrorParsingRecordsTracker)
+	varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct := CSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsErrorParsingRecordsTracker := _CSEWindowsErrorParsingRecordsTracker{}
+		varCSEWindowsErrorParsingRecordsTracker.EventType = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsErrorParsingRecordsTracker.SensorId = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsErrorParsingRecordsTracker.SensorHostname = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsErrorParsingRecordsTracker.Source = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.Source
+		varCSEWindowsErrorParsingRecordsTracker.ErrorCount = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.ErrorCount
+		varCSEWindowsErrorParsingRecordsTracker.LastErrorMessage = varCSEWindowsErrorParsingRecordsTrackerWithoutEmbeddedStruct.LastErrorMessage
+		*o = CSEWindowsErrorParsingRecordsTracker(varCSEWindowsErrorParsingRecordsTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsErrorParsingRecordsTracker(varCSEWindowsErrorParsingRecordsTracker)
+	varCSEWindowsErrorParsingRecordsTracker := _CSEWindowsErrorParsingRecordsTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsErrorParsingRecordsTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsErrorParsingRecordsTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "errorCount")
+		delete(additionalProperties, "lastErrorMessage")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

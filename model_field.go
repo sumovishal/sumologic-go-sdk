@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type Field struct {
 	FieldType string `json:"fieldType"`
 	// Flag if the field is a key field.
 	KeyField bool `json:"keyField"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Field Field
@@ -136,6 +136,11 @@ func (o Field) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["fieldType"] = o.FieldType
 	toSerialize["keyField"] = o.KeyField
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *Field) UnmarshalJSON(data []byte) (err error) {
 
 	varField := _Field{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varField)
+	err = json.Unmarshal(data, &varField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Field(varField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "fieldType")
+		delete(additionalProperties, "keyField")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

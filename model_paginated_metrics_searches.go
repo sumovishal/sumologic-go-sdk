@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PaginatedMetricsSearches struct {
 	MetricsSearches []MetricsSearchResponse `json:"metricsSearches"`
 	// Next continuation token. `token` is set to null when no more pages are left.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaginatedMetricsSearches PaginatedMetricsSearches
@@ -117,6 +117,11 @@ func (o PaginatedMetricsSearches) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *PaginatedMetricsSearches) UnmarshalJSON(data []byte) (err error) {
 
 	varPaginatedMetricsSearches := _PaginatedMetricsSearches{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaginatedMetricsSearches)
+	err = json.Unmarshal(data, &varPaginatedMetricsSearches)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaginatedMetricsSearches(varPaginatedMetricsSearches)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metricsSearches")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

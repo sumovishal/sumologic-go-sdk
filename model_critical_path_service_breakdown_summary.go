@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CriticalPathServiceBreakdownSummary struct {
 	OtherServicesDuration int64 `json:"otherServicesDuration"`
 	// Overall time in nanoseconds when no particular operation was in progress.
 	IdleTime int64 `json:"idleTime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CriticalPathServiceBreakdownSummary CriticalPathServiceBreakdownSummary
@@ -136,6 +136,11 @@ func (o CriticalPathServiceBreakdownSummary) ToMap() (map[string]interface{}, er
 	toSerialize["elements"] = o.Elements
 	toSerialize["otherServicesDuration"] = o.OtherServicesDuration
 	toSerialize["idleTime"] = o.IdleTime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CriticalPathServiceBreakdownSummary) UnmarshalJSON(data []byte) (err er
 
 	varCriticalPathServiceBreakdownSummary := _CriticalPathServiceBreakdownSummary{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCriticalPathServiceBreakdownSummary)
+	err = json.Unmarshal(data, &varCriticalPathServiceBreakdownSummary)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CriticalPathServiceBreakdownSummary(varCriticalPathServiceBreakdownSummary)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "elements")
+		delete(additionalProperties, "otherServicesDuration")
+		delete(additionalProperties, "idleTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

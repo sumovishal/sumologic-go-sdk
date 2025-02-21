@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type ReportSchedule struct {
 	IsActive *bool `json:"isActive,omitempty"`
 	// Identifier of the dashboard report schedule.
 	ScheduleId *string `json:"scheduleId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ReportSchedule ReportSchedule
@@ -378,6 +378,11 @@ func (o ReportSchedule) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScheduleId) {
 		toSerialize["scheduleId"] = o.ScheduleId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -409,15 +414,29 @@ func (o *ReportSchedule) UnmarshalJSON(data []byte) (err error) {
 
 	varReportSchedule := _ReportSchedule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varReportSchedule)
+	err = json.Unmarshal(data, &varReportSchedule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ReportSchedule(varReportSchedule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dashboardId")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "variableValues")
+		delete(additionalProperties, "reportFormat")
+		delete(additionalProperties, "scheduleType")
+		delete(additionalProperties, "cronExpression")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "emailNotification")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "scheduleId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

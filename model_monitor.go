@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type Monitor struct {
 	Sli
 	// Monitors over which the SLO is defined.
 	MonitorTriggers []MonitorTrigger `json:"monitorTriggers"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Monitor Monitor
@@ -82,6 +82,11 @@ func (o Monitor) MarshalJSON() ([]byte, error) {
 func (o Monitor) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["monitorTriggers"] = o.MonitorTriggers
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -110,15 +115,20 @@ func (o *Monitor) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitor := _Monitor{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitor)
+	err = json.Unmarshal(data, &varMonitor)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Monitor(varMonitor)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorTriggers")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -44,6 +43,7 @@ type AccessKey struct {
 	EffectiveScopes []string `json:"effectiveScopes,omitempty"`
 	// The key for the created access key. This field will have values only in the response for an access key create request. The value will be an empty string while listing all keys.
 	Key string `json:"key"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessKey AccessKey
@@ -397,6 +397,11 @@ func (o AccessKey) ToMap() (map[string]interface{}, error) {
 		toSerialize["effectiveScopes"] = o.EffectiveScopes
 	}
 	toSerialize["key"] = o.Key
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -430,15 +435,30 @@ func (o *AccessKey) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessKey := _AccessKey{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessKey)
+	err = json.Unmarshal(data, &varAccessKey)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessKey(varAccessKey)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "corsHeaders")
+		delete(additionalProperties, "disabled")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "lastUsed")
+		delete(additionalProperties, "scopes")
+		delete(additionalProperties, "effectiveScopes")
+		delete(additionalProperties, "key")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

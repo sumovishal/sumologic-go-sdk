@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the EpochTimeRangeBoundary type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type EpochTimeRangeBoundary struct {
 	TimeRangeBoundary
 	// Starting point in time as a number of milliseconds since the epoch. For example `1538392220000`
 	EpochMillis int64 `json:"epochMillis"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EpochTimeRangeBoundary EpochTimeRangeBoundary
@@ -90,6 +92,11 @@ func (o EpochTimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	toSerialize["epochMillis"] = o.EpochMillis
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *EpochTimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varEpochTimeRangeBoundary := _EpochTimeRangeBoundary{}
+	type EpochTimeRangeBoundaryWithoutEmbeddedStruct struct {
+		// Starting point in time as a number of milliseconds since the epoch. For example `1538392220000`
+		EpochMillis int64 `json:"epochMillis"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEpochTimeRangeBoundary)
+	varEpochTimeRangeBoundaryWithoutEmbeddedStruct := EpochTimeRangeBoundaryWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varEpochTimeRangeBoundaryWithoutEmbeddedStruct)
+	if err == nil {
+		varEpochTimeRangeBoundary := _EpochTimeRangeBoundary{}
+		varEpochTimeRangeBoundary.EpochMillis = varEpochTimeRangeBoundaryWithoutEmbeddedStruct.EpochMillis
+		*o = EpochTimeRangeBoundary(varEpochTimeRangeBoundary)
+	} else {
 		return err
 	}
 
-	*o = EpochTimeRangeBoundary(varEpochTimeRangeBoundary)
+	varEpochTimeRangeBoundary := _EpochTimeRangeBoundary{}
+
+	err = json.Unmarshal(data, &varEpochTimeRangeBoundary)
+	if err == nil {
+		o.TimeRangeBoundary = varEpochTimeRangeBoundary.TimeRangeBoundary
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "epochMillis")
+
+		// remove fields from embedded structs
+		reflectTimeRangeBoundary := reflect.ValueOf(o.TimeRangeBoundary)
+		for i := 0; i < reflectTimeRangeBoundary.Type().NumField(); i++ {
+			t := reflectTimeRangeBoundary.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

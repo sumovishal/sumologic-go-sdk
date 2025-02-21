@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &MaxUserSessionTimeoutPolicy{}
 type MaxUserSessionTimeoutPolicy struct {
 	// Maximum web session timeout users are able to configure within their user preferences. Valid values are: `5m`, `15m`, `30m`, `1h`, `2h`, `6h`, `12h`, `1d`, `2d`, `3d`, `5d`, or `7d`
 	MaxUserSessionTimeout string `json:"maxUserSessionTimeout" validate:"regexp=^(5m|15m|30m|1h|2h|6h|12h|1d|2d|3d|5d|7d)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MaxUserSessionTimeoutPolicy MaxUserSessionTimeoutPolicy
@@ -80,6 +80,11 @@ func (o MaxUserSessionTimeoutPolicy) MarshalJSON() ([]byte, error) {
 func (o MaxUserSessionTimeoutPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["maxUserSessionTimeout"] = o.MaxUserSessionTimeout
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *MaxUserSessionTimeoutPolicy) UnmarshalJSON(data []byte) (err error) {
 
 	varMaxUserSessionTimeoutPolicy := _MaxUserSessionTimeoutPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMaxUserSessionTimeoutPolicy)
+	err = json.Unmarshal(data, &varMaxUserSessionTimeoutPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MaxUserSessionTimeoutPolicy(varMaxUserSessionTimeoutPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "maxUserSessionTimeout")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

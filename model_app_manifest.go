@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -53,6 +52,7 @@ type AppManifest struct {
 	Author *string `json:"author,omitempty"`
 	// App author website URL.
 	AuthorWebsite *string `json:"authorWebsite,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppManifest AppManifest
@@ -617,6 +617,11 @@ func (o AppManifest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AuthorWebsite) {
 		toSerialize["authorWebsite"] = o.AuthorWebsite
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -646,15 +651,35 @@ func (o *AppManifest) UnmarshalJSON(data []byte) (err error) {
 
 	varAppManifest := _AppManifest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppManifest)
+	err = json.Unmarshal(data, &varAppManifest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppManifest(varAppManifest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "family")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "categories")
+		delete(additionalProperties, "hoverText")
+		delete(additionalProperties, "iconURL")
+		delete(additionalProperties, "screenshotURLs")
+		delete(additionalProperties, "helpURL")
+		delete(additionalProperties, "helpDocIdMap")
+		delete(additionalProperties, "communityURL")
+		delete(additionalProperties, "requirements")
+		delete(additionalProperties, "accountTypes")
+		delete(additionalProperties, "requiresInstallationInstructions")
+		delete(additionalProperties, "installationInstructions")
+		delete(additionalProperties, "parameters")
+		delete(additionalProperties, "author")
+		delete(additionalProperties, "authorWebsite")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

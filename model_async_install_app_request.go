@@ -23,7 +23,10 @@ type AsyncInstallAppRequest struct {
 	Version *string `json:"version,omitempty"`
 	// Map of additional parameters for the app installation.
 	Parameters *map[string]string `json:"parameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AsyncInstallAppRequest AsyncInstallAppRequest
 
 // NewAsyncInstallAppRequest instantiates a new AsyncInstallAppRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o AsyncInstallAppRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Parameters) {
 		toSerialize["parameters"] = o.Parameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AsyncInstallAppRequest) UnmarshalJSON(data []byte) (err error) {
+	varAsyncInstallAppRequest := _AsyncInstallAppRequest{}
+
+	err = json.Unmarshal(data, &varAsyncInstallAppRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AsyncInstallAppRequest(varAsyncInstallAppRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "parameters")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAsyncInstallAppRequest struct {

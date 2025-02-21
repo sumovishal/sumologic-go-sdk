@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type AlertMonitorQuery struct {
 	Query string `json:"query"`
 	// Indicates whether the current row is the trigger (final) row.
 	IsTriggerRow bool `json:"isTriggerRow"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertMonitorQuery AlertMonitorQuery
@@ -136,6 +136,11 @@ func (o AlertMonitorQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize["rowId"] = o.RowId
 	toSerialize["query"] = o.Query
 	toSerialize["isTriggerRow"] = o.IsTriggerRow
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *AlertMonitorQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varAlertMonitorQuery := _AlertMonitorQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertMonitorQuery)
+	err = json.Unmarshal(data, &varAlertMonitorQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AlertMonitorQuery(varAlertMonitorQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "isTriggerRow")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

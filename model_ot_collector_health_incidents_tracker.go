@@ -23,7 +23,10 @@ type OTCollectorHealthIncidentsTracker struct {
 	ErrorsCount *int32 `json:"errorsCount,omitempty"`
 	// Number of warnings associated with the OT Collector.
 	WarningsCount *int32 `json:"warningsCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OTCollectorHealthIncidentsTracker OTCollectorHealthIncidentsTracker
 
 // NewOTCollectorHealthIncidentsTracker instantiates a new OTCollectorHealthIncidentsTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o OTCollectorHealthIncidentsTracker) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.WarningsCount) {
 		toSerialize["warningsCount"] = o.WarningsCount
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OTCollectorHealthIncidentsTracker) UnmarshalJSON(data []byte) (err error) {
+	varOTCollectorHealthIncidentsTracker := _OTCollectorHealthIncidentsTracker{}
+
+	err = json.Unmarshal(data, &varOTCollectorHealthIncidentsTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OTCollectorHealthIncidentsTracker(varOTCollectorHealthIncidentsTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "errorsCount")
+		delete(additionalProperties, "warningsCount")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOTCollectorHealthIncidentsTracker struct {

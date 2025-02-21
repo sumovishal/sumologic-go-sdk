@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SCIMPatchUserDefinition struct {
 	Schemas []string `json:"schemas"`
 	// Updates one or more attributes of a SCIM resource using a sequence of operations
 	Operations []SCIMPatchUserDefinitionOperationsInner `json:"Operations"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SCIMPatchUserDefinition SCIMPatchUserDefinition
@@ -108,6 +108,11 @@ func (o SCIMPatchUserDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["schemas"] = o.Schemas
 	toSerialize["Operations"] = o.Operations
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SCIMPatchUserDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varSCIMPatchUserDefinition := _SCIMPatchUserDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSCIMPatchUserDefinition)
+	err = json.Unmarshal(data, &varSCIMPatchUserDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SCIMPatchUserDefinition(varSCIMPatchUserDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemas")
+		delete(additionalProperties, "Operations")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

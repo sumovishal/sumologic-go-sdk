@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CpcQueryResultResponse{}
 type CpcQueryResultResponse struct {
 	// A list of CPC query results on a per time bucket basis.  Each bucket result corresponds to the aggregated CPC data from a sample of traces matching search criteria falling within a specific time slice.
 	Buckets []CpcQueryBucketResult `json:"buckets"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryResultResponse CpcQueryResultResponse
@@ -80,6 +80,11 @@ func (o CpcQueryResultResponse) MarshalJSON() ([]byte, error) {
 func (o CpcQueryResultResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["buckets"] = o.Buckets
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CpcQueryResultResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryResultResponse := _CpcQueryResultResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryResultResponse)
+	err = json.Unmarshal(data, &varCpcQueryResultResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryResultResponse(varCpcQueryResultResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "buckets")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

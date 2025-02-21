@@ -21,7 +21,10 @@ var _ MappedNullable = &ReportAutoParsingInfo{}
 type ReportAutoParsingInfo struct {
 	// Can be `intelligent` or `performance`
 	Mode *string `json:"mode,omitempty" validate:"regexp=^(intelligent|performance)$|^$"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ReportAutoParsingInfo ReportAutoParsingInfo
 
 // NewReportAutoParsingInfo instantiates a new ReportAutoParsingInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -89,7 +92,33 @@ func (o ReportAutoParsingInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Mode) {
 		toSerialize["mode"] = o.Mode
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ReportAutoParsingInfo) UnmarshalJSON(data []byte) (err error) {
+	varReportAutoParsingInfo := _ReportAutoParsingInfo{}
+
+	err = json.Unmarshal(data, &varReportAutoParsingInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ReportAutoParsingInfo(varReportAutoParsingInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "mode")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableReportAutoParsingInfo struct {

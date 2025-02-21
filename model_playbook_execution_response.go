@@ -23,7 +23,10 @@ type PlaybookExecutionResponse struct {
 	RunningId *string `json:"runningId,omitempty"`
 	// The id of the playbook when it is executed.
 	PlaybookExecutedId *string `json:"playbookExecutedId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PlaybookExecutionResponse PlaybookExecutionResponse
 
 // NewPlaybookExecutionResponse instantiates a new PlaybookExecutionResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o PlaybookExecutionResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PlaybookExecutedId) {
 		toSerialize["playbookExecutedId"] = o.PlaybookExecutedId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PlaybookExecutionResponse) UnmarshalJSON(data []byte) (err error) {
+	varPlaybookExecutionResponse := _PlaybookExecutionResponse{}
+
+	err = json.Unmarshal(data, &varPlaybookExecutionResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PlaybookExecutionResponse(varPlaybookExecutionResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "runningId")
+		delete(additionalProperties, "playbookExecutedId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePlaybookExecutionResponse struct {

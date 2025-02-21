@@ -23,7 +23,10 @@ type SCIMCreateUserDefinitionRolesInner struct {
 	Value *string `json:"value,omitempty"`
 	// Indicates if this is the primary role
 	Primary *bool `json:"primary,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SCIMCreateUserDefinitionRolesInner SCIMCreateUserDefinitionRolesInner
 
 // NewSCIMCreateUserDefinitionRolesInner instantiates a new SCIMCreateUserDefinitionRolesInner object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o SCIMCreateUserDefinitionRolesInner) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Primary) {
 		toSerialize["primary"] = o.Primary
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SCIMCreateUserDefinitionRolesInner) UnmarshalJSON(data []byte) (err error) {
+	varSCIMCreateUserDefinitionRolesInner := _SCIMCreateUserDefinitionRolesInner{}
+
+	err = json.Unmarshal(data, &varSCIMCreateUserDefinitionRolesInner)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SCIMCreateUserDefinitionRolesInner(varSCIMCreateUserDefinitionRolesInner)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "primary")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSCIMCreateUserDefinitionRolesInner struct {

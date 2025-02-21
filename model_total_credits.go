@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type TotalCredits struct {
 	// Numerical value of the amount of credits
 	TotalCredits float64 `json:"totalCredits"`
 	Breakdown *CreditsBreakdown `json:"breakdown,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TotalCredits TotalCredits
@@ -116,6 +116,11 @@ func (o TotalCredits) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Breakdown) {
 		toSerialize["breakdown"] = o.Breakdown
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *TotalCredits) UnmarshalJSON(data []byte) (err error) {
 
 	varTotalCredits := _TotalCredits{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTotalCredits)
+	err = json.Unmarshal(data, &varTotalCredits)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TotalCredits(varTotalCredits)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "totalCredits")
+		delete(additionalProperties, "breakdown")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -45,6 +44,7 @@ type RuleAndBucketDetail struct {
 	// The unique identifier of the data forwarding rule.
 	Id *string `json:"id,omitempty"`
 	Bucket map[string]interface{} `json:"bucket,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RuleAndBucketDetail RuleAndBucketDetail
@@ -442,6 +442,11 @@ func (o RuleAndBucketDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Bucket) {
 		toSerialize["bucket"] = o.Bucket
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -474,15 +479,31 @@ func (o *RuleAndBucketDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varRuleAndBucketDetail := _RuleAndBucketDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRuleAndBucketDetail)
+	err = json.Unmarshal(data, &varRuleAndBucketDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RuleAndBucketDetail(varRuleAndBucketDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "indexId")
+		delete(additionalProperties, "destinationId")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "fileFormat")
+		delete(additionalProperties, "payloadSchema")
+		delete(additionalProperties, "format")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "bucket")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

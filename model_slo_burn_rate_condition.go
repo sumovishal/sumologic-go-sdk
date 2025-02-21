@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SloBurnRateCondition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type SloBurnRateCondition struct {
 	BurnRateThreshold *float64 `json:"burnRateThreshold,omitempty"`
 	// The relative time range for measuring error budget depletion.
 	TimeRange *string `json:"timeRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SloBurnRateCondition SloBurnRateCondition
@@ -138,6 +140,11 @@ func (o SloBurnRateCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -163,17 +170,60 @@ func (o *SloBurnRateCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSloBurnRateCondition := _SloBurnRateCondition{}
+	type SloBurnRateConditionWithoutEmbeddedStruct struct {
+		// The error budget depletion percentage.
+		BurnRateThreshold *float64 `json:"burnRateThreshold,omitempty"`
+		// The relative time range for measuring error budget depletion.
+		TimeRange *string `json:"timeRange,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSloBurnRateCondition)
+	varSloBurnRateConditionWithoutEmbeddedStruct := SloBurnRateConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSloBurnRateConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varSloBurnRateCondition := _SloBurnRateCondition{}
+		varSloBurnRateCondition.BurnRateThreshold = varSloBurnRateConditionWithoutEmbeddedStruct.BurnRateThreshold
+		varSloBurnRateCondition.TimeRange = varSloBurnRateConditionWithoutEmbeddedStruct.TimeRange
+		*o = SloBurnRateCondition(varSloBurnRateCondition)
+	} else {
 		return err
 	}
 
-	*o = SloBurnRateCondition(varSloBurnRateCondition)
+	varSloBurnRateCondition := _SloBurnRateCondition{}
+
+	err = json.Unmarshal(data, &varSloBurnRateCondition)
+	if err == nil {
+		o.TriggerCondition = varSloBurnRateCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "burnRateThreshold")
+		delete(additionalProperties, "timeRange")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

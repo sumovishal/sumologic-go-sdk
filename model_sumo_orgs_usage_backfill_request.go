@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SumoOrgsUsageBackfillRequest struct {
 	From int64 `json:"from"`
 	// epoch millis of date upto which usage is to be copied
 	To int64 `json:"to"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SumoOrgsUsageBackfillRequest SumoOrgsUsageBackfillRequest
@@ -136,6 +136,11 @@ func (o SumoOrgsUsageBackfillRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["customerId"] = o.CustomerId
 	toSerialize["from"] = o.From
 	toSerialize["to"] = o.To
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *SumoOrgsUsageBackfillRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSumoOrgsUsageBackfillRequest := _SumoOrgsUsageBackfillRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSumoOrgsUsageBackfillRequest)
+	err = json.Unmarshal(data, &varSumoOrgsUsageBackfillRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SumoOrgsUsageBackfillRequest(varSumoOrgsUsageBackfillRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customerId")
+		delete(additionalProperties, "from")
+		delete(additionalProperties, "to")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

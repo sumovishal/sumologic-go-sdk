@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the HighCardinalityDimensionDroppedTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type HighCardinalityDimensionDroppedTracker struct {
 	TrackerIdentity
 	// The dropped high cardinality dimension.
 	Dimension *string `json:"dimension,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _HighCardinalityDimensionDroppedTracker HighCardinalityDimensionDroppedTracker
@@ -101,6 +103,11 @@ func (o HighCardinalityDimensionDroppedTracker) ToMap() (map[string]interface{},
 	if !IsNil(o.Dimension) {
 		toSerialize["dimension"] = o.Dimension
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *HighCardinalityDimensionDroppedTracker) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varHighCardinalityDimensionDroppedTracker := _HighCardinalityDimensionDroppedTracker{}
+	type HighCardinalityDimensionDroppedTrackerWithoutEmbeddedStruct struct {
+		// The dropped high cardinality dimension.
+		Dimension *string `json:"dimension,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varHighCardinalityDimensionDroppedTracker)
+	varHighCardinalityDimensionDroppedTrackerWithoutEmbeddedStruct := HighCardinalityDimensionDroppedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varHighCardinalityDimensionDroppedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varHighCardinalityDimensionDroppedTracker := _HighCardinalityDimensionDroppedTracker{}
+		varHighCardinalityDimensionDroppedTracker.Dimension = varHighCardinalityDimensionDroppedTrackerWithoutEmbeddedStruct.Dimension
+		*o = HighCardinalityDimensionDroppedTracker(varHighCardinalityDimensionDroppedTracker)
+	} else {
 		return err
 	}
 
-	*o = HighCardinalityDimensionDroppedTracker(varHighCardinalityDimensionDroppedTracker)
+	varHighCardinalityDimensionDroppedTracker := _HighCardinalityDimensionDroppedTracker{}
+
+	err = json.Unmarshal(data, &varHighCardinalityDimensionDroppedTracker)
+	if err == nil {
+		o.TrackerIdentity = varHighCardinalityDimensionDroppedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dimension")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

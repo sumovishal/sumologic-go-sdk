@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CompliancePeriodRef struct {
 	ComplianceRefType string `json:"complianceRefType" validate:"regexp=^(Relative)$"`
 	// Relative shift of compliance period from the latest/current compliance period.
 	RelativeShift *int32 `json:"relativeShift,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CompliancePeriodRef CompliancePeriodRef
@@ -117,6 +117,11 @@ func (o CompliancePeriodRef) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RelativeShift) {
 		toSerialize["relativeShift"] = o.RelativeShift
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *CompliancePeriodRef) UnmarshalJSON(data []byte) (err error) {
 
 	varCompliancePeriodRef := _CompliancePeriodRef{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompliancePeriodRef)
+	err = json.Unmarshal(data, &varCompliancePeriodRef)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CompliancePeriodRef(varCompliancePeriodRef)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "complianceRefType")
+		delete(additionalProperties, "relativeShift")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

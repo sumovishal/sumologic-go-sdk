@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsInvalidUserPermissionsTracker type satisfies the MappedNullable interface at compile time
@@ -36,6 +37,7 @@ type CSEWindowsInvalidUserPermissionsTracker struct {
 	FilePath *string `json:"filePath,omitempty"`
 	// The HostName + EventLog name for EventLogs and Domain name for Directory..
 	Source *string `json:"source,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsInvalidUserPermissionsTracker CSEWindowsInvalidUserPermissionsTracker
@@ -323,6 +325,11 @@ func (o CSEWindowsInvalidUserPermissionsTracker) ToMap() (map[string]interface{}
 	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -350,17 +357,80 @@ func (o *CSEWindowsInvalidUserPermissionsTracker) UnmarshalJSON(data []byte) (er
 		}
 	}
 
-	varCSEWindowsInvalidUserPermissionsTracker := _CSEWindowsInvalidUserPermissionsTracker{}
+	type CSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The sensor's user name.
+		SensorUserName *string `json:"sensorUserName,omitempty"`
+		// The path of the folder.
+		FolderPath *string `json:"folderPath,omitempty"`
+		// The complete file path.
+		FilePath *string `json:"filePath,omitempty"`
+		// The HostName + EventLog name for EventLogs and Domain name for Directory..
+		Source *string `json:"source,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsInvalidUserPermissionsTracker)
+	varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct := CSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsInvalidUserPermissionsTracker := _CSEWindowsInvalidUserPermissionsTracker{}
+		varCSEWindowsInvalidUserPermissionsTracker.EventType = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsInvalidUserPermissionsTracker.SensorId = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsInvalidUserPermissionsTracker.SensorHostname = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsInvalidUserPermissionsTracker.SensorUserName = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.SensorUserName
+		varCSEWindowsInvalidUserPermissionsTracker.FolderPath = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.FolderPath
+		varCSEWindowsInvalidUserPermissionsTracker.FilePath = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.FilePath
+		varCSEWindowsInvalidUserPermissionsTracker.Source = varCSEWindowsInvalidUserPermissionsTrackerWithoutEmbeddedStruct.Source
+		*o = CSEWindowsInvalidUserPermissionsTracker(varCSEWindowsInvalidUserPermissionsTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsInvalidUserPermissionsTracker(varCSEWindowsInvalidUserPermissionsTracker)
+	varCSEWindowsInvalidUserPermissionsTracker := _CSEWindowsInvalidUserPermissionsTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsInvalidUserPermissionsTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsInvalidUserPermissionsTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "sensorUserName")
+		delete(additionalProperties, "folderPath")
+		delete(additionalProperties, "filePath")
+		delete(additionalProperties, "source")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

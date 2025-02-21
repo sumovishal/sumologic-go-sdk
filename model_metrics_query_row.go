@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type MetricsQueryRow struct {
 	Rollup *string `json:"rollup,omitempty" validate:"regexp=^(Count|Min|Max|Sum|Avg|None)$|^$"`
 	// Shifts the time series from your metrics query by the specified amount of time. This can help when comparing a time series across multiple time periods. Specified as a signed duration in milliseconds.
 	Timeshift *int64 `json:"timeshift,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsQueryRow MetricsQueryRow
@@ -219,6 +219,11 @@ func (o MetricsQueryRow) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Timeshift) {
 		toSerialize["timeshift"] = o.Timeshift
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -247,15 +252,24 @@ func (o *MetricsQueryRow) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsQueryRow := _MetricsQueryRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsQueryRow)
+	err = json.Unmarshal(data, &varMetricsQueryRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsQueryRow(varMetricsQueryRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "quantization")
+		delete(additionalProperties, "rollup")
+		delete(additionalProperties, "timeshift")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

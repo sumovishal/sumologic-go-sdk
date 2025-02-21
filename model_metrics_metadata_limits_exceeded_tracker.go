@@ -21,7 +21,10 @@ var _ MappedNullable = &MetricsMetadataLimitsExceededTracker{}
 type MetricsMetadataLimitsExceededTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MetricsMetadataLimitsExceededTracker MetricsMetadataLimitsExceededTracker
 
 // NewMetricsMetadataLimitsExceededTracker instantiates a new MetricsMetadataLimitsExceededTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o MetricsMetadataLimitsExceededTracker) ToMap() (map[string]interface{}, e
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MetricsMetadataLimitsExceededTracker) UnmarshalJSON(data []byte) (err error) {
+	varMetricsMetadataLimitsExceededTracker := _MetricsMetadataLimitsExceededTracker{}
+
+	err = json.Unmarshal(data, &varMetricsMetadataLimitsExceededTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsMetadataLimitsExceededTracker(varMetricsMetadataLimitsExceededTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMetricsMetadataLimitsExceededTracker struct {

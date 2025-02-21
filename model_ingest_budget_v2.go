@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -54,6 +53,7 @@ type IngestBudgetV2 struct {
 	ModifiedBy string `json:"modifiedBy"`
 	// The version of the Ingest Budget
 	BudgetVersion *int32 `json:"budgetVersion,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestBudgetV2 IngestBudgetV2
@@ -572,6 +572,11 @@ func (o IngestBudgetV2) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BudgetVersion) {
 		toSerialize["budgetVersion"] = o.BudgetVersion
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -607,15 +612,35 @@ func (o *IngestBudgetV2) UnmarshalJSON(data []byte) (err error) {
 
 	varIngestBudgetV2 := _IngestBudgetV2{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestBudgetV2)
+	err = json.Unmarshal(data, &varIngestBudgetV2)
 
 	if err != nil {
 		return err
 	}
 
 	*o = IngestBudgetV2(varIngestBudgetV2)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "capacityBytes")
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "resetTime")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "auditThreshold")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "usageBytes")
+		delete(additionalProperties, "usageStatus")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "budgetVersion")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

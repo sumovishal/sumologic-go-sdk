@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &LogSearchParameterAutoCompleteSyncDefinition{}
 type LogSearchParameterAutoCompleteSyncDefinition struct {
 	// The autocomplete parameter type.
 	AutoCompleteType string `json:"autoCompleteType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchParameterAutoCompleteSyncDefinition LogSearchParameterAutoCompleteSyncDefinition
@@ -80,6 +80,11 @@ func (o LogSearchParameterAutoCompleteSyncDefinition) MarshalJSON() ([]byte, err
 func (o LogSearchParameterAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["autoCompleteType"] = o.AutoCompleteType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *LogSearchParameterAutoCompleteSyncDefinition) UnmarshalJSON(data []byte
 
 	varLogSearchParameterAutoCompleteSyncDefinition := _LogSearchParameterAutoCompleteSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchParameterAutoCompleteSyncDefinition)
+	err = json.Unmarshal(data, &varLogSearchParameterAutoCompleteSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchParameterAutoCompleteSyncDefinition(varLogSearchParameterAutoCompleteSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "autoCompleteType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

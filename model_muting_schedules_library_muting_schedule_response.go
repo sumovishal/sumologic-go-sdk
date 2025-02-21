@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MutingSchedulesLibraryMutingScheduleResponse type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type MutingSchedulesLibraryMutingScheduleResponse struct {
 	Schedule ScheduleDefinition `json:"schedule"`
 	Monitor *MonitorScope `json:"monitor,omitempty"`
 	NotificationGroups []GroupDefinition `json:"notificationGroups,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryMutingScheduleResponse MutingSchedulesLibraryMutingScheduleResponse
@@ -174,6 +176,11 @@ func (o MutingSchedulesLibraryMutingScheduleResponse) ToMap() (map[string]interf
 	if !IsNil(o.NotificationGroups) {
 		toSerialize["notificationGroups"] = o.NotificationGroups
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -212,17 +219,61 @@ func (o *MutingSchedulesLibraryMutingScheduleResponse) UnmarshalJSON(data []byte
 		}
 	}
 
-	varMutingSchedulesLibraryMutingScheduleResponse := _MutingSchedulesLibraryMutingScheduleResponse{}
+	type MutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct struct {
+		Schedule ScheduleDefinition `json:"schedule"`
+		Monitor *MonitorScope `json:"monitor,omitempty"`
+		NotificationGroups []GroupDefinition `json:"notificationGroups,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryMutingScheduleResponse)
+	varMutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct := MutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varMutingSchedulesLibraryMutingScheduleResponse := _MutingSchedulesLibraryMutingScheduleResponse{}
+		varMutingSchedulesLibraryMutingScheduleResponse.Schedule = varMutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct.Schedule
+		varMutingSchedulesLibraryMutingScheduleResponse.Monitor = varMutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct.Monitor
+		varMutingSchedulesLibraryMutingScheduleResponse.NotificationGroups = varMutingSchedulesLibraryMutingScheduleResponseWithoutEmbeddedStruct.NotificationGroups
+		*o = MutingSchedulesLibraryMutingScheduleResponse(varMutingSchedulesLibraryMutingScheduleResponse)
+	} else {
 		return err
 	}
 
-	*o = MutingSchedulesLibraryMutingScheduleResponse(varMutingSchedulesLibraryMutingScheduleResponse)
+	varMutingSchedulesLibraryMutingScheduleResponse := _MutingSchedulesLibraryMutingScheduleResponse{}
+
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryMutingScheduleResponse)
+	if err == nil {
+		o.MutingSchedulesLibraryBaseResponse = varMutingSchedulesLibraryMutingScheduleResponse.MutingSchedulesLibraryBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schedule")
+		delete(additionalProperties, "monitor")
+		delete(additionalProperties, "notificationGroups")
+
+		// remove fields from embedded structs
+		reflectMutingSchedulesLibraryBaseResponse := reflect.ValueOf(o.MutingSchedulesLibraryBaseResponse)
+		for i := 0; i < reflectMutingSchedulesLibraryBaseResponse.Type().NumField(); i++ {
+			t := reflectMutingSchedulesLibraryBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

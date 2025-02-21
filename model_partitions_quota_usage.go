@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PartitionsQuotaUsage struct {
 	Quota int32 `json:"quota"`
 	// Remaining number of Partitions allowed.
 	Remaining int32 `json:"remaining"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PartitionsQuotaUsage PartitionsQuotaUsage
@@ -108,6 +108,11 @@ func (o PartitionsQuotaUsage) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["quota"] = o.Quota
 	toSerialize["remaining"] = o.Remaining
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *PartitionsQuotaUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varPartitionsQuotaUsage := _PartitionsQuotaUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPartitionsQuotaUsage)
+	err = json.Unmarshal(data, &varPartitionsQuotaUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PartitionsQuotaUsage(varPartitionsQuotaUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "quota")
+		delete(additionalProperties, "remaining")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

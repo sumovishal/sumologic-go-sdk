@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SubdomainAvailabilityResponse{}
 type SubdomainAvailabilityResponse struct {
 	// Subdomain is available for use or not.
 	IsAvailable bool `json:"isAvailable"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubdomainAvailabilityResponse SubdomainAvailabilityResponse
@@ -80,6 +80,11 @@ func (o SubdomainAvailabilityResponse) MarshalJSON() ([]byte, error) {
 func (o SubdomainAvailabilityResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["isAvailable"] = o.IsAvailable
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SubdomainAvailabilityResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSubdomainAvailabilityResponse := _SubdomainAvailabilityResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubdomainAvailabilityResponse)
+	err = json.Unmarshal(data, &varSubdomainAvailabilityResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubdomainAvailabilityResponse(varSubdomainAvailabilityResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isAvailable")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

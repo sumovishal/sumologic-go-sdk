@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MonitorQueries struct {
 	TimeRange string `json:"timeRange"`
 	// Queries to be validated.
 	Queries []UnvalidatedMonitorQuery `json:"queries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorQueries MonitorQueries
@@ -136,6 +136,11 @@ func (o MonitorQueries) ToMap() (map[string]interface{}, error) {
 	toSerialize["monitorType"] = o.MonitorType
 	toSerialize["timeRange"] = o.TimeRange
 	toSerialize["queries"] = o.Queries
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *MonitorQueries) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorQueries := _MonitorQueries{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorQueries)
+	err = json.Unmarshal(data, &varMonitorQueries)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorQueries(varMonitorQueries)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "queries")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

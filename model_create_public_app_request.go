@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CreatePublicAppRequest{}
 type CreatePublicAppRequest struct {
 	// Name of the app.
 	Name string `json:"name" validate:"regexp=^([ -~]+)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePublicAppRequest CreatePublicAppRequest
@@ -80,6 +80,11 @@ func (o CreatePublicAppRequest) MarshalJSON() ([]byte, error) {
 func (o CreatePublicAppRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CreatePublicAppRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePublicAppRequest := _CreatePublicAppRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePublicAppRequest)
+	err = json.Unmarshal(data, &varCreatePublicAppRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePublicAppRequest(varCreatePublicAppRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

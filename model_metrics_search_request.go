@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type MetricsSearchRequest struct {
 	VisualSettings *string `json:"visualSettings,omitempty"`
 	// The identifier of the folder to save the metrics search in. By default it is saved in your personal folder. 
 	FolderId *string `json:"folderId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearchRequest MetricsSearchRequest
@@ -246,6 +246,11 @@ func (o MetricsSearchRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FolderId) {
 		toSerialize["folderId"] = o.FolderId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -275,15 +280,25 @@ func (o *MetricsSearchRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsSearchRequest := _MetricsSearchRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearchRequest)
+	err = json.Unmarshal(data, &varMetricsSearchRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSearchRequest(varMetricsSearchRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "visualSettings")
+		delete(additionalProperties, "folderId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

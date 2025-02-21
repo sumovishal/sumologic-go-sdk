@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type AccountStatusResponse struct {
 	TotalCredits *int32 `json:"totalCredits,omitempty"`
 	// The log model of the account
 	LogModel *string `json:"logModel,omitempty" validate:"regexp=^(Flex|Tiered|FlexPlusTiered)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccountStatusResponse AccountStatusResponse
@@ -312,6 +312,11 @@ func (o AccountStatusResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LogModel) {
 		toSerialize["logModel"] = o.LogModel
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -342,15 +347,27 @@ func (o *AccountStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varAccountStatusResponse := _AccountStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccountStatusResponse)
+	err = json.Unmarshal(data, &varAccountStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccountStatusResponse(varAccountStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pricingModel")
+		delete(additionalProperties, "canUpdatePlan")
+		delete(additionalProperties, "planType")
+		delete(additionalProperties, "planExpirationDays")
+		delete(additionalProperties, "applicationUse")
+		delete(additionalProperties, "accountActivated")
+		delete(additionalProperties, "totalCredits")
+		delete(additionalProperties, "logModel")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SignalsJobResult struct {
 	Signals []SignalsResponse `json:"signals"`
 	// List of warnings while computing signals.
 	Warnings []WarningDetails `json:"warnings"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SignalsJobResult SignalsJobResult
@@ -136,6 +136,11 @@ func (o SignalsJobResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["isComplete"] = o.IsComplete
 	toSerialize["signals"] = o.Signals
 	toSerialize["warnings"] = o.Warnings
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *SignalsJobResult) UnmarshalJSON(data []byte) (err error) {
 
 	varSignalsJobResult := _SignalsJobResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSignalsJobResult)
+	err = json.Unmarshal(data, &varSignalsJobResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SignalsJobResult(varSignalsJobResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isComplete")
+		delete(additionalProperties, "signals")
+		delete(additionalProperties, "warnings")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type SpanPathSegment struct {
 	Duration int64 `json:"duration"`
 	// The fraction (value between 0.0 and 1.0) from the trace duration time this segment took.
 	Fraction *float64 `json:"fraction,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanPathSegment SpanPathSegment
@@ -247,6 +247,11 @@ func (o SpanPathSegment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Fraction) {
 		toSerialize["fraction"] = o.Fraction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,15 +281,25 @@ func (o *SpanPathSegment) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanPathSegment := _SpanPathSegment{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanPathSegment)
+	err = json.Unmarshal(data, &varSpanPathSegment)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanPathSegment(varSpanPathSegment)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spanId")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "serviceColor")
+		delete(additionalProperties, "startOffset")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "fraction")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

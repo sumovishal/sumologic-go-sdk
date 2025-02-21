@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type SCIMUpdateUserDefinition struct {
 	Active bool `json:"active"`
 	// Roles should exactly match with role names within sumologic
 	Roles []SCIMCreateUserDefinitionRolesInner `json:"roles"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SCIMUpdateUserDefinition SCIMUpdateUserDefinition
@@ -163,6 +163,11 @@ func (o SCIMUpdateUserDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["active"] = o.Active
 	toSerialize["roles"] = o.Roles
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -193,15 +198,23 @@ func (o *SCIMUpdateUserDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varSCIMUpdateUserDefinition := _SCIMUpdateUserDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSCIMUpdateUserDefinition)
+	err = json.Unmarshal(data, &varSCIMUpdateUserDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SCIMUpdateUserDefinition(varSCIMUpdateUserDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemas")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "active")
+		delete(additionalProperties, "roles")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

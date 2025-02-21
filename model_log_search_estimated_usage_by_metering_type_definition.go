@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type LogSearchEstimatedUsageByMeteringTypeDefinition struct {
 	Timezone string `json:"timezone"`
 	EmulateSearchContext *LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext `json:"emulateSearchContext,omitempty"`
 	EstimatedUsageDetails []EstimatedUsageDetailsWithMeteringType `json:"estimatedUsageDetails"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchEstimatedUsageByMeteringTypeDefinition LogSearchEstimatedUsageByMeteringTypeDefinition
@@ -276,6 +276,11 @@ func (o LogSearchEstimatedUsageByMeteringTypeDefinition) ToMap() (map[string]int
 		toSerialize["emulateSearchContext"] = o.EmulateSearchContext
 	}
 	toSerialize["estimatedUsageDetails"] = o.EstimatedUsageDetails
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -306,15 +311,26 @@ func (o *LogSearchEstimatedUsageByMeteringTypeDefinition) UnmarshalJSON(data []b
 
 	varLogSearchEstimatedUsageByMeteringTypeDefinition := _LogSearchEstimatedUsageByMeteringTypeDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchEstimatedUsageByMeteringTypeDefinition)
+	err = json.Unmarshal(data, &varLogSearchEstimatedUsageByMeteringTypeDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchEstimatedUsageByMeteringTypeDefinition(varLogSearchEstimatedUsageByMeteringTypeDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "emulateSearchContext")
+		delete(additionalProperties, "estimatedUsageDetails")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CorrelationExpression{}
 type CorrelationExpression struct {
 	// The type of correlation expression.
 	CorrelationExpressionType string `json:"correlationExpressionType" validate:"regexp=^(StringMatch|And|Or)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CorrelationExpression CorrelationExpression
@@ -80,6 +80,11 @@ func (o CorrelationExpression) MarshalJSON() ([]byte, error) {
 func (o CorrelationExpression) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["correlationExpressionType"] = o.CorrelationExpressionType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CorrelationExpression) UnmarshalJSON(data []byte) (err error) {
 
 	varCorrelationExpression := _CorrelationExpression{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCorrelationExpression)
+	err = json.Unmarshal(data, &varCorrelationExpression)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CorrelationExpression(varCorrelationExpression)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "correlationExpressionType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

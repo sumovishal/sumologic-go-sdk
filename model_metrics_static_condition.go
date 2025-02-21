@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsStaticCondition type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type MetricsStaticCondition struct {
 	OccurrenceType string `json:"occurrenceType" validate:"regexp=^(AtLeastOnce|Always|ResultCount|MissingData)$"`
 	// The minimum number of data points required for the monitor to alert or resolve within the time range specified. This field will always be set to 1 for `AtleastOnce` occurrence type and for `Always`, if not specified by user it will default to 2.
 	MinDataPoints *int32 `json:"minDataPoints,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsStaticCondition MetricsStaticCondition
@@ -217,6 +219,11 @@ func (o MetricsStaticCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MinDataPoints) {
 		toSerialize["minDataPoints"] = o.MinDataPoints
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -246,17 +253,72 @@ func (o *MetricsStaticCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMetricsStaticCondition := _MetricsStaticCondition{}
+	type MetricsStaticConditionWithoutEmbeddedStruct struct {
+		// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
+		TimeRange string `json:"timeRange"`
+		// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
+		Threshold float64 `json:"threshold"`
+		// The comparison type for the `threshold` evaluation. This defines how you want the data value compared. Valid values:   1. `LessThan`: Less than than the configured threshold.   2. `GreaterThan`: Greater than the configured threshold.   3. `LessThanOrEqual`: Less than or equal to the configured threshold.   4. `GreaterThanOrEqual`: Greater than or equal to the configured threshold. ThresholdType value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
+		ThresholdType string `json:"thresholdType" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
+		// The criteria to evaluate the threshold and thresholdType in the given time range. Valid values:   1. `AtLeastOnce`: Trigger if the threshold is met at least once. (NOTE: This is the only valid value if monitorType is `Metrics`.)   2. `Always`: Trigger if the threshold is met continuously. (NOTE: This is the only valid value if monitorType is `Metrics`.)   3. `ResultCount`: Trigger if the threshold is met against the count of results. (NOTE: This is the only valid value if monitorType is `Logs`.)   4. `MissingData`: Trigger if the data is missing. (NOTE: This is valid for both `Logs` and `Metrics` monitorTypes)
+		OccurrenceType string `json:"occurrenceType" validate:"regexp=^(AtLeastOnce|Always|ResultCount|MissingData)$"`
+		// The minimum number of data points required for the monitor to alert or resolve within the time range specified. This field will always be set to 1 for `AtleastOnce` occurrence type and for `Always`, if not specified by user it will default to 2.
+		MinDataPoints *int32 `json:"minDataPoints,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsStaticCondition)
+	varMetricsStaticConditionWithoutEmbeddedStruct := MetricsStaticConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsStaticConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsStaticCondition := _MetricsStaticCondition{}
+		varMetricsStaticCondition.TimeRange = varMetricsStaticConditionWithoutEmbeddedStruct.TimeRange
+		varMetricsStaticCondition.Threshold = varMetricsStaticConditionWithoutEmbeddedStruct.Threshold
+		varMetricsStaticCondition.ThresholdType = varMetricsStaticConditionWithoutEmbeddedStruct.ThresholdType
+		varMetricsStaticCondition.OccurrenceType = varMetricsStaticConditionWithoutEmbeddedStruct.OccurrenceType
+		varMetricsStaticCondition.MinDataPoints = varMetricsStaticConditionWithoutEmbeddedStruct.MinDataPoints
+		*o = MetricsStaticCondition(varMetricsStaticCondition)
+	} else {
 		return err
 	}
 
-	*o = MetricsStaticCondition(varMetricsStaticCondition)
+	varMetricsStaticCondition := _MetricsStaticCondition{}
+
+	err = json.Unmarshal(data, &varMetricsStaticCondition)
+	if err == nil {
+		o.TriggerCondition = varMetricsStaticCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "thresholdType")
+		delete(additionalProperties, "occurrenceType")
+		delete(additionalProperties, "minDataPoints")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

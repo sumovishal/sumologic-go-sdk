@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the EmailSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type EmailSearchNotificationSyncDefinition struct {
 	IncludeHistogram *bool `json:"includeHistogram,omitempty"`
 	// A boolean value to indicate if the search results should be included in the notification email as a CSV attachment.
 	IncludeCsvAttachment *bool `json:"includeCsvAttachment,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EmailSearchNotificationSyncDefinition EmailSearchNotificationSyncDefinition
@@ -291,6 +293,11 @@ func (o EmailSearchNotificationSyncDefinition) ToMap() (map[string]interface{}, 
 	if !IsNil(o.IncludeCsvAttachment) {
 		toSerialize["includeCsvAttachment"] = o.IncludeCsvAttachment
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -317,17 +324,76 @@ func (o *EmailSearchNotificationSyncDefinition) UnmarshalJSON(data []byte) (err 
 		}
 	}
 
-	varEmailSearchNotificationSyncDefinition := _EmailSearchNotificationSyncDefinition{}
+	type EmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// A list of email recipients.
+		ToList []string `json:"toList"`
+		// If the notification is scheduled with a threshold, the default subject template will be \"Search Alert: {{AlertCondition}} results found for {{SearchName}}\". For email notifications without a threshold, the default subject template is \"Search Results: {{SearchName}}\".
+		SubjectTemplate *string `json:"subjectTemplate,omitempty"`
+		// A boolean value to indicate if the search query should be included in the notification email.
+		IncludeQuery *bool `json:"includeQuery,omitempty"`
+		// A boolean value to indicate if the search result set should be included in the notification email.
+		IncludeResultSet *bool `json:"includeResultSet,omitempty"`
+		// A boolean value to indicate if the search result histogram should be included in the notification email.
+		IncludeHistogram *bool `json:"includeHistogram,omitempty"`
+		// A boolean value to indicate if the search results should be included in the notification email as a CSV attachment.
+		IncludeCsvAttachment *bool `json:"includeCsvAttachment,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEmailSearchNotificationSyncDefinition)
+	varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct := EmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varEmailSearchNotificationSyncDefinition := _EmailSearchNotificationSyncDefinition{}
+		varEmailSearchNotificationSyncDefinition.ToList = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.ToList
+		varEmailSearchNotificationSyncDefinition.SubjectTemplate = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.SubjectTemplate
+		varEmailSearchNotificationSyncDefinition.IncludeQuery = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.IncludeQuery
+		varEmailSearchNotificationSyncDefinition.IncludeResultSet = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.IncludeResultSet
+		varEmailSearchNotificationSyncDefinition.IncludeHistogram = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.IncludeHistogram
+		varEmailSearchNotificationSyncDefinition.IncludeCsvAttachment = varEmailSearchNotificationSyncDefinitionWithoutEmbeddedStruct.IncludeCsvAttachment
+		*o = EmailSearchNotificationSyncDefinition(varEmailSearchNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = EmailSearchNotificationSyncDefinition(varEmailSearchNotificationSyncDefinition)
+	varEmailSearchNotificationSyncDefinition := _EmailSearchNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varEmailSearchNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varEmailSearchNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "toList")
+		delete(additionalProperties, "subjectTemplate")
+		delete(additionalProperties, "includeQuery")
+		delete(additionalProperties, "includeResultSet")
+		delete(additionalProperties, "includeHistogram")
+		delete(additionalProperties, "includeCsvAttachment")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

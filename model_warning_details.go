@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type WarningDetails struct {
 	Message string `json:"message"`
 	// Details related to warning.
 	Detail string `json:"detail"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _WarningDetails WarningDetails
@@ -136,6 +136,11 @@ func (o WarningDetails) ToMap() (map[string]interface{}, error) {
 	toSerialize["code"] = o.Code
 	toSerialize["message"] = o.Message
 	toSerialize["detail"] = o.Detail
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *WarningDetails) UnmarshalJSON(data []byte) (err error) {
 
 	varWarningDetails := _WarningDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWarningDetails)
+	err = json.Unmarshal(data, &varWarningDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = WarningDetails(varWarningDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "detail")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

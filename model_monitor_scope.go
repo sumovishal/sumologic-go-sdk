@@ -23,7 +23,10 @@ type MonitorScope struct {
 	Ids []string `json:"ids,omitempty"`
 	// true if the schedule applies to all monitors
 	All *bool `json:"all,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MonitorScope MonitorScope
 
 // NewMonitorScope instantiates a new MonitorScope object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o MonitorScope) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.All) {
 		toSerialize["all"] = o.All
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MonitorScope) UnmarshalJSON(data []byte) (err error) {
+	varMonitorScope := _MonitorScope{}
+
+	err = json.Unmarshal(data, &varMonitorScope)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorScope(varMonitorScope)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ids")
+		delete(additionalProperties, "all")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMonitorScope struct {

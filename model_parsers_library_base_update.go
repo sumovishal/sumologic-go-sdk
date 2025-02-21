@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ParsersLibraryBaseUpdate struct {
 	Version int64 `json:"version"`
 	// Type of the object model.
 	Type *string `json:"type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryBaseUpdate ParsersLibraryBaseUpdate
@@ -173,6 +173,11 @@ func (o ParsersLibraryBaseUpdate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *ParsersLibraryBaseUpdate) UnmarshalJSON(data []byte) (err error) {
 
 	varParsersLibraryBaseUpdate := _ParsersLibraryBaseUpdate{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryBaseUpdate)
+	err = json.Unmarshal(data, &varParsersLibraryBaseUpdate)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ParsersLibraryBaseUpdate(varParsersLibraryBaseUpdate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

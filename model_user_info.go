@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type UserInfo struct {
 	FirstName string `json:"firstName"`
 	// User's last name.
 	LastName string `json:"lastName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserInfo UserInfo
@@ -164,6 +164,11 @@ func (o UserInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize["email"] = o.Email
 	toSerialize["firstName"] = o.FirstName
 	toSerialize["lastName"] = o.LastName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *UserInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varUserInfo := _UserInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserInfo)
+	err = json.Unmarshal(data, &varUserInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserInfo(varUserInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "firstName")
+		delete(additionalProperties, "lastName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

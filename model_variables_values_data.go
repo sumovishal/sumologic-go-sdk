@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type VariablesValuesData struct {
 	Data map[string][]string `json:"data"`
 	// A rich form of data for the variable search, including variable values, status and variable type. This field is different from `data` in that it includes an object instead of list as the value in the map. The `data` field is kept for backwards compatibility, please use `richData` for all usages going forward.
 	RichData *map[string]VariableValuesData `json:"richData,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VariablesValuesData VariablesValuesData
@@ -117,6 +117,11 @@ func (o VariablesValuesData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RichData) {
 		toSerialize["richData"] = o.RichData
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *VariablesValuesData) UnmarshalJSON(data []byte) (err error) {
 
 	varVariablesValuesData := _VariablesValuesData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVariablesValuesData)
+	err = json.Unmarshal(data, &varVariablesValuesData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VariablesValuesData(varVariablesValuesData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "richData")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type FieldQuotaUsage struct {
 	Quota int32 `json:"quota"`
 	// Current number of fields available.
 	Remaining int32 `json:"remaining"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FieldQuotaUsage FieldQuotaUsage
@@ -108,6 +108,11 @@ func (o FieldQuotaUsage) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["quota"] = o.Quota
 	toSerialize["remaining"] = o.Remaining
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *FieldQuotaUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varFieldQuotaUsage := _FieldQuotaUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFieldQuotaUsage)
+	err = json.Unmarshal(data, &varFieldQuotaUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FieldQuotaUsage(varFieldQuotaUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "quota")
+		delete(additionalProperties, "remaining")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

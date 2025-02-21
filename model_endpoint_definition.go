@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type EndpointDefinition struct {
 	OutputSchema string `json:"outputSchema"`
 	// HTTP headers for endpoint.
 	Headers string `json:"headers"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EndpointDefinition EndpointDefinition
@@ -192,6 +192,11 @@ func (o EndpointDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["inputSchema"] = o.InputSchema
 	toSerialize["outputSchema"] = o.OutputSchema
 	toSerialize["headers"] = o.Headers
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,24 @@ func (o *EndpointDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varEndpointDefinition := _EndpointDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEndpointDefinition)
+	err = json.Unmarshal(data, &varEndpointDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EndpointDefinition(varEndpointDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "inputSchema")
+		delete(additionalProperties, "outputSchema")
+		delete(additionalProperties, "headers")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

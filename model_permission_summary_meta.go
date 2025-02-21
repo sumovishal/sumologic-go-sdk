@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type PermissionSummaryMeta struct {
 	IsRecursive bool `json:"isRecursive"`
 	// A true value implies that the permission is defined by the system on the resource and can not be modified by the user. A false value implies that the permission is defined by the user on the resource and can be modified by the user.
 	IsSystemDefined bool `json:"isSystemDefined"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionSummaryMeta PermissionSummaryMeta
@@ -220,6 +220,11 @@ func (o PermissionSummaryMeta) ToMap() (map[string]interface{}, error) {
 	toSerialize["isRevoked"] = o.IsRevoked
 	toSerialize["isRecursive"] = o.IsRecursive
 	toSerialize["isSystemDefined"] = o.IsSystemDefined
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -252,15 +257,25 @@ func (o *PermissionSummaryMeta) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionSummaryMeta := _PermissionSummaryMeta{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionSummaryMeta)
+	err = json.Unmarshal(data, &varPermissionSummaryMeta)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionSummaryMeta(varPermissionSummaryMeta)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "isInherited")
+		delete(additionalProperties, "isExplicit")
+		delete(additionalProperties, "isRevoked")
+		delete(additionalProperties, "isRecursive")
+		delete(additionalProperties, "isSystemDefined")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

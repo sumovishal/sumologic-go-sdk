@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the Grid type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &Grid{}
 // Grid struct for Grid
 type Grid struct {
 	Layout
+	AdditionalProperties map[string]interface{}
 }
 
 type _Grid Grid
@@ -63,6 +65,11 @@ func (o Grid) ToMap() (map[string]interface{}, error) {
 	if errLayout != nil {
 		return map[string]interface{}{}, errLayout
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -89,17 +96,52 @@ func (o *Grid) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varGrid := _Grid{}
+	type GridWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGrid)
+	varGridWithoutEmbeddedStruct := GridWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varGridWithoutEmbeddedStruct)
+	if err == nil {
+		varGrid := _Grid{}
+		*o = Grid(varGrid)
+	} else {
 		return err
 	}
 
-	*o = Grid(varGrid)
+	varGrid := _Grid{}
+
+	err = json.Unmarshal(data, &varGrid)
+	if err == nil {
+		o.Layout = varGrid.Layout
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectLayout := reflect.ValueOf(o.Layout)
+		for i := 0; i < reflectLayout.Type().NumField(); i++ {
+			t := reflectLayout.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

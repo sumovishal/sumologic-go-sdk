@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type AppRecommendation struct {
 	IconURL string `json:"iconURL"`
 	// Percentage relevance of recommendation.
 	Confidence float64 `json:"confidence"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppRecommendation AppRecommendation
@@ -192,6 +192,11 @@ func (o AppRecommendation) ToMap() (map[string]interface{}, error) {
 	toSerialize["description"] = o.Description
 	toSerialize["iconURL"] = o.IconURL
 	toSerialize["confidence"] = o.Confidence
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,24 @@ func (o *AppRecommendation) UnmarshalJSON(data []byte) (err error) {
 
 	varAppRecommendation := _AppRecommendation{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppRecommendation)
+	err = json.Unmarshal(data, &varAppRecommendation)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppRecommendation(varAppRecommendation)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "uuid")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "iconURL")
+		delete(additionalProperties, "confidence")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

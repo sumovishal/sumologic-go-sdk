@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type LookupTableField struct {
 	FieldName string `json:"fieldName"`
 	// The data type of the field. Supported types:   - `boolean`   - `int`   - `long`   - `double`   - `string`
 	FieldType string `json:"fieldType" validate:"regexp=^(boolean|int|long|double|string)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupTableField LookupTableField
@@ -108,6 +108,11 @@ func (o LookupTableField) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["fieldName"] = o.FieldName
 	toSerialize["fieldType"] = o.FieldType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *LookupTableField) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupTableField := _LookupTableField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupTableField)
+	err = json.Unmarshal(data, &varLookupTableField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupTableField(varLookupTableField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

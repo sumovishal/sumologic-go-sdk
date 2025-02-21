@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -56,6 +55,7 @@ type Partition struct {
 	IndexType *string `json:"indexType,omitempty" validate:"regexp=^(DefaultIndex|AuditIndex|Partition)$"`
 	// Id of the data forwarding configuration to be used by the partition.
 	DataForwardingId *string `json:"dataForwardingId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Partition Partition
@@ -618,6 +618,11 @@ func (o Partition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataForwardingId) {
 		toSerialize["dataForwardingId"] = o.DataForwardingId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -652,15 +657,36 @@ func (o *Partition) UnmarshalJSON(data []byte) (err error) {
 
 	varPartition := _Partition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPartition)
+	err = json.Unmarshal(data, &varPartition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Partition(varPartition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "routingExpression")
+		delete(additionalProperties, "analyticsTier")
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "isCompliant")
+		delete(additionalProperties, "isIncludedInDefaultSearch")
+		delete(additionalProperties, "newRetentionPeriod")
+		delete(additionalProperties, "retentionEffectiveAt")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "totalBytes")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "indexType")
+		delete(additionalProperties, "dataForwardingId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

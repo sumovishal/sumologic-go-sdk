@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Operator struct {
 	Values []DataValue `json:"values"`
 	// The name of the operator applied to the data.
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Operator Operator
@@ -108,6 +108,11 @@ func (o Operator) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["values"] = o.Values
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Operator) UnmarshalJSON(data []byte) (err error) {
 
 	varOperator := _Operator{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOperator)
+	err = json.Unmarshal(data, &varOperator)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Operator(varOperator)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "values")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

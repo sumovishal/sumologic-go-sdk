@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the BeginBoundedTimeRange type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type BeginBoundedTimeRange struct {
 	ResolvableTimeRange
 	From TimeRangeBoundary `json:"from"`
 	To *TimeRangeBoundary `json:"to,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BeginBoundedTimeRange BeginBoundedTimeRange
@@ -125,6 +127,11 @@ func (o BeginBoundedTimeRange) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.To) {
 		toSerialize["to"] = o.To
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -151,17 +158,58 @@ func (o *BeginBoundedTimeRange) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varBeginBoundedTimeRange := _BeginBoundedTimeRange{}
+	type BeginBoundedTimeRangeWithoutEmbeddedStruct struct {
+		From TimeRangeBoundary `json:"from"`
+		To *TimeRangeBoundary `json:"to,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBeginBoundedTimeRange)
+	varBeginBoundedTimeRangeWithoutEmbeddedStruct := BeginBoundedTimeRangeWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varBeginBoundedTimeRangeWithoutEmbeddedStruct)
+	if err == nil {
+		varBeginBoundedTimeRange := _BeginBoundedTimeRange{}
+		varBeginBoundedTimeRange.From = varBeginBoundedTimeRangeWithoutEmbeddedStruct.From
+		varBeginBoundedTimeRange.To = varBeginBoundedTimeRangeWithoutEmbeddedStruct.To
+		*o = BeginBoundedTimeRange(varBeginBoundedTimeRange)
+	} else {
 		return err
 	}
 
-	*o = BeginBoundedTimeRange(varBeginBoundedTimeRange)
+	varBeginBoundedTimeRange := _BeginBoundedTimeRange{}
+
+	err = json.Unmarshal(data, &varBeginBoundedTimeRange)
+	if err == nil {
+		o.ResolvableTimeRange = varBeginBoundedTimeRange.ResolvableTimeRange
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "from")
+		delete(additionalProperties, "to")
+
+		// remove fields from embedded structs
+		reflectResolvableTimeRange := reflect.ValueOf(o.ResolvableTimeRange)
+		for i := 0; i < reflectResolvableTimeRange.Type().NumField(); i++ {
+			t := reflectResolvableTimeRange.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

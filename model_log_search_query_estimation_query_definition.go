@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type LogSearchQueryEstimationQueryDefinition struct {
 	RunByReceiptTime *bool `json:"runByReceiptTime,omitempty"`
 	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
 	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchQueryEstimationQueryDefinition LogSearchQueryEstimationQueryDefinition
@@ -185,6 +185,11 @@ func (o LogSearchQueryEstimationQueryDefinition) ToMap() (map[string]interface{}
 	if !IsNil(o.QueryParameters) {
 		toSerialize["queryParameters"] = o.QueryParameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -213,15 +218,23 @@ func (o *LogSearchQueryEstimationQueryDefinition) UnmarshalJSON(data []byte) (er
 
 	varLogSearchQueryEstimationQueryDefinition := _LogSearchQueryEstimationQueryDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchQueryEstimationQueryDefinition)
+	err = json.Unmarshal(data, &varLogSearchQueryEstimationQueryDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchQueryEstimationQueryDefinition(varLogSearchQueryEstimationQueryDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

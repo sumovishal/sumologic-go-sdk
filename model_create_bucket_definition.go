@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type CreateBucketDefinition struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// The name of the Amazon S3 bucket.
 	BucketName string `json:"bucketName" validate:"regexp=(?!(^xn--|-s3alias$))^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateBucketDefinition CreateBucketDefinition
@@ -395,6 +395,11 @@ func (o CreateBucketDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["enabled"] = o.Enabled
 	}
 	toSerialize["bucketName"] = o.BucketName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -424,15 +429,29 @@ func (o *CreateBucketDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateBucketDefinition := _CreateBucketDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateBucketDefinition)
+	err = json.Unmarshal(data, &varCreateBucketDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateBucketDefinition(varCreateBucketDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "destinationName")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "authenticationMode")
+		delete(additionalProperties, "accessKeyId")
+		delete(additionalProperties, "secretAccessKey")
+		delete(additionalProperties, "roleArn")
+		delete(additionalProperties, "region")
+		delete(additionalProperties, "encrypted")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "bucketName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the DashboardTemplate type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type DashboardTemplate struct {
 	PanelToSessionIdMap *map[string]string `json:"panelToSessionIdMap,omitempty"`
 	TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
 	VariableValues *VariablesValuesData `json:"variableValues,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardTemplate DashboardTemplate
@@ -199,6 +201,11 @@ func (o DashboardTemplate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.VariableValues) {
 		toSerialize["variableValues"] = o.VariableValues
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -225,17 +232,66 @@ func (o *DashboardTemplate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varDashboardTemplate := _DashboardTemplate{}
+	type DashboardTemplateWithoutEmbeddedStruct struct {
+		// Id of the dashboard.
+		Id string `json:"id"`
+		// A map of panel to session id. The session id will be used to fetch data of the panel for the report. If not specified, a new session id will be created for the panel. 
+		PanelToSessionIdMap *map[string]string `json:"panelToSessionIdMap,omitempty"`
+		TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+		VariableValues *VariablesValuesData `json:"variableValues,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardTemplate)
+	varDashboardTemplateWithoutEmbeddedStruct := DashboardTemplateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varDashboardTemplateWithoutEmbeddedStruct)
+	if err == nil {
+		varDashboardTemplate := _DashboardTemplate{}
+		varDashboardTemplate.Id = varDashboardTemplateWithoutEmbeddedStruct.Id
+		varDashboardTemplate.PanelToSessionIdMap = varDashboardTemplateWithoutEmbeddedStruct.PanelToSessionIdMap
+		varDashboardTemplate.TimeRange = varDashboardTemplateWithoutEmbeddedStruct.TimeRange
+		varDashboardTemplate.VariableValues = varDashboardTemplateWithoutEmbeddedStruct.VariableValues
+		*o = DashboardTemplate(varDashboardTemplate)
+	} else {
 		return err
 	}
 
-	*o = DashboardTemplate(varDashboardTemplate)
+	varDashboardTemplate := _DashboardTemplate{}
+
+	err = json.Unmarshal(data, &varDashboardTemplate)
+	if err == nil {
+		o.Template = varDashboardTemplate.Template
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "panelToSessionIdMap")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "variableValues")
+
+		// remove fields from embedded structs
+		reflectTemplate := reflect.ValueOf(o.Template)
+		for i := 0; i < reflectTemplate.Type().NumField(); i++ {
+			t := reflectTemplate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

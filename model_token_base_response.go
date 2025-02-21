@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type TokenBaseResponse struct {
 	ModifiedAt time.Time `json:"modifiedAt"`
 	// Identifier of the user who last modified the resource.
 	ModifiedBy string `json:"modifiedBy"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TokenBaseResponse TokenBaseResponse
@@ -333,6 +333,11 @@ func (o TokenBaseResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdBy"] = o.CreatedBy
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -369,15 +374,29 @@ func (o *TokenBaseResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTokenBaseResponse := _TokenBaseResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTokenBaseResponse)
+	err = json.Unmarshal(data, &varTokenBaseResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TokenBaseResponse(varTokenBaseResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

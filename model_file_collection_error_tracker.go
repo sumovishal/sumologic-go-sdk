@@ -21,7 +21,10 @@ var _ MappedNullable = &FileCollectionErrorTracker{}
 type FileCollectionErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FileCollectionErrorTracker FileCollectionErrorTracker
 
 // NewFileCollectionErrorTracker instantiates a new FileCollectionErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o FileCollectionErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FileCollectionErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varFileCollectionErrorTracker := _FileCollectionErrorTracker{}
+
+	err = json.Unmarshal(data, &varFileCollectionErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FileCollectionErrorTracker(varFileCollectionErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFileCollectionErrorTracker struct {

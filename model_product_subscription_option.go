@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ProductSubscriptionOption struct {
 	BillingFrequency string `json:"billingFrequency" validate:"regexp=^(Monthly|Annually)$"`
 	// Discount percentage for this plan's subscription.
 	DiscountPercentage int32 `json:"discountPercentage"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProductSubscriptionOption ProductSubscriptionOption
@@ -108,6 +108,11 @@ func (o ProductSubscriptionOption) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["billingFrequency"] = o.BillingFrequency
 	toSerialize["discountPercentage"] = o.DiscountPercentage
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ProductSubscriptionOption) UnmarshalJSON(data []byte) (err error) {
 
 	varProductSubscriptionOption := _ProductSubscriptionOption{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProductSubscriptionOption)
+	err = json.Unmarshal(data, &varProductSubscriptionOption)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProductSubscriptionOption(varProductSubscriptionOption)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billingFrequency")
+		delete(additionalProperties, "discountPercentage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

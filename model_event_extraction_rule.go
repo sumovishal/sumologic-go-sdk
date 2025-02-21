@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type EventExtractionRule struct {
 	// Query String.
 	Query string `json:"query"`
 	CorrelationExpression CorrelationExpression `json:"correlationExpression"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventExtractionRule EventExtractionRule
@@ -172,6 +172,11 @@ func (o EventExtractionRule) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["query"] = o.Query
 	toSerialize["correlationExpression"] = o.CorrelationExpression
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -201,15 +206,23 @@ func (o *EventExtractionRule) UnmarshalJSON(data []byte) (err error) {
 
 	varEventExtractionRule := _EventExtractionRule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventExtractionRule)
+	err = json.Unmarshal(data, &varEventExtractionRule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventExtractionRule(varEventExtractionRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "correlationExpression")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

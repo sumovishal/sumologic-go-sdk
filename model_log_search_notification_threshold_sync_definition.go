@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type LogSearchNotificationThresholdSyncDefinition struct {
 	Operator string `json:"operator" validate:"regexp=^(eq|gt|ge|lt|le)$"`
 	// Expected result count.
 	Count int32 `json:"count"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchNotificationThresholdSyncDefinition LogSearchNotificationThresholdSyncDefinition
@@ -145,6 +145,11 @@ func (o LogSearchNotificationThresholdSyncDefinition) ToMap() (map[string]interf
 	}
 	toSerialize["operator"] = o.Operator
 	toSerialize["count"] = o.Count
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *LogSearchNotificationThresholdSyncDefinition) UnmarshalJSON(data []byte
 
 	varLogSearchNotificationThresholdSyncDefinition := _LogSearchNotificationThresholdSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchNotificationThresholdSyncDefinition)
+	err = json.Unmarshal(data, &varLogSearchNotificationThresholdSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchNotificationThresholdSyncDefinition(varLogSearchNotificationThresholdSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "thresholdType")
+		delete(additionalProperties, "operator")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -54,6 +53,7 @@ type BucketDefinition struct {
 	Id string `json:"id"`
 	// True if invalidated by the system.
 	InvalidatedBySystem *bool `json:"invalidatedBySystem,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BucketDefinition BucketDefinition
@@ -573,6 +573,11 @@ func (o BucketDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.InvalidatedBySystem) {
 		toSerialize["invalidatedBySystem"] = o.InvalidatedBySystem
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -607,15 +612,35 @@ func (o *BucketDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varBucketDefinition := _BucketDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBucketDefinition)
+	err = json.Unmarshal(data, &varBucketDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BucketDefinition(varBucketDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "destinationName")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "authenticationMode")
+		delete(additionalProperties, "accessKeyId")
+		delete(additionalProperties, "secretAccessKey")
+		delete(additionalProperties, "roleArn")
+		delete(additionalProperties, "region")
+		delete(additionalProperties, "encrypted")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "bucketName")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invalidatedBySystem")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

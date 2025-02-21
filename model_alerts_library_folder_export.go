@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AlertsLibraryFolderExport type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AlertsLibraryFolderExport struct {
 	AlertsLibraryBaseExport
 	// The items in the folder. A multi-type list of types alert or folder.
 	Children []AlertsLibraryBaseExport `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryFolderExport AlertsLibraryFolderExport
@@ -100,6 +102,11 @@ func (o AlertsLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -126,17 +133,56 @@ func (o *AlertsLibraryFolderExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAlertsLibraryFolderExport := _AlertsLibraryFolderExport{}
+	type AlertsLibraryFolderExportWithoutEmbeddedStruct struct {
+		// The items in the folder. A multi-type list of types alert or folder.
+		Children []AlertsLibraryBaseExport `json:"children,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryFolderExport)
+	varAlertsLibraryFolderExportWithoutEmbeddedStruct := AlertsLibraryFolderExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAlertsLibraryFolderExportWithoutEmbeddedStruct)
+	if err == nil {
+		varAlertsLibraryFolderExport := _AlertsLibraryFolderExport{}
+		varAlertsLibraryFolderExport.Children = varAlertsLibraryFolderExportWithoutEmbeddedStruct.Children
+		*o = AlertsLibraryFolderExport(varAlertsLibraryFolderExport)
+	} else {
 		return err
 	}
 
-	*o = AlertsLibraryFolderExport(varAlertsLibraryFolderExport)
+	varAlertsLibraryFolderExport := _AlertsLibraryFolderExport{}
+
+	err = json.Unmarshal(data, &varAlertsLibraryFolderExport)
+	if err == nil {
+		o.AlertsLibraryBaseExport = varAlertsLibraryFolderExport.AlertsLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectAlertsLibraryBaseExport := reflect.ValueOf(o.AlertsLibraryBaseExport)
+		for i := 0; i < reflectAlertsLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectAlertsLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

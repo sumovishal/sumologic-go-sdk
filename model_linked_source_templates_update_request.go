@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type LinkedSourceTemplatesUpdateRequest struct {
 	CollectorId string `json:"collectorId"`
 	// JSON map of key-value metadata to apply to the otCollector.
 	Tags *map[string]string `json:"tags,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LinkedSourceTemplatesUpdateRequest LinkedSourceTemplatesUpdateRequest
@@ -117,6 +117,11 @@ func (o LinkedSourceTemplatesUpdateRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *LinkedSourceTemplatesUpdateRequest) UnmarshalJSON(data []byte) (err err
 
 	varLinkedSourceTemplatesUpdateRequest := _LinkedSourceTemplatesUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLinkedSourceTemplatesUpdateRequest)
+	err = json.Unmarshal(data, &varLinkedSourceTemplatesUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LinkedSourceTemplatesUpdateRequest(varLinkedSourceTemplatesUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "collectorId")
+		delete(additionalProperties, "tags")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

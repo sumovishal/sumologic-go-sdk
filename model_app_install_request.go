@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type AppInstallRequest struct {
 	DestinationFolderId string `json:"destinationFolderId"`
 	// Dictionary of properties specifying log-source name and value.
 	DataSourceValues *map[string]string `json:"dataSourceValues,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppInstallRequest AppInstallRequest
@@ -173,6 +173,11 @@ func (o AppInstallRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataSourceValues) {
 		toSerialize["dataSourceValues"] = o.DataSourceValues
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *AppInstallRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAppInstallRequest := _AppInstallRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppInstallRequest)
+	err = json.Unmarshal(data, &varAppInstallRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppInstallRequest(varAppInstallRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "destinationFolderId")
+		delete(additionalProperties, "dataSourceValues")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

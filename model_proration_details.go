@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ProrationDetails struct {
 	ProratedCredits int32 `json:"proratedCredits"`
 	// Cost of the total prorated credits.
 	ProratedCost float64 `json:"proratedCost"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProrationDetails ProrationDetails
@@ -136,6 +136,11 @@ func (o ProrationDetails) ToMap() (map[string]interface{}, error) {
 	toSerialize["remainingDays"] = o.RemainingDays
 	toSerialize["proratedCredits"] = o.ProratedCredits
 	toSerialize["proratedCost"] = o.ProratedCost
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *ProrationDetails) UnmarshalJSON(data []byte) (err error) {
 
 	varProrationDetails := _ProrationDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProrationDetails)
+	err = json.Unmarshal(data, &varProrationDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProrationDetails(varProrationDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "remainingDays")
+		delete(additionalProperties, "proratedCredits")
+		delete(additionalProperties, "proratedCost")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

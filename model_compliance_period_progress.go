@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type CompliancePeriodProgress struct {
 	Progress float64 `json:"progress"`
 	// Whether a permanent error is encountered and no further progress is expected.
 	IrrecoverableError bool `json:"irrecoverableError"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CompliancePeriodProgress CompliancePeriodProgress
@@ -193,6 +193,11 @@ func (o CompliancePeriodProgress) ToMap() (map[string]interface{}, error) {
 	toSerialize["endTime"] = o.EndTime
 	toSerialize["progress"] = o.Progress
 	toSerialize["irrecoverableError"] = o.IrrecoverableError
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -224,15 +229,24 @@ func (o *CompliancePeriodProgress) UnmarshalJSON(data []byte) (err error) {
 
 	varCompliancePeriodProgress := _CompliancePeriodProgress{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompliancePeriodProgress)
+	err = json.Unmarshal(data, &varCompliancePeriodProgress)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CompliancePeriodProgress(varCompliancePeriodProgress)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "relativeReference")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		delete(additionalProperties, "progress")
+		delete(additionalProperties, "irrecoverableError")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

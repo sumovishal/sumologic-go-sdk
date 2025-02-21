@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CreateParentOrgSamlConfigRequest struct {
 	ParentOrgId string `json:"parentOrgId"`
 	// Deployment where parent org exists.
 	ParentOrgDeployment string `json:"parentOrgDeployment"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateParentOrgSamlConfigRequest CreateParentOrgSamlConfigRequest
@@ -108,6 +108,11 @@ func (o CreateParentOrgSamlConfigRequest) ToMap() (map[string]interface{}, error
 	toSerialize := map[string]interface{}{}
 	toSerialize["parentOrgId"] = o.ParentOrgId
 	toSerialize["parentOrgDeployment"] = o.ParentOrgDeployment
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CreateParentOrgSamlConfigRequest) UnmarshalJSON(data []byte) (err error
 
 	varCreateParentOrgSamlConfigRequest := _CreateParentOrgSamlConfigRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateParentOrgSamlConfigRequest)
+	err = json.Unmarshal(data, &varCreateParentOrgSamlConfigRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateParentOrgSamlConfigRequest(varCreateParentOrgSamlConfigRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "parentOrgId")
+		delete(additionalProperties, "parentOrgDeployment")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

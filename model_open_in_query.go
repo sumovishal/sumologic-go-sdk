@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type OpenInQuery struct {
 	StartTime time.Time `json:"startTime"`
 	// End time of the query.
 	EndTime time.Time `json:"endTime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenInQuery OpenInQuery
@@ -136,6 +136,11 @@ func (o OpenInQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize["query"] = o.Query
 	toSerialize["startTime"] = o.StartTime
 	toSerialize["endTime"] = o.EndTime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *OpenInQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenInQuery := _OpenInQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenInQuery)
+	err = json.Unmarshal(data, &varOpenInQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenInQuery(varOpenInQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

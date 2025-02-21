@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type SeriesData struct {
 	SeriesAxisRange SeriesAxisRange `json:"seriesAxisRange"`
 	AggregateInfo *VisualAggregateData `json:"aggregateInfo,omitempty"`
 	SeriesMetadata *SeriesMetadata `json:"seriesMetadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SeriesData SeriesData
@@ -207,6 +207,11 @@ func (o SeriesData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SeriesMetadata) {
 		toSerialize["seriesMetadata"] = o.SeriesMetadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -236,15 +241,24 @@ func (o *SeriesData) UnmarshalJSON(data []byte) (err error) {
 
 	varSeriesData := _SeriesData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSeriesData)
+	err = json.Unmarshal(data, &varSeriesData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SeriesData(varSeriesData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "dataPoints")
+		delete(additionalProperties, "seriesAxisRange")
+		delete(additionalProperties, "aggregateInfo")
+		delete(additionalProperties, "seriesMetadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type DynamicRuleDefinition struct {
 	Scope string `json:"scope"`
 	// Is the dynamic parsing rule enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DynamicRuleDefinition DynamicRuleDefinition
@@ -138,6 +138,11 @@ func (o DynamicRuleDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["scope"] = o.Scope
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -167,15 +172,22 @@ func (o *DynamicRuleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varDynamicRuleDefinition := _DynamicRuleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDynamicRuleDefinition)
+	err = json.Unmarshal(data, &varDynamicRuleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DynamicRuleDefinition(varDynamicRuleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

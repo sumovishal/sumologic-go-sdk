@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type WarningDescription struct {
 	Message string `json:"message"`
 	// An optional cause of this warning.
 	Cause *string `json:"cause,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _WarningDescription WarningDescription
@@ -117,6 +117,11 @@ func (o WarningDescription) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Cause) {
 		toSerialize["cause"] = o.Cause
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *WarningDescription) UnmarshalJSON(data []byte) (err error) {
 
 	varWarningDescription := _WarningDescription{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWarningDescription)
+	err = json.Unmarshal(data, &varWarningDescription)
 
 	if err != nil {
 		return err
 	}
 
 	*o = WarningDescription(varWarningDescription)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "cause")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

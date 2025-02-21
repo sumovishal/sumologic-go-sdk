@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &Permissions{}
 type Permissions struct {
 	// List of permissions.
 	Permissions []string `json:"permissions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Permissions Permissions
@@ -80,6 +80,11 @@ func (o Permissions) MarshalJSON() ([]byte, error) {
 func (o Permissions) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["permissions"] = o.Permissions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *Permissions) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissions := _Permissions{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissions)
+	err = json.Unmarshal(data, &varPermissions)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Permissions(varPermissions)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

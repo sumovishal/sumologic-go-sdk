@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListAccessKeysResult{}
 type ListAccessKeysResult struct {
 	// An array of access keys.
 	Data []AccessKeyPublic `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListAccessKeysResult ListAccessKeysResult
@@ -80,6 +80,11 @@ func (o ListAccessKeysResult) MarshalJSON() ([]byte, error) {
 func (o ListAccessKeysResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListAccessKeysResult) UnmarshalJSON(data []byte) (err error) {
 
 	varListAccessKeysResult := _ListAccessKeysResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListAccessKeysResult)
+	err = json.Unmarshal(data, &varListAccessKeysResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListAccessKeysResult(varListAccessKeysResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

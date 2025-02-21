@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type SchemaBaseIdentity struct {
 	Schema map[string]interface{} `json:"schema"`
 	// The family to which schema belong.
 	Family string `json:"family"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SchemaBaseIdentity SchemaBaseIdentity
@@ -238,6 +238,11 @@ func (o SchemaBaseIdentity) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["schema"] = o.Schema
 	toSerialize["family"] = o.Family
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -268,15 +273,25 @@ func (o *SchemaBaseIdentity) UnmarshalJSON(data []byte) (err error) {
 
 	varSchemaBaseIdentity := _SchemaBaseIdentity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSchemaBaseIdentity)
+	err = json.Unmarshal(data, &varSchemaBaseIdentity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SchemaBaseIdentity(varSchemaBaseIdentity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "manifest")
+		delete(additionalProperties, "schema")
+		delete(additionalProperties, "family")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionPathAccessDeniedTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type CollectionPathAccessDeniedTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The path to the file.
 	Path *string `json:"path,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionPathAccessDeniedTracker CollectionPathAccessDeniedTracker
@@ -138,6 +140,11 @@ func (o CollectionPathAccessDeniedTracker) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Path) {
 		toSerialize["path"] = o.Path
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *CollectionPathAccessDeniedTracker) UnmarshalJSON(data []byte) (err erro
 		}
 	}
 
-	varCollectionPathAccessDeniedTracker := _CollectionPathAccessDeniedTracker{}
+	type CollectionPathAccessDeniedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The path to the file.
+		Path *string `json:"path,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionPathAccessDeniedTracker)
+	varCollectionPathAccessDeniedTrackerWithoutEmbeddedStruct := CollectionPathAccessDeniedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionPathAccessDeniedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionPathAccessDeniedTracker := _CollectionPathAccessDeniedTracker{}
+		varCollectionPathAccessDeniedTracker.EventType = varCollectionPathAccessDeniedTrackerWithoutEmbeddedStruct.EventType
+		varCollectionPathAccessDeniedTracker.Path = varCollectionPathAccessDeniedTrackerWithoutEmbeddedStruct.Path
+		*o = CollectionPathAccessDeniedTracker(varCollectionPathAccessDeniedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionPathAccessDeniedTracker(varCollectionPathAccessDeniedTracker)
+	varCollectionPathAccessDeniedTracker := _CollectionPathAccessDeniedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionPathAccessDeniedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionPathAccessDeniedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "path")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

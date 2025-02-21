@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type MetricsSearchResponse struct {
 	FolderId *string `json:"folderId,omitempty"`
 	// Unique identifier for the metrics search page.
 	Id *string `json:"id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearchResponse MetricsSearchResponse
@@ -283,6 +283,11 @@ func (o MetricsSearchResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -312,15 +317,26 @@ func (o *MetricsSearchResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsSearchResponse := _MetricsSearchResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearchResponse)
+	err = json.Unmarshal(data, &varMetricsSearchResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSearchResponse(varMetricsSearchResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "visualSettings")
+		delete(additionalProperties, "folderId")
+		delete(additionalProperties, "id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

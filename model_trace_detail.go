@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type TraceDetail struct {
 	// Date and time the trace was started in [ISO 8601 / RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	CriticalPathServiceBreakdownSummary *CriticalPathServiceBreakdownSummary `json:"criticalPathServiceBreakdownSummary,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceDetail TraceDetail
@@ -338,6 +338,11 @@ func (o TraceDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CriticalPathServiceBreakdownSummary) {
 		toSerialize["criticalPathServiceBreakdownSummary"] = o.CriticalPathServiceBreakdownSummary
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -365,15 +370,27 @@ func (o *TraceDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceDetail := _TraceDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceDetail)
+	err = json.Unmarshal(data, &varTraceDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceDetail(varTraceDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "rootService")
+		delete(additionalProperties, "rootResource")
+		delete(additionalProperties, "rootStatus")
+		delete(additionalProperties, "rootOperationName")
+		delete(additionalProperties, "metrics")
+		delete(additionalProperties, "startedAt")
+		delete(additionalProperties, "criticalPathServiceBreakdownSummary")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

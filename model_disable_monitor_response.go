@@ -23,7 +23,10 @@ type DisableMonitorResponse struct {
 	Monitors map[string]MonitorsLibraryMonitorResponse `json:"monitors,omitempty"`
 	// Warnings from the operation.
 	Warnings []DisableMonitorWarning `json:"warnings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DisableMonitorResponse DisableMonitorResponse
 
 // NewDisableMonitorResponse instantiates a new DisableMonitorResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o DisableMonitorResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Warnings) {
 		toSerialize["warnings"] = o.Warnings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DisableMonitorResponse) UnmarshalJSON(data []byte) (err error) {
+	varDisableMonitorResponse := _DisableMonitorResponse{}
+
+	err = json.Unmarshal(data, &varDisableMonitorResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DisableMonitorResponse(varDisableMonitorResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitors")
+		delete(additionalProperties, "warnings")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDisableMonitorResponse struct {

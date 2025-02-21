@@ -21,7 +21,10 @@ var _ MappedNullable = &MonitorSubscription{}
 type MonitorSubscription struct {
 	// The id of the subscription target. It can be either a monitor or a folder id.
 	TargetId *string `json:"targetId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MonitorSubscription MonitorSubscription
 
 // NewMonitorSubscription instantiates a new MonitorSubscription object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o MonitorSubscription) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TargetId) {
 		toSerialize["targetId"] = o.TargetId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MonitorSubscription) UnmarshalJSON(data []byte) (err error) {
+	varMonitorSubscription := _MonitorSubscription{}
+
+	err = json.Unmarshal(data, &varMonitorSubscription)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorSubscription(varMonitorSubscription)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "targetId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMonitorSubscription struct {

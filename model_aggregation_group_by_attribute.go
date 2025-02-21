@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AggregationGroupByAttribute{}
 type AggregationGroupByAttribute struct {
 	// Attribute type of the object model.
 	AttributeType string `json:"attributeType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregationGroupByAttribute AggregationGroupByAttribute
@@ -80,6 +80,11 @@ func (o AggregationGroupByAttribute) MarshalJSON() ([]byte, error) {
 func (o AggregationGroupByAttribute) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["attributeType"] = o.AttributeType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AggregationGroupByAttribute) UnmarshalJSON(data []byte) (err error) {
 
 	varAggregationGroupByAttribute := _AggregationGroupByAttribute{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregationGroupByAttribute)
+	err = json.Unmarshal(data, &varAggregationGroupByAttribute)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AggregationGroupByAttribute(varAggregationGroupByAttribute)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "attributeType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

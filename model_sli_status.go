@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type SliStatus struct {
 	AbsoluteErrorBudgetRemaining *string `json:"absoluteErrorBudgetRemaining,omitempty"`
 	// SLI computation progress.
 	ProgressPercentage *float64 `json:"progressPercentage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SliStatus SliStatus
@@ -228,6 +228,11 @@ func (o SliStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProgressPercentage) {
 		toSerialize["progressPercentage"] = o.ProgressPercentage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -255,15 +260,24 @@ func (o *SliStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varSliStatus := _SliStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSliStatus)
+	err = json.Unmarshal(data, &varSliStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SliStatus(varSliStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "sliPercentage")
+		delete(additionalProperties, "errorBudgetRemainingPercentage")
+		delete(additionalProperties, "absoluteErrorBudgetRemaining")
+		delete(additionalProperties, "progressPercentage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

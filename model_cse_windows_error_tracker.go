@@ -21,7 +21,10 @@ var _ MappedNullable = &CSEWindowsErrorTracker{}
 type CSEWindowsErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CSEWindowsErrorTracker CSEWindowsErrorTracker
 
 // NewCSEWindowsErrorTracker instantiates a new CSEWindowsErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o CSEWindowsErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CSEWindowsErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varCSEWindowsErrorTracker := _CSEWindowsErrorTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CSEWindowsErrorTracker(varCSEWindowsErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCSEWindowsErrorTracker struct {

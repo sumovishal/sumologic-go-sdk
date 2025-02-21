@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SpanQueryRow struct {
 	QueryString string `json:"queryString"`
 	// An identifier used to reference this particular row of the query request. Within a query, row ids must have distinct values.
 	RowId string `json:"rowId" validate:"regexp=^[a-zA-Z0-9_]*$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRow SpanQueryRow
@@ -108,6 +108,11 @@ func (o SpanQueryRow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryString"] = o.QueryString
 	toSerialize["rowId"] = o.RowId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SpanQueryRow) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRow := _SpanQueryRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRow)
+	err = json.Unmarshal(data, &varSpanQueryRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRow(varSpanQueryRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "rowId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

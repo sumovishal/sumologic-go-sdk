@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the WebhookConnection type satisfies the MappedNullable interface at compile time
@@ -39,6 +40,7 @@ type WebhookConnection struct {
 	ResolutionPayload *string `json:"resolutionPayload,omitempty"`
 	// Webhook endpoint warning for incorrect variable names and syntax.
 	Warnings []string `json:"warnings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _WebhookConnection WebhookConnection
@@ -321,6 +323,11 @@ func (o WebhookConnection) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Warnings) {
 		toSerialize["warnings"] = o.Warnings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -358,17 +365,84 @@ func (o *WebhookConnection) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varWebhookConnection := _WebhookConnection{}
+	type WebhookConnectionWithoutEmbeddedStruct struct {
+		// URL for the webhook connection.
+		Url string `json:"url"`
+		// List of access authorization headers.
+		Headers []Header `json:"headers"`
+		// List of custom webhook headers.
+		CustomHeaders []Header `json:"customHeaders"`
+		// Default payload of the webhook.
+		DefaultPayload string `json:"defaultPayload"`
+		// Type of webhook connection. Valid values are `AWSLambda`, `Azure`, `Datadog`, `HipChat`, `Jira`, `NewRelic`, `Opsgenie`, `PagerDuty`, `Slack`, `MicrosoftTeams`, `ServiceNow`, `SumoCloudSOAR` and `Webhook`.
+		WebhookType string `json:"webhookType" validate:"regexp=^(AWSLambda|Azure|Datadog|HipChat|PagerDuty|Slack|Webhook|NewRelic|Jira|Opsgenie|MicrosoftTeams|ServiceNow|SumoCloudSOAR)$"`
+		// The subtype of the connection. Valid values are `Event` or `Incident`.
+		ConnectionSubtype *string `json:"connectionSubtype,omitempty" validate:"regexp=^(Event|Incident)$"`
+		// Resolution payload of the webhook.
+		ResolutionPayload *string `json:"resolutionPayload,omitempty"`
+		// Webhook endpoint warning for incorrect variable names and syntax.
+		Warnings []string `json:"warnings,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWebhookConnection)
+	varWebhookConnectionWithoutEmbeddedStruct := WebhookConnectionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varWebhookConnectionWithoutEmbeddedStruct)
+	if err == nil {
+		varWebhookConnection := _WebhookConnection{}
+		varWebhookConnection.Url = varWebhookConnectionWithoutEmbeddedStruct.Url
+		varWebhookConnection.Headers = varWebhookConnectionWithoutEmbeddedStruct.Headers
+		varWebhookConnection.CustomHeaders = varWebhookConnectionWithoutEmbeddedStruct.CustomHeaders
+		varWebhookConnection.DefaultPayload = varWebhookConnectionWithoutEmbeddedStruct.DefaultPayload
+		varWebhookConnection.WebhookType = varWebhookConnectionWithoutEmbeddedStruct.WebhookType
+		varWebhookConnection.ConnectionSubtype = varWebhookConnectionWithoutEmbeddedStruct.ConnectionSubtype
+		varWebhookConnection.ResolutionPayload = varWebhookConnectionWithoutEmbeddedStruct.ResolutionPayload
+		varWebhookConnection.Warnings = varWebhookConnectionWithoutEmbeddedStruct.Warnings
+		*o = WebhookConnection(varWebhookConnection)
+	} else {
 		return err
 	}
 
-	*o = WebhookConnection(varWebhookConnection)
+	varWebhookConnection := _WebhookConnection{}
+
+	err = json.Unmarshal(data, &varWebhookConnection)
+	if err == nil {
+		o.Connection = varWebhookConnection.Connection
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "headers")
+		delete(additionalProperties, "customHeaders")
+		delete(additionalProperties, "defaultPayload")
+		delete(additionalProperties, "webhookType")
+		delete(additionalProperties, "connectionSubtype")
+		delete(additionalProperties, "resolutionPayload")
+		delete(additionalProperties, "warnings")
+
+		// remove fields from embedded structs
+		reflectConnection := reflect.ValueOf(o.Connection)
+		for i := 0; i < reflectConnection.Type().NumField(); i++ {
+			t := reflectConnection.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

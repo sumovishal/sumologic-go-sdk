@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &LogSearchQuery{}
 type LogSearchQuery struct {
 	// Query string for which to get log fields.
 	QueryString string `json:"queryString"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchQuery LogSearchQuery
@@ -80,6 +80,11 @@ func (o LogSearchQuery) MarshalJSON() ([]byte, error) {
 func (o LogSearchQuery) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryString"] = o.QueryString
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *LogSearchQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varLogSearchQuery := _LogSearchQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchQuery)
+	err = json.Unmarshal(data, &varLogSearchQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchQuery(varLogSearchQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

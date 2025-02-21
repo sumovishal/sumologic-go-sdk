@@ -23,7 +23,10 @@ type SliQueriesValidationResult struct {
 	IsValid *bool `json:"isValid,omitempty"`
 	// Message from validation.
 	Message *string `json:"message,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SliQueriesValidationResult SliQueriesValidationResult
 
 // NewSliQueriesValidationResult instantiates a new SliQueriesValidationResult object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o SliQueriesValidationResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Message) {
 		toSerialize["message"] = o.Message
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SliQueriesValidationResult) UnmarshalJSON(data []byte) (err error) {
+	varSliQueriesValidationResult := _SliQueriesValidationResult{}
+
+	err = json.Unmarshal(data, &varSliQueriesValidationResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SliQueriesValidationResult(varSliQueriesValidationResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isValid")
+		delete(additionalProperties, "message")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSliQueriesValidationResult struct {

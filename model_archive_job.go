@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type ArchiveJob struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// The identifier of the user who created the ingestion job.
 	CreatedBy string `json:"createdBy"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ArchiveJob ArchiveJob
@@ -333,6 +333,11 @@ func (o ArchiveJob) ToMap() (map[string]interface{}, error) {
 	toSerialize["status"] = o.Status
 	toSerialize["createdAt"] = o.CreatedAt
 	toSerialize["createdBy"] = o.CreatedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -369,15 +374,29 @@ func (o *ArchiveJob) UnmarshalJSON(data []byte) (err error) {
 
 	varArchiveJob := _ArchiveJob{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varArchiveJob)
+	err = json.Unmarshal(data, &varArchiveJob)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ArchiveJob(varArchiveJob)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "totalObjectsScanned")
+		delete(additionalProperties, "totalObjectsIngested")
+		delete(additionalProperties, "totalBytesIngested")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

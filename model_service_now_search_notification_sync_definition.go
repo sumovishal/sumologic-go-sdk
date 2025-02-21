@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ServiceNowSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type ServiceNowSearchNotificationSyncDefinition struct {
 	// ServiceNow identifier.
 	ExternalId string `json:"externalId"`
 	Fields *ServiceNowFieldsSyncDefinition `json:"fields,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceNowSearchNotificationSyncDefinition ServiceNowSearchNotificationSyncDefinition
@@ -126,6 +128,11 @@ func (o ServiceNowSearchNotificationSyncDefinition) ToMap() (map[string]interfac
 	if !IsNil(o.Fields) {
 		toSerialize["fields"] = o.Fields
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -152,17 +159,59 @@ func (o *ServiceNowSearchNotificationSyncDefinition) UnmarshalJSON(data []byte) 
 		}
 	}
 
-	varServiceNowSearchNotificationSyncDefinition := _ServiceNowSearchNotificationSyncDefinition{}
+	type ServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// ServiceNow identifier.
+		ExternalId string `json:"externalId"`
+		Fields *ServiceNowFieldsSyncDefinition `json:"fields,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceNowSearchNotificationSyncDefinition)
+	varServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct := ServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varServiceNowSearchNotificationSyncDefinition := _ServiceNowSearchNotificationSyncDefinition{}
+		varServiceNowSearchNotificationSyncDefinition.ExternalId = varServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct.ExternalId
+		varServiceNowSearchNotificationSyncDefinition.Fields = varServiceNowSearchNotificationSyncDefinitionWithoutEmbeddedStruct.Fields
+		*o = ServiceNowSearchNotificationSyncDefinition(varServiceNowSearchNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = ServiceNowSearchNotificationSyncDefinition(varServiceNowSearchNotificationSyncDefinition)
+	varServiceNowSearchNotificationSyncDefinition := _ServiceNowSearchNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varServiceNowSearchNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varServiceNowSearchNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "externalId")
+		delete(additionalProperties, "fields")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

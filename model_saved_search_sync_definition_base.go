@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type SavedSearchSyncDefinitionBase struct {
 	QueryParameters []QueryParameterSyncDefinition `json:"queryParameters"`
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SavedSearchSyncDefinitionBase SavedSearchSyncDefinitionBase
@@ -254,6 +254,11 @@ func (o SavedSearchSyncDefinitionBase) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParsingMode) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -283,15 +288,25 @@ func (o *SavedSearchSyncDefinitionBase) UnmarshalJSON(data []byte) (err error) {
 
 	varSavedSearchSyncDefinitionBase := _SavedSearchSyncDefinitionBase{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSavedSearchSyncDefinitionBase)
+	err = json.Unmarshal(data, &varSavedSearchSyncDefinitionBase)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SavedSearchSyncDefinitionBase(varSavedSearchSyncDefinitionBase)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryText")
+		delete(additionalProperties, "byReceiptTime")
+		delete(additionalProperties, "viewName")
+		delete(additionalProperties, "viewStartTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "parsingMode")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

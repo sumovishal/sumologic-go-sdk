@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionS3GetObjectAccessDeniedTracker type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type CollectionS3GetObjectAccessDeniedTracker struct {
 	BucketName *string `json:"bucketName,omitempty"`
 	// The access key used to make the request. In the case of IAM roles, this is the temporary key used for authentication.
 	AccessKey *string `json:"accessKey,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionS3GetObjectAccessDeniedTracker CollectionS3GetObjectAccessDeniedTracker
@@ -175,6 +177,11 @@ func (o CollectionS3GetObjectAccessDeniedTracker) ToMap() (map[string]interface{
 	if !IsNil(o.AccessKey) {
 		toSerialize["accessKey"] = o.AccessKey
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,17 +209,64 @@ func (o *CollectionS3GetObjectAccessDeniedTracker) UnmarshalJSON(data []byte) (e
 		}
 	}
 
-	varCollectionS3GetObjectAccessDeniedTracker := _CollectionS3GetObjectAccessDeniedTracker{}
+	type CollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The bucket name of the associated Source.
+		BucketName *string `json:"bucketName,omitempty"`
+		// The access key used to make the request. In the case of IAM roles, this is the temporary key used for authentication.
+		AccessKey *string `json:"accessKey,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionS3GetObjectAccessDeniedTracker)
+	varCollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct := CollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionS3GetObjectAccessDeniedTracker := _CollectionS3GetObjectAccessDeniedTracker{}
+		varCollectionS3GetObjectAccessDeniedTracker.EventType = varCollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct.EventType
+		varCollectionS3GetObjectAccessDeniedTracker.BucketName = varCollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct.BucketName
+		varCollectionS3GetObjectAccessDeniedTracker.AccessKey = varCollectionS3GetObjectAccessDeniedTrackerWithoutEmbeddedStruct.AccessKey
+		*o = CollectionS3GetObjectAccessDeniedTracker(varCollectionS3GetObjectAccessDeniedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionS3GetObjectAccessDeniedTracker(varCollectionS3GetObjectAccessDeniedTracker)
+	varCollectionS3GetObjectAccessDeniedTracker := _CollectionS3GetObjectAccessDeniedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionS3GetObjectAccessDeniedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionS3GetObjectAccessDeniedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "bucketName")
+		delete(additionalProperties, "accessKey")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

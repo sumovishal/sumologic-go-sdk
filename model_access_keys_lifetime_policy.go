@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AccessKeysLifetimePolicy{}
 type AccessKeysLifetimePolicy struct {
 	// The number of days it will take for an access key to expire without being rotated/copied. Setting it to 0 (never) means that access keys will never expire.
 	AccessKeysLifetimeInDays int32 `json:"accessKeysLifetimeInDays"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessKeysLifetimePolicy AccessKeysLifetimePolicy
@@ -80,6 +80,11 @@ func (o AccessKeysLifetimePolicy) MarshalJSON() ([]byte, error) {
 func (o AccessKeysLifetimePolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["accessKeysLifetimeInDays"] = o.AccessKeysLifetimeInDays
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AccessKeysLifetimePolicy) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessKeysLifetimePolicy := _AccessKeysLifetimePolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessKeysLifetimePolicy)
+	err = json.Unmarshal(data, &varAccessKeysLifetimePolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessKeysLifetimePolicy(varAccessKeysLifetimePolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "accessKeysLifetimeInDays")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SlosLibraryFolder type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &SlosLibraryFolder{}
 // SlosLibraryFolder struct for SlosLibraryFolder
 type SlosLibraryFolder struct {
 	SlosLibraryBase
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryFolder SlosLibraryFolder
@@ -65,6 +67,11 @@ func (o SlosLibraryFolder) ToMap() (map[string]interface{}, error) {
 	if errSlosLibraryBase != nil {
 		return map[string]interface{}{}, errSlosLibraryBase
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *SlosLibraryFolder) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSlosLibraryFolder := _SlosLibraryFolder{}
+	type SlosLibraryFolderWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryFolder)
+	varSlosLibraryFolderWithoutEmbeddedStruct := SlosLibraryFolderWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSlosLibraryFolderWithoutEmbeddedStruct)
+	if err == nil {
+		varSlosLibraryFolder := _SlosLibraryFolder{}
+		*o = SlosLibraryFolder(varSlosLibraryFolder)
+	} else {
 		return err
 	}
 
-	*o = SlosLibraryFolder(varSlosLibraryFolder)
+	varSlosLibraryFolder := _SlosLibraryFolder{}
+
+	err = json.Unmarshal(data, &varSlosLibraryFolder)
+	if err == nil {
+		o.SlosLibraryBase = varSlosLibraryFolder.SlosLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectSlosLibraryBase := reflect.ValueOf(o.SlosLibraryBase)
+		for i := 0; i < reflectSlosLibraryBase.Type().NumField(); i++ {
+			t := reflectSlosLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

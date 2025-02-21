@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type SaveLogSearchRequest struct {
 	Properties *string `json:"properties,omitempty"`
 	// Identifier of a folder where to save the log search.
 	ParentId string `json:"parentId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SaveLogSearchRequest SaveLogSearchRequest
@@ -392,6 +392,11 @@ func (o SaveLogSearchRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["properties"] = o.Properties
 	}
 	toSerialize["parentId"] = o.ParentId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -422,15 +427,29 @@ func (o *SaveLogSearchRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSaveLogSearchRequest := _SaveLogSearchRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSaveLogSearchRequest)
+	err = json.Unmarshal(data, &varSaveLogSearchRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SaveLogSearchRequest(varSaveLogSearchRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "parsingMode")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "schedule")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

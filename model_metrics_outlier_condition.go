@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsOutlierCondition type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type MetricsOutlierCondition struct {
 	Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
 	// How much should the indicator be different from the baseline for each datapoint.
 	Threshold *float64 `json:"threshold,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsOutlierCondition MetricsOutlierCondition
@@ -187,6 +189,11 @@ func (o MetricsOutlierCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Threshold) {
 		toSerialize["threshold"] = o.Threshold
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -212,17 +219,64 @@ func (o *MetricsOutlierCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMetricsOutlierCondition := _MetricsOutlierCondition{}
+	type MetricsOutlierConditionWithoutEmbeddedStruct struct {
+		// The time range used to compute the baseline.
+		BaselineWindow *string `json:"baselineWindow,omitempty"`
+		// Specifies which direction should trigger violations.
+		Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
+		// How much should the indicator be different from the baseline for each datapoint.
+		Threshold *float64 `json:"threshold,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsOutlierCondition)
+	varMetricsOutlierConditionWithoutEmbeddedStruct := MetricsOutlierConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsOutlierConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsOutlierCondition := _MetricsOutlierCondition{}
+		varMetricsOutlierCondition.BaselineWindow = varMetricsOutlierConditionWithoutEmbeddedStruct.BaselineWindow
+		varMetricsOutlierCondition.Direction = varMetricsOutlierConditionWithoutEmbeddedStruct.Direction
+		varMetricsOutlierCondition.Threshold = varMetricsOutlierConditionWithoutEmbeddedStruct.Threshold
+		*o = MetricsOutlierCondition(varMetricsOutlierCondition)
+	} else {
 		return err
 	}
 
-	*o = MetricsOutlierCondition(varMetricsOutlierCondition)
+	varMetricsOutlierCondition := _MetricsOutlierCondition{}
+
+	err = json.Unmarshal(data, &varMetricsOutlierCondition)
+	if err == nil {
+		o.TriggerCondition = varMetricsOutlierCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "baselineWindow")
+		delete(additionalProperties, "direction")
+		delete(additionalProperties, "threshold")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

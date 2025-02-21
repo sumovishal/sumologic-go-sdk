@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UploadStixIndicatorsResponse{}
 type UploadStixIndicatorsResponse struct {
 	// A list of invalid indicator IDs that were not ingested
 	InvalidIndicators []string `json:"invalidIndicators"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UploadStixIndicatorsResponse UploadStixIndicatorsResponse
@@ -80,6 +80,11 @@ func (o UploadStixIndicatorsResponse) MarshalJSON() ([]byte, error) {
 func (o UploadStixIndicatorsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["invalidIndicators"] = o.InvalidIndicators
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *UploadStixIndicatorsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUploadStixIndicatorsResponse := _UploadStixIndicatorsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUploadStixIndicatorsResponse)
+	err = json.Unmarshal(data, &varUploadStixIndicatorsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UploadStixIndicatorsResponse(varUploadStixIndicatorsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "invalidIndicators")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

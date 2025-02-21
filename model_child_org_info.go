@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ChildOrgInfo{}
 type ChildOrgInfo struct {
 	// Organization Identifier.
 	OrgId string `json:"orgId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChildOrgInfo ChildOrgInfo
@@ -80,6 +80,11 @@ func (o ChildOrgInfo) MarshalJSON() ([]byte, error) {
 func (o ChildOrgInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["orgId"] = o.OrgId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ChildOrgInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varChildOrgInfo := _ChildOrgInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChildOrgInfo)
+	err = json.Unmarshal(data, &varChildOrgInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChildOrgInfo(varChildOrgInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "orgId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

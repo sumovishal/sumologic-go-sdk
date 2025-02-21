@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SlosLibraryFolderUpdate type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &SlosLibraryFolderUpdate{}
 // SlosLibraryFolderUpdate struct for SlosLibraryFolderUpdate
 type SlosLibraryFolderUpdate struct {
 	SlosLibraryBaseUpdate
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryFolderUpdate SlosLibraryFolderUpdate
@@ -66,6 +68,11 @@ func (o SlosLibraryFolderUpdate) ToMap() (map[string]interface{}, error) {
 	if errSlosLibraryBaseUpdate != nil {
 		return map[string]interface{}{}, errSlosLibraryBaseUpdate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -93,17 +100,52 @@ func (o *SlosLibraryFolderUpdate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSlosLibraryFolderUpdate := _SlosLibraryFolderUpdate{}
+	type SlosLibraryFolderUpdateWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryFolderUpdate)
+	varSlosLibraryFolderUpdateWithoutEmbeddedStruct := SlosLibraryFolderUpdateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSlosLibraryFolderUpdateWithoutEmbeddedStruct)
+	if err == nil {
+		varSlosLibraryFolderUpdate := _SlosLibraryFolderUpdate{}
+		*o = SlosLibraryFolderUpdate(varSlosLibraryFolderUpdate)
+	} else {
 		return err
 	}
 
-	*o = SlosLibraryFolderUpdate(varSlosLibraryFolderUpdate)
+	varSlosLibraryFolderUpdate := _SlosLibraryFolderUpdate{}
+
+	err = json.Unmarshal(data, &varSlosLibraryFolderUpdate)
+	if err == nil {
+		o.SlosLibraryBaseUpdate = varSlosLibraryFolderUpdate.SlosLibraryBaseUpdate
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectSlosLibraryBaseUpdate := reflect.ValueOf(o.SlosLibraryBaseUpdate)
+		for i := 0; i < reflectSlosLibraryBaseUpdate.Type().NumField(); i++ {
+			t := reflectSlosLibraryBaseUpdate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

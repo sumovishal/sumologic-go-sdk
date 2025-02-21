@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type NotificationThresholdSyncDefinition struct {
 	Operator string `json:"operator"`
 	// Expected result count.
 	Count int32 `json:"count"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NotificationThresholdSyncDefinition NotificationThresholdSyncDefinition
@@ -149,6 +149,11 @@ func (o NotificationThresholdSyncDefinition) ToMap() (map[string]interface{}, er
 	}
 	toSerialize["operator"] = o.Operator
 	toSerialize["count"] = o.Count
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -177,15 +182,22 @@ func (o *NotificationThresholdSyncDefinition) UnmarshalJSON(data []byte) (err er
 
 	varNotificationThresholdSyncDefinition := _NotificationThresholdSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNotificationThresholdSyncDefinition)
+	err = json.Unmarshal(data, &varNotificationThresholdSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NotificationThresholdSyncDefinition(varNotificationThresholdSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "thresholdType")
+		delete(additionalProperties, "operator")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

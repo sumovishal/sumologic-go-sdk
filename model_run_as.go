@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &RunAs{}
 type RunAs struct {
 	// The runAsId indicates the context in which monitors will run. If not provided, then it will run in the context of the monitor author.
 	RunAsId string `json:"runAsId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RunAs RunAs
@@ -80,6 +80,11 @@ func (o RunAs) MarshalJSON() ([]byte, error) {
 func (o RunAs) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["runAsId"] = o.RunAsId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *RunAs) UnmarshalJSON(data []byte) (err error) {
 
 	varRunAs := _RunAs{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRunAs)
+	err = json.Unmarshal(data, &varRunAs)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RunAs(varRunAs)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "runAsId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

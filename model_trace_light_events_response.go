@@ -23,7 +23,10 @@ type TraceLightEventsResponse struct {
 	SpanEvents *map[string][]LightSpanEvent `json:"spanEvents,omitempty"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _TraceLightEventsResponse TraceLightEventsResponse
 
 // NewTraceLightEventsResponse instantiates a new TraceLightEventsResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o TraceLightEventsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *TraceLightEventsResponse) UnmarshalJSON(data []byte) (err error) {
+	varTraceLightEventsResponse := _TraceLightEventsResponse{}
+
+	err = json.Unmarshal(data, &varTraceLightEventsResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TraceLightEventsResponse(varTraceLightEventsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spanEvents")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableTraceLightEventsResponse struct {

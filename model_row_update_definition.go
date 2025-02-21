@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &RowUpdateDefinition{}
 type RowUpdateDefinition struct {
 	// A list of all the field identifiers and their corresponding values.
 	Row []TableRow `json:"row"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RowUpdateDefinition RowUpdateDefinition
@@ -80,6 +80,11 @@ func (o RowUpdateDefinition) MarshalJSON() ([]byte, error) {
 func (o RowUpdateDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["row"] = o.Row
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *RowUpdateDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varRowUpdateDefinition := _RowUpdateDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRowUpdateDefinition)
+	err = json.Unmarshal(data, &varRowUpdateDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RowUpdateDefinition(varRowUpdateDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "row")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

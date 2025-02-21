@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -68,6 +67,7 @@ type StixIndicator struct {
 	ValidUntil *time.Time `json:"valid_until,omitempty"`
 	// The list of Kill Chain Phases for which this Attack Pattern is used
 	KillChainPhases []KillChainPhase `json:"kill_chain_phases,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _StixIndicator StixIndicator
@@ -832,6 +832,11 @@ func (o StixIndicator) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.KillChainPhases) {
 		toSerialize["kill_chain_phases"] = o.KillChainPhases
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -866,15 +871,42 @@ func (o *StixIndicator) UnmarshalJSON(data []byte) (err error) {
 
 	varStixIndicator := _StixIndicator{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varStixIndicator)
+	err = json.Unmarshal(data, &varStixIndicator)
 
 	if err != nil {
 		return err
 	}
 
 	*o = StixIndicator(varStixIndicator)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "spec_version")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "modified")
+		delete(additionalProperties, "created_by_ref")
+		delete(additionalProperties, "revoked")
+		delete(additionalProperties, "labels")
+		delete(additionalProperties, "confidence")
+		delete(additionalProperties, "lang")
+		delete(additionalProperties, "external_references")
+		delete(additionalProperties, "object_marking_refs")
+		delete(additionalProperties, "granular_markings")
+		delete(additionalProperties, "extensions")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "indicator_types")
+		delete(additionalProperties, "pattern")
+		delete(additionalProperties, "pattern_type")
+		delete(additionalProperties, "pattern_version")
+		delete(additionalProperties, "valid_from")
+		delete(additionalProperties, "valid_until")
+		delete(additionalProperties, "kill_chain_phases")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

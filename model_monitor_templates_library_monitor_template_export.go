@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MonitorTemplatesLibraryMonitorTemplateExport type satisfies the MappedNullable interface at compile time
@@ -38,6 +39,7 @@ type MonitorTemplatesLibraryMonitorTemplateExport struct {
 	GroupNotifications *bool `json:"groupNotifications,omitempty"`
 	// Notes such as links and instruction to help you resolve alerts triggered by this monitor template. {{Markdown}} supported. It will be enabled only if available for your organization. Please contact your Sumo Logic account team to learn more.
 	Playbook *string `json:"playbook,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorTemplatesLibraryMonitorTemplateExport MonitorTemplatesLibraryMonitorTemplateExport
@@ -348,6 +350,11 @@ func (o MonitorTemplatesLibraryMonitorTemplateExport) ToMap() (map[string]interf
 	if !IsNil(o.Playbook) {
 		toSerialize["playbook"] = o.Playbook
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -377,17 +384,84 @@ func (o *MonitorTemplatesLibraryMonitorTemplateExport) UnmarshalJSON(data []byte
 		}
 	}
 
-	varMonitorTemplatesLibraryMonitorTemplateExport := _MonitorTemplatesLibraryMonitorTemplateExport{}
+	type MonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct struct {
+		// The type of monitor template. Valid values:   1. `Logs`: A logs query monitor template.   2. `Metrics`: A metrics query monitor template.   3. `Slo`: A SLO based monitor template.
+		MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics|Slo)$"`
+		// The delay duration for evaluating the monitor (relative to current time). The timerange of monitor will be shifted in the past by this delay time.
+		EvaluationDelay *string `json:"evaluationDelay,omitempty"`
+		// The name of the alert(s) triggered from the monitor created based on the template. Monitor name will be used if not specified.
+		AlertName *string `json:"alertName,omitempty"`
+		// All queries from the monitor.
+		Queries []MonitorQuery `json:"queries"`
+		// Defines the conditions of when to send notifications.
+		Triggers []TriggerCondition `json:"triggers"`
+		// Whether or not the monitor template is disabled.
+		IsDisabled *bool `json:"isDisabled,omitempty"`
+		// Whether or not to group notifications for individual items that meet the trigger condition.
+		GroupNotifications *bool `json:"groupNotifications,omitempty"`
+		// Notes such as links and instruction to help you resolve alerts triggered by this monitor template. {{Markdown}} supported. It will be enabled only if available for your organization. Please contact your Sumo Logic account team to learn more.
+		Playbook *string `json:"playbook,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorTemplatesLibraryMonitorTemplateExport)
+	varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct := MonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct)
+	if err == nil {
+		varMonitorTemplatesLibraryMonitorTemplateExport := _MonitorTemplatesLibraryMonitorTemplateExport{}
+		varMonitorTemplatesLibraryMonitorTemplateExport.MonitorType = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.MonitorType
+		varMonitorTemplatesLibraryMonitorTemplateExport.EvaluationDelay = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.EvaluationDelay
+		varMonitorTemplatesLibraryMonitorTemplateExport.AlertName = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.AlertName
+		varMonitorTemplatesLibraryMonitorTemplateExport.Queries = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.Queries
+		varMonitorTemplatesLibraryMonitorTemplateExport.Triggers = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.Triggers
+		varMonitorTemplatesLibraryMonitorTemplateExport.IsDisabled = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.IsDisabled
+		varMonitorTemplatesLibraryMonitorTemplateExport.GroupNotifications = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.GroupNotifications
+		varMonitorTemplatesLibraryMonitorTemplateExport.Playbook = varMonitorTemplatesLibraryMonitorTemplateExportWithoutEmbeddedStruct.Playbook
+		*o = MonitorTemplatesLibraryMonitorTemplateExport(varMonitorTemplatesLibraryMonitorTemplateExport)
+	} else {
 		return err
 	}
 
-	*o = MonitorTemplatesLibraryMonitorTemplateExport(varMonitorTemplatesLibraryMonitorTemplateExport)
+	varMonitorTemplatesLibraryMonitorTemplateExport := _MonitorTemplatesLibraryMonitorTemplateExport{}
+
+	err = json.Unmarshal(data, &varMonitorTemplatesLibraryMonitorTemplateExport)
+	if err == nil {
+		o.MonitorTemplatesLibraryBaseExport = varMonitorTemplatesLibraryMonitorTemplateExport.MonitorTemplatesLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "evaluationDelay")
+		delete(additionalProperties, "alertName")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "triggers")
+		delete(additionalProperties, "isDisabled")
+		delete(additionalProperties, "groupNotifications")
+		delete(additionalProperties, "playbook")
+
+		// remove fields from embedded structs
+		reflectMonitorTemplatesLibraryBaseExport := reflect.ValueOf(o.MonitorTemplatesLibraryBaseExport)
+		for i := 0; i < reflectMonitorTemplatesLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectMonitorTemplatesLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

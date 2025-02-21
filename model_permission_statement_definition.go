@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type PermissionStatementDefinition struct {
 	SubjectId string `json:"subjectId"`
 	// The identifier that belongs to the resource this permission assignment applies to.
 	TargetId string `json:"targetId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionStatementDefinition PermissionStatementDefinition
@@ -164,6 +164,11 @@ func (o PermissionStatementDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["subjectType"] = o.SubjectType
 	toSerialize["subjectId"] = o.SubjectId
 	toSerialize["targetId"] = o.TargetId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *PermissionStatementDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionStatementDefinition := _PermissionStatementDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionStatementDefinition)
+	err = json.Unmarshal(data, &varPermissionStatementDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionStatementDefinition(varPermissionStatementDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "subjectType")
+		delete(additionalProperties, "subjectId")
+		delete(additionalProperties, "targetId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

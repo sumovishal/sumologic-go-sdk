@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OrgIdentity type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &OrgIdentity{}
 // OrgIdentity struct for OrgIdentity
 type OrgIdentity struct {
 	ResourceIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _OrgIdentity OrgIdentity
@@ -65,6 +67,11 @@ func (o OrgIdentity) ToMap() (map[string]interface{}, error) {
 	if errResourceIdentity != nil {
 		return map[string]interface{}{}, errResourceIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *OrgIdentity) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varOrgIdentity := _OrgIdentity{}
+	type OrgIdentityWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOrgIdentity)
+	varOrgIdentityWithoutEmbeddedStruct := OrgIdentityWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOrgIdentityWithoutEmbeddedStruct)
+	if err == nil {
+		varOrgIdentity := _OrgIdentity{}
+		*o = OrgIdentity(varOrgIdentity)
+	} else {
 		return err
 	}
 
-	*o = OrgIdentity(varOrgIdentity)
+	varOrgIdentity := _OrgIdentity{}
+
+	err = json.Unmarshal(data, &varOrgIdentity)
+	if err == nil {
+		o.ResourceIdentity = varOrgIdentity.ResourceIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectResourceIdentity := reflect.ValueOf(o.ResourceIdentity)
+		for i := 0; i < reflectResourceIdentity.Type().NumField(); i++ {
+			t := reflectResourceIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

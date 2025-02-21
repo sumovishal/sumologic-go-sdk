@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type LogSearchQueryParameterSyncDefinitionBase struct {
 	DataType string `json:"dataType" validate:"regexp=^(NUMBER|STRING|ANY|KEYWORD)$"`
 	// A value for the parameter. Should be compatible with the type set in dataType field.
 	Value string `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchQueryParameterSyncDefinitionBase LogSearchQueryParameterSyncDefinitionBase
@@ -173,6 +173,11 @@ func (o LogSearchQueryParameterSyncDefinitionBase) ToMap() (map[string]interface
 	}
 	toSerialize["dataType"] = o.DataType
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *LogSearchQueryParameterSyncDefinitionBase) UnmarshalJSON(data []byte) (
 
 	varLogSearchQueryParameterSyncDefinitionBase := _LogSearchQueryParameterSyncDefinitionBase{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchQueryParameterSyncDefinitionBase)
+	err = json.Unmarshal(data, &varLogSearchQueryParameterSyncDefinitionBase)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchQueryParameterSyncDefinitionBase(varLogSearchQueryParameterSyncDefinitionBase)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

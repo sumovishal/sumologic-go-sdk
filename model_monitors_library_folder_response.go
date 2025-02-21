@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MonitorsLibraryFolderResponse type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,7 @@ type MonitorsLibraryFolderResponse struct {
 	Permissions []string `json:"permissions"`
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []MonitorsLibraryBaseResponse `json:"children"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorsLibraryFolderResponse MonitorsLibraryFolderResponse
@@ -131,6 +133,11 @@ func (o MonitorsLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["permissions"] = o.Permissions
 	toSerialize["children"] = o.Children
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -170,17 +177,60 @@ func (o *MonitorsLibraryFolderResponse) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMonitorsLibraryFolderResponse := _MonitorsLibraryFolderResponse{}
+	type MonitorsLibraryFolderResponseWithoutEmbeddedStruct struct {
+		// Aggregated permission summary for the calling user. If detailed permission statements are required, please call list permissions endpoint.
+		Permissions []string `json:"permissions"`
+		// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
+		Children []MonitorsLibraryBaseResponse `json:"children"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorsLibraryFolderResponse)
+	varMonitorsLibraryFolderResponseWithoutEmbeddedStruct := MonitorsLibraryFolderResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varMonitorsLibraryFolderResponse := _MonitorsLibraryFolderResponse{}
+		varMonitorsLibraryFolderResponse.Permissions = varMonitorsLibraryFolderResponseWithoutEmbeddedStruct.Permissions
+		varMonitorsLibraryFolderResponse.Children = varMonitorsLibraryFolderResponseWithoutEmbeddedStruct.Children
+		*o = MonitorsLibraryFolderResponse(varMonitorsLibraryFolderResponse)
+	} else {
 		return err
 	}
 
-	*o = MonitorsLibraryFolderResponse(varMonitorsLibraryFolderResponse)
+	varMonitorsLibraryFolderResponse := _MonitorsLibraryFolderResponse{}
+
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderResponse)
+	if err == nil {
+		o.MonitorsLibraryBaseResponse = varMonitorsLibraryFolderResponse.MonitorsLibraryBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectMonitorsLibraryBaseResponse := reflect.ValueOf(o.MonitorsLibraryBaseResponse)
+		for i := 0; i < reflectMonitorsLibraryBaseResponse.Type().NumField(); i++ {
+			t := reflectMonitorsLibraryBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

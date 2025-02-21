@@ -25,7 +25,10 @@ type TagsReversedIndexResponse struct {
 	AttributesIndices []AttributeReversedIndex `json:"attributesIndices,omitempty"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _TagsReversedIndexResponse TagsReversedIndexResponse
 
 // NewTagsReversedIndexResponse instantiates a new TagsReversedIndexResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o TagsReversedIndexResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *TagsReversedIndexResponse) UnmarshalJSON(data []byte) (err error) {
+	varTagsReversedIndexResponse := _TagsReversedIndexResponse{}
+
+	err = json.Unmarshal(data, &varTagsReversedIndexResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TagsReversedIndexResponse(varTagsReversedIndexResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tagsIndices")
+		delete(additionalProperties, "attributesIndices")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableTagsReversedIndexResponse struct {

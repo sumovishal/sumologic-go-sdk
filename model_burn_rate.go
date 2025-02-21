@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type BurnRate struct {
 	BurnRateThreshold float64 `json:"burnRateThreshold"`
 	// The relative time range for measuring error budget depletion.
 	TimeRange string `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BurnRate BurnRate
@@ -108,6 +108,11 @@ func (o BurnRate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["burnRateThreshold"] = o.BurnRateThreshold
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *BurnRate) UnmarshalJSON(data []byte) (err error) {
 
 	varBurnRate := _BurnRate{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBurnRate)
+	err = json.Unmarshal(data, &varBurnRate)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BurnRate(varBurnRate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "burnRateThreshold")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

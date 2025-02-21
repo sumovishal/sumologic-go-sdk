@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsMetadataKeyLengthLimitExceededTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type MetricsMetadataKeyLengthLimitExceededTracker struct {
 	TrackerIdentity
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsMetadataKeyLengthLimitExceededTracker MetricsMetadataKeyLengthLimitExceededTracker
@@ -101,6 +103,11 @@ func (o MetricsMetadataKeyLengthLimitExceededTracker) ToMap() (map[string]interf
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *MetricsMetadataKeyLengthLimitExceededTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varMetricsMetadataKeyLengthLimitExceededTracker := _MetricsMetadataKeyLengthLimitExceededTracker{}
+	type MetricsMetadataKeyLengthLimitExceededTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsMetadataKeyLengthLimitExceededTracker)
+	varMetricsMetadataKeyLengthLimitExceededTrackerWithoutEmbeddedStruct := MetricsMetadataKeyLengthLimitExceededTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsMetadataKeyLengthLimitExceededTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsMetadataKeyLengthLimitExceededTracker := _MetricsMetadataKeyLengthLimitExceededTracker{}
+		varMetricsMetadataKeyLengthLimitExceededTracker.EventType = varMetricsMetadataKeyLengthLimitExceededTrackerWithoutEmbeddedStruct.EventType
+		*o = MetricsMetadataKeyLengthLimitExceededTracker(varMetricsMetadataKeyLengthLimitExceededTracker)
+	} else {
 		return err
 	}
 
-	*o = MetricsMetadataKeyLengthLimitExceededTracker(varMetricsMetadataKeyLengthLimitExceededTracker)
+	varMetricsMetadataKeyLengthLimitExceededTracker := _MetricsMetadataKeyLengthLimitExceededTracker{}
+
+	err = json.Unmarshal(data, &varMetricsMetadataKeyLengthLimitExceededTracker)
+	if err == nil {
+		o.TrackerIdentity = varMetricsMetadataKeyLengthLimitExceededTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

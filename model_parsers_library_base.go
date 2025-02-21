@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ParsersLibraryBase struct {
 	Type string `json:"type"`
 	// Locking/Unlocking requires the `LockParsers` capability. Locked objects can only be `Localized`. Updating or moving requires unlocking the object. Locking/Unlocking recursively locks all of the objects children. All children of a locked object must be locked.
 	IsLocked *bool `json:"isLocked,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryBase ParsersLibraryBase
@@ -177,6 +177,11 @@ func (o ParsersLibraryBase) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsLocked) {
 		toSerialize["isLocked"] = o.IsLocked
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -206,15 +211,23 @@ func (o *ParsersLibraryBase) UnmarshalJSON(data []byte) (err error) {
 
 	varParsersLibraryBase := _ParsersLibraryBase{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryBase)
+	err = json.Unmarshal(data, &varParsersLibraryBase)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ParsersLibraryBase(varParsersLibraryBase)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "isLocked")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

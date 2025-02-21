@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ViewFilterDefinition{}
 type ViewFilterDefinition struct {
 	// Name of the view.
 	ViewName string `json:"viewName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ViewFilterDefinition ViewFilterDefinition
@@ -80,6 +80,11 @@ func (o ViewFilterDefinition) MarshalJSON() ([]byte, error) {
 func (o ViewFilterDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["viewName"] = o.ViewName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ViewFilterDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varViewFilterDefinition := _ViewFilterDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varViewFilterDefinition)
+	err = json.Unmarshal(data, &varViewFilterDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ViewFilterDefinition(varViewFilterDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "viewName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

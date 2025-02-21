@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListDroppedFieldsResponse{}
 type ListDroppedFieldsResponse struct {
 	// List of dropped fields.
 	Data []DroppedField `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListDroppedFieldsResponse ListDroppedFieldsResponse
@@ -80,6 +80,11 @@ func (o ListDroppedFieldsResponse) MarshalJSON() ([]byte, error) {
 func (o ListDroppedFieldsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListDroppedFieldsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListDroppedFieldsResponse := _ListDroppedFieldsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListDroppedFieldsResponse)
+	err = json.Unmarshal(data, &varListDroppedFieldsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListDroppedFieldsResponse(varListDroppedFieldsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

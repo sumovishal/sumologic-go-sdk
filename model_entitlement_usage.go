@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type EntitlementUsage struct {
 	Tier string `json:"tier"`
 	// The label for the entitlement.
 	Label string `json:"label"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EntitlementUsage EntitlementUsage
@@ -201,6 +201,11 @@ func (o EntitlementUsage) ToMap() (map[string]interface{}, error) {
 	toSerialize["operators"] = o.Operators
 	toSerialize["tier"] = o.Tier
 	toSerialize["label"] = o.Label
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -231,15 +236,24 @@ func (o *EntitlementUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varEntitlementUsage := _EntitlementUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEntitlementUsage)
+	err = json.Unmarshal(data, &varEntitlementUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EntitlementUsage(varEntitlementUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "entitlementType")
+		delete(additionalProperties, "datapoints")
+		delete(additionalProperties, "operators")
+		delete(additionalProperties, "tier")
+		delete(additionalProperties, "label")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

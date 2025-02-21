@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type LinkedSourceTemplatesUpdateResponse struct {
 	AddedSourceTemplates []LinkingUpdatedSourceTemplateDetails `json:"addedSourceTemplates,omitempty"`
 	// list of sourceTemplates which are removed from otCollector linking.
 	RemovedSourceTemplates []LinkingUpdatedSourceTemplateDetails `json:"removedSourceTemplates,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LinkedSourceTemplatesUpdateResponse LinkedSourceTemplatesUpdateResponse
@@ -154,6 +154,11 @@ func (o LinkedSourceTemplatesUpdateResponse) ToMap() (map[string]interface{}, er
 	if !IsNil(o.RemovedSourceTemplates) {
 		toSerialize["removedSourceTemplates"] = o.RemovedSourceTemplates
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *LinkedSourceTemplatesUpdateResponse) UnmarshalJSON(data []byte) (err er
 
 	varLinkedSourceTemplatesUpdateResponse := _LinkedSourceTemplatesUpdateResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLinkedSourceTemplatesUpdateResponse)
+	err = json.Unmarshal(data, &varLinkedSourceTemplatesUpdateResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LinkedSourceTemplatesUpdateResponse(varLinkedSourceTemplatesUpdateResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "collectorId")
+		delete(additionalProperties, "addedSourceTemplates")
+		delete(additionalProperties, "removedSourceTemplates")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

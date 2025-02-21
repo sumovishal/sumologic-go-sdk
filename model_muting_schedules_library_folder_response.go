@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MutingSchedulesLibraryFolderResponse type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,7 @@ type MutingSchedulesLibraryFolderResponse struct {
 	Permissions []string `json:"permissions"`
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []MutingSchedulesLibraryBaseResponse `json:"children"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryFolderResponse MutingSchedulesLibraryFolderResponse
@@ -131,6 +133,11 @@ func (o MutingSchedulesLibraryFolderResponse) ToMap() (map[string]interface{}, e
 	}
 	toSerialize["permissions"] = o.Permissions
 	toSerialize["children"] = o.Children
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -170,17 +177,60 @@ func (o *MutingSchedulesLibraryFolderResponse) UnmarshalJSON(data []byte) (err e
 		}
 	}
 
-	varMutingSchedulesLibraryFolderResponse := _MutingSchedulesLibraryFolderResponse{}
+	type MutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct struct {
+		// Aggregated permission summary for the calling user. If detailed permission statements are required, please call list permissions endpoint.
+		Permissions []string `json:"permissions"`
+		// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
+		Children []MutingSchedulesLibraryBaseResponse `json:"children"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryFolderResponse)
+	varMutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct := MutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varMutingSchedulesLibraryFolderResponse := _MutingSchedulesLibraryFolderResponse{}
+		varMutingSchedulesLibraryFolderResponse.Permissions = varMutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct.Permissions
+		varMutingSchedulesLibraryFolderResponse.Children = varMutingSchedulesLibraryFolderResponseWithoutEmbeddedStruct.Children
+		*o = MutingSchedulesLibraryFolderResponse(varMutingSchedulesLibraryFolderResponse)
+	} else {
 		return err
 	}
 
-	*o = MutingSchedulesLibraryFolderResponse(varMutingSchedulesLibraryFolderResponse)
+	varMutingSchedulesLibraryFolderResponse := _MutingSchedulesLibraryFolderResponse{}
+
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolderResponse)
+	if err == nil {
+		o.MutingSchedulesLibraryBaseResponse = varMutingSchedulesLibraryFolderResponse.MutingSchedulesLibraryBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectMutingSchedulesLibraryBaseResponse := reflect.ValueOf(o.MutingSchedulesLibraryBaseResponse)
+		for i := 0; i < reflectMutingSchedulesLibraryBaseResponse.Type().NumField(); i++ {
+			t := reflectMutingSchedulesLibraryBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryParserExportV2 type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type ParsersLibraryParserExportV2 struct {
 	IsPartial *bool `json:"isPartial,omitempty"`
 	// Localized stanzas.
 	LocalStanzas *string `json:"localStanzas,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryParserExportV2 ParsersLibraryParserExportV2
@@ -281,6 +283,11 @@ func (o ParsersLibraryParserExportV2) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LocalStanzas) {
 		toSerialize["localStanzas"] = o.LocalStanzas
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -309,17 +316,76 @@ func (o *ParsersLibraryParserExportV2) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryParserExportV2 := _ParsersLibraryParserExportV2{}
+	type ParsersLibraryParserExportV2WithoutEmbeddedStruct struct {
+		// Array of lines of stanzas describing the parser.
+		Stanzas []string `json:"stanzas"`
+		// The path to the Model a Model-Connector is associated with.
+		ModelPath *string `json:"modelPath,omitempty"`
+		// The path to the sourcetype a Model-Connector is associated with.
+		SourcetypePath *string `json:"sourcetypePath,omitempty"`
+		// CSV list of model families this object belongs/applies to
+		Families *string `json:"families,omitempty"`
+		// Is this a complete Parser or Model-Connector, or just a config fragment?
+		IsPartial *bool `json:"isPartial,omitempty"`
+		// Localized stanzas.
+		LocalStanzas *string `json:"localStanzas,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryParserExportV2)
+	varParsersLibraryParserExportV2WithoutEmbeddedStruct := ParsersLibraryParserExportV2WithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryParserExportV2WithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryParserExportV2 := _ParsersLibraryParserExportV2{}
+		varParsersLibraryParserExportV2.Stanzas = varParsersLibraryParserExportV2WithoutEmbeddedStruct.Stanzas
+		varParsersLibraryParserExportV2.ModelPath = varParsersLibraryParserExportV2WithoutEmbeddedStruct.ModelPath
+		varParsersLibraryParserExportV2.SourcetypePath = varParsersLibraryParserExportV2WithoutEmbeddedStruct.SourcetypePath
+		varParsersLibraryParserExportV2.Families = varParsersLibraryParserExportV2WithoutEmbeddedStruct.Families
+		varParsersLibraryParserExportV2.IsPartial = varParsersLibraryParserExportV2WithoutEmbeddedStruct.IsPartial
+		varParsersLibraryParserExportV2.LocalStanzas = varParsersLibraryParserExportV2WithoutEmbeddedStruct.LocalStanzas
+		*o = ParsersLibraryParserExportV2(varParsersLibraryParserExportV2)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryParserExportV2(varParsersLibraryParserExportV2)
+	varParsersLibraryParserExportV2 := _ParsersLibraryParserExportV2{}
+
+	err = json.Unmarshal(data, &varParsersLibraryParserExportV2)
+	if err == nil {
+		o.ParsersLibraryExportBase = varParsersLibraryParserExportV2.ParsersLibraryExportBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "stanzas")
+		delete(additionalProperties, "modelPath")
+		delete(additionalProperties, "sourcetypePath")
+		delete(additionalProperties, "families")
+		delete(additionalProperties, "isPartial")
+		delete(additionalProperties, "localStanzas")
+
+		// remove fields from embedded structs
+		reflectParsersLibraryExportBase := reflect.ValueOf(o.ParsersLibraryExportBase)
+		for i := 0; i < reflectParsersLibraryExportBase.Type().NumField(); i++ {
+			t := reflectParsersLibraryExportBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

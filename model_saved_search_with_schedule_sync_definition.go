@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SavedSearchWithScheduleSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type SavedSearchWithScheduleSyncDefinition struct {
 	SearchSchedule *SearchScheduleSyncDefinition `json:"searchSchedule,omitempty"`
 	// Description of the saved search.
 	Description string `json:"description"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SavedSearchWithScheduleSyncDefinition SavedSearchWithScheduleSyncDefinition
@@ -154,6 +156,11 @@ func (o SavedSearchWithScheduleSyncDefinition) ToMap() (map[string]interface{}, 
 		toSerialize["searchSchedule"] = o.SearchSchedule
 	}
 	toSerialize["description"] = o.Description
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -182,17 +189,62 @@ func (o *SavedSearchWithScheduleSyncDefinition) UnmarshalJSON(data []byte) (err 
 		}
 	}
 
-	varSavedSearchWithScheduleSyncDefinition := _SavedSearchWithScheduleSyncDefinition{}
+	type SavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct struct {
+		Search SavedSearchSyncDefinition `json:"search"`
+		SearchSchedule *SearchScheduleSyncDefinition `json:"searchSchedule,omitempty"`
+		// Description of the saved search.
+		Description string `json:"description"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSavedSearchWithScheduleSyncDefinition)
+	varSavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct := SavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varSavedSearchWithScheduleSyncDefinition := _SavedSearchWithScheduleSyncDefinition{}
+		varSavedSearchWithScheduleSyncDefinition.Search = varSavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct.Search
+		varSavedSearchWithScheduleSyncDefinition.SearchSchedule = varSavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct.SearchSchedule
+		varSavedSearchWithScheduleSyncDefinition.Description = varSavedSearchWithScheduleSyncDefinitionWithoutEmbeddedStruct.Description
+		*o = SavedSearchWithScheduleSyncDefinition(varSavedSearchWithScheduleSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = SavedSearchWithScheduleSyncDefinition(varSavedSearchWithScheduleSyncDefinition)
+	varSavedSearchWithScheduleSyncDefinition := _SavedSearchWithScheduleSyncDefinition{}
+
+	err = json.Unmarshal(data, &varSavedSearchWithScheduleSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varSavedSearchWithScheduleSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "searchSchedule")
+		delete(additionalProperties, "description")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectorRegistrationTokenResponse type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type CollectorRegistrationTokenResponse struct {
 	TokenBaseResponse
 	// The token and URL used to register the Collector as an encoded string.
 	EncodedTokenAndUrl string `json:"encodedTokenAndUrl"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectorRegistrationTokenResponse CollectorRegistrationTokenResponse
@@ -100,6 +102,11 @@ func (o CollectorRegistrationTokenResponse) ToMap() (map[string]interface{}, err
 		return map[string]interface{}{}, errTokenBaseResponse
 	}
 	toSerialize["encodedTokenAndUrl"] = o.EncodedTokenAndUrl
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,17 +142,56 @@ func (o *CollectorRegistrationTokenResponse) UnmarshalJSON(data []byte) (err err
 		}
 	}
 
-	varCollectorRegistrationTokenResponse := _CollectorRegistrationTokenResponse{}
+	type CollectorRegistrationTokenResponseWithoutEmbeddedStruct struct {
+		// The token and URL used to register the Collector as an encoded string.
+		EncodedTokenAndUrl string `json:"encodedTokenAndUrl"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectorRegistrationTokenResponse)
+	varCollectorRegistrationTokenResponseWithoutEmbeddedStruct := CollectorRegistrationTokenResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectorRegistrationTokenResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectorRegistrationTokenResponse := _CollectorRegistrationTokenResponse{}
+		varCollectorRegistrationTokenResponse.EncodedTokenAndUrl = varCollectorRegistrationTokenResponseWithoutEmbeddedStruct.EncodedTokenAndUrl
+		*o = CollectorRegistrationTokenResponse(varCollectorRegistrationTokenResponse)
+	} else {
 		return err
 	}
 
-	*o = CollectorRegistrationTokenResponse(varCollectorRegistrationTokenResponse)
+	varCollectorRegistrationTokenResponse := _CollectorRegistrationTokenResponse{}
+
+	err = json.Unmarshal(data, &varCollectorRegistrationTokenResponse)
+	if err == nil {
+		o.TokenBaseResponse = varCollectorRegistrationTokenResponse.TokenBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "encodedTokenAndUrl")
+
+		// remove fields from embedded structs
+		reflectTokenBaseResponse := reflect.ValueOf(o.TokenBaseResponse)
+		for i := 0; i < reflectTokenBaseResponse.Type().NumField(); i++ {
+			t := reflectTokenBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

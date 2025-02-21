@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ScheduledViewsQuotaUsage struct {
 	Quota int32 `json:"quota"`
 	// Remaining number of Scheduled Views allowed.
 	Remaining int32 `json:"remaining"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduledViewsQuotaUsage ScheduledViewsQuotaUsage
@@ -108,6 +108,11 @@ func (o ScheduledViewsQuotaUsage) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["quota"] = o.Quota
 	toSerialize["remaining"] = o.Remaining
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ScheduledViewsQuotaUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varScheduledViewsQuotaUsage := _ScheduledViewsQuotaUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduledViewsQuotaUsage)
+	err = json.Unmarshal(data, &varScheduledViewsQuotaUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduledViewsQuotaUsage(varScheduledViewsQuotaUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "quota")
+		delete(additionalProperties, "remaining")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

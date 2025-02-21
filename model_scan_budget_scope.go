@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ScanBudgetScope struct {
 	IncludedRoles []string `json:"includedRoles"`
 	// List of roleIds excluded in the budget.
 	ExcludedRoles []string `json:"excludedRoles"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScanBudgetScope ScanBudgetScope
@@ -164,6 +164,11 @@ func (o ScanBudgetScope) ToMap() (map[string]interface{}, error) {
 	toSerialize["excludedUsers"] = o.ExcludedUsers
 	toSerialize["includedRoles"] = o.IncludedRoles
 	toSerialize["excludedRoles"] = o.ExcludedRoles
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *ScanBudgetScope) UnmarshalJSON(data []byte) (err error) {
 
 	varScanBudgetScope := _ScanBudgetScope{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScanBudgetScope)
+	err = json.Unmarshal(data, &varScanBudgetScope)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScanBudgetScope(varScanBudgetScope)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "includedUsers")
+		delete(additionalProperties, "excludedUsers")
+		delete(additionalProperties, "includedRoles")
+		delete(additionalProperties, "excludedRoles")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

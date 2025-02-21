@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Layout struct {
 	LayoutType string `json:"layoutType"`
 	// Layout structures for the panel childen.
 	LayoutStructures []LayoutStructure `json:"layoutStructures"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Layout Layout
@@ -108,6 +108,11 @@ func (o Layout) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["layoutType"] = o.LayoutType
 	toSerialize["layoutStructures"] = o.LayoutStructures
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Layout) UnmarshalJSON(data []byte) (err error) {
 
 	varLayout := _Layout{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLayout)
+	err = json.Unmarshal(data, &varLayout)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Layout(varLayout)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "layoutType")
+		delete(additionalProperties, "layoutStructures")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

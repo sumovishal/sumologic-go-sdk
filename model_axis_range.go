@@ -23,7 +23,10 @@ type AxisRange struct {
 	Min *int64 `json:"min,omitempty"`
 	// maximum limit of x or y axis.
 	Max *int64 `json:"max,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AxisRange AxisRange
 
 // NewAxisRange instantiates a new AxisRange object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o AxisRange) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Max) {
 		toSerialize["max"] = o.Max
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AxisRange) UnmarshalJSON(data []byte) (err error) {
+	varAxisRange := _AxisRange{}
+
+	err = json.Unmarshal(data, &varAxisRange)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AxisRange(varAxisRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "min")
+		delete(additionalProperties, "max")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAxisRange struct {

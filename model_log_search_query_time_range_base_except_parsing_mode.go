@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type LogSearchQueryTimeRangeBaseExceptParsingMode struct {
 	RunByReceiptTime *bool `json:"runByReceiptTime,omitempty"`
 	// Values for search template used in the search query. Learn more about the search templates here : https://help.sumologic.com/docs/search/get-started-with-search/build-search/search-templates/
 	QueryParameters []LogSearchQueryParameterSyncDefinitionBase `json:"queryParameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchQueryTimeRangeBaseExceptParsingMode LogSearchQueryTimeRangeBaseExceptParsingMode
@@ -185,6 +185,11 @@ func (o LogSearchQueryTimeRangeBaseExceptParsingMode) ToMap() (map[string]interf
 	if !IsNil(o.QueryParameters) {
 		toSerialize["queryParameters"] = o.QueryParameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -213,15 +218,23 @@ func (o *LogSearchQueryTimeRangeBaseExceptParsingMode) UnmarshalJSON(data []byte
 
 	varLogSearchQueryTimeRangeBaseExceptParsingMode := _LogSearchQueryTimeRangeBaseExceptParsingMode{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchQueryTimeRangeBaseExceptParsingMode)
+	err = json.Unmarshal(data, &varLogSearchQueryTimeRangeBaseExceptParsingMode)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchQueryTimeRangeBaseExceptParsingMode(varLogSearchQueryTimeRangeBaseExceptParsingMode)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

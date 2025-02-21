@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type ParsersLibraryBaseResponse struct {
 	IsSystem bool `json:"isSystem"`
 	// Immutable objects are \"READ-ONLY\".
 	IsMutable bool `json:"isMutable"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryBaseResponse ParsersLibraryBaseResponse
@@ -445,6 +445,11 @@ func (o ParsersLibraryBaseResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["isLocked"] = o.IsLocked
 	toSerialize["isSystem"] = o.IsSystem
 	toSerialize["isMutable"] = o.IsMutable
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -485,15 +490,33 @@ func (o *ParsersLibraryBaseResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varParsersLibraryBaseResponse := _ParsersLibraryBaseResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryBaseResponse)
+	err = json.Unmarshal(data, &varParsersLibraryBaseResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ParsersLibraryBaseResponse(varParsersLibraryBaseResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "contentType")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "isLocked")
+		delete(additionalProperties, "isSystem")
+		delete(additionalProperties, "isMutable")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

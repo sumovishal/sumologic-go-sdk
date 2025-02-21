@@ -23,7 +23,10 @@ type NameInfo struct {
 	GivenName *string `json:"givenName,omitempty"`
 	// Family name of the user (lastName)
 	FamilyName *string `json:"familyName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _NameInfo NameInfo
 
 // NewNameInfo instantiates a new NameInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o NameInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FamilyName) {
 		toSerialize["familyName"] = o.FamilyName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *NameInfo) UnmarshalJSON(data []byte) (err error) {
+	varNameInfo := _NameInfo{}
+
+	err = json.Unmarshal(data, &varNameInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = NameInfo(varNameInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "givenName")
+		delete(additionalProperties, "familyName")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableNameInfo struct {

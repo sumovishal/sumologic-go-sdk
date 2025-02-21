@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SliQueryGroup struct {
 	QueryGroupType string `json:"queryGroupType" validate:"regexp=^(Successful|Unsuccessful|Total|Threshold)$"`
 	// Group of queries to allow for query arithmetic.
 	QueryGroup []SliQuery `json:"queryGroup"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SliQueryGroup SliQueryGroup
@@ -108,6 +108,11 @@ func (o SliQueryGroup) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryGroupType"] = o.QueryGroupType
 	toSerialize["queryGroup"] = o.QueryGroup
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SliQueryGroup) UnmarshalJSON(data []byte) (err error) {
 
 	varSliQueryGroup := _SliQueryGroup{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSliQueryGroup)
+	err = json.Unmarshal(data, &varSliQueryGroup)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SliQueryGroup(varSliQueryGroup)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryGroupType")
+		delete(additionalProperties, "queryGroup")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

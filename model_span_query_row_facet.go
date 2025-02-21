@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type SpanQueryRowFacet struct {
 	InSchema *bool `json:"inSchema,omitempty"`
 	// Map of field value frequencies.
 	ValueFrequency *map[string]int64 `json:"valueFrequency,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRowFacet SpanQueryRowFacet
@@ -210,6 +210,11 @@ func (o SpanQueryRowFacet) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ValueFrequency) {
 		toSerialize["valueFrequency"] = o.ValueFrequency
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,15 +244,24 @@ func (o *SpanQueryRowFacet) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRowFacet := _SpanQueryRowFacet{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRowFacet)
+	err = json.Unmarshal(data, &varSpanQueryRowFacet)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRowFacet(varSpanQueryRowFacet)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "cardinality")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "inSchema")
+		delete(additionalProperties, "valueFrequency")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

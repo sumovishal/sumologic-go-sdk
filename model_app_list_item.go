@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type AppListItem struct {
 	Panels []PanelItem `json:"panels,omitempty"`
 	// Child content items. Applicable only for `Folder` itemType.
 	Children []AppListItem `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppListItem AppListItem
@@ -293,6 +293,11 @@ func (o AppListItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -321,15 +326,26 @@ func (o *AppListItem) UnmarshalJSON(data []byte) (err error) {
 
 	varAppListItem := _AppListItem{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppListItem)
+	err = json.Unmarshal(data, &varAppListItem)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppListItem(varAppListItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "itemType")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "screenshotUrl")
+		delete(additionalProperties, "panels")
+		delete(additionalProperties, "children")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

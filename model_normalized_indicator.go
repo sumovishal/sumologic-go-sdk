@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -46,6 +45,7 @@ type NormalizedIndicator struct {
 	KillChain *string `json:"killChain,omitempty"`
 	// Flattened fields from the original indicator object (e.g. flattened STIX fields)
 	Fields *map[string]string `json:"fields,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NormalizedIndicator NormalizedIndicator
@@ -434,6 +434,11 @@ func (o NormalizedIndicator) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Fields) {
 		toSerialize["fields"] = o.Fields
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -467,15 +472,31 @@ func (o *NormalizedIndicator) UnmarshalJSON(data []byte) (err error) {
 
 	varNormalizedIndicator := _NormalizedIndicator{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNormalizedIndicator)
+	err = json.Unmarshal(data, &varNormalizedIndicator)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NormalizedIndicator(varNormalizedIndicator)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "indicator")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "updated")
+		delete(additionalProperties, "validFrom")
+		delete(additionalProperties, "validUntil")
+		delete(additionalProperties, "confidence")
+		delete(additionalProperties, "threatType")
+		delete(additionalProperties, "actors")
+		delete(additionalProperties, "killChain")
+		delete(additionalProperties, "fields")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -47,6 +46,7 @@ type MetricsSearchInstance struct {
 	Id string `json:"id"`
 	// Identifier of the parent element in the content library, such as folder.
 	ParentId *string `json:"parentId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearchInstance MetricsSearchInstance
@@ -456,6 +456,11 @@ func (o MetricsSearchInstance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -491,15 +496,32 @@ func (o *MetricsSearchInstance) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsSearchInstance := _MetricsSearchInstance{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearchInstance)
+	err = json.Unmarshal(data, &varMetricsSearchInstance)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSearchInstance(varMetricsSearchInstance)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "logQuery")
+		delete(additionalProperties, "metricsQueries")
+		delete(additionalProperties, "desiredQuantizationInSecs")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

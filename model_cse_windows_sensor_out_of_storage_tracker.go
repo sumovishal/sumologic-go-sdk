@@ -21,7 +21,10 @@ var _ MappedNullable = &CSEWindowsSensorOutOfStorageTracker{}
 type CSEWindowsSensorOutOfStorageTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CSEWindowsSensorOutOfStorageTracker CSEWindowsSensorOutOfStorageTracker
 
 // NewCSEWindowsSensorOutOfStorageTracker instantiates a new CSEWindowsSensorOutOfStorageTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o CSEWindowsSensorOutOfStorageTracker) ToMap() (map[string]interface{}, er
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CSEWindowsSensorOutOfStorageTracker) UnmarshalJSON(data []byte) (err error) {
+	varCSEWindowsSensorOutOfStorageTracker := _CSEWindowsSensorOutOfStorageTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsSensorOutOfStorageTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CSEWindowsSensorOutOfStorageTracker(varCSEWindowsSensorOutOfStorageTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCSEWindowsSensorOutOfStorageTracker struct {

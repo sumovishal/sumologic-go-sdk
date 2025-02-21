@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type MetricsSearchV1 struct {
 	DesiredQuantizationInSecs *int32 `json:"desiredQuantizationInSecs,omitempty"`
 	// Chart properties, like line width, color palette, and the fill missing data method. Leave this field empty to use the defaults. This property contains JSON object encoded as a string. 
 	Properties *string `json:"properties,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearchV1 MetricsSearchV1
@@ -278,6 +278,11 @@ func (o MetricsSearchV1) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Properties) {
 		toSerialize["properties"] = o.Properties
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -308,15 +313,26 @@ func (o *MetricsSearchV1) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsSearchV1 := _MetricsSearchV1{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearchV1)
+	err = json.Unmarshal(data, &varMetricsSearchV1)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSearchV1(varMetricsSearchV1)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "logQuery")
+		delete(additionalProperties, "metricsQueries")
+		delete(additionalProperties, "desiredQuantizationInSecs")
+		delete(additionalProperties, "properties")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

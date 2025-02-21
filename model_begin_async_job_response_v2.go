@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &BeginAsyncJobResponseV2{}
 type BeginAsyncJobResponseV2 struct {
 	// Identifier of the asynchronous job. Use it to get status of the job.
 	JobId string `json:"jobId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BeginAsyncJobResponseV2 BeginAsyncJobResponseV2
@@ -80,6 +80,11 @@ func (o BeginAsyncJobResponseV2) MarshalJSON() ([]byte, error) {
 func (o BeginAsyncJobResponseV2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["jobId"] = o.JobId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *BeginAsyncJobResponseV2) UnmarshalJSON(data []byte) (err error) {
 
 	varBeginAsyncJobResponseV2 := _BeginAsyncJobResponseV2{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBeginAsyncJobResponseV2)
+	err = json.Unmarshal(data, &varBeginAsyncJobResponseV2)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BeginAsyncJobResponseV2(varBeginAsyncJobResponseV2)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "jobId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

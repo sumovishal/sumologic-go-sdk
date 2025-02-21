@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UploadStixIndicatorsRequest struct {
 	Source string `json:"source"`
 	// The list of stix threat intel indicators to upload.
 	Indicators []StixIndicator `json:"indicators"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UploadStixIndicatorsRequest UploadStixIndicatorsRequest
@@ -108,6 +108,11 @@ func (o UploadStixIndicatorsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source"] = o.Source
 	toSerialize["indicators"] = o.Indicators
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *UploadStixIndicatorsRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUploadStixIndicatorsRequest := _UploadStixIndicatorsRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUploadStixIndicatorsRequest)
+	err = json.Unmarshal(data, &varUploadStixIndicatorsRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UploadStixIndicatorsRequest(varUploadStixIndicatorsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "indicators")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

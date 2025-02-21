@@ -13,8 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AlertsLibraryAlertExport type satisfies the MappedNullable interface at compile time
@@ -60,6 +61,7 @@ type AlertsLibraryAlertExport struct {
 	AlertCondition NullableString `json:"alertCondition,omitempty"`
 	// Flag of the alerts muting status.
 	IsMuted *bool `json:"isMuted,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryAlertExport AlertsLibraryAlertExport
@@ -789,6 +791,11 @@ func (o AlertsLibraryAlertExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsMuted) {
 		toSerialize["isMuted"] = o.IsMuted
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -815,17 +822,127 @@ func (o *AlertsLibraryAlertExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAlertsLibraryAlertExport := _AlertsLibraryAlertExport{}
+	type AlertsLibraryAlertExportWithoutEmbeddedStruct struct {
+		// The Id of the associated monitor.
+		MonitorId *string `json:"monitorId,omitempty"`
+		// The time at which the alert was resolved.
+		ResolvedAt NullableTime `json:"resolvedAt,omitempty"`
+		// The time at which the incident started.
+		AbnormalityStartTime *time.Time `json:"abnormalityStartTime,omitempty"`
+		// The severity of the Alert. Valid values:   1. `Critical`   2. `Warning`   3. `MissingData`
+		AlertType *string `json:"alertType,omitempty" validate:"regexp=^(Critical|Warning|MissingData)$"`
+		// The status of the Alert. Valid values:   1. `Triggered`   2. `Resolved`
+		Status *string `json:"status,omitempty" validate:"regexp=^(Triggered|Resolved)$"`
+		// All queries from the monitor relevant to the alert.
+		MonitorQueries []AlertMonitorQuery `json:"monitorQueries,omitempty"`
+		// All queries from the monitor relevant to the alert with triggered time series filters.
+		TriggerQueries []AlertMonitorQuery `json:"triggerQueries,omitempty"`
+		// URL for this monitor's view page
+		MonitorUrl *string `json:"monitorUrl,omitempty"`
+		// A link to search with the triggering data and time range
+		TriggerQueryUrl *string `json:"triggerQueryUrl,omitempty"`
+		// Trigger conditions which were breached to create this Alert.
+		TriggerConditions []TriggerCondition `json:"triggerConditions,omitempty"`
+		// The of the query result which breached the trigger condition.
+		TriggerValue *float64 `json:"triggerValue,omitempty"`
+		// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
+		MonitorType *string `json:"monitorType,omitempty" validate:"regexp=^(Logs|Metrics)$"`
+		// One or more primary entity identifiers involved in this Alert. Primary/secondary entities are explained in description for `entities`. DEPRECATED, USE `entities` INSTEAD. 
+		// Deprecated
+		EntityIds []string `json:"entityIds,omitempty"`
+		// One or more primary entities involved in this Alert. Primary entity is the most concrete entity that can be assigned per time series or log group (e.g. k8s container), secondary entities are the less specific ones that can be assigned per that notification (e.g. k8s cluster or EC2 host). 
+		Entities []AlertEntityInfo `json:"entities,omitempty"`
+		// One or more secondary entity involved in this Alert. Primary/secondary entities are explained in description for `entities` 
+		SecondaryEntities []AlertEntityInfo `json:"secondaryEntities,omitempty"`
+		Notes *string `json:"notes,omitempty"`
+		ExtraDetails *ExtraDetails `json:"extraDetails,omitempty"`
+		// The condition which triggered this alert.
+		AlertCondition NullableString `json:"alertCondition,omitempty"`
+		// Flag of the alerts muting status.
+		IsMuted *bool `json:"isMuted,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryAlertExport)
+	varAlertsLibraryAlertExportWithoutEmbeddedStruct := AlertsLibraryAlertExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAlertsLibraryAlertExportWithoutEmbeddedStruct)
+	if err == nil {
+		varAlertsLibraryAlertExport := _AlertsLibraryAlertExport{}
+		varAlertsLibraryAlertExport.MonitorId = varAlertsLibraryAlertExportWithoutEmbeddedStruct.MonitorId
+		varAlertsLibraryAlertExport.ResolvedAt = varAlertsLibraryAlertExportWithoutEmbeddedStruct.ResolvedAt
+		varAlertsLibraryAlertExport.AbnormalityStartTime = varAlertsLibraryAlertExportWithoutEmbeddedStruct.AbnormalityStartTime
+		varAlertsLibraryAlertExport.AlertType = varAlertsLibraryAlertExportWithoutEmbeddedStruct.AlertType
+		varAlertsLibraryAlertExport.Status = varAlertsLibraryAlertExportWithoutEmbeddedStruct.Status
+		varAlertsLibraryAlertExport.MonitorQueries = varAlertsLibraryAlertExportWithoutEmbeddedStruct.MonitorQueries
+		varAlertsLibraryAlertExport.TriggerQueries = varAlertsLibraryAlertExportWithoutEmbeddedStruct.TriggerQueries
+		varAlertsLibraryAlertExport.MonitorUrl = varAlertsLibraryAlertExportWithoutEmbeddedStruct.MonitorUrl
+		varAlertsLibraryAlertExport.TriggerQueryUrl = varAlertsLibraryAlertExportWithoutEmbeddedStruct.TriggerQueryUrl
+		varAlertsLibraryAlertExport.TriggerConditions = varAlertsLibraryAlertExportWithoutEmbeddedStruct.TriggerConditions
+		varAlertsLibraryAlertExport.TriggerValue = varAlertsLibraryAlertExportWithoutEmbeddedStruct.TriggerValue
+		varAlertsLibraryAlertExport.MonitorType = varAlertsLibraryAlertExportWithoutEmbeddedStruct.MonitorType
+		varAlertsLibraryAlertExport.EntityIds = varAlertsLibraryAlertExportWithoutEmbeddedStruct.EntityIds
+		varAlertsLibraryAlertExport.Entities = varAlertsLibraryAlertExportWithoutEmbeddedStruct.Entities
+		varAlertsLibraryAlertExport.SecondaryEntities = varAlertsLibraryAlertExportWithoutEmbeddedStruct.SecondaryEntities
+		varAlertsLibraryAlertExport.Notes = varAlertsLibraryAlertExportWithoutEmbeddedStruct.Notes
+		varAlertsLibraryAlertExport.ExtraDetails = varAlertsLibraryAlertExportWithoutEmbeddedStruct.ExtraDetails
+		varAlertsLibraryAlertExport.AlertCondition = varAlertsLibraryAlertExportWithoutEmbeddedStruct.AlertCondition
+		varAlertsLibraryAlertExport.IsMuted = varAlertsLibraryAlertExportWithoutEmbeddedStruct.IsMuted
+		*o = AlertsLibraryAlertExport(varAlertsLibraryAlertExport)
+	} else {
 		return err
 	}
 
-	*o = AlertsLibraryAlertExport(varAlertsLibraryAlertExport)
+	varAlertsLibraryAlertExport := _AlertsLibraryAlertExport{}
+
+	err = json.Unmarshal(data, &varAlertsLibraryAlertExport)
+	if err == nil {
+		o.AlertsLibraryBaseExport = varAlertsLibraryAlertExport.AlertsLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorId")
+		delete(additionalProperties, "resolvedAt")
+		delete(additionalProperties, "abnormalityStartTime")
+		delete(additionalProperties, "alertType")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "monitorQueries")
+		delete(additionalProperties, "triggerQueries")
+		delete(additionalProperties, "monitorUrl")
+		delete(additionalProperties, "triggerQueryUrl")
+		delete(additionalProperties, "triggerConditions")
+		delete(additionalProperties, "triggerValue")
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "entityIds")
+		delete(additionalProperties, "entities")
+		delete(additionalProperties, "secondaryEntities")
+		delete(additionalProperties, "notes")
+		delete(additionalProperties, "extraDetails")
+		delete(additionalProperties, "alertCondition")
+		delete(additionalProperties, "isMuted")
+
+		// remove fields from embedded structs
+		reflectAlertsLibraryBaseExport := reflect.ValueOf(o.AlertsLibraryBaseExport)
+		for i := 0; i < reflectAlertsLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectAlertsLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

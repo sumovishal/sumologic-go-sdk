@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SloSliCondition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SloSliCondition struct {
 	TriggerCondition
 	// The remaining SLI error budget threshold percentage.
 	SliThreshold float64 `json:"sliThreshold"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SloSliCondition SloSliCondition
@@ -92,6 +94,11 @@ func (o SloSliCondition) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTriggerCondition
 	}
 	toSerialize["sliThreshold"] = o.SliThreshold
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -118,17 +125,56 @@ func (o *SloSliCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSloSliCondition := _SloSliCondition{}
+	type SloSliConditionWithoutEmbeddedStruct struct {
+		// The remaining SLI error budget threshold percentage.
+		SliThreshold float64 `json:"sliThreshold"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSloSliCondition)
+	varSloSliConditionWithoutEmbeddedStruct := SloSliConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSloSliConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varSloSliCondition := _SloSliCondition{}
+		varSloSliCondition.SliThreshold = varSloSliConditionWithoutEmbeddedStruct.SliThreshold
+		*o = SloSliCondition(varSloSliCondition)
+	} else {
 		return err
 	}
 
-	*o = SloSliCondition(varSloSliCondition)
+	varSloSliCondition := _SloSliCondition{}
+
+	err = json.Unmarshal(data, &varSloSliCondition)
+	if err == nil {
+		o.TriggerCondition = varSloSliCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sliThreshold")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

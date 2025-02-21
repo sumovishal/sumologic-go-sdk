@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type SchemaBaseIdentityWithMetadata struct {
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Last modification timestamp in UTC.
 	ModifiedAt *time.Time `json:"modifiedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SchemaBaseIdentityWithMetadata SchemaBaseIdentityWithMetadata
@@ -341,6 +341,11 @@ func (o SchemaBaseIdentityWithMetadata) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.ModifiedAt) {
 		toSerialize["modifiedAt"] = o.ModifiedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -372,15 +377,28 @@ func (o *SchemaBaseIdentityWithMetadata) UnmarshalJSON(data []byte) (err error) 
 
 	varSchemaBaseIdentityWithMetadata := _SchemaBaseIdentityWithMetadata{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSchemaBaseIdentityWithMetadata)
+	err = json.Unmarshal(data, &varSchemaBaseIdentityWithMetadata)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SchemaBaseIdentityWithMetadata(varSchemaBaseIdentityWithMetadata)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "manifest")
+		delete(additionalProperties, "schema")
+		delete(additionalProperties, "family")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "modifiedAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

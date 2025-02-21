@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type LightSpanEvent struct {
 	Timestamp time.Time `json:"timestamp"`
 	// Name of the event.
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LightSpanEvent LightSpanEvent
@@ -109,6 +109,11 @@ func (o LightSpanEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["timestamp"] = o.Timestamp
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -137,15 +142,21 @@ func (o *LightSpanEvent) UnmarshalJSON(data []byte) (err error) {
 
 	varLightSpanEvent := _LightSpanEvent{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLightSpanEvent)
+	err = json.Unmarshal(data, &varLightSpanEvent)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LightSpanEvent(varLightSpanEvent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timestamp")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

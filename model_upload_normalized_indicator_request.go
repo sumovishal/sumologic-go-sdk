@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UploadNormalizedIndicatorRequest{}
 type UploadNormalizedIndicatorRequest struct {
 	// The list of normalized threat intel indicators to upload.
 	Indicators []NormalizedIndicator `json:"indicators"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UploadNormalizedIndicatorRequest UploadNormalizedIndicatorRequest
@@ -80,6 +80,11 @@ func (o UploadNormalizedIndicatorRequest) MarshalJSON() ([]byte, error) {
 func (o UploadNormalizedIndicatorRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["indicators"] = o.Indicators
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *UploadNormalizedIndicatorRequest) UnmarshalJSON(data []byte) (err error
 
 	varUploadNormalizedIndicatorRequest := _UploadNormalizedIndicatorRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUploadNormalizedIndicatorRequest)
+	err = json.Unmarshal(data, &varUploadNormalizedIndicatorRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UploadNormalizedIndicatorRequest(varUploadNormalizedIndicatorRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "indicators")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

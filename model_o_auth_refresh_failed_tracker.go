@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OAuthRefreshFailedTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type OAuthRefreshFailedTracker struct {
 	ExceptionType *string `json:"exceptionType,omitempty"`
 	// The error message received with the failed OAuth request.
 	ExceptionMessage *string `json:"exceptionMessage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OAuthRefreshFailedTracker OAuthRefreshFailedTracker
@@ -138,6 +140,11 @@ func (o OAuthRefreshFailedTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ExceptionMessage) {
 		toSerialize["exceptionMessage"] = o.ExceptionMessage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *OAuthRefreshFailedTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varOAuthRefreshFailedTracker := _OAuthRefreshFailedTracker{}
+	type OAuthRefreshFailedTrackerWithoutEmbeddedStruct struct {
+		// The type of exception received while attempting OAuth.
+		ExceptionType *string `json:"exceptionType,omitempty"`
+		// The error message received with the failed OAuth request.
+		ExceptionMessage *string `json:"exceptionMessage,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOAuthRefreshFailedTracker)
+	varOAuthRefreshFailedTrackerWithoutEmbeddedStruct := OAuthRefreshFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOAuthRefreshFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOAuthRefreshFailedTracker := _OAuthRefreshFailedTracker{}
+		varOAuthRefreshFailedTracker.ExceptionType = varOAuthRefreshFailedTrackerWithoutEmbeddedStruct.ExceptionType
+		varOAuthRefreshFailedTracker.ExceptionMessage = varOAuthRefreshFailedTrackerWithoutEmbeddedStruct.ExceptionMessage
+		*o = OAuthRefreshFailedTracker(varOAuthRefreshFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = OAuthRefreshFailedTracker(varOAuthRefreshFailedTracker)
+	varOAuthRefreshFailedTracker := _OAuthRefreshFailedTracker{}
+
+	err = json.Unmarshal(data, &varOAuthRefreshFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varOAuthRefreshFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "exceptionType")
+		delete(additionalProperties, "exceptionMessage")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

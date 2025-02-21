@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type TransformationRuleDefinition struct {
 	TransformedMetricsRetention *int64 `json:"transformedMetricsRetention,omitempty"`
 	// Retention period in days for the metrics that are selected by the selector. The supported retention periods for selected metrics are 8 days, 400 days, and 0 (Do not store) if this rule contains dimension transformation.
 	Retention int64 `json:"retention"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TransformationRuleDefinition TransformationRuleDefinition
@@ -216,6 +216,11 @@ func (o TransformationRuleDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["transformedMetricsRetention"] = o.TransformedMetricsRetention
 	}
 	toSerialize["retention"] = o.Retention
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -245,15 +250,24 @@ func (o *TransformationRuleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varTransformationRuleDefinition := _TransformationRuleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTransformationRuleDefinition)
+	err = json.Unmarshal(data, &varTransformationRuleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TransformationRuleDefinition(varTransformationRuleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "selector")
+		delete(additionalProperties, "dimensionTransformations")
+		delete(additionalProperties, "transformedMetricsRetention")
+		delete(additionalProperties, "retention")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

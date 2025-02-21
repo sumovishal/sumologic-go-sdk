@@ -33,7 +33,10 @@ type SelfServiceCreditsBaselines struct {
 	FlexStorage *int64 `json:"flexStorage,omitempty"`
 	// The amount of flex logs ingest scan ratio.
 	FlexScanRatio *int64 `json:"flexScanRatio,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SelfServiceCreditsBaselines SelfServiceCreditsBaselines
 
 // NewSelfServiceCreditsBaselines instantiates a new SelfServiceCreditsBaselines object
 // This constructor will assign default values to properties that have it defined,
@@ -335,7 +338,39 @@ func (o SelfServiceCreditsBaselines) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FlexScanRatio) {
 		toSerialize["flexScanRatio"] = o.FlexScanRatio
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SelfServiceCreditsBaselines) UnmarshalJSON(data []byte) (err error) {
+	varSelfServiceCreditsBaselines := _SelfServiceCreditsBaselines{}
+
+	err = json.Unmarshal(data, &varSelfServiceCreditsBaselines)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SelfServiceCreditsBaselines(varSelfServiceCreditsBaselines)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "continuousIngest")
+		delete(additionalProperties, "continuousStorage")
+		delete(additionalProperties, "metrics")
+		delete(additionalProperties, "tracingIngest")
+		delete(additionalProperties, "flexIngest")
+		delete(additionalProperties, "flexStorage")
+		delete(additionalProperties, "flexScanRatio")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSelfServiceCreditsBaselines struct {

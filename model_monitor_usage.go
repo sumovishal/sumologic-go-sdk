@@ -27,7 +27,10 @@ type MonitorUsage struct {
 	Limit *int32 `json:"limit,omitempty"`
 	// The total number of monitors created. (Including both active and disabled Logs/Metrics monitors)
 	Total *int32 `json:"total,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MonitorUsage MonitorUsage
 
 // NewMonitorUsage instantiates a new MonitorUsage object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o MonitorUsage) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Total) {
 		toSerialize["total"] = o.Total
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MonitorUsage) UnmarshalJSON(data []byte) (err error) {
+	varMonitorUsage := _MonitorUsage{}
+
+	err = json.Unmarshal(data, &varMonitorUsage)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorUsage(varMonitorUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorType")
+		delete(additionalProperties, "usage")
+		delete(additionalProperties, "limit")
+		delete(additionalProperties, "total")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMonitorUsage struct {

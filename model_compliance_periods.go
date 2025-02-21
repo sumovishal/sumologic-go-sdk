@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CompliancePeriods struct {
 	Timezone string `json:"timezone"`
 	// List of CompliancePeriodProgress.
 	Periods []CompliancePeriodProgress `json:"periods"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CompliancePeriods CompliancePeriods
@@ -108,6 +108,11 @@ func (o CompliancePeriods) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["timezone"] = o.Timezone
 	toSerialize["periods"] = o.Periods
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CompliancePeriods) UnmarshalJSON(data []byte) (err error) {
 
 	varCompliancePeriods := _CompliancePeriods{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompliancePeriods)
+	err = json.Unmarshal(data, &varCompliancePeriods)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CompliancePeriods(varCompliancePeriods)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "periods")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

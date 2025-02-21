@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ContentCopyParams struct {
 	Name *string `json:"name,omitempty"`
 	// Optionally provide a new description.
 	Description *string `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentCopyParams ContentCopyParams
@@ -154,6 +154,11 @@ func (o ContentCopyParams) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *ContentCopyParams) UnmarshalJSON(data []byte) (err error) {
 
 	varContentCopyParams := _ContentCopyParams{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentCopyParams)
+	err = json.Unmarshal(data, &varContentCopyParams)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentCopyParams(varContentCopyParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

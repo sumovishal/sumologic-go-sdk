@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &MigrationPreviewResponse{}
 type MigrationPreviewResponse struct {
 	// Count of dashboards to be migrated.
 	Count int32 `json:"count"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MigrationPreviewResponse MigrationPreviewResponse
@@ -80,6 +80,11 @@ func (o MigrationPreviewResponse) MarshalJSON() ([]byte, error) {
 func (o MigrationPreviewResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["count"] = o.Count
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *MigrationPreviewResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varMigrationPreviewResponse := _MigrationPreviewResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMigrationPreviewResponse)
+	err = json.Unmarshal(data, &varMigrationPreviewResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MigrationPreviewResponse(varMigrationPreviewResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

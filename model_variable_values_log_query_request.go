@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type VariableValuesLogQueryRequest struct {
 	// A field in log query to populate the variable values.
 	Field string `json:"field"`
 	VariablesValues *VariablesValuesData `json:"variablesValues,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VariableValuesLogQueryRequest VariableValuesLogQueryRequest
@@ -144,6 +144,11 @@ func (o VariableValuesLogQueryRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.VariablesValues) {
 		toSerialize["variablesValues"] = o.VariablesValues
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -172,15 +177,22 @@ func (o *VariableValuesLogQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varVariableValuesLogQueryRequest := _VariableValuesLogQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVariableValuesLogQueryRequest)
+	err = json.Unmarshal(data, &varVariableValuesLogQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VariableValuesLogQueryRequest(varVariableValuesLogQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "variablesValues")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

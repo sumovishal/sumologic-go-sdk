@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SchemaBaseTypeToVersionsResponse struct {
 	Type string `json:"type"`
 	// List of schema base identities sorted by latest version for a specific schema type.
 	Versions []SchemaBaseComplete `json:"versions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SchemaBaseTypeToVersionsResponse SchemaBaseTypeToVersionsResponse
@@ -108,6 +108,11 @@ func (o SchemaBaseTypeToVersionsResponse) ToMap() (map[string]interface{}, error
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["versions"] = o.Versions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SchemaBaseTypeToVersionsResponse) UnmarshalJSON(data []byte) (err error
 
 	varSchemaBaseTypeToVersionsResponse := _SchemaBaseTypeToVersionsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSchemaBaseTypeToVersionsResponse)
+	err = json.Unmarshal(data, &varSchemaBaseTypeToVersionsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SchemaBaseTypeToVersionsResponse(varSchemaBaseTypeToVersionsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "versions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

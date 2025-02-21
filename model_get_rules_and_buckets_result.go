@@ -23,7 +23,10 @@ type GetRulesAndBucketsResult struct {
 	Data []RuleAndBucketDetail `json:"data,omitempty"`
 	// Next continuation token.
 	NextToken *string `json:"nextToken,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GetRulesAndBucketsResult GetRulesAndBucketsResult
 
 // NewGetRulesAndBucketsResult instantiates a new GetRulesAndBucketsResult object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o GetRulesAndBucketsResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NextToken) {
 		toSerialize["nextToken"] = o.NextToken
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GetRulesAndBucketsResult) UnmarshalJSON(data []byte) (err error) {
+	varGetRulesAndBucketsResult := _GetRulesAndBucketsResult{}
+
+	err = json.Unmarshal(data, &varGetRulesAndBucketsResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GetRulesAndBucketsResult(varGetRulesAndBucketsResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "nextToken")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGetRulesAndBucketsResult struct {

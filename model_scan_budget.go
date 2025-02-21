@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -61,6 +60,7 @@ type ScanBudget struct {
 	ModifiedAt time.Time `json:"modifiedAt"`
 	// Id of the user who last modified the budget.
 	ModifiedBy string `json:"modifiedBy"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScanBudget ScanBudget
@@ -629,6 +629,11 @@ func (o ScanBudget) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdBy"] = o.CreatedBy
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -674,15 +679,39 @@ func (o *ScanBudget) UnmarshalJSON(data []byte) (err error) {
 
 	varScanBudget := _ScanBudget{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScanBudget)
+	err = json.Unmarshal(data, &varScanBudget)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScanBudget(varScanBudget)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "capacity")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "budgetType")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "window")
+		delete(additionalProperties, "applicableOn")
+		delete(additionalProperties, "groupBy")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "orgId")
+		delete(additionalProperties, "resetTime")
+		delete(additionalProperties, "resetTimeZone")
+		delete(additionalProperties, "resetDayOfWeek")
+		delete(additionalProperties, "resetDateOfMonth")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

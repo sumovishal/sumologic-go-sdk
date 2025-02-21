@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsStorageLimitExceededTracker type satisfies the MappedNullable interface at compile time
@@ -40,6 +41,7 @@ type CSEWindowsStorageLimitExceededTracker struct {
 	CurrentPercentageAvailableDiskSpace *string `json:"currentPercentageAvailableDiskSpace,omitempty"`
 	// The last error.
 	LastError *string `json:"lastError,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsStorageLimitExceededTracker CSEWindowsStorageLimitExceededTracker
@@ -397,6 +399,11 @@ func (o CSEWindowsStorageLimitExceededTracker) ToMap() (map[string]interface{}, 
 	if !IsNil(o.LastError) {
 		toSerialize["lastError"] = o.LastError
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -424,17 +431,88 @@ func (o *CSEWindowsStorageLimitExceededTracker) UnmarshalJSON(data []byte) (err 
 		}
 	}
 
-	varCSEWindowsStorageLimitExceededTracker := _CSEWindowsStorageLimitExceededTracker{}
+	type CSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The path of the folder.
+		FolderPath *string `json:"folderPath,omitempty"`
+		// The complete file path.
+		FolderSizeLimit *string `json:"folderSizeLimit,omitempty"`
+		// Current size of the folder.
+		CurrentFolderSize *string `json:"currentFolderSize,omitempty"`
+		// The percentage available disk space limit.
+		PercentageAvailableDiskSpaceLimit *string `json:"percentageAvailableDiskSpaceLimit,omitempty"`
+		// The current percentage available disk space.
+		CurrentPercentageAvailableDiskSpace *string `json:"currentPercentageAvailableDiskSpace,omitempty"`
+		// The last error.
+		LastError *string `json:"lastError,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsStorageLimitExceededTracker)
+	varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct := CSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsStorageLimitExceededTracker := _CSEWindowsStorageLimitExceededTracker{}
+		varCSEWindowsStorageLimitExceededTracker.EventType = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsStorageLimitExceededTracker.SensorId = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsStorageLimitExceededTracker.SensorHostname = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsStorageLimitExceededTracker.FolderPath = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.FolderPath
+		varCSEWindowsStorageLimitExceededTracker.FolderSizeLimit = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.FolderSizeLimit
+		varCSEWindowsStorageLimitExceededTracker.CurrentFolderSize = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.CurrentFolderSize
+		varCSEWindowsStorageLimitExceededTracker.PercentageAvailableDiskSpaceLimit = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.PercentageAvailableDiskSpaceLimit
+		varCSEWindowsStorageLimitExceededTracker.CurrentPercentageAvailableDiskSpace = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.CurrentPercentageAvailableDiskSpace
+		varCSEWindowsStorageLimitExceededTracker.LastError = varCSEWindowsStorageLimitExceededTrackerWithoutEmbeddedStruct.LastError
+		*o = CSEWindowsStorageLimitExceededTracker(varCSEWindowsStorageLimitExceededTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsStorageLimitExceededTracker(varCSEWindowsStorageLimitExceededTracker)
+	varCSEWindowsStorageLimitExceededTracker := _CSEWindowsStorageLimitExceededTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsStorageLimitExceededTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsStorageLimitExceededTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "folderPath")
+		delete(additionalProperties, "folderSizeLimit")
+		delete(additionalProperties, "currentFolderSize")
+		delete(additionalProperties, "percentageAvailableDiskSpaceLimit")
+		delete(additionalProperties, "currentPercentageAvailableDiskSpace")
+		delete(additionalProperties, "lastError")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpanCalculationPctAggregator type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SpanCalculationPctAggregator struct {
 	SpanCalculationAggregator
 	// The specified percentile of a given field.
 	Percentile float64 `json:"percentile"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanCalculationPctAggregator SpanCalculationPctAggregator
@@ -90,6 +92,11 @@ func (o SpanCalculationPctAggregator) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
 	toSerialize["percentile"] = o.Percentile
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *SpanCalculationPctAggregator) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpanCalculationPctAggregator := _SpanCalculationPctAggregator{}
+	type SpanCalculationPctAggregatorWithoutEmbeddedStruct struct {
+		// The specified percentile of a given field.
+		Percentile float64 `json:"percentile"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanCalculationPctAggregator)
+	varSpanCalculationPctAggregatorWithoutEmbeddedStruct := SpanCalculationPctAggregatorWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpanCalculationPctAggregatorWithoutEmbeddedStruct)
+	if err == nil {
+		varSpanCalculationPctAggregator := _SpanCalculationPctAggregator{}
+		varSpanCalculationPctAggregator.Percentile = varSpanCalculationPctAggregatorWithoutEmbeddedStruct.Percentile
+		*o = SpanCalculationPctAggregator(varSpanCalculationPctAggregator)
+	} else {
 		return err
 	}
 
-	*o = SpanCalculationPctAggregator(varSpanCalculationPctAggregator)
+	varSpanCalculationPctAggregator := _SpanCalculationPctAggregator{}
+
+	err = json.Unmarshal(data, &varSpanCalculationPctAggregator)
+	if err == nil {
+		o.SpanCalculationAggregator = varSpanCalculationPctAggregator.SpanCalculationAggregator
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "percentile")
+
+		// remove fields from embedded structs
+		reflectSpanCalculationAggregator := reflect.ValueOf(o.SpanCalculationAggregator)
+		for i := 0; i < reflectSpanCalculationAggregator.Type().NumField(); i++ {
+			t := reflectSpanCalculationAggregator.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

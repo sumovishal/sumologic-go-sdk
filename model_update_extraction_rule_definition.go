@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type UpdateExtractionRuleDefinition struct {
 	ParseExpression string `json:"parseExpression"`
 	// Is the field extraction rule enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateExtractionRuleDefinition UpdateExtractionRuleDefinition
@@ -164,6 +164,11 @@ func (o UpdateExtractionRuleDefinition) ToMap() (map[string]interface{}, error) 
 	toSerialize["scope"] = o.Scope
 	toSerialize["parseExpression"] = o.ParseExpression
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *UpdateExtractionRuleDefinition) UnmarshalJSON(data []byte) (err error) 
 
 	varUpdateExtractionRuleDefinition := _UpdateExtractionRuleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateExtractionRuleDefinition)
+	err = json.Unmarshal(data, &varUpdateExtractionRuleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateExtractionRuleDefinition(varUpdateExtractionRuleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "parseExpression")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

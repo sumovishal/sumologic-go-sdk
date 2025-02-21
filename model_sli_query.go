@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type SliQuery struct {
 	UseRowCount bool `json:"useRowCount"`
 	// Field of log query output to compare against. To be used only for logs based data type when `useRowCount` is false.
 	Field *string `json:"field,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SliQuery SliQuery
@@ -173,6 +173,11 @@ func (o SliQuery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Field) {
 		toSerialize["field"] = o.Field
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *SliQuery) UnmarshalJSON(data []byte) (err error) {
 
 	varSliQuery := _SliQuery{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSliQuery)
+	err = json.Unmarshal(data, &varSliQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SliQuery(varSliQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "useRowCount")
+		delete(additionalProperties, "field")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

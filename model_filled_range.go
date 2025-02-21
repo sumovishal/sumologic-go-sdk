@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type FilledRange struct {
 	StartTime time.Time `json:"startTime"`
 	// End of the timestamp for each unit of filled ranges, expressed in UTC.
 	EndTime time.Time `json:"endTime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FilledRange FilledRange
@@ -109,6 +109,11 @@ func (o FilledRange) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["startTime"] = o.StartTime
 	toSerialize["endTime"] = o.EndTime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -137,15 +142,21 @@ func (o *FilledRange) UnmarshalJSON(data []byte) (err error) {
 
 	varFilledRange := _FilledRange{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFilledRange)
+	err = json.Unmarshal(data, &varFilledRange)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FilledRange(varFilledRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

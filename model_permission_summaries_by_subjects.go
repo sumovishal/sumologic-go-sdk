@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &PermissionSummariesBySubjects{}
 type PermissionSummariesBySubjects struct {
 	// A list of PermissionSubjects and PermissionSummaryMeta(s) associated with each subject.
 	PermissionSummariesBySubjects []PermissionSummaryBySubjects `json:"permissionSummariesBySubjects"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionSummariesBySubjects PermissionSummariesBySubjects
@@ -80,6 +80,11 @@ func (o PermissionSummariesBySubjects) MarshalJSON() ([]byte, error) {
 func (o PermissionSummariesBySubjects) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["permissionSummariesBySubjects"] = o.PermissionSummariesBySubjects
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *PermissionSummariesBySubjects) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionSummariesBySubjects := _PermissionSummariesBySubjects{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionSummariesBySubjects)
+	err = json.Unmarshal(data, &varPermissionSummariesBySubjects)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionSummariesBySubjects(varPermissionSummariesBySubjects)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissionSummariesBySubjects")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

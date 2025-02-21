@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansCountVisualization type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SpansCountVisualization struct {
 	SpansVisualization
 	// A field by which the spans need to be counted.
 	DistinctBy *string `json:"distinctBy,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansCountVisualization SpansCountVisualization
@@ -100,6 +102,11 @@ func (o SpansCountVisualization) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DistinctBy) {
 		toSerialize["distinctBy"] = o.DistinctBy
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -126,17 +133,56 @@ func (o *SpansCountVisualization) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansCountVisualization := _SpansCountVisualization{}
+	type SpansCountVisualizationWithoutEmbeddedStruct struct {
+		// A field by which the spans need to be counted.
+		DistinctBy *string `json:"distinctBy,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansCountVisualization)
+	varSpansCountVisualizationWithoutEmbeddedStruct := SpansCountVisualizationWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansCountVisualizationWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansCountVisualization := _SpansCountVisualization{}
+		varSpansCountVisualization.DistinctBy = varSpansCountVisualizationWithoutEmbeddedStruct.DistinctBy
+		*o = SpansCountVisualization(varSpansCountVisualization)
+	} else {
 		return err
 	}
 
-	*o = SpansCountVisualization(varSpansCountVisualization)
+	varSpansCountVisualization := _SpansCountVisualization{}
+
+	err = json.Unmarshal(data, &varSpansCountVisualization)
+	if err == nil {
+		o.SpansVisualization = varSpansCountVisualization.SpansVisualization
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "distinctBy")
+
+		// remove fields from embedded structs
+		reflectSpansVisualization := reflect.ValueOf(o.SpansVisualization)
+		for i := 0; i < reflectSpansVisualization.Type().NumField(); i++ {
+			t := reflectSpansVisualization.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsAnomalyCondition type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &LogsAnomalyCondition{}
 // LogsAnomalyCondition struct for LogsAnomalyCondition
 type LogsAnomalyCondition struct {
 	AnomalyCondition
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsAnomalyCondition LogsAnomalyCondition
@@ -73,6 +75,11 @@ func (o LogsAnomalyCondition) ToMap() (map[string]interface{}, error) {
 	if errAnomalyCondition != nil {
 		return map[string]interface{}{}, errAnomalyCondition
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -101,17 +108,52 @@ func (o *LogsAnomalyCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogsAnomalyCondition := _LogsAnomalyCondition{}
+	type LogsAnomalyConditionWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsAnomalyCondition)
+	varLogsAnomalyConditionWithoutEmbeddedStruct := LogsAnomalyConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsAnomalyConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsAnomalyCondition := _LogsAnomalyCondition{}
+		*o = LogsAnomalyCondition(varLogsAnomalyCondition)
+	} else {
 		return err
 	}
 
-	*o = LogsAnomalyCondition(varLogsAnomalyCondition)
+	varLogsAnomalyCondition := _LogsAnomalyCondition{}
+
+	err = json.Unmarshal(data, &varLogsAnomalyCondition)
+	if err == nil {
+		o.AnomalyCondition = varLogsAnomalyCondition.AnomalyCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectAnomalyCondition := reflect.ValueOf(o.AnomalyCondition)
+		for i := 0; i < reflectAnomalyCondition.Type().NumField(); i++ {
+			t := reflectAnomalyCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

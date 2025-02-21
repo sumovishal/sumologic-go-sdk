@@ -27,7 +27,10 @@ type UpdateServiceAccountDefinition struct {
 	RoleIds []string `json:"roleIds,omitempty"`
 	// New email address of the service account.
 	Email *string `json:"email,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateServiceAccountDefinition UpdateServiceAccountDefinition
 
 // NewUpdateServiceAccountDefinition instantiates a new UpdateServiceAccountDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o UpdateServiceAccountDefinition) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateServiceAccountDefinition) UnmarshalJSON(data []byte) (err error) {
+	varUpdateServiceAccountDefinition := _UpdateServiceAccountDefinition{}
+
+	err = json.Unmarshal(data, &varUpdateServiceAccountDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateServiceAccountDefinition(varUpdateServiceAccountDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "roleIds")
+		delete(additionalProperties, "email")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateServiceAccountDefinition struct {

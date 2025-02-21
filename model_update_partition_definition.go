@@ -29,7 +29,10 @@ type UpdatePartitionDefinition struct {
 	IsIncludedInDefaultSearch *bool `json:"isIncludedInDefaultSearch,omitempty"`
 	// The query that defines the data to be included in the partition.
 	RoutingExpression *string `json:"routingExpression,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdatePartitionDefinition UpdatePartitionDefinition
 
 // NewUpdatePartitionDefinition instantiates a new UpdatePartitionDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -241,7 +244,37 @@ func (o UpdatePartitionDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RoutingExpression) {
 		toSerialize["routingExpression"] = o.RoutingExpression
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdatePartitionDefinition) UnmarshalJSON(data []byte) (err error) {
+	varUpdatePartitionDefinition := _UpdatePartitionDefinition{}
+
+	err = json.Unmarshal(data, &varUpdatePartitionDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdatePartitionDefinition(varUpdatePartitionDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "reduceRetentionPeriodImmediately")
+		delete(additionalProperties, "isCompliant")
+		delete(additionalProperties, "isIncludedInDefaultSearch")
+		delete(additionalProperties, "routingExpression")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdatePartitionDefinition struct {

@@ -45,7 +45,10 @@ type ScannedBytes struct {
 	FlexUpfront *int64 `json:"flexUpfront,omitempty"`
 	// The total number of scanned bytes from flex metered tier data for the query in bytes.
 	FlexMetered *int64 `json:"flexMetered,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ScannedBytes ScannedBytes
 
 // NewScannedBytes instantiates a new ScannedBytes object
 // This constructor will assign default values to properties that have it defined,
@@ -529,7 +532,45 @@ func (o ScannedBytes) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FlexMetered) {
 		toSerialize["flexMetered"] = o.FlexMetered
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ScannedBytes) UnmarshalJSON(data []byte) (err error) {
+	varScannedBytes := _ScannedBytes{}
+
+	err = json.Unmarshal(data, &varScannedBytes)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScannedBytes(varScannedBytes)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "infrequent")
+		delete(additionalProperties, "continuous")
+		delete(additionalProperties, "frequent")
+		delete(additionalProperties, "security")
+		delete(additionalProperties, "tracing")
+		delete(additionalProperties, "upfront")
+		delete(additionalProperties, "metered")
+		delete(additionalProperties, "rce")
+		delete(additionalProperties, "flex")
+		delete(additionalProperties, "continuousSecurity")
+		delete(additionalProperties, "flexSecurity")
+		delete(additionalProperties, "flexUpfront")
+		delete(additionalProperties, "flexMetered")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableScannedBytes struct {

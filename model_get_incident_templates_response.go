@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &GetIncidentTemplatesResponse{}
 type GetIncidentTemplatesResponse struct {
 	// List of incident templates.
 	Templates []IncidentTemplate `json:"templates"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GetIncidentTemplatesResponse GetIncidentTemplatesResponse
@@ -80,6 +80,11 @@ func (o GetIncidentTemplatesResponse) MarshalJSON() ([]byte, error) {
 func (o GetIncidentTemplatesResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["templates"] = o.Templates
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *GetIncidentTemplatesResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varGetIncidentTemplatesResponse := _GetIncidentTemplatesResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGetIncidentTemplatesResponse)
+	err = json.Unmarshal(data, &varGetIncidentTemplatesResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GetIncidentTemplatesResponse(varGetIncidentTemplatesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "templates")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

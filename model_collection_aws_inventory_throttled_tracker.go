@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionAwsInventoryThrottledTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CollectionAwsInventoryThrottledTracker struct {
 	TrackerIdentity
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionAwsInventoryThrottledTracker CollectionAwsInventoryThrottledTracker
@@ -101,6 +103,11 @@ func (o CollectionAwsInventoryThrottledTracker) ToMap() (map[string]interface{},
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *CollectionAwsInventoryThrottledTracker) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varCollectionAwsInventoryThrottledTracker := _CollectionAwsInventoryThrottledTracker{}
+	type CollectionAwsInventoryThrottledTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionAwsInventoryThrottledTracker)
+	varCollectionAwsInventoryThrottledTrackerWithoutEmbeddedStruct := CollectionAwsInventoryThrottledTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionAwsInventoryThrottledTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionAwsInventoryThrottledTracker := _CollectionAwsInventoryThrottledTracker{}
+		varCollectionAwsInventoryThrottledTracker.EventType = varCollectionAwsInventoryThrottledTrackerWithoutEmbeddedStruct.EventType
+		*o = CollectionAwsInventoryThrottledTracker(varCollectionAwsInventoryThrottledTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionAwsInventoryThrottledTracker(varCollectionAwsInventoryThrottledTracker)
+	varCollectionAwsInventoryThrottledTracker := _CollectionAwsInventoryThrottledTracker{}
+
+	err = json.Unmarshal(data, &varCollectionAwsInventoryThrottledTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionAwsInventoryThrottledTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

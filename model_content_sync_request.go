@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ContentSyncRequest struct {
 	DestinationChildOrgInfo DestinationChildOrgInfo `json:"destinationChildOrgInfo"`
 	// List of Content and Configuration Information.
 	ContentList []Content1 `json:"contentList"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentSyncRequest ContentSyncRequest
@@ -134,6 +134,11 @@ func (o ContentSyncRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["sourceChildOrgInfo"] = o.SourceChildOrgInfo
 	toSerialize["destinationChildOrgInfo"] = o.DestinationChildOrgInfo
 	toSerialize["contentList"] = o.ContentList
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -163,15 +168,22 @@ func (o *ContentSyncRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varContentSyncRequest := _ContentSyncRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentSyncRequest)
+	err = json.Unmarshal(data, &varContentSyncRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentSyncRequest(varContentSyncRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sourceChildOrgInfo")
+		delete(additionalProperties, "destinationChildOrgInfo")
+		delete(additionalProperties, "contentList")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

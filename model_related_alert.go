@@ -22,7 +22,10 @@ type RelatedAlert struct {
 	Alert *AlertsLibraryAlertResponse `json:"alert,omitempty"`
 	// Tags describing the relationship between the two alerts.
 	Relations []string `json:"relations,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _RelatedAlert RelatedAlert
 
 // NewRelatedAlert instantiates a new RelatedAlert object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o RelatedAlert) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Relations) {
 		toSerialize["relations"] = o.Relations
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *RelatedAlert) UnmarshalJSON(data []byte) (err error) {
+	varRelatedAlert := _RelatedAlert{}
+
+	err = json.Unmarshal(data, &varRelatedAlert)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RelatedAlert(varRelatedAlert)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "alert")
+		delete(additionalProperties, "relations")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableRelatedAlert struct {

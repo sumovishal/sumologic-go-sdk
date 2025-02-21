@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type Panel struct {
 	KeepVisualSettingsConsistentWithParent *bool `json:"keepVisualSettingsConsistentWithParent,omitempty"`
 	// Type of panel.
 	PanelType string `json:"panelType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Panel Panel
@@ -260,6 +260,11 @@ func (o Panel) ToMap() (map[string]interface{}, error) {
 		toSerialize["keepVisualSettingsConsistentWithParent"] = o.KeepVisualSettingsConsistentWithParent
 	}
 	toSerialize["panelType"] = o.PanelType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -288,15 +293,25 @@ func (o *Panel) UnmarshalJSON(data []byte) (err error) {
 
 	varPanel := _Panel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPanel)
+	err = json.Unmarshal(data, &varPanel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Panel(varPanel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "visualSettings")
+		delete(additionalProperties, "keepVisualSettingsConsistentWithParent")
+		delete(additionalProperties, "panelType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

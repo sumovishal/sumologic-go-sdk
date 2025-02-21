@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker type satisfies the MappedNullable interface at compile time
@@ -36,6 +37,7 @@ type CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker struct {
 	FilePath *string `json:"filePath,omitempty"`
 	// The HostName + EventLog name for EventLogs and Domain name for Directory..
 	Source *string `json:"source,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker
@@ -323,6 +325,11 @@ func (o CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker) ToMap() (map[st
 	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -350,17 +357,80 @@ func (o *CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker) UnmarshalJSON(
 		}
 	}
 
-	varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker := _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker{}
+	type CSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The sensor's user name.
+		SensorUserName *string `json:"sensorUserName,omitempty"`
+		// The path of the folder.
+		FolderPath *string `json:"folderPath,omitempty"`
+		// The complete file path.
+		FilePath *string `json:"filePath,omitempty"`
+		// The HostName + EventLog name for EventLogs and Domain name for Directory..
+		Source *string `json:"source,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+	varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct := CSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker := _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker{}
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.EventType = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.SensorId = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.SensorHostname = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.SensorUserName = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.SensorUserName
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.FolderPath = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.FolderPath
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.FilePath = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.FilePath
+		varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.Source = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTrackerWithoutEmbeddedStruct.Source
+		*o = CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker(varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker(varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+	varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker := _CSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsWriteQueueFilesToSensorDirectoryFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "sensorUserName")
+		delete(additionalProperties, "folderPath")
+		delete(additionalProperties, "filePath")
+		delete(additionalProperties, "source")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

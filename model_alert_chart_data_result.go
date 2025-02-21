@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AlertChartDataResult struct {
 	// List of time series of the alert chart data.
 	Series []SeriesData `json:"series"`
 	Metadata AlertChartMetadata `json:"metadata"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertChartDataResult AlertChartDataResult
@@ -107,6 +107,11 @@ func (o AlertChartDataResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["series"] = o.Series
 	toSerialize["metadata"] = o.Metadata
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AlertChartDataResult) UnmarshalJSON(data []byte) (err error) {
 
 	varAlertChartDataResult := _AlertChartDataResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertChartDataResult)
+	err = json.Unmarshal(data, &varAlertChartDataResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AlertChartDataResult(varAlertChartDataResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "series")
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

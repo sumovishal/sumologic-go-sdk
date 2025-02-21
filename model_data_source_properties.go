@@ -23,7 +23,10 @@ type DataSourceProperties struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// The data source description.
 	Description *string `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DataSourceProperties DataSourceProperties
 
 // NewDataSourceProperties instantiates a new DataSourceProperties object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o DataSourceProperties) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DataSourceProperties) UnmarshalJSON(data []byte) (err error) {
+	varDataSourceProperties := _DataSourceProperties{}
+
+	err = json.Unmarshal(data, &varDataSourceProperties)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DataSourceProperties(varDataSourceProperties)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDataSourceProperties struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type PermissionSummaryBySubjects struct {
 	// The identifier that belongs to the subject type chosen above. For e.g. if the subjectType is set to `user`, subjectId should be the identifier of a user (same goes for `role` or `org` subjectType).
 	SubjectId string `json:"subjectId"`
 	PermissionSummaries []PermissionSummaryMeta `json:"permissionSummaries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionSummaryBySubjects PermissionSummaryBySubjects
@@ -135,6 +135,11 @@ func (o PermissionSummaryBySubjects) ToMap() (map[string]interface{}, error) {
 	toSerialize["subjectType"] = o.SubjectType
 	toSerialize["subjectId"] = o.SubjectId
 	toSerialize["permissionSummaries"] = o.PermissionSummaries
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -164,15 +169,22 @@ func (o *PermissionSummaryBySubjects) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionSummaryBySubjects := _PermissionSummaryBySubjects{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionSummaryBySubjects)
+	err = json.Unmarshal(data, &varPermissionSummaryBySubjects)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionSummaryBySubjects(varPermissionSummaryBySubjects)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subjectType")
+		delete(additionalProperties, "subjectId")
+		delete(additionalProperties, "permissionSummaries")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

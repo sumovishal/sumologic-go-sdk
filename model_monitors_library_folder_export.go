@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MonitorsLibraryFolderExport type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type MonitorsLibraryFolderExport struct {
 	MonitorsLibraryBaseExport
 	// The items in the folder. A multi-type list of types monitor or folder.
 	Children []MonitorsLibraryBaseExport `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorsLibraryFolderExport MonitorsLibraryFolderExport
@@ -100,6 +102,11 @@ func (o MonitorsLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -126,17 +133,56 @@ func (o *MonitorsLibraryFolderExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMonitorsLibraryFolderExport := _MonitorsLibraryFolderExport{}
+	type MonitorsLibraryFolderExportWithoutEmbeddedStruct struct {
+		// The items in the folder. A multi-type list of types monitor or folder.
+		Children []MonitorsLibraryBaseExport `json:"children,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorsLibraryFolderExport)
+	varMonitorsLibraryFolderExportWithoutEmbeddedStruct := MonitorsLibraryFolderExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderExportWithoutEmbeddedStruct)
+	if err == nil {
+		varMonitorsLibraryFolderExport := _MonitorsLibraryFolderExport{}
+		varMonitorsLibraryFolderExport.Children = varMonitorsLibraryFolderExportWithoutEmbeddedStruct.Children
+		*o = MonitorsLibraryFolderExport(varMonitorsLibraryFolderExport)
+	} else {
 		return err
 	}
 
-	*o = MonitorsLibraryFolderExport(varMonitorsLibraryFolderExport)
+	varMonitorsLibraryFolderExport := _MonitorsLibraryFolderExport{}
+
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderExport)
+	if err == nil {
+		o.MonitorsLibraryBaseExport = varMonitorsLibraryFolderExport.MonitorsLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectMonitorsLibraryBaseExport := reflect.ValueOf(o.MonitorsLibraryBaseExport)
+		for i := 0; i < reflectMonitorsLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectMonitorsLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

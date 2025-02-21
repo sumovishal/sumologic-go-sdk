@@ -21,7 +21,10 @@ var _ MappedNullable = &AwsCloudWatchCollectionErrorTracker{}
 type AwsCloudWatchCollectionErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AwsCloudWatchCollectionErrorTracker AwsCloudWatchCollectionErrorTracker
 
 // NewAwsCloudWatchCollectionErrorTracker instantiates a new AwsCloudWatchCollectionErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o AwsCloudWatchCollectionErrorTracker) ToMap() (map[string]interface{}, er
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AwsCloudWatchCollectionErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varAwsCloudWatchCollectionErrorTracker := _AwsCloudWatchCollectionErrorTracker{}
+
+	err = json.Unmarshal(data, &varAwsCloudWatchCollectionErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AwsCloudWatchCollectionErrorTracker(varAwsCloudWatchCollectionErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAwsCloudWatchCollectionErrorTracker struct {

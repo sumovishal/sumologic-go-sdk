@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type SlosLibraryItemWithPath struct {
 	Item SlosLibraryBaseResponse `json:"item"`
 	// Path of the slo or folder.
 	Path string `json:"path"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryItemWithPath SlosLibraryItemWithPath
@@ -107,6 +107,11 @@ func (o SlosLibraryItemWithPath) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["item"] = o.Item
 	toSerialize["path"] = o.Path
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *SlosLibraryItemWithPath) UnmarshalJSON(data []byte) (err error) {
 
 	varSlosLibraryItemWithPath := _SlosLibraryItemWithPath{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryItemWithPath)
+	err = json.Unmarshal(data, &varSlosLibraryItemWithPath)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SlosLibraryItemWithPath(varSlosLibraryItemWithPath)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "item")
+		delete(additionalProperties, "path")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

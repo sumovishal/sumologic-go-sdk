@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type TraceFieldDetail struct {
 	// The type the values of this field will have. Possible values: `DoubleTracingValue`, `IntegerTracingValue`, `StringTracingValue`, `DateTimeTracingValue`.
 	Type string `json:"type"`
 	NoValuesReason *NoTraceFieldValuesReason `json:"noValuesReason,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceFieldDetail TraceFieldDetail
@@ -248,6 +248,11 @@ func (o TraceFieldDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NoValuesReason) {
 		toSerialize["noValuesReason"] = o.NoValuesReason
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -277,15 +282,25 @@ func (o *TraceFieldDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceFieldDetail := _TraceFieldDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceFieldDetail)
+	err = json.Unmarshal(data, &varTraceFieldDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceFieldDetail(varTraceFieldDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "fieldType")
+		delete(additionalProperties, "valueListing")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "noValuesReason")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

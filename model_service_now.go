@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ServiceNow type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type ServiceNow struct {
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
 	// The override of the resolution JSON payload of the connection. Should be in JSON format.
 	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceNow ServiceNow
@@ -201,6 +203,11 @@ func (o ServiceNow) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResolutionPayloadOverride) {
 		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -227,17 +234,68 @@ func (o *ServiceNow) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varServiceNow := _ServiceNow{}
+	type ServiceNowWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The subtype of the connection. Valid values are `Event` or `Incident`.
+		ConnectionSubtype *string `json:"connectionSubtype,omitempty" validate:"regexp=^(Event|Incident)$"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+		// The override of the resolution JSON payload of the connection. Should be in JSON format.
+		ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceNow)
+	varServiceNowWithoutEmbeddedStruct := ServiceNowWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varServiceNowWithoutEmbeddedStruct)
+	if err == nil {
+		varServiceNow := _ServiceNow{}
+		varServiceNow.ConnectionId = varServiceNowWithoutEmbeddedStruct.ConnectionId
+		varServiceNow.ConnectionSubtype = varServiceNowWithoutEmbeddedStruct.ConnectionSubtype
+		varServiceNow.PayloadOverride = varServiceNowWithoutEmbeddedStruct.PayloadOverride
+		varServiceNow.ResolutionPayloadOverride = varServiceNowWithoutEmbeddedStruct.ResolutionPayloadOverride
+		*o = ServiceNow(varServiceNow)
+	} else {
 		return err
 	}
 
-	*o = ServiceNow(varServiceNow)
+	varServiceNow := _ServiceNow{}
+
+	err = json.Unmarshal(data, &varServiceNow)
+	if err == nil {
+		o.Action = varServiceNow.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "connectionSubtype")
+		delete(additionalProperties, "payloadOverride")
+		delete(additionalProperties, "resolutionPayloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

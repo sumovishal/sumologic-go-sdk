@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type DashboardSearchResult struct {
 	ScannedBytes *ScannedBytes `json:"scannedBytes,omitempty"`
 	// The backfill percentage of a continuous query.
 	BackfillPercent *float32 `json:"backfillPercent,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardSearchResult DashboardSearchResult
@@ -391,6 +391,11 @@ func (o DashboardSearchResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BackfillPercent) {
 		toSerialize["backfillPercent"] = o.BackfillPercent
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -420,15 +425,29 @@ func (o *DashboardSearchResult) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardSearchResult := _DashboardSearchResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardSearchResult)
+	err = json.Unmarshal(data, &varDashboardSearchResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardSearchResult(varDashboardSearchResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "axes")
+		delete(additionalProperties, "series")
+		delete(additionalProperties, "errors")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "requestToken")
+		delete(additionalProperties, "fieldOrdering")
+		delete(additionalProperties, "infrequentScannedBytes")
+		delete(additionalProperties, "scannedBytes")
+		delete(additionalProperties, "backfillPercent")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

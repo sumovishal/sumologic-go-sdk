@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type CustomField struct {
 	DataType string `json:"dataType" validate:"regexp=^(String|Long|Int|Double|Boolean)$"`
 	// Indicates whether the field is enabled and its values are being accepted. Possible values are `Enabled` and `Disabled`.
 	State string `json:"state" validate:"regexp=^(Enabled|Disabled)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CustomField CustomField
@@ -164,6 +164,11 @@ func (o CustomField) ToMap() (map[string]interface{}, error) {
 	toSerialize["fieldId"] = o.FieldId
 	toSerialize["dataType"] = o.DataType
 	toSerialize["state"] = o.State
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *CustomField) UnmarshalJSON(data []byte) (err error) {
 
 	varCustomField := _CustomField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCustomField)
+	err = json.Unmarshal(data, &varCustomField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CustomField(varCustomField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldId")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "state")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

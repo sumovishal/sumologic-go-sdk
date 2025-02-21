@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type LookupTable struct {
 	ContentPath *string `json:"contentPath,omitempty"`
 	// The current size of the lookup table in bytes
 	Size *int64 `json:"size,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupTable LookupTable
@@ -489,6 +489,11 @@ func (o LookupTable) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Size) {
 		toSerialize["size"] = o.Size
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -525,15 +530,33 @@ func (o *LookupTable) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupTable := _LookupTable{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupTable)
+	err = json.Unmarshal(data, &varLookupTable)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupTable(varLookupTable)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "primaryKeys")
+		delete(additionalProperties, "ttl")
+		delete(additionalProperties, "sizeLimitAction")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "parentFolderId")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "contentPath")
+		delete(additionalProperties, "size")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

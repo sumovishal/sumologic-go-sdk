@@ -23,7 +23,10 @@ type SeriesMetadata struct {
 	RowId *string `json:"rowId,omitempty"`
 	// Dimensions for the time series.
 	Dimensions []DimensionKeyValue `json:"dimensions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SeriesMetadata SeriesMetadata
 
 // NewSeriesMetadata instantiates a new SeriesMetadata object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o SeriesMetadata) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Dimensions) {
 		toSerialize["dimensions"] = o.Dimensions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SeriesMetadata) UnmarshalJSON(data []byte) (err error) {
+	varSeriesMetadata := _SeriesMetadata{}
+
+	err = json.Unmarshal(data, &varSeriesMetadata)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SeriesMetadata(varSeriesMetadata)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "dimensions")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSeriesMetadata struct {

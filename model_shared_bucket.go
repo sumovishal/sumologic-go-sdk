@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type SharedBucket struct {
 	LinkedEntitlementTypes []string `json:"linkedEntitlementTypes"`
 	// List of capacities alloted.
 	Capacitites []Capacity `json:"capacitites,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SharedBucket SharedBucket
@@ -173,6 +173,11 @@ func (o SharedBucket) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Capacitites) {
 		toSerialize["capacitites"] = o.Capacitites
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *SharedBucket) UnmarshalJSON(data []byte) (err error) {
 
 	varSharedBucket := _SharedBucket{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSharedBucket)
+	err = json.Unmarshal(data, &varSharedBucket)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SharedBucket(varSharedBucket)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "linkedEntitlementTypes")
+		delete(additionalProperties, "capacitites")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

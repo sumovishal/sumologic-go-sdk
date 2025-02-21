@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SchemaRef{}
 type SchemaRef struct {
 	// type of source template.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SchemaRef SchemaRef
@@ -80,6 +80,11 @@ func (o SchemaRef) MarshalJSON() ([]byte, error) {
 func (o SchemaRef) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SchemaRef) UnmarshalJSON(data []byte) (err error) {
 
 	varSchemaRef := _SchemaRef{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSchemaRef)
+	err = json.Unmarshal(data, &varSchemaRef)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SchemaRef(varSchemaRef)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

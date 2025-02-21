@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the IntegerTracingValue type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,7 @@ var _ MappedNullable = &IntegerTracingValue{}
 type IntegerTracingValue struct {
 	TracingValue
 	Value int64 `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IntegerTracingValue IntegerTracingValue
@@ -89,6 +91,11 @@ func (o IntegerTracingValue) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTracingValue
 	}
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -115,17 +122,55 @@ func (o *IntegerTracingValue) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varIntegerTracingValue := _IntegerTracingValue{}
+	type IntegerTracingValueWithoutEmbeddedStruct struct {
+		Value int64 `json:"value"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIntegerTracingValue)
+	varIntegerTracingValueWithoutEmbeddedStruct := IntegerTracingValueWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIntegerTracingValueWithoutEmbeddedStruct)
+	if err == nil {
+		varIntegerTracingValue := _IntegerTracingValue{}
+		varIntegerTracingValue.Value = varIntegerTracingValueWithoutEmbeddedStruct.Value
+		*o = IntegerTracingValue(varIntegerTracingValue)
+	} else {
 		return err
 	}
 
-	*o = IntegerTracingValue(varIntegerTracingValue)
+	varIntegerTracingValue := _IntegerTracingValue{}
+
+	err = json.Unmarshal(data, &varIntegerTracingValue)
+	if err == nil {
+		o.TracingValue = varIntegerTracingValue.TracingValue
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+
+		// remove fields from embedded structs
+		reflectTracingValue := reflect.ValueOf(o.TracingValue)
+		for i := 0; i < reflectTracingValue.Type().NumField(); i++ {
+			t := reflectTracingValue.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

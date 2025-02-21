@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -46,6 +45,7 @@ type LookupAsyncJobStatus struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Timestamp in UTC when status was last updated.
 	ModifiedAt time.Time `json:"modifiedAt"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupAsyncJobStatus LookupAsyncJobStatus
@@ -425,6 +425,11 @@ func (o LookupAsyncJobStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize["userId"] = o.UserId
 	toSerialize["createdAt"] = o.CreatedAt
 	toSerialize["modifiedAt"] = o.ModifiedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -459,15 +464,31 @@ func (o *LookupAsyncJobStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupAsyncJobStatus := _LookupAsyncJobStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupAsyncJobStatus)
+	err = json.Unmarshal(data, &varLookupAsyncJobStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupAsyncJobStatus(varLookupAsyncJobStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "jobId")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessages")
+		delete(additionalProperties, "errors")
+		delete(additionalProperties, "warnings")
+		delete(additionalProperties, "lookupContentId")
+		delete(additionalProperties, "lookupName")
+		delete(additionalProperties, "lookupContentPath")
+		delete(additionalProperties, "requestType")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "modifiedAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

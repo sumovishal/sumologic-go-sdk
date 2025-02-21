@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type ServiceMapEdge struct {
 	Target string `json:"target"`
 	// The last time in UTC an edge has been seen. Formatted as defined by date-time - RFC3339.
 	LastSeenAt time.Time `json:"lastSeenAt"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceMapEdge ServiceMapEdge
@@ -137,6 +137,11 @@ func (o ServiceMapEdge) ToMap() (map[string]interface{}, error) {
 	toSerialize["source"] = o.Source
 	toSerialize["target"] = o.Target
 	toSerialize["lastSeenAt"] = o.LastSeenAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -166,15 +171,22 @@ func (o *ServiceMapEdge) UnmarshalJSON(data []byte) (err error) {
 
 	varServiceMapEdge := _ServiceMapEdge{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceMapEdge)
+	err = json.Unmarshal(data, &varServiceMapEdge)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceMapEdge(varServiceMapEdge)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "target")
+		delete(additionalProperties, "lastSeenAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

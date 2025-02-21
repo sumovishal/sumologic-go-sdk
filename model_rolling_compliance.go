@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type RollingCompliance struct {
 	Compliance
 	// Size of Rolling Window. Must be a multiple of days.
 	Size string `json:"size"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RollingCompliance RollingCompliance
@@ -84,6 +84,11 @@ func (o RollingCompliance) MarshalJSON() ([]byte, error) {
 func (o RollingCompliance) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["size"] = o.Size
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -114,15 +119,20 @@ func (o *RollingCompliance) UnmarshalJSON(data []byte) (err error) {
 
 	varRollingCompliance := _RollingCompliance{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRollingCompliance)
+	err = json.Unmarshal(data, &varRollingCompliance)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RollingCompliance(varRollingCompliance)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "size")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

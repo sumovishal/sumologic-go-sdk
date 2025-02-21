@@ -23,7 +23,10 @@ type LookupPreviewData struct {
 	FieldProperties []PreviewLookupTableField `json:"fieldProperties,omitempty"`
 	// The data of the lookup table as a list of field identifiers mapped to their values.
 	FieldValueMapList []map[string]string `json:"fieldValueMapList,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _LookupPreviewData LookupPreviewData
 
 // NewLookupPreviewData instantiates a new LookupPreviewData object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o LookupPreviewData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FieldValueMapList) {
 		toSerialize["fieldValueMapList"] = o.FieldValueMapList
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *LookupPreviewData) UnmarshalJSON(data []byte) (err error) {
+	varLookupPreviewData := _LookupPreviewData{}
+
+	err = json.Unmarshal(data, &varLookupPreviewData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupPreviewData(varLookupPreviewData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldProperties")
+		delete(additionalProperties, "fieldValueMapList")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLookupPreviewData struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type AnomalyDataPointsCountRequest struct {
 	Queries []MonitorQuery `json:"queries"`
 	// The type of anomaly monitor (Logs or Metrics).
 	MonitorType *string `json:"monitorType,omitempty" validate:"regexp=^(Logs|Metrics)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AnomalyDataPointsCountRequest AnomalyDataPointsCountRequest
@@ -149,6 +149,11 @@ func (o AnomalyDataPointsCountRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MonitorType) {
 		toSerialize["monitorType"] = o.MonitorType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -177,15 +182,22 @@ func (o *AnomalyDataPointsCountRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAnomalyDataPointsCountRequest := _AnomalyDataPointsCountRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAnomalyDataPointsCountRequest)
+	err = json.Unmarshal(data, &varAnomalyDataPointsCountRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AnomalyDataPointsCountRequest(varAnomalyDataPointsCountRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "relativeTimeRange")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "monitorType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

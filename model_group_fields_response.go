@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type GroupFieldsResponse struct {
 	GroupFields []string `json:"groupFields"`
 	// Whether or not the queries are aggregate.
 	IsQueryAggregate bool `json:"isQueryAggregate"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupFieldsResponse GroupFieldsResponse
@@ -110,6 +110,11 @@ func (o GroupFieldsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["groupFields"] = o.GroupFields
 	toSerialize["isQueryAggregate"] = o.IsQueryAggregate
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -138,15 +143,21 @@ func (o *GroupFieldsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupFieldsResponse := _GroupFieldsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupFieldsResponse)
+	err = json.Unmarshal(data, &varGroupFieldsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupFieldsResponse(varGroupFieldsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "groupFields")
+		delete(additionalProperties, "isQueryAggregate")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

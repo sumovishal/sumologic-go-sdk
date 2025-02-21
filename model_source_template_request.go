@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type SourceTemplateRequest struct {
 	SchemaRef SchemaRef `json:"schemaRef"`
 	InputJson SourceTemplateRequestInputJson `json:"inputJson"`
 	Selector *Selector `json:"selector,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SourceTemplateRequest SourceTemplateRequest
@@ -142,6 +142,11 @@ func (o SourceTemplateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Selector) {
 		toSerialize["selector"] = o.Selector
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -170,15 +175,22 @@ func (o *SourceTemplateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSourceTemplateRequest := _SourceTemplateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSourceTemplateRequest)
+	err = json.Unmarshal(data, &varSourceTemplateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SourceTemplateRequest(varSourceTemplateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemaRef")
+		delete(additionalProperties, "inputJson")
+		delete(additionalProperties, "selector")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AnomalyCondition type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type AnomalyCondition struct {
 	MinAnomalyCount *int32 `json:"minAnomalyCount,omitempty"`
 	// Specifies which direction should trigger violations.
 	Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AnomalyCondition AnomalyCondition
@@ -298,6 +300,11 @@ func (o AnomalyCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Direction) {
 		toSerialize["direction"] = o.Direction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -323,17 +330,76 @@ func (o *AnomalyCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAnomalyCondition := _AnomalyCondition{}
+	type AnomalyConditionWithoutEmbeddedStruct struct {
+		// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, `-24h` or `-1d`.
+		TimeRange *string `json:"timeRange,omitempty"`
+		// The triggering sensitivity of the anomaly model used for this monitor.
+		Sensitivity *float64 `json:"sensitivity,omitempty"`
+		// The type of anomaly model that will be used for evaluating this monitor. Only `Cluster` option is supported currently.
+		AnomalyDetectorType *string `json:"anomalyDetectorType,omitempty" validate:"regexp=^Cluster$"`
+		// The name of the field that the trigger condition will alert on. The trigger could compare the value of specified field with the threshold. If `field` is not specified, monitor would default to result count instead.
+		Field *string `json:"field,omitempty"`
+		// The minimum number of anomalies required to exist in the current time range for the condition to trigger.
+		MinAnomalyCount *int32 `json:"minAnomalyCount,omitempty"`
+		// Specifies which direction should trigger violations.
+		Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAnomalyCondition)
+	varAnomalyConditionWithoutEmbeddedStruct := AnomalyConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAnomalyConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varAnomalyCondition := _AnomalyCondition{}
+		varAnomalyCondition.TimeRange = varAnomalyConditionWithoutEmbeddedStruct.TimeRange
+		varAnomalyCondition.Sensitivity = varAnomalyConditionWithoutEmbeddedStruct.Sensitivity
+		varAnomalyCondition.AnomalyDetectorType = varAnomalyConditionWithoutEmbeddedStruct.AnomalyDetectorType
+		varAnomalyCondition.Field = varAnomalyConditionWithoutEmbeddedStruct.Field
+		varAnomalyCondition.MinAnomalyCount = varAnomalyConditionWithoutEmbeddedStruct.MinAnomalyCount
+		varAnomalyCondition.Direction = varAnomalyConditionWithoutEmbeddedStruct.Direction
+		*o = AnomalyCondition(varAnomalyCondition)
+	} else {
 		return err
 	}
 
-	*o = AnomalyCondition(varAnomalyCondition)
+	varAnomalyCondition := _AnomalyCondition{}
+
+	err = json.Unmarshal(data, &varAnomalyCondition)
+	if err == nil {
+		o.TriggerCondition = varAnomalyCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "sensitivity")
+		delete(additionalProperties, "anomalyDetectorType")
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "minAnomalyCount")
+		delete(additionalProperties, "direction")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

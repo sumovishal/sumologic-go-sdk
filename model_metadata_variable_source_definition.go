@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetadataVariableSourceDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type MetadataVariableSourceDefinition struct {
 	Filter string `json:"filter"`
 	// Return the values for this given key.
 	Key string `json:"key"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetadataVariableSourceDefinition MetadataVariableSourceDefinition
@@ -118,6 +120,11 @@ func (o MetadataVariableSourceDefinition) ToMap() (map[string]interface{}, error
 	}
 	toSerialize["filter"] = o.Filter
 	toSerialize["key"] = o.Key
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,17 +152,60 @@ func (o *MetadataVariableSourceDefinition) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varMetadataVariableSourceDefinition := _MetadataVariableSourceDefinition{}
+	type MetadataVariableSourceDefinitionWithoutEmbeddedStruct struct {
+		// A metrics query to filter the metadata catalog.
+		Filter string `json:"filter"`
+		// Return the values for this given key.
+		Key string `json:"key"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetadataVariableSourceDefinition)
+	varMetadataVariableSourceDefinitionWithoutEmbeddedStruct := MetadataVariableSourceDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetadataVariableSourceDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetadataVariableSourceDefinition := _MetadataVariableSourceDefinition{}
+		varMetadataVariableSourceDefinition.Filter = varMetadataVariableSourceDefinitionWithoutEmbeddedStruct.Filter
+		varMetadataVariableSourceDefinition.Key = varMetadataVariableSourceDefinitionWithoutEmbeddedStruct.Key
+		*o = MetadataVariableSourceDefinition(varMetadataVariableSourceDefinition)
+	} else {
 		return err
 	}
 
-	*o = MetadataVariableSourceDefinition(varMetadataVariableSourceDefinition)
+	varMetadataVariableSourceDefinition := _MetadataVariableSourceDefinition{}
+
+	err = json.Unmarshal(data, &varMetadataVariableSourceDefinition)
+	if err == nil {
+		o.VariableSourceDefinition = varMetadataVariableSourceDefinition.VariableSourceDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "filter")
+		delete(additionalProperties, "key")
+
+		// remove fields from embedded structs
+		reflectVariableSourceDefinition := reflect.ValueOf(o.VariableSourceDefinition)
+		for i := 0; i < reflectVariableSourceDefinition.Type().NumField(); i++ {
+			t := reflectVariableSourceDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

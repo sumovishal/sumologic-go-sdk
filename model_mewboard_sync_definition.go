@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MewboardSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -39,6 +40,7 @@ type MewboardSyncDefinition struct {
 	Variables []Variable `json:"variables,omitempty"`
 	// Coloring rules to color the panel/data with.
 	ColoringRules []ColoringRule `json:"coloringRules,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MewboardSyncDefinition MewboardSyncDefinition
@@ -425,6 +427,11 @@ func (o MewboardSyncDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ColoringRules) {
 		toSerialize["coloringRules"] = o.ColoringRules
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -452,17 +459,89 @@ func (o *MewboardSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMewboardSyncDefinition := _MewboardSyncDefinition{}
+	type MewboardSyncDefinitionWithoutEmbeddedStruct struct {
+		// A description of the dashboard.
+		Description *string `json:"description,omitempty"`
+		// The title of the dashboard.
+		Title string `json:"title"`
+		// Theme for the dashboard. Must be `light` or `dark`.
+		Theme *string `json:"theme,omitempty" validate:"regexp=^(light|dark|Light|Dark)$"`
+		TopologyLabelMap *TopologyLabelMap `json:"topologyLabelMap,omitempty"`
+		// Interval of time (in seconds) to automatically refresh the dashboard. A value of 0 means we never automatically refresh the dashboard.
+		RefreshInterval *int32 `json:"refreshInterval,omitempty"`
+		TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+		Layout *Layout `json:"layout,omitempty"`
+		// Children panels that the container panel contains.
+		Panels []Panel `json:"panels,omitempty"`
+		// Variables that could be applied to the panel's children.
+		Variables []Variable `json:"variables,omitempty"`
+		// Coloring rules to color the panel/data with.
+		ColoringRules []ColoringRule `json:"coloringRules,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMewboardSyncDefinition)
+	varMewboardSyncDefinitionWithoutEmbeddedStruct := MewboardSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMewboardSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varMewboardSyncDefinition := _MewboardSyncDefinition{}
+		varMewboardSyncDefinition.Description = varMewboardSyncDefinitionWithoutEmbeddedStruct.Description
+		varMewboardSyncDefinition.Title = varMewboardSyncDefinitionWithoutEmbeddedStruct.Title
+		varMewboardSyncDefinition.Theme = varMewboardSyncDefinitionWithoutEmbeddedStruct.Theme
+		varMewboardSyncDefinition.TopologyLabelMap = varMewboardSyncDefinitionWithoutEmbeddedStruct.TopologyLabelMap
+		varMewboardSyncDefinition.RefreshInterval = varMewboardSyncDefinitionWithoutEmbeddedStruct.RefreshInterval
+		varMewboardSyncDefinition.TimeRange = varMewboardSyncDefinitionWithoutEmbeddedStruct.TimeRange
+		varMewboardSyncDefinition.Layout = varMewboardSyncDefinitionWithoutEmbeddedStruct.Layout
+		varMewboardSyncDefinition.Panels = varMewboardSyncDefinitionWithoutEmbeddedStruct.Panels
+		varMewboardSyncDefinition.Variables = varMewboardSyncDefinitionWithoutEmbeddedStruct.Variables
+		varMewboardSyncDefinition.ColoringRules = varMewboardSyncDefinitionWithoutEmbeddedStruct.ColoringRules
+		*o = MewboardSyncDefinition(varMewboardSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = MewboardSyncDefinition(varMewboardSyncDefinition)
+	varMewboardSyncDefinition := _MewboardSyncDefinition{}
+
+	err = json.Unmarshal(data, &varMewboardSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varMewboardSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "theme")
+		delete(additionalProperties, "topologyLabelMap")
+		delete(additionalProperties, "refreshInterval")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "layout")
+		delete(additionalProperties, "panels")
+		delete(additionalProperties, "variables")
+		delete(additionalProperties, "coloringRules")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

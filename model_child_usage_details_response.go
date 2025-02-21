@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ChildUsageDetailsResponse{}
 type ChildUsageDetailsResponse struct {
 	// Usage details of the child orgs.
 	Data []ChildUsageDetail `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChildUsageDetailsResponse ChildUsageDetailsResponse
@@ -80,6 +80,11 @@ func (o ChildUsageDetailsResponse) MarshalJSON() ([]byte, error) {
 func (o ChildUsageDetailsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ChildUsageDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varChildUsageDetailsResponse := _ChildUsageDetailsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChildUsageDetailsResponse)
+	err = json.Unmarshal(data, &varChildUsageDetailsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChildUsageDetailsResponse(varChildUsageDetailsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

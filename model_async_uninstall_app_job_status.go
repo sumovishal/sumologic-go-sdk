@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AsyncUninstallAppJobStatus struct {
 	Status string `json:"status"`
 	// More information about the failure if the status is `Failed`.
 	Errors []ErrorDescription `json:"errors,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AsyncUninstallAppJobStatus AsyncUninstallAppJobStatus
@@ -117,6 +117,11 @@ func (o AsyncUninstallAppJobStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Errors) {
 		toSerialize["errors"] = o.Errors
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *AsyncUninstallAppJobStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varAsyncUninstallAppJobStatus := _AsyncUninstallAppJobStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAsyncUninstallAppJobStatus)
+	err = json.Unmarshal(data, &varAsyncUninstallAppJobStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AsyncUninstallAppJobStatus(varAsyncUninstallAppJobStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "errors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

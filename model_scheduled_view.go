@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -62,6 +61,7 @@ type ScheduledView struct {
 	ModifiedBy *string `json:"modifiedBy,omitempty"`
 	// List of the different units of filled ranges since the autoview has been created.
 	FilledRanges []FilledRange `json:"filledRanges,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduledView ScheduledView
@@ -765,6 +765,11 @@ func (o ScheduledView) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FilledRanges) {
 		toSerialize["filledRanges"] = o.FilledRanges
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -795,15 +800,39 @@ func (o *ScheduledView) UnmarshalJSON(data []byte) (err error) {
 
 	varScheduledView := _ScheduledView{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduledView)
+	err = json.Unmarshal(data, &varScheduledView)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduledView(varScheduledView)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "indexName")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "dataForwardingId")
+		delete(additionalProperties, "parsingMode")
+		delete(additionalProperties, "newRetentionPeriod")
+		delete(additionalProperties, "retentionEffectiveAt")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "indexId")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "createdByOptimizeIt")
+		delete(additionalProperties, "error")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "totalBytes")
+		delete(additionalProperties, "totalMessageCount")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "filledRanges")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

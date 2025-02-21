@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type ReportFilterSyncDefinition struct {
 	Properties string `json:"properties"`
 	// A list of panel identifiers that the filter applies to.
 	PanelIds []string `json:"panelIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ReportFilterSyncDefinition ReportFilterSyncDefinition
@@ -229,6 +229,11 @@ func (o ReportFilterSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["filterType"] = o.FilterType
 	toSerialize["properties"] = o.Properties
 	toSerialize["panelIds"] = o.PanelIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -260,15 +265,25 @@ func (o *ReportFilterSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varReportFilterSyncDefinition := _ReportFilterSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varReportFilterSyncDefinition)
+	err = json.Unmarshal(data, &varReportFilterSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ReportFilterSyncDefinition(varReportFilterSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "defaultValue")
+		delete(additionalProperties, "filterType")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "panelIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the Email type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type Email struct {
 	MessageBody *string `json:"messageBody,omitempty"`
 	// Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	TimeZone *string `json:"timeZone,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Email Email
@@ -192,6 +194,11 @@ func (o Email) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeZone) {
 		toSerialize["timeZone"] = o.TimeZone
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -219,17 +226,68 @@ func (o *Email) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varEmail := _Email{}
+	type EmailWithoutEmbeddedStruct struct {
+		// A list of email addresses to send to when the rule fires.
+		Recipients []string `json:"recipients"`
+		// The subject line of the email.
+		Subject string `json:"subject"`
+		// The message body of the email to send.
+		MessageBody *string `json:"messageBody,omitempty"`
+		// Time zone for the email content. All dates/times will be displayed in this timeZone in the email payload. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
+		TimeZone *string `json:"timeZone,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEmail)
+	varEmailWithoutEmbeddedStruct := EmailWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varEmailWithoutEmbeddedStruct)
+	if err == nil {
+		varEmail := _Email{}
+		varEmail.Recipients = varEmailWithoutEmbeddedStruct.Recipients
+		varEmail.Subject = varEmailWithoutEmbeddedStruct.Subject
+		varEmail.MessageBody = varEmailWithoutEmbeddedStruct.MessageBody
+		varEmail.TimeZone = varEmailWithoutEmbeddedStruct.TimeZone
+		*o = Email(varEmail)
+	} else {
 		return err
 	}
 
-	*o = Email(varEmail)
+	varEmail := _Email{}
+
+	err = json.Unmarshal(data, &varEmail)
+	if err == nil {
+		o.Action = varEmail.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "recipients")
+		delete(additionalProperties, "subject")
+		delete(additionalProperties, "messageBody")
+		delete(additionalProperties, "timeZone")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -22,7 +22,10 @@ type MetricsQueryResultInfo struct {
 	// Metrics Query row id.
 	RowId *string `json:"rowId,omitempty"`
 	ResultContext *MetricsQueryResultContext `json:"resultContext,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MetricsQueryResultInfo MetricsQueryResultInfo
 
 // NewMetricsQueryResultInfo instantiates a new MetricsQueryResultInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o MetricsQueryResultInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResultContext) {
 		toSerialize["resultContext"] = o.ResultContext
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MetricsQueryResultInfo) UnmarshalJSON(data []byte) (err error) {
+	varMetricsQueryResultInfo := _MetricsQueryResultInfo{}
+
+	err = json.Unmarshal(data, &varMetricsQueryResultInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsQueryResultInfo(varMetricsQueryResultInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "resultContext")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMetricsQueryResultInfo struct {

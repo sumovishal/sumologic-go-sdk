@@ -21,7 +21,10 @@ var _ MappedNullable = &ExtraDetails{}
 type ExtraDetails struct {
 	// Additional data from Sumo Logic related to the Alert.
 	Details []KeyValuePair `json:"details,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ExtraDetails ExtraDetails
 
 // NewExtraDetails instantiates a new ExtraDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o ExtraDetails) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Details) {
 		toSerialize["details"] = o.Details
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ExtraDetails) UnmarshalJSON(data []byte) (err error) {
+	varExtraDetails := _ExtraDetails{}
+
+	err = json.Unmarshal(data, &varExtraDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ExtraDetails(varExtraDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "details")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableExtraDetails struct {

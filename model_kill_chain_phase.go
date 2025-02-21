@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type KillChainPhase struct {
 	KillChainName string `json:"kill_chain_name"`
 	// The name of the phase in the kill chain. The value of this property SHOULD be all lowercase and SHOULD use hyphens instead of spaces or underscores as word separators
 	PhaseName *string `json:"phase_name,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _KillChainPhase KillChainPhase
@@ -117,6 +117,11 @@ func (o KillChainPhase) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PhaseName) {
 		toSerialize["phase_name"] = o.PhaseName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *KillChainPhase) UnmarshalJSON(data []byte) (err error) {
 
 	varKillChainPhase := _KillChainPhase{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varKillChainPhase)
+	err = json.Unmarshal(data, &varKillChainPhase)
 
 	if err != nil {
 		return err
 	}
 
 	*o = KillChainPhase(varKillChainPhase)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "kill_chain_name")
+		delete(additionalProperties, "phase_name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

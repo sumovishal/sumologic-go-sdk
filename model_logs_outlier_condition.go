@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsOutlierCondition type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type LogsOutlierCondition struct {
 	Threshold *float64 `json:"threshold,omitempty"`
 	// The name of the field that the trigger condition will alert on.
 	Field *string `json:"field,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsOutlierCondition LogsOutlierCondition
@@ -265,6 +267,11 @@ func (o LogsOutlierCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Field) {
 		toSerialize["field"] = o.Field
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -290,17 +297,72 @@ func (o *LogsOutlierCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogsOutlierCondition := _LogsOutlierCondition{}
+	type LogsOutlierConditionWithoutEmbeddedStruct struct {
+		// Sets the trailing number of data points to calculate mean and sigma.
+		Window *int64 `json:"window,omitempty"`
+		// Sets the required number of consecutive indicator data points (outliers) to trigger a violation.
+		Consecutive *int64 `json:"consecutive,omitempty"`
+		// Specifies which direction should trigger violations.
+		Direction *string `json:"direction,omitempty" validate:"regexp=^(Both|Up|Down)$"`
+		// Sets the number of standard deviations for calculating violations.
+		Threshold *float64 `json:"threshold,omitempty"`
+		// The name of the field that the trigger condition will alert on.
+		Field *string `json:"field,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsOutlierCondition)
+	varLogsOutlierConditionWithoutEmbeddedStruct := LogsOutlierConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsOutlierConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsOutlierCondition := _LogsOutlierCondition{}
+		varLogsOutlierCondition.Window = varLogsOutlierConditionWithoutEmbeddedStruct.Window
+		varLogsOutlierCondition.Consecutive = varLogsOutlierConditionWithoutEmbeddedStruct.Consecutive
+		varLogsOutlierCondition.Direction = varLogsOutlierConditionWithoutEmbeddedStruct.Direction
+		varLogsOutlierCondition.Threshold = varLogsOutlierConditionWithoutEmbeddedStruct.Threshold
+		varLogsOutlierCondition.Field = varLogsOutlierConditionWithoutEmbeddedStruct.Field
+		*o = LogsOutlierCondition(varLogsOutlierCondition)
+	} else {
 		return err
 	}
 
-	*o = LogsOutlierCondition(varLogsOutlierCondition)
+	varLogsOutlierCondition := _LogsOutlierCondition{}
+
+	err = json.Unmarshal(data, &varLogsOutlierCondition)
+	if err == nil {
+		o.TriggerCondition = varLogsOutlierCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "window")
+		delete(additionalProperties, "consecutive")
+		delete(additionalProperties, "direction")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "field")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type GranularMarkingType struct {
 	MarkingRef *string `json:"marking_ref,omitempty"`
 	// The selectors property specifies a list of selectors for content contained within the STIX Object in which this property appears
 	Selectors []string `json:"selectors"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GranularMarkingType GranularMarkingType
@@ -154,6 +154,11 @@ func (o GranularMarkingType) ToMap() (map[string]interface{}, error) {
 		toSerialize["marking_ref"] = o.MarkingRef
 	}
 	toSerialize["selectors"] = o.Selectors
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *GranularMarkingType) UnmarshalJSON(data []byte) (err error) {
 
 	varGranularMarkingType := _GranularMarkingType{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGranularMarkingType)
+	err = json.Unmarshal(data, &varGranularMarkingType)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GranularMarkingType(varGranularMarkingType)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "lang")
+		delete(additionalProperties, "marking_ref")
+		delete(additionalProperties, "selectors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

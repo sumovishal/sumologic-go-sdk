@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CsvVariableSourceDefinition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CsvVariableSourceDefinition struct {
 	VariableSourceDefinition
 	// Comma separated values for the variable.
 	Values string `json:"values"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CsvVariableSourceDefinition CsvVariableSourceDefinition
@@ -90,6 +92,11 @@ func (o CsvVariableSourceDefinition) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errVariableSourceDefinition
 	}
 	toSerialize["values"] = o.Values
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *CsvVariableSourceDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varCsvVariableSourceDefinition := _CsvVariableSourceDefinition{}
+	type CsvVariableSourceDefinitionWithoutEmbeddedStruct struct {
+		// Comma separated values for the variable.
+		Values string `json:"values"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCsvVariableSourceDefinition)
+	varCsvVariableSourceDefinitionWithoutEmbeddedStruct := CsvVariableSourceDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCsvVariableSourceDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varCsvVariableSourceDefinition := _CsvVariableSourceDefinition{}
+		varCsvVariableSourceDefinition.Values = varCsvVariableSourceDefinitionWithoutEmbeddedStruct.Values
+		*o = CsvVariableSourceDefinition(varCsvVariableSourceDefinition)
+	} else {
 		return err
 	}
 
-	*o = CsvVariableSourceDefinition(varCsvVariableSourceDefinition)
+	varCsvVariableSourceDefinition := _CsvVariableSourceDefinition{}
+
+	err = json.Unmarshal(data, &varCsvVariableSourceDefinition)
+	if err == nil {
+		o.VariableSourceDefinition = varCsvVariableSourceDefinition.VariableSourceDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "values")
+
+		// remove fields from embedded structs
+		reflectVariableSourceDefinition := reflect.ValueOf(o.VariableSourceDefinition)
+		for i := 0; i < reflectVariableSourceDefinition.Type().NumField(); i++ {
+			t := reflectVariableSourceDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

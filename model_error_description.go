@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ErrorDescription struct {
 	Detail *string `json:"detail,omitempty"`
 	// An optional list of metadata about the error.
 	Meta map[string]interface{} `json:"meta,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ErrorDescription ErrorDescription
@@ -182,6 +182,11 @@ func (o ErrorDescription) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Meta) {
 		toSerialize["meta"] = o.Meta
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -210,15 +215,23 @@ func (o *ErrorDescription) UnmarshalJSON(data []byte) (err error) {
 
 	varErrorDescription := _ErrorDescription{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varErrorDescription)
+	err = json.Unmarshal(data, &varErrorDescription)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ErrorDescription(varErrorDescription)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "detail")
+		delete(additionalProperties, "meta")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

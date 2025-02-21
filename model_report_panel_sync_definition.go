@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -49,6 +48,7 @@ type ReportPanelSyncDefinition struct {
 	// The parameters for parameterized searches.
 	QueryParameters []QueryParameterSyncDefinition `json:"queryParameters"`
 	AutoParsingInfo *ReportAutoParsingInfo `json:"autoParsingInfo,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ReportPanelSyncDefinition ReportPanelSyncDefinition
@@ -488,6 +488,11 @@ func (o ReportPanelSyncDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutoParsingInfo) {
 		toSerialize["autoParsingInfo"] = o.AutoParsingInfo
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -527,15 +532,34 @@ func (o *ReportPanelSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varReportPanelSyncDefinition := _ReportPanelSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varReportPanelSyncDefinition)
+	err = json.Unmarshal(data, &varReportPanelSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ReportPanelSyncDefinition(varReportPanelSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "viewerType")
+		delete(additionalProperties, "detailLevel")
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "metricsQueries")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+		delete(additionalProperties, "width")
+		delete(additionalProperties, "height")
+		delete(additionalProperties, "properties")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "desiredQuantizationInSecs")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "autoParsingInfo")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

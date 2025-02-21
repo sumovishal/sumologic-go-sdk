@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListTagResult{}
 type ListTagResult struct {
 	// List of Tag Dictionary Values (e.g. Tag Keys or Tag Values).
 	Result []string `json:"result"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListTagResult ListTagResult
@@ -80,6 +80,11 @@ func (o ListTagResult) MarshalJSON() ([]byte, error) {
 func (o ListTagResult) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["result"] = o.Result
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListTagResult) UnmarshalJSON(data []byte) (err error) {
 
 	varListTagResult := _ListTagResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListTagResult)
+	err = json.Unmarshal(data, &varListTagResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListTagResult(varListTagResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

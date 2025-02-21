@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TracesFilter{}
 type TracesFilter struct {
 	// The type of the filter.
 	Type string `json:"type" validate:"regexp=^(FieldDescriptor|DurationMetricDescriptor|NumericMetricDescriptor|CPCOfFilterDescriptor|MaxCPCOfFilterDescriptor|MaxCPCFilterDescriptor)$|^$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TracesFilter TracesFilter
@@ -80,6 +80,11 @@ func (o TracesFilter) MarshalJSON() ([]byte, error) {
 func (o TracesFilter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TracesFilter) UnmarshalJSON(data []byte) (err error) {
 
 	varTracesFilter := _TracesFilter{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTracesFilter)
+	err = json.Unmarshal(data, &varTracesFilter)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TracesFilter(varTracesFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

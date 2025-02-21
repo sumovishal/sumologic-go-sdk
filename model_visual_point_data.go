@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type VisualPointData struct {
 	// Values that represents a point on the x axis.
 	XAxisValues *map[string]string `json:"xAxisValues,omitempty"`
 	OutlierData *VisualOutlierData `json:"outlierData,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VisualPointData VisualPointData
@@ -231,6 +231,11 @@ func (o VisualPointData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.OutlierData) {
 		toSerialize["outlierData"] = o.OutlierData
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -258,15 +263,24 @@ func (o *VisualPointData) UnmarshalJSON(data []byte) (err error) {
 
 	varVisualPointData := _VisualPointData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVisualPointData)
+	err = json.Unmarshal(data, &varVisualPointData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VisualPointData(varVisualPointData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+		delete(additionalProperties, "isFilled")
+		delete(additionalProperties, "xAxisValues")
+		delete(additionalProperties, "outlierData")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

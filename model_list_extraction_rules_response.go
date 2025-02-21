@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListExtractionRulesResponse struct {
 	Data []ExtractionRule `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListExtractionRulesResponse ListExtractionRulesResponse
@@ -117,6 +117,11 @@ func (o ListExtractionRulesResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ListExtractionRulesResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListExtractionRulesResponse := _ListExtractionRulesResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListExtractionRulesResponse)
+	err = json.Unmarshal(data, &varListExtractionRulesResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListExtractionRulesResponse(varListExtractionRulesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

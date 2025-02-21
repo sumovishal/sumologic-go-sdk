@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TopologySearchLabel struct {
 	Value string `json:"value"`
 	// Whether the content item is required to contain this label in order to be matched. If true, content items without this label will not be matched. If false, content items without this label will be matched. 
 	IsRequired *bool `json:"isRequired,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TopologySearchLabel TopologySearchLabel
@@ -145,6 +145,11 @@ func (o TopologySearchLabel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsRequired) {
 		toSerialize["isRequired"] = o.IsRequired
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *TopologySearchLabel) UnmarshalJSON(data []byte) (err error) {
 
 	varTopologySearchLabel := _TopologySearchLabel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTopologySearchLabel)
+	err = json.Unmarshal(data, &varTopologySearchLabel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TopologySearchLabel(varTopologySearchLabel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "isRequired")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

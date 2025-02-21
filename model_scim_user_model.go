@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type SCIMUserModel struct {
 	// True if the user is active
 	Active *bool `json:"active,omitempty"`
 	Meta *ResourceData `json:"meta,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SCIMUserModel SCIMUserModel
@@ -292,6 +292,11 @@ func (o SCIMUserModel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Meta) {
 		toSerialize["meta"] = o.Meta
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -324,15 +329,27 @@ func (o *SCIMUserModel) UnmarshalJSON(data []byte) (err error) {
 
 	varSCIMUserModel := _SCIMUserModel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSCIMUserModel)
+	err = json.Unmarshal(data, &varSCIMUserModel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SCIMUserModel(varSCIMUserModel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemas")
+		delete(additionalProperties, "userName")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "emails")
+		delete(additionalProperties, "roles")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "active")
+		delete(additionalProperties, "meta")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

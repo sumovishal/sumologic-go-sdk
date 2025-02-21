@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AWSLambda type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type AWSLambda struct {
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
 	// The override of the resolution JSON payload of the connection. Should be in JSON format.
 	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AWSLambda AWSLambda
@@ -164,6 +166,11 @@ func (o AWSLambda) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResolutionPayloadOverride) {
 		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -190,17 +197,64 @@ func (o *AWSLambda) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAWSLambda := _AWSLambda{}
+	type AWSLambdaWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+		// The override of the resolution JSON payload of the connection. Should be in JSON format.
+		ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAWSLambda)
+	varAWSLambdaWithoutEmbeddedStruct := AWSLambdaWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAWSLambdaWithoutEmbeddedStruct)
+	if err == nil {
+		varAWSLambda := _AWSLambda{}
+		varAWSLambda.ConnectionId = varAWSLambdaWithoutEmbeddedStruct.ConnectionId
+		varAWSLambda.PayloadOverride = varAWSLambdaWithoutEmbeddedStruct.PayloadOverride
+		varAWSLambda.ResolutionPayloadOverride = varAWSLambdaWithoutEmbeddedStruct.ResolutionPayloadOverride
+		*o = AWSLambda(varAWSLambda)
+	} else {
 		return err
 	}
 
-	*o = AWSLambda(varAWSLambda)
+	varAWSLambda := _AWSLambda{}
+
+	err = json.Unmarshal(data, &varAWSLambda)
+	if err == nil {
+		o.Action = varAWSLambda.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "payloadOverride")
+		delete(additionalProperties, "resolutionPayloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type BuiltinFieldUsage struct {
 	Roles []string `json:"roles,omitempty"`
 	// An array of hexadecimal identifiers of partitions which use this field in the routing expression.
 	Partitions []string `json:"partitions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BuiltinFieldUsage BuiltinFieldUsage
@@ -275,6 +275,11 @@ func (o BuiltinFieldUsage) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Partitions) {
 		toSerialize["partitions"] = o.Partitions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -305,15 +310,26 @@ func (o *BuiltinFieldUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varBuiltinFieldUsage := _BuiltinFieldUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBuiltinFieldUsage)
+	err = json.Unmarshal(data, &varBuiltinFieldUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BuiltinFieldUsage(varBuiltinFieldUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldId")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "fieldExtractionRules")
+		delete(additionalProperties, "roles")
+		delete(additionalProperties, "partitions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

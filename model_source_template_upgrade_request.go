@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SourceTemplateUpgradeRequest{}
 type SourceTemplateUpgradeRequest struct {
 	SchemaRef UpgradeSchemaRef `json:"schemaRef"`
 	InputJson SourceTemplateUpgradeRequestInputJson `json:"inputJson"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SourceTemplateUpgradeRequest SourceTemplateUpgradeRequest
@@ -106,6 +106,11 @@ func (o SourceTemplateUpgradeRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["schemaRef"] = o.SchemaRef
 	toSerialize["inputJson"] = o.InputJson
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *SourceTemplateUpgradeRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSourceTemplateUpgradeRequest := _SourceTemplateUpgradeRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSourceTemplateUpgradeRequest)
+	err = json.Unmarshal(data, &varSourceTemplateUpgradeRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SourceTemplateUpgradeRequest(varSourceTemplateUpgradeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "schemaRef")
+		delete(additionalProperties, "inputJson")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

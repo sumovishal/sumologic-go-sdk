@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogQueryVariableSourceDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type LogQueryVariableSourceDefinition struct {
 	Query string `json:"query"`
 	// A field in log query to populate the variable values.
 	Field string `json:"field"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogQueryVariableSourceDefinition LogQueryVariableSourceDefinition
@@ -118,6 +120,11 @@ func (o LogQueryVariableSourceDefinition) ToMap() (map[string]interface{}, error
 	}
 	toSerialize["query"] = o.Query
 	toSerialize["field"] = o.Field
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,17 +152,60 @@ func (o *LogQueryVariableSourceDefinition) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varLogQueryVariableSourceDefinition := _LogQueryVariableSourceDefinition{}
+	type LogQueryVariableSourceDefinitionWithoutEmbeddedStruct struct {
+		// A log query.
+		Query string `json:"query"`
+		// A field in log query to populate the variable values.
+		Field string `json:"field"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogQueryVariableSourceDefinition)
+	varLogQueryVariableSourceDefinitionWithoutEmbeddedStruct := LogQueryVariableSourceDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogQueryVariableSourceDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varLogQueryVariableSourceDefinition := _LogQueryVariableSourceDefinition{}
+		varLogQueryVariableSourceDefinition.Query = varLogQueryVariableSourceDefinitionWithoutEmbeddedStruct.Query
+		varLogQueryVariableSourceDefinition.Field = varLogQueryVariableSourceDefinitionWithoutEmbeddedStruct.Field
+		*o = LogQueryVariableSourceDefinition(varLogQueryVariableSourceDefinition)
+	} else {
 		return err
 	}
 
-	*o = LogQueryVariableSourceDefinition(varLogQueryVariableSourceDefinition)
+	varLogQueryVariableSourceDefinition := _LogQueryVariableSourceDefinition{}
+
+	err = json.Unmarshal(data, &varLogQueryVariableSourceDefinition)
+	if err == nil {
+		o.VariableSourceDefinition = varLogQueryVariableSourceDefinition.VariableSourceDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "field")
+
+		// remove fields from embedded structs
+		reflectVariableSourceDefinition := reflect.ValueOf(o.VariableSourceDefinition)
+		for i := 0; i < reflectVariableSourceDefinition.Type().NumField(); i++ {
+			t := reflectVariableSourceDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AggregationQueryRow struct {
 	Query TraceQueryExpression `json:"query"`
 	// An identifier used to reference this particular row of the query request while fetching a query result. Within a query, row ids must have distinct values.
 	RowId string `json:"rowId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregationQueryRow AggregationQueryRow
@@ -107,6 +107,11 @@ func (o AggregationQueryRow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["query"] = o.Query
 	toSerialize["rowId"] = o.RowId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AggregationQueryRow) UnmarshalJSON(data []byte) (err error) {
 
 	varAggregationQueryRow := _AggregationQueryRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregationQueryRow)
+	err = json.Unmarshal(data, &varAggregationQueryRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AggregationQueryRow(varAggregationQueryRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "rowId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

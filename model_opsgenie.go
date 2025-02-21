@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the Opsgenie type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type Opsgenie struct {
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
 	// The override of the resolution JSON payload of the connection. Should be in JSON format.
 	ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Opsgenie Opsgenie
@@ -164,6 +166,11 @@ func (o Opsgenie) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResolutionPayloadOverride) {
 		toSerialize["resolutionPayloadOverride"] = o.ResolutionPayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -190,17 +197,64 @@ func (o *Opsgenie) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varOpsgenie := _Opsgenie{}
+	type OpsgenieWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+		// The override of the resolution JSON payload of the connection. Should be in JSON format.
+		ResolutionPayloadOverride *string `json:"resolutionPayloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpsgenie)
+	varOpsgenieWithoutEmbeddedStruct := OpsgenieWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOpsgenieWithoutEmbeddedStruct)
+	if err == nil {
+		varOpsgenie := _Opsgenie{}
+		varOpsgenie.ConnectionId = varOpsgenieWithoutEmbeddedStruct.ConnectionId
+		varOpsgenie.PayloadOverride = varOpsgenieWithoutEmbeddedStruct.PayloadOverride
+		varOpsgenie.ResolutionPayloadOverride = varOpsgenieWithoutEmbeddedStruct.ResolutionPayloadOverride
+		*o = Opsgenie(varOpsgenie)
+	} else {
 		return err
 	}
 
-	*o = Opsgenie(varOpsgenie)
+	varOpsgenie := _Opsgenie{}
+
+	err = json.Unmarshal(data, &varOpsgenie)
+	if err == nil {
+		o.Action = varOpsgenie.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "payloadOverride")
+		delete(additionalProperties, "resolutionPayloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

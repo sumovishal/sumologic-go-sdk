@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type CapabilityDefinition struct {
 	Group CapabilityDefinitionGroup `json:"group"`
 	// Warning message that appears when this capability is enabled.
 	Message *string `json:"message,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CapabilityDefinition CapabilityDefinition
@@ -200,6 +200,11 @@ func (o CapabilityDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Message) {
 		toSerialize["message"] = o.Message
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -230,15 +235,24 @@ func (o *CapabilityDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCapabilityDefinition := _CapabilityDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCapabilityDefinition)
+	err = json.Unmarshal(data, &varCapabilityDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CapabilityDefinition(varCapabilityDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "dependsOn")
+		delete(additionalProperties, "group")
+		delete(additionalProperties, "message")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

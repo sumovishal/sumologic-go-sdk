@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsToMetricsRuleDisabledTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &LogsToMetricsRuleDisabledTracker{}
 // LogsToMetricsRuleDisabledTracker struct for LogsToMetricsRuleDisabledTracker
 type LogsToMetricsRuleDisabledTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsToMetricsRuleDisabledTracker LogsToMetricsRuleDisabledTracker
@@ -64,6 +66,11 @@ func (o LogsToMetricsRuleDisabledTracker) ToMap() (map[string]interface{}, error
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *LogsToMetricsRuleDisabledTracker) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varLogsToMetricsRuleDisabledTracker := _LogsToMetricsRuleDisabledTracker{}
+	type LogsToMetricsRuleDisabledTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsToMetricsRuleDisabledTracker)
+	varLogsToMetricsRuleDisabledTrackerWithoutEmbeddedStruct := LogsToMetricsRuleDisabledTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsToMetricsRuleDisabledTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsToMetricsRuleDisabledTracker := _LogsToMetricsRuleDisabledTracker{}
+		*o = LogsToMetricsRuleDisabledTracker(varLogsToMetricsRuleDisabledTracker)
+	} else {
 		return err
 	}
 
-	*o = LogsToMetricsRuleDisabledTracker(varLogsToMetricsRuleDisabledTracker)
+	varLogsToMetricsRuleDisabledTracker := _LogsToMetricsRuleDisabledTracker{}
+
+	err = json.Unmarshal(data, &varLogsToMetricsRuleDisabledTracker)
+	if err == nil {
+		o.TrackerIdentity = varLogsToMetricsRuleDisabledTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

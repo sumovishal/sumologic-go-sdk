@@ -23,7 +23,10 @@ type MetricDefinition struct {
 	Metric *string `json:"metric,omitempty"`
 	// Metric dimensions / metadata related to each timeseries.
 	Dimensions *map[string]string `json:"dimensions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MetricDefinition MetricDefinition
 
 // NewMetricDefinition instantiates a new MetricDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o MetricDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Dimensions) {
 		toSerialize["dimensions"] = o.Dimensions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MetricDefinition) UnmarshalJSON(data []byte) (err error) {
+	varMetricDefinition := _MetricDefinition{}
+
+	err = json.Unmarshal(data, &varMetricDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricDefinition(varMetricDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metric")
+		delete(additionalProperties, "dimensions")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMetricDefinition struct {

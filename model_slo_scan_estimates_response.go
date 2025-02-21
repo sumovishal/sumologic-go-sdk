@@ -21,7 +21,10 @@ var _ MappedNullable = &SloScanEstimatesResponse{}
 type SloScanEstimatesResponse struct {
 	// Scan estimates by data tier for the SLO configuration.
 	ScanEstimates []TierEstimate1 `json:"scanEstimates,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SloScanEstimatesResponse SloScanEstimatesResponse
 
 // NewSloScanEstimatesResponse instantiates a new SloScanEstimatesResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o SloScanEstimatesResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScanEstimates) {
 		toSerialize["scanEstimates"] = o.ScanEstimates
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SloScanEstimatesResponse) UnmarshalJSON(data []byte) (err error) {
+	varSloScanEstimatesResponse := _SloScanEstimatesResponse{}
+
+	err = json.Unmarshal(data, &varSloScanEstimatesResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SloScanEstimatesResponse(varSloScanEstimatesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "scanEstimates")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSloScanEstimatesResponse struct {

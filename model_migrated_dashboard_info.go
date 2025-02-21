@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MigratedDashboardInfo struct {
 	Id string `json:"id"`
 	// The name of the Dashboard(New)
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MigratedDashboardInfo MigratedDashboardInfo
@@ -108,6 +108,11 @@ func (o MigratedDashboardInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MigratedDashboardInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varMigratedDashboardInfo := _MigratedDashboardInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMigratedDashboardInfo)
+	err = json.Unmarshal(data, &varMigratedDashboardInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MigratedDashboardInfo(varMigratedDashboardInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

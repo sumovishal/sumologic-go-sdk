@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DatastoreRetentionPeriod{}
 type DatastoreRetentionPeriod struct {
 	// Retention period in days.
 	RetentionPeriod int64 `json:"retentionPeriod"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DatastoreRetentionPeriod DatastoreRetentionPeriod
@@ -80,6 +80,11 @@ func (o DatastoreRetentionPeriod) MarshalJSON() ([]byte, error) {
 func (o DatastoreRetentionPeriod) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["retentionPeriod"] = o.RetentionPeriod
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DatastoreRetentionPeriod) UnmarshalJSON(data []byte) (err error) {
 
 	varDatastoreRetentionPeriod := _DatastoreRetentionPeriod{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDatastoreRetentionPeriod)
+	err = json.Unmarshal(data, &varDatastoreRetentionPeriod)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DatastoreRetentionPeriod(varDatastoreRetentionPeriod)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "retentionPeriod")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

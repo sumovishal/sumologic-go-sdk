@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type SpanQueryAggregateAggregateData struct {
 	Latest float64 `json:"latest"`
 	// The number of values in the series.
 	Count *float64 `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregateAggregateData SpanQueryAggregateAggregateData
@@ -229,6 +229,11 @@ func (o SpanQueryAggregateAggregateData) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -260,15 +265,25 @@ func (o *SpanQueryAggregateAggregateData) UnmarshalJSON(data []byte) (err error)
 
 	varSpanQueryAggregateAggregateData := _SpanQueryAggregateAggregateData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregateAggregateData)
+	err = json.Unmarshal(data, &varSpanQueryAggregateAggregateData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregateAggregateData(varSpanQueryAggregateAggregateData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "max")
+		delete(additionalProperties, "min")
+		delete(additionalProperties, "avg")
+		delete(additionalProperties, "sum")
+		delete(additionalProperties, "latest")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

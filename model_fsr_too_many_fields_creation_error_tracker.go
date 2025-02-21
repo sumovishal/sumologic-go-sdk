@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the FsrTooManyFieldsCreationErrorTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &FsrTooManyFieldsCreationErrorTracker{}
 // FsrTooManyFieldsCreationErrorTracker struct for FsrTooManyFieldsCreationErrorTracker
 type FsrTooManyFieldsCreationErrorTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _FsrTooManyFieldsCreationErrorTracker FsrTooManyFieldsCreationErrorTracker
@@ -64,6 +66,11 @@ func (o FsrTooManyFieldsCreationErrorTracker) ToMap() (map[string]interface{}, e
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *FsrTooManyFieldsCreationErrorTracker) UnmarshalJSON(data []byte) (err e
 		}
 	}
 
-	varFsrTooManyFieldsCreationErrorTracker := _FsrTooManyFieldsCreationErrorTracker{}
+	type FsrTooManyFieldsCreationErrorTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFsrTooManyFieldsCreationErrorTracker)
+	varFsrTooManyFieldsCreationErrorTrackerWithoutEmbeddedStruct := FsrTooManyFieldsCreationErrorTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varFsrTooManyFieldsCreationErrorTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varFsrTooManyFieldsCreationErrorTracker := _FsrTooManyFieldsCreationErrorTracker{}
+		*o = FsrTooManyFieldsCreationErrorTracker(varFsrTooManyFieldsCreationErrorTracker)
+	} else {
 		return err
 	}
 
-	*o = FsrTooManyFieldsCreationErrorTracker(varFsrTooManyFieldsCreationErrorTracker)
+	varFsrTooManyFieldsCreationErrorTracker := _FsrTooManyFieldsCreationErrorTracker{}
+
+	err = json.Unmarshal(data, &varFsrTooManyFieldsCreationErrorTracker)
+	if err == nil {
+		o.TrackerIdentity = varFsrTooManyFieldsCreationErrorTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type PendingUpdateRequest struct {
 	// The date on which the update request was created.
 	CreatedOn string `json:"createdOn"`
 	Plan CurrentPlan `json:"plan"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PendingUpdateRequest PendingUpdateRequest
@@ -107,6 +107,11 @@ func (o PendingUpdateRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["createdOn"] = o.CreatedOn
 	toSerialize["plan"] = o.Plan
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *PendingUpdateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varPendingUpdateRequest := _PendingUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPendingUpdateRequest)
+	err = json.Unmarshal(data, &varPendingUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PendingUpdateRequest(varPendingUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdOn")
+		delete(additionalProperties, "plan")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

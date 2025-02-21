@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ChangeEmailRequest{}
 type ChangeEmailRequest struct {
 	// New email address of the user.
 	Email string `json:"email"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChangeEmailRequest ChangeEmailRequest
@@ -80,6 +80,11 @@ func (o ChangeEmailRequest) MarshalJSON() ([]byte, error) {
 func (o ChangeEmailRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ChangeEmailRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChangeEmailRequest := _ChangeEmailRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChangeEmailRequest)
+	err = json.Unmarshal(data, &varChangeEmailRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChangeEmailRequest(varChangeEmailRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "email")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

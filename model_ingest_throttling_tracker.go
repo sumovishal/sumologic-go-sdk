@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the IngestThrottlingTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type IngestThrottlingTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The type of data for which the rate limit was enabled. The possible values are `LogIngest` and `MetricsIngest`.
 	DataType *string `json:"dataType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestThrottlingTracker IngestThrottlingTracker
@@ -138,6 +140,11 @@ func (o IngestThrottlingTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataType) {
 		toSerialize["dataType"] = o.DataType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *IngestThrottlingTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varIngestThrottlingTracker := _IngestThrottlingTracker{}
+	type IngestThrottlingTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The type of data for which the rate limit was enabled. The possible values are `LogIngest` and `MetricsIngest`.
+		DataType *string `json:"dataType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestThrottlingTracker)
+	varIngestThrottlingTrackerWithoutEmbeddedStruct := IngestThrottlingTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIngestThrottlingTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varIngestThrottlingTracker := _IngestThrottlingTracker{}
+		varIngestThrottlingTracker.EventType = varIngestThrottlingTrackerWithoutEmbeddedStruct.EventType
+		varIngestThrottlingTracker.DataType = varIngestThrottlingTrackerWithoutEmbeddedStruct.DataType
+		*o = IngestThrottlingTracker(varIngestThrottlingTracker)
+	} else {
 		return err
 	}
 
-	*o = IngestThrottlingTracker(varIngestThrottlingTracker)
+	varIngestThrottlingTracker := _IngestThrottlingTracker{}
+
+	err = json.Unmarshal(data, &varIngestThrottlingTracker)
+	if err == nil {
+		o.TrackerIdentity = varIngestThrottlingTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "dataType")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

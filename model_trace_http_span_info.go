@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the TraceHttpSpanInfo type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type TraceHttpSpanInfo struct {
 	Url *string `json:"url,omitempty"`
 	// HTTP response status code for the associated span.
 	StatusCode *int32 `json:"statusCode,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceHttpSpanInfo TraceHttpSpanInfo
@@ -173,6 +175,11 @@ func (o TraceHttpSpanInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.StatusCode) {
 		toSerialize["statusCode"] = o.StatusCode
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -198,17 +205,64 @@ func (o *TraceHttpSpanInfo) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTraceHttpSpanInfo := _TraceHttpSpanInfo{}
+	type TraceHttpSpanInfoWithoutEmbeddedStruct struct {
+		// HTTP method of the request for the associated span.
+		Method *string `json:"method,omitempty" validate:"regexp=^(GET|HEAD|POST|PUT|DELETE|CONNECT|OPTIONS|TRACE)$"`
+		// URL of the request being handled in this span, in the standard URI format.
+		Url *string `json:"url,omitempty"`
+		// HTTP response status code for the associated span.
+		StatusCode *int32 `json:"statusCode,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceHttpSpanInfo)
+	varTraceHttpSpanInfoWithoutEmbeddedStruct := TraceHttpSpanInfoWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varTraceHttpSpanInfoWithoutEmbeddedStruct)
+	if err == nil {
+		varTraceHttpSpanInfo := _TraceHttpSpanInfo{}
+		varTraceHttpSpanInfo.Method = varTraceHttpSpanInfoWithoutEmbeddedStruct.Method
+		varTraceHttpSpanInfo.Url = varTraceHttpSpanInfoWithoutEmbeddedStruct.Url
+		varTraceHttpSpanInfo.StatusCode = varTraceHttpSpanInfoWithoutEmbeddedStruct.StatusCode
+		*o = TraceHttpSpanInfo(varTraceHttpSpanInfo)
+	} else {
 		return err
 	}
 
-	*o = TraceHttpSpanInfo(varTraceHttpSpanInfo)
+	varTraceHttpSpanInfo := _TraceHttpSpanInfo{}
+
+	err = json.Unmarshal(data, &varTraceHttpSpanInfo)
+	if err == nil {
+		o.TraceSpanInfo = varTraceHttpSpanInfo.TraceSpanInfo
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "method")
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "statusCode")
+
+		// remove fields from embedded structs
+		reflectTraceSpanInfo := reflect.ValueOf(o.TraceSpanInfo)
+		for i := 0; i < reflectTraceSpanInfo.Type().NumField(); i++ {
+			t := reflectTraceSpanInfo.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

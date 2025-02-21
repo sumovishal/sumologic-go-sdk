@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type TokenBaseDefinitionUpdate struct {
 	Type string `json:"type" validate:"regexp=^(CollectorRegistration)$"`
 	// Version of the token.
 	Version int64 `json:"version"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TokenBaseDefinitionUpdate TokenBaseDefinitionUpdate
@@ -201,6 +201,11 @@ func (o TokenBaseDefinitionUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize["status"] = o.Status
 	toSerialize["type"] = o.Type
 	toSerialize["version"] = o.Version
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -231,15 +236,24 @@ func (o *TokenBaseDefinitionUpdate) UnmarshalJSON(data []byte) (err error) {
 
 	varTokenBaseDefinitionUpdate := _TokenBaseDefinitionUpdate{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTokenBaseDefinitionUpdate)
+	err = json.Unmarshal(data, &varTokenBaseDefinitionUpdate)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TokenBaseDefinitionUpdate(varTokenBaseDefinitionUpdate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &VariableSourceDefinition{}
 type VariableSourceDefinition struct {
 	// Source type of the variable values.
 	VariableSourceType string `json:"variableSourceType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VariableSourceDefinition VariableSourceDefinition
@@ -80,6 +80,11 @@ func (o VariableSourceDefinition) MarshalJSON() ([]byte, error) {
 func (o VariableSourceDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["variableSourceType"] = o.VariableSourceType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *VariableSourceDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varVariableSourceDefinition := _VariableSourceDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVariableSourceDefinition)
+	err = json.Unmarshal(data, &varVariableSourceDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VariableSourceDefinition(varVariableSourceDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "variableSourceType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

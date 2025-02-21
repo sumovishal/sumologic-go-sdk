@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type AccessKeyPublic struct {
 	Scopes []string `json:"scopes,omitempty"`
 	// Effective scopes based on the intersection of the user's RBAC capabilities and the assigned scopes.
 	EffectiveScopes []string `json:"effectiveScopes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessKeyPublic AccessKeyPublic
@@ -369,6 +369,11 @@ func (o AccessKeyPublic) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EffectiveScopes) {
 		toSerialize["effectiveScopes"] = o.EffectiveScopes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -401,15 +406,29 @@ func (o *AccessKeyPublic) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessKeyPublic := _AccessKeyPublic{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessKeyPublic)
+	err = json.Unmarshal(data, &varAccessKeyPublic)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessKeyPublic(varAccessKeyPublic)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "corsHeaders")
+		delete(additionalProperties, "disabled")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "lastUsed")
+		delete(additionalProperties, "scopes")
+		delete(additionalProperties, "effectiveScopes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

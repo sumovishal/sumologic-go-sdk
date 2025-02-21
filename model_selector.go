@@ -23,7 +23,10 @@ type Selector struct {
 	Tags [][]OtTag `json:"tags,omitempty"`
 	// names to select custom agents
 	Names []string `json:"names,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _Selector Selector
 
 // NewSelector instantiates a new Selector object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o Selector) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Names) {
 		toSerialize["names"] = o.Names
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *Selector) UnmarshalJSON(data []byte) (err error) {
+	varSelector := _Selector{}
+
+	err = json.Unmarshal(data, &varSelector)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Selector(varSelector)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tags")
+		delete(additionalProperties, "names")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSelector struct {

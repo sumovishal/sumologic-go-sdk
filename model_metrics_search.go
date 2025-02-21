@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type MetricsSearch struct {
 	Queries []Query `json:"queries"`
 	// Visual settings of the metrics search page.
 	VisualSettings *string `json:"visualSettings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearch MetricsSearch
@@ -209,6 +209,11 @@ func (o MetricsSearch) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.VisualSettings) {
 		toSerialize["visualSettings"] = o.VisualSettings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -238,15 +243,24 @@ func (o *MetricsSearch) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsSearch := _MetricsSearch{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearch)
+	err = json.Unmarshal(data, &varMetricsSearch)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsSearch(varMetricsSearch)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "visualSettings")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

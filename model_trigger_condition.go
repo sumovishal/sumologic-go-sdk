@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TriggerCondition struct {
 	TriggerType string `json:"triggerType" validate:"regexp=^(Critical|Warning|MissingData|ResolvedCritical|ResolvedWarning|ResolvedMissingData)$"`
 	// The resolution window that the recovery condition must be met in each evaluation that happens within this entire duration before the alert is recovered (resolved). If not specified, the time range of your trigger will be used. Valid values are: `0m`, `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`
 	ResolutionWindow NullableString `json:"resolutionWindow,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TriggerCondition TriggerCondition
@@ -168,6 +168,11 @@ func (o TriggerCondition) ToMap() (map[string]interface{}, error) {
 	if o.ResolutionWindow.IsSet() {
 		toSerialize["resolutionWindow"] = o.ResolutionWindow.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -195,15 +200,22 @@ func (o *TriggerCondition) UnmarshalJSON(data []byte) (err error) {
 
 	varTriggerCondition := _TriggerCondition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTriggerCondition)
+	err = json.Unmarshal(data, &varTriggerCondition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TriggerCondition(varTriggerCondition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "detectionMethod")
+		delete(additionalProperties, "triggerType")
+		delete(additionalProperties, "resolutionWindow")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

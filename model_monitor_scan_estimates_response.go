@@ -21,7 +21,10 @@ var _ MappedNullable = &MonitorScanEstimatesResponse{}
 type MonitorScanEstimatesResponse struct {
 	// array of scan estimates
 	ScanEstimates []TierEstimate `json:"scanEstimates,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MonitorScanEstimatesResponse MonitorScanEstimatesResponse
 
 // NewMonitorScanEstimatesResponse instantiates a new MonitorScanEstimatesResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o MonitorScanEstimatesResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScanEstimates) {
 		toSerialize["scanEstimates"] = o.ScanEstimates
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MonitorScanEstimatesResponse) UnmarshalJSON(data []byte) (err error) {
+	varMonitorScanEstimatesResponse := _MonitorScanEstimatesResponse{}
+
+	err = json.Unmarshal(data, &varMonitorScanEstimatesResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MonitorScanEstimatesResponse(varMonitorScanEstimatesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "scanEstimates")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMonitorScanEstimatesResponse struct {

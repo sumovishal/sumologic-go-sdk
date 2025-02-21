@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AggregationQueryRequest struct {
 	QueryRows []AggregationQueryRow `json:"queryRows"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	XAxisGroupByAttribute AggregationGroupByAttribute `json:"xAxisGroupByAttribute"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregationQueryRequest AggregationQueryRequest
@@ -134,6 +134,11 @@ func (o AggregationQueryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["queryRows"] = o.QueryRows
 	toSerialize["timeRange"] = o.TimeRange
 	toSerialize["xAxisGroupByAttribute"] = o.XAxisGroupByAttribute
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -163,15 +168,22 @@ func (o *AggregationQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAggregationQueryRequest := _AggregationQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregationQueryRequest)
+	err = json.Unmarshal(data, &varAggregationQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AggregationQueryRequest(varAggregationQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "xAxisGroupByAttribute")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

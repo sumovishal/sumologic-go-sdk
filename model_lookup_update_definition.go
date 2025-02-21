@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type LookupUpdateDefinition struct {
 	Description string `json:"description"`
 	// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will starting deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
 	SizeLimitAction *string `json:"sizeLimitAction,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupUpdateDefinition LookupUpdateDefinition
@@ -151,6 +151,11 @@ func (o LookupUpdateDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SizeLimitAction) {
 		toSerialize["sizeLimitAction"] = o.SizeLimitAction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -179,15 +184,22 @@ func (o *LookupUpdateDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupUpdateDefinition := _LookupUpdateDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupUpdateDefinition)
+	err = json.Unmarshal(data, &varLookupUpdateDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupUpdateDefinition(varLookupUpdateDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ttl")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "sizeLimitAction")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

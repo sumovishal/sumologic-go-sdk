@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryFolderUpdate type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &ParsersLibraryFolderUpdate{}
 // ParsersLibraryFolderUpdate struct for ParsersLibraryFolderUpdate
 type ParsersLibraryFolderUpdate struct {
 	ParsersLibraryBaseUpdate
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryFolderUpdate ParsersLibraryFolderUpdate
@@ -64,6 +66,11 @@ func (o ParsersLibraryFolderUpdate) ToMap() (map[string]interface{}, error) {
 	if errParsersLibraryBaseUpdate != nil {
 		return map[string]interface{}{}, errParsersLibraryBaseUpdate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *ParsersLibraryFolderUpdate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryFolderUpdate := _ParsersLibraryFolderUpdate{}
+	type ParsersLibraryFolderUpdateWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryFolderUpdate)
+	varParsersLibraryFolderUpdateWithoutEmbeddedStruct := ParsersLibraryFolderUpdateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryFolderUpdateWithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryFolderUpdate := _ParsersLibraryFolderUpdate{}
+		*o = ParsersLibraryFolderUpdate(varParsersLibraryFolderUpdate)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryFolderUpdate(varParsersLibraryFolderUpdate)
+	varParsersLibraryFolderUpdate := _ParsersLibraryFolderUpdate{}
+
+	err = json.Unmarshal(data, &varParsersLibraryFolderUpdate)
+	if err == nil {
+		o.ParsersLibraryBaseUpdate = varParsersLibraryFolderUpdate.ParsersLibraryBaseUpdate
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectParsersLibraryBaseUpdate := reflect.ValueOf(o.ParsersLibraryBaseUpdate)
+		for i := 0; i < reflectParsersLibraryBaseUpdate.Type().NumField(); i++ {
+			t := reflectParsersLibraryBaseUpdate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

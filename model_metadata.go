@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type Metadata struct {
 	ModifiedAt string `json:"modifiedAt"`
 	// Identifier of the user who last modified the resource.
 	ModifiedBy string `json:"modifiedBy"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Metadata Metadata
@@ -164,6 +164,11 @@ func (o Metadata) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdBy"] = o.CreatedBy
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *Metadata) UnmarshalJSON(data []byte) (err error) {
 
 	varMetadata := _Metadata{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetadata)
+	err = json.Unmarshal(data, &varMetadata)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Metadata(varMetadata)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

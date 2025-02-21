@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -56,6 +55,7 @@ type Extension struct {
 	ExtensionTypes []string `json:"extension_types"`
 	// This property contains the list of new property names that are added to an object by an extension
 	ExtensionProperties []string `json:"extension_properties,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Extension Extension
@@ -592,6 +592,11 @@ func (o Extension) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ExtensionProperties) {
 		toSerialize["extension_properties"] = o.ExtensionProperties
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -628,15 +633,36 @@ func (o *Extension) UnmarshalJSON(data []byte) (err error) {
 
 	varExtension := _Extension{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varExtension)
+	err = json.Unmarshal(data, &varExtension)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Extension(varExtension)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "spec_version")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "modified")
+		delete(additionalProperties, "created_by_ref")
+		delete(additionalProperties, "revoked")
+		delete(additionalProperties, "labels")
+		delete(additionalProperties, "external_references")
+		delete(additionalProperties, "object_marking_refs")
+		delete(additionalProperties, "granular_markings")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "schema")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "extension_types")
+		delete(additionalProperties, "extension_properties")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

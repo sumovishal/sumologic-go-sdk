@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionAwsMetadataTagsFetchDeniedTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &CollectionAwsMetadataTagsFetchDeniedTracker{}
 // CollectionAwsMetadataTagsFetchDeniedTracker struct for CollectionAwsMetadataTagsFetchDeniedTracker
 type CollectionAwsMetadataTagsFetchDeniedTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionAwsMetadataTagsFetchDeniedTracker CollectionAwsMetadataTagsFetchDeniedTracker
@@ -64,6 +66,11 @@ func (o CollectionAwsMetadataTagsFetchDeniedTracker) ToMap() (map[string]interfa
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *CollectionAwsMetadataTagsFetchDeniedTracker) UnmarshalJSON(data []byte)
 		}
 	}
 
-	varCollectionAwsMetadataTagsFetchDeniedTracker := _CollectionAwsMetadataTagsFetchDeniedTracker{}
+	type CollectionAwsMetadataTagsFetchDeniedTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionAwsMetadataTagsFetchDeniedTracker)
+	varCollectionAwsMetadataTagsFetchDeniedTrackerWithoutEmbeddedStruct := CollectionAwsMetadataTagsFetchDeniedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionAwsMetadataTagsFetchDeniedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionAwsMetadataTagsFetchDeniedTracker := _CollectionAwsMetadataTagsFetchDeniedTracker{}
+		*o = CollectionAwsMetadataTagsFetchDeniedTracker(varCollectionAwsMetadataTagsFetchDeniedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionAwsMetadataTagsFetchDeniedTracker(varCollectionAwsMetadataTagsFetchDeniedTracker)
+	varCollectionAwsMetadataTagsFetchDeniedTracker := _CollectionAwsMetadataTagsFetchDeniedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionAwsMetadataTagsFetchDeniedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionAwsMetadataTagsFetchDeniedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -27,7 +27,10 @@ type ListSCIMUserModelsResponse struct {
 	ItemsPerPage *int32 `json:"itemsPerPage,omitempty"`
 	// List of SCIM user resources
 	Resources []SCIMUserModel `json:"Resources,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ListSCIMUserModelsResponse ListSCIMUserModelsResponse
 
 // NewListSCIMUserModelsResponse instantiates a new ListSCIMUserModelsResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o ListSCIMUserModelsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Resources) {
 		toSerialize["Resources"] = o.Resources
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ListSCIMUserModelsResponse) UnmarshalJSON(data []byte) (err error) {
+	varListSCIMUserModelsResponse := _ListSCIMUserModelsResponse{}
+
+	err = json.Unmarshal(data, &varListSCIMUserModelsResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListSCIMUserModelsResponse(varListSCIMUserModelsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "totalResults")
+		delete(additionalProperties, "startIndex")
+		delete(additionalProperties, "itemsPerPage")
+		delete(additionalProperties, "Resources")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableListSCIMUserModelsResponse struct {

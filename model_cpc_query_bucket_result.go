@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type CpcQueryBucketResult struct {
 	PerServiceCpcSummaries []CpcServiceSummary `json:"perServiceCpcSummaries"`
 	OtherServicesCpcSummary CpcSummary `json:"otherServicesCpcSummary"`
 	IdleTimeCpcSummary CpcSummary `json:"idleTimeCpcSummary"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryBucketResult CpcQueryBucketResult
@@ -275,6 +275,11 @@ func (o CpcQueryBucketResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["perServiceCpcSummaries"] = o.PerServiceCpcSummaries
 	toSerialize["otherServicesCpcSummary"] = o.OtherServicesCpcSummary
 	toSerialize["idleTimeCpcSummary"] = o.IdleTimeCpcSummary
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -309,15 +314,27 @@ func (o *CpcQueryBucketResult) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryBucketResult := _CpcQueryBucketResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryBucketResult)
+	err = json.Unmarshal(data, &varCpcQueryBucketResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryBucketResult(varCpcQueryBucketResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketId")
+		delete(additionalProperties, "startTimestamp")
+		delete(additionalProperties, "length")
+		delete(additionalProperties, "totalNumOfTraces")
+		delete(additionalProperties, "avgTraceDuration")
+		delete(additionalProperties, "perServiceCpcSummaries")
+		delete(additionalProperties, "otherServicesCpcSummary")
+		delete(additionalProperties, "idleTimeCpcSummary")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

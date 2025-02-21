@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CseInsightConfidenceRequest{}
 type CseInsightConfidenceRequest struct {
 	// List of CSE Insight Created logs for which the confidence score should be calculated.
 	CseInsight string `json:"cseInsight"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CseInsightConfidenceRequest CseInsightConfidenceRequest
@@ -80,6 +80,11 @@ func (o CseInsightConfidenceRequest) MarshalJSON() ([]byte, error) {
 func (o CseInsightConfidenceRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["cseInsight"] = o.CseInsight
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CseInsightConfidenceRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCseInsightConfidenceRequest := _CseInsightConfidenceRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCseInsightConfidenceRequest)
+	err = json.Unmarshal(data, &varCseInsightConfidenceRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CseInsightConfidenceRequest(varCseInsightConfidenceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cseInsight")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

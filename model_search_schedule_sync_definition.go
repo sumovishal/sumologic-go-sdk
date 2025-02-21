@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type SearchScheduleSyncDefinition struct {
 	MuteErrorEmails *bool `json:"muteErrorEmails,omitempty"`
 	// A list of scheduled search parameters.
 	Parameters []ScheduleSearchParameterSyncDefinition `json:"parameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SearchScheduleSyncDefinition SearchScheduleSyncDefinition
@@ -346,6 +346,11 @@ func (o SearchScheduleSyncDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Parameters) {
 		toSerialize["parameters"] = o.Parameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -376,15 +381,28 @@ func (o *SearchScheduleSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varSearchScheduleSyncDefinition := _SearchScheduleSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSearchScheduleSyncDefinition)
+	err = json.Unmarshal(data, &varSearchScheduleSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SearchScheduleSyncDefinition(varSearchScheduleSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cronExpression")
+		delete(additionalProperties, "displayableTimeRange")
+		delete(additionalProperties, "parseableTimeRange")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "notification")
+		delete(additionalProperties, "scheduleType")
+		delete(additionalProperties, "muteErrorEmails")
+		delete(additionalProperties, "parameters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

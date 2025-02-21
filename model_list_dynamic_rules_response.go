@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListDynamicRulesResponse struct {
 	Data []DynamicRule `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListDynamicRulesResponse ListDynamicRulesResponse
@@ -117,6 +117,11 @@ func (o ListDynamicRulesResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ListDynamicRulesResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListDynamicRulesResponse := _ListDynamicRulesResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListDynamicRulesResponse)
+	err = json.Unmarshal(data, &varListDynamicRulesResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListDynamicRulesResponse(varListDynamicRulesResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

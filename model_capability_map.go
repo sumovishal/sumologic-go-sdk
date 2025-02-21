@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CapabilityMap{}
 type CapabilityMap struct {
 	// Map of capabilities to their attributes
 	Capabilities map[string]CapabilityDefinition `json:"capabilities"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CapabilityMap CapabilityMap
@@ -80,6 +80,11 @@ func (o CapabilityMap) MarshalJSON() ([]byte, error) {
 func (o CapabilityMap) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["capabilities"] = o.Capabilities
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CapabilityMap) UnmarshalJSON(data []byte) (err error) {
 
 	varCapabilityMap := _CapabilityMap{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCapabilityMap)
+	err = json.Unmarshal(data, &varCapabilityMap)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CapabilityMap(varCapabilityMap)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "capabilities")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AggregateOnTransformation type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AggregateOnTransformation struct {
 	DimensionTransformation
 	// A list of dimensions that should be aggregated on.
 	AggregateOn []string `json:"aggregateOn"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregateOnTransformation AggregateOnTransformation
@@ -90,6 +92,11 @@ func (o AggregateOnTransformation) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errDimensionTransformation
 	}
 	toSerialize["aggregateOn"] = o.AggregateOn
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *AggregateOnTransformation) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAggregateOnTransformation := _AggregateOnTransformation{}
+	type AggregateOnTransformationWithoutEmbeddedStruct struct {
+		// A list of dimensions that should be aggregated on.
+		AggregateOn []string `json:"aggregateOn"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregateOnTransformation)
+	varAggregateOnTransformationWithoutEmbeddedStruct := AggregateOnTransformationWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAggregateOnTransformationWithoutEmbeddedStruct)
+	if err == nil {
+		varAggregateOnTransformation := _AggregateOnTransformation{}
+		varAggregateOnTransformation.AggregateOn = varAggregateOnTransformationWithoutEmbeddedStruct.AggregateOn
+		*o = AggregateOnTransformation(varAggregateOnTransformation)
+	} else {
 		return err
 	}
 
-	*o = AggregateOnTransformation(varAggregateOnTransformation)
+	varAggregateOnTransformation := _AggregateOnTransformation{}
+
+	err = json.Unmarshal(data, &varAggregateOnTransformation)
+	if err == nil {
+		o.DimensionTransformation = varAggregateOnTransformation.DimensionTransformation
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "aggregateOn")
+
+		// remove fields from embedded structs
+		reflectDimensionTransformation := reflect.ValueOf(o.DimensionTransformation)
+		for i := 0; i < reflectDimensionTransformation.Type().NumField(); i++ {
+			t := reflectDimensionTransformation.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

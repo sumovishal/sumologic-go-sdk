@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SpansVisualization struct {
 	Type string `json:"type" validate:"regexp=^(count|calculation)$"`
 	// A unique name of the visualization.
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansVisualization SpansVisualization
@@ -108,6 +108,11 @@ func (o SpansVisualization) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SpansVisualization) UnmarshalJSON(data []byte) (err error) {
 
 	varSpansVisualization := _SpansVisualization{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansVisualization)
+	err = json.Unmarshal(data, &varSpansVisualization)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpansVisualization(varSpansVisualization)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

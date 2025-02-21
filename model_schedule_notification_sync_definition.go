@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ScheduleNotificationSyncDefinition{}
 type ScheduleNotificationSyncDefinition struct {
 	// Delivery channel for notifications.
 	TaskType string `json:"taskType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduleNotificationSyncDefinition ScheduleNotificationSyncDefinition
@@ -80,6 +80,11 @@ func (o ScheduleNotificationSyncDefinition) MarshalJSON() ([]byte, error) {
 func (o ScheduleNotificationSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["taskType"] = o.TaskType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ScheduleNotificationSyncDefinition) UnmarshalJSON(data []byte) (err err
 
 	varScheduleNotificationSyncDefinition := _ScheduleNotificationSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduleNotificationSyncDefinition)
+	err = json.Unmarshal(data, &varScheduleNotificationSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduleNotificationSyncDefinition(varScheduleNotificationSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "taskType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

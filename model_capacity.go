@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type Capacity struct {
 	Unit string `json:"unit"`
 	// Type of capacity. Valid values are: 1) `Paid` : This means that the capacity is chargeable. 2) `Free` : This means that this capacity is not chargeable.
 	CapacityType *string `json:"capacityType,omitempty" validate:"regexp=^(Paid|Free)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Capacity Capacity
@@ -145,6 +145,11 @@ func (o Capacity) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CapacityType) {
 		toSerialize["capacityType"] = o.CapacityType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *Capacity) UnmarshalJSON(data []byte) (err error) {
 
 	varCapacity := _Capacity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCapacity)
+	err = json.Unmarshal(data, &varCapacity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Capacity(varCapacity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "capacityType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

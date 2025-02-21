@@ -26,7 +26,10 @@ type OutlierDataValue struct {
 	Value *float64 `json:"value,omitempty"`
 	// The type of violation.
 	Violation *string `json:"violation,omitempty" validate:"regexp=^(CriticalUpperViolation|CriticalLowerViolation|WarningUpperViolation|WarningLowerViolation|NoViolation)$"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OutlierDataValue OutlierDataValue
 
 // NewOutlierDataValue instantiates a new OutlierDataValue object
 // This constructor will assign default values to properties that have it defined,
@@ -230,7 +233,37 @@ func (o OutlierDataValue) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Violation) {
 		toSerialize["violation"] = o.Violation
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OutlierDataValue) UnmarshalJSON(data []byte) (err error) {
+	varOutlierDataValue := _OutlierDataValue{}
+
+	err = json.Unmarshal(data, &varOutlierDataValue)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OutlierDataValue(varOutlierDataValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "baseline")
+		delete(additionalProperties, "critical")
+		delete(additionalProperties, "warning")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "violation")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOutlierDataValue struct {

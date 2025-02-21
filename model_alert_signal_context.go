@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AlertSignalContext struct {
 	SignalContext
 	// Alert Identifier.
 	AlertId string `json:"alertId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertSignalContext AlertSignalContext
@@ -82,6 +82,11 @@ func (o AlertSignalContext) MarshalJSON() ([]byte, error) {
 func (o AlertSignalContext) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["alertId"] = o.AlertId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -110,15 +115,20 @@ func (o *AlertSignalContext) UnmarshalJSON(data []byte) (err error) {
 
 	varAlertSignalContext := _AlertSignalContext{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertSignalContext)
+	err = json.Unmarshal(data, &varAlertSignalContext)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AlertSignalContext(varAlertSignalContext)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "alertId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

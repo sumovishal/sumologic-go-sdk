@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -55,6 +54,7 @@ type SamlIdentityProviderRequest struct {
 	DisableRequestedAuthnContext *bool `json:"disableRequestedAuthnContext,omitempty"`
 	// True if the SAML binding is of HTTP Redirect type.
 	IsRedirectBinding *bool `json:"isRedirectBinding,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SamlIdentityProviderRequest SamlIdentityProviderRequest
@@ -709,6 +709,11 @@ func (o SamlIdentityProviderRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsRedirectBinding) {
 		toSerialize["isRedirectBinding"] = o.IsRedirectBinding
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -738,15 +743,36 @@ func (o *SamlIdentityProviderRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSamlIdentityProviderRequest := _SamlIdentityProviderRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSamlIdentityProviderRequest)
+	err = json.Unmarshal(data, &varSamlIdentityProviderRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SamlIdentityProviderRequest(varSamlIdentityProviderRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spInitiatedLoginPath")
+		delete(additionalProperties, "configurationName")
+		delete(additionalProperties, "issuer")
+		delete(additionalProperties, "spInitiatedLoginEnabled")
+		delete(additionalProperties, "authnRequestUrl")
+		delete(additionalProperties, "x509cert1")
+		delete(additionalProperties, "x509cert2")
+		delete(additionalProperties, "x509cert3")
+		delete(additionalProperties, "onDemandProvisioningEnabled")
+		delete(additionalProperties, "rolesAttribute")
+		delete(additionalProperties, "logoutEnabled")
+		delete(additionalProperties, "logoutUrl")
+		delete(additionalProperties, "emailAttribute")
+		delete(additionalProperties, "debugMode")
+		delete(additionalProperties, "signAuthnRequest")
+		delete(additionalProperties, "disableRequestedAuthnContext")
+		delete(additionalProperties, "isRedirectBinding")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

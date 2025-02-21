@@ -21,7 +21,10 @@ var _ MappedNullable = &AwsInventoryCollectionErrorTracker{}
 type AwsInventoryCollectionErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AwsInventoryCollectionErrorTracker AwsInventoryCollectionErrorTracker
 
 // NewAwsInventoryCollectionErrorTracker instantiates a new AwsInventoryCollectionErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o AwsInventoryCollectionErrorTracker) ToMap() (map[string]interface{}, err
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AwsInventoryCollectionErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varAwsInventoryCollectionErrorTracker := _AwsInventoryCollectionErrorTracker{}
+
+	err = json.Unmarshal(data, &varAwsInventoryCollectionErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AwsInventoryCollectionErrorTracker(varAwsInventoryCollectionErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAwsInventoryCollectionErrorTracker struct {

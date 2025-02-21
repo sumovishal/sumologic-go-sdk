@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type Content1 struct {
 	Type string `json:"type"`
 	// Advance Settings required for syncing content or configuration.
 	Options map[string]string `json:"options"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Content1 Content1
@@ -136,6 +136,11 @@ func (o Content1) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["type"] = o.Type
 	toSerialize["options"] = o.Options
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *Content1) UnmarshalJSON(data []byte) (err error) {
 
 	varContent1 := _Content1{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContent1)
+	err = json.Unmarshal(data, &varContent1)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Content1(varContent1)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "options")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

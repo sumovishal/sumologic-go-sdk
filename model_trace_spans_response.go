@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TraceSpansResponse struct {
 	TotalCount int64 `json:"totalCount"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpansResponse TraceSpansResponse
@@ -154,6 +154,11 @@ func (o TraceSpansResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *TraceSpansResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpansResponse := _TraceSpansResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpansResponse)
+	err = json.Unmarshal(data, &varTraceSpansResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpansResponse(varTraceSpansResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spanPage")
+		delete(additionalProperties, "totalCount")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

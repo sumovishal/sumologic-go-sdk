@@ -25,7 +25,10 @@ type GetIncidentTemplatesRequest struct {
 	AuthHeader *string `json:"authHeader,omitempty"`
 	// Optional connectionId to get incident templates for an existing CloudSOAR connection. If provided, the authHeader and url will be taken from the existing connection object.
 	ConnectionId *string `json:"connectionId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GetIncidentTemplatesRequest GetIncidentTemplatesRequest
 
 // NewGetIncidentTemplatesRequest instantiates a new GetIncidentTemplatesRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o GetIncidentTemplatesRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ConnectionId) {
 		toSerialize["connectionId"] = o.ConnectionId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GetIncidentTemplatesRequest) UnmarshalJSON(data []byte) (err error) {
+	varGetIncidentTemplatesRequest := _GetIncidentTemplatesRequest{}
+
+	err = json.Unmarshal(data, &varGetIncidentTemplatesRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GetIncidentTemplatesRequest(varGetIncidentTemplatesRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "authHeader")
+		delete(additionalProperties, "connectionId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGetIncidentTemplatesRequest struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type MutingInformationResponse struct {
 	// Array of muting schedules that this monitor is associated with.
 	MutingSchedules []MutingScheduleResponse `json:"mutingSchedules,omitempty"`
 	AdhocMuting *AdhocMutingResponse `json:"adhocMuting,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingInformationResponse MutingInformationResponse
@@ -229,6 +229,11 @@ func (o MutingInformationResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AdhocMuting) {
 		toSerialize["adhocMuting"] = o.AdhocMuting
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -256,15 +261,24 @@ func (o *MutingInformationResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varMutingInformationResponse := _MutingInformationResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingInformationResponse)
+	err = json.Unmarshal(data, &varMutingInformationResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MutingInformationResponse(varMutingInformationResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "isMuted")
+		delete(additionalProperties, "mutingEndTime")
+		delete(additionalProperties, "mutingSchedules")
+		delete(additionalProperties, "adhocMuting")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

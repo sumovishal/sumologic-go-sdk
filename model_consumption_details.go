@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ConsumptionDetails struct {
 	StartDate string `json:"startDate"`
 	// End date of the data usage.
 	EndDate string `json:"endDate"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ConsumptionDetails ConsumptionDetails
@@ -136,6 +136,11 @@ func (o ConsumptionDetails) ToMap() (map[string]interface{}, error) {
 	toSerialize["entitlementConsumptions"] = o.EntitlementConsumptions
 	toSerialize["startDate"] = o.StartDate
 	toSerialize["endDate"] = o.EndDate
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *ConsumptionDetails) UnmarshalJSON(data []byte) (err error) {
 
 	varConsumptionDetails := _ConsumptionDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varConsumptionDetails)
+	err = json.Unmarshal(data, &varConsumptionDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ConsumptionDetails(varConsumptionDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "entitlementConsumptions")
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "endDate")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

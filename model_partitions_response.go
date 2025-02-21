@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &PartitionsResponse{}
 type PartitionsResponse struct {
 	// Array of partitions.
 	Data []Partition `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PartitionsResponse PartitionsResponse
@@ -80,6 +80,11 @@ func (o PartitionsResponse) MarshalJSON() ([]byte, error) {
 func (o PartitionsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *PartitionsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varPartitionsResponse := _PartitionsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPartitionsResponse)
+	err = json.Unmarshal(data, &varPartitionsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PartitionsResponse(varPartitionsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

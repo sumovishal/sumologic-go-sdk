@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TraceMetricsResponse{}
 type TraceMetricsResponse struct {
 	// List of trace metrics.
 	Metrics []TraceMetricDetail `json:"metrics"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceMetricsResponse TraceMetricsResponse
@@ -80,6 +80,11 @@ func (o TraceMetricsResponse) MarshalJSON() ([]byte, error) {
 func (o TraceMetricsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["metrics"] = o.Metrics
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TraceMetricsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceMetricsResponse := _TraceMetricsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceMetricsResponse)
+	err = json.Unmarshal(data, &varTraceMetricsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceMetricsResponse(varTraceMetricsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metrics")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

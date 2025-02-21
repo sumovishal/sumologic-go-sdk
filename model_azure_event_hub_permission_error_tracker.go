@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AzureEventHubPermissionErrorTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AzureEventHubPermissionErrorTracker struct {
 	TrackerIdentity
 	// The specific reason of the permission error
 	Reason *string `json:"reason,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AzureEventHubPermissionErrorTracker AzureEventHubPermissionErrorTracker
@@ -101,6 +103,11 @@ func (o AzureEventHubPermissionErrorTracker) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Reason) {
 		toSerialize["reason"] = o.Reason
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *AzureEventHubPermissionErrorTracker) UnmarshalJSON(data []byte) (err er
 		}
 	}
 
-	varAzureEventHubPermissionErrorTracker := _AzureEventHubPermissionErrorTracker{}
+	type AzureEventHubPermissionErrorTrackerWithoutEmbeddedStruct struct {
+		// The specific reason of the permission error
+		Reason *string `json:"reason,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAzureEventHubPermissionErrorTracker)
+	varAzureEventHubPermissionErrorTrackerWithoutEmbeddedStruct := AzureEventHubPermissionErrorTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAzureEventHubPermissionErrorTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varAzureEventHubPermissionErrorTracker := _AzureEventHubPermissionErrorTracker{}
+		varAzureEventHubPermissionErrorTracker.Reason = varAzureEventHubPermissionErrorTrackerWithoutEmbeddedStruct.Reason
+		*o = AzureEventHubPermissionErrorTracker(varAzureEventHubPermissionErrorTracker)
+	} else {
 		return err
 	}
 
-	*o = AzureEventHubPermissionErrorTracker(varAzureEventHubPermissionErrorTracker)
+	varAzureEventHubPermissionErrorTracker := _AzureEventHubPermissionErrorTracker{}
+
+	err = json.Unmarshal(data, &varAzureEventHubPermissionErrorTracker)
+	if err == nil {
+		o.TrackerIdentity = varAzureEventHubPermissionErrorTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "reason")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

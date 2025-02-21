@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &EventAttributeValue{}
 type EventAttributeValue struct {
 	// Type of the event attribute value.
 	Type string `json:"type" validate:"regexp=^(BooleanEventAttributeValue|StringEventAttributeValue|DoubleEventAttributeValue|IntegerEventAttributeValue|BooleanArrayEventAttributeValue|StringArrayEventAttributeValue|DoubleArrayEventAttributeValue|IntegerArrayEventAttributeValue)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventAttributeValue EventAttributeValue
@@ -80,6 +80,11 @@ func (o EventAttributeValue) MarshalJSON() ([]byte, error) {
 func (o EventAttributeValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *EventAttributeValue) UnmarshalJSON(data []byte) (err error) {
 
 	varEventAttributeValue := _EventAttributeValue{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventAttributeValue)
+	err = json.Unmarshal(data, &varEventAttributeValue)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventAttributeValue(varEventAttributeValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

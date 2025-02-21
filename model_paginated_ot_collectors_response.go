@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type PaginatedOTCollectorsResponse struct {
 	Next *string `json:"next,omitempty"`
 	// count of otCollectors in response.
 	Count *int32 `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaginatedOTCollectorsResponse PaginatedOTCollectorsResponse
@@ -154,6 +154,11 @@ func (o PaginatedOTCollectorsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *PaginatedOTCollectorsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varPaginatedOTCollectorsResponse := _PaginatedOTCollectorsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaginatedOTCollectorsResponse)
+	err = json.Unmarshal(data, &varPaginatedOTCollectorsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaginatedOTCollectorsResponse(varPaginatedOTCollectorsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

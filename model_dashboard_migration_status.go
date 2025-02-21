@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type DashboardMigrationStatus struct {
 	FailedCount int32 `json:"failedCount"`
 	// The total number of Legacy Dashboards to migrate.
 	TotalCount int32 `json:"totalCount"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardMigrationStatus DashboardMigrationStatus
@@ -136,6 +136,11 @@ func (o DashboardMigrationStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize["successCount"] = o.SuccessCount
 	toSerialize["failedCount"] = o.FailedCount
 	toSerialize["totalCount"] = o.TotalCount
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *DashboardMigrationStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardMigrationStatus := _DashboardMigrationStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardMigrationStatus)
+	err = json.Unmarshal(data, &varDashboardMigrationStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardMigrationStatus(varDashboardMigrationStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "successCount")
+		delete(additionalProperties, "failedCount")
+		delete(additionalProperties, "totalCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

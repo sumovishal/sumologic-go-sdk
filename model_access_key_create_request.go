@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type AccessKeyCreateRequest struct {
 	CorsHeaders []string `json:"corsHeaders,omitempty"`
 	// Scopes assigned to the key. ### Alerting   - adminMonitorsV2   - viewMonitorsV2   - manageMonitorsV2  ### Data Management   - manageApps   - viewCollectors   - manageCollectors   - viewConnections   - manageConnections   - contentAdmin   - viewFieldExtractionRules   - manageFieldExtractionRules               - viewFields   - manageFields   - manageBudgets   - viewLibrary   - manageLibrary   - viewPartitions   - managePartitions   - manageS3DataForwarding   - viewScheduledViews   - manageScheduledViews   - manageTokens  ### Logs   - runLogSearch  ### Metrics   - runMetricsQuery   ### Reliability Management   - viewSlos   - manageSlos  ### Security   - manageAccessKeys   - viewPersonalAccessKeys   - managePersonalAccessKeys  ### UserManagement   - viewUsersAndRoles   - manageUsersAndRoles
 	Scopes []string `json:"scopes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessKeyCreateRequest AccessKeyCreateRequest
@@ -154,6 +154,11 @@ func (o AccessKeyCreateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scopes) {
 		toSerialize["scopes"] = o.Scopes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *AccessKeyCreateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessKeyCreateRequest := _AccessKeyCreateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessKeyCreateRequest)
+	err = json.Unmarshal(data, &varAccessKeyCreateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessKeyCreateRequest(varAccessKeyCreateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "corsHeaders")
+		delete(additionalProperties, "scopes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

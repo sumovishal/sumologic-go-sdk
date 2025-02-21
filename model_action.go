@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &Action{}
 type Action struct {
 	// Connection type of the connection. Valid values:   1.  `Email`   2.  `AWSLambda`   3.  `AzureFunctions`   4.  `Datadog`   5.  `HipChat`   6.  `Jira`   7.  `NewRelic`   8.  `Opsgenie`   9.  `PagerDuty`   10. `Slack`   11. `MicrosoftTeams`   12. `ServiceNow`   13. `SumoCloudSOAR`   14. `Webhook`
 	ConnectionType string `json:"connectionType" validate:"regexp=^(Email|AWSLambda|AzureFunctions|Datadog|HipChat|Jira|NewRelic|Opsgenie|PagerDuty|Slack|MicrosoftTeams|ServiceNow|SumoCloudSOAR|Webhook)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Action Action
@@ -80,6 +80,11 @@ func (o Action) MarshalJSON() ([]byte, error) {
 func (o Action) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["connectionType"] = o.ConnectionType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *Action) UnmarshalJSON(data []byte) (err error) {
 
 	varAction := _Action{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAction)
+	err = json.Unmarshal(data, &varAction)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Action(varAction)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

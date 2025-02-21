@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CalendarCompliance struct {
 	WindowType string `json:"windowType" validate:"regexp=^(Week|Month|Quarter)$"`
 	// Start of the calendar window. For week, it would be the day of the week (for e.g Sunday, Monday etc). For month, it will always be the first day of the month (therefore not required to specify for monthly compliance). For quarter, it would be the first month of the quarter (for e.g January, February etc.)
 	StartFrom *string `json:"startFrom,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CalendarCompliance CalendarCompliance
@@ -121,6 +121,11 @@ func (o CalendarCompliance) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.StartFrom) {
 		toSerialize["startFrom"] = o.StartFrom
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -151,15 +156,21 @@ func (o *CalendarCompliance) UnmarshalJSON(data []byte) (err error) {
 
 	varCalendarCompliance := _CalendarCompliance{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCalendarCompliance)
+	err = json.Unmarshal(data, &varCalendarCompliance)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CalendarCompliance(varCalendarCompliance)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "windowType")
+		delete(additionalProperties, "startFrom")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

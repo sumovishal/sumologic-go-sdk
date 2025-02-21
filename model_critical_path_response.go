@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CriticalPathResponse struct {
 	Segments []SpanPathSegment `json:"segments"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CriticalPathResponse CriticalPathResponse
@@ -117,6 +117,11 @@ func (o CriticalPathResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *CriticalPathResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCriticalPathResponse := _CriticalPathResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCriticalPathResponse)
+	err = json.Unmarshal(data, &varCriticalPathResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CriticalPathResponse(varCriticalPathResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "segments")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AlertSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AlertSearchNotificationSyncDefinition struct {
 	ScheduleNotificationSyncDefinition
 	// A String value to uniquely identify a Collector's Source.
 	SourceId string `json:"sourceId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertSearchNotificationSyncDefinition AlertSearchNotificationSyncDefinition
@@ -90,6 +92,11 @@ func (o AlertSearchNotificationSyncDefinition) ToMap() (map[string]interface{}, 
 		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	toSerialize["sourceId"] = o.SourceId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *AlertSearchNotificationSyncDefinition) UnmarshalJSON(data []byte) (err 
 		}
 	}
 
-	varAlertSearchNotificationSyncDefinition := _AlertSearchNotificationSyncDefinition{}
+	type AlertSearchNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// A String value to uniquely identify a Collector's Source.
+		SourceId string `json:"sourceId"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertSearchNotificationSyncDefinition)
+	varAlertSearchNotificationSyncDefinitionWithoutEmbeddedStruct := AlertSearchNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAlertSearchNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varAlertSearchNotificationSyncDefinition := _AlertSearchNotificationSyncDefinition{}
+		varAlertSearchNotificationSyncDefinition.SourceId = varAlertSearchNotificationSyncDefinitionWithoutEmbeddedStruct.SourceId
+		*o = AlertSearchNotificationSyncDefinition(varAlertSearchNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = AlertSearchNotificationSyncDefinition(varAlertSearchNotificationSyncDefinition)
+	varAlertSearchNotificationSyncDefinition := _AlertSearchNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varAlertSearchNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varAlertSearchNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sourceId")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type ContractDetails struct {
 	SharedBuckets []SharedBucket `json:"sharedBuckets,omitempty"`
 	ContractPeriod ContractPeriod `json:"contractPeriod"`
 	CurrentBillingPeriod CurrentBillingPeriod `json:"currentBillingPeriod"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContractDetails ContractDetails
@@ -227,6 +227,11 @@ func (o ContractDetails) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["contractPeriod"] = o.ContractPeriod
 	toSerialize["currentBillingPeriod"] = o.CurrentBillingPeriod
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -258,15 +263,25 @@ func (o *ContractDetails) UnmarshalJSON(data []byte) (err error) {
 
 	varContractDetails := _ContractDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContractDetails)
+	err = json.Unmarshal(data, &varContractDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContractDetails(varContractDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "orgId")
+		delete(additionalProperties, "planType")
+		delete(additionalProperties, "entitlements")
+		delete(additionalProperties, "sharedBuckets")
+		delete(additionalProperties, "contractPeriod")
+		delete(additionalProperties, "currentBillingPeriod")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type UpdateUserDefinition struct {
 	IsActive *bool `json:"isActive,omitempty"`
 	// List of role identifiers associated with the user. To modify this field you must have the `manageUserAndRoles` capability.
 	RoleIds []string `json:"roleIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateUserDefinition UpdateUserDefinition
@@ -182,6 +182,11 @@ func (o UpdateUserDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RoleIds) {
 		toSerialize["roleIds"] = o.RoleIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -210,15 +215,23 @@ func (o *UpdateUserDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateUserDefinition := _UpdateUserDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateUserDefinition)
+	err = json.Unmarshal(data, &varUpdateUserDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateUserDefinition(varUpdateUserDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "firstName")
+		delete(additionalProperties, "lastName")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "roleIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

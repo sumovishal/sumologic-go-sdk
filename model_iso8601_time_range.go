@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type Iso8601TimeRange struct {
 	Start time.Time `json:"start"`
 	// End time in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format
 	End time.Time `json:"end"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Iso8601TimeRange Iso8601TimeRange
@@ -109,6 +109,11 @@ func (o Iso8601TimeRange) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["start"] = o.Start
 	toSerialize["end"] = o.End
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -137,15 +142,21 @@ func (o *Iso8601TimeRange) UnmarshalJSON(data []byte) (err error) {
 
 	varIso8601TimeRange := _Iso8601TimeRange{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIso8601TimeRange)
+	err = json.Unmarshal(data, &varIso8601TimeRange)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Iso8601TimeRange(varIso8601TimeRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "start")
+		delete(additionalProperties, "end")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &VisualAxisData{}
 type VisualAxisData struct {
 	// The value of the axis labels.
 	Index *int32 `json:"index,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _VisualAxisData VisualAxisData
 
 // NewVisualAxisData instantiates a new VisualAxisData object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o VisualAxisData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Index) {
 		toSerialize["index"] = o.Index
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *VisualAxisData) UnmarshalJSON(data []byte) (err error) {
+	varVisualAxisData := _VisualAxisData{}
+
+	err = json.Unmarshal(data, &varVisualAxisData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VisualAxisData(varVisualAxisData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "index")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableVisualAxisData struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type BucketValue struct {
 	BucketValueType string `json:"bucketValueType"`
 	// The number of traces per bucket.
 	TraceCount int64 `json:"traceCount"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BucketValue BucketValue
@@ -108,6 +108,11 @@ func (o BucketValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketValueType"] = o.BucketValueType
 	toSerialize["traceCount"] = o.TraceCount
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *BucketValue) UnmarshalJSON(data []byte) (err error) {
 
 	varBucketValue := _BucketValue{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBucketValue)
+	err = json.Unmarshal(data, &varBucketValue)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BucketValue(varBucketValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketValueType")
+		delete(additionalProperties, "traceCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CurrentBillingPeriod struct {
 	StartDate string `json:"startDate"`
 	// End date of the current billing period.
 	EndDate string `json:"endDate"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CurrentBillingPeriod CurrentBillingPeriod
@@ -108,6 +108,11 @@ func (o CurrentBillingPeriod) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["startDate"] = o.StartDate
 	toSerialize["endDate"] = o.EndDate
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CurrentBillingPeriod) UnmarshalJSON(data []byte) (err error) {
 
 	varCurrentBillingPeriod := _CurrentBillingPeriod{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCurrentBillingPeriod)
+	err = json.Unmarshal(data, &varCurrentBillingPeriod)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CurrentBillingPeriod(varCurrentBillingPeriod)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "endDate")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

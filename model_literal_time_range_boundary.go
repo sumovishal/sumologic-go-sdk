@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LiteralTimeRangeBoundary type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type LiteralTimeRangeBoundary struct {
 	TimeRangeBoundary
 	// Name of the time range. Possible values are:   - `now`,   - `second`,   - `minute`,   - `hour`,   - `day`,   - `today`,   - `week`,   - `month`,   - `year`
 	RangeName string `json:"rangeName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LiteralTimeRangeBoundary LiteralTimeRangeBoundary
@@ -90,6 +92,11 @@ func (o LiteralTimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	toSerialize["rangeName"] = o.RangeName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *LiteralTimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLiteralTimeRangeBoundary := _LiteralTimeRangeBoundary{}
+	type LiteralTimeRangeBoundaryWithoutEmbeddedStruct struct {
+		// Name of the time range. Possible values are:   - `now`,   - `second`,   - `minute`,   - `hour`,   - `day`,   - `today`,   - `week`,   - `month`,   - `year`
+		RangeName string `json:"rangeName"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLiteralTimeRangeBoundary)
+	varLiteralTimeRangeBoundaryWithoutEmbeddedStruct := LiteralTimeRangeBoundaryWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLiteralTimeRangeBoundaryWithoutEmbeddedStruct)
+	if err == nil {
+		varLiteralTimeRangeBoundary := _LiteralTimeRangeBoundary{}
+		varLiteralTimeRangeBoundary.RangeName = varLiteralTimeRangeBoundaryWithoutEmbeddedStruct.RangeName
+		*o = LiteralTimeRangeBoundary(varLiteralTimeRangeBoundary)
+	} else {
 		return err
 	}
 
-	*o = LiteralTimeRangeBoundary(varLiteralTimeRangeBoundary)
+	varLiteralTimeRangeBoundary := _LiteralTimeRangeBoundary{}
+
+	err = json.Unmarshal(data, &varLiteralTimeRangeBoundary)
+	if err == nil {
+		o.TimeRangeBoundary = varLiteralTimeRangeBoundary.TimeRangeBoundary
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rangeName")
+
+		// remove fields from embedded structs
+		reflectTimeRangeBoundary := reflect.ValueOf(o.TimeRangeBoundary)
+		for i := 0; i < reflectTimeRangeBoundary.Type().NumField(); i++ {
+			t := reflectTimeRangeBoundary.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

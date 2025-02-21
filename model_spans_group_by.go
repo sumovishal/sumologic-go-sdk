@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SpansGroupBy{}
 type SpansGroupBy struct {
 	// The type of the group-by clause.
 	Type string `json:"type" validate:"regexp=^(time|field)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansGroupBy SpansGroupBy
@@ -80,6 +80,11 @@ func (o SpansGroupBy) MarshalJSON() ([]byte, error) {
 func (o SpansGroupBy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SpansGroupBy) UnmarshalJSON(data []byte) (err error) {
 
 	varSpansGroupBy := _SpansGroupBy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansGroupBy)
+	err = json.Unmarshal(data, &varSpansGroupBy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpansGroupBy(varSpansGroupBy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

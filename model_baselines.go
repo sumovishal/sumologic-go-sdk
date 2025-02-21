@@ -47,7 +47,10 @@ type Baselines struct {
 	FlexStorage *int64 `json:"flexStorage,omitempty"`
 	// The amount of flex logs ingest scan ratio.
 	FlexScanRatio *int64 `json:"flexScanRatio,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _Baselines Baselines
 
 // NewBaselines instantiates a new Baselines object
 // This constructor will assign default values to properties that have it defined,
@@ -622,7 +625,46 @@ func (o Baselines) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FlexScanRatio) {
 		toSerialize["flexScanRatio"] = o.FlexScanRatio
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *Baselines) UnmarshalJSON(data []byte) (err error) {
+	varBaselines := _Baselines{}
+
+	err = json.Unmarshal(data, &varBaselines)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Baselines(varBaselines)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "continuousIngest")
+		delete(additionalProperties, "continuousStorage")
+		delete(additionalProperties, "frequentIngest")
+		delete(additionalProperties, "frequentStorage")
+		delete(additionalProperties, "infrequentIngest")
+		delete(additionalProperties, "infrequentStorage")
+		delete(additionalProperties, "infrequentScan")
+		delete(additionalProperties, "metrics")
+		delete(additionalProperties, "cseIngest")
+		delete(additionalProperties, "cseStorage")
+		delete(additionalProperties, "tracingIngest")
+		delete(additionalProperties, "flexIngest")
+		delete(additionalProperties, "flexStorage")
+		delete(additionalProperties, "flexScanRatio")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableBaselines struct {

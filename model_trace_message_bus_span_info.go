@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the TraceMessageBusSpanInfo type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type TraceMessageBusSpanInfo struct {
 	TraceSpanInfo
 	// An address at which messages can be exchanged e.g. a Kafka record has an associated \"topic name\" that can be stored using this tag.
 	Destination *string `json:"destination,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceMessageBusSpanInfo TraceMessageBusSpanInfo
@@ -99,6 +101,11 @@ func (o TraceMessageBusSpanInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Destination) {
 		toSerialize["destination"] = o.Destination
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -124,17 +131,56 @@ func (o *TraceMessageBusSpanInfo) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTraceMessageBusSpanInfo := _TraceMessageBusSpanInfo{}
+	type TraceMessageBusSpanInfoWithoutEmbeddedStruct struct {
+		// An address at which messages can be exchanged e.g. a Kafka record has an associated \"topic name\" that can be stored using this tag.
+		Destination *string `json:"destination,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceMessageBusSpanInfo)
+	varTraceMessageBusSpanInfoWithoutEmbeddedStruct := TraceMessageBusSpanInfoWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varTraceMessageBusSpanInfoWithoutEmbeddedStruct)
+	if err == nil {
+		varTraceMessageBusSpanInfo := _TraceMessageBusSpanInfo{}
+		varTraceMessageBusSpanInfo.Destination = varTraceMessageBusSpanInfoWithoutEmbeddedStruct.Destination
+		*o = TraceMessageBusSpanInfo(varTraceMessageBusSpanInfo)
+	} else {
 		return err
 	}
 
-	*o = TraceMessageBusSpanInfo(varTraceMessageBusSpanInfo)
+	varTraceMessageBusSpanInfo := _TraceMessageBusSpanInfo{}
+
+	err = json.Unmarshal(data, &varTraceMessageBusSpanInfo)
+	if err == nil {
+		o.TraceSpanInfo = varTraceMessageBusSpanInfo.TraceSpanInfo
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "destination")
+
+		// remove fields from embedded structs
+		reflectTraceSpanInfo := reflect.ValueOf(o.TraceSpanInfo)
+		for i := 0; i < reflectTraceSpanInfo.Type().NumField(); i++ {
+			t := reflectTraceSpanInfo.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

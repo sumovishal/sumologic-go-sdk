@@ -25,7 +25,10 @@ type SearchQueryFieldAndType struct {
 	FieldType *string `json:"fieldType,omitempty" validate:"regexp=^(NumericValue|DistinctCount)$"`
 	// Indicates if the field is implicit or user defined.
 	IsImplicitField *bool `json:"isImplicitField,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SearchQueryFieldAndType SearchQueryFieldAndType
 
 // NewSearchQueryFieldAndType instantiates a new SearchQueryFieldAndType object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o SearchQueryFieldAndType) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsImplicitField) {
 		toSerialize["isImplicitField"] = o.IsImplicitField
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SearchQueryFieldAndType) UnmarshalJSON(data []byte) (err error) {
+	varSearchQueryFieldAndType := _SearchQueryFieldAndType{}
+
+	err = json.Unmarshal(data, &varSearchQueryFieldAndType)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SearchQueryFieldAndType(varSearchQueryFieldAndType)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldType")
+		delete(additionalProperties, "isImplicitField")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSearchQueryFieldAndType struct {

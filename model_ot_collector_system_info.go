@@ -29,7 +29,10 @@ type OTCollectorSystemInfo struct {
 	HostIpAddress *string `json:"hostIpAddress,omitempty"`
 	// Host environment of the OT Collector.
 	HostEnv *string `json:"hostEnv,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OTCollectorSystemInfo OTCollectorSystemInfo
 
 // NewOTCollectorSystemInfo instantiates a new OTCollectorSystemInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o OTCollectorSystemInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.HostEnv) {
 		toSerialize["hostEnv"] = o.HostEnv
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OTCollectorSystemInfo) UnmarshalJSON(data []byte) (err error) {
+	varOTCollectorSystemInfo := _OTCollectorSystemInfo{}
+
+	err = json.Unmarshal(data, &varOTCollectorSystemInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OTCollectorSystemInfo(varOTCollectorSystemInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "hostName")
+		delete(additionalProperties, "hostOsName")
+		delete(additionalProperties, "hostOsVersion")
+		delete(additionalProperties, "hostIpAddress")
+		delete(additionalProperties, "hostEnv")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOTCollectorSystemInfo struct {

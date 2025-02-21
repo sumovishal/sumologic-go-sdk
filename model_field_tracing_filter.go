@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the FieldTracingFilter type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,7 @@ type FieldTracingFilter struct {
 	// The operator to use. Accepted values:   <table>     <tr>       <th>Operator</th>       <th>Accepted value types</th>     </tr>     <tr>       <th>&lt; &lt;= &gt; &gt;= = !=</th>       <th>StringTracingValue DoubleTracingValue IntegerTracingValue DateTimeTracingValue</th>     </tr>     <tr>       <th>in</th>       <th>ArrayTracingValue of StringTracingValue / DoubleTracingValue / IntegerTracingValue / DateTimeTracingValue</th>     </tr>     <tr>       <th>between</th>       <th>RangeTracingValue of StringTracingValue / DoubleTracingValue / IntegerTracingValue / DateTimeTracingValue</th>     </tr>   </table>
 	Operator string `json:"operator"`
 	Value *TracingValue `json:"value,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FieldTracingFilter FieldTracingFilter
@@ -154,6 +156,11 @@ func (o FieldTracingFilter) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,17 +188,63 @@ func (o *FieldTracingFilter) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varFieldTracingFilter := _FieldTracingFilter{}
+	type FieldTracingFilterWithoutEmbeddedStruct struct {
+		// The field name to filter by. The list of supported field names can be retrieved using the [Trace Query Fields](#operation/getTraceQueryFields) endpoint.
+		Field string `json:"field"`
+		// The operator to use. Accepted values:   <table>     <tr>       <th>Operator</th>       <th>Accepted value types</th>     </tr>     <tr>       <th>&lt; &lt;= &gt; &gt;= = !=</th>       <th>StringTracingValue DoubleTracingValue IntegerTracingValue DateTimeTracingValue</th>     </tr>     <tr>       <th>in</th>       <th>ArrayTracingValue of StringTracingValue / DoubleTracingValue / IntegerTracingValue / DateTimeTracingValue</th>     </tr>     <tr>       <th>between</th>       <th>RangeTracingValue of StringTracingValue / DoubleTracingValue / IntegerTracingValue / DateTimeTracingValue</th>     </tr>   </table>
+		Operator string `json:"operator"`
+		Value *TracingValue `json:"value,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFieldTracingFilter)
+	varFieldTracingFilterWithoutEmbeddedStruct := FieldTracingFilterWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varFieldTracingFilterWithoutEmbeddedStruct)
+	if err == nil {
+		varFieldTracingFilter := _FieldTracingFilter{}
+		varFieldTracingFilter.Field = varFieldTracingFilterWithoutEmbeddedStruct.Field
+		varFieldTracingFilter.Operator = varFieldTracingFilterWithoutEmbeddedStruct.Operator
+		varFieldTracingFilter.Value = varFieldTracingFilterWithoutEmbeddedStruct.Value
+		*o = FieldTracingFilter(varFieldTracingFilter)
+	} else {
 		return err
 	}
 
-	*o = FieldTracingFilter(varFieldTracingFilter)
+	varFieldTracingFilter := _FieldTracingFilter{}
+
+	err = json.Unmarshal(data, &varFieldTracingFilter)
+	if err == nil {
+		o.TraceQueryExpression = varFieldTracingFilter.TraceQueryExpression
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "operator")
+		delete(additionalProperties, "value")
+
+		// remove fields from embedded structs
+		reflectTraceQueryExpression := reflect.ValueOf(o.TraceQueryExpression)
+		for i := 0; i < reflectTraceQueryExpression.Type().NumField(); i++ {
+			t := reflectTraceQueryExpression.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

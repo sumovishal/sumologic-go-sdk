@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type VariableValuesData struct {
 	VariableKey *string `json:"variableKey,omitempty"`
 	// Generic errors returned by backend from downstream assemblies. More specific errors will be thrown in the future.
 	Errors []ErrorDescription `json:"errors,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VariableValuesData VariableValuesData
@@ -309,6 +309,11 @@ func (o VariableValuesData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Errors) {
 		toSerialize["errors"] = o.Errors
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -336,15 +341,26 @@ func (o *VariableValuesData) UnmarshalJSON(data []byte) (err error) {
 
 	varVariableValuesData := _VariableValuesData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVariableValuesData)
+	err = json.Unmarshal(data, &varVariableValuesData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VariableValuesData(varVariableValuesData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "variableValues")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "variableType")
+		delete(additionalProperties, "valueType")
+		delete(additionalProperties, "allowMultiSelect")
+		delete(additionalProperties, "variableKey")
+		delete(additionalProperties, "errors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

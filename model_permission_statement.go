@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type PermissionStatement struct {
 	ModifiedAt time.Time `json:"modifiedAt"`
 	// Identifier of the user who last modified the resource.
 	ModifiedBy string `json:"modifiedBy"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionStatement PermissionStatement
@@ -277,6 +277,11 @@ func (o PermissionStatement) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdBy"] = o.CreatedBy
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -311,15 +316,27 @@ func (o *PermissionStatement) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionStatement := _PermissionStatement{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionStatement)
+	err = json.Unmarshal(data, &varPermissionStatement)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionStatement(varPermissionStatement)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "subjectType")
+		delete(additionalProperties, "subjectId")
+		delete(additionalProperties, "targetId")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

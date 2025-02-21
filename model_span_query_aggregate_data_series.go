@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type SpanQueryAggregateDataSeries struct {
 	XAxisKeys []string `json:"xAxisKeys,omitempty"`
 	// Type of the values in the series.
 	ValueType *string `json:"valueType,omitempty" validate:"regexp=^(STRING|DOUBLE)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregateDataSeries SpanQueryAggregateDataSeries
@@ -319,6 +319,11 @@ func (o SpanQueryAggregateDataSeries) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ValueType) {
 		toSerialize["valueType"] = o.ValueType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -348,15 +353,27 @@ func (o *SpanQueryAggregateDataSeries) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryAggregateDataSeries := _SpanQueryAggregateDataSeries{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregateDataSeries)
+	err = json.Unmarshal(data, &varSpanQueryAggregateDataSeries)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregateDataSeries(varSpanQueryAggregateDataSeries)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "dataPoints")
+		delete(additionalProperties, "aggregateInfo")
+		delete(additionalProperties, "metaData")
+		delete(additionalProperties, "seriesType")
+		delete(additionalProperties, "xAxisKeys")
+		delete(additionalProperties, "valueType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

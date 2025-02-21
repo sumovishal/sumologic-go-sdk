@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionCloudWatchGetStatisticsThrottledTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CollectionCloudWatchGetStatisticsThrottledTracker struct {
 	TrackerIdentity
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionCloudWatchGetStatisticsThrottledTracker CollectionCloudWatchGetStatisticsThrottledTracker
@@ -101,6 +103,11 @@ func (o CollectionCloudWatchGetStatisticsThrottledTracker) ToMap() (map[string]i
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *CollectionCloudWatchGetStatisticsThrottledTracker) UnmarshalJSON(data [
 		}
 	}
 
-	varCollectionCloudWatchGetStatisticsThrottledTracker := _CollectionCloudWatchGetStatisticsThrottledTracker{}
+	type CollectionCloudWatchGetStatisticsThrottledTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionCloudWatchGetStatisticsThrottledTracker)
+	varCollectionCloudWatchGetStatisticsThrottledTrackerWithoutEmbeddedStruct := CollectionCloudWatchGetStatisticsThrottledTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionCloudWatchGetStatisticsThrottledTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionCloudWatchGetStatisticsThrottledTracker := _CollectionCloudWatchGetStatisticsThrottledTracker{}
+		varCollectionCloudWatchGetStatisticsThrottledTracker.EventType = varCollectionCloudWatchGetStatisticsThrottledTrackerWithoutEmbeddedStruct.EventType
+		*o = CollectionCloudWatchGetStatisticsThrottledTracker(varCollectionCloudWatchGetStatisticsThrottledTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionCloudWatchGetStatisticsThrottledTracker(varCollectionCloudWatchGetStatisticsThrottledTracker)
+	varCollectionCloudWatchGetStatisticsThrottledTracker := _CollectionCloudWatchGetStatisticsThrottledTracker{}
+
+	err = json.Unmarshal(data, &varCollectionCloudWatchGetStatisticsThrottledTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionCloudWatchGetStatisticsThrottledTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

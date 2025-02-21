@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type DashboardMigrationResult struct {
 	Errors *map[string][]ErrorDescription `json:"errors,omitempty"`
 	// A mapping of Legacy Dashboards Content Identifiers to warnings.
 	Warnings *map[string][]ErrorDescription `json:"warnings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardMigrationResult DashboardMigrationResult
@@ -218,6 +218,11 @@ func (o DashboardMigrationResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Warnings) {
 		toSerialize["warnings"] = o.Warnings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -246,15 +251,24 @@ func (o *DashboardMigrationResult) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardMigrationResult := _DashboardMigrationResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardMigrationResult)
+	err = json.Unmarshal(data, &varDashboardMigrationResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardMigrationResult(varDashboardMigrationResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "richData")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "errors")
+		delete(additionalProperties, "warnings")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

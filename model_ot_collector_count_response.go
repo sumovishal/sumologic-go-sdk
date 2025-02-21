@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OTCollectorCountResponse{}
 type OTCollectorCountResponse struct {
 	// Total number of OT Collector for a customer.
 	TotalCount int32 `json:"totalCount"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCollectorCountResponse OTCollectorCountResponse
@@ -80,6 +80,11 @@ func (o OTCollectorCountResponse) MarshalJSON() ([]byte, error) {
 func (o OTCollectorCountResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["totalCount"] = o.TotalCount
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *OTCollectorCountResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varOTCollectorCountResponse := _OTCollectorCountResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCollectorCountResponse)
+	err = json.Unmarshal(data, &varOTCollectorCountResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OTCollectorCountResponse(varOTCollectorCountResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "totalCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

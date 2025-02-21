@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UpgradeSchemaRef struct {
 	Type string `json:"type"`
 	// version of source template.
 	Version string `json:"version"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpgradeSchemaRef UpgradeSchemaRef
@@ -108,6 +108,11 @@ func (o UpgradeSchemaRef) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
 	toSerialize["version"] = o.Version
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *UpgradeSchemaRef) UnmarshalJSON(data []byte) (err error) {
 
 	varUpgradeSchemaRef := _UpgradeSchemaRef{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpgradeSchemaRef)
+	err = json.Unmarshal(data, &varUpgradeSchemaRef)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpgradeSchemaRef(varUpgradeSchemaRef)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

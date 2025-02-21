@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type BulkErrorResponse struct {
 	// HTTP status code of individual request
 	Status int32 `json:"status"`
 	ErrorResponse ErrorResponse `json:"errorResponse"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BulkErrorResponse BulkErrorResponse
@@ -107,6 +107,11 @@ func (o BulkErrorResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["status"] = o.Status
 	toSerialize["errorResponse"] = o.ErrorResponse
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *BulkErrorResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varBulkErrorResponse := _BulkErrorResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBulkErrorResponse)
+	err = json.Unmarshal(data, &varBulkErrorResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BulkErrorResponse(varBulkErrorResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "errorResponse")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

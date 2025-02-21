@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AzureMetricsInvalidClientSecretTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &AzureMetricsInvalidClientSecretTracker{}
 // AzureMetricsInvalidClientSecretTracker struct for AzureMetricsInvalidClientSecretTracker
 type AzureMetricsInvalidClientSecretTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _AzureMetricsInvalidClientSecretTracker AzureMetricsInvalidClientSecretTracker
@@ -64,6 +66,11 @@ func (o AzureMetricsInvalidClientSecretTracker) ToMap() (map[string]interface{},
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *AzureMetricsInvalidClientSecretTracker) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varAzureMetricsInvalidClientSecretTracker := _AzureMetricsInvalidClientSecretTracker{}
+	type AzureMetricsInvalidClientSecretTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAzureMetricsInvalidClientSecretTracker)
+	varAzureMetricsInvalidClientSecretTrackerWithoutEmbeddedStruct := AzureMetricsInvalidClientSecretTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAzureMetricsInvalidClientSecretTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varAzureMetricsInvalidClientSecretTracker := _AzureMetricsInvalidClientSecretTracker{}
+		*o = AzureMetricsInvalidClientSecretTracker(varAzureMetricsInvalidClientSecretTracker)
+	} else {
 		return err
 	}
 
-	*o = AzureMetricsInvalidClientSecretTracker(varAzureMetricsInvalidClientSecretTracker)
+	varAzureMetricsInvalidClientSecretTracker := _AzureMetricsInvalidClientSecretTracker{}
+
+	err = json.Unmarshal(data, &varAzureMetricsInvalidClientSecretTracker)
+	if err == nil {
+		o.TrackerIdentity = varAzureMetricsInvalidClientSecretTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

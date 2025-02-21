@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpanCalculationSumAggregator type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &SpanCalculationSumAggregator{}
 // SpanCalculationSumAggregator struct for SpanCalculationSumAggregator
 type SpanCalculationSumAggregator struct {
 	SpanCalculationAggregator
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanCalculationSumAggregator SpanCalculationSumAggregator
@@ -62,6 +64,11 @@ func (o SpanCalculationSumAggregator) ToMap() (map[string]interface{}, error) {
 	if errSpanCalculationAggregator != nil {
 		return map[string]interface{}{}, errSpanCalculationAggregator
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -87,17 +94,52 @@ func (o *SpanCalculationSumAggregator) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpanCalculationSumAggregator := _SpanCalculationSumAggregator{}
+	type SpanCalculationSumAggregatorWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanCalculationSumAggregator)
+	varSpanCalculationSumAggregatorWithoutEmbeddedStruct := SpanCalculationSumAggregatorWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpanCalculationSumAggregatorWithoutEmbeddedStruct)
+	if err == nil {
+		varSpanCalculationSumAggregator := _SpanCalculationSumAggregator{}
+		*o = SpanCalculationSumAggregator(varSpanCalculationSumAggregator)
+	} else {
 		return err
 	}
 
-	*o = SpanCalculationSumAggregator(varSpanCalculationSumAggregator)
+	varSpanCalculationSumAggregator := _SpanCalculationSumAggregator{}
+
+	err = json.Unmarshal(data, &varSpanCalculationSumAggregator)
+	if err == nil {
+		o.SpanCalculationAggregator = varSpanCalculationSumAggregator.SpanCalculationAggregator
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectSpanCalculationAggregator := reflect.ValueOf(o.SpanCalculationAggregator)
+		for i := 0; i < reflectSpanCalculationAggregator.Type().NumField(); i++ {
+			t := reflectSpanCalculationAggregator.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

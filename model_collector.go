@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Collector struct {
 	CollectorId string `json:"collectorId"`
 	// Name of a collector.
 	CollectorName string `json:"collectorName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Collector Collector
@@ -108,6 +108,11 @@ func (o Collector) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["collectorId"] = o.CollectorId
 	toSerialize["collectorName"] = o.CollectorName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Collector) UnmarshalJSON(data []byte) (err error) {
 
 	varCollector := _Collector{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollector)
+	err = json.Unmarshal(data, &varCollector)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Collector(varCollector)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "collectorId")
+		delete(additionalProperties, "collectorName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

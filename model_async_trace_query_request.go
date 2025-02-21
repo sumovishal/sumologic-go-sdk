@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AsyncTraceQueryRequest struct {
 	// A list of trace queries.
 	QueryRows []AsyncTraceQueryRow `json:"queryRows"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AsyncTraceQueryRequest AsyncTraceQueryRequest
@@ -107,6 +107,11 @@ func (o AsyncTraceQueryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryRows"] = o.QueryRows
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AsyncTraceQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAsyncTraceQueryRequest := _AsyncTraceQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAsyncTraceQueryRequest)
+	err = json.Unmarshal(data, &varAsyncTraceQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AsyncTraceQueryRequest(varAsyncTraceQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

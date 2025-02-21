@@ -25,7 +25,10 @@ type SloUsage struct {
 	Usage *int32 `json:"usage,omitempty"`
 	// The limit of active Logs/Metrics/Monitors SLOs.
 	Limit *int32 `json:"limit,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SloUsage SloUsage
 
 // NewSloUsage instantiates a new SloUsage object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o SloUsage) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Limit) {
 		toSerialize["limit"] = o.Limit
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SloUsage) UnmarshalJSON(data []byte) (err error) {
+	varSloUsage := _SloUsage{}
+
+	err = json.Unmarshal(data, &varSloUsage)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SloUsage(varSloUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sliType")
+		delete(additionalProperties, "usage")
+		delete(additionalProperties, "limit")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSloUsage struct {

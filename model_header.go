@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Header struct {
 	Name string `json:"name"`
 	// Value of the header field.
 	Value string `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Header Header
@@ -108,6 +108,11 @@ func (o Header) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Header) UnmarshalJSON(data []byte) (err error) {
 
 	varHeader := _Header{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varHeader)
+	err = json.Unmarshal(data, &varHeader)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Header(varHeader)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

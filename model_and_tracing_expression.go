@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AndTracingExpression type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AndTracingExpression struct {
 	TraceQueryExpression
 	// Evaluates to true, if (and only if) all expressions evaluate to true, otherwise evaluates to false.
 	Expressions []TraceQueryExpression `json:"expressions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AndTracingExpression AndTracingExpression
@@ -90,6 +92,11 @@ func (o AndTracingExpression) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTraceQueryExpression
 	}
 	toSerialize["expressions"] = o.Expressions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *AndTracingExpression) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAndTracingExpression := _AndTracingExpression{}
+	type AndTracingExpressionWithoutEmbeddedStruct struct {
+		// Evaluates to true, if (and only if) all expressions evaluate to true, otherwise evaluates to false.
+		Expressions []TraceQueryExpression `json:"expressions"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAndTracingExpression)
+	varAndTracingExpressionWithoutEmbeddedStruct := AndTracingExpressionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAndTracingExpressionWithoutEmbeddedStruct)
+	if err == nil {
+		varAndTracingExpression := _AndTracingExpression{}
+		varAndTracingExpression.Expressions = varAndTracingExpressionWithoutEmbeddedStruct.Expressions
+		*o = AndTracingExpression(varAndTracingExpression)
+	} else {
 		return err
 	}
 
-	*o = AndTracingExpression(varAndTracingExpression)
+	varAndTracingExpression := _AndTracingExpression{}
+
+	err = json.Unmarshal(data, &varAndTracingExpression)
+	if err == nil {
+		o.TraceQueryExpression = varAndTracingExpression.TraceQueryExpression
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "expressions")
+
+		// remove fields from embedded structs
+		reflectTraceQueryExpression := reflect.ValueOf(o.TraceQueryExpression)
+		for i := 0; i < reflectTraceQueryExpression.Type().NumField(); i++ {
+			t := reflectTraceQueryExpression.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

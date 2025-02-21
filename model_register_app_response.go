@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &RegisterAppResponse{}
 type RegisterAppResponse struct {
 	// UUID of the app.
 	Uuid string `json:"uuid"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RegisterAppResponse RegisterAppResponse
@@ -80,6 +80,11 @@ func (o RegisterAppResponse) MarshalJSON() ([]byte, error) {
 func (o RegisterAppResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["uuid"] = o.Uuid
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *RegisterAppResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varRegisterAppResponse := _RegisterAppResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRegisterAppResponse)
+	err = json.Unmarshal(data, &varRegisterAppResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RegisterAppResponse(varRegisterAppResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "uuid")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

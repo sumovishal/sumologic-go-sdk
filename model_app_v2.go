@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -48,6 +47,7 @@ type AppV2 struct {
 	ShowOnMarketplace bool `json:"showOnMarketplace"`
 	// The timestamp in UTC of the most recent modification of the app.
 	ModifiedAt *time.Time `json:"modifiedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppV2 AppV2
@@ -435,6 +435,11 @@ func (o AppV2) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ModifiedAt) {
 		toSerialize["modifiedAt"] = o.ModifiedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -472,15 +477,32 @@ func (o *AppV2) UnmarshalJSON(data []byte) (err error) {
 
 	varAppV2 := _AppV2{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppV2)
+	err = json.Unmarshal(data, &varAppV2)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppV2(varAppV2)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "uuid")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "latestVersion")
+		delete(additionalProperties, "icon")
+		delete(additionalProperties, "author")
+		delete(additionalProperties, "accountTypes")
+		delete(additionalProperties, "beta")
+		delete(additionalProperties, "installs")
+		delete(additionalProperties, "attributes")
+		delete(additionalProperties, "installable")
+		delete(additionalProperties, "showOnMarketplace")
+		delete(additionalProperties, "modifiedAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

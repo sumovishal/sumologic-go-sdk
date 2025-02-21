@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type TransformationRuleResponse struct {
 	ModifiedBy string `json:"modifiedBy"`
 	// Unique identifier for the transformation rule.
 	Id string `json:"id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TransformationRuleResponse TransformationRuleResponse
@@ -248,6 +248,11 @@ func (o TransformationRuleResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["modifiedBy"] = o.ModifiedBy
 	toSerialize["id"] = o.Id
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -281,15 +286,26 @@ func (o *TransformationRuleResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTransformationRuleResponse := _TransformationRuleResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTransformationRuleResponse)
+	err = json.Unmarshal(data, &varTransformationRuleResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TransformationRuleResponse(varTransformationRuleResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ruleDefinition")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

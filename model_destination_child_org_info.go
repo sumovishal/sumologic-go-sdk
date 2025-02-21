@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DestinationChildOrgInfo struct {
 	Included []ChildOrgInfo `json:"included"`
 	// Organization Info which needs to be excluded from Destination Organisation List.
 	Excluded []ChildOrgInfo `json:"excluded"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DestinationChildOrgInfo DestinationChildOrgInfo
@@ -108,6 +108,11 @@ func (o DestinationChildOrgInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["included"] = o.Included
 	toSerialize["excluded"] = o.Excluded
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *DestinationChildOrgInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varDestinationChildOrgInfo := _DestinationChildOrgInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDestinationChildOrgInfo)
+	err = json.Unmarshal(data, &varDestinationChildOrgInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DestinationChildOrgInfo(varDestinationChildOrgInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "included")
+		delete(additionalProperties, "excluded")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

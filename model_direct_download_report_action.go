@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the DirectDownloadReportAction type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &DirectDownloadReportAction{}
 // DirectDownloadReportAction struct for DirectDownloadReportAction
 type DirectDownloadReportAction struct {
 	ReportAction
+	AdditionalProperties map[string]interface{}
 }
 
 type _DirectDownloadReportAction DirectDownloadReportAction
@@ -62,6 +64,11 @@ func (o DirectDownloadReportAction) ToMap() (map[string]interface{}, error) {
 	if errReportAction != nil {
 		return map[string]interface{}{}, errReportAction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -87,17 +94,52 @@ func (o *DirectDownloadReportAction) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varDirectDownloadReportAction := _DirectDownloadReportAction{}
+	type DirectDownloadReportActionWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDirectDownloadReportAction)
+	varDirectDownloadReportActionWithoutEmbeddedStruct := DirectDownloadReportActionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varDirectDownloadReportActionWithoutEmbeddedStruct)
+	if err == nil {
+		varDirectDownloadReportAction := _DirectDownloadReportAction{}
+		*o = DirectDownloadReportAction(varDirectDownloadReportAction)
+	} else {
 		return err
 	}
 
-	*o = DirectDownloadReportAction(varDirectDownloadReportAction)
+	varDirectDownloadReportAction := _DirectDownloadReportAction{}
+
+	err = json.Unmarshal(data, &varDirectDownloadReportAction)
+	if err == nil {
+		o.ReportAction = varDirectDownloadReportAction.ReportAction
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectReportAction := reflect.ValueOf(o.ReportAction)
+		for i := 0; i < reflectReportAction.Type().NumField(); i++ {
+			t := reflectReportAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

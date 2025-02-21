@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type UpdateRequest struct {
 	Baselines SelfServiceCreditsBaselines `json:"baselines"`
 	// true in case the subscription baselines need to be updated immediately(only for monthly customers who are staying on the monthly plan)
 	Immediate *bool `json:"immediate,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateRequest UpdateRequest
@@ -176,6 +176,11 @@ func (o UpdateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Immediate) {
 		toSerialize["immediate"] = o.Immediate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -205,15 +210,23 @@ func (o *UpdateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateRequest := _UpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateRequest)
+	err = json.Unmarshal(data, &varUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateRequest(varUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productId")
+		delete(additionalProperties, "billingFrequency")
+		delete(additionalProperties, "baselines")
+		delete(additionalProperties, "immediate")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

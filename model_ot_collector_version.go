@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OTCollectorVersion{}
 type OTCollectorVersion struct {
 	// Current version of the OT Collector.
 	CurrentVersion string `json:"currentVersion"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCollectorVersion OTCollectorVersion
@@ -80,6 +80,11 @@ func (o OTCollectorVersion) MarshalJSON() ([]byte, error) {
 func (o OTCollectorVersion) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["currentVersion"] = o.CurrentVersion
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *OTCollectorVersion) UnmarshalJSON(data []byte) (err error) {
 
 	varOTCollectorVersion := _OTCollectorVersion{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCollectorVersion)
+	err = json.Unmarshal(data, &varOTCollectorVersion)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OTCollectorVersion(varOTCollectorVersion)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "currentVersion")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -29,7 +29,10 @@ type AlertEntityInfo struct {
 	IsPrimaryWithinDomain *bool `json:"isPrimaryWithinDomain,omitempty"`
 	// Whether entity is from the most accurate domain found for this alert.
 	IsPrimaryDomain *bool `json:"isPrimaryDomain,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AlertEntityInfo AlertEntityInfo
 
 // NewAlertEntityInfo instantiates a new AlertEntityInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -245,7 +248,37 @@ func (o AlertEntityInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsPrimaryDomain) {
 		toSerialize["isPrimaryDomain"] = o.IsPrimaryDomain
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AlertEntityInfo) UnmarshalJSON(data []byte) (err error) {
+	varAlertEntityInfo := _AlertEntityInfo{}
+
+	err = json.Unmarshal(data, &varAlertEntityInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AlertEntityInfo(varAlertEntityInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "entityId")
+		delete(additionalProperties, "entityName")
+		delete(additionalProperties, "entityTypeId")
+		delete(additionalProperties, "isPrimaryWithinDomain")
+		delete(additionalProperties, "isPrimaryDomain")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAlertEntityInfo struct {

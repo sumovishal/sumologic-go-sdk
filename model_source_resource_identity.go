@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SourceResourceIdentity type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type SourceResourceIdentity struct {
 	CollectorId *string `json:"collectorId,omitempty"`
 	// The name of the Collector this Source belongs to.
 	CollectorName *string `json:"collectorName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SourceResourceIdentity SourceResourceIdentity
@@ -147,6 +149,11 @@ func (o SourceResourceIdentity) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CollectorName) {
 		toSerialize["collectorName"] = o.CollectorName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,17 +180,60 @@ func (o *SourceResourceIdentity) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSourceResourceIdentity := _SourceResourceIdentity{}
+	type SourceResourceIdentityWithoutEmbeddedStruct struct {
+		// The unique identifier of the Collector this Source belongs to.
+		CollectorId *string `json:"collectorId,omitempty"`
+		// The name of the Collector this Source belongs to.
+		CollectorName *string `json:"collectorName,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSourceResourceIdentity)
+	varSourceResourceIdentityWithoutEmbeddedStruct := SourceResourceIdentityWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSourceResourceIdentityWithoutEmbeddedStruct)
+	if err == nil {
+		varSourceResourceIdentity := _SourceResourceIdentity{}
+		varSourceResourceIdentity.CollectorId = varSourceResourceIdentityWithoutEmbeddedStruct.CollectorId
+		varSourceResourceIdentity.CollectorName = varSourceResourceIdentityWithoutEmbeddedStruct.CollectorName
+		*o = SourceResourceIdentity(varSourceResourceIdentity)
+	} else {
 		return err
 	}
 
-	*o = SourceResourceIdentity(varSourceResourceIdentity)
+	varSourceResourceIdentity := _SourceResourceIdentity{}
+
+	err = json.Unmarshal(data, &varSourceResourceIdentity)
+	if err == nil {
+		o.ResourceIdentity = varSourceResourceIdentity.ResourceIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "collectorId")
+		delete(additionalProperties, "collectorName")
+
+		// remove fields from embedded structs
+		reflectResourceIdentity := reflect.ValueOf(o.ResourceIdentity)
+		for i := 0; i < reflectResourceIdentity.Type().NumField(); i++ {
+			t := reflectResourceIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

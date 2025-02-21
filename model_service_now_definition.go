@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ServiceNowDefinition type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type ServiceNowDefinition struct {
 	Username string `json:"username"`
 	// User password for the ServiceNow connection.
 	Password string `json:"password"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceNowDefinition ServiceNowDefinition
@@ -149,6 +151,11 @@ func (o ServiceNowDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["url"] = o.Url
 	toSerialize["username"] = o.Username
 	toSerialize["password"] = o.Password
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -178,17 +185,64 @@ func (o *ServiceNowDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varServiceNowDefinition := _ServiceNowDefinition{}
+	type ServiceNowDefinitionWithoutEmbeddedStruct struct {
+		// URL for the ServiceNow connection.
+		Url string `json:"url"`
+		// User name for the ServiceNow connection.
+		Username string `json:"username"`
+		// User password for the ServiceNow connection.
+		Password string `json:"password"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceNowDefinition)
+	varServiceNowDefinitionWithoutEmbeddedStruct := ServiceNowDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varServiceNowDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varServiceNowDefinition := _ServiceNowDefinition{}
+		varServiceNowDefinition.Url = varServiceNowDefinitionWithoutEmbeddedStruct.Url
+		varServiceNowDefinition.Username = varServiceNowDefinitionWithoutEmbeddedStruct.Username
+		varServiceNowDefinition.Password = varServiceNowDefinitionWithoutEmbeddedStruct.Password
+		*o = ServiceNowDefinition(varServiceNowDefinition)
+	} else {
 		return err
 	}
 
-	*o = ServiceNowDefinition(varServiceNowDefinition)
+	varServiceNowDefinition := _ServiceNowDefinition{}
+
+	err = json.Unmarshal(data, &varServiceNowDefinition)
+	if err == nil {
+		o.ConnectionDefinition = varServiceNowDefinition.ConnectionDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "username")
+		delete(additionalProperties, "password")
+
+		// remove fields from embedded structs
+		reflectConnectionDefinition := reflect.ValueOf(o.ConnectionDefinition)
+		for i := 0; i < reflectConnectionDefinition.Type().NumField(); i++ {
+			t := reflectConnectionDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -27,7 +27,10 @@ type ScanEstimateDetails struct {
 	PerDayInBytes *int64 `json:"perDayInBytes,omitempty"`
 	// Amount of data scanned in bytes, to run the schedule search each year.
 	PerYearInBytes *int64 `json:"perYearInBytes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ScanEstimateDetails ScanEstimateDetails
 
 // NewScanEstimateDetails instantiates a new ScanEstimateDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o ScanEstimateDetails) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PerYearInBytes) {
 		toSerialize["perYearInBytes"] = o.PerYearInBytes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ScanEstimateDetails) UnmarshalJSON(data []byte) (err error) {
+	varScanEstimateDetails := _ScanEstimateDetails{}
+
+	err = json.Unmarshal(data, &varScanEstimateDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScanEstimateDetails(varScanEstimateDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tier")
+		delete(additionalProperties, "perScanInBytes")
+		delete(additionalProperties, "perDayInBytes")
+		delete(additionalProperties, "perYearInBytes")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableScanEstimateDetails struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type PartitionInfo struct {
 	AnalyticsTier *string `json:"analyticsTier,omitempty"`
 	// The Data Filter Group to which this parition belongs to. Possible values are :               1. `LOGS`               2. `SECURITY`               3. `AUDIT`
 	DataFilterGroup *string `json:"dataFilterGroup,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PartitionInfo PartitionInfo
@@ -154,6 +154,11 @@ func (o PartitionInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataFilterGroup) {
 		toSerialize["dataFilterGroup"] = o.DataFilterGroup
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *PartitionInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varPartitionInfo := _PartitionInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPartitionInfo)
+	err = json.Unmarshal(data, &varPartitionInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PartitionInfo(varPartitionInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "analyticsTier")
+		delete(additionalProperties, "dataFilterGroup")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

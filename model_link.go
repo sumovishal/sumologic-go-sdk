@@ -23,7 +23,10 @@ type Link struct {
 	Rel *string `json:"rel,omitempty"`
 	// URL of the search job.
 	Href *string `json:"href,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _Link Link
 
 // NewLink instantiates a new Link object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o Link) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Href) {
 		toSerialize["href"] = o.Href
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *Link) UnmarshalJSON(data []byte) (err error) {
+	varLink := _Link{}
+
+	err = json.Unmarshal(data, &varLink)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Link(varLink)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rel")
+		delete(additionalProperties, "href")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLink struct {

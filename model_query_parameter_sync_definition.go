@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type QueryParameterSyncDefinition struct {
 	// A value for the parameter. Should be compatible with the type set in dataType field.
 	Value string `json:"value"`
 	AutoComplete ParameterAutoCompleteSyncDefinition `json:"autoComplete"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _QueryParameterSyncDefinition QueryParameterSyncDefinition
@@ -219,6 +219,11 @@ func (o QueryParameterSyncDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["dataType"] = o.DataType
 	toSerialize["value"] = o.Value
 	toSerialize["autoComplete"] = o.AutoComplete
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -251,15 +256,25 @@ func (o *QueryParameterSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varQueryParameterSyncDefinition := _QueryParameterSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varQueryParameterSyncDefinition)
+	err = json.Unmarshal(data, &varQueryParameterSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = QueryParameterSyncDefinition(varQueryParameterSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "autoComplete")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

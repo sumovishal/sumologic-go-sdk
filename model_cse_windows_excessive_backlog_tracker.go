@@ -21,7 +21,10 @@ var _ MappedNullable = &CSEWindowsExcessiveBacklogTracker{}
 type CSEWindowsExcessiveBacklogTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CSEWindowsExcessiveBacklogTracker CSEWindowsExcessiveBacklogTracker
 
 // NewCSEWindowsExcessiveBacklogTracker instantiates a new CSEWindowsExcessiveBacklogTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o CSEWindowsExcessiveBacklogTracker) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CSEWindowsExcessiveBacklogTracker) UnmarshalJSON(data []byte) (err error) {
+	varCSEWindowsExcessiveBacklogTracker := _CSEWindowsExcessiveBacklogTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsExcessiveBacklogTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CSEWindowsExcessiveBacklogTracker(varCSEWindowsExcessiveBacklogTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCSEWindowsExcessiveBacklogTracker struct {

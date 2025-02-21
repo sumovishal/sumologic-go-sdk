@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsInvalidConfigurationTracker type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type CSEWindowsInvalidConfigurationTracker struct {
 	SensorHostname *string `json:"sensorHostname,omitempty"`
 	// The sensor's user name.
 	SensorUserName *string `json:"sensorUserName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsInvalidConfigurationTracker CSEWindowsInvalidConfigurationTracker
@@ -212,6 +214,11 @@ func (o CSEWindowsInvalidConfigurationTracker) ToMap() (map[string]interface{}, 
 	if !IsNil(o.SensorUserName) {
 		toSerialize["sensorUserName"] = o.SensorUserName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,17 +246,68 @@ func (o *CSEWindowsInvalidConfigurationTracker) UnmarshalJSON(data []byte) (err 
 		}
 	}
 
-	varCSEWindowsInvalidConfigurationTracker := _CSEWindowsInvalidConfigurationTracker{}
+	type CSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The sensor's user name.
+		SensorUserName *string `json:"sensorUserName,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsInvalidConfigurationTracker)
+	varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct := CSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsInvalidConfigurationTracker := _CSEWindowsInvalidConfigurationTracker{}
+		varCSEWindowsInvalidConfigurationTracker.EventType = varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsInvalidConfigurationTracker.SensorId = varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsInvalidConfigurationTracker.SensorHostname = varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsInvalidConfigurationTracker.SensorUserName = varCSEWindowsInvalidConfigurationTrackerWithoutEmbeddedStruct.SensorUserName
+		*o = CSEWindowsInvalidConfigurationTracker(varCSEWindowsInvalidConfigurationTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsInvalidConfigurationTracker(varCSEWindowsInvalidConfigurationTracker)
+	varCSEWindowsInvalidConfigurationTracker := _CSEWindowsInvalidConfigurationTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsInvalidConfigurationTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsInvalidConfigurationTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "sensorUserName")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -63,6 +62,7 @@ type TraceSpanDetail struct {
 	Events []SpanEvent `json:"events,omitempty"`
 	// List of casually related spans.
 	Links []SpanLink `json:"links,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpanDetail TraceSpanDetail
@@ -819,6 +819,11 @@ func (o TraceSpanDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Links) {
 		toSerialize["links"] = o.Links
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -850,15 +855,41 @@ func (o *TraceSpanDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpanDetail := _TraceSpanDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpanDetail)
+	err = json.Unmarshal(data, &varTraceSpanDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpanDetail(varTraceSpanDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "operationName")
+		delete(additionalProperties, "resource")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "serviceColor")
+		delete(additionalProperties, "serviceType")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "startedAt")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "kind")
+		delete(additionalProperties, "remoteService")
+		delete(additionalProperties, "remoteServiceColor")
+		delete(additionalProperties, "remoteServiceType")
+		delete(additionalProperties, "info")
+		delete(additionalProperties, "numberOfLinks")
+		delete(additionalProperties, "errorMessage")
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "criticalPathContribution")
+		delete(additionalProperties, "logs")
+		delete(additionalProperties, "events")
+		delete(additionalProperties, "links")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

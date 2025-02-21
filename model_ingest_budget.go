@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -52,6 +51,7 @@ type IngestBudget struct {
 	UsageStatus *string `json:"usageStatus,omitempty"`
 	// Number of collectors assigned to the ingest budget.
 	NumberOfCollectors *int64 `json:"numberOfCollectors,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestBudget IngestBudget
@@ -548,6 +548,11 @@ func (o IngestBudget) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NumberOfCollectors) {
 		toSerialize["numberOfCollectors"] = o.NumberOfCollectors
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -585,15 +590,35 @@ func (o *IngestBudget) UnmarshalJSON(data []byte) (err error) {
 
 	varIngestBudget := _IngestBudget{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestBudget)
+	err = json.Unmarshal(data, &varIngestBudget)
 
 	if err != nil {
 		return err
 	}
 
 	*o = IngestBudget(varIngestBudget)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "fieldValue")
+		delete(additionalProperties, "capacityBytes")
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "resetTime")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "auditThreshold")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdByUser")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedByUser")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "usageBytes")
+		delete(additionalProperties, "usageStatus")
+		delete(additionalProperties, "numberOfCollectors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

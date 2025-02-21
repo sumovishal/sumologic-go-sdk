@@ -29,7 +29,10 @@ type UsageReportRequest struct {
 	ReportType *string `json:"reportType,omitempty" validate:"regexp=^(standard|detailed|childDetailed)$"`
 	// Deployment charges will be applied to the returned usages csv if this is set to true and the organization  is a part of Sumo Organizations as a child organization.
 	IncludeDeploymentCharge *bool `json:"includeDeploymentCharge,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UsageReportRequest UsageReportRequest
 
 // NewUsageReportRequest instantiates a new UsageReportRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -245,7 +248,37 @@ func (o UsageReportRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IncludeDeploymentCharge) {
 		toSerialize["includeDeploymentCharge"] = o.IncludeDeploymentCharge
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UsageReportRequest) UnmarshalJSON(data []byte) (err error) {
+	varUsageReportRequest := _UsageReportRequest{}
+
+	err = json.Unmarshal(data, &varUsageReportRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UsageReportRequest(varUsageReportRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "endDate")
+		delete(additionalProperties, "groupBy")
+		delete(additionalProperties, "reportType")
+		delete(additionalProperties, "includeDeploymentCharge")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUsageReportRequest struct {

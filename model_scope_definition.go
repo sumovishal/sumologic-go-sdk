@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type ScopeDefinition struct {
 	// Any scopes that are required for this scope to be enabled.
 	DependsOn []string `json:"dependsOn"`
 	Group ScopeDefinitionGroup `json:"group"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScopeDefinition ScopeDefinition
@@ -191,6 +191,11 @@ func (o ScopeDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["type"] = o.Type
 	toSerialize["dependsOn"] = o.DependsOn
 	toSerialize["group"] = o.Group
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -222,15 +227,24 @@ func (o *ScopeDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varScopeDefinition := _ScopeDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScopeDefinition)
+	err = json.Unmarshal(data, &varScopeDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScopeDefinition(varScopeDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "dependsOn")
+		delete(additionalProperties, "group")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

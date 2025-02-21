@@ -26,7 +26,10 @@ type ResourceData struct {
 	Created *time.Time `json:"created,omitempty"`
 	// Last modification timestamp in date-time format.
 	LastModified *time.Time `json:"lastModified,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ResourceData ResourceData
 
 // NewResourceData instantiates a new ResourceData object
 // This constructor will assign default values to properties that have it defined,
@@ -160,7 +163,35 @@ func (o ResourceData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LastModified) {
 		toSerialize["lastModified"] = o.LastModified
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ResourceData) UnmarshalJSON(data []byte) (err error) {
+	varResourceData := _ResourceData{}
+
+	err = json.Unmarshal(data, &varResourceData)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ResourceData(varResourceData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "resourceType")
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "lastModified")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableResourceData struct {

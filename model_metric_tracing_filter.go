@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricTracingFilter type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,7 @@ type MetricTracingFilter struct {
 	// The operator to use. Accepted values:   <table>     <tr>       <th>Operator</th>       <th>Accepted value types</th>     </tr>     <tr>       <th>&lt; &lt;= &gt; &gt;= =</th>       <th>DoubleTracingValue IntegerTracingValue</th>     </tr>     <tr>       <th>between</th>       <th>RangeTracingValue of DoubleTracingValue / IntegerTracingValue</th>     </tr>   </table>
 	Operator string `json:"operator"`
 	Value *TracingValue `json:"value,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricTracingFilter MetricTracingFilter
@@ -154,6 +156,11 @@ func (o MetricTracingFilter) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,17 +188,63 @@ func (o *MetricTracingFilter) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMetricTracingFilter := _MetricTracingFilter{}
+	type MetricTracingFilterWithoutEmbeddedStruct struct {
+		// The name of the metric to filter by. The list of supported metrics can be retrieved using the [Trace Metrics](#operation/getMetrics) endpoint.
+		Metric string `json:"metric"`
+		// The operator to use. Accepted values:   <table>     <tr>       <th>Operator</th>       <th>Accepted value types</th>     </tr>     <tr>       <th>&lt; &lt;= &gt; &gt;= =</th>       <th>DoubleTracingValue IntegerTracingValue</th>     </tr>     <tr>       <th>between</th>       <th>RangeTracingValue of DoubleTracingValue / IntegerTracingValue</th>     </tr>   </table>
+		Operator string `json:"operator"`
+		Value *TracingValue `json:"value,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricTracingFilter)
+	varMetricTracingFilterWithoutEmbeddedStruct := MetricTracingFilterWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricTracingFilterWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricTracingFilter := _MetricTracingFilter{}
+		varMetricTracingFilter.Metric = varMetricTracingFilterWithoutEmbeddedStruct.Metric
+		varMetricTracingFilter.Operator = varMetricTracingFilterWithoutEmbeddedStruct.Operator
+		varMetricTracingFilter.Value = varMetricTracingFilterWithoutEmbeddedStruct.Value
+		*o = MetricTracingFilter(varMetricTracingFilter)
+	} else {
 		return err
 	}
 
-	*o = MetricTracingFilter(varMetricTracingFilter)
+	varMetricTracingFilter := _MetricTracingFilter{}
+
+	err = json.Unmarshal(data, &varMetricTracingFilter)
+	if err == nil {
+		o.TraceQueryExpression = varMetricTracingFilter.TraceQueryExpression
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metric")
+		delete(additionalProperties, "operator")
+		delete(additionalProperties, "value")
+
+		// remove fields from embedded structs
+		reflectTraceQueryExpression := reflect.ValueOf(o.TraceQueryExpression)
+		for i := 0; i < reflectTraceQueryExpression.Type().NumField(); i++ {
+			t := reflectTraceQueryExpression.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

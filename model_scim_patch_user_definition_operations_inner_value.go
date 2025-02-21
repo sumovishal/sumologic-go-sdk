@@ -20,7 +20,10 @@ var _ MappedNullable = &SCIMPatchUserDefinitionOperationsInnerValue{}
 // SCIMPatchUserDefinitionOperationsInnerValue struct for SCIMPatchUserDefinitionOperationsInnerValue
 type SCIMPatchUserDefinitionOperationsInnerValue struct {
 	Value []string `json:"value,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SCIMPatchUserDefinitionOperationsInnerValue SCIMPatchUserDefinitionOperationsInnerValue
 
 // NewSCIMPatchUserDefinitionOperationsInnerValue instantiates a new SCIMPatchUserDefinitionOperationsInnerValue object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o SCIMPatchUserDefinitionOperationsInnerValue) ToMap() (map[string]interfa
 	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SCIMPatchUserDefinitionOperationsInnerValue) UnmarshalJSON(data []byte) (err error) {
+	varSCIMPatchUserDefinitionOperationsInnerValue := _SCIMPatchUserDefinitionOperationsInnerValue{}
+
+	err = json.Unmarshal(data, &varSCIMPatchUserDefinitionOperationsInnerValue)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SCIMPatchUserDefinitionOperationsInnerValue(varSCIMPatchUserDefinitionOperationsInnerValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSCIMPatchUserDefinitionOperationsInnerValue struct {

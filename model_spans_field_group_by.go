@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansFieldGroupBy type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SpansFieldGroupBy struct {
 	SpansGroupBy
 	// A name of the field to group by.
 	FieldName string `json:"fieldName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansFieldGroupBy SpansFieldGroupBy
@@ -90,6 +92,11 @@ func (o SpansFieldGroupBy) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errSpansGroupBy
 	}
 	toSerialize["fieldName"] = o.FieldName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *SpansFieldGroupBy) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansFieldGroupBy := _SpansFieldGroupBy{}
+	type SpansFieldGroupByWithoutEmbeddedStruct struct {
+		// A name of the field to group by.
+		FieldName string `json:"fieldName"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansFieldGroupBy)
+	varSpansFieldGroupByWithoutEmbeddedStruct := SpansFieldGroupByWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansFieldGroupByWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansFieldGroupBy := _SpansFieldGroupBy{}
+		varSpansFieldGroupBy.FieldName = varSpansFieldGroupByWithoutEmbeddedStruct.FieldName
+		*o = SpansFieldGroupBy(varSpansFieldGroupBy)
+	} else {
 		return err
 	}
 
-	*o = SpansFieldGroupBy(varSpansFieldGroupBy)
+	varSpansFieldGroupBy := _SpansFieldGroupBy{}
+
+	err = json.Unmarshal(data, &varSpansFieldGroupBy)
+	if err == nil {
+		o.SpansGroupBy = varSpansFieldGroupBy.SpansGroupBy
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+
+		// remove fields from embedded structs
+		reflectSpansGroupBy := reflect.ValueOf(o.SpansGroupBy)
+		for i := 0; i < reflectSpansGroupBy.Type().NumField(); i++ {
+			t := reflectSpansGroupBy.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

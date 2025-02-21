@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SearchAuditPolicy{}
 type SearchAuditPolicy struct {
 	// Whether the Search Audit policy is enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SearchAuditPolicy SearchAuditPolicy
@@ -80,6 +80,11 @@ func (o SearchAuditPolicy) MarshalJSON() ([]byte, error) {
 func (o SearchAuditPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SearchAuditPolicy) UnmarshalJSON(data []byte) (err error) {
 
 	varSearchAuditPolicy := _SearchAuditPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSearchAuditPolicy)
+	err = json.Unmarshal(data, &varSearchAuditPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SearchAuditPolicy(varSearchAuditPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CidrList{}
 type CidrList struct {
 	// An array of CIDR notations and/or IP addresses.
 	Data []Cidr `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CidrList CidrList
@@ -80,6 +80,11 @@ func (o CidrList) MarshalJSON() ([]byte, error) {
 func (o CidrList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CidrList) UnmarshalJSON(data []byte) (err error) {
 
 	varCidrList := _CidrList{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCidrList)
+	err = json.Unmarshal(data, &varCidrList)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CidrList(varCidrList)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

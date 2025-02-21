@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type Compliance struct {
 	Target float32 `json:"target"`
 	// Time zone for the SLO compliance. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Compliance Compliance
@@ -136,6 +136,11 @@ func (o Compliance) ToMap() (map[string]interface{}, error) {
 	toSerialize["complianceType"] = o.ComplianceType
 	toSerialize["target"] = o.Target
 	toSerialize["timezone"] = o.Timezone
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *Compliance) UnmarshalJSON(data []byte) (err error) {
 
 	varCompliance := _Compliance{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCompliance)
+	err = json.Unmarshal(data, &varCompliance)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Compliance(varCompliance)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "complianceType")
+		delete(additionalProperties, "target")
+		delete(additionalProperties, "timezone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

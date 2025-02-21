@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsStaticCondition type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type LogsStaticCondition struct {
 	ThresholdType string `json:"thresholdType" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
 	// The name of the field that the trigger condition will alert on. The trigger could compare the value of specified field with the threshold. If `field` is not specified, monitor would default to result count instead.
 	Field *string `json:"field,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsStaticCondition LogsStaticCondition
@@ -189,6 +191,11 @@ func (o LogsStaticCondition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Field) {
 		toSerialize["field"] = o.Field
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -217,17 +224,68 @@ func (o *LogsStaticCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogsStaticCondition := _LogsStaticCondition{}
+	type LogsStaticConditionWithoutEmbeddedStruct struct {
+		// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
+		TimeRange string `json:"timeRange"`
+		// The data value for the condition. This defines the threshold for when to trigger. Threshold value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
+		Threshold float64 `json:"threshold"`
+		// The comparison type for the `threshold` evaluation. This defines how you want the data value compared. Valid values:   1. `LessThan`: Less than than the configured threshold.   2. `GreaterThan`: Greater than the configured threshold.   3. `LessThanOrEqual`: Less than or equal to the configured threshold.   4. `GreaterThanOrEqual`: Greater than or equal to the configured threshold. ThresholdType value is not applicable for `MissingData` and `ResolvedMissingData` triggerTypes and will be ignored if specified.
+		ThresholdType string `json:"thresholdType" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
+		// The name of the field that the trigger condition will alert on. The trigger could compare the value of specified field with the threshold. If `field` is not specified, monitor would default to result count instead.
+		Field *string `json:"field,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsStaticCondition)
+	varLogsStaticConditionWithoutEmbeddedStruct := LogsStaticConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsStaticConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsStaticCondition := _LogsStaticCondition{}
+		varLogsStaticCondition.TimeRange = varLogsStaticConditionWithoutEmbeddedStruct.TimeRange
+		varLogsStaticCondition.Threshold = varLogsStaticConditionWithoutEmbeddedStruct.Threshold
+		varLogsStaticCondition.ThresholdType = varLogsStaticConditionWithoutEmbeddedStruct.ThresholdType
+		varLogsStaticCondition.Field = varLogsStaticConditionWithoutEmbeddedStruct.Field
+		*o = LogsStaticCondition(varLogsStaticCondition)
+	} else {
 		return err
 	}
 
-	*o = LogsStaticCondition(varLogsStaticCondition)
+	varLogsStaticCondition := _LogsStaticCondition{}
+
+	err = json.Unmarshal(data, &varLogsStaticCondition)
+	if err == nil {
+		o.TriggerCondition = varLogsStaticCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "thresholdType")
+		delete(additionalProperties, "field")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

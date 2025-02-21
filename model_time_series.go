@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TimeSeries{}
 type TimeSeries struct {
 	MetricDefinition MetricDefinition `json:"metricDefinition"`
 	Points Points `json:"points"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TimeSeries TimeSeries
@@ -106,6 +106,11 @@ func (o TimeSeries) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["metricDefinition"] = o.MetricDefinition
 	toSerialize["points"] = o.Points
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *TimeSeries) UnmarshalJSON(data []byte) (err error) {
 
 	varTimeSeries := _TimeSeries{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTimeSeries)
+	err = json.Unmarshal(data, &varTimeSeries)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TimeSeries(varTimeSeries)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metricDefinition")
+		delete(additionalProperties, "points")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

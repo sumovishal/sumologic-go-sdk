@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type SignalsRequest struct {
 	// A list of signal types to compute. Can be `LogFluctuation`, `DimensionalityExplanation`, `GisBenchmark` or `Anomalies` 
 	SignalTypes []string `json:"signalTypes"`
 	SignalContext SignalContext `json:"signalContext"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SignalsRequest SignalsRequest
@@ -107,6 +107,11 @@ func (o SignalsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["signalTypes"] = o.SignalTypes
 	toSerialize["signalContext"] = o.SignalContext
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *SignalsRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSignalsRequest := _SignalsRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSignalsRequest)
+	err = json.Unmarshal(data, &varSignalsRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SignalsRequest(varSignalsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "signalTypes")
+		delete(additionalProperties, "signalContext")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

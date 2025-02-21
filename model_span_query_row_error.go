@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SpanQueryRowError struct {
 	Message string `json:"message"`
 	// Details about the occured error.
 	Details *string `json:"details,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRowError SpanQueryRowError
@@ -145,6 +145,11 @@ func (o SpanQueryRowError) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Details) {
 		toSerialize["details"] = o.Details
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *SpanQueryRowError) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRowError := _SpanQueryRowError{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRowError)
+	err = json.Unmarshal(data, &varSpanQueryRowError)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRowError(varSpanQueryRowError)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "details")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionAffectedDueToIngestBudgetTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type CollectionAffectedDueToIngestBudgetTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The list of budget names.
 	AssociatedBudgetNames *string `json:"associatedBudgetNames,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionAffectedDueToIngestBudgetTracker CollectionAffectedDueToIngestBudgetTracker
@@ -138,6 +140,11 @@ func (o CollectionAffectedDueToIngestBudgetTracker) ToMap() (map[string]interfac
 	if !IsNil(o.AssociatedBudgetNames) {
 		toSerialize["associatedBudgetNames"] = o.AssociatedBudgetNames
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *CollectionAffectedDueToIngestBudgetTracker) UnmarshalJSON(data []byte) 
 		}
 	}
 
-	varCollectionAffectedDueToIngestBudgetTracker := _CollectionAffectedDueToIngestBudgetTracker{}
+	type CollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The list of budget names.
+		AssociatedBudgetNames *string `json:"associatedBudgetNames,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionAffectedDueToIngestBudgetTracker)
+	varCollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct := CollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionAffectedDueToIngestBudgetTracker := _CollectionAffectedDueToIngestBudgetTracker{}
+		varCollectionAffectedDueToIngestBudgetTracker.EventType = varCollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct.EventType
+		varCollectionAffectedDueToIngestBudgetTracker.AssociatedBudgetNames = varCollectionAffectedDueToIngestBudgetTrackerWithoutEmbeddedStruct.AssociatedBudgetNames
+		*o = CollectionAffectedDueToIngestBudgetTracker(varCollectionAffectedDueToIngestBudgetTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionAffectedDueToIngestBudgetTracker(varCollectionAffectedDueToIngestBudgetTracker)
+	varCollectionAffectedDueToIngestBudgetTracker := _CollectionAffectedDueToIngestBudgetTracker{}
+
+	err = json.Unmarshal(data, &varCollectionAffectedDueToIngestBudgetTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionAffectedDueToIngestBudgetTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "associatedBudgetNames")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

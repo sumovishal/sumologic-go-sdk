@@ -23,7 +23,10 @@ type DimensionKeyValue struct {
 	Key *string `json:"key,omitempty"`
 	// The value of the metric dimension.
 	Value *string `json:"value,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DimensionKeyValue DimensionKeyValue
 
 // NewDimensionKeyValue instantiates a new DimensionKeyValue object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o DimensionKeyValue) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DimensionKeyValue) UnmarshalJSON(data []byte) (err error) {
+	varDimensionKeyValue := _DimensionKeyValue{}
+
+	err = json.Unmarshal(data, &varDimensionKeyValue)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DimensionKeyValue(varDimensionKeyValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDimensionKeyValue struct {

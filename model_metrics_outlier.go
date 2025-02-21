@@ -28,7 +28,10 @@ type MetricsOutlier struct {
 	Direction *string `json:"direction,omitempty"`
 	// How much should the indicator be different from the baseline for each datapoint.
 	Threshold *float64 `json:"threshold,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MetricsOutlier MetricsOutlier
 
 // NewMetricsOutlier instantiates a new MetricsOutlier object
 // This constructor will assign default values to properties that have it defined,
@@ -240,7 +243,37 @@ func (o MetricsOutlier) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Threshold) {
 		toSerialize["threshold"] = o.Threshold
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MetricsOutlier) UnmarshalJSON(data []byte) (err error) {
+	varMetricsOutlier := _MetricsOutlier{}
+
+	err = json.Unmarshal(data, &varMetricsOutlier)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsOutlier(varMetricsOutlier)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "trimmedQuery")
+		delete(additionalProperties, "baselineWindow")
+		delete(additionalProperties, "baselineTimeRangeWindow")
+		delete(additionalProperties, "direction")
+		delete(additionalProperties, "threshold")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMetricsOutlier struct {

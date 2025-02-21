@@ -21,7 +21,10 @@ var _ MappedNullable = &DataPoint{}
 type DataPoint struct {
 	// Type of the data point.
 	DataPointType *string `json:"dataPointType,omitempty" validate:"regexp=^(OutlierSeriesData|StaticSeriesData)$"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DataPoint DataPoint
 
 // NewDataPoint instantiates a new DataPoint object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o DataPoint) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DataPointType) {
 		toSerialize["dataPointType"] = o.DataPointType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DataPoint) UnmarshalJSON(data []byte) (err error) {
+	varDataPoint := _DataPoint{}
+
+	err = json.Unmarshal(data, &varDataPoint)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DataPoint(varDataPoint)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dataPointType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDataPoint struct {

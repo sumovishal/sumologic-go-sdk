@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TraceQueryResultResponse struct {
 	Results []TraceDetail `json:"results"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceQueryResultResponse TraceQueryResultResponse
@@ -117,6 +117,11 @@ func (o TraceQueryResultResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *TraceQueryResultResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceQueryResultResponse := _TraceQueryResultResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceQueryResultResponse)
+	err = json.Unmarshal(data, &varTraceQueryResultResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceQueryResultResponse(varTraceQueryResultResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "results")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

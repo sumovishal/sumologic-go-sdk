@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ContentPermissionAssignment struct {
 	SourceId string `json:"sourceId"`
 	// Unique identifier for the content item.
 	ContentId string `json:"contentId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentPermissionAssignment ContentPermissionAssignment
@@ -164,6 +164,11 @@ func (o ContentPermissionAssignment) ToMap() (map[string]interface{}, error) {
 	toSerialize["sourceType"] = o.SourceType
 	toSerialize["sourceId"] = o.SourceId
 	toSerialize["contentId"] = o.ContentId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *ContentPermissionAssignment) UnmarshalJSON(data []byte) (err error) {
 
 	varContentPermissionAssignment := _ContentPermissionAssignment{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentPermissionAssignment)
+	err = json.Unmarshal(data, &varContentPermissionAssignment)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentPermissionAssignment(varContentPermissionAssignment)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissionName")
+		delete(additionalProperties, "sourceType")
+		delete(additionalProperties, "sourceId")
+		delete(additionalProperties, "contentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

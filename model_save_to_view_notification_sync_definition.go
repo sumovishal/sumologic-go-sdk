@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SaveToViewNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SaveToViewNotificationSyncDefinition struct {
 	ScheduleNotificationSyncDefinition
 	// Name of the View to save the notification to.
 	ViewName string `json:"viewName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SaveToViewNotificationSyncDefinition SaveToViewNotificationSyncDefinition
@@ -90,6 +92,11 @@ func (o SaveToViewNotificationSyncDefinition) ToMap() (map[string]interface{}, e
 		return map[string]interface{}{}, errScheduleNotificationSyncDefinition
 	}
 	toSerialize["viewName"] = o.ViewName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *SaveToViewNotificationSyncDefinition) UnmarshalJSON(data []byte) (err e
 		}
 	}
 
-	varSaveToViewNotificationSyncDefinition := _SaveToViewNotificationSyncDefinition{}
+	type SaveToViewNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// Name of the View to save the notification to.
+		ViewName string `json:"viewName"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSaveToViewNotificationSyncDefinition)
+	varSaveToViewNotificationSyncDefinitionWithoutEmbeddedStruct := SaveToViewNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSaveToViewNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varSaveToViewNotificationSyncDefinition := _SaveToViewNotificationSyncDefinition{}
+		varSaveToViewNotificationSyncDefinition.ViewName = varSaveToViewNotificationSyncDefinitionWithoutEmbeddedStruct.ViewName
+		*o = SaveToViewNotificationSyncDefinition(varSaveToViewNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = SaveToViewNotificationSyncDefinition(varSaveToViewNotificationSyncDefinition)
+	varSaveToViewNotificationSyncDefinition := _SaveToViewNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varSaveToViewNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varSaveToViewNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "viewName")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

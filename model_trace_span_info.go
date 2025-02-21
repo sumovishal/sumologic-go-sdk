@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TraceSpanInfo{}
 type TraceSpanInfo struct {
 	// Type of this span. Possible values: `TraceHttpSpanInfo`, `TraceDbSpanInfo`, `TraceMessageBusSpanInfo`.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpanInfo TraceSpanInfo
@@ -80,6 +80,11 @@ func (o TraceSpanInfo) MarshalJSON() ([]byte, error) {
 func (o TraceSpanInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TraceSpanInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpanInfo := _TraceSpanInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpanInfo)
+	err = json.Unmarshal(data, &varTraceSpanInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpanInfo(varTraceSpanInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

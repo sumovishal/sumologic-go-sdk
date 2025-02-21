@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CreateDataForwardingRule struct {
 	PayloadSchema *string `json:"payloadSchema,omitempty" validate:"regexp=^(builtInFields|allFields|raw)$"`
 	// Format of the payload. Default format will be \"csv\". \"text\" format should be used in conjunction with \"raw\" payloadSchema and vice-versa.
 	Format *string `json:"format,omitempty" validate:"regexp=^(csv|json|text)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateDataForwardingRule CreateDataForwardingRule
@@ -256,6 +256,11 @@ func (o CreateDataForwardingRule) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Format) {
 		toSerialize["format"] = o.Format
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -284,15 +289,25 @@ func (o *CreateDataForwardingRule) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateDataForwardingRule := _CreateDataForwardingRule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateDataForwardingRule)
+	err = json.Unmarshal(data, &varCreateDataForwardingRule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateDataForwardingRule(varCreateDataForwardingRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "indexId")
+		delete(additionalProperties, "destinationId")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "fileFormat")
+		delete(additionalProperties, "payloadSchema")
+		delete(additionalProperties, "format")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

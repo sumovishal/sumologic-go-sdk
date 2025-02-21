@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &EventContext{}
 type EventContext struct {
 	// Context for which correlated events are to be fetched.
 	EventContextType string `json:"eventContextType" validate:"regexp=^(SearchQueryContext)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventContext EventContext
@@ -80,6 +80,11 @@ func (o EventContext) MarshalJSON() ([]byte, error) {
 func (o EventContext) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["eventContextType"] = o.EventContextType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *EventContext) UnmarshalJSON(data []byte) (err error) {
 
 	varEventContext := _EventContext{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventContext)
+	err = json.Unmarshal(data, &varEventContext)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventContext(varEventContext)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventContextType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

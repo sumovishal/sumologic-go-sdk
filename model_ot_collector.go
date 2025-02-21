@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -55,6 +54,7 @@ type OTCollector struct {
 	ModifiedBy string `json:"modifiedBy"`
 	// Count of the source templates linked to a collector
 	SourceTemplateLinkedCount *int32 `json:"sourceTemplateLinkedCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCollector OTCollector
@@ -644,6 +644,11 @@ func (o OTCollector) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SourceTemplateLinkedCount) {
 		toSerialize["sourceTemplateLinkedCount"] = o.SourceTemplateLinkedCount
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -678,15 +683,37 @@ func (o *OTCollector) UnmarshalJSON(data []byte) (err error) {
 
 	varOTCollector := _OTCollector{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCollector)
+	err = json.Unmarshal(data, &varOTCollector)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OTCollector(varOTCollector)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "category")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "tags")
+		delete(additionalProperties, "healthIncidentsTracker")
+		delete(additionalProperties, "ephemeral")
+		delete(additionalProperties, "alive")
+		delete(additionalProperties, "isRemotelyManaged")
+		delete(additionalProperties, "effectiveConfig")
+		delete(additionalProperties, "systemInfo")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "sourceTemplateLinkedCount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

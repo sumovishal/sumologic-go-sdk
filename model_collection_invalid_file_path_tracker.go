@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionInvalidFilePathTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type CollectionInvalidFilePathTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The path to the file.
 	Path *string `json:"path,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionInvalidFilePathTracker CollectionInvalidFilePathTracker
@@ -138,6 +140,11 @@ func (o CollectionInvalidFilePathTracker) ToMap() (map[string]interface{}, error
 	if !IsNil(o.Path) {
 		toSerialize["path"] = o.Path
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *CollectionInvalidFilePathTracker) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varCollectionInvalidFilePathTracker := _CollectionInvalidFilePathTracker{}
+	type CollectionInvalidFilePathTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The path to the file.
+		Path *string `json:"path,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionInvalidFilePathTracker)
+	varCollectionInvalidFilePathTrackerWithoutEmbeddedStruct := CollectionInvalidFilePathTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionInvalidFilePathTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionInvalidFilePathTracker := _CollectionInvalidFilePathTracker{}
+		varCollectionInvalidFilePathTracker.EventType = varCollectionInvalidFilePathTrackerWithoutEmbeddedStruct.EventType
+		varCollectionInvalidFilePathTracker.Path = varCollectionInvalidFilePathTrackerWithoutEmbeddedStruct.Path
+		*o = CollectionInvalidFilePathTracker(varCollectionInvalidFilePathTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionInvalidFilePathTracker(varCollectionInvalidFilePathTracker)
+	varCollectionInvalidFilePathTracker := _CollectionInvalidFilePathTracker{}
+
+	err = json.Unmarshal(data, &varCollectionInvalidFilePathTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionInvalidFilePathTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "path")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

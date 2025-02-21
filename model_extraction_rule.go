@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type ExtractionRule struct {
 	Id string `json:"id"`
 	// List of extracted fields from \"parseExpression\".
 	FieldNames []string `json:"fieldNames,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ExtractionRule ExtractionRule
@@ -355,6 +355,11 @@ func (o ExtractionRule) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FieldNames) {
 		toSerialize["fieldNames"] = o.FieldNames
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -389,15 +394,29 @@ func (o *ExtractionRule) UnmarshalJSON(data []byte) (err error) {
 
 	varExtractionRule := _ExtractionRule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varExtractionRule)
+	err = json.Unmarshal(data, &varExtractionRule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ExtractionRule(varExtractionRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "parseExpression")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "fieldNames")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type AsyncInstallAppJobStatus struct {
 	// Identifier of the folder in which the app was installed.
 	FolderId *string `json:"folderId,omitempty"`
 	Error *ErrorDescription `json:"error,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AsyncInstallAppJobStatus AsyncInstallAppJobStatus
@@ -227,6 +227,11 @@ func (o AsyncInstallAppJobStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Error) {
 		toSerialize["error"] = o.Error
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -254,15 +259,24 @@ func (o *AsyncInstallAppJobStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varAsyncInstallAppJobStatus := _AsyncInstallAppJobStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAsyncInstallAppJobStatus)
+	err = json.Unmarshal(data, &varAsyncInstallAppJobStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AsyncInstallAppJobStatus(varAsyncInstallAppJobStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "path")
+		delete(additionalProperties, "folderId")
+		delete(additionalProperties, "error")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type TimeSeriesList struct {
 	// Time shift value if specified in request in human readable format.
 	TimeShiftLabel *string `json:"timeShiftLabel,omitempty"`
 	ResultContext *MetricsQueryResultContext `json:"resultContext,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TimeSeriesList TimeSeriesList
@@ -190,6 +190,11 @@ func (o TimeSeriesList) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResultContext) {
 		toSerialize["resultContext"] = o.ResultContext
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -217,15 +222,23 @@ func (o *TimeSeriesList) UnmarshalJSON(data []byte) (err error) {
 
 	varTimeSeriesList := _TimeSeriesList{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTimeSeriesList)
+	err = json.Unmarshal(data, &varTimeSeriesList)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TimeSeriesList(varTimeSeriesList)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeSeries")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "timeShiftLabel")
+		delete(additionalProperties, "resultContext")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Points struct {
 	Timestamps []int64 `json:"timestamps"`
 	// Array of values of datapoints corresponding to timestamp array.
 	Values []float64 `json:"values"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Points Points
@@ -108,6 +108,11 @@ func (o Points) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["timestamps"] = o.Timestamps
 	toSerialize["values"] = o.Values
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Points) UnmarshalJSON(data []byte) (err error) {
 
 	varPoints := _Points{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPoints)
+	err = json.Unmarshal(data, &varPoints)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Points(varPoints)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timestamps")
+		delete(additionalProperties, "values")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

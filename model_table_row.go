@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TableRow struct {
 	ColumnName string `json:"columnName"`
 	// Value of the specified column.
 	ColumnValue string `json:"columnValue"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TableRow TableRow
@@ -108,6 +108,11 @@ func (o TableRow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["columnName"] = o.ColumnName
 	toSerialize["columnValue"] = o.ColumnValue
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *TableRow) UnmarshalJSON(data []byte) (err error) {
 
 	varTableRow := _TableRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTableRow)
+	err = json.Unmarshal(data, &varTableRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TableRow(varTableRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "columnName")
+		delete(additionalProperties, "columnValue")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

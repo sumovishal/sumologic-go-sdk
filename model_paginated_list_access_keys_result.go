@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PaginatedListAccessKeysResult struct {
 	Data []AccessKeyPublic `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaginatedListAccessKeysResult PaginatedListAccessKeysResult
@@ -117,6 +117,11 @@ func (o PaginatedListAccessKeysResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *PaginatedListAccessKeysResult) UnmarshalJSON(data []byte) (err error) {
 
 	varPaginatedListAccessKeysResult := _PaginatedListAccessKeysResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaginatedListAccessKeysResult)
+	err = json.Unmarshal(data, &varPaginatedListAccessKeysResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaginatedListAccessKeysResult(varPaginatedListAccessKeysResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

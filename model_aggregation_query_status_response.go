@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type AggregationQueryStatusResponse struct {
 	Status string `json:"status" validate:"regexp=^(Processing|Finished|Error|Canceled)$"`
 	// Descriptive message of the status.
 	StatusMessage *string `json:"statusMessage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AggregationQueryStatusResponse AggregationQueryStatusResponse
@@ -145,6 +145,11 @@ func (o AggregationQueryStatusResponse) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.StatusMessage) {
 		toSerialize["statusMessage"] = o.StatusMessage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *AggregationQueryStatusResponse) UnmarshalJSON(data []byte) (err error) 
 
 	varAggregationQueryStatusResponse := _AggregationQueryStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAggregationQueryStatusResponse)
+	err = json.Unmarshal(data, &varAggregationQueryStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AggregationQueryStatusResponse(varAggregationQueryStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

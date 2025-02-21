@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OtTag struct {
 	Key string `json:"key"`
 	// values of the given tag.
 	Values []string `json:"values"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OtTag OtTag
@@ -108,6 +108,11 @@ func (o OtTag) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["key"] = o.Key
 	toSerialize["values"] = o.Values
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *OtTag) UnmarshalJSON(data []byte) (err error) {
 
 	varOtTag := _OtTag{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOtTag)
+	err = json.Unmarshal(data, &varOtTag)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OtTag(varOtTag)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "values")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

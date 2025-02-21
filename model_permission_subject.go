@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type PermissionSubject struct {
 	SubjectType string `json:"subjectType" validate:"regexp=^(user|role|org)$"`
 	// The identifier that belongs to the subject type chosen above. For e.g. if the subjectType is set to `user`, subjectId should be the identifier of a user (same goes for `role` or `org` subjectType).
 	SubjectId string `json:"subjectId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PermissionSubject PermissionSubject
@@ -108,6 +108,11 @@ func (o PermissionSubject) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["subjectType"] = o.SubjectType
 	toSerialize["subjectId"] = o.SubjectId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *PermissionSubject) UnmarshalJSON(data []byte) (err error) {
 
 	varPermissionSubject := _PermissionSubject{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPermissionSubject)
+	err = json.Unmarshal(data, &varPermissionSubject)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PermissionSubject(varPermissionSubject)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subjectType")
+		delete(additionalProperties, "subjectId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

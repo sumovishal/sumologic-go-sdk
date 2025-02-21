@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &RowDeleteDefinition{}
 type RowDeleteDefinition struct {
 	// A list of all the primary key field identifiers and their corresponding values which defines the row to delete.
 	PrimaryKey []TableRow `json:"primaryKey"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RowDeleteDefinition RowDeleteDefinition
@@ -80,6 +80,11 @@ func (o RowDeleteDefinition) MarshalJSON() ([]byte, error) {
 func (o RowDeleteDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["primaryKey"] = o.PrimaryKey
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *RowDeleteDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varRowDeleteDefinition := _RowDeleteDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRowDeleteDefinition)
+	err = json.Unmarshal(data, &varRowDeleteDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RowDeleteDefinition(varRowDeleteDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "primaryKey")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

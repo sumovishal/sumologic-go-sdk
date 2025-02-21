@@ -29,7 +29,10 @@ type TierEstimate struct {
 	PerYearInBytes *int64 `json:"perYearInBytes,omitempty"`
 	// one-time scan for log anomaly monitor
 	TrainingScanInBytes *int64 `json:"trainingScanInBytes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _TierEstimate TierEstimate
 
 // NewTierEstimate instantiates a new TierEstimate object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o TierEstimate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TrainingScanInBytes) {
 		toSerialize["trainingScanInBytes"] = o.TrainingScanInBytes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *TierEstimate) UnmarshalJSON(data []byte) (err error) {
+	varTierEstimate := _TierEstimate{}
+
+	err = json.Unmarshal(data, &varTierEstimate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TierEstimate(varTierEstimate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tier")
+		delete(additionalProperties, "perScanInBytes")
+		delete(additionalProperties, "perDayInBytes")
+		delete(additionalProperties, "perYearInBytes")
+		delete(additionalProperties, "trainingScanInBytes")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableTierEstimate struct {

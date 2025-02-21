@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type BuiltinField struct {
 	DataType string `json:"dataType" validate:"regexp=^(String|Long|Int|Double|Boolean)$"`
 	// Indicates whether the field is enabled and its values are being accepted. Possible values are `Enabled` and `Disabled`.
 	State string `json:"state" validate:"regexp=^(Enabled|Disabled)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BuiltinField BuiltinField
@@ -164,6 +164,11 @@ func (o BuiltinField) ToMap() (map[string]interface{}, error) {
 	toSerialize["fieldId"] = o.FieldId
 	toSerialize["dataType"] = o.DataType
 	toSerialize["state"] = o.State
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *BuiltinField) UnmarshalJSON(data []byte) (err error) {
 
 	varBuiltinField := _BuiltinField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBuiltinField)
+	err = json.Unmarshal(data, &varBuiltinField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BuiltinField(varBuiltinField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldId")
+		delete(additionalProperties, "dataType")
+		delete(additionalProperties, "state")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsSearchSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -29,6 +30,7 @@ type MetricsSearchSyncDefinition struct {
 	Queries []Query `json:"queries"`
 	// Visual settings of the metrics search page. Must be a string representing a valid JSON object. 
 	VisualSettings *string `json:"visualSettings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSearchSyncDefinition MetricsSearchSyncDefinition
@@ -192,6 +194,11 @@ func (o MetricsSearchSyncDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.VisualSettings) {
 		toSerialize["visualSettings"] = o.VisualSettings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -220,17 +227,67 @@ func (o *MetricsSearchSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMetricsSearchSyncDefinition := _MetricsSearchSyncDefinition{}
+	type MetricsSearchSyncDefinitionWithoutEmbeddedStruct struct {
+		TimeRange ResolvableTimeRange `json:"timeRange"`
+		// Description of the metrics search page.
+		Description *string `json:"description,omitempty"`
+		// Queries of the metrics search page.
+		Queries []Query `json:"queries"`
+		// Visual settings of the metrics search page. Must be a string representing a valid JSON object. 
+		VisualSettings *string `json:"visualSettings,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSearchSyncDefinition)
+	varMetricsSearchSyncDefinitionWithoutEmbeddedStruct := MetricsSearchSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsSearchSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsSearchSyncDefinition := _MetricsSearchSyncDefinition{}
+		varMetricsSearchSyncDefinition.TimeRange = varMetricsSearchSyncDefinitionWithoutEmbeddedStruct.TimeRange
+		varMetricsSearchSyncDefinition.Description = varMetricsSearchSyncDefinitionWithoutEmbeddedStruct.Description
+		varMetricsSearchSyncDefinition.Queries = varMetricsSearchSyncDefinitionWithoutEmbeddedStruct.Queries
+		varMetricsSearchSyncDefinition.VisualSettings = varMetricsSearchSyncDefinitionWithoutEmbeddedStruct.VisualSettings
+		*o = MetricsSearchSyncDefinition(varMetricsSearchSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = MetricsSearchSyncDefinition(varMetricsSearchSyncDefinition)
+	varMetricsSearchSyncDefinition := _MetricsSearchSyncDefinition{}
+
+	err = json.Unmarshal(data, &varMetricsSearchSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varMetricsSearchSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "visualSettings")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

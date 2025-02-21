@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListIngestBudgetsResponseV2 struct {
 	Data []IngestBudgetV2 `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListIngestBudgetsResponseV2 ListIngestBudgetsResponseV2
@@ -117,6 +117,11 @@ func (o ListIngestBudgetsResponseV2) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ListIngestBudgetsResponseV2) UnmarshalJSON(data []byte) (err error) {
 
 	varListIngestBudgetsResponseV2 := _ListIngestBudgetsResponseV2{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListIngestBudgetsResponseV2)
+	err = json.Unmarshal(data, &varListIngestBudgetsResponseV2)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListIngestBudgetsResponseV2(varListIngestBudgetsResponseV2)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

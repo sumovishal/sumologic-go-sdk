@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type EntitlementConsumption struct {
 	Operators []Operator `json:"operators"`
 	// Consumption model of the entitlements, available values are `DailyAverage`, `AnnualBucket`, and `Credits`.
 	ContractType string `json:"contractType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EntitlementConsumption EntitlementConsumption
@@ -173,6 +173,11 @@ func (o EntitlementConsumption) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["operators"] = o.Operators
 	toSerialize["contractType"] = o.ContractType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *EntitlementConsumption) UnmarshalJSON(data []byte) (err error) {
 
 	varEntitlementConsumption := _EntitlementConsumption{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEntitlementConsumption)
+	err = json.Unmarshal(data, &varEntitlementConsumption)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EntitlementConsumption(varEntitlementConsumption)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "entitlementType")
+		delete(additionalProperties, "datapoints")
+		delete(additionalProperties, "operators")
+		delete(additionalProperties, "contractType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

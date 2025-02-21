@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AdhocMutingResponse struct {
 	StartTime int64 `json:"startTime"`
 	// End time of the adhoc muting period in Epoch.If muting indefinitely, this will be empty.
 	EndTime *int64 `json:"endTime,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AdhocMutingResponse AdhocMutingResponse
@@ -117,6 +117,11 @@ func (o AdhocMutingResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EndTime) {
 		toSerialize["endTime"] = o.EndTime
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *AdhocMutingResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varAdhocMutingResponse := _AdhocMutingResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAdhocMutingResponse)
+	err = json.Unmarshal(data, &varAdhocMutingResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AdhocMutingResponse(varAdhocMutingResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

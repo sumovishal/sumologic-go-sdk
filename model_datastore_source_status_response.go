@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type DatastoreSourceStatusResponse struct {
 	SupportsCat *bool `json:"supportsCat,omitempty"`
 	// True if enabled
 	Enabled *bool `json:"enabled,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DatastoreSourceStatusResponse DatastoreSourceStatusResponse
@@ -302,6 +302,11 @@ func (o DatastoreSourceStatusResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Enabled) {
 		toSerialize["enabled"] = o.Enabled
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -329,15 +334,26 @@ func (o *DatastoreSourceStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varDatastoreSourceStatusResponse := _DatastoreSourceStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDatastoreSourceStatusResponse)
+	err = json.Unmarshal(data, &varDatastoreSourceStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DatastoreSourceStatusResponse(varDatastoreSourceStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "diskSize")
+		delete(additionalProperties, "indicatorCount")
+		delete(additionalProperties, "sumoProvided")
+		delete(additionalProperties, "supportsCat")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

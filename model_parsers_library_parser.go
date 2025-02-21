@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryParser type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type ParsersLibraryParser struct {
 	IsPartial *bool `json:"isPartial,omitempty"`
 	// Localized stanzas.
 	LocalStanzas *string `json:"localStanzas,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryParser ParsersLibraryParser
@@ -283,6 +285,11 @@ func (o ParsersLibraryParser) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LocalStanzas) {
 		toSerialize["localStanzas"] = o.LocalStanzas
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -311,17 +318,76 @@ func (o *ParsersLibraryParser) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryParser := _ParsersLibraryParser{}
+	type ParsersLibraryParserWithoutEmbeddedStruct struct {
+		// Collection of stanzas describing the parser.
+		Stanzas string `json:"stanzas"`
+		// The path to the Model a Model-Connector is associated with.
+		ModelPath *string `json:"modelPath,omitempty"`
+		// The path to the sourcetype a Model-Connector is associated with.
+		SourcetypePath *string `json:"sourcetypePath,omitempty"`
+		// CSV list of model families this object belongs/applies to
+		Families *string `json:"families,omitempty"`
+		// Is this a complete Parser or Model-Connector, or just a config fragment?
+		IsPartial *bool `json:"isPartial,omitempty"`
+		// Localized stanzas.
+		LocalStanzas *string `json:"localStanzas,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryParser)
+	varParsersLibraryParserWithoutEmbeddedStruct := ParsersLibraryParserWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryParserWithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryParser := _ParsersLibraryParser{}
+		varParsersLibraryParser.Stanzas = varParsersLibraryParserWithoutEmbeddedStruct.Stanzas
+		varParsersLibraryParser.ModelPath = varParsersLibraryParserWithoutEmbeddedStruct.ModelPath
+		varParsersLibraryParser.SourcetypePath = varParsersLibraryParserWithoutEmbeddedStruct.SourcetypePath
+		varParsersLibraryParser.Families = varParsersLibraryParserWithoutEmbeddedStruct.Families
+		varParsersLibraryParser.IsPartial = varParsersLibraryParserWithoutEmbeddedStruct.IsPartial
+		varParsersLibraryParser.LocalStanzas = varParsersLibraryParserWithoutEmbeddedStruct.LocalStanzas
+		*o = ParsersLibraryParser(varParsersLibraryParser)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryParser(varParsersLibraryParser)
+	varParsersLibraryParser := _ParsersLibraryParser{}
+
+	err = json.Unmarshal(data, &varParsersLibraryParser)
+	if err == nil {
+		o.ParsersLibraryBase = varParsersLibraryParser.ParsersLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "stanzas")
+		delete(additionalProperties, "modelPath")
+		delete(additionalProperties, "sourcetypePath")
+		delete(additionalProperties, "families")
+		delete(additionalProperties, "isPartial")
+		delete(additionalProperties, "localStanzas")
+
+		// remove fields from embedded structs
+		reflectParsersLibraryBase := reflect.ValueOf(o.ParsersLibraryBase)
+		for i := 0; i < reflectParsersLibraryBase.Type().NumField(); i++ {
+			t := reflectParsersLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type CreateArchiveJobRequest struct {
 	StartTime time.Time `json:"startTime"`
 	// The ending timestamp of the ingestion job.
 	EndTime time.Time `json:"endTime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateArchiveJobRequest CreateArchiveJobRequest
@@ -137,6 +137,11 @@ func (o CreateArchiveJobRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["startTime"] = o.StartTime
 	toSerialize["endTime"] = o.EndTime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -166,15 +171,22 @@ func (o *CreateArchiveJobRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateArchiveJobRequest := _CreateArchiveJobRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateArchiveJobRequest)
+	err = json.Unmarshal(data, &varCreateArchiveJobRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateArchiveJobRequest(varCreateArchiveJobRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "endTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

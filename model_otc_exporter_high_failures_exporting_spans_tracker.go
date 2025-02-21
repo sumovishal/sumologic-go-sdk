@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OTCExporterHighFailuresExportingSpansTracker type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type OTCExporterHighFailuresExportingSpansTracker struct {
 	ExporterId *string `json:"exporterId,omitempty"`
 	// The failure count.
 	Count *string `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCExporterHighFailuresExportingSpansTracker OTCExporterHighFailuresExportingSpansTracker
@@ -249,6 +251,11 @@ func (o OTCExporterHighFailuresExportingSpansTracker) ToMap() (map[string]interf
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,17 +283,72 @@ func (o *OTCExporterHighFailuresExportingSpansTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varOTCExporterHighFailuresExportingSpansTracker := _OTCExporterHighFailuresExportingSpansTracker{}
+	type OTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The collector instance ID, e.g. `974b444b-4b45-4f32-aa03-1dbf2a16826d`.
+		InstanceId *string `json:"instanceId,omitempty"`
+		// The collector instance address, e.g. `172.16.1.14`.
+		InstanceAddress *string `json:"instanceAddress,omitempty"`
+		// The collector exporter ID, e.g. `otlphttp`.
+		ExporterId *string `json:"exporterId,omitempty"`
+		// The failure count.
+		Count *string `json:"count,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCExporterHighFailuresExportingSpansTracker)
+	varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct := OTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOTCExporterHighFailuresExportingSpansTracker := _OTCExporterHighFailuresExportingSpansTracker{}
+		varOTCExporterHighFailuresExportingSpansTracker.EventType = varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct.EventType
+		varOTCExporterHighFailuresExportingSpansTracker.InstanceId = varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct.InstanceId
+		varOTCExporterHighFailuresExportingSpansTracker.InstanceAddress = varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct.InstanceAddress
+		varOTCExporterHighFailuresExportingSpansTracker.ExporterId = varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct.ExporterId
+		varOTCExporterHighFailuresExportingSpansTracker.Count = varOTCExporterHighFailuresExportingSpansTrackerWithoutEmbeddedStruct.Count
+		*o = OTCExporterHighFailuresExportingSpansTracker(varOTCExporterHighFailuresExportingSpansTracker)
+	} else {
 		return err
 	}
 
-	*o = OTCExporterHighFailuresExportingSpansTracker(varOTCExporterHighFailuresExportingSpansTracker)
+	varOTCExporterHighFailuresExportingSpansTracker := _OTCExporterHighFailuresExportingSpansTracker{}
+
+	err = json.Unmarshal(data, &varOTCExporterHighFailuresExportingSpansTracker)
+	if err == nil {
+		o.TrackerIdentity = varOTCExporterHighFailuresExportingSpansTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "instanceAddress")
+		delete(additionalProperties, "exporterId")
+		delete(additionalProperties, "count")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

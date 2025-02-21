@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type CreateJobRequest struct {
 	TimeZone *string `json:"timeZone,omitempty"`
 	// Flag to order the search results in the order collector received it.
 	ByReceiptTime *string `json:"byReceiptTime,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateJobRequest CreateJobRequest
@@ -218,6 +218,11 @@ func (o CreateJobRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ByReceiptTime) {
 		toSerialize["byReceiptTime"] = o.ByReceiptTime
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -247,15 +252,24 @@ func (o *CreateJobRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateJobRequest := _CreateJobRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateJobRequest)
+	err = json.Unmarshal(data, &varCreateJobRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateJobRequest(varCreateJobRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "from")
+		delete(additionalProperties, "to")
+		delete(additionalProperties, "timeZone")
+		delete(additionalProperties, "byReceiptTime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

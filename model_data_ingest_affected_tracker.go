@@ -21,7 +21,10 @@ var _ MappedNullable = &DataIngestAffectedTracker{}
 type DataIngestAffectedTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DataIngestAffectedTracker DataIngestAffectedTracker
 
 // NewDataIngestAffectedTracker instantiates a new DataIngestAffectedTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o DataIngestAffectedTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DataIngestAffectedTracker) UnmarshalJSON(data []byte) (err error) {
+	varDataIngestAffectedTracker := _DataIngestAffectedTracker{}
+
+	err = json.Unmarshal(data, &varDataIngestAffectedTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DataIngestAffectedTracker(varDataIngestAffectedTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDataIngestAffectedTracker struct {

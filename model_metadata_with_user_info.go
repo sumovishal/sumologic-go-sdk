@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type MetadataWithUserInfo struct {
 	// Last modification timestamp in UTC in [RFC3339](https://tools.ietf.org/html/rfc3339) format.
 	ModifiedAt NullableTime `json:"modifiedAt"`
 	ModifiedByUser UserInfo `json:"modifiedByUser"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetadataWithUserInfo MetadataWithUserInfo
@@ -167,6 +167,11 @@ func (o MetadataWithUserInfo) ToMap() (map[string]interface{}, error) {
 	toSerialize["createdByUser"] = o.CreatedByUser
 	toSerialize["modifiedAt"] = o.ModifiedAt.Get()
 	toSerialize["modifiedByUser"] = o.ModifiedByUser
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -197,15 +202,23 @@ func (o *MetadataWithUserInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varMetadataWithUserInfo := _MetadataWithUserInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetadataWithUserInfo)
+	err = json.Unmarshal(data, &varMetadataWithUserInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetadataWithUserInfo(varMetadataWithUserInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdByUser")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedByUser")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CreditsBreakdown struct {
 	DeploymentChargeCredits float64 `json:"deploymentChargeCredits"`
 	// The total useable credits allocated to the child organization.
 	AllocatedCredits float64 `json:"allocatedCredits"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreditsBreakdown CreditsBreakdown
@@ -108,6 +108,11 @@ func (o CreditsBreakdown) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["deploymentChargeCredits"] = o.DeploymentChargeCredits
 	toSerialize["allocatedCredits"] = o.AllocatedCredits
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CreditsBreakdown) UnmarshalJSON(data []byte) (err error) {
 
 	varCreditsBreakdown := _CreditsBreakdown{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreditsBreakdown)
+	err = json.Unmarshal(data, &varCreditsBreakdown)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreditsBreakdown(varCreditsBreakdown)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "deploymentChargeCredits")
+		delete(additionalProperties, "allocatedCredits")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

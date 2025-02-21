@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type VisualDataAxes struct {
 	X2 []VisualAxisData `json:"x2,omitempty"`
 	// The data of the secondary y axis.
 	Y2 []VisualAxisData `json:"y2,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VisualDataAxes VisualDataAxes
@@ -182,6 +182,11 @@ func (o VisualDataAxes) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Y2) {
 		toSerialize["y2"] = o.Y2
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -210,15 +215,23 @@ func (o *VisualDataAxes) UnmarshalJSON(data []byte) (err error) {
 
 	varVisualDataAxes := _VisualDataAxes{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVisualDataAxes)
+	err = json.Unmarshal(data, &varVisualDataAxes)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VisualDataAxes(varVisualDataAxes)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+		delete(additionalProperties, "x2")
+		delete(additionalProperties, "y2")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

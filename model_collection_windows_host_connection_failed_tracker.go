@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionWindowsHostConnectionFailedTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &CollectionWindowsHostConnectionFailedTracker{}
 // CollectionWindowsHostConnectionFailedTracker struct for CollectionWindowsHostConnectionFailedTracker
 type CollectionWindowsHostConnectionFailedTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionWindowsHostConnectionFailedTracker CollectionWindowsHostConnectionFailedTracker
@@ -64,6 +66,11 @@ func (o CollectionWindowsHostConnectionFailedTracker) ToMap() (map[string]interf
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *CollectionWindowsHostConnectionFailedTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varCollectionWindowsHostConnectionFailedTracker := _CollectionWindowsHostConnectionFailedTracker{}
+	type CollectionWindowsHostConnectionFailedTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionWindowsHostConnectionFailedTracker)
+	varCollectionWindowsHostConnectionFailedTrackerWithoutEmbeddedStruct := CollectionWindowsHostConnectionFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionWindowsHostConnectionFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionWindowsHostConnectionFailedTracker := _CollectionWindowsHostConnectionFailedTracker{}
+		*o = CollectionWindowsHostConnectionFailedTracker(varCollectionWindowsHostConnectionFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionWindowsHostConnectionFailedTracker(varCollectionWindowsHostConnectionFailedTracker)
+	varCollectionWindowsHostConnectionFailedTracker := _CollectionWindowsHostConnectionFailedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionWindowsHostConnectionFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionWindowsHostConnectionFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

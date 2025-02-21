@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type ServiceMapNode struct {
 	IsRemote bool `json:"isRemote"`
 	// Defines type of service.
 	ServiceType string `json:"serviceType" validate:"regexp=^(Db|HTTP|MQ|Web|Mixed|Unknown|Cpp|DotNET|Erlang|Go|Java|NodeJS|Php|Python|Ruby|WebJS|Swift|MSSQL|MySQL|Oracle|Db2|PostgreSQL|Redshift|Hive|Cloudscape|HSQLDB|Progress|MaxDB|HANADB|Ingres|FirstSQL|EnterpriseDB|Cache|Adabas|Firebird|ApacheDerby|FileMaker|Informix|InstantDB|InterBase|MariaDB|Netezza|PervasivePSQL|PointBase|SQLite|Sybase|Teradata|Vertica|H2|ColdFusion|Cassandra|HBase|MongoDB|Redis|Couchbase|CouchDB|CosmosDB|DynamoDB|Neo4j|Geode|Elasticsearch|Memcached|CockroachDB|RPC|gRPC|JavaRMI|DotNETWCF|ApacheDubbo)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceMapNode ServiceMapNode
@@ -202,6 +202,11 @@ func (o ServiceMapNode) ToMap() (map[string]interface{}, error) {
 	toSerialize["lastSeenAt"] = o.LastSeenAt
 	toSerialize["isRemote"] = o.IsRemote
 	toSerialize["serviceType"] = o.ServiceType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -232,15 +237,24 @@ func (o *ServiceMapNode) UnmarshalJSON(data []byte) (err error) {
 
 	varServiceMapNode := _ServiceMapNode{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceMapNode)
+	err = json.Unmarshal(data, &varServiceMapNode)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceMapNode(varServiceMapNode)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "serviceName")
+		delete(additionalProperties, "serviceColor")
+		delete(additionalProperties, "lastSeenAt")
+		delete(additionalProperties, "isRemote")
+		delete(additionalProperties, "serviceType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

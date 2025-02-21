@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type MonitorPlaybook struct {
 	VersionId string `json:"versionId"`
 	// The type of the playbook.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorPlaybook MonitorPlaybook
@@ -192,6 +192,11 @@ func (o MonitorPlaybook) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["versionId"] = o.VersionId
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,24 @@ func (o *MonitorPlaybook) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorPlaybook := _MonitorPlaybook{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorPlaybook)
+	err = json.Unmarshal(data, &varMonitorPlaybook)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorPlaybook(varMonitorPlaybook)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "playbookId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "versionId")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

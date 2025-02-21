@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -74,6 +73,7 @@ type SamlIdentityProvider struct {
 	EntityId *string `json:"entityId,omitempty"`
 	// The URL to fetch SAML metadata XML.
 	MetadataUrl *string `json:"metadataUrl,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SamlIdentityProvider SamlIdentityProvider
@@ -1001,6 +1001,11 @@ func (o SamlIdentityProvider) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MetadataUrl) {
 		toSerialize["metadataUrl"] = o.MetadataUrl
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1036,15 +1041,45 @@ func (o *SamlIdentityProvider) UnmarshalJSON(data []byte) (err error) {
 
 	varSamlIdentityProvider := _SamlIdentityProvider{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSamlIdentityProvider)
+	err = json.Unmarshal(data, &varSamlIdentityProvider)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SamlIdentityProvider(varSamlIdentityProvider)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spInitiatedLoginPath")
+		delete(additionalProperties, "configurationName")
+		delete(additionalProperties, "issuer")
+		delete(additionalProperties, "spInitiatedLoginEnabled")
+		delete(additionalProperties, "authnRequestUrl")
+		delete(additionalProperties, "x509cert1")
+		delete(additionalProperties, "x509cert2")
+		delete(additionalProperties, "x509cert3")
+		delete(additionalProperties, "onDemandProvisioningEnabled")
+		delete(additionalProperties, "rolesAttribute")
+		delete(additionalProperties, "logoutEnabled")
+		delete(additionalProperties, "logoutUrl")
+		delete(additionalProperties, "emailAttribute")
+		delete(additionalProperties, "debugMode")
+		delete(additionalProperties, "signAuthnRequest")
+		delete(additionalProperties, "disableRequestedAuthnContext")
+		delete(additionalProperties, "isRedirectBinding")
+		delete(additionalProperties, "certificate")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "assertionConsumerUrl")
+		delete(additionalProperties, "entityId")
+		delete(additionalProperties, "metadataUrl")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

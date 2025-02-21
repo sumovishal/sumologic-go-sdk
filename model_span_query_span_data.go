@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -45,6 +44,7 @@ type SpanQuerySpanData struct {
 	TagsJSON *string `json:"tagsJSON,omitempty"`
 	// Metadata attached to the span.
 	Metadata *map[string]string `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQuerySpanData SpanQuerySpanData
@@ -478,6 +478,11 @@ func (o SpanQuerySpanData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -506,15 +511,31 @@ func (o *SpanQuerySpanData) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQuerySpanData := _SpanQuerySpanData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQuerySpanData)
+	err = json.Unmarshal(data, &varSpanQuerySpanData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQuerySpanData(varSpanQuerySpanData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "spanId")
+		delete(additionalProperties, "traceId")
+		delete(additionalProperties, "parentSpanId")
+		delete(additionalProperties, "operationName")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "remoteService")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "startedAt")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "kind")
+		delete(additionalProperties, "tagsJSON")
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

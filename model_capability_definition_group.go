@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CapabilityDefinitionGroup struct {
 	Label string `json:"label"`
 	// The ID of the parent capability group
 	ParentId *string `json:"parentId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CapabilityDefinitionGroup CapabilityDefinitionGroup
@@ -145,6 +145,11 @@ func (o CapabilityDefinitionGroup) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *CapabilityDefinitionGroup) UnmarshalJSON(data []byte) (err error) {
 
 	varCapabilityDefinitionGroup := _CapabilityDefinitionGroup{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCapabilityDefinitionGroup)
+	err = json.Unmarshal(data, &varCapabilityDefinitionGroup)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CapabilityDefinitionGroup(varCapabilityDefinitionGroup)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

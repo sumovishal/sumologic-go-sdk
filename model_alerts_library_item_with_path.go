@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AlertsLibraryItemWithPath struct {
 	Item AlertsLibraryBaseResponse `json:"item"`
 	// Path of the alert or folder.
 	Path string `json:"path"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryItemWithPath AlertsLibraryItemWithPath
@@ -107,6 +107,11 @@ func (o AlertsLibraryItemWithPath) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["item"] = o.Item
 	toSerialize["path"] = o.Path
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AlertsLibraryItemWithPath) UnmarshalJSON(data []byte) (err error) {
 
 	varAlertsLibraryItemWithPath := _AlertsLibraryItemWithPath{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryItemWithPath)
+	err = json.Unmarshal(data, &varAlertsLibraryItemWithPath)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AlertsLibraryItemWithPath(varAlertsLibraryItemWithPath)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "item")
+		delete(additionalProperties, "path")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

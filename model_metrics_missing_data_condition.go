@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsMissingDataCondition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type MetricsMissingDataCondition struct {
 	TriggerSource string `json:"triggerSource" validate:"regexp=^(AllTimeSeries|AnyTimeSeries|AllResults)$"`
 	// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
 	TimeRange string `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsMissingDataCondition MetricsMissingDataCondition
@@ -120,6 +122,11 @@ func (o MetricsMissingDataCondition) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["triggerSource"] = o.TriggerSource
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -147,17 +154,60 @@ func (o *MetricsMissingDataCondition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMetricsMissingDataCondition := _MetricsMissingDataCondition{}
+	type MetricsMissingDataConditionWithoutEmbeddedStruct struct {
+		// Determines which time series from queries to use for Metrics MissingData and ResolvedMissingData triggers Valid values:   1. `AllTimeSeries`: Evaluate the condition against all time series. (NOTE: This option is only valid if monitorType is `Metrics`)   2. `AnyTimeSeries`: Evaluate the condition against any time series. (NOTE: This option is only valid if monitorType is `Metrics`)   3. `AllResults`: Evaluate the condition against results from all queries. (NOTE: This option is only valid if monitorType is `Logs`)
+		TriggerSource string `json:"triggerSource" validate:"regexp=^(AllTimeSeries|AnyTimeSeries|AllResults)$"`
+		// The relative time range of the monitor. Valid values of time ranges are `-5m`, `-10m`, `-15m`, `-30m`, `-1h`, `-3h`, `-6h`, `-12h`, or `-24h`.
+		TimeRange string `json:"timeRange"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsMissingDataCondition)
+	varMetricsMissingDataConditionWithoutEmbeddedStruct := MetricsMissingDataConditionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsMissingDataConditionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsMissingDataCondition := _MetricsMissingDataCondition{}
+		varMetricsMissingDataCondition.TriggerSource = varMetricsMissingDataConditionWithoutEmbeddedStruct.TriggerSource
+		varMetricsMissingDataCondition.TimeRange = varMetricsMissingDataConditionWithoutEmbeddedStruct.TimeRange
+		*o = MetricsMissingDataCondition(varMetricsMissingDataCondition)
+	} else {
 		return err
 	}
 
-	*o = MetricsMissingDataCondition(varMetricsMissingDataCondition)
+	varMetricsMissingDataCondition := _MetricsMissingDataCondition{}
+
+	err = json.Unmarshal(data, &varMetricsMissingDataCondition)
+	if err == nil {
+		o.TriggerCondition = varMetricsMissingDataCondition.TriggerCondition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "triggerSource")
+		delete(additionalProperties, "timeRange")
+
+		// remove fields from embedded structs
+		reflectTriggerCondition := reflect.ValueOf(o.TriggerCondition)
+		for i := 0; i < reflectTriggerCondition.Type().NumField(); i++ {
+			t := reflectTriggerCondition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

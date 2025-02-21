@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type Content struct {
 	ParentId string `json:"parentId"`
 	// List of permissions the user has on the content item.
 	Permissions []string `json:"permissions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Content Content
@@ -305,6 +305,11 @@ func (o Content) ToMap() (map[string]interface{}, error) {
 	toSerialize["itemType"] = o.ItemType
 	toSerialize["parentId"] = o.ParentId
 	toSerialize["permissions"] = o.Permissions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -340,15 +345,28 @@ func (o *Content) UnmarshalJSON(data []byte) (err error) {
 
 	varContent := _Content{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContent)
+	err = json.Unmarshal(data, &varContent)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Content(varContent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "itemType")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "permissions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

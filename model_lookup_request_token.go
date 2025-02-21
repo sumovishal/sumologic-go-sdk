@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &LookupRequestToken{}
 type LookupRequestToken struct {
 	// The identifier used to track the request.
 	Id string `json:"id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupRequestToken LookupRequestToken
@@ -80,6 +80,11 @@ func (o LookupRequestToken) MarshalJSON() ([]byte, error) {
 func (o LookupRequestToken) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *LookupRequestToken) UnmarshalJSON(data []byte) (err error) {
 
 	varLookupRequestToken := _LookupRequestToken{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupRequestToken)
+	err = json.Unmarshal(data, &varLookupRequestToken)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LookupRequestToken(varLookupRequestToken)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

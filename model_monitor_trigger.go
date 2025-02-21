@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MonitorTrigger struct {
 	MonitorId string `json:"monitorId"`
 	// The types of trigger conditions (such as Critical, Warning, MissingData etc).
 	TriggerTypes []string `json:"triggerTypes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorTrigger MonitorTrigger
@@ -108,6 +108,11 @@ func (o MonitorTrigger) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["monitorId"] = o.MonitorId
 	toSerialize["triggerTypes"] = o.TriggerTypes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MonitorTrigger) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorTrigger := _MonitorTrigger{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorTrigger)
+	err = json.Unmarshal(data, &varMonitorTrigger)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorTrigger(varMonitorTrigger)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "monitorId")
+		delete(additionalProperties, "triggerTypes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

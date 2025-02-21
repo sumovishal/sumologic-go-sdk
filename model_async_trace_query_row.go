@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AsyncTraceQueryRow struct {
 	// An identifier used to reference this particular row of the query request while fetching a query result. Within a query, row ids must have distinct values.
 	RowId string `json:"rowId"`
 	OrderBy *OrderBy `json:"orderBy,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AsyncTraceQueryRow AsyncTraceQueryRow
@@ -143,6 +143,11 @@ func (o AsyncTraceQueryRow) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.OrderBy) {
 		toSerialize["orderBy"] = o.OrderBy
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -171,15 +176,22 @@ func (o *AsyncTraceQueryRow) UnmarshalJSON(data []byte) (err error) {
 
 	varAsyncTraceQueryRow := _AsyncTraceQueryRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAsyncTraceQueryRow)
+	err = json.Unmarshal(data, &varAsyncTraceQueryRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AsyncTraceQueryRow(varAsyncTraceQueryRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "orderBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -22,7 +22,10 @@ type SpanEventAttribute struct {
 	// Name of the attribute.
 	AttributeName *string `json:"attributeName,omitempty"`
 	AttributeValue *EventAttributeValue `json:"attributeValue,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SpanEventAttribute SpanEventAttribute
 
 // NewSpanEventAttribute instantiates a new SpanEventAttribute object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o SpanEventAttribute) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AttributeValue) {
 		toSerialize["attributeValue"] = o.AttributeValue
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SpanEventAttribute) UnmarshalJSON(data []byte) (err error) {
+	varSpanEventAttribute := _SpanEventAttribute{}
+
+	err = json.Unmarshal(data, &varSpanEventAttribute)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SpanEventAttribute(varSpanEventAttribute)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "attributeName")
+		delete(additionalProperties, "attributeValue")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSpanEventAttribute struct {

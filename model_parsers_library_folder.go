@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryFolder type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &ParsersLibraryFolder{}
 // ParsersLibraryFolder struct for ParsersLibraryFolder
 type ParsersLibraryFolder struct {
 	ParsersLibraryBase
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryFolder ParsersLibraryFolder
@@ -66,6 +68,11 @@ func (o ParsersLibraryFolder) ToMap() (map[string]interface{}, error) {
 	if errParsersLibraryBase != nil {
 		return map[string]interface{}{}, errParsersLibraryBase
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -93,17 +100,52 @@ func (o *ParsersLibraryFolder) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryFolder := _ParsersLibraryFolder{}
+	type ParsersLibraryFolderWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryFolder)
+	varParsersLibraryFolderWithoutEmbeddedStruct := ParsersLibraryFolderWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryFolderWithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryFolder := _ParsersLibraryFolder{}
+		*o = ParsersLibraryFolder(varParsersLibraryFolder)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryFolder(varParsersLibraryFolder)
+	varParsersLibraryFolder := _ParsersLibraryFolder{}
+
+	err = json.Unmarshal(data, &varParsersLibraryFolder)
+	if err == nil {
+		o.ParsersLibraryBase = varParsersLibraryFolder.ParsersLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectParsersLibraryBase := reflect.ValueOf(o.ParsersLibraryBase)
+		for i := 0; i < reflectParsersLibraryBase.Type().NumField(); i++ {
+			t := reflectParsersLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

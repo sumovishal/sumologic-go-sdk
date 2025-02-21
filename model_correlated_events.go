@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CorrelatedEvents struct {
 	CorrelationFinished bool `json:"correlationFinished"`
 	// List of events.
 	Events []CorrelatedEvent `json:"events"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CorrelatedEvents CorrelatedEvents
@@ -108,6 +108,11 @@ func (o CorrelatedEvents) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["correlationFinished"] = o.CorrelationFinished
 	toSerialize["events"] = o.Events
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CorrelatedEvents) UnmarshalJSON(data []byte) (err error) {
 
 	varCorrelatedEvents := _CorrelatedEvents{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCorrelatedEvents)
+	err = json.Unmarshal(data, &varCorrelatedEvents)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CorrelatedEvents(varCorrelatedEvents)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "correlationFinished")
+		delete(additionalProperties, "events")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

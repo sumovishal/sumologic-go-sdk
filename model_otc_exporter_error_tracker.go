@@ -21,7 +21,10 @@ var _ MappedNullable = &OTCExporterErrorTracker{}
 type OTCExporterErrorTracker struct {
 	// Event type.
 	EventType *string `json:"eventType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OTCExporterErrorTracker OTCExporterErrorTracker
 
 // NewOTCExporterErrorTracker instantiates a new OTCExporterErrorTracker object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o OTCExporterErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EventType) {
 		toSerialize["eventType"] = o.EventType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OTCExporterErrorTracker) UnmarshalJSON(data []byte) (err error) {
+	varOTCExporterErrorTracker := _OTCExporterErrorTracker{}
+
+	err = json.Unmarshal(data, &varOTCExporterErrorTracker)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OTCExporterErrorTracker(varOTCExporterErrorTracker)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOTCExporterErrorTracker struct {

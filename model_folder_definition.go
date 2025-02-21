@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type FolderDefinition struct {
 	Description *string `json:"description,omitempty"`
 	// The identifier of the parent folder.
 	ParentId string `json:"parentId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FolderDefinition FolderDefinition
@@ -145,6 +145,11 @@ func (o FolderDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["parentId"] = o.ParentId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *FolderDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varFolderDefinition := _FolderDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFolderDefinition)
+	err = json.Unmarshal(data, &varFolderDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FolderDefinition(varFolderDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -25,7 +25,10 @@ type UpdateScheduledViewDefinition struct {
 	RetentionPeriod *int32 `json:"retentionPeriod,omitempty"`
 	// This is required if the newly specified `retentionPeriod` is less than the existing retention period.  In such a situation, a value of `true` says that data between the existing retention period and the new retention period should be deleted immediately; if `false`, such data will be deleted after seven days. This property is optional and ignored if the specified `retentionPeriod` is greater than or equal to the current retention period.
 	ReduceRetentionPeriodImmediately *bool `json:"reduceRetentionPeriodImmediately,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateScheduledViewDefinition UpdateScheduledViewDefinition
 
 // NewUpdateScheduledViewDefinition instantiates a new UpdateScheduledViewDefinition object
 // This constructor will assign default values to properties that have it defined,
@@ -167,7 +170,35 @@ func (o UpdateScheduledViewDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ReduceRetentionPeriodImmediately) {
 		toSerialize["reduceRetentionPeriodImmediately"] = o.ReduceRetentionPeriodImmediately
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateScheduledViewDefinition) UnmarshalJSON(data []byte) (err error) {
+	varUpdateScheduledViewDefinition := _UpdateScheduledViewDefinition{}
+
+	err = json.Unmarshal(data, &varUpdateScheduledViewDefinition)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateScheduledViewDefinition(varUpdateScheduledViewDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dataForwardingId")
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "reduceRetentionPeriodImmediately")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateScheduledViewDefinition struct {

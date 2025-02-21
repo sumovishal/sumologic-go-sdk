@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ParsersLibraryParserUpdate type satisfies the MappedNullable interface at compile time
@@ -34,6 +35,7 @@ type ParsersLibraryParserUpdate struct {
 	IsPartial *bool `json:"isPartial,omitempty"`
 	// Localized stanzas.
 	LocalStanzas *string `json:"localStanzas,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParsersLibraryParserUpdate ParsersLibraryParserUpdate
@@ -281,6 +283,11 @@ func (o ParsersLibraryParserUpdate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LocalStanzas) {
 		toSerialize["localStanzas"] = o.LocalStanzas
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -309,17 +316,76 @@ func (o *ParsersLibraryParserUpdate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varParsersLibraryParserUpdate := _ParsersLibraryParserUpdate{}
+	type ParsersLibraryParserUpdateWithoutEmbeddedStruct struct {
+		// Collection of stanzas describing the parser.
+		Stanzas string `json:"stanzas"`
+		// The path to the Model a Model-Connector is associated with.
+		ModelPath *string `json:"modelPath,omitempty"`
+		// The path to the sourcetype a Model-Connector is associated with.
+		SourcetypePath *string `json:"sourcetypePath,omitempty"`
+		// CSV list of model families this object belongs/applies to
+		Families *string `json:"families,omitempty"`
+		// Is this a complete Parser or Model-Connector, or just a config fragment?
+		IsPartial *bool `json:"isPartial,omitempty"`
+		// Localized stanzas.
+		LocalStanzas *string `json:"localStanzas,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParsersLibraryParserUpdate)
+	varParsersLibraryParserUpdateWithoutEmbeddedStruct := ParsersLibraryParserUpdateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varParsersLibraryParserUpdateWithoutEmbeddedStruct)
+	if err == nil {
+		varParsersLibraryParserUpdate := _ParsersLibraryParserUpdate{}
+		varParsersLibraryParserUpdate.Stanzas = varParsersLibraryParserUpdateWithoutEmbeddedStruct.Stanzas
+		varParsersLibraryParserUpdate.ModelPath = varParsersLibraryParserUpdateWithoutEmbeddedStruct.ModelPath
+		varParsersLibraryParserUpdate.SourcetypePath = varParsersLibraryParserUpdateWithoutEmbeddedStruct.SourcetypePath
+		varParsersLibraryParserUpdate.Families = varParsersLibraryParserUpdateWithoutEmbeddedStruct.Families
+		varParsersLibraryParserUpdate.IsPartial = varParsersLibraryParserUpdateWithoutEmbeddedStruct.IsPartial
+		varParsersLibraryParserUpdate.LocalStanzas = varParsersLibraryParserUpdateWithoutEmbeddedStruct.LocalStanzas
+		*o = ParsersLibraryParserUpdate(varParsersLibraryParserUpdate)
+	} else {
 		return err
 	}
 
-	*o = ParsersLibraryParserUpdate(varParsersLibraryParserUpdate)
+	varParsersLibraryParserUpdate := _ParsersLibraryParserUpdate{}
+
+	err = json.Unmarshal(data, &varParsersLibraryParserUpdate)
+	if err == nil {
+		o.ParsersLibraryBaseUpdate = varParsersLibraryParserUpdate.ParsersLibraryBaseUpdate
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "stanzas")
+		delete(additionalProperties, "modelPath")
+		delete(additionalProperties, "sourcetypePath")
+		delete(additionalProperties, "families")
+		delete(additionalProperties, "isPartial")
+		delete(additionalProperties, "localStanzas")
+
+		// remove fields from embedded structs
+		reflectParsersLibraryBaseUpdate := reflect.ValueOf(o.ParsersLibraryBaseUpdate)
+		for i := 0; i < reflectParsersLibraryBaseUpdate.Type().NumField(); i++ {
+			t := reflectParsersLibraryBaseUpdate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

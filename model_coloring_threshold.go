@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ColoringThreshold struct {
 	Min *float64 `json:"min,omitempty"`
 	// Absolute exclusive threshold to color by.
 	Max *float64 `json:"max,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ColoringThreshold ColoringThreshold
@@ -154,6 +154,11 @@ func (o ColoringThreshold) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Max) {
 		toSerialize["max"] = o.Max
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *ColoringThreshold) UnmarshalJSON(data []byte) (err error) {
 
 	varColoringThreshold := _ColoringThreshold{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varColoringThreshold)
+	err = json.Unmarshal(data, &varColoringThreshold)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ColoringThreshold(varColoringThreshold)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "color")
+		delete(additionalProperties, "min")
+		delete(additionalProperties, "max")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type LogSearchDefinition struct {
 	Schedule *LogSearchScheduleSyncDefinition `json:"schedule,omitempty"`
 	// Aggregate Results Settings and View configurations, Legends settings, and different visualisation settings overrides. Leave this field empty to use the defaults. This property contains JSON object encoded as a string. 
 	Properties *string `json:"properties,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchDefinition LogSearchDefinition
@@ -364,6 +364,11 @@ func (o LogSearchDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Properties) {
 		toSerialize["properties"] = o.Properties
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -393,15 +398,28 @@ func (o *LogSearchDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varLogSearchDefinition := _LogSearchDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchDefinition)
+	err = json.Unmarshal(data, &varLogSearchDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchDefinition(varLogSearchDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "parsingMode")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "schedule")
+		delete(additionalProperties, "properties")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type SelfServicePlan struct {
 	ProductGroups []ProductGroup `json:"productGroups"`
 	// A list of product subscription option.
 	ProductSubscriptionOptions []ProductSubscriptionOption `json:"productSubscriptionOptions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SelfServicePlan SelfServicePlan
@@ -164,6 +164,11 @@ func (o SelfServicePlan) ToMap() (map[string]interface{}, error) {
 	toSerialize["productName"] = o.ProductName
 	toSerialize["productGroups"] = o.ProductGroups
 	toSerialize["productSubscriptionOptions"] = o.ProductSubscriptionOptions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *SelfServicePlan) UnmarshalJSON(data []byte) (err error) {
 
 	varSelfServicePlan := _SelfServicePlan{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSelfServicePlan)
+	err = json.Unmarshal(data, &varSelfServicePlan)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SelfServicePlan(varSelfServicePlan)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productId")
+		delete(additionalProperties, "productName")
+		delete(additionalProperties, "productGroups")
+		delete(additionalProperties, "productSubscriptionOptions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

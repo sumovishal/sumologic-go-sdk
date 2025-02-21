@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -54,6 +53,7 @@ type RoleModelV2 struct {
 	Id string `json:"id"`
 	// Role is system or user defined.
 	SystemDefined *bool `json:"systemDefined,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RoleModelV2 RoleModelV2
@@ -595,6 +595,11 @@ func (o RoleModelV2) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SystemDefined) {
 		toSerialize["systemDefined"] = o.SystemDefined
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -627,15 +632,35 @@ func (o *RoleModelV2) UnmarshalJSON(data []byte) (err error) {
 
 	varRoleModelV2 := _RoleModelV2{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRoleModelV2)
+	err = json.Unmarshal(data, &varRoleModelV2)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RoleModelV2(varRoleModelV2)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "logAnalyticsFilter")
+		delete(additionalProperties, "auditDataFilter")
+		delete(additionalProperties, "securityDataFilter")
+		delete(additionalProperties, "selectionType")
+		delete(additionalProperties, "selectedViews")
+		delete(additionalProperties, "users")
+		delete(additionalProperties, "capabilities")
+		delete(additionalProperties, "autofillDependencies")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "systemDefined")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

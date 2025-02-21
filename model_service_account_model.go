@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type ServiceAccountModel struct {
 	Id string `json:"id"`
 	// True if the service account is active.
 	IsActive *bool `json:"isActive,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceAccountModel ServiceAccountModel
@@ -314,6 +314,11 @@ func (o ServiceAccountModel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsActive) {
 		toSerialize["isActive"] = o.IsActive
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -348,15 +353,28 @@ func (o *ServiceAccountModel) UnmarshalJSON(data []byte) (err error) {
 
 	varServiceAccountModel := _ServiceAccountModel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceAccountModel)
+	err = json.Unmarshal(data, &varServiceAccountModel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceAccountModel(varServiceAccountModel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "roleIds")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "isActive")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

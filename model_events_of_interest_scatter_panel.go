@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the EventsOfInterestScatterPanel type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &EventsOfInterestScatterPanel{}
 // EventsOfInterestScatterPanel struct for EventsOfInterestScatterPanel
 type EventsOfInterestScatterPanel struct {
 	Panel
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventsOfInterestScatterPanel EventsOfInterestScatterPanel
@@ -65,6 +67,11 @@ func (o EventsOfInterestScatterPanel) ToMap() (map[string]interface{}, error) {
 	if errPanel != nil {
 		return map[string]interface{}{}, errPanel
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *EventsOfInterestScatterPanel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varEventsOfInterestScatterPanel := _EventsOfInterestScatterPanel{}
+	type EventsOfInterestScatterPanelWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventsOfInterestScatterPanel)
+	varEventsOfInterestScatterPanelWithoutEmbeddedStruct := EventsOfInterestScatterPanelWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varEventsOfInterestScatterPanelWithoutEmbeddedStruct)
+	if err == nil {
+		varEventsOfInterestScatterPanel := _EventsOfInterestScatterPanel{}
+		*o = EventsOfInterestScatterPanel(varEventsOfInterestScatterPanel)
+	} else {
 		return err
 	}
 
-	*o = EventsOfInterestScatterPanel(varEventsOfInterestScatterPanel)
+	varEventsOfInterestScatterPanel := _EventsOfInterestScatterPanel{}
+
+	err = json.Unmarshal(data, &varEventsOfInterestScatterPanel)
+	if err == nil {
+		o.Panel = varEventsOfInterestScatterPanel.Panel
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectPanel := reflect.ValueOf(o.Panel)
+		for i := 0; i < reflectPanel.Type().NumField(); i++ {
+			t := reflectPanel.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

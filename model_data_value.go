@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DataValue struct {
 	Value float64 `json:"value"`
 	// The unit of the entitlement, possible values are `GB`, `DPM`, or `Credits`.
 	Unit string `json:"unit"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DataValue DataValue
@@ -108,6 +108,11 @@ func (o DataValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["value"] = o.Value
 	toSerialize["unit"] = o.Unit
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *DataValue) UnmarshalJSON(data []byte) (err error) {
 
 	varDataValue := _DataValue{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDataValue)
+	err = json.Unmarshal(data, &varDataValue)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DataValue(varDataValue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "unit")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

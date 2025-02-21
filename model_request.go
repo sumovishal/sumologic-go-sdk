@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type Request struct {
 	Threshold *float32 `json:"threshold,omitempty"`
 	// Comparison function with threshold (LessThan/GreaterThan/LessThanOrEqual/GreaterThanOrEqual).
 	Op *string `json:"op,omitempty" validate:"regexp=^(LessThan|GreaterThan|LessThanOrEqual|GreaterThanOrEqual)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Request Request
@@ -184,6 +184,11 @@ func (o Request) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Op) {
 		toSerialize["op"] = o.Op
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -213,15 +218,23 @@ func (o *Request) UnmarshalJSON(data []byte) (err error) {
 
 	varRequest := _Request{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRequest)
+	err = json.Unmarshal(data, &varRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Request(varRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryType")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "op")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

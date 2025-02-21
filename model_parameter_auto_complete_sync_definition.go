@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type ParameterAutoCompleteSyncDefinition struct {
 	LookupLabelColumn *string `json:"lookupLabelColumn,omitempty"`
 	// The column from the lookup file to fill the actual value when a particular label is selected.
 	LookupValueColumn *string `json:"lookupValueColumn,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ParameterAutoCompleteSyncDefinition ParameterAutoCompleteSyncDefinition
@@ -265,6 +265,11 @@ func (o ParameterAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, er
 	if !IsNil(o.LookupValueColumn) {
 		toSerialize["lookupValueColumn"] = o.LookupValueColumn
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -292,15 +297,25 @@ func (o *ParameterAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) (err er
 
 	varParameterAutoCompleteSyncDefinition := _ParameterAutoCompleteSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varParameterAutoCompleteSyncDefinition)
+	err = json.Unmarshal(data, &varParameterAutoCompleteSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ParameterAutoCompleteSyncDefinition(varParameterAutoCompleteSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "autoCompleteType")
+		delete(additionalProperties, "autoCompleteKey")
+		delete(additionalProperties, "autoCompleteValues")
+		delete(additionalProperties, "lookupFileName")
+		delete(additionalProperties, "lookupLabelColumn")
+		delete(additionalProperties, "lookupValueColumn")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

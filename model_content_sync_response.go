@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ContentSyncResponse{}
 type ContentSyncResponse struct {
 	// Content Sync Job Id.
 	JobId string `json:"jobId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentSyncResponse ContentSyncResponse
@@ -80,6 +80,11 @@ func (o ContentSyncResponse) MarshalJSON() ([]byte, error) {
 func (o ContentSyncResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["jobId"] = o.JobId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ContentSyncResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varContentSyncResponse := _ContentSyncResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentSyncResponse)
+	err = json.Unmarshal(data, &varContentSyncResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentSyncResponse(varContentSyncResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "jobId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

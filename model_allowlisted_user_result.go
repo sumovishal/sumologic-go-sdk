@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type AllowlistedUserResult struct {
 	IsActive bool `json:"isActive"`
 	// Timestamp of the last login of the user.
 	LastLogin time.Time `json:"lastLogin"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AllowlistedUserResult AllowlistedUserResult
@@ -249,6 +249,11 @@ func (o AllowlistedUserResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["canManageSaml"] = o.CanManageSaml
 	toSerialize["isActive"] = o.IsActive
 	toSerialize["lastLogin"] = o.LastLogin
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -282,15 +287,26 @@ func (o *AllowlistedUserResult) UnmarshalJSON(data []byte) (err error) {
 
 	varAllowlistedUserResult := _AllowlistedUserResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAllowlistedUserResult)
+	err = json.Unmarshal(data, &varAllowlistedUserResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AllowlistedUserResult(varAllowlistedUserResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "firstName")
+		delete(additionalProperties, "lastName")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "canManageSaml")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "lastLogin")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

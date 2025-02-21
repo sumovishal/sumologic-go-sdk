@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type AsyncJobStatus struct {
 	// Additional status message generated if the status is not `Failed`.
 	StatusMessage *string `json:"statusMessage,omitempty"`
 	Error *ErrorDescription `json:"error,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AsyncJobStatus AsyncJobStatus
@@ -153,6 +153,11 @@ func (o AsyncJobStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Error) {
 		toSerialize["error"] = o.Error
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -180,15 +185,22 @@ func (o *AsyncJobStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varAsyncJobStatus := _AsyncJobStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAsyncJobStatus)
+	err = json.Unmarshal(data, &varAsyncJobStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AsyncJobStatus(varAsyncJobStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		delete(additionalProperties, "error")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

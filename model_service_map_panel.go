@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the ServiceMapPanel type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type ServiceMapPanel struct {
 	ShowRemoteServices *bool `json:"showRemoteServices,omitempty"`
 	// Show only service map data specific to the provided environment.
 	Environment *string `json:"environment,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceMapPanel ServiceMapPanel
@@ -213,6 +215,11 @@ func (o ServiceMapPanel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Environment) {
 		toSerialize["environment"] = o.Environment
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,17 +246,68 @@ func (o *ServiceMapPanel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varServiceMapPanel := _ServiceMapPanel{}
+	type ServiceMapPanelWithoutEmbeddedStruct struct {
+		// Filter services by the application custom tag.
+		Application *string `json:"application,omitempty"`
+		// Show only the specific service and its connections to other services.
+		Service *string `json:"service,omitempty"`
+		// Show remote services, like databases or external calls, automatically detected in client traffic.
+		ShowRemoteServices *bool `json:"showRemoteServices,omitempty"`
+		// Show only service map data specific to the provided environment.
+		Environment *string `json:"environment,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceMapPanel)
+	varServiceMapPanelWithoutEmbeddedStruct := ServiceMapPanelWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varServiceMapPanelWithoutEmbeddedStruct)
+	if err == nil {
+		varServiceMapPanel := _ServiceMapPanel{}
+		varServiceMapPanel.Application = varServiceMapPanelWithoutEmbeddedStruct.Application
+		varServiceMapPanel.Service = varServiceMapPanelWithoutEmbeddedStruct.Service
+		varServiceMapPanel.ShowRemoteServices = varServiceMapPanelWithoutEmbeddedStruct.ShowRemoteServices
+		varServiceMapPanel.Environment = varServiceMapPanelWithoutEmbeddedStruct.Environment
+		*o = ServiceMapPanel(varServiceMapPanel)
+	} else {
 		return err
 	}
 
-	*o = ServiceMapPanel(varServiceMapPanel)
+	varServiceMapPanel := _ServiceMapPanel{}
+
+	err = json.Unmarshal(data, &varServiceMapPanel)
+	if err == nil {
+		o.Panel = varServiceMapPanel.Panel
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "application")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "showRemoteServices")
+		delete(additionalProperties, "environment")
+
+		// remove fields from embedded structs
+		reflectPanel := reflect.ValueOf(o.Panel)
+		for i := 0; i < reflectPanel.Type().NumField(); i++ {
+			t := reflectPanel.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

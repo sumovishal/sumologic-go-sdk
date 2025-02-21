@@ -23,7 +23,10 @@ type OutlierBound struct {
 	Lower *float64 `json:"lower,omitempty"`
 	// Upper bond value.
 	Upper *float64 `json:"upper,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OutlierBound OutlierBound
 
 // NewOutlierBound instantiates a new OutlierBound object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o OutlierBound) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Upper) {
 		toSerialize["upper"] = o.Upper
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OutlierBound) UnmarshalJSON(data []byte) (err error) {
+	varOutlierBound := _OutlierBound{}
+
+	err = json.Unmarshal(data, &varOutlierBound)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OutlierBound(varOutlierBound)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "lower")
+		delete(additionalProperties, "upper")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOutlierBound struct {

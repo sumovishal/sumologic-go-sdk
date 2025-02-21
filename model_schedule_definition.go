@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type ScheduleDefinition struct {
 	Rrule *string `json:"rrule,omitempty"`
 	// A flag identifying if the RRule is created or modified through Form UI
 	IsForm *bool `json:"isForm,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScheduleDefinition ScheduleDefinition
@@ -238,6 +238,11 @@ func (o ScheduleDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsForm) {
 		toSerialize["isForm"] = o.IsForm
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -268,15 +273,25 @@ func (o *ScheduleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varScheduleDefinition := _ScheduleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScheduleDefinition)
+	err = json.Unmarshal(data, &varScheduleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScheduleDefinition(varScheduleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "startTime")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "rrule")
+		delete(additionalProperties, "isForm")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

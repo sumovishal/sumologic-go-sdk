@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type TestConnectionResponse struct {
 	ResolutionStatusCode *int32 `json:"resolutionStatusCode,omitempty"`
 	// Content of the response of resolution payload test.
 	ResolutionResponseContent *string `json:"resolutionResponseContent,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TestConnectionResponse TestConnectionResponse
@@ -256,6 +256,11 @@ func (o TestConnectionResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ResolutionResponseContent) {
 		toSerialize["resolutionResponseContent"] = o.ResolutionResponseContent
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -284,15 +289,25 @@ func (o *TestConnectionResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varTestConnectionResponse := _TestConnectionResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTestConnectionResponse)
+	err = json.Unmarshal(data, &varTestConnectionResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TestConnectionResponse(varTestConnectionResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "statusCode")
+		delete(additionalProperties, "responseContent")
+		delete(additionalProperties, "alertStatusCode")
+		delete(additionalProperties, "alertResponseContent")
+		delete(additionalProperties, "resolutionStatusCode")
+		delete(additionalProperties, "resolutionResponseContent")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

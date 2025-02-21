@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type DynamicRule struct {
 	Id string `json:"id"`
 	// Whether the rule has been defined by the system, rather than by a user.
 	IsSystemRule bool `json:"isSystemRule"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DynamicRule DynamicRule
@@ -306,6 +306,11 @@ func (o DynamicRule) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedBy"] = o.ModifiedBy
 	toSerialize["id"] = o.Id
 	toSerialize["isSystemRule"] = o.IsSystemRule
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -341,15 +346,28 @@ func (o *DynamicRule) UnmarshalJSON(data []byte) (err error) {
 
 	varDynamicRule := _DynamicRule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDynamicRule)
+	err = json.Unmarshal(data, &varDynamicRule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DynamicRule(varDynamicRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "enabled")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "isSystemRule")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

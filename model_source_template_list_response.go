@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SourceTemplateListResponse{}
 type SourceTemplateListResponse struct {
 	// List of Source Template.
 	Data []SourceTemplateDefinition `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SourceTemplateListResponse SourceTemplateListResponse
@@ -80,6 +80,11 @@ func (o SourceTemplateListResponse) MarshalJSON() ([]byte, error) {
 func (o SourceTemplateListResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SourceTemplateListResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSourceTemplateListResponse := _SourceTemplateListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSourceTemplateListResponse)
+	err = json.Unmarshal(data, &varSourceTemplateListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SourceTemplateListResponse(varSourceTemplateListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

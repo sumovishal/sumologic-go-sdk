@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OTCollectorListResponse{}
 type OTCollectorListResponse struct {
 	// List of OT Collectors.
 	Data []OTCollector `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCollectorListResponse OTCollectorListResponse
@@ -80,6 +80,11 @@ func (o OTCollectorListResponse) MarshalJSON() ([]byte, error) {
 func (o OTCollectorListResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *OTCollectorListResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varOTCollectorListResponse := _OTCollectorListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCollectorListResponse)
+	err = json.Unmarshal(data, &varOTCollectorListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OTCollectorListResponse(varOTCollectorListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

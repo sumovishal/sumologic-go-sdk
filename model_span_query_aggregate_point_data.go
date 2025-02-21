@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SpanQueryAggregatePointData struct {
 	Y string `json:"y"`
 	// Values that represents a point on the x axis.
 	XAxisValues *map[string]string `json:"xAxisValues,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregatePointData SpanQueryAggregatePointData
@@ -154,6 +154,11 @@ func (o SpanQueryAggregatePointData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.XAxisValues) {
 		toSerialize["xAxisValues"] = o.XAxisValues
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *SpanQueryAggregatePointData) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryAggregatePointData := _SpanQueryAggregatePointData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregatePointData)
+	err = json.Unmarshal(data, &varSpanQueryAggregatePointData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregatePointData(varSpanQueryAggregatePointData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+		delete(additionalProperties, "xAxisValues")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the WebhookSearchNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type WebhookSearchNotificationSyncDefinition struct {
 	ItemizeAlerts *bool `json:"itemizeAlerts,omitempty"`
 	// The maximum number of results for which we send separate alerts. This value should be between 1 and 100.
 	MaxItemizedAlerts *int32 `json:"maxItemizedAlerts,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _WebhookSearchNotificationSyncDefinition WebhookSearchNotificationSyncDefinition
@@ -205,6 +207,11 @@ func (o WebhookSearchNotificationSyncDefinition) ToMap() (map[string]interface{}
 	if !IsNil(o.MaxItemizedAlerts) {
 		toSerialize["maxItemizedAlerts"] = o.MaxItemizedAlerts
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -231,17 +238,68 @@ func (o *WebhookSearchNotificationSyncDefinition) UnmarshalJSON(data []byte) (er
 		}
 	}
 
-	varWebhookSearchNotificationSyncDefinition := _WebhookSearchNotificationSyncDefinition{}
+	type WebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// Identifier of the webhook connection.
+		WebhookId string `json:"webhookId"`
+		// A JSON object in the format required by the target WebHook URL. For details on variables that can be used as parameters within your JSON object, please refer to Sumo Logic Doc Hub.
+		Payload *string `json:"payload,omitempty"`
+		// If this field is set to true, one webhook per result will be sent when the trigger conditions are met
+		ItemizeAlerts *bool `json:"itemizeAlerts,omitempty"`
+		// The maximum number of results for which we send separate alerts. This value should be between 1 and 100.
+		MaxItemizedAlerts *int32 `json:"maxItemizedAlerts,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWebhookSearchNotificationSyncDefinition)
+	varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct := WebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varWebhookSearchNotificationSyncDefinition := _WebhookSearchNotificationSyncDefinition{}
+		varWebhookSearchNotificationSyncDefinition.WebhookId = varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct.WebhookId
+		varWebhookSearchNotificationSyncDefinition.Payload = varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct.Payload
+		varWebhookSearchNotificationSyncDefinition.ItemizeAlerts = varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct.ItemizeAlerts
+		varWebhookSearchNotificationSyncDefinition.MaxItemizedAlerts = varWebhookSearchNotificationSyncDefinitionWithoutEmbeddedStruct.MaxItemizedAlerts
+		*o = WebhookSearchNotificationSyncDefinition(varWebhookSearchNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = WebhookSearchNotificationSyncDefinition(varWebhookSearchNotificationSyncDefinition)
+	varWebhookSearchNotificationSyncDefinition := _WebhookSearchNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varWebhookSearchNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varWebhookSearchNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "webhookId")
+		delete(additionalProperties, "payload")
+		delete(additionalProperties, "itemizeAlerts")
+		delete(additionalProperties, "maxItemizedAlerts")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

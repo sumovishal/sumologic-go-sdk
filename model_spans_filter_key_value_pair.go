@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansFilterKeyValuePair type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type SpansFilterKeyValuePair struct {
 	Operator string `json:"operator" validate:"regexp=^(<|<=|>|>=|=|!=)$"`
 	// The second argument of the operation applied to a `fieldName`.
 	FieldValue string `json:"fieldValue"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansFilterKeyValuePair SpansFilterKeyValuePair
@@ -119,6 +121,11 @@ func (o SpansFilterKeyValuePair) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["operator"] = o.Operator
 	toSerialize["fieldValue"] = o.FieldValue
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -147,17 +154,60 @@ func (o *SpansFilterKeyValuePair) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansFilterKeyValuePair := _SpansFilterKeyValuePair{}
+	type SpansFilterKeyValuePairWithoutEmbeddedStruct struct {
+		// A symbol that indicates an operation to be performed between a `fieldName` and `fieldValue`.
+		Operator string `json:"operator" validate:"regexp=^(<|<=|>|>=|=|!=)$"`
+		// The second argument of the operation applied to a `fieldName`.
+		FieldValue string `json:"fieldValue"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansFilterKeyValuePair)
+	varSpansFilterKeyValuePairWithoutEmbeddedStruct := SpansFilterKeyValuePairWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansFilterKeyValuePairWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansFilterKeyValuePair := _SpansFilterKeyValuePair{}
+		varSpansFilterKeyValuePair.Operator = varSpansFilterKeyValuePairWithoutEmbeddedStruct.Operator
+		varSpansFilterKeyValuePair.FieldValue = varSpansFilterKeyValuePairWithoutEmbeddedStruct.FieldValue
+		*o = SpansFilterKeyValuePair(varSpansFilterKeyValuePair)
+	} else {
 		return err
 	}
 
-	*o = SpansFilterKeyValuePair(varSpansFilterKeyValuePair)
+	varSpansFilterKeyValuePair := _SpansFilterKeyValuePair{}
+
+	err = json.Unmarshal(data, &varSpansFilterKeyValuePair)
+	if err == nil {
+		o.SpansFilter = varSpansFilterKeyValuePair.SpansFilter
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "operator")
+		delete(additionalProperties, "fieldValue")
+
+		// remove fields from embedded structs
+		reflectSpansFilter := reflect.ValueOf(o.SpansFilter)
+		for i := 0; i < reflectSpansFilter.Type().NumField(); i++ {
+			t := reflectSpansFilter.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

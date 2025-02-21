@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type Query struct {
 	Transient *bool `json:"transient,omitempty"`
 	// This field only applies for queryType of `Metrics` but other query types may be supported in the future. Specifies the output cardinality limitations for the query, which is the maximum number of timeseries returned in the result.
 	OutputCardinalityLimit *int32 `json:"outputCardinalityLimit,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Query Query
@@ -445,6 +445,11 @@ func (o Query) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.OutputCardinalityLimit) {
 		toSerialize["outputCardinalityLimit"] = o.OutputCardinalityLimit
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -474,15 +479,30 @@ func (o *Query) UnmarshalJSON(data []byte) (err error) {
 
 	varQuery := _Query{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varQuery)
+	err = json.Unmarshal(data, &varQuery)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Query(varQuery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "queryType")
+		delete(additionalProperties, "queryKey")
+		delete(additionalProperties, "metricsQueryMode")
+		delete(additionalProperties, "metricsQueryData")
+		delete(additionalProperties, "tracesQueryData")
+		delete(additionalProperties, "spansQueryData")
+		delete(additionalProperties, "parseMode")
+		delete(additionalProperties, "timeSource")
+		delete(additionalProperties, "transient")
+		delete(additionalProperties, "outputCardinalityLimit")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

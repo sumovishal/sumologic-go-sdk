@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SlosLibraryBaseExport struct {
 	Description *string `json:"description,omitempty"`
 	// Type of the object model.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryBaseExport SlosLibraryBaseExport
@@ -145,6 +145,11 @@ func (o SlosLibraryBaseExport) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *SlosLibraryBaseExport) UnmarshalJSON(data []byte) (err error) {
 
 	varSlosLibraryBaseExport := _SlosLibraryBaseExport{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryBaseExport)
+	err = json.Unmarshal(data, &varSlosLibraryBaseExport)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SlosLibraryBaseExport(varSlosLibraryBaseExport)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

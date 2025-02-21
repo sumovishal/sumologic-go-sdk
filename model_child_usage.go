@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type ChildUsage struct {
 	UsagePercentChangeWoW *float64 `json:"usagePercentChangeWoW,omitempty"`
 	// Percentage of usage change over the given time period.
 	UsagePercentChange *float64 `json:"usagePercentChange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChildUsage ChildUsage
@@ -228,6 +228,11 @@ func (o ChildUsage) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UsagePercentChange) {
 		toSerialize["usagePercentChange"] = o.UsagePercentChange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -255,15 +260,24 @@ func (o *ChildUsage) UnmarshalJSON(data []byte) (err error) {
 
 	varChildUsage := _ChildUsage{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChildUsage)
+	err = json.Unmarshal(data, &varChildUsage)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChildUsage(varChildUsage)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "totalCreditsUsed")
+		delete(additionalProperties, "usagePercentage")
+		delete(additionalProperties, "forecastPercentage")
+		delete(additionalProperties, "usagePercentChangeWoW")
+		delete(additionalProperties, "usagePercentChange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

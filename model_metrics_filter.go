@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MetricsFilter struct {
 	Value string `json:"value"`
 	// Whether or not the metrics filter is negated.
 	Negation *bool `json:"negation,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsFilter MetricsFilter
@@ -154,6 +154,11 @@ func (o MetricsFilter) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Negation) {
 		toSerialize["negation"] = o.Negation
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -181,15 +186,22 @@ func (o *MetricsFilter) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsFilter := _MetricsFilter{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsFilter)
+	err = json.Unmarshal(data, &varMetricsFilter)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsFilter(varMetricsFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "negation")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

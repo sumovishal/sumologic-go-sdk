@@ -25,7 +25,10 @@ type VersionRange struct {
 	MaxVersion *string `json:"maxVersion,omitempty" validate:"regexp=^v(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)(-sumo.+)?$"`
 	// Specifies how filtering should be applied when `minVersion` and `maxVersion` are defined. - `Within`: Filtering includes the specified range. - `Outside`: Filtering excludes the specified range. By default, filtering includes the specified range.
 	RangeType *string `json:"rangeType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _VersionRange VersionRange
 
 // NewVersionRange instantiates a new VersionRange object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o VersionRange) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RangeType) {
 		toSerialize["rangeType"] = o.RangeType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *VersionRange) UnmarshalJSON(data []byte) (err error) {
+	varVersionRange := _VersionRange{}
+
+	err = json.Unmarshal(data, &varVersionRange)
+
+	if err != nil {
+		return err
+	}
+
+	*o = VersionRange(varVersionRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "minVersion")
+		delete(additionalProperties, "maxVersion")
+		delete(additionalProperties, "rangeType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableVersionRange struct {

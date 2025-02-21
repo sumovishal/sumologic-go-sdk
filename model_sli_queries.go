@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type SliQueries struct {
 	EvaluationType *string `json:"evaluationType,omitempty" validate:"regexp=^(Window|Request|Monitor)$"`
 	// Size of the SLI aggregation window (valid only for `Window` evaluation type).
 	WindowSize *string `json:"windowSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SliQueries SliQueries
@@ -181,6 +181,11 @@ func (o SliQueries) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.WindowSize) {
 		toSerialize["windowSize"] = o.WindowSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -209,15 +214,23 @@ func (o *SliQueries) UnmarshalJSON(data []byte) (err error) {
 
 	varSliQueries := _SliQueries{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSliQueries)
+	err = json.Unmarshal(data, &varSliQueries)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SliQueries(varSliQueries)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryGroup")
+		delete(additionalProperties, "queryType")
+		delete(additionalProperties, "evaluationType")
+		delete(additionalProperties, "windowSize")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

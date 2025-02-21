@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SlosLibrarySlo type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type SlosLibrarySlo struct {
 	Application *string `json:"application,omitempty"`
 	// Tags to be associated with the SLO.
 	Tags *map[string]string `json:"tags,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibrarySlo SlosLibrarySlo
@@ -258,6 +260,11 @@ func (o SlosLibrarySlo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -287,17 +294,74 @@ func (o *SlosLibrarySlo) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSlosLibrarySlo := _SlosLibrarySlo{}
+	type SlosLibrarySloWithoutEmbeddedStruct struct {
+		// Type of SLI Signal (latency, error, throughput, availability or other).
+		SignalType string `json:"signalType" validate:"regexp=^(Latency|Error|Throughput|Availability|Other)$"`
+		Compliance Compliance `json:"compliance"`
+		Indicator Sli `json:"indicator"`
+		// Name of the service.
+		Service *string `json:"service,omitempty"`
+		// Name of the application.
+		Application *string `json:"application,omitempty"`
+		// Tags to be associated with the SLO.
+		Tags *map[string]string `json:"tags,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibrarySlo)
+	varSlosLibrarySloWithoutEmbeddedStruct := SlosLibrarySloWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSlosLibrarySloWithoutEmbeddedStruct)
+	if err == nil {
+		varSlosLibrarySlo := _SlosLibrarySlo{}
+		varSlosLibrarySlo.SignalType = varSlosLibrarySloWithoutEmbeddedStruct.SignalType
+		varSlosLibrarySlo.Compliance = varSlosLibrarySloWithoutEmbeddedStruct.Compliance
+		varSlosLibrarySlo.Indicator = varSlosLibrarySloWithoutEmbeddedStruct.Indicator
+		varSlosLibrarySlo.Service = varSlosLibrarySloWithoutEmbeddedStruct.Service
+		varSlosLibrarySlo.Application = varSlosLibrarySloWithoutEmbeddedStruct.Application
+		varSlosLibrarySlo.Tags = varSlosLibrarySloWithoutEmbeddedStruct.Tags
+		*o = SlosLibrarySlo(varSlosLibrarySlo)
+	} else {
 		return err
 	}
 
-	*o = SlosLibrarySlo(varSlosLibrarySlo)
+	varSlosLibrarySlo := _SlosLibrarySlo{}
+
+	err = json.Unmarshal(data, &varSlosLibrarySlo)
+	if err == nil {
+		o.SlosLibraryBase = varSlosLibrarySlo.SlosLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "signalType")
+		delete(additionalProperties, "compliance")
+		delete(additionalProperties, "indicator")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "application")
+		delete(additionalProperties, "tags")
+
+		// remove fields from embedded structs
+		reflectSlosLibraryBase := reflect.ValueOf(o.SlosLibraryBase)
+		for i := 0; i < reflectSlosLibraryBase.Type().NumField(); i++ {
+			t := reflectSlosLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

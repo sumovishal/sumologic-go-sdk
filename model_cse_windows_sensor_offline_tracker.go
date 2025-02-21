@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsSensorOfflineTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type CSEWindowsSensorOfflineTracker struct {
 	TrackerIdentity
 	// The number of minutes without heartbeat after which sensor is marked offline.
 	MinutesWithNoHeartbeatBeforeMarkingOffline *string `json:"minutesWithNoHeartbeatBeforeMarkingOffline,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsSensorOfflineTracker CSEWindowsSensorOfflineTracker
@@ -101,6 +103,11 @@ func (o CSEWindowsSensorOfflineTracker) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.MinutesWithNoHeartbeatBeforeMarkingOffline) {
 		toSerialize["minutesWithNoHeartbeatBeforeMarkingOffline"] = o.MinutesWithNoHeartbeatBeforeMarkingOffline
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *CSEWindowsSensorOfflineTracker) UnmarshalJSON(data []byte) (err error) 
 		}
 	}
 
-	varCSEWindowsSensorOfflineTracker := _CSEWindowsSensorOfflineTracker{}
+	type CSEWindowsSensorOfflineTrackerWithoutEmbeddedStruct struct {
+		// The number of minutes without heartbeat after which sensor is marked offline.
+		MinutesWithNoHeartbeatBeforeMarkingOffline *string `json:"minutesWithNoHeartbeatBeforeMarkingOffline,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsSensorOfflineTracker)
+	varCSEWindowsSensorOfflineTrackerWithoutEmbeddedStruct := CSEWindowsSensorOfflineTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsSensorOfflineTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsSensorOfflineTracker := _CSEWindowsSensorOfflineTracker{}
+		varCSEWindowsSensorOfflineTracker.MinutesWithNoHeartbeatBeforeMarkingOffline = varCSEWindowsSensorOfflineTrackerWithoutEmbeddedStruct.MinutesWithNoHeartbeatBeforeMarkingOffline
+		*o = CSEWindowsSensorOfflineTracker(varCSEWindowsSensorOfflineTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsSensorOfflineTracker(varCSEWindowsSensorOfflineTracker)
+	varCSEWindowsSensorOfflineTracker := _CSEWindowsSensorOfflineTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsSensorOfflineTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsSensorOfflineTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "minutesWithNoHeartbeatBeforeMarkingOffline")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

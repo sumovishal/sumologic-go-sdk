@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionS3SlowListingTracker type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type CollectionS3SlowListingTracker struct {
 	BucketName *string `json:"bucketName,omitempty"`
 	// The number of minutes elapsed in scanning after which this incident was created.
 	FlaggedAfterMinutes *string `json:"flaggedAfterMinutes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionS3SlowListingTracker CollectionS3SlowListingTracker
@@ -175,6 +177,11 @@ func (o CollectionS3SlowListingTracker) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.FlaggedAfterMinutes) {
 		toSerialize["flaggedAfterMinutes"] = o.FlaggedAfterMinutes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,17 +209,64 @@ func (o *CollectionS3SlowListingTracker) UnmarshalJSON(data []byte) (err error) 
 		}
 	}
 
-	varCollectionS3SlowListingTracker := _CollectionS3SlowListingTracker{}
+	type CollectionS3SlowListingTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The bucket name of the associated Source.
+		BucketName *string `json:"bucketName,omitempty"`
+		// The number of minutes elapsed in scanning after which this incident was created.
+		FlaggedAfterMinutes *string `json:"flaggedAfterMinutes,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionS3SlowListingTracker)
+	varCollectionS3SlowListingTrackerWithoutEmbeddedStruct := CollectionS3SlowListingTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionS3SlowListingTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionS3SlowListingTracker := _CollectionS3SlowListingTracker{}
+		varCollectionS3SlowListingTracker.EventType = varCollectionS3SlowListingTrackerWithoutEmbeddedStruct.EventType
+		varCollectionS3SlowListingTracker.BucketName = varCollectionS3SlowListingTrackerWithoutEmbeddedStruct.BucketName
+		varCollectionS3SlowListingTracker.FlaggedAfterMinutes = varCollectionS3SlowListingTrackerWithoutEmbeddedStruct.FlaggedAfterMinutes
+		*o = CollectionS3SlowListingTracker(varCollectionS3SlowListingTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionS3SlowListingTracker(varCollectionS3SlowListingTracker)
+	varCollectionS3SlowListingTracker := _CollectionS3SlowListingTracker{}
+
+	err = json.Unmarshal(data, &varCollectionS3SlowListingTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionS3SlowListingTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "bucketName")
+		delete(additionalProperties, "flaggedAfterMinutes")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ScopeDefinitionGroup struct {
 	Label string `json:"label"`
 	// The ID of the parent scope group
 	ParentId *string `json:"parentId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ScopeDefinitionGroup ScopeDefinitionGroup
@@ -145,6 +145,11 @@ func (o ScopeDefinitionGroup) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *ScopeDefinitionGroup) UnmarshalJSON(data []byte) (err error) {
 
 	varScopeDefinitionGroup := _ScopeDefinitionGroup{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varScopeDefinitionGroup)
+	err = json.Unmarshal(data, &varScopeDefinitionGroup)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ScopeDefinitionGroup(varScopeDefinitionGroup)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "parentId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

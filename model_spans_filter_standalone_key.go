@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansFilterStandaloneKey type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &SpansFilterStandaloneKey{}
 // SpansFilterStandaloneKey struct for SpansFilterStandaloneKey
 type SpansFilterStandaloneKey struct {
 	SpansFilter
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansFilterStandaloneKey SpansFilterStandaloneKey
@@ -63,6 +65,11 @@ func (o SpansFilterStandaloneKey) ToMap() (map[string]interface{}, error) {
 	if errSpansFilter != nil {
 		return map[string]interface{}{}, errSpansFilter
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -89,17 +96,52 @@ func (o *SpansFilterStandaloneKey) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansFilterStandaloneKey := _SpansFilterStandaloneKey{}
+	type SpansFilterStandaloneKeyWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansFilterStandaloneKey)
+	varSpansFilterStandaloneKeyWithoutEmbeddedStruct := SpansFilterStandaloneKeyWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansFilterStandaloneKeyWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansFilterStandaloneKey := _SpansFilterStandaloneKey{}
+		*o = SpansFilterStandaloneKey(varSpansFilterStandaloneKey)
+	} else {
 		return err
 	}
 
-	*o = SpansFilterStandaloneKey(varSpansFilterStandaloneKey)
+	varSpansFilterStandaloneKey := _SpansFilterStandaloneKey{}
+
+	err = json.Unmarshal(data, &varSpansFilterStandaloneKey)
+	if err == nil {
+		o.SpansFilter = varSpansFilterStandaloneKey.SpansFilter
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectSpansFilter := reflect.ValueOf(o.SpansFilter)
+		for i := 0; i < reflectSpansFilter.Type().NumField(); i++ {
+			t := reflectSpansFilter.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the StaticSeriesDataPoint type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type StaticSeriesDataPoint struct {
 	X int64 `json:"x"`
 	// The value of the data point.
 	Y float64 `json:"y"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _StaticSeriesDataPoint StaticSeriesDataPoint
@@ -117,6 +119,11 @@ func (o StaticSeriesDataPoint) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["x"] = o.X
 	toSerialize["y"] = o.Y
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,17 +150,60 @@ func (o *StaticSeriesDataPoint) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varStaticSeriesDataPoint := _StaticSeriesDataPoint{}
+	type StaticSeriesDataPointWithoutEmbeddedStruct struct {
+		// Epoch unix time stamp.
+		X int64 `json:"x"`
+		// The value of the data point.
+		Y float64 `json:"y"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varStaticSeriesDataPoint)
+	varStaticSeriesDataPointWithoutEmbeddedStruct := StaticSeriesDataPointWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varStaticSeriesDataPointWithoutEmbeddedStruct)
+	if err == nil {
+		varStaticSeriesDataPoint := _StaticSeriesDataPoint{}
+		varStaticSeriesDataPoint.X = varStaticSeriesDataPointWithoutEmbeddedStruct.X
+		varStaticSeriesDataPoint.Y = varStaticSeriesDataPointWithoutEmbeddedStruct.Y
+		*o = StaticSeriesDataPoint(varStaticSeriesDataPoint)
+	} else {
 		return err
 	}
 
-	*o = StaticSeriesDataPoint(varStaticSeriesDataPoint)
+	varStaticSeriesDataPoint := _StaticSeriesDataPoint{}
+
+	err = json.Unmarshal(data, &varStaticSeriesDataPoint)
+	if err == nil {
+		o.DataPoint = varStaticSeriesDataPoint.DataPoint
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "x")
+		delete(additionalProperties, "y")
+
+		// remove fields from embedded structs
+		reflectDataPoint := reflect.ValueOf(o.DataPoint)
+		for i := 0; i < reflectDataPoint.Type().NumField(); i++ {
+			t := reflectDataPoint.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

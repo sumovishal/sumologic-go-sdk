@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LogsToMetricsRuleIdentity type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &LogsToMetricsRuleIdentity{}
 // LogsToMetricsRuleIdentity struct for LogsToMetricsRuleIdentity
 type LogsToMetricsRuleIdentity struct {
 	ResourceIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogsToMetricsRuleIdentity LogsToMetricsRuleIdentity
@@ -65,6 +67,11 @@ func (o LogsToMetricsRuleIdentity) ToMap() (map[string]interface{}, error) {
 	if errResourceIdentity != nil {
 		return map[string]interface{}{}, errResourceIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *LogsToMetricsRuleIdentity) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogsToMetricsRuleIdentity := _LogsToMetricsRuleIdentity{}
+	type LogsToMetricsRuleIdentityWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogsToMetricsRuleIdentity)
+	varLogsToMetricsRuleIdentityWithoutEmbeddedStruct := LogsToMetricsRuleIdentityWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLogsToMetricsRuleIdentityWithoutEmbeddedStruct)
+	if err == nil {
+		varLogsToMetricsRuleIdentity := _LogsToMetricsRuleIdentity{}
+		*o = LogsToMetricsRuleIdentity(varLogsToMetricsRuleIdentity)
+	} else {
 		return err
 	}
 
-	*o = LogsToMetricsRuleIdentity(varLogsToMetricsRuleIdentity)
+	varLogsToMetricsRuleIdentity := _LogsToMetricsRuleIdentity{}
+
+	err = json.Unmarshal(data, &varLogsToMetricsRuleIdentity)
+	if err == nil {
+		o.ResourceIdentity = varLogsToMetricsRuleIdentity.ResourceIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectResourceIdentity := reflect.ValueOf(o.ResourceIdentity)
+		for i := 0; i < reflectResourceIdentity.Type().NumField(); i++ {
+			t := reflectResourceIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

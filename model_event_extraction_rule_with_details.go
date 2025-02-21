@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type EventExtractionRuleWithDetails struct {
 	ModifiedAt *time.Time `json:"modifiedAt,omitempty"`
 	// Identifier of the user who last modified the resource.
 	ModifiedBy *string `json:"modifiedBy,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventExtractionRuleWithDetails EventExtractionRuleWithDetails
@@ -349,6 +349,11 @@ func (o EventExtractionRuleWithDetails) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.ModifiedBy) {
 		toSerialize["modifiedBy"] = o.ModifiedBy
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -379,15 +384,28 @@ func (o *EventExtractionRuleWithDetails) UnmarshalJSON(data []byte) (err error) 
 
 	varEventExtractionRuleWithDetails := _EventExtractionRuleWithDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventExtractionRuleWithDetails)
+	err = json.Unmarshal(data, &varEventExtractionRuleWithDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventExtractionRuleWithDetails(varEventExtractionRuleWithDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "correlationExpression")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

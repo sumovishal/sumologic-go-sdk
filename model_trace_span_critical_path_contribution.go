@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TraceSpanCriticalPathContribution struct {
 	Duration int64 `json:"duration"`
 	// The total fraction (value between 0.0 and 1.0) of the trace duration time consumed by this span in the critical path of its trace.
 	Fraction float64 `json:"fraction"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpanCriticalPathContribution TraceSpanCriticalPathContribution
@@ -108,6 +108,11 @@ func (o TraceSpanCriticalPathContribution) ToMap() (map[string]interface{}, erro
 	toSerialize := map[string]interface{}{}
 	toSerialize["duration"] = o.Duration
 	toSerialize["fraction"] = o.Fraction
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *TraceSpanCriticalPathContribution) UnmarshalJSON(data []byte) (err erro
 
 	varTraceSpanCriticalPathContribution := _TraceSpanCriticalPathContribution{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpanCriticalPathContribution)
+	err = json.Unmarshal(data, &varTraceSpanCriticalPathContribution)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpanCriticalPathContribution(varTraceSpanCriticalPathContribution)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "fraction")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

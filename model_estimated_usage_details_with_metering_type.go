@@ -27,7 +27,10 @@ type EstimatedUsageDetailsWithMeteringType struct {
 	Tier *string `json:"tier,omitempty"`
 	// Whether particular metering type is accounted against a customer's credit on a per scan basis.  e.g Data belonging to \"Flex\" and \"Infrequent\" metering type is accounted for credits on per scan basis. For other metering types, eg. \"Continuous\" it's charged upfront during ingestion. 
 	ScanCreditAccounted *bool `json:"scanCreditAccounted,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _EstimatedUsageDetailsWithMeteringType EstimatedUsageDetailsWithMeteringType
 
 // NewEstimatedUsageDetailsWithMeteringType instantiates a new EstimatedUsageDetailsWithMeteringType object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o EstimatedUsageDetailsWithMeteringType) ToMap() (map[string]interface{}, 
 	if !IsNil(o.ScanCreditAccounted) {
 		toSerialize["scanCreditAccounted"] = o.ScanCreditAccounted
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *EstimatedUsageDetailsWithMeteringType) UnmarshalJSON(data []byte) (err error) {
+	varEstimatedUsageDetailsWithMeteringType := _EstimatedUsageDetailsWithMeteringType{}
+
+	err = json.Unmarshal(data, &varEstimatedUsageDetailsWithMeteringType)
+
+	if err != nil {
+		return err
+	}
+
+	*o = EstimatedUsageDetailsWithMeteringType(varEstimatedUsageDetailsWithMeteringType)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "meteringType")
+		delete(additionalProperties, "dataScannedInBytes")
+		delete(additionalProperties, "tier")
+		delete(additionalProperties, "scanCreditAccounted")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableEstimatedUsageDetailsWithMeteringType struct {

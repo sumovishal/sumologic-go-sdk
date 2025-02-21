@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ContentPermissionUpdateRequest struct {
 	NotifyRecipients bool `json:"notifyRecipients"`
 	// The notification message sent to the users who had a permission update.
 	NotificationMessage string `json:"notificationMessage"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentPermissionUpdateRequest ContentPermissionUpdateRequest
@@ -136,6 +136,11 @@ func (o ContentPermissionUpdateRequest) ToMap() (map[string]interface{}, error) 
 	toSerialize["contentPermissionAssignments"] = o.ContentPermissionAssignments
 	toSerialize["notifyRecipients"] = o.NotifyRecipients
 	toSerialize["notificationMessage"] = o.NotificationMessage
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *ContentPermissionUpdateRequest) UnmarshalJSON(data []byte) (err error) 
 
 	varContentPermissionUpdateRequest := _ContentPermissionUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentPermissionUpdateRequest)
+	err = json.Unmarshal(data, &varContentPermissionUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentPermissionUpdateRequest(varContentPermissionUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "contentPermissionAssignments")
+		delete(additionalProperties, "notifyRecipients")
+		delete(additionalProperties, "notificationMessage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

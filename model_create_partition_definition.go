@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CreatePartitionDefinition struct {
 	IsCompliant *bool `json:"isCompliant,omitempty"`
 	// Indicates whether the partition is included in the default search scope. When executing a  query such as \"error | count,\" certain partitions are automatically part of the search scope.  However, for specific partitions, the user must explicitly mention the partition using the _index  term, as in \"_index=webApp error | count\". This property governs the default inclusion of the  partition in the search scope. Configuring this property is exclusively permitted for flex partitions.
 	IsIncludedInDefaultSearch *bool `json:"isIncludedInDefaultSearch,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePartitionDefinition CreatePartitionDefinition
@@ -264,6 +264,11 @@ func (o CreatePartitionDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsIncludedInDefaultSearch) {
 		toSerialize["isIncludedInDefaultSearch"] = o.IsIncludedInDefaultSearch
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -292,15 +297,25 @@ func (o *CreatePartitionDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePartitionDefinition := _CreatePartitionDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePartitionDefinition)
+	err = json.Unmarshal(data, &varCreatePartitionDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePartitionDefinition(varCreatePartitionDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "routingExpression")
+		delete(additionalProperties, "analyticsTier")
+		delete(additionalProperties, "retentionPeriod")
+		delete(additionalProperties, "isCompliant")
+		delete(additionalProperties, "isIncludedInDefaultSearch")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

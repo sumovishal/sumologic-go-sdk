@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CpcQueryBucketStatus struct {
 	Status string `json:"status" validate:"regexp=^(Processing|Finished|Error|Canceled)$"`
 	// Descriptive message of the status.
 	StatusMessage *string `json:"statusMessage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryBucketStatus CpcQueryBucketStatus
@@ -145,6 +145,11 @@ func (o CpcQueryBucketStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.StatusMessage) {
 		toSerialize["statusMessage"] = o.StatusMessage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *CpcQueryBucketStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryBucketStatus := _CpcQueryBucketStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryBucketStatus)
+	err = json.Unmarshal(data, &varCpcQueryBucketStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryBucketStatus(varCpcQueryBucketStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketId")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

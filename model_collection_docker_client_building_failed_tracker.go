@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionDockerClientBuildingFailedTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &CollectionDockerClientBuildingFailedTracker{}
 // CollectionDockerClientBuildingFailedTracker struct for CollectionDockerClientBuildingFailedTracker
 type CollectionDockerClientBuildingFailedTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionDockerClientBuildingFailedTracker CollectionDockerClientBuildingFailedTracker
@@ -64,6 +66,11 @@ func (o CollectionDockerClientBuildingFailedTracker) ToMap() (map[string]interfa
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *CollectionDockerClientBuildingFailedTracker) UnmarshalJSON(data []byte)
 		}
 	}
 
-	varCollectionDockerClientBuildingFailedTracker := _CollectionDockerClientBuildingFailedTracker{}
+	type CollectionDockerClientBuildingFailedTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionDockerClientBuildingFailedTracker)
+	varCollectionDockerClientBuildingFailedTrackerWithoutEmbeddedStruct := CollectionDockerClientBuildingFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionDockerClientBuildingFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionDockerClientBuildingFailedTracker := _CollectionDockerClientBuildingFailedTracker{}
+		*o = CollectionDockerClientBuildingFailedTracker(varCollectionDockerClientBuildingFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionDockerClientBuildingFailedTracker(varCollectionDockerClientBuildingFailedTracker)
+	varCollectionDockerClientBuildingFailedTracker := _CollectionDockerClientBuildingFailedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionDockerClientBuildingFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionDockerClientBuildingFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

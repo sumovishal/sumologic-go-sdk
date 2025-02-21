@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CreateRoleDefinition struct {
 	Capabilities []string `json:"capabilities,omitempty"`
 	// Set this to true if you want to automatically append all missing capability requirements. If set to false an error will be thrown if any capabilities are missing their dependencies.
 	AutofillDependencies *bool `json:"autofillDependencies,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateRoleDefinition CreateRoleDefinition
@@ -269,6 +269,11 @@ func (o CreateRoleDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutofillDependencies) {
 		toSerialize["autofillDependencies"] = o.AutofillDependencies
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -296,15 +301,25 @@ func (o *CreateRoleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateRoleDefinition := _CreateRoleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateRoleDefinition)
+	err = json.Unmarshal(data, &varCreateRoleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateRoleDefinition(varCreateRoleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "filterPredicate")
+		delete(additionalProperties, "users")
+		delete(additionalProperties, "capabilities")
+		delete(additionalProperties, "autofillDependencies")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

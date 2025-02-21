@@ -13,8 +13,9 @@ package sumologic
 import (
 	"time"
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SlosLibraryFolderResponse type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,7 @@ type SlosLibraryFolderResponse struct {
 	Permissions []string `json:"permissions"`
 	// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
 	Children []SlosLibraryBaseResponse `json:"children"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryFolderResponse SlosLibraryFolderResponse
@@ -131,6 +133,11 @@ func (o SlosLibraryFolderResponse) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["permissions"] = o.Permissions
 	toSerialize["children"] = o.Children
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -170,17 +177,60 @@ func (o *SlosLibraryFolderResponse) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSlosLibraryFolderResponse := _SlosLibraryFolderResponse{}
+	type SlosLibraryFolderResponseWithoutEmbeddedStruct struct {
+		// Aggregated permission summary for the calling user. If detailed permission statements are required, please call list permissions endpoint.
+		Permissions []string `json:"permissions"`
+		// Children of the folder. NOTE: Permissions field will not be filled (empty list) for children.
+		Children []SlosLibraryBaseResponse `json:"children"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryFolderResponse)
+	varSlosLibraryFolderResponseWithoutEmbeddedStruct := SlosLibraryFolderResponseWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSlosLibraryFolderResponseWithoutEmbeddedStruct)
+	if err == nil {
+		varSlosLibraryFolderResponse := _SlosLibraryFolderResponse{}
+		varSlosLibraryFolderResponse.Permissions = varSlosLibraryFolderResponseWithoutEmbeddedStruct.Permissions
+		varSlosLibraryFolderResponse.Children = varSlosLibraryFolderResponseWithoutEmbeddedStruct.Children
+		*o = SlosLibraryFolderResponse(varSlosLibraryFolderResponse)
+	} else {
 		return err
 	}
 
-	*o = SlosLibraryFolderResponse(varSlosLibraryFolderResponse)
+	varSlosLibraryFolderResponse := _SlosLibraryFolderResponse{}
+
+	err = json.Unmarshal(data, &varSlosLibraryFolderResponse)
+	if err == nil {
+		o.SlosLibraryBaseResponse = varSlosLibraryFolderResponse.SlosLibraryBaseResponse
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectSlosLibraryBaseResponse := reflect.ValueOf(o.SlosLibraryBaseResponse)
+		for i := 0; i < reflectSlosLibraryBaseResponse.Type().NumField(); i++ {
+			t := reflectSlosLibraryBaseResponse.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

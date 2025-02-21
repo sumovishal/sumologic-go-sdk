@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type Window struct {
 	Aggregation *string `json:"aggregation,omitempty"`
 	// Size of the aggregation window (minimum of 1m and maximum of 1h).
 	Size string `json:"size"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Window Window
@@ -231,6 +231,11 @@ func (o Window) ToMap() (map[string]interface{}, error) {
 		toSerialize["aggregation"] = o.Aggregation
 	}
 	toSerialize["size"] = o.Size
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -263,15 +268,25 @@ func (o *Window) UnmarshalJSON(data []byte) (err error) {
 
 	varWindow := _Window{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWindow)
+	err = json.Unmarshal(data, &varWindow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Window(varWindow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryType")
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "op")
+		delete(additionalProperties, "aggregation")
+		delete(additionalProperties, "size")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

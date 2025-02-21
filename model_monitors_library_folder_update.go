@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MonitorsLibraryFolderUpdate type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &MonitorsLibraryFolderUpdate{}
 // MonitorsLibraryFolderUpdate struct for MonitorsLibraryFolderUpdate
 type MonitorsLibraryFolderUpdate struct {
 	MonitorsLibraryBaseUpdate
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorsLibraryFolderUpdate MonitorsLibraryFolderUpdate
@@ -66,6 +68,11 @@ func (o MonitorsLibraryFolderUpdate) ToMap() (map[string]interface{}, error) {
 	if errMonitorsLibraryBaseUpdate != nil {
 		return map[string]interface{}{}, errMonitorsLibraryBaseUpdate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -93,17 +100,52 @@ func (o *MonitorsLibraryFolderUpdate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMonitorsLibraryFolderUpdate := _MonitorsLibraryFolderUpdate{}
+	type MonitorsLibraryFolderUpdateWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorsLibraryFolderUpdate)
+	varMonitorsLibraryFolderUpdateWithoutEmbeddedStruct := MonitorsLibraryFolderUpdateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderUpdateWithoutEmbeddedStruct)
+	if err == nil {
+		varMonitorsLibraryFolderUpdate := _MonitorsLibraryFolderUpdate{}
+		*o = MonitorsLibraryFolderUpdate(varMonitorsLibraryFolderUpdate)
+	} else {
 		return err
 	}
 
-	*o = MonitorsLibraryFolderUpdate(varMonitorsLibraryFolderUpdate)
+	varMonitorsLibraryFolderUpdate := _MonitorsLibraryFolderUpdate{}
+
+	err = json.Unmarshal(data, &varMonitorsLibraryFolderUpdate)
+	if err == nil {
+		o.MonitorsLibraryBaseUpdate = varMonitorsLibraryFolderUpdate.MonitorsLibraryBaseUpdate
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectMonitorsLibraryBaseUpdate := reflect.ValueOf(o.MonitorsLibraryBaseUpdate)
+		for i := 0; i < reflectMonitorsLibraryBaseUpdate.Type().NumField(); i++ {
+			t := reflectMonitorsLibraryBaseUpdate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

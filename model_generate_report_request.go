@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type GenerateReportRequest struct {
 	// Time zone for the query time ranges. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
 	Template Template `json:"template"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GenerateReportRequest GenerateReportRequest
@@ -162,6 +162,11 @@ func (o GenerateReportRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["exportFormat"] = o.ExportFormat
 	toSerialize["timezone"] = o.Timezone
 	toSerialize["template"] = o.Template
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -192,15 +197,23 @@ func (o *GenerateReportRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGenerateReportRequest := _GenerateReportRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGenerateReportRequest)
+	err = json.Unmarshal(data, &varGenerateReportRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GenerateReportRequest(varGenerateReportRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "exportFormat")
+		delete(additionalProperties, "timezone")
+		delete(additionalProperties, "template")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

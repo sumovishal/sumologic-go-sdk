@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionWindowsEventChannelConnectionFailedTracker type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &CollectionWindowsEventChannelConnectionFailedTracker{}
 // CollectionWindowsEventChannelConnectionFailedTracker struct for CollectionWindowsEventChannelConnectionFailedTracker
 type CollectionWindowsEventChannelConnectionFailedTracker struct {
 	TrackerIdentity
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionWindowsEventChannelConnectionFailedTracker CollectionWindowsEventChannelConnectionFailedTracker
@@ -64,6 +66,11 @@ func (o CollectionWindowsEventChannelConnectionFailedTracker) ToMap() (map[strin
 	if errTrackerIdentity != nil {
 		return map[string]interface{}{}, errTrackerIdentity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *CollectionWindowsEventChannelConnectionFailedTracker) UnmarshalJSON(dat
 		}
 	}
 
-	varCollectionWindowsEventChannelConnectionFailedTracker := _CollectionWindowsEventChannelConnectionFailedTracker{}
+	type CollectionWindowsEventChannelConnectionFailedTrackerWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionWindowsEventChannelConnectionFailedTracker)
+	varCollectionWindowsEventChannelConnectionFailedTrackerWithoutEmbeddedStruct := CollectionWindowsEventChannelConnectionFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionWindowsEventChannelConnectionFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionWindowsEventChannelConnectionFailedTracker := _CollectionWindowsEventChannelConnectionFailedTracker{}
+		*o = CollectionWindowsEventChannelConnectionFailedTracker(varCollectionWindowsEventChannelConnectionFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionWindowsEventChannelConnectionFailedTracker(varCollectionWindowsEventChannelConnectionFailedTracker)
+	varCollectionWindowsEventChannelConnectionFailedTracker := _CollectionWindowsEventChannelConnectionFailedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionWindowsEventChannelConnectionFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionWindowsEventChannelConnectionFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

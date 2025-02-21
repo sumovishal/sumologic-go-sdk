@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type CreateUserDefinition struct {
 	Email string `json:"email"`
 	// List of roleIds associated with the user.
 	RoleIds []string `json:"roleIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateUserDefinition CreateUserDefinition
@@ -164,6 +164,11 @@ func (o CreateUserDefinition) ToMap() (map[string]interface{}, error) {
 	toSerialize["lastName"] = o.LastName
 	toSerialize["email"] = o.Email
 	toSerialize["roleIds"] = o.RoleIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *CreateUserDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateUserDefinition := _CreateUserDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateUserDefinition)
+	err = json.Unmarshal(data, &varCreateUserDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateUserDefinition(varCreateUserDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "firstName")
+		delete(additionalProperties, "lastName")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "roleIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type MonitorNotification struct {
 	Notification Action `json:"notification"`
 	// The trigger types assigned to send this notification.
 	RunForTriggerTypes []string `json:"runForTriggerTypes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorNotification MonitorNotification
@@ -107,6 +107,11 @@ func (o MonitorNotification) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["notification"] = o.Notification
 	toSerialize["runForTriggerTypes"] = o.RunForTriggerTypes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *MonitorNotification) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorNotification := _MonitorNotification{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorNotification)
+	err = json.Unmarshal(data, &varMonitorNotification)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorNotification(varMonitorNotification)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "notification")
+		delete(additionalProperties, "runForTriggerTypes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

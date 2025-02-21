@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SumoSearchPanel type satisfies the MappedNullable interface at compile time
@@ -31,6 +32,7 @@ type SumoSearchPanel struct {
 	ColoringRules []ColoringRule `json:"coloringRules,omitempty"`
 	// List of linked dashboards.
 	LinkedDashboards []LinkedDashboard `json:"linkedDashboards,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SumoSearchPanel SumoSearchPanel
@@ -240,6 +242,11 @@ func (o SumoSearchPanel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LinkedDashboards) {
 		toSerialize["linkedDashboards"] = o.LinkedDashboards
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -267,17 +274,71 @@ func (o *SumoSearchPanel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSumoSearchPanel := _SumoSearchPanel{}
+	type SumoSearchPanelWithoutEmbeddedStruct struct {
+		// Metrics and log queries of the panel.
+		Queries []Query `json:"queries"`
+		// Description of the panel.
+		Description *string `json:"description,omitempty"`
+		TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+		// Rules to set the color of data.
+		ColoringRules []ColoringRule `json:"coloringRules,omitempty"`
+		// List of linked dashboards.
+		LinkedDashboards []LinkedDashboard `json:"linkedDashboards,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSumoSearchPanel)
+	varSumoSearchPanelWithoutEmbeddedStruct := SumoSearchPanelWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSumoSearchPanelWithoutEmbeddedStruct)
+	if err == nil {
+		varSumoSearchPanel := _SumoSearchPanel{}
+		varSumoSearchPanel.Queries = varSumoSearchPanelWithoutEmbeddedStruct.Queries
+		varSumoSearchPanel.Description = varSumoSearchPanelWithoutEmbeddedStruct.Description
+		varSumoSearchPanel.TimeRange = varSumoSearchPanelWithoutEmbeddedStruct.TimeRange
+		varSumoSearchPanel.ColoringRules = varSumoSearchPanelWithoutEmbeddedStruct.ColoringRules
+		varSumoSearchPanel.LinkedDashboards = varSumoSearchPanelWithoutEmbeddedStruct.LinkedDashboards
+		*o = SumoSearchPanel(varSumoSearchPanel)
+	} else {
 		return err
 	}
 
-	*o = SumoSearchPanel(varSumoSearchPanel)
+	varSumoSearchPanel := _SumoSearchPanel{}
+
+	err = json.Unmarshal(data, &varSumoSearchPanel)
+	if err == nil {
+		o.Panel = varSumoSearchPanel.Panel
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "coloringRules")
+		delete(additionalProperties, "linkedDashboards")
+
+		// remove fields from embedded structs
+		reflectPanel := reflect.ValueOf(o.Panel)
+		for i := 0; i < reflectPanel.Type().NumField(); i++ {
+			t := reflectPanel.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

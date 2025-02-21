@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type SubdomainDefinitionResponse struct {
 	Subdomain string `json:"subdomain"`
 	// Login URL corresponding to the subdomain.
 	Url string `json:"url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubdomainDefinitionResponse SubdomainDefinitionResponse
@@ -221,6 +221,11 @@ func (o SubdomainDefinitionResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["modifiedBy"] = o.ModifiedBy
 	toSerialize["subdomain"] = o.Subdomain
 	toSerialize["url"] = o.Url
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -253,15 +258,25 @@ func (o *SubdomainDefinitionResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSubdomainDefinitionResponse := _SubdomainDefinitionResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubdomainDefinitionResponse)
+	err = json.Unmarshal(data, &varSubdomainDefinitionResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubdomainDefinitionResponse(varSubdomainDefinitionResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "subdomain")
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

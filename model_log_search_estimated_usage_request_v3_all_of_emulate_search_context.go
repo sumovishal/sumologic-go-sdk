@@ -21,7 +21,10 @@ var _ MappedNullable = &LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContex
 type LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext struct {
 	RoleIds []string `json:"roleIds,omitempty"`
 	UserId *string `json:"userId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext
 
 // NewLogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext instantiates a new LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext) ToMap() (map[
 	if !IsNil(o.UserId) {
 		toSerialize["userId"] = o.UserId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext) UnmarshalJSON(data []byte) (err error) {
+	varLogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext := _LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext{}
+
+	err = json.Unmarshal(data, &varLogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext(varLogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "roleIds")
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLogSearchEstimatedUsageRequestV3AllOfEmulateSearchContext struct {

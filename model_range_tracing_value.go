@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the RangeTracingValue type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type RangeTracingValue struct {
 	TracingValue
 	From TracingValue `json:"from"`
 	To TracingValue `json:"to"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RangeTracingValue RangeTracingValue
@@ -116,6 +118,11 @@ func (o RangeTracingValue) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["from"] = o.From
 	toSerialize["to"] = o.To
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,17 +150,58 @@ func (o *RangeTracingValue) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varRangeTracingValue := _RangeTracingValue{}
+	type RangeTracingValueWithoutEmbeddedStruct struct {
+		From TracingValue `json:"from"`
+		To TracingValue `json:"to"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRangeTracingValue)
+	varRangeTracingValueWithoutEmbeddedStruct := RangeTracingValueWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varRangeTracingValueWithoutEmbeddedStruct)
+	if err == nil {
+		varRangeTracingValue := _RangeTracingValue{}
+		varRangeTracingValue.From = varRangeTracingValueWithoutEmbeddedStruct.From
+		varRangeTracingValue.To = varRangeTracingValueWithoutEmbeddedStruct.To
+		*o = RangeTracingValue(varRangeTracingValue)
+	} else {
 		return err
 	}
 
-	*o = RangeTracingValue(varRangeTracingValue)
+	varRangeTracingValue := _RangeTracingValue{}
+
+	err = json.Unmarshal(data, &varRangeTracingValue)
+	if err == nil {
+		o.TracingValue = varRangeTracingValue.TracingValue
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "from")
+		delete(additionalProperties, "to")
+
+		// remove fields from embedded structs
+		reflectTracingValue := reflect.ValueOf(o.TracingValue)
+		for i := 0; i < reflectTracingValue.Type().NumField(); i++ {
+			t := reflectTracingValue.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

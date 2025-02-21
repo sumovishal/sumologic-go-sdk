@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CreateBucketDefinitionItems{}
 type CreateBucketDefinitionItems struct {
 	// The name of the Amazon S3 bucket.
 	BucketName string `json:"bucketName" validate:"regexp=(?!(^xn--|-s3alias$))^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateBucketDefinitionItems CreateBucketDefinitionItems
@@ -80,6 +80,11 @@ func (o CreateBucketDefinitionItems) MarshalJSON() ([]byte, error) {
 func (o CreateBucketDefinitionItems) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["bucketName"] = o.BucketName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CreateBucketDefinitionItems) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateBucketDefinitionItems := _CreateBucketDefinitionItems{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateBucketDefinitionItems)
+	err = json.Unmarshal(data, &varCreateBucketDefinitionItems)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateBucketDefinitionItems(varCreateBucketDefinitionItems)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bucketName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DashboardMigrationRequest{}
 type DashboardMigrationRequest struct {
 	// Content identifiers of the Legacy dashboards.
 	ContentIds []string `json:"contentIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardMigrationRequest DashboardMigrationRequest
@@ -80,6 +80,11 @@ func (o DashboardMigrationRequest) MarshalJSON() ([]byte, error) {
 func (o DashboardMigrationRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["contentIds"] = o.ContentIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DashboardMigrationRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardMigrationRequest := _DashboardMigrationRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardMigrationRequest)
+	err = json.Unmarshal(data, &varDashboardMigrationRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardMigrationRequest(varDashboardMigrationRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "contentIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

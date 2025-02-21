@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type SpanQueryRequest struct {
 	TimeRange ResolvableTimeRange `json:"timeRange"`
 	// Time zone for the query time ranges. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	TimeZone *string `json:"timeZone,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRequest SpanQueryRequest
@@ -148,6 +148,11 @@ func (o SpanQueryRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeZone) {
 		toSerialize["timeZone"] = o.TimeZone
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -176,15 +181,22 @@ func (o *SpanQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRequest := _SpanQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRequest)
+	err = json.Unmarshal(data, &varSpanQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRequest(varSpanQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "timeZone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

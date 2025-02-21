@@ -25,7 +25,10 @@ type LookupTablesLimits struct {
 	TableCapacityRemaining *int32 `json:"tableCapacityRemaining,omitempty"`
 	// Total capacity of lookup tables that can be created for the given org id.
 	TotalTableCapacity *int32 `json:"totalTableCapacity,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _LookupTablesLimits LookupTablesLimits
 
 // NewLookupTablesLimits instantiates a new LookupTablesLimits object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o LookupTablesLimits) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TotalTableCapacity) {
 		toSerialize["totalTableCapacity"] = o.TotalTableCapacity
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *LookupTablesLimits) UnmarshalJSON(data []byte) (err error) {
+	varLookupTablesLimits := _LookupTablesLimits{}
+
+	err = json.Unmarshal(data, &varLookupTablesLimits)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LookupTablesLimits(varLookupTablesLimits)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tablesCreated")
+		delete(additionalProperties, "tableCapacityRemaining")
+		delete(additionalProperties, "totalTableCapacity")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLookupTablesLimits struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type DatastoreStatusResponse struct {
 	IndicatorLimit int64 `json:"indicatorLimit"`
 	// A list of sources and their individual DB sizes and indicator counts
 	SourceStatus []DatastoreSourceStatusResponse `json:"sourceStatus"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DatastoreStatusResponse DatastoreStatusResponse
@@ -164,6 +164,11 @@ func (o DatastoreStatusResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["indicatorCount"] = o.IndicatorCount
 	toSerialize["indicatorLimit"] = o.IndicatorLimit
 	toSerialize["sourceStatus"] = o.SourceStatus
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *DatastoreStatusResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varDatastoreStatusResponse := _DatastoreStatusResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDatastoreStatusResponse)
+	err = json.Unmarshal(data, &varDatastoreStatusResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DatastoreStatusResponse(varDatastoreStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "diskSize")
+		delete(additionalProperties, "indicatorCount")
+		delete(additionalProperties, "indicatorLimit")
+		delete(additionalProperties, "sourceStatus")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

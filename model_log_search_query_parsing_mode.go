@@ -21,7 +21,10 @@ var _ MappedNullable = &LogSearchQueryParsingMode{}
 type LogSearchQueryParsingMode struct {
 	// Define the parsing mode to scan the JSON format log messages. Possible values are:   1. `AutoParse`   2. `Manual` In AutoParse mode, the system automatically figures out fields to parse based on the search query. While in the Manual mode, no fields are parsed out automatically. For more information see [Dynamic Parsing](https://help.sumologic.com/?cid=0011).
 	ParsingMode *string `json:"parsingMode,omitempty" validate:"regexp=^(AutoParse|Manual)$"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _LogSearchQueryParsingMode LogSearchQueryParsingMode
 
 // NewLogSearchQueryParsingMode instantiates a new LogSearchQueryParsingMode object
 // This constructor will assign default values to properties that have it defined,
@@ -89,7 +92,33 @@ func (o LogSearchQueryParsingMode) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParsingMode) {
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *LogSearchQueryParsingMode) UnmarshalJSON(data []byte) (err error) {
+	varLogSearchQueryParsingMode := _LogSearchQueryParsingMode{}
+
+	err = json.Unmarshal(data, &varLogSearchQueryParsingMode)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogSearchQueryParsingMode(varLogSearchQueryParsingMode)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "parsingMode")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLogSearchQueryParsingMode struct {

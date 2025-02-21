@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ResolvableTimeRange{}
 type ResolvableTimeRange struct {
 	// Type of the time range. Value must be either `CompleteLiteralTimeRange` or `BeginBoundedTimeRange`.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ResolvableTimeRange ResolvableTimeRange
@@ -80,6 +80,11 @@ func (o ResolvableTimeRange) MarshalJSON() ([]byte, error) {
 func (o ResolvableTimeRange) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ResolvableTimeRange) UnmarshalJSON(data []byte) (err error) {
 
 	varResolvableTimeRange := _ResolvableTimeRange{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varResolvableTimeRange)
+	err = json.Unmarshal(data, &varResolvableTimeRange)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ResolvableTimeRange(varResolvableTimeRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

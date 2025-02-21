@@ -28,7 +28,10 @@ type PaginatedOTCollectorsRequestFilters struct {
 	Alive NullableBool `json:"alive,omitempty"`
 	// Management Status of the OT Collector based on if it is remotely or locally managed.
 	IsRemotelyManaged NullableBool `json:"isRemotelyManaged,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PaginatedOTCollectorsRequestFilters PaginatedOTCollectorsRequestFilters
 
 // NewPaginatedOTCollectorsRequestFilters instantiates a new PaginatedOTCollectorsRequestFilters object
 // This constructor will assign default values to properties that have it defined,
@@ -262,7 +265,37 @@ func (o PaginatedOTCollectorsRequestFilters) ToMap() (map[string]interface{}, er
 	if o.IsRemotelyManaged.IsSet() {
 		toSerialize["isRemotelyManaged"] = o.IsRemotelyManaged.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PaginatedOTCollectorsRequestFilters) UnmarshalJSON(data []byte) (err error) {
+	varPaginatedOTCollectorsRequestFilters := _PaginatedOTCollectorsRequestFilters{}
+
+	err = json.Unmarshal(data, &varPaginatedOTCollectorsRequestFilters)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PaginatedOTCollectorsRequestFilters(varPaginatedOTCollectorsRequestFilters)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tags")
+		delete(additionalProperties, "os")
+		delete(additionalProperties, "collectorVersionRange")
+		delete(additionalProperties, "alive")
+		delete(additionalProperties, "isRemotelyManaged")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePaginatedOTCollectorsRequestFilters struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type AppDefinition struct {
 	Preview *bool `json:"preview,omitempty"`
 	// Manifest version of the app
 	ManifestVersion *string `json:"manifestVersion,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AppDefinition AppDefinition
@@ -238,6 +238,11 @@ func (o AppDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ManifestVersion) {
 		toSerialize["manifestVersion"] = o.ManifestVersion
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -268,15 +273,25 @@ func (o *AppDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varAppDefinition := _AppDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAppDefinition)
+	err = json.Unmarshal(data, &varAppDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AppDefinition(varAppDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "contentId")
+		delete(additionalProperties, "uuid")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "appVersion")
+		delete(additionalProperties, "preview")
+		delete(additionalProperties, "manifestVersion")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

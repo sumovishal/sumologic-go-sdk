@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the DashboardReportModeTemplate type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &DashboardReportModeTemplate{}
 // DashboardReportModeTemplate struct for DashboardReportModeTemplate
 type DashboardReportModeTemplate struct {
 	DashboardTemplate
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardReportModeTemplate DashboardReportModeTemplate
@@ -63,6 +65,11 @@ func (o DashboardReportModeTemplate) ToMap() (map[string]interface{}, error) {
 	if errDashboardTemplate != nil {
 		return map[string]interface{}{}, errDashboardTemplate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -89,17 +96,52 @@ func (o *DashboardReportModeTemplate) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varDashboardReportModeTemplate := _DashboardReportModeTemplate{}
+	type DashboardReportModeTemplateWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardReportModeTemplate)
+	varDashboardReportModeTemplateWithoutEmbeddedStruct := DashboardReportModeTemplateWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varDashboardReportModeTemplateWithoutEmbeddedStruct)
+	if err == nil {
+		varDashboardReportModeTemplate := _DashboardReportModeTemplate{}
+		*o = DashboardReportModeTemplate(varDashboardReportModeTemplate)
+	} else {
 		return err
 	}
 
-	*o = DashboardReportModeTemplate(varDashboardReportModeTemplate)
+	varDashboardReportModeTemplate := _DashboardReportModeTemplate{}
+
+	err = json.Unmarshal(data, &varDashboardReportModeTemplate)
+	if err == nil {
+		o.DashboardTemplate = varDashboardReportModeTemplate.DashboardTemplate
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectDashboardTemplate := reflect.ValueOf(o.DashboardTemplate)
+		for i := 0; i < reflectDashboardTemplate.Type().NumField(); i++ {
+			t := reflectDashboardTemplate.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

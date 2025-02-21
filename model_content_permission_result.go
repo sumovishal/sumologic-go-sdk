@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ContentPermissionResult struct {
 	ExplicitPermissions []ContentPermissionAssignment `json:"explicitPermissions"`
 	// Implicitly inherited content permissions.
 	ImplicitPermissions []ContentPermissionAssignment `json:"implicitPermissions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ContentPermissionResult ContentPermissionResult
@@ -117,6 +117,11 @@ func (o ContentPermissionResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ImplicitPermissions) {
 		toSerialize["implicitPermissions"] = o.ImplicitPermissions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ContentPermissionResult) UnmarshalJSON(data []byte) (err error) {
 
 	varContentPermissionResult := _ContentPermissionResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varContentPermissionResult)
+	err = json.Unmarshal(data, &varContentPermissionResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ContentPermissionResult(varContentPermissionResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "explicitPermissions")
+		delete(additionalProperties, "implicitPermissions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

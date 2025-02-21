@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the TraceDbSpanInfo type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type TraceDbSpanInfo struct {
 	Instance *string `json:"instance,omitempty"`
 	// Database statement for the given database type.
 	Statement *string `json:"statement,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceDbSpanInfo TraceDbSpanInfo
@@ -173,6 +175,11 @@ func (o TraceDbSpanInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Statement) {
 		toSerialize["statement"] = o.Statement
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -198,17 +205,64 @@ func (o *TraceDbSpanInfo) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTraceDbSpanInfo := _TraceDbSpanInfo{}
+	type TraceDbSpanInfoWithoutEmbeddedStruct struct {
+		// Database type.
+		DbType *string `json:"dbType,omitempty"`
+		// Database instance name, e.g. in java, if jdbc.url=\"jdbc:mysql://127.0.0.1:3306/customers\", the instance name is \"customers\".
+		Instance *string `json:"instance,omitempty"`
+		// Database statement for the given database type.
+		Statement *string `json:"statement,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceDbSpanInfo)
+	varTraceDbSpanInfoWithoutEmbeddedStruct := TraceDbSpanInfoWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varTraceDbSpanInfoWithoutEmbeddedStruct)
+	if err == nil {
+		varTraceDbSpanInfo := _TraceDbSpanInfo{}
+		varTraceDbSpanInfo.DbType = varTraceDbSpanInfoWithoutEmbeddedStruct.DbType
+		varTraceDbSpanInfo.Instance = varTraceDbSpanInfoWithoutEmbeddedStruct.Instance
+		varTraceDbSpanInfo.Statement = varTraceDbSpanInfoWithoutEmbeddedStruct.Statement
+		*o = TraceDbSpanInfo(varTraceDbSpanInfo)
+	} else {
 		return err
 	}
 
-	*o = TraceDbSpanInfo(varTraceDbSpanInfo)
+	varTraceDbSpanInfo := _TraceDbSpanInfo{}
+
+	err = json.Unmarshal(data, &varTraceDbSpanInfo)
+	if err == nil {
+		o.TraceSpanInfo = varTraceDbSpanInfo.TraceSpanInfo
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "dbType")
+		delete(additionalProperties, "instance")
+		delete(additionalProperties, "statement")
+
+		// remove fields from embedded structs
+		reflectTraceSpanInfo := reflect.ValueOf(o.TraceSpanInfo)
+		for i := 0; i < reflectTraceSpanInfo.Type().NumField(); i++ {
+			t := reflectTraceSpanInfo.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AzureEventHubConnectionErrorTracker type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AzureEventHubConnectionErrorTracker struct {
 	TrackerIdentity
 	// The specific reason of the connection error
 	Reason *string `json:"reason,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AzureEventHubConnectionErrorTracker AzureEventHubConnectionErrorTracker
@@ -101,6 +103,11 @@ func (o AzureEventHubConnectionErrorTracker) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Reason) {
 		toSerialize["reason"] = o.Reason
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -128,17 +135,56 @@ func (o *AzureEventHubConnectionErrorTracker) UnmarshalJSON(data []byte) (err er
 		}
 	}
 
-	varAzureEventHubConnectionErrorTracker := _AzureEventHubConnectionErrorTracker{}
+	type AzureEventHubConnectionErrorTrackerWithoutEmbeddedStruct struct {
+		// The specific reason of the connection error
+		Reason *string `json:"reason,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAzureEventHubConnectionErrorTracker)
+	varAzureEventHubConnectionErrorTrackerWithoutEmbeddedStruct := AzureEventHubConnectionErrorTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAzureEventHubConnectionErrorTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varAzureEventHubConnectionErrorTracker := _AzureEventHubConnectionErrorTracker{}
+		varAzureEventHubConnectionErrorTracker.Reason = varAzureEventHubConnectionErrorTrackerWithoutEmbeddedStruct.Reason
+		*o = AzureEventHubConnectionErrorTracker(varAzureEventHubConnectionErrorTracker)
+	} else {
 		return err
 	}
 
-	*o = AzureEventHubConnectionErrorTracker(varAzureEventHubConnectionErrorTracker)
+	varAzureEventHubConnectionErrorTracker := _AzureEventHubConnectionErrorTracker{}
+
+	err = json.Unmarshal(data, &varAzureEventHubConnectionErrorTracker)
+	if err == nil {
+		o.TrackerIdentity = varAzureEventHubConnectionErrorTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "reason")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

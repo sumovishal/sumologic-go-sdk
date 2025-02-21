@@ -25,7 +25,10 @@ type QueriesParametersResult struct {
 	Errors []string `json:"errors,omitempty"`
 	LogsOutlier *LogsOutlier `json:"logsOutlier,omitempty"`
 	MetricsOutlier *MetricsOutlier `json:"metricsOutlier,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _QueriesParametersResult QueriesParametersResult
 
 // NewQueriesParametersResult instantiates a new QueriesParametersResult object
 // This constructor will assign default values to properties that have it defined,
@@ -194,7 +197,36 @@ func (o QueriesParametersResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MetricsOutlier) {
 		toSerialize["metricsOutlier"] = o.MetricsOutlier
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *QueriesParametersResult) UnmarshalJSON(data []byte) (err error) {
+	varQueriesParametersResult := _QueriesParametersResult{}
+
+	err = json.Unmarshal(data, &varQueriesParametersResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = QueriesParametersResult(varQueriesParametersResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isValid")
+		delete(additionalProperties, "errors")
+		delete(additionalProperties, "logsOutlier")
+		delete(additionalProperties, "metricsOutlier")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableQueriesParametersResult struct {

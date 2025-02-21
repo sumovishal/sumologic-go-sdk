@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the IntegerArrayEventAttributeValue type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,7 @@ var _ MappedNullable = &IntegerArrayEventAttributeValue{}
 type IntegerArrayEventAttributeValue struct {
 	EventAttributeValue
 	Values []int64 `json:"values"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IntegerArrayEventAttributeValue IntegerArrayEventAttributeValue
@@ -89,6 +91,11 @@ func (o IntegerArrayEventAttributeValue) ToMap() (map[string]interface{}, error)
 		return map[string]interface{}{}, errEventAttributeValue
 	}
 	toSerialize["values"] = o.Values
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -115,17 +122,55 @@ func (o *IntegerArrayEventAttributeValue) UnmarshalJSON(data []byte) (err error)
 		}
 	}
 
-	varIntegerArrayEventAttributeValue := _IntegerArrayEventAttributeValue{}
+	type IntegerArrayEventAttributeValueWithoutEmbeddedStruct struct {
+		Values []int64 `json:"values"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIntegerArrayEventAttributeValue)
+	varIntegerArrayEventAttributeValueWithoutEmbeddedStruct := IntegerArrayEventAttributeValueWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIntegerArrayEventAttributeValueWithoutEmbeddedStruct)
+	if err == nil {
+		varIntegerArrayEventAttributeValue := _IntegerArrayEventAttributeValue{}
+		varIntegerArrayEventAttributeValue.Values = varIntegerArrayEventAttributeValueWithoutEmbeddedStruct.Values
+		*o = IntegerArrayEventAttributeValue(varIntegerArrayEventAttributeValue)
+	} else {
 		return err
 	}
 
-	*o = IntegerArrayEventAttributeValue(varIntegerArrayEventAttributeValue)
+	varIntegerArrayEventAttributeValue := _IntegerArrayEventAttributeValue{}
+
+	err = json.Unmarshal(data, &varIntegerArrayEventAttributeValue)
+	if err == nil {
+		o.EventAttributeValue = varIntegerArrayEventAttributeValue.EventAttributeValue
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "values")
+
+		// remove fields from embedded structs
+		reflectEventAttributeValue := reflect.ValueOf(o.EventAttributeValue)
+		for i := 0; i < reflectEventAttributeValue.Type().NumField(); i++ {
+			t := reflectEventAttributeValue.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

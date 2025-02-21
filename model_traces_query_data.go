@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TracesQueryData{}
 type TracesQueryData struct {
 	// A list of filters for the traces query.
 	Filters []TracesFilter `json:"filters"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TracesQueryData TracesQueryData
@@ -80,6 +80,11 @@ func (o TracesQueryData) MarshalJSON() ([]byte, error) {
 func (o TracesQueryData) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["filters"] = o.Filters
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TracesQueryData) UnmarshalJSON(data []byte) (err error) {
 
 	varTracesQueryData := _TracesQueryData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTracesQueryData)
+	err = json.Unmarshal(data, &varTracesQueryData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TracesQueryData(varTracesQueryData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "filters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

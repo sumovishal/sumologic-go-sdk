@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionS3ListingFailedTracker type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type CollectionS3ListingFailedTracker struct {
 	EventType *string `json:"eventType,omitempty"`
 	// The bucket name of the associated Source.
 	BucketName *string `json:"bucketName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionS3ListingFailedTracker CollectionS3ListingFailedTracker
@@ -138,6 +140,11 @@ func (o CollectionS3ListingFailedTracker) ToMap() (map[string]interface{}, error
 	if !IsNil(o.BucketName) {
 		toSerialize["bucketName"] = o.BucketName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,17 +172,60 @@ func (o *CollectionS3ListingFailedTracker) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varCollectionS3ListingFailedTracker := _CollectionS3ListingFailedTracker{}
+	type CollectionS3ListingFailedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The bucket name of the associated Source.
+		BucketName *string `json:"bucketName,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionS3ListingFailedTracker)
+	varCollectionS3ListingFailedTrackerWithoutEmbeddedStruct := CollectionS3ListingFailedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionS3ListingFailedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionS3ListingFailedTracker := _CollectionS3ListingFailedTracker{}
+		varCollectionS3ListingFailedTracker.EventType = varCollectionS3ListingFailedTrackerWithoutEmbeddedStruct.EventType
+		varCollectionS3ListingFailedTracker.BucketName = varCollectionS3ListingFailedTrackerWithoutEmbeddedStruct.BucketName
+		*o = CollectionS3ListingFailedTracker(varCollectionS3ListingFailedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionS3ListingFailedTracker(varCollectionS3ListingFailedTracker)
+	varCollectionS3ListingFailedTracker := _CollectionS3ListingFailedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionS3ListingFailedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionS3ListingFailedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "bucketName")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

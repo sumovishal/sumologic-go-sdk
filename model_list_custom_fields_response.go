@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListCustomFieldsResponse{}
 type ListCustomFieldsResponse struct {
 	// List of custom fields.
 	Data []CustomField `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListCustomFieldsResponse ListCustomFieldsResponse
@@ -80,6 +80,11 @@ func (o ListCustomFieldsResponse) MarshalJSON() ([]byte, error) {
 func (o ListCustomFieldsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListCustomFieldsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListCustomFieldsResponse := _ListCustomFieldsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListCustomFieldsResponse)
+	err = json.Unmarshal(data, &varListCustomFieldsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListCustomFieldsResponse(varListCustomFieldsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

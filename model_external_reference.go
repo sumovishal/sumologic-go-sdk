@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type ExternalReference struct {
 	Hashes *map[string]string `json:"hashes,omitempty"`
 	// An identifier for the external reference content
 	ExternalId *string `json:"external_id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ExternalReference ExternalReference
@@ -228,6 +228,11 @@ func (o ExternalReference) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ExternalId) {
 		toSerialize["external_id"] = o.ExternalId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -255,15 +260,24 @@ func (o *ExternalReference) UnmarshalJSON(data []byte) (err error) {
 
 	varExternalReference := _ExternalReference{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varExternalReference)
+	err = json.Unmarshal(data, &varExternalReference)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ExternalReference(varExternalReference)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source_name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "url")
+		delete(additionalProperties, "hashes")
+		delete(additionalProperties, "external_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

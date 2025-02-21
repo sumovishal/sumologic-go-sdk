@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AutoCompleteValueSyncDefinition struct {
 	Label string `json:"label"`
 	// The value of the autocomplete value.
 	Value string `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AutoCompleteValueSyncDefinition AutoCompleteValueSyncDefinition
@@ -108,6 +108,11 @@ func (o AutoCompleteValueSyncDefinition) ToMap() (map[string]interface{}, error)
 	toSerialize := map[string]interface{}{}
 	toSerialize["label"] = o.Label
 	toSerialize["value"] = o.Value
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *AutoCompleteValueSyncDefinition) UnmarshalJSON(data []byte) (err error)
 
 	varAutoCompleteValueSyncDefinition := _AutoCompleteValueSyncDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAutoCompleteValueSyncDefinition)
+	err = json.Unmarshal(data, &varAutoCompleteValueSyncDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AutoCompleteValueSyncDefinition(varAutoCompleteValueSyncDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "label")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

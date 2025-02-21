@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type QueryBasedSli struct {
 	QueryType string `json:"queryType" validate:"regexp=^(Logs|Metrics)$"`
 	// Queries for defining SLI.
 	Queries []SliQueryGroup `json:"queries"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _QueryBasedSli QueryBasedSli
@@ -108,6 +108,11 @@ func (o QueryBasedSli) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryType"] = o.QueryType
 	toSerialize["queries"] = o.Queries
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *QueryBasedSli) UnmarshalJSON(data []byte) (err error) {
 
 	varQueryBasedSli := _QueryBasedSli{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varQueryBasedSli)
+	err = json.Unmarshal(data, &varQueryBasedSli)
 
 	if err != nil {
 		return err
 	}
 
 	*o = QueryBasedSli(varQueryBasedSli)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryType")
+		delete(additionalProperties, "queries")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SpanLink struct {
 	TraceId string `json:"traceId"`
 	// Span identifier of the linked span.
 	SpanId string `json:"spanId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanLink SpanLink
@@ -108,6 +108,11 @@ func (o SpanLink) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["traceId"] = o.TraceId
 	toSerialize["spanId"] = o.SpanId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SpanLink) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanLink := _SpanLink{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanLink)
+	err = json.Unmarshal(data, &varSpanLink)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanLink(varSpanLink)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "traceId")
+		delete(additionalProperties, "spanId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

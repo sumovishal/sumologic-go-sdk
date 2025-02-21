@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &FieldName{}
 type FieldName struct {
 	// Field name.
 	FieldName string `json:"fieldName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FieldName FieldName
@@ -80,6 +80,11 @@ func (o FieldName) MarshalJSON() ([]byte, error) {
 func (o FieldName) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["fieldName"] = o.FieldName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *FieldName) UnmarshalJSON(data []byte) (err error) {
 
 	varFieldName := _FieldName{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFieldName)
+	err = json.Unmarshal(data, &varFieldName)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FieldName(varFieldName)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

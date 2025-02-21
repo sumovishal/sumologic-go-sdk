@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type MutingSchedulesLibraryBaseResponse struct {
 	IsMutable bool `json:"isMutable"`
 	// Aggregated permission summary for the calling user. If detailed permission statements are required, please call list permissions endpoint.
 	Permissions []string `json:"permissions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryBaseResponse MutingSchedulesLibraryBaseResponse
@@ -454,6 +454,11 @@ func (o MutingSchedulesLibraryBaseResponse) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Permissions) {
 		toSerialize["permissions"] = o.Permissions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -493,15 +498,33 @@ func (o *MutingSchedulesLibraryBaseResponse) UnmarshalJSON(data []byte) (err err
 
 	varMutingSchedulesLibraryBaseResponse := _MutingSchedulesLibraryBaseResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryBaseResponse)
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryBaseResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MutingSchedulesLibraryBaseResponse(varMutingSchedulesLibraryBaseResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "contentType")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "isSystem")
+		delete(additionalProperties, "isMutable")
+		delete(additionalProperties, "permissions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

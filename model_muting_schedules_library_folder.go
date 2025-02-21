@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MutingSchedulesLibraryFolder type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &MutingSchedulesLibraryFolder{}
 // MutingSchedulesLibraryFolder struct for MutingSchedulesLibraryFolder
 type MutingSchedulesLibraryFolder struct {
 	MutingSchedulesLibraryBase
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryFolder MutingSchedulesLibraryFolder
@@ -65,6 +67,11 @@ func (o MutingSchedulesLibraryFolder) ToMap() (map[string]interface{}, error) {
 	if errMutingSchedulesLibraryBase != nil {
 		return map[string]interface{}{}, errMutingSchedulesLibraryBase
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -91,17 +98,52 @@ func (o *MutingSchedulesLibraryFolder) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varMutingSchedulesLibraryFolder := _MutingSchedulesLibraryFolder{}
+	type MutingSchedulesLibraryFolderWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryFolder)
+	varMutingSchedulesLibraryFolderWithoutEmbeddedStruct := MutingSchedulesLibraryFolderWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolderWithoutEmbeddedStruct)
+	if err == nil {
+		varMutingSchedulesLibraryFolder := _MutingSchedulesLibraryFolder{}
+		*o = MutingSchedulesLibraryFolder(varMutingSchedulesLibraryFolder)
+	} else {
 		return err
 	}
 
-	*o = MutingSchedulesLibraryFolder(varMutingSchedulesLibraryFolder)
+	varMutingSchedulesLibraryFolder := _MutingSchedulesLibraryFolder{}
+
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryFolder)
+	if err == nil {
+		o.MutingSchedulesLibraryBase = varMutingSchedulesLibraryFolder.MutingSchedulesLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectMutingSchedulesLibraryBase := reflect.ValueOf(o.MutingSchedulesLibraryBase)
+		for i := 0; i < reflectMutingSchedulesLibraryBase.Type().NumField(); i++ {
+			t := reflectMutingSchedulesLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

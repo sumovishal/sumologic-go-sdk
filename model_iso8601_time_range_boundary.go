@@ -13,8 +13,9 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the Iso8601TimeRangeBoundary type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type Iso8601TimeRangeBoundary struct {
 	TimeRangeBoundary
 	// Starting point in time as a string in ISO 8601 format. For example `2018-10-01T11:10:20.52+01:00`
 	Iso8601Time time.Time `json:"iso8601Time"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Iso8601TimeRangeBoundary Iso8601TimeRangeBoundary
@@ -91,6 +93,11 @@ func (o Iso8601TimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errTimeRangeBoundary
 	}
 	toSerialize["iso8601Time"] = o.Iso8601Time
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -117,17 +124,56 @@ func (o *Iso8601TimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varIso8601TimeRangeBoundary := _Iso8601TimeRangeBoundary{}
+	type Iso8601TimeRangeBoundaryWithoutEmbeddedStruct struct {
+		// Starting point in time as a string in ISO 8601 format. For example `2018-10-01T11:10:20.52+01:00`
+		Iso8601Time time.Time `json:"iso8601Time"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIso8601TimeRangeBoundary)
+	varIso8601TimeRangeBoundaryWithoutEmbeddedStruct := Iso8601TimeRangeBoundaryWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIso8601TimeRangeBoundaryWithoutEmbeddedStruct)
+	if err == nil {
+		varIso8601TimeRangeBoundary := _Iso8601TimeRangeBoundary{}
+		varIso8601TimeRangeBoundary.Iso8601Time = varIso8601TimeRangeBoundaryWithoutEmbeddedStruct.Iso8601Time
+		*o = Iso8601TimeRangeBoundary(varIso8601TimeRangeBoundary)
+	} else {
 		return err
 	}
 
-	*o = Iso8601TimeRangeBoundary(varIso8601TimeRangeBoundary)
+	varIso8601TimeRangeBoundary := _Iso8601TimeRangeBoundary{}
+
+	err = json.Unmarshal(data, &varIso8601TimeRangeBoundary)
+	if err == nil {
+		o.TimeRangeBoundary = varIso8601TimeRangeBoundary.TimeRangeBoundary
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "iso8601Time")
+
+		// remove fields from embedded structs
+		reflectTimeRangeBoundary := reflect.ValueOf(o.TimeRangeBoundary)
+		for i := 0; i < reflectTimeRangeBoundary.Type().NumField(); i++ {
+			t := reflectTimeRangeBoundary.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

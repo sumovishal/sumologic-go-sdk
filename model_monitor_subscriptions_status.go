@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MonitorSubscriptionsStatus struct {
 	TargetId string `json:"targetId"`
 	// Status of the subscription.
 	Status string `json:"status" validate:"regexp=^(Subscribed|SubscribedByAncestor|NotSubscribed)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorSubscriptionsStatus MonitorSubscriptionsStatus
@@ -108,6 +108,11 @@ func (o MonitorSubscriptionsStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["targetId"] = o.TargetId
 	toSerialize["status"] = o.Status
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *MonitorSubscriptionsStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorSubscriptionsStatus := _MonitorSubscriptionsStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorSubscriptionsStatus)
+	err = json.Unmarshal(data, &varMonitorSubscriptionsStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorSubscriptionsStatus(varMonitorSubscriptionsStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "targetId")
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

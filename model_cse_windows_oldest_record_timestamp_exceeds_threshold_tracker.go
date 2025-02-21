@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsOldestRecordTimestampExceedsThresholdTracker type satisfies the MappedNullable interface at compile time
@@ -36,6 +37,7 @@ type CSEWindowsOldestRecordTimestampExceedsThresholdTracker struct {
 	NumberOfFilesPending *string `json:"numberOfFilesPending,omitempty"`
 	// The oldest timestamp in the queue.
 	OldestTimestampInQueue *string `json:"oldestTimestampInQueue,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsOldestRecordTimestampExceedsThresholdTracker CSEWindowsOldestRecordTimestampExceedsThresholdTracker
@@ -323,6 +325,11 @@ func (o CSEWindowsOldestRecordTimestampExceedsThresholdTracker) ToMap() (map[str
 	if !IsNil(o.OldestTimestampInQueue) {
 		toSerialize["oldestTimestampInQueue"] = o.OldestTimestampInQueue
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -350,17 +357,80 @@ func (o *CSEWindowsOldestRecordTimestampExceedsThresholdTracker) UnmarshalJSON(d
 		}
 	}
 
-	varCSEWindowsOldestRecordTimestampExceedsThresholdTracker := _CSEWindowsOldestRecordTimestampExceedsThresholdTracker{}
+	type CSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The HostName + EventLog name for EventLogs and Domain name for Directory.
+		Source *string `json:"source,omitempty"`
+		// The last error message.
+		LastErrorMessage *string `json:"lastErrorMessage,omitempty"`
+		// The number of files pending upload.
+		NumberOfFilesPending *string `json:"numberOfFilesPending,omitempty"`
+		// The oldest timestamp in the queue.
+		OldestTimestampInQueue *string `json:"oldestTimestampInQueue,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsOldestRecordTimestampExceedsThresholdTracker)
+	varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct := CSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker := _CSEWindowsOldestRecordTimestampExceedsThresholdTracker{}
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.EventType = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.SensorId = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.SensorHostname = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.Source = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.Source
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.LastErrorMessage = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.LastErrorMessage
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.NumberOfFilesPending = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.NumberOfFilesPending
+		varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.OldestTimestampInQueue = varCSEWindowsOldestRecordTimestampExceedsThresholdTrackerWithoutEmbeddedStruct.OldestTimestampInQueue
+		*o = CSEWindowsOldestRecordTimestampExceedsThresholdTracker(varCSEWindowsOldestRecordTimestampExceedsThresholdTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsOldestRecordTimestampExceedsThresholdTracker(varCSEWindowsOldestRecordTimestampExceedsThresholdTracker)
+	varCSEWindowsOldestRecordTimestampExceedsThresholdTracker := _CSEWindowsOldestRecordTimestampExceedsThresholdTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsOldestRecordTimestampExceedsThresholdTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsOldestRecordTimestampExceedsThresholdTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "lastErrorMessage")
+		delete(additionalProperties, "numberOfFilesPending")
+		delete(additionalProperties, "oldestTimestampInQueue")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

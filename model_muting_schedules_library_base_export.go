@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MutingSchedulesLibraryBaseExport struct {
 	Description *string `json:"description,omitempty"`
 	// Type of the object model.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MutingSchedulesLibraryBaseExport MutingSchedulesLibraryBaseExport
@@ -145,6 +145,11 @@ func (o MutingSchedulesLibraryBaseExport) ToMap() (map[string]interface{}, error
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *MutingSchedulesLibraryBaseExport) UnmarshalJSON(data []byte) (err error
 
 	varMutingSchedulesLibraryBaseExport := _MutingSchedulesLibraryBaseExport{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMutingSchedulesLibraryBaseExport)
+	err = json.Unmarshal(data, &varMutingSchedulesLibraryBaseExport)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MutingSchedulesLibraryBaseExport(varMutingSchedulesLibraryBaseExport)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

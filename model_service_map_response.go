@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ServiceMapResponse struct {
 	Nodes []ServiceMapNode `json:"nodes"`
 	// List of service map edges.
 	Edges []ServiceMapEdge `json:"edges"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceMapResponse ServiceMapResponse
@@ -108,6 +108,11 @@ func (o ServiceMapResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["nodes"] = o.Nodes
 	toSerialize["edges"] = o.Edges
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ServiceMapResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varServiceMapResponse := _ServiceMapResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceMapResponse)
+	err = json.Unmarshal(data, &varServiceMapResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceMapResponse(varServiceMapResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "nodes")
+		delete(additionalProperties, "edges")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

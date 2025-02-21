@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TrackerIdentity struct {
 	Error string `json:"error"`
 	// A more elaborate description of why the event occurred.
 	Description string `json:"description"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TrackerIdentity TrackerIdentity
@@ -136,6 +136,11 @@ func (o TrackerIdentity) ToMap() (map[string]interface{}, error) {
 	toSerialize["trackerId"] = o.TrackerId
 	toSerialize["error"] = o.Error
 	toSerialize["description"] = o.Description
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *TrackerIdentity) UnmarshalJSON(data []byte) (err error) {
 
 	varTrackerIdentity := _TrackerIdentity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTrackerIdentity)
+	err = json.Unmarshal(data, &varTrackerIdentity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TrackerIdentity(varTrackerIdentity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "trackerId")
+		delete(additionalProperties, "error")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

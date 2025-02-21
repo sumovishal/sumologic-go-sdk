@@ -43,7 +43,10 @@ type AlertsListPageObject struct {
 	LastUpdated *string `json:"lastUpdated,omitempty"`
 	// True if the ARP was created while the monitor was muted
 	IsMuted *bool `json:"isMuted,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AlertsListPageObject AlertsListPageObject
 
 // NewAlertsListPageObject instantiates a new AlertsListPageObject object
 // This constructor will assign default values to properties that have it defined,
@@ -496,7 +499,44 @@ func (o AlertsListPageObject) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsMuted) {
 		toSerialize["isMuted"] = o.IsMuted
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AlertsListPageObject) UnmarshalJSON(data []byte) (err error) {
+	varAlertsListPageObject := _AlertsListPageObject{}
+
+	err = json.Unmarshal(data, &varAlertsListPageObject)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AlertsListPageObject(varAlertsListPageObject)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "severity")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "entitiesInfo")
+		delete(additionalProperties, "secondaryEntitiesInfo")
+		delete(additionalProperties, "violationCount")
+		delete(additionalProperties, "lastViolation")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "lastUpdated")
+		delete(additionalProperties, "isMuted")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAlertsListPageObject struct {

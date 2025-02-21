@@ -23,7 +23,10 @@ type ChildUsageDetailsRequest struct {
 	StartDate *string `json:"startDate,omitempty"`
 	// End date, without the time, of usage data to fetch.
 	EndDate *string `json:"endDate,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChildUsageDetailsRequest ChildUsageDetailsRequest
 
 // NewChildUsageDetailsRequest instantiates a new ChildUsageDetailsRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o ChildUsageDetailsRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EndDate) {
 		toSerialize["endDate"] = o.EndDate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChildUsageDetailsRequest) UnmarshalJSON(data []byte) (err error) {
+	varChildUsageDetailsRequest := _ChildUsageDetailsRequest{}
+
+	err = json.Unmarshal(data, &varChildUsageDetailsRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChildUsageDetailsRequest(varChildUsageDetailsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "startDate")
+		delete(additionalProperties, "endDate")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChildUsageDetailsRequest struct {

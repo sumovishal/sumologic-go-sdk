@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -52,6 +51,7 @@ type TraceSpan struct {
 	Info *TraceSpanInfo `json:"info,omitempty"`
 	// Number of span links in this span.
 	NumberOfLinks *int32 `json:"numberOfLinks,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TraceSpan TraceSpan
@@ -598,6 +598,11 @@ func (o TraceSpan) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NumberOfLinks) {
 		toSerialize["numberOfLinks"] = o.NumberOfLinks
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -629,15 +634,35 @@ func (o *TraceSpan) UnmarshalJSON(data []byte) (err error) {
 
 	varTraceSpan := _TraceSpan{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTraceSpan)
+	err = json.Unmarshal(data, &varTraceSpan)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TraceSpan(varTraceSpan)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "operationName")
+		delete(additionalProperties, "resource")
+		delete(additionalProperties, "service")
+		delete(additionalProperties, "serviceColor")
+		delete(additionalProperties, "serviceType")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "startedAt")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "kind")
+		delete(additionalProperties, "remoteService")
+		delete(additionalProperties, "remoteServiceColor")
+		delete(additionalProperties, "remoteServiceType")
+		delete(additionalProperties, "info")
+		delete(additionalProperties, "numberOfLinks")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

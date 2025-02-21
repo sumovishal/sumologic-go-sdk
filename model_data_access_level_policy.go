@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &DataAccessLevelPolicy{}
 type DataAccessLevelPolicy struct {
 	// Whether the Data Access Level policy is enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DataAccessLevelPolicy DataAccessLevelPolicy
@@ -80,6 +80,11 @@ func (o DataAccessLevelPolicy) MarshalJSON() ([]byte, error) {
 func (o DataAccessLevelPolicy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *DataAccessLevelPolicy) UnmarshalJSON(data []byte) (err error) {
 
 	varDataAccessLevelPolicy := _DataAccessLevelPolicy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDataAccessLevelPolicy)
+	err = json.Unmarshal(data, &varDataAccessLevelPolicy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DataAccessLevelPolicy(varDataAccessLevelPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

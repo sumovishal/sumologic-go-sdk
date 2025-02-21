@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type PlanUpdateEmail struct {
 	Baselines SelfServiceCreditsBaselines `json:"baselines"`
 	// option details the user might want to inform
 	Details *string `json:"details,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PlanUpdateEmail PlanUpdateEmail
@@ -218,6 +218,11 @@ func (o PlanUpdateEmail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Details) {
 		toSerialize["details"] = o.Details
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -246,15 +251,24 @@ func (o *PlanUpdateEmail) UnmarshalJSON(data []byte) (err error) {
 
 	varPlanUpdateEmail := _PlanUpdateEmail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPlanUpdateEmail)
+	err = json.Unmarshal(data, &varPlanUpdateEmail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PlanUpdateEmail(varPlanUpdateEmail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "emailId")
+		delete(additionalProperties, "phoneNumber")
+		delete(additionalProperties, "billingFrequency")
+		delete(additionalProperties, "baselines")
+		delete(additionalProperties, "details")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type OnDemandProvisioningInfo struct {
 	LastNameAttribute *string `json:"lastNameAttribute,omitempty"`
 	// Sumo Logic RBAC roles to be assigned when user accounts are provisioned.
 	OnDemandProvisioningRoles []string `json:"onDemandProvisioningRoles"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OnDemandProvisioningInfo OnDemandProvisioningInfo
@@ -162,6 +162,11 @@ func (o OnDemandProvisioningInfo) ToMap() (map[string]interface{}, error) {
 		toSerialize["lastNameAttribute"] = o.LastNameAttribute
 	}
 	toSerialize["onDemandProvisioningRoles"] = o.OnDemandProvisioningRoles
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -189,15 +194,22 @@ func (o *OnDemandProvisioningInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varOnDemandProvisioningInfo := _OnDemandProvisioningInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOnDemandProvisioningInfo)
+	err = json.Unmarshal(data, &varOnDemandProvisioningInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OnDemandProvisioningInfo(varOnDemandProvisioningInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "firstNameAttribute")
+		delete(additionalProperties, "lastNameAttribute")
+		delete(additionalProperties, "onDemandProvisioningRoles")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type LogSearchEstimatedUsageRequest struct {
 	ParsingMode *string `json:"parsingMode,omitempty" validate:"regexp=^(AutoParse|Manual)$"`
 	// Time zone to get the estimated usage details. Follow the format in the [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List). 
 	Timezone string `json:"timezone"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LogSearchEstimatedUsageRequest LogSearchEstimatedUsageRequest
@@ -254,6 +254,11 @@ func (o LogSearchEstimatedUsageRequest) ToMap() (map[string]interface{}, error) 
 		toSerialize["parsingMode"] = o.ParsingMode
 	}
 	toSerialize["timezone"] = o.Timezone
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -283,15 +288,25 @@ func (o *LogSearchEstimatedUsageRequest) UnmarshalJSON(data []byte) (err error) 
 
 	varLogSearchEstimatedUsageRequest := _LogSearchEstimatedUsageRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogSearchEstimatedUsageRequest)
+	err = json.Unmarshal(data, &varLogSearchEstimatedUsageRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = LogSearchEstimatedUsageRequest(varLogSearchEstimatedUsageRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryString")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "runByReceiptTime")
+		delete(additionalProperties, "queryParameters")
+		delete(additionalProperties, "parsingMode")
+		delete(additionalProperties, "timezone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

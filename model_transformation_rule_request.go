@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type TransformationRuleRequest struct {
 	RuleDefinition TransformationRuleDefinition `json:"ruleDefinition"`
 	// True if the rule is enabled.
 	Enabled bool `json:"enabled"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TransformationRuleRequest TransformationRuleRequest
@@ -107,6 +107,11 @@ func (o TransformationRuleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["ruleDefinition"] = o.RuleDefinition
 	toSerialize["enabled"] = o.Enabled
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *TransformationRuleRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varTransformationRuleRequest := _TransformationRuleRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTransformationRuleRequest)
+	err = json.Unmarshal(data, &varTransformationRuleRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TransformationRuleRequest(varTransformationRuleRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ruleDefinition")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

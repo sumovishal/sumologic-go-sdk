@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type SpanQueryRowResponse struct {
 	IsAggregation bool `json:"isAggregation"`
 	// The executed query after rewriting
 	ExecutedQuery *string `json:"executedQuery,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRowResponse SpanQueryRowResponse
@@ -184,6 +184,11 @@ func (o SpanQueryRowResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ExecutedQuery) {
 		toSerialize["executedQuery"] = o.ExecutedQuery
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -212,15 +217,23 @@ func (o *SpanQueryRowResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRowResponse := _SpanQueryRowResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRowResponse)
+	err = json.Unmarshal(data, &varSpanQueryRowResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRowResponse(varSpanQueryRowResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "errors")
+		delete(additionalProperties, "isAggregation")
+		delete(additionalProperties, "executedQuery")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

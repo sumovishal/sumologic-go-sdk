@@ -31,7 +31,10 @@ type LogsOutlier struct {
 	Threshold *float64 `json:"threshold,omitempty"`
 	// The name of the field that the trigger condition will alert on.
 	Field *string `json:"field,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _LogsOutlier LogsOutlier
 
 // NewLogsOutlier instantiates a new LogsOutlier object
 // This constructor will assign default values to properties that have it defined,
@@ -282,7 +285,38 @@ func (o LogsOutlier) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Field) {
 		toSerialize["field"] = o.Field
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *LogsOutlier) UnmarshalJSON(data []byte) (err error) {
+	varLogsOutlier := _LogsOutlier{}
+
+	err = json.Unmarshal(data, &varLogsOutlier)
+
+	if err != nil {
+		return err
+	}
+
+	*o = LogsOutlier(varLogsOutlier)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "trimmedQuery")
+		delete(additionalProperties, "window")
+		delete(additionalProperties, "consecutive")
+		delete(additionalProperties, "direction")
+		delete(additionalProperties, "threshold")
+		delete(additionalProperties, "field")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableLogsOutlier struct {

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MonitorScanEstimatesRequest struct {
 	Triggers []TriggerCondition `json:"triggers"`
 	// Time zone for the monitor [IANA Time Zone Database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 	Timezone string `json:"timezone"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorScanEstimatesRequest MonitorScanEstimatesRequest
@@ -136,6 +136,11 @@ func (o MonitorScanEstimatesRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["query"] = o.Query
 	toSerialize["triggers"] = o.Triggers
 	toSerialize["timezone"] = o.Timezone
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *MonitorScanEstimatesRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorScanEstimatesRequest := _MonitorScanEstimatesRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorScanEstimatesRequest)
+	err = json.Unmarshal(data, &varMonitorScanEstimatesRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorScanEstimatesRequest(varMonitorScanEstimatesRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "query")
+		delete(additionalProperties, "triggers")
+		delete(additionalProperties, "timezone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

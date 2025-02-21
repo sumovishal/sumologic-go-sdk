@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the NoneAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &NoneAutoCompleteSyncDefinition{}
 // NoneAutoCompleteSyncDefinition struct for NoneAutoCompleteSyncDefinition
 type NoneAutoCompleteSyncDefinition struct {
 	LogSearchParameterAutoCompleteSyncDefinition
+	AdditionalProperties map[string]interface{}
 }
 
 type _NoneAutoCompleteSyncDefinition NoneAutoCompleteSyncDefinition
@@ -62,6 +64,11 @@ func (o NoneAutoCompleteSyncDefinition) ToMap() (map[string]interface{}, error) 
 	if errLogSearchParameterAutoCompleteSyncDefinition != nil {
 		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -87,17 +94,52 @@ func (o *NoneAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) (err error) 
 		}
 	}
 
-	varNoneAutoCompleteSyncDefinition := _NoneAutoCompleteSyncDefinition{}
+	type NoneAutoCompleteSyncDefinitionWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNoneAutoCompleteSyncDefinition)
+	varNoneAutoCompleteSyncDefinitionWithoutEmbeddedStruct := NoneAutoCompleteSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varNoneAutoCompleteSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varNoneAutoCompleteSyncDefinition := _NoneAutoCompleteSyncDefinition{}
+		*o = NoneAutoCompleteSyncDefinition(varNoneAutoCompleteSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = NoneAutoCompleteSyncDefinition(varNoneAutoCompleteSyncDefinition)
+	varNoneAutoCompleteSyncDefinition := _NoneAutoCompleteSyncDefinition{}
+
+	err = json.Unmarshal(data, &varNoneAutoCompleteSyncDefinition)
+	if err == nil {
+		o.LogSearchParameterAutoCompleteSyncDefinition = varNoneAutoCompleteSyncDefinition.LogSearchParameterAutoCompleteSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectLogSearchParameterAutoCompleteSyncDefinition := reflect.ValueOf(o.LogSearchParameterAutoCompleteSyncDefinition)
+		for i := 0; i < reflectLogSearchParameterAutoCompleteSyncDefinition.Type().NumField(); i++ {
+			t := reflectLogSearchParameterAutoCompleteSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

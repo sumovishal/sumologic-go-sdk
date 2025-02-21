@@ -31,7 +31,10 @@ type GetSearchJobStatusResponse struct {
 	PendingErrors []string `json:"pendingErrors,omitempty"`
 	// Pending warnings that have accumulated since the last time the status was requested.
 	PendingWarnings []string `json:"pendingWarnings,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GetSearchJobStatusResponse GetSearchJobStatusResponse
 
 // NewGetSearchJobStatusResponse instantiates a new GetSearchJobStatusResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -270,7 +273,38 @@ func (o GetSearchJobStatusResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PendingWarnings) {
 		toSerialize["pendingWarnings"] = o.PendingWarnings
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GetSearchJobStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	varGetSearchJobStatusResponse := _GetSearchJobStatusResponse{}
+
+	err = json.Unmarshal(data, &varGetSearchJobStatusResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GetSearchJobStatusResponse(varGetSearchJobStatusResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "messageCount")
+		delete(additionalProperties, "recordCount")
+		delete(additionalProperties, "histogramBuckets")
+		delete(additionalProperties, "pendingErrors")
+		delete(additionalProperties, "pendingWarnings")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGetSearchJobStatusResponse struct {

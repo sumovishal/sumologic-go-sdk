@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LookupTableSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type LookupTableSyncDefinition struct {
 	Ttl *int32 `json:"ttl,omitempty"`
 	// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will start deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
 	SizeLimitAction *string `json:"sizeLimitAction,omitempty" validate:"regexp=^(StopIncomingMessages|DeleteOldData)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LookupTableSyncDefinition LookupTableSyncDefinition
@@ -229,6 +231,11 @@ func (o LookupTableSyncDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SizeLimitAction) {
 		toSerialize["sizeLimitAction"] = o.SizeLimitAction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -258,17 +265,72 @@ func (o *LookupTableSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLookupTableSyncDefinition := _LookupTableSyncDefinition{}
+	type LookupTableSyncDefinitionWithoutEmbeddedStruct struct {
+		// The description of the lookup table.
+		Description string `json:"description"`
+		// The list of fields in the lookup table.
+		Fields []LookupTableField `json:"fields"`
+		// The names of the fields that make up the primary key for the lookup table. These will be a subset of the fields that the table will contain.
+		PrimaryKeys []string `json:"primaryKeys"`
+		// A time to live for each entry in the lookup table (in minutes). 365 days is the maximum time to live for each entry that you can specify. Setting it to 0 means that the records will not expire automatically.
+		Ttl *int32 `json:"ttl,omitempty"`
+		// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will start deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
+		SizeLimitAction *string `json:"sizeLimitAction,omitempty" validate:"regexp=^(StopIncomingMessages|DeleteOldData)$"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLookupTableSyncDefinition)
+	varLookupTableSyncDefinitionWithoutEmbeddedStruct := LookupTableSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLookupTableSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varLookupTableSyncDefinition := _LookupTableSyncDefinition{}
+		varLookupTableSyncDefinition.Description = varLookupTableSyncDefinitionWithoutEmbeddedStruct.Description
+		varLookupTableSyncDefinition.Fields = varLookupTableSyncDefinitionWithoutEmbeddedStruct.Fields
+		varLookupTableSyncDefinition.PrimaryKeys = varLookupTableSyncDefinitionWithoutEmbeddedStruct.PrimaryKeys
+		varLookupTableSyncDefinition.Ttl = varLookupTableSyncDefinitionWithoutEmbeddedStruct.Ttl
+		varLookupTableSyncDefinition.SizeLimitAction = varLookupTableSyncDefinitionWithoutEmbeddedStruct.SizeLimitAction
+		*o = LookupTableSyncDefinition(varLookupTableSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = LookupTableSyncDefinition(varLookupTableSyncDefinition)
+	varLookupTableSyncDefinition := _LookupTableSyncDefinition{}
+
+	err = json.Unmarshal(data, &varLookupTableSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varLookupTableSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "primaryKeys")
+		delete(additionalProperties, "ttl")
+		delete(additionalProperties, "sizeLimitAction")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

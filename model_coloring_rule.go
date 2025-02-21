@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ColoringRule struct {
 	MultipleSeriesAggregateFunction string `json:"multipleSeriesAggregateFunction"`
 	// Color thresholds.
 	ColorThresholds []ColoringThreshold `json:"colorThresholds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ColoringRule ColoringRule
@@ -164,6 +164,11 @@ func (o ColoringRule) ToMap() (map[string]interface{}, error) {
 	toSerialize["singleSeriesAggregateFunction"] = o.SingleSeriesAggregateFunction
 	toSerialize["multipleSeriesAggregateFunction"] = o.MultipleSeriesAggregateFunction
 	toSerialize["colorThresholds"] = o.ColorThresholds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *ColoringRule) UnmarshalJSON(data []byte) (err error) {
 
 	varColoringRule := _ColoringRule{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varColoringRule)
+	err = json.Unmarshal(data, &varColoringRule)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ColoringRule(varColoringRule)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "singleSeriesAggregateFunction")
+		delete(additionalProperties, "multipleSeriesAggregateFunction")
+		delete(additionalProperties, "colorThresholds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

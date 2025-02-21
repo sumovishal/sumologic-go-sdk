@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type MetricsQueryResponse struct {
 	QueryResult []TimeSeriesRow `json:"queryResult,omitempty"`
 	// Errors, warnings, and information logged for the query.
 	Errors ErrorResponse `json:"errors"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsQueryResponse MetricsQueryResponse
@@ -117,6 +117,11 @@ func (o MetricsQueryResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["queryResult"] = o.QueryResult
 	}
 	toSerialize["errors"] = o.Errors
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *MetricsQueryResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varMetricsQueryResponse := _MetricsQueryResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsQueryResponse)
+	err = json.Unmarshal(data, &varMetricsQueryResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MetricsQueryResponse(varMetricsQueryResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryResult")
+		delete(additionalProperties, "errors")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

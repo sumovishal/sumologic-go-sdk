@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SpansCalculationVisualization type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type SpansCalculationVisualization struct {
 	// A field by which the spans are aggregated.
 	Field string `json:"field"`
 	Aggregator SpanCalculationAggregator `json:"aggregator"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpansCalculationVisualization SpansCalculationVisualization
@@ -118,6 +120,11 @@ func (o SpansCalculationVisualization) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["field"] = o.Field
 	toSerialize["aggregator"] = o.Aggregator
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -146,17 +153,59 @@ func (o *SpansCalculationVisualization) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSpansCalculationVisualization := _SpansCalculationVisualization{}
+	type SpansCalculationVisualizationWithoutEmbeddedStruct struct {
+		// A field by which the spans are aggregated.
+		Field string `json:"field"`
+		Aggregator SpanCalculationAggregator `json:"aggregator"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpansCalculationVisualization)
+	varSpansCalculationVisualizationWithoutEmbeddedStruct := SpansCalculationVisualizationWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSpansCalculationVisualizationWithoutEmbeddedStruct)
+	if err == nil {
+		varSpansCalculationVisualization := _SpansCalculationVisualization{}
+		varSpansCalculationVisualization.Field = varSpansCalculationVisualizationWithoutEmbeddedStruct.Field
+		varSpansCalculationVisualization.Aggregator = varSpansCalculationVisualizationWithoutEmbeddedStruct.Aggregator
+		*o = SpansCalculationVisualization(varSpansCalculationVisualization)
+	} else {
 		return err
 	}
 
-	*o = SpansCalculationVisualization(varSpansCalculationVisualization)
+	varSpansCalculationVisualization := _SpansCalculationVisualization{}
+
+	err = json.Unmarshal(data, &varSpansCalculationVisualization)
+	if err == nil {
+		o.SpansVisualization = varSpansCalculationVisualization.SpansVisualization
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "aggregator")
+
+		// remove fields from embedded structs
+		reflectSpansVisualization := reflect.ValueOf(o.SpansVisualization)
+		for i := 0; i < reflectSpansVisualization.Type().NumField(); i++ {
+			t := reflectSpansVisualization.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the TracesListPanel type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,7 @@ type TracesListPanel struct {
 	// Traces queries of the panel.
 	Queries []Query `json:"queries,omitempty"`
 	TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TracesListPanel TracesListPanel
@@ -138,6 +140,11 @@ func (o TracesListPanel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeRange) {
 		toSerialize["timeRange"] = o.TimeRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -164,17 +171,59 @@ func (o *TracesListPanel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varTracesListPanel := _TracesListPanel{}
+	type TracesListPanelWithoutEmbeddedStruct struct {
+		// Traces queries of the panel.
+		Queries []Query `json:"queries,omitempty"`
+		TimeRange *ResolvableTimeRange `json:"timeRange,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTracesListPanel)
+	varTracesListPanelWithoutEmbeddedStruct := TracesListPanelWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varTracesListPanelWithoutEmbeddedStruct)
+	if err == nil {
+		varTracesListPanel := _TracesListPanel{}
+		varTracesListPanel.Queries = varTracesListPanelWithoutEmbeddedStruct.Queries
+		varTracesListPanel.TimeRange = varTracesListPanelWithoutEmbeddedStruct.TimeRange
+		*o = TracesListPanel(varTracesListPanel)
+	} else {
 		return err
 	}
 
-	*o = TracesListPanel(varTracesListPanel)
+	varTracesListPanel := _TracesListPanel{}
+
+	err = json.Unmarshal(data, &varTracesListPanel)
+	if err == nil {
+		o.Panel = varTracesListPanel.Panel
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "timeRange")
+
+		// remove fields from embedded structs
+		reflectPanel := reflect.ValueOf(o.Panel)
+		for i := 0; i < reflectPanel.Type().NumField(); i++ {
+			t := reflectPanel.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

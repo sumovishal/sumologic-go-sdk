@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &SpanQueryAggregateResponse{}
 // SpanQueryAggregateResponse struct for SpanQueryAggregateResponse
 type SpanQueryAggregateResponse struct {
 	Result SpanQueryAggregateResult `json:"result"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregateResponse SpanQueryAggregateResponse
@@ -79,6 +79,11 @@ func (o SpanQueryAggregateResponse) MarshalJSON() ([]byte, error) {
 func (o SpanQueryAggregateResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["result"] = o.Result
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *SpanQueryAggregateResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryAggregateResponse := _SpanQueryAggregateResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregateResponse)
+	err = json.Unmarshal(data, &varSpanQueryAggregateResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregateResponse(varSpanQueryAggregateResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

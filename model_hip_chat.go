@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the HipChat type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type HipChat struct {
 	ConnectionId string `json:"connectionId"`
 	// The override of the default JSON payload of the connection. Should be in JSON format.
 	PayloadOverride *string `json:"payloadOverride,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _HipChat HipChat
@@ -127,6 +129,11 @@ func (o HipChat) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PayloadOverride) {
 		toSerialize["payloadOverride"] = o.PayloadOverride
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -153,17 +160,60 @@ func (o *HipChat) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varHipChat := _HipChat{}
+	type HipChatWithoutEmbeddedStruct struct {
+		// The identifier of the connection.
+		ConnectionId string `json:"connectionId"`
+		// The override of the default JSON payload of the connection. Should be in JSON format.
+		PayloadOverride *string `json:"payloadOverride,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varHipChat)
+	varHipChatWithoutEmbeddedStruct := HipChatWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varHipChatWithoutEmbeddedStruct)
+	if err == nil {
+		varHipChat := _HipChat{}
+		varHipChat.ConnectionId = varHipChatWithoutEmbeddedStruct.ConnectionId
+		varHipChat.PayloadOverride = varHipChatWithoutEmbeddedStruct.PayloadOverride
+		*o = HipChat(varHipChat)
+	} else {
 		return err
 	}
 
-	*o = HipChat(varHipChat)
+	varHipChat := _HipChat{}
+
+	err = json.Unmarshal(data, &varHipChat)
+	if err == nil {
+		o.Action = varHipChat.Action
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "connectionId")
+		delete(additionalProperties, "payloadOverride")
+
+		// remove fields from embedded structs
+		reflectAction := reflect.ValueOf(o.Action)
+		for i := 0; i < reflectAction.Type().NumField(); i++ {
+			t := reflectAction.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -26,7 +26,10 @@ type CalculatorRequest struct {
 	// length of the trial period.
 	TrialPlanPeriod *int32 `json:"trialPlanPeriod,omitempty"`
 	Baselines *Baselines `json:"baselines,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CalculatorRequest CalculatorRequest
 
 // NewCalculatorRequest instantiates a new CalculatorRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -195,7 +198,36 @@ func (o CalculatorRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Baselines) {
 		toSerialize["baselines"] = o.Baselines
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CalculatorRequest) UnmarshalJSON(data []byte) (err error) {
+	varCalculatorRequest := _CalculatorRequest{}
+
+	err = json.Unmarshal(data, &varCalculatorRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CalculatorRequest(varCalculatorRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "parentDeploymentId")
+		delete(additionalProperties, "deploymentId")
+		delete(additionalProperties, "trialPlanPeriod")
+		delete(additionalProperties, "baselines")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCalculatorRequest struct {

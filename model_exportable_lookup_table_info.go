@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type ExportableLookupTableInfo struct {
 	Ttl *int32 `json:"ttl,omitempty"`
 	// The action that needs to be taken when the size limit is reached for the table. The possible values can be `StopIncomingMessages` or `DeleteOldData`. DeleteOldData will start deleting old data once size limit is reached whereas StopIncomingMessages will discard all the updates made to the lookup table once size limit is reached.
 	SizeLimitAction *string `json:"sizeLimitAction,omitempty" validate:"regexp=^(StopIncomingMessages|DeleteOldData)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ExportableLookupTableInfo ExportableLookupTableInfo
@@ -218,6 +218,11 @@ func (o ExportableLookupTableInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SizeLimitAction) {
 		toSerialize["sizeLimitAction"] = o.SizeLimitAction
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -247,15 +252,24 @@ func (o *ExportableLookupTableInfo) UnmarshalJSON(data []byte) (err error) {
 
 	varExportableLookupTableInfo := _ExportableLookupTableInfo{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varExportableLookupTableInfo)
+	err = json.Unmarshal(data, &varExportableLookupTableInfo)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ExportableLookupTableInfo(varExportableLookupTableInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "fields")
+		delete(additionalProperties, "primaryKeys")
+		delete(additionalProperties, "ttl")
+		delete(additionalProperties, "sizeLimitAction")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -43,6 +42,7 @@ type CurrentPlan struct {
 	// True if there is a pending update request
 	PendingUpdateRequest *bool `json:"pendingUpdateRequest,omitempty"`
 	ProrationDetails *ProrationDetails `json:"prorationDetails,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CurrentPlan CurrentPlan
@@ -502,6 +502,11 @@ func (o CurrentPlan) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProrationDetails) {
 		toSerialize["prorationDetails"] = o.ProrationDetails
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -531,15 +536,32 @@ func (o *CurrentPlan) UnmarshalJSON(data []byte) (err error) {
 
 	varCurrentPlan := _CurrentPlan{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCurrentPlan)
+	err = json.Unmarshal(data, &varCurrentPlan)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CurrentPlan(varCurrentPlan)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "productId")
+		delete(additionalProperties, "planCost")
+		delete(additionalProperties, "billingFrequency")
+		delete(additionalProperties, "consumables")
+		delete(additionalProperties, "planType")
+		delete(additionalProperties, "planName")
+		delete(additionalProperties, "discountAmount")
+		delete(additionalProperties, "contractPeriod")
+		delete(additionalProperties, "currentBillingPeriod")
+		delete(additionalProperties, "credits")
+		delete(additionalProperties, "baselines")
+		delete(additionalProperties, "pendingUpdateRequest")
+		delete(additionalProperties, "prorationDetails")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

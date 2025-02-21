@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type TimeSeriesRow struct {
 	// Row id for the query row as specified in the request.
 	RowId string `json:"rowId"`
 	TimeSeriesList TimeSeriesList `json:"timeSeriesList"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TimeSeriesRow TimeSeriesRow
@@ -107,6 +107,11 @@ func (o TimeSeriesRow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["rowId"] = o.RowId
 	toSerialize["timeSeriesList"] = o.TimeSeriesList
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *TimeSeriesRow) UnmarshalJSON(data []byte) (err error) {
 
 	varTimeSeriesRow := _TimeSeriesRow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTimeSeriesRow)
+	err = json.Unmarshal(data, &varTimeSeriesRow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TimeSeriesRow(varTimeSeriesRow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "timeSeriesList")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

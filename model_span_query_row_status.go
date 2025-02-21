@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type SpanQueryRowStatus struct {
 	ApproximatedFieldCounts *bool `json:"approximatedFieldCounts,omitempty"`
 	// Indicates whether facets calculation has completed.
 	FacetsCompleted *bool `json:"facetsCompleted,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryRowStatus SpanQueryRowStatus
@@ -247,6 +247,11 @@ func (o SpanQueryRowStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FacetsCompleted) {
 		toSerialize["facetsCompleted"] = o.FacetsCompleted
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,15 +281,25 @@ func (o *SpanQueryRowStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryRowStatus := _SpanQueryRowStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryRowStatus)
+	err = json.Unmarshal(data, &varSpanQueryRowStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryRowStatus(varSpanQueryRowStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rowId")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "statusMessage")
+		delete(additionalProperties, "count")
+		delete(additionalProperties, "approximatedFieldCounts")
+		delete(additionalProperties, "facetsCompleted")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

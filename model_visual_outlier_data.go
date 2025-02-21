@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type VisualOutlierData struct {
 	UpperBound float64 `json:"upperBound"`
 	// Indicates if the data point is outlier or not.
 	IsOutlier bool `json:"isOutlier"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VisualOutlierData VisualOutlierData
@@ -192,6 +192,11 @@ func (o VisualOutlierData) ToMap() (map[string]interface{}, error) {
 	toSerialize["lowerBound"] = o.LowerBound
 	toSerialize["upperBound"] = o.UpperBound
 	toSerialize["isOutlier"] = o.IsOutlier
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,24 @@ func (o *VisualOutlierData) UnmarshalJSON(data []byte) (err error) {
 
 	varVisualOutlierData := _VisualOutlierData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVisualOutlierData)
+	err = json.Unmarshal(data, &varVisualOutlierData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VisualOutlierData(varVisualOutlierData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "baseline")
+		delete(additionalProperties, "unit")
+		delete(additionalProperties, "lowerBound")
+		delete(additionalProperties, "upperBound")
+		delete(additionalProperties, "isOutlier")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MonitorTemplatesLibraryBase struct {
 	Description *string `json:"description,omitempty"`
 	// Type of the object model. Valid values:   1) MonitorTemplatesLibraryMonitortemplate   2) MonitorTemplatesLibraryFolder
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MonitorTemplatesLibraryBase MonitorTemplatesLibraryBase
@@ -149,6 +149,11 @@ func (o MonitorTemplatesLibraryBase) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -177,15 +182,22 @@ func (o *MonitorTemplatesLibraryBase) UnmarshalJSON(data []byte) (err error) {
 
 	varMonitorTemplatesLibraryBase := _MonitorTemplatesLibraryBase{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMonitorTemplatesLibraryBase)
+	err = json.Unmarshal(data, &varMonitorTemplatesLibraryBase)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MonitorTemplatesLibraryBase(varMonitorTemplatesLibraryBase)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

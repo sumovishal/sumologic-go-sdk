@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DashboardSearchStatus struct {
 	State string `json:"state"`
 	// Percentage of search completed.
 	PercentCompleted *int32 `json:"percentCompleted,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DashboardSearchStatus DashboardSearchStatus
@@ -117,6 +117,11 @@ func (o DashboardSearchStatus) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PercentCompleted) {
 		toSerialize["percentCompleted"] = o.PercentCompleted
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *DashboardSearchStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varDashboardSearchStatus := _DashboardSearchStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardSearchStatus)
+	err = json.Unmarshal(data, &varDashboardSearchStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DashboardSearchStatus(varDashboardSearchStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "percentCompleted")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

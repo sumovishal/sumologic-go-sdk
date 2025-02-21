@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type ChildUsageDetail struct {
 	// Denotes the total number of credits provisioned for the child organization to use.
 	AllocatedCredits *float64 `json:"allocatedCredits,omitempty"`
 	Usages ChildUsage `json:"usages"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChildUsageDetail ChildUsageDetail
@@ -209,6 +209,11 @@ func (o ChildUsageDetail) ToMap() (map[string]interface{}, error) {
 		toSerialize["allocatedCredits"] = o.AllocatedCredits
 	}
 	toSerialize["usages"] = o.Usages
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -238,15 +243,24 @@ func (o *ChildUsageDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varChildUsageDetail := _ChildUsageDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChildUsageDetail)
+	err = json.Unmarshal(data, &varChildUsageDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChildUsageDetail(varChildUsageDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "orgName")
+		delete(additionalProperties, "orgId")
+		delete(additionalProperties, "allocatedCredits")
+		delete(additionalProperties, "usages")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

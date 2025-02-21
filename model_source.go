@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Source struct {
 	SourceId string `json:"sourceId"`
 	// Name of a source.
 	SourceName string `json:"sourceName"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Source Source
@@ -108,6 +108,11 @@ func (o Source) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["sourceId"] = o.SourceId
 	toSerialize["sourceName"] = o.SourceName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Source) UnmarshalJSON(data []byte) (err error) {
 
 	varSource := _Source{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSource)
+	err = json.Unmarshal(data, &varSource)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Source(varSource)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sourceId")
+		delete(additionalProperties, "sourceName")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListArchiveJobsResponse struct {
 	Data []ArchiveJob `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListArchiveJobsResponse ListArchiveJobsResponse
@@ -117,6 +117,11 @@ func (o ListArchiveJobsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ListArchiveJobsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListArchiveJobsResponse := _ListArchiveJobsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListArchiveJobsResponse)
+	err = json.Unmarshal(data, &varListArchiveJobsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListArchiveJobsResponse(varListArchiveJobsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

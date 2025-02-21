@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type SchemaBaseComplete struct {
 	ModifiedAt *time.Time `json:"modifiedAt,omitempty"`
 	// The template yaml of schema.
 	TemplateYaml *string `json:"templateYaml,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SchemaBaseComplete SchemaBaseComplete
@@ -378,6 +378,11 @@ func (o SchemaBaseComplete) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TemplateYaml) {
 		toSerialize["templateYaml"] = o.TemplateYaml
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -409,15 +414,29 @@ func (o *SchemaBaseComplete) UnmarshalJSON(data []byte) (err error) {
 
 	varSchemaBaseComplete := _SchemaBaseComplete{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSchemaBaseComplete)
+	err = json.Unmarshal(data, &varSchemaBaseComplete)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SchemaBaseComplete(varSchemaBaseComplete)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "manifest")
+		delete(additionalProperties, "schema")
+		delete(additionalProperties, "family")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "templateYaml")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -23,7 +23,10 @@ type GetDataForwardingDestinations struct {
 	NextToken *string `json:"nextToken,omitempty"`
 	// List of data forwarding destinations.
 	Data []BucketDefinition `json:"data,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GetDataForwardingDestinations GetDataForwardingDestinations
 
 // NewGetDataForwardingDestinations instantiates a new GetDataForwardingDestinations object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o GetDataForwardingDestinations) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Data) {
 		toSerialize["data"] = o.Data
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GetDataForwardingDestinations) UnmarshalJSON(data []byte) (err error) {
+	varGetDataForwardingDestinations := _GetDataForwardingDestinations{}
+
+	err = json.Unmarshal(data, &varGetDataForwardingDestinations)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GetDataForwardingDestinations(varGetDataForwardingDestinations)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "nextToken")
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGetDataForwardingDestinations struct {

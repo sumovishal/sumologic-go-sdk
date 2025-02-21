@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type PreviewLookupTableField struct {
 	FieldType string `json:"fieldType"`
 	// Identifier associated with each field of the table.
 	FieldId string `json:"fieldId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PreviewLookupTableField PreviewLookupTableField
@@ -136,6 +136,11 @@ func (o PreviewLookupTableField) ToMap() (map[string]interface{}, error) {
 	toSerialize["fieldName"] = o.FieldName
 	toSerialize["fieldType"] = o.FieldType
 	toSerialize["fieldId"] = o.FieldId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *PreviewLookupTableField) UnmarshalJSON(data []byte) (err error) {
 
 	varPreviewLookupTableField := _PreviewLookupTableField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPreviewLookupTableField)
+	err = json.Unmarshal(data, &varPreviewLookupTableField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PreviewLookupTableField(varPreviewLookupTableField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "fieldType")
+		delete(additionalProperties, "fieldId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the FolderSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type FolderSyncDefinition struct {
 	Description *string `json:"description,omitempty"`
 	// The items in the folder, a list of Dashboard and/or Folder items.
 	Children []ContentSyncDefinition `json:"children"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FolderSyncDefinition FolderSyncDefinition
@@ -128,6 +130,11 @@ func (o FolderSyncDefinition) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["children"] = o.Children
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -155,17 +162,60 @@ func (o *FolderSyncDefinition) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varFolderSyncDefinition := _FolderSyncDefinition{}
+	type FolderSyncDefinitionWithoutEmbeddedStruct struct {
+		// An optional description for the folder.
+		Description *string `json:"description,omitempty"`
+		// The items in the folder, a list of Dashboard and/or Folder items.
+		Children []ContentSyncDefinition `json:"children"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFolderSyncDefinition)
+	varFolderSyncDefinitionWithoutEmbeddedStruct := FolderSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varFolderSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varFolderSyncDefinition := _FolderSyncDefinition{}
+		varFolderSyncDefinition.Description = varFolderSyncDefinitionWithoutEmbeddedStruct.Description
+		varFolderSyncDefinition.Children = varFolderSyncDefinitionWithoutEmbeddedStruct.Children
+		*o = FolderSyncDefinition(varFolderSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = FolderSyncDefinition(varFolderSyncDefinition)
+	varFolderSyncDefinition := _FolderSyncDefinition{}
+
+	err = json.Unmarshal(data, &varFolderSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varFolderSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

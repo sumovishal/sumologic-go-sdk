@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AndCorrelationExpression type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type AndCorrelationExpression struct {
 	CorrelationExpression
 	// List of correlation expressions to be evaluated with AND boolean operator.
 	CorrelationExpressions []CorrelationExpression `json:"correlationExpressions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AndCorrelationExpression AndCorrelationExpression
@@ -90,6 +92,11 @@ func (o AndCorrelationExpression) ToMap() (map[string]interface{}, error) {
 		return map[string]interface{}{}, errCorrelationExpression
 	}
 	toSerialize["correlationExpressions"] = o.CorrelationExpressions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *AndCorrelationExpression) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAndCorrelationExpression := _AndCorrelationExpression{}
+	type AndCorrelationExpressionWithoutEmbeddedStruct struct {
+		// List of correlation expressions to be evaluated with AND boolean operator.
+		CorrelationExpressions []CorrelationExpression `json:"correlationExpressions"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAndCorrelationExpression)
+	varAndCorrelationExpressionWithoutEmbeddedStruct := AndCorrelationExpressionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAndCorrelationExpressionWithoutEmbeddedStruct)
+	if err == nil {
+		varAndCorrelationExpression := _AndCorrelationExpression{}
+		varAndCorrelationExpression.CorrelationExpressions = varAndCorrelationExpressionWithoutEmbeddedStruct.CorrelationExpressions
+		*o = AndCorrelationExpression(varAndCorrelationExpression)
+	} else {
 		return err
 	}
 
-	*o = AndCorrelationExpression(varAndCorrelationExpression)
+	varAndCorrelationExpression := _AndCorrelationExpression{}
+
+	err = json.Unmarshal(data, &varAndCorrelationExpression)
+	if err == nil {
+		o.CorrelationExpression = varAndCorrelationExpression.CorrelationExpression
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "correlationExpressions")
+
+		// remove fields from embedded structs
+		reflectCorrelationExpression := reflect.ValueOf(o.CorrelationExpression)
+		for i := 0; i < reflectCorrelationExpression.Type().NumField(); i++ {
+			t := reflectCorrelationExpression.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

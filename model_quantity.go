@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type Quantity struct {
 	Value int64 `json:"value"`
 	// The unit of the consumable. Units are provided in: 1. `GB` 2. `DPM`(Data Points Per Minute) 3. `Credits` 4. `Days` 
 	Unit string `json:"unit" validate:"regexp=^(GB|DPM|Credits|Days)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Quantity Quantity
@@ -108,6 +108,11 @@ func (o Quantity) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["value"] = o.Value
 	toSerialize["unit"] = o.Unit
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *Quantity) UnmarshalJSON(data []byte) (err error) {
 
 	varQuantity := _Quantity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varQuantity)
+	err = json.Unmarshal(data, &varQuantity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Quantity(varQuantity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "unit")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

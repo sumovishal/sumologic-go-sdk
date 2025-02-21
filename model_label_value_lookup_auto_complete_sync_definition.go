@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LabelValueLookupAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type LabelValueLookupAutoCompleteSyncDefinition struct {
 	LookupLabelColumn string `json:"lookupLabelColumn"`
 	// The column from the lookup file to fill the actual value when a particular label is selected.
 	LookupValueColumn string `json:"lookupValueColumn"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LabelValueLookupAutoCompleteSyncDefinition LabelValueLookupAutoCompleteSyncDefinition
@@ -174,6 +176,11 @@ func (o LabelValueLookupAutoCompleteSyncDefinition) ToMap() (map[string]interfac
 	toSerialize["lookupFileName"] = o.LookupFileName
 	toSerialize["lookupLabelColumn"] = o.LookupLabelColumn
 	toSerialize["lookupValueColumn"] = o.LookupValueColumn
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -203,17 +210,68 @@ func (o *LabelValueLookupAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) 
 		}
 	}
 
-	varLabelValueLookupAutoCompleteSyncDefinition := _LabelValueLookupAutoCompleteSyncDefinition{}
+	type LabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct struct {
+		// The autocomplete key to be used to fetch autocomplete values.
+		AutoCompleteKey string `json:"autoCompleteKey"`
+		// The lookup file to use as a source for autocomplete values.
+		LookupFileName string `json:"lookupFileName"`
+		// The column from the lookup file to use for autocomplete labels.
+		LookupLabelColumn string `json:"lookupLabelColumn"`
+		// The column from the lookup file to fill the actual value when a particular label is selected.
+		LookupValueColumn string `json:"lookupValueColumn"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLabelValueLookupAutoCompleteSyncDefinition)
+	varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct := LabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varLabelValueLookupAutoCompleteSyncDefinition := _LabelValueLookupAutoCompleteSyncDefinition{}
+		varLabelValueLookupAutoCompleteSyncDefinition.AutoCompleteKey = varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct.AutoCompleteKey
+		varLabelValueLookupAutoCompleteSyncDefinition.LookupFileName = varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct.LookupFileName
+		varLabelValueLookupAutoCompleteSyncDefinition.LookupLabelColumn = varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct.LookupLabelColumn
+		varLabelValueLookupAutoCompleteSyncDefinition.LookupValueColumn = varLabelValueLookupAutoCompleteSyncDefinitionWithoutEmbeddedStruct.LookupValueColumn
+		*o = LabelValueLookupAutoCompleteSyncDefinition(varLabelValueLookupAutoCompleteSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = LabelValueLookupAutoCompleteSyncDefinition(varLabelValueLookupAutoCompleteSyncDefinition)
+	varLabelValueLookupAutoCompleteSyncDefinition := _LabelValueLookupAutoCompleteSyncDefinition{}
+
+	err = json.Unmarshal(data, &varLabelValueLookupAutoCompleteSyncDefinition)
+	if err == nil {
+		o.LogSearchParameterAutoCompleteSyncDefinition = varLabelValueLookupAutoCompleteSyncDefinition.LogSearchParameterAutoCompleteSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "autoCompleteKey")
+		delete(additionalProperties, "lookupFileName")
+		delete(additionalProperties, "lookupLabelColumn")
+		delete(additionalProperties, "lookupValueColumn")
+
+		// remove fields from embedded structs
+		reflectLogSearchParameterAutoCompleteSyncDefinition := reflect.ValueOf(o.LogSearchParameterAutoCompleteSyncDefinition)
+		for i := 0; i < reflectLogSearchParameterAutoCompleteSyncDefinition.Type().NumField(); i++ {
+			t := reflectLogSearchParameterAutoCompleteSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

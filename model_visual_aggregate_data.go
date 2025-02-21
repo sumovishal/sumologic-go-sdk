@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type VisualAggregateData struct {
 	Latest float64 `json:"latest"`
 	// The number of values in the series.
 	Count *float64 `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _VisualAggregateData VisualAggregateData
@@ -229,6 +229,11 @@ func (o VisualAggregateData) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -260,15 +265,25 @@ func (o *VisualAggregateData) UnmarshalJSON(data []byte) (err error) {
 
 	varVisualAggregateData := _VisualAggregateData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVisualAggregateData)
+	err = json.Unmarshal(data, &varVisualAggregateData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = VisualAggregateData(varVisualAggregateData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "max")
+		delete(additionalProperties, "min")
+		delete(additionalProperties, "avg")
+		delete(additionalProperties, "sum")
+		delete(additionalProperties, "latest")
+		delete(additionalProperties, "count")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

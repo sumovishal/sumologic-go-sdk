@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OTCProcessSpansDroppedTracker type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type OTCProcessSpansDroppedTracker struct {
 	ProcessorId *string `json:"processorId,omitempty"`
 	// The count of dropped spans.
 	Count *string `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCProcessSpansDroppedTracker OTCProcessSpansDroppedTracker
@@ -249,6 +251,11 @@ func (o OTCProcessSpansDroppedTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,17 +283,72 @@ func (o *OTCProcessSpansDroppedTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varOTCProcessSpansDroppedTracker := _OTCProcessSpansDroppedTracker{}
+	type OTCProcessSpansDroppedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The collector instance ID, e.g. `974b444b-4b45-4f32-aa03-1dbf2a16826d`.
+		InstanceId *string `json:"instanceId,omitempty"`
+		// The collector instance address, e.g. `172.16.1.14`.
+		InstanceAddress *string `json:"instanceAddress,omitempty"`
+		// The collector processor ID, e.g. `cascading_filter`.
+		ProcessorId *string `json:"processorId,omitempty"`
+		// The count of dropped spans.
+		Count *string `json:"count,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCProcessSpansDroppedTracker)
+	varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct := OTCProcessSpansDroppedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOTCProcessSpansDroppedTracker := _OTCProcessSpansDroppedTracker{}
+		varOTCProcessSpansDroppedTracker.EventType = varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct.EventType
+		varOTCProcessSpansDroppedTracker.InstanceId = varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct.InstanceId
+		varOTCProcessSpansDroppedTracker.InstanceAddress = varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct.InstanceAddress
+		varOTCProcessSpansDroppedTracker.ProcessorId = varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct.ProcessorId
+		varOTCProcessSpansDroppedTracker.Count = varOTCProcessSpansDroppedTrackerWithoutEmbeddedStruct.Count
+		*o = OTCProcessSpansDroppedTracker(varOTCProcessSpansDroppedTracker)
+	} else {
 		return err
 	}
 
-	*o = OTCProcessSpansDroppedTracker(varOTCProcessSpansDroppedTracker)
+	varOTCProcessSpansDroppedTracker := _OTCProcessSpansDroppedTracker{}
+
+	err = json.Unmarshal(data, &varOTCProcessSpansDroppedTracker)
+	if err == nil {
+		o.TrackerIdentity = varOTCProcessSpansDroppedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "instanceAddress")
+		delete(additionalProperties, "processorId")
+		delete(additionalProperties, "count")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

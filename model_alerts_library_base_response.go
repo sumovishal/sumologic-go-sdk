@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type AlertsLibraryBaseResponse struct {
 	IsSystem bool `json:"isSystem"`
 	// Immutable objects are \"READ-ONLY\".
 	IsMutable bool `json:"isMutable"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryBaseResponse AlertsLibraryBaseResponse
@@ -454,6 +454,11 @@ func (o AlertsLibraryBaseResponse) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["isSystem"] = o.IsSystem
 	toSerialize["isMutable"] = o.IsMutable
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -493,15 +498,33 @@ func (o *AlertsLibraryBaseResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varAlertsLibraryBaseResponse := _AlertsLibraryBaseResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryBaseResponse)
+	err = json.Unmarshal(data, &varAlertsLibraryBaseResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AlertsLibraryBaseResponse(varAlertsLibraryBaseResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "contentType")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "isLocked")
+		delete(additionalProperties, "isSystem")
+		delete(additionalProperties, "isMutable")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

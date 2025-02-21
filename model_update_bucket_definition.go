@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type UpdateBucketDefinition struct {
 	Encrypted *bool `json:"encrypted,omitempty"`
 	// True if the destination is Active.
 	Enabled *bool `json:"enabled,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateBucketDefinition UpdateBucketDefinition
@@ -376,6 +376,11 @@ func (o UpdateBucketDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Enabled) {
 		toSerialize["enabled"] = o.Enabled
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -403,15 +408,28 @@ func (o *UpdateBucketDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateBucketDefinition := _UpdateBucketDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateBucketDefinition)
+	err = json.Unmarshal(data, &varUpdateBucketDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateBucketDefinition(varUpdateBucketDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "destinationName")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "authenticationMode")
+		delete(additionalProperties, "accessKeyId")
+		delete(additionalProperties, "secretAccessKey")
+		delete(additionalProperties, "roleArn")
+		delete(additionalProperties, "region")
+		delete(additionalProperties, "encrypted")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

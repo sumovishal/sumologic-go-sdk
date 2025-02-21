@@ -23,7 +23,10 @@ type ChartDataResult struct {
 	Warnings []ErrorDescription `json:"warnings,omitempty"`
 	// List of time series of the monitor chart data.
 	Series []SeriesData `json:"series,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChartDataResult ChartDataResult
 
 // NewChartDataResult instantiates a new ChartDataResult object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o ChartDataResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Series) {
 		toSerialize["series"] = o.Series
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChartDataResult) UnmarshalJSON(data []byte) (err error) {
+	varChartDataResult := _ChartDataResult{}
+
+	err = json.Unmarshal(data, &varChartDataResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChartDataResult(varChartDataResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "warnings")
+		delete(additionalProperties, "series")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChartDataResult struct {

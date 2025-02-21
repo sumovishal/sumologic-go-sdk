@@ -47,7 +47,10 @@ type PasswordPolicy struct {
 	RememberMfa *bool `json:"rememberMfa,omitempty"`
 	// If weak passwords should be disallowed. By default, this field is set to `false`.
 	DisallowWeakPasswords *bool `json:"disallowWeakPasswords,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PasswordPolicy PasswordPolicy
 
 // NewPasswordPolicy instantiates a new PasswordPolicy object
 // This constructor will assign default values to properties that have it defined,
@@ -622,7 +625,46 @@ func (o PasswordPolicy) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DisallowWeakPasswords) {
 		toSerialize["disallowWeakPasswords"] = o.DisallowWeakPasswords
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PasswordPolicy) UnmarshalJSON(data []byte) (err error) {
+	varPasswordPolicy := _PasswordPolicy{}
+
+	err = json.Unmarshal(data, &varPasswordPolicy)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PasswordPolicy(varPasswordPolicy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "minLength")
+		delete(additionalProperties, "maxLength")
+		delete(additionalProperties, "mustContainLowercase")
+		delete(additionalProperties, "mustContainUppercase")
+		delete(additionalProperties, "mustContainDigits")
+		delete(additionalProperties, "mustContainSpecialChars")
+		delete(additionalProperties, "maxPasswordAgeInDays")
+		delete(additionalProperties, "minUniquePasswords")
+		delete(additionalProperties, "accountLockoutThreshold")
+		delete(additionalProperties, "failedLoginResetDurationInMins")
+		delete(additionalProperties, "accountLockoutDurationInMins")
+		delete(additionalProperties, "requireMfa")
+		delete(additionalProperties, "rememberMfa")
+		delete(additionalProperties, "disallowWeakPasswords")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePasswordPolicy struct {

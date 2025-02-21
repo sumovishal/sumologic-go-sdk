@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SpanQueryAggregateMetaData{}
 type SpanQueryAggregateMetaData struct {
 	// The value of the metadata.
 	Data map[string]string `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryAggregateMetaData SpanQueryAggregateMetaData
@@ -80,6 +80,11 @@ func (o SpanQueryAggregateMetaData) MarshalJSON() ([]byte, error) {
 func (o SpanQueryAggregateMetaData) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SpanQueryAggregateMetaData) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryAggregateMetaData := _SpanQueryAggregateMetaData{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryAggregateMetaData)
+	err = json.Unmarshal(data, &varSpanQueryAggregateMetaData)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryAggregateMetaData(varSpanQueryAggregateMetaData)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

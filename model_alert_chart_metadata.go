@@ -29,7 +29,10 @@ type AlertChartMetadata struct {
 	AlertCreatedAt *int64 `json:"alertCreatedAt,omitempty"`
 	// The time stamp at which the alert response page is resolved.
 	AlertResolvedAt *int64 `json:"alertResolvedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AlertChartMetadata AlertChartMetadata
 
 // NewAlertChartMetadata instantiates a new AlertChartMetadata object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o AlertChartMetadata) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AlertResolvedAt) {
 		toSerialize["alertResolvedAt"] = o.AlertResolvedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AlertChartMetadata) UnmarshalJSON(data []byte) (err error) {
+	varAlertChartMetadata := _AlertChartMetadata{}
+
+	err = json.Unmarshal(data, &varAlertChartMetadata)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AlertChartMetadata(varAlertChartMetadata)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "abnormalityStartTime")
+		delete(additionalProperties, "abnormalityEndTime")
+		delete(additionalProperties, "evaluationDelay")
+		delete(additionalProperties, "alertCreatedAt")
+		delete(additionalProperties, "alertResolvedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAlertChartMetadata struct {

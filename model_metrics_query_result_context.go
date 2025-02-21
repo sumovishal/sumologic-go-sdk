@@ -24,7 +24,10 @@ type MetricsQueryResultContext struct {
 	// We use the term rollup to refer to the aggregation function Sumo Logic uses when quantizing metrics. Can be `Avg`, `Sum`, `Min`, `Max`, `Count` or `Rate`.
 	Rollup *string `json:"rollup,omitempty" validate:"regexp=^(Avg|Sum|Min|Max|Count|Rate)$|^$"`
 	ActualQueryTimeRange *Iso8601TimeRange `json:"actualQueryTimeRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MetricsQueryResultContext MetricsQueryResultContext
 
 // NewMetricsQueryResultContext instantiates a new MetricsQueryResultContext object
 // This constructor will assign default values to properties that have it defined,
@@ -158,7 +161,35 @@ func (o MetricsQueryResultContext) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ActualQueryTimeRange) {
 		toSerialize["actualQueryTimeRange"] = o.ActualQueryTimeRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MetricsQueryResultContext) UnmarshalJSON(data []byte) (err error) {
+	varMetricsQueryResultContext := _MetricsQueryResultContext{}
+
+	err = json.Unmarshal(data, &varMetricsQueryResultContext)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MetricsQueryResultContext(varMetricsQueryResultContext)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "quantizationGranularity")
+		delete(additionalProperties, "rollup")
+		delete(additionalProperties, "actualQueryTimeRange")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMetricsQueryResultContext struct {

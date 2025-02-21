@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type GroupFieldsRequest struct {
 	Queries []MonitorQuery `json:"queries"`
 	// The type of monitor. Valid values:   1. `Logs`: A logs query monitor.   2. `Metrics`: A metrics query monitor.
 	MonitorType string `json:"monitorType" validate:"regexp=^(Logs|Metrics)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupFieldsRequest GroupFieldsRequest
@@ -108,6 +108,11 @@ func (o GroupFieldsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queries"] = o.Queries
 	toSerialize["monitorType"] = o.MonitorType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *GroupFieldsRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupFieldsRequest := _GroupFieldsRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupFieldsRequest)
+	err = json.Unmarshal(data, &varGroupFieldsRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupFieldsRequest(varGroupFieldsRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queries")
+		delete(additionalProperties, "monitorType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

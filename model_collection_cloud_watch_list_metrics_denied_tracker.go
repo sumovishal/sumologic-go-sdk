@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CollectionCloudWatchListMetricsDeniedTracker type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type CollectionCloudWatchListMetricsDeniedTracker struct {
 	ErrorCode *string `json:"errorCode,omitempty"`
 	// The error message from AWS for the request made to get metrics.
 	ErrorMessage *string `json:"errorMessage,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CollectionCloudWatchListMetricsDeniedTracker CollectionCloudWatchListMetricsDeniedTracker
@@ -175,6 +177,11 @@ func (o CollectionCloudWatchListMetricsDeniedTracker) ToMap() (map[string]interf
 	if !IsNil(o.ErrorMessage) {
 		toSerialize["errorMessage"] = o.ErrorMessage
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,17 +209,64 @@ func (o *CollectionCloudWatchListMetricsDeniedTracker) UnmarshalJSON(data []byte
 		}
 	}
 
-	varCollectionCloudWatchListMetricsDeniedTracker := _CollectionCloudWatchListMetricsDeniedTracker{}
+	type CollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The error code from AWS for the request made to get metrics.
+		ErrorCode *string `json:"errorCode,omitempty"`
+		// The error message from AWS for the request made to get metrics.
+		ErrorMessage *string `json:"errorMessage,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCollectionCloudWatchListMetricsDeniedTracker)
+	varCollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct := CollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCollectionCloudWatchListMetricsDeniedTracker := _CollectionCloudWatchListMetricsDeniedTracker{}
+		varCollectionCloudWatchListMetricsDeniedTracker.EventType = varCollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct.EventType
+		varCollectionCloudWatchListMetricsDeniedTracker.ErrorCode = varCollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct.ErrorCode
+		varCollectionCloudWatchListMetricsDeniedTracker.ErrorMessage = varCollectionCloudWatchListMetricsDeniedTrackerWithoutEmbeddedStruct.ErrorMessage
+		*o = CollectionCloudWatchListMetricsDeniedTracker(varCollectionCloudWatchListMetricsDeniedTracker)
+	} else {
 		return err
 	}
 
-	*o = CollectionCloudWatchListMetricsDeniedTracker(varCollectionCloudWatchListMetricsDeniedTracker)
+	varCollectionCloudWatchListMetricsDeniedTracker := _CollectionCloudWatchListMetricsDeniedTracker{}
+
+	err = json.Unmarshal(data, &varCollectionCloudWatchListMetricsDeniedTracker)
+	if err == nil {
+		o.TrackerIdentity = varCollectionCloudWatchListMetricsDeniedTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "errorCode")
+		delete(additionalProperties, "errorMessage")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ExtractionRuleDefinition struct {
 	ParseExpression string `json:"parseExpression"`
 	// Is the field extraction rule enabled.
 	Enabled *bool `json:"enabled,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ExtractionRuleDefinition ExtractionRuleDefinition
@@ -177,6 +177,11 @@ func (o ExtractionRuleDefinition) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Enabled) {
 		toSerialize["enabled"] = o.Enabled
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -206,15 +211,23 @@ func (o *ExtractionRuleDefinition) UnmarshalJSON(data []byte) (err error) {
 
 	varExtractionRuleDefinition := _ExtractionRuleDefinition{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varExtractionRuleDefinition)
+	err = json.Unmarshal(data, &varExtractionRuleDefinition)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ExtractionRuleDefinition(varExtractionRuleDefinition)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "parseExpression")
+		delete(additionalProperties, "enabled")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

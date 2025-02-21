@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type HistogramBucket struct {
 	Count int32 `json:"count"`
 	// Start time of the bucket.
 	StartTimestamp int64 `json:"startTimestamp"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _HistogramBucket HistogramBucket
@@ -136,6 +136,11 @@ func (o HistogramBucket) ToMap() (map[string]interface{}, error) {
 	toSerialize["length"] = o.Length
 	toSerialize["count"] = o.Count
 	toSerialize["startTimestamp"] = o.StartTimestamp
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *HistogramBucket) UnmarshalJSON(data []byte) (err error) {
 
 	varHistogramBucket := _HistogramBucket{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varHistogramBucket)
+	err = json.Unmarshal(data, &varHistogramBucket)
 
 	if err != nil {
 		return err
 	}
 
 	*o = HistogramBucket(varHistogramBucket)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "length")
+		delete(additionalProperties, "count")
+		delete(additionalProperties, "startTimestamp")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

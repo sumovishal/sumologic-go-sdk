@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DisableMfaRequest struct {
 	Email string `json:"email"`
 	// Password of user whose mfa is being disabled.
 	Password string `json:"password"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DisableMfaRequest DisableMfaRequest
@@ -108,6 +108,11 @@ func (o DisableMfaRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
 	toSerialize["password"] = o.Password
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *DisableMfaRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varDisableMfaRequest := _DisableMfaRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDisableMfaRequest)
+	err = json.Unmarshal(data, &varDisableMfaRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DisableMfaRequest(varDisableMfaRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "password")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

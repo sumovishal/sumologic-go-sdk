@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ListBuiltinFieldsUsageResponse{}
 type ListBuiltinFieldsUsageResponse struct {
 	// List of fields with their usages.
 	Data []BuiltinFieldUsage `json:"data"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListBuiltinFieldsUsageResponse ListBuiltinFieldsUsageResponse
@@ -80,6 +80,11 @@ func (o ListBuiltinFieldsUsageResponse) MarshalJSON() ([]byte, error) {
 func (o ListBuiltinFieldsUsageResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *ListBuiltinFieldsUsageResponse) UnmarshalJSON(data []byte) (err error) 
 
 	varListBuiltinFieldsUsageResponse := _ListBuiltinFieldsUsageResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListBuiltinFieldsUsageResponse)
+	err = json.Unmarshal(data, &varListBuiltinFieldsUsageResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListBuiltinFieldsUsageResponse(varListBuiltinFieldsUsageResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OrderBy struct {
 	FieldName string `json:"fieldName"`
 	// Type of sorting values - descending or ascending.
 	Order string `json:"order" validate:"regexp=^(Asc|Desc)$"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OrderBy OrderBy
@@ -110,6 +110,11 @@ func (o OrderBy) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["fieldName"] = o.FieldName
 	toSerialize["order"] = o.Order
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -138,15 +143,21 @@ func (o *OrderBy) UnmarshalJSON(data []byte) (err error) {
 
 	varOrderBy := _OrderBy{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOrderBy)
+	err = json.Unmarshal(data, &varOrderBy)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OrderBy(varOrderBy)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fieldName")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

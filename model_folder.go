@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -44,6 +43,7 @@ type Folder struct {
 	Description *string `json:"description,omitempty"`
 	// A list of the content items.
 	Children []Content `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Folder Folder
@@ -379,6 +379,11 @@ func (o Folder) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -414,15 +419,30 @@ func (o *Folder) UnmarshalJSON(data []byte) (err error) {
 
 	varFolder := _Folder{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFolder)
+	err = json.Unmarshal(data, &varFolder)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Folder(varFolder)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "itemType")
+		delete(additionalProperties, "parentId")
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "children")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

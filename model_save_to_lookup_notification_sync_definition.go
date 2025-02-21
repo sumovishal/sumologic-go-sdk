@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SaveToLookupNotificationSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,7 @@ type SaveToLookupNotificationSyncDefinition struct {
 	LookupFilePath string `json:"lookupFilePath"`
 	// This indicates whether the file contents will be merged with existing data in the lookup table or not. If this is true then data with the same primary keys will be updated while the rest of the rows will be appended.
 	IsLookupMergeOperation bool `json:"isLookupMergeOperation"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SaveToLookupNotificationSyncDefinition SaveToLookupNotificationSyncDefinition
@@ -118,6 +120,11 @@ func (o SaveToLookupNotificationSyncDefinition) ToMap() (map[string]interface{},
 	}
 	toSerialize["lookupFilePath"] = o.LookupFilePath
 	toSerialize["isLookupMergeOperation"] = o.IsLookupMergeOperation
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,17 +152,60 @@ func (o *SaveToLookupNotificationSyncDefinition) UnmarshalJSON(data []byte) (err
 		}
 	}
 
-	varSaveToLookupNotificationSyncDefinition := _SaveToLookupNotificationSyncDefinition{}
+	type SaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct struct {
+		// The path of the lookup table that will store the results of the scheduled search.
+		LookupFilePath string `json:"lookupFilePath"`
+		// This indicates whether the file contents will be merged with existing data in the lookup table or not. If this is true then data with the same primary keys will be updated while the rest of the rows will be appended.
+		IsLookupMergeOperation bool `json:"isLookupMergeOperation"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSaveToLookupNotificationSyncDefinition)
+	varSaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct := SaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varSaveToLookupNotificationSyncDefinition := _SaveToLookupNotificationSyncDefinition{}
+		varSaveToLookupNotificationSyncDefinition.LookupFilePath = varSaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct.LookupFilePath
+		varSaveToLookupNotificationSyncDefinition.IsLookupMergeOperation = varSaveToLookupNotificationSyncDefinitionWithoutEmbeddedStruct.IsLookupMergeOperation
+		*o = SaveToLookupNotificationSyncDefinition(varSaveToLookupNotificationSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = SaveToLookupNotificationSyncDefinition(varSaveToLookupNotificationSyncDefinition)
+	varSaveToLookupNotificationSyncDefinition := _SaveToLookupNotificationSyncDefinition{}
+
+	err = json.Unmarshal(data, &varSaveToLookupNotificationSyncDefinition)
+	if err == nil {
+		o.ScheduleNotificationSyncDefinition = varSaveToLookupNotificationSyncDefinition.ScheduleNotificationSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "lookupFilePath")
+		delete(additionalProperties, "isLookupMergeOperation")
+
+		// remove fields from embedded structs
+		reflectScheduleNotificationSyncDefinition := reflect.ValueOf(o.ScheduleNotificationSyncDefinition)
+		for i := 0; i < reflectScheduleNotificationSyncDefinition.Type().NumField(); i++ {
+			t := reflectScheduleNotificationSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

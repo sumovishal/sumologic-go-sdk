@@ -23,7 +23,10 @@ type KeyValuePair struct {
 	Key *string `json:"key,omitempty"`
 	// Value of the key.
 	Value *string `json:"value,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _KeyValuePair KeyValuePair
 
 // NewKeyValuePair instantiates a new KeyValuePair object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o KeyValuePair) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Value) {
 		toSerialize["value"] = o.Value
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *KeyValuePair) UnmarshalJSON(data []byte) (err error) {
+	varKeyValuePair := _KeyValuePair{}
+
+	err = json.Unmarshal(data, &varKeyValuePair)
+
+	if err != nil {
+		return err
+	}
+
+	*o = KeyValuePair(varKeyValuePair)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableKeyValuePair struct {

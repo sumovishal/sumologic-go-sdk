@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the CSEWindowsRuntimeErrorTracker type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,7 @@ type CSEWindowsRuntimeErrorTracker struct {
 	SensorHostname *string `json:"sensorHostname,omitempty"`
 	// The sensor's user name.
 	SensorUserName *string `json:"sensorUserName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CSEWindowsRuntimeErrorTracker CSEWindowsRuntimeErrorTracker
@@ -212,6 +214,11 @@ func (o CSEWindowsRuntimeErrorTracker) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SensorUserName) {
 		toSerialize["sensorUserName"] = o.SensorUserName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,17 +246,68 @@ func (o *CSEWindowsRuntimeErrorTracker) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varCSEWindowsRuntimeErrorTracker := _CSEWindowsRuntimeErrorTracker{}
+	type CSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The sensor ID.
+		SensorId *string `json:"sensorId,omitempty"`
+		// The sensor's hostname.
+		SensorHostname *string `json:"sensorHostname,omitempty"`
+		// The sensor's user name.
+		SensorUserName *string `json:"sensorUserName,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCSEWindowsRuntimeErrorTracker)
+	varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct := CSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varCSEWindowsRuntimeErrorTracker := _CSEWindowsRuntimeErrorTracker{}
+		varCSEWindowsRuntimeErrorTracker.EventType = varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct.EventType
+		varCSEWindowsRuntimeErrorTracker.SensorId = varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct.SensorId
+		varCSEWindowsRuntimeErrorTracker.SensorHostname = varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct.SensorHostname
+		varCSEWindowsRuntimeErrorTracker.SensorUserName = varCSEWindowsRuntimeErrorTrackerWithoutEmbeddedStruct.SensorUserName
+		*o = CSEWindowsRuntimeErrorTracker(varCSEWindowsRuntimeErrorTracker)
+	} else {
 		return err
 	}
 
-	*o = CSEWindowsRuntimeErrorTracker(varCSEWindowsRuntimeErrorTracker)
+	varCSEWindowsRuntimeErrorTracker := _CSEWindowsRuntimeErrorTracker{}
+
+	err = json.Unmarshal(data, &varCSEWindowsRuntimeErrorTracker)
+	if err == nil {
+		o.TrackerIdentity = varCSEWindowsRuntimeErrorTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "sensorId")
+		delete(additionalProperties, "sensorHostname")
+		delete(additionalProperties, "sensorUserName")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type SpanQueryFieldDetail struct {
 	NoValuesReason *NoTraceFieldValuesReason `json:"noValuesReason,omitempty"`
 	// Indicates whether the field is available in the schema.
 	InSchema bool `json:"inSchema"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SpanQueryFieldDetail SpanQueryFieldDetail
@@ -276,6 +276,11 @@ func (o SpanQueryFieldDetail) ToMap() (map[string]interface{}, error) {
 		toSerialize["noValuesReason"] = o.NoValuesReason
 	}
 	toSerialize["inSchema"] = o.InSchema
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -306,15 +311,26 @@ func (o *SpanQueryFieldDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varSpanQueryFieldDetail := _SpanQueryFieldDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSpanQueryFieldDetail)
+	err = json.Unmarshal(data, &varSpanQueryFieldDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SpanQueryFieldDetail(varSpanQueryFieldDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "field")
+		delete(additionalProperties, "fieldType")
+		delete(additionalProperties, "valueListing")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "noValuesReason")
+		delete(additionalProperties, "inSchema")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

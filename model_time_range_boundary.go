@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &TimeRangeBoundary{}
 type TimeRangeBoundary struct {
 	// Type of the time range boundary. Value must be from list: - `RelativeTimeRangeBoundary`, - `EpochTimeRangeBoundary`, - `Iso8601TimeRangeBoundary`, - `LiteralTimeRangeBoundary`.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TimeRangeBoundary TimeRangeBoundary
@@ -80,6 +80,11 @@ func (o TimeRangeBoundary) MarshalJSON() ([]byte, error) {
 func (o TimeRangeBoundary) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *TimeRangeBoundary) UnmarshalJSON(data []byte) (err error) {
 
 	varTimeRangeBoundary := _TimeRangeBoundary{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTimeRangeBoundary)
+	err = json.Unmarshal(data, &varTimeRangeBoundary)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TimeRangeBoundary(varTimeRangeBoundary)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

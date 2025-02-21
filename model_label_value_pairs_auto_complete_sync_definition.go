@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the LabelValuePairsAutoCompleteSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type LabelValuePairsAutoCompleteSyncDefinition struct {
 	LogSearchParameterAutoCompleteSyncDefinition
 	// The autocomplete key to be used to fetch autocomplete values.
 	AutoCompleteKey string `json:"autoCompleteKey"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _LabelValuePairsAutoCompleteSyncDefinition LabelValuePairsAutoCompleteSyncDefinition
@@ -90,6 +92,11 @@ func (o LabelValuePairsAutoCompleteSyncDefinition) ToMap() (map[string]interface
 		return map[string]interface{}{}, errLogSearchParameterAutoCompleteSyncDefinition
 	}
 	toSerialize["autoCompleteKey"] = o.AutoCompleteKey
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -116,17 +123,56 @@ func (o *LabelValuePairsAutoCompleteSyncDefinition) UnmarshalJSON(data []byte) (
 		}
 	}
 
-	varLabelValuePairsAutoCompleteSyncDefinition := _LabelValuePairsAutoCompleteSyncDefinition{}
+	type LabelValuePairsAutoCompleteSyncDefinitionWithoutEmbeddedStruct struct {
+		// The autocomplete key to be used to fetch autocomplete values.
+		AutoCompleteKey string `json:"autoCompleteKey"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLabelValuePairsAutoCompleteSyncDefinition)
+	varLabelValuePairsAutoCompleteSyncDefinitionWithoutEmbeddedStruct := LabelValuePairsAutoCompleteSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varLabelValuePairsAutoCompleteSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varLabelValuePairsAutoCompleteSyncDefinition := _LabelValuePairsAutoCompleteSyncDefinition{}
+		varLabelValuePairsAutoCompleteSyncDefinition.AutoCompleteKey = varLabelValuePairsAutoCompleteSyncDefinitionWithoutEmbeddedStruct.AutoCompleteKey
+		*o = LabelValuePairsAutoCompleteSyncDefinition(varLabelValuePairsAutoCompleteSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = LabelValuePairsAutoCompleteSyncDefinition(varLabelValuePairsAutoCompleteSyncDefinition)
+	varLabelValuePairsAutoCompleteSyncDefinition := _LabelValuePairsAutoCompleteSyncDefinition{}
+
+	err = json.Unmarshal(data, &varLabelValuePairsAutoCompleteSyncDefinition)
+	if err == nil {
+		o.LogSearchParameterAutoCompleteSyncDefinition = varLabelValuePairsAutoCompleteSyncDefinition.LogSearchParameterAutoCompleteSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "autoCompleteKey")
+
+		// remove fields from embedded structs
+		reflectLogSearchParameterAutoCompleteSyncDefinition := reflect.ValueOf(o.LogSearchParameterAutoCompleteSyncDefinition)
+		for i := 0; i < reflectLogSearchParameterAutoCompleteSyncDefinition.Type().NumField(); i++ {
+			t := reflectLogSearchParameterAutoCompleteSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

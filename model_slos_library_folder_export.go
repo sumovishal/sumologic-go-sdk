@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the SlosLibraryFolderExport type satisfies the MappedNullable interface at compile time
@@ -24,6 +25,7 @@ type SlosLibraryFolderExport struct {
 	SlosLibraryBaseExport
 	// The items in the folder. A multi-type list of types slo or folder.
 	Children []SlosLibraryBaseExport `json:"children,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SlosLibraryFolderExport SlosLibraryFolderExport
@@ -100,6 +102,11 @@ func (o SlosLibraryFolderExport) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Children) {
 		toSerialize["children"] = o.Children
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -126,17 +133,56 @@ func (o *SlosLibraryFolderExport) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varSlosLibraryFolderExport := _SlosLibraryFolderExport{}
+	type SlosLibraryFolderExportWithoutEmbeddedStruct struct {
+		// The items in the folder. A multi-type list of types slo or folder.
+		Children []SlosLibraryBaseExport `json:"children,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSlosLibraryFolderExport)
+	varSlosLibraryFolderExportWithoutEmbeddedStruct := SlosLibraryFolderExportWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varSlosLibraryFolderExportWithoutEmbeddedStruct)
+	if err == nil {
+		varSlosLibraryFolderExport := _SlosLibraryFolderExport{}
+		varSlosLibraryFolderExport.Children = varSlosLibraryFolderExportWithoutEmbeddedStruct.Children
+		*o = SlosLibraryFolderExport(varSlosLibraryFolderExport)
+	} else {
 		return err
 	}
 
-	*o = SlosLibraryFolderExport(varSlosLibraryFolderExport)
+	varSlosLibraryFolderExport := _SlosLibraryFolderExport{}
+
+	err = json.Unmarshal(data, &varSlosLibraryFolderExport)
+	if err == nil {
+		o.SlosLibraryBaseExport = varSlosLibraryFolderExport.SlosLibraryBaseExport
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "children")
+
+		// remove fields from embedded structs
+		reflectSlosLibraryBaseExport := reflect.ValueOf(o.SlosLibraryBaseExport)
+		for i := 0; i < reflectSlosLibraryBaseExport.Type().NumField(); i++ {
+			t := reflectSlosLibraryBaseExport.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

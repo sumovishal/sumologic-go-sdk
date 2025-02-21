@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the IngestBudgetResourceIdentity type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,7 @@ type IngestBudgetResourceIdentity struct {
 	Scope *string `json:"scope,omitempty"`
 	// The type of budget. Supported values are:  * `dailyVolume` * `minuteVolume`
 	BudgetType *string `json:"budgetType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _IngestBudgetResourceIdentity IngestBudgetResourceIdentity
@@ -184,6 +186,11 @@ func (o IngestBudgetResourceIdentity) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BudgetType) {
 		toSerialize["budgetType"] = o.BudgetType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -210,17 +217,64 @@ func (o *IngestBudgetResourceIdentity) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varIngestBudgetResourceIdentity := _IngestBudgetResourceIdentity{}
+	type IngestBudgetResourceIdentityWithoutEmbeddedStruct struct {
+		// The unique field value of the ingest budget v1. This will be empty for v2 budgets.
+		IngestBudgetFieldValue *string `json:"ingestBudgetFieldValue,omitempty"`
+		// The scope of the ingest budget v2. This will be empty for v1 budgets.
+		Scope *string `json:"scope,omitempty"`
+		// The type of budget. Supported values are:  * `dailyVolume` * `minuteVolume`
+		BudgetType *string `json:"budgetType,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varIngestBudgetResourceIdentity)
+	varIngestBudgetResourceIdentityWithoutEmbeddedStruct := IngestBudgetResourceIdentityWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varIngestBudgetResourceIdentityWithoutEmbeddedStruct)
+	if err == nil {
+		varIngestBudgetResourceIdentity := _IngestBudgetResourceIdentity{}
+		varIngestBudgetResourceIdentity.IngestBudgetFieldValue = varIngestBudgetResourceIdentityWithoutEmbeddedStruct.IngestBudgetFieldValue
+		varIngestBudgetResourceIdentity.Scope = varIngestBudgetResourceIdentityWithoutEmbeddedStruct.Scope
+		varIngestBudgetResourceIdentity.BudgetType = varIngestBudgetResourceIdentityWithoutEmbeddedStruct.BudgetType
+		*o = IngestBudgetResourceIdentity(varIngestBudgetResourceIdentity)
+	} else {
 		return err
 	}
 
-	*o = IngestBudgetResourceIdentity(varIngestBudgetResourceIdentity)
+	varIngestBudgetResourceIdentity := _IngestBudgetResourceIdentity{}
+
+	err = json.Unmarshal(data, &varIngestBudgetResourceIdentity)
+	if err == nil {
+		o.ResourceIdentity = varIngestBudgetResourceIdentity.ResourceIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ingestBudgetFieldValue")
+		delete(additionalProperties, "scope")
+		delete(additionalProperties, "budgetType")
+
+		// remove fields from embedded structs
+		reflectResourceIdentity := reflect.ValueOf(o.ResourceIdentity)
+		for i := 0; i < reflectResourceIdentity.Type().NumField(); i++ {
+			t := reflectResourceIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

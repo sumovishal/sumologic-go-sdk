@@ -22,7 +22,10 @@ type CollectorCompatibility struct {
 	// Name of the Operating System.
 	Os *string `json:"os,omitempty"`
 	CollectorVersionRange *CollectorVersionRange `json:"collectorVersionRange,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CollectorCompatibility CollectorCompatibility
 
 // NewCollectorCompatibility instantiates a new CollectorCompatibility object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o CollectorCompatibility) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CollectorVersionRange) {
 		toSerialize["collectorVersionRange"] = o.CollectorVersionRange
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CollectorCompatibility) UnmarshalJSON(data []byte) (err error) {
+	varCollectorCompatibility := _CollectorCompatibility{}
+
+	err = json.Unmarshal(data, &varCollectorCompatibility)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CollectorCompatibility(varCollectorCompatibility)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "os")
+		delete(additionalProperties, "collectorVersionRange")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCollectorCompatibility struct {

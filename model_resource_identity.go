@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ResourceIdentity struct {
 	Name *string `json:"name,omitempty"`
 	// -> Resource type. Supported types are - `Collector`, `Source`, `IngestBudget` and `Organisation`.
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ResourceIdentity ResourceIdentity
@@ -149,6 +149,11 @@ func (o ResourceIdentity) ToMap() (map[string]interface{}, error) {
 		toSerialize["name"] = o.Name
 	}
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -177,15 +182,22 @@ func (o *ResourceIdentity) UnmarshalJSON(data []byte) (err error) {
 
 	varResourceIdentity := _ResourceIdentity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varResourceIdentity)
+	err = json.Unmarshal(data, &varResourceIdentity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ResourceIdentity(varResourceIdentity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

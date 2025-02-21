@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the AlertsLibraryFolder type satisfies the MappedNullable interface at compile time
@@ -22,6 +23,7 @@ var _ MappedNullable = &AlertsLibraryFolder{}
 // AlertsLibraryFolder struct for AlertsLibraryFolder
 type AlertsLibraryFolder struct {
 	AlertsLibraryBase
+	AdditionalProperties map[string]interface{}
 }
 
 type _AlertsLibraryFolder AlertsLibraryFolder
@@ -67,6 +69,11 @@ func (o AlertsLibraryFolder) ToMap() (map[string]interface{}, error) {
 	if errAlertsLibraryBase != nil {
 		return map[string]interface{}{}, errAlertsLibraryBase
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -93,17 +100,52 @@ func (o *AlertsLibraryFolder) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAlertsLibraryFolder := _AlertsLibraryFolder{}
+	type AlertsLibraryFolderWithoutEmbeddedStruct struct {
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAlertsLibraryFolder)
+	varAlertsLibraryFolderWithoutEmbeddedStruct := AlertsLibraryFolderWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varAlertsLibraryFolderWithoutEmbeddedStruct)
+	if err == nil {
+		varAlertsLibraryFolder := _AlertsLibraryFolder{}
+		*o = AlertsLibraryFolder(varAlertsLibraryFolder)
+	} else {
 		return err
 	}
 
-	*o = AlertsLibraryFolder(varAlertsLibraryFolder)
+	varAlertsLibraryFolder := _AlertsLibraryFolder{}
+
+	err = json.Unmarshal(data, &varAlertsLibraryFolder)
+	if err == nil {
+		o.AlertsLibraryBase = varAlertsLibraryFolder.AlertsLibraryBase
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+
+		// remove fields from embedded structs
+		reflectAlertsLibraryBase := reflect.ValueOf(o.AlertsLibraryBase)
+		for i := 0; i < reflectAlertsLibraryBase.Type().NumField(); i++ {
+			t := reflectAlertsLibraryBase.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

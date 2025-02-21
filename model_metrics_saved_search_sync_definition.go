@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the MetricsSavedSearchSyncDefinition type satisfies the MappedNullable interface at compile time
@@ -33,6 +34,7 @@ type MetricsSavedSearchSyncDefinition struct {
 	DesiredQuantizationInSecs int32 `json:"desiredQuantizationInSecs"`
 	// Chart properties. This field is optional.
 	Properties *string `json:"properties,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MetricsSavedSearchSyncDefinition MetricsSavedSearchSyncDefinition
@@ -257,6 +259,11 @@ func (o MetricsSavedSearchSyncDefinition) ToMap() (map[string]interface{}, error
 	if !IsNil(o.Properties) {
 		toSerialize["properties"] = o.Properties
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -286,17 +293,75 @@ func (o *MetricsSavedSearchSyncDefinition) UnmarshalJSON(data []byte) (err error
 		}
 	}
 
-	varMetricsSavedSearchSyncDefinition := _MetricsSavedSearchSyncDefinition{}
+	type MetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct struct {
+		// Item description in the content library.
+		Description *string `json:"description,omitempty"`
+		TimeRange ResolvableTimeRange `json:"timeRange"`
+		// Query used to add an overlay to the chart.
+		LogQuery *string `json:"logQuery,omitempty"`
+		// Metrics queries.
+		MetricsQueries []MetricsSavedSearchQuerySyncDefinition `json:"metricsQueries"`
+		// Desired quantization in seconds.
+		DesiredQuantizationInSecs int32 `json:"desiredQuantizationInSecs"`
+		// Chart properties. This field is optional.
+		Properties *string `json:"properties,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMetricsSavedSearchSyncDefinition)
+	varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct := MetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct)
+	if err == nil {
+		varMetricsSavedSearchSyncDefinition := _MetricsSavedSearchSyncDefinition{}
+		varMetricsSavedSearchSyncDefinition.Description = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.Description
+		varMetricsSavedSearchSyncDefinition.TimeRange = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.TimeRange
+		varMetricsSavedSearchSyncDefinition.LogQuery = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.LogQuery
+		varMetricsSavedSearchSyncDefinition.MetricsQueries = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.MetricsQueries
+		varMetricsSavedSearchSyncDefinition.DesiredQuantizationInSecs = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.DesiredQuantizationInSecs
+		varMetricsSavedSearchSyncDefinition.Properties = varMetricsSavedSearchSyncDefinitionWithoutEmbeddedStruct.Properties
+		*o = MetricsSavedSearchSyncDefinition(varMetricsSavedSearchSyncDefinition)
+	} else {
 		return err
 	}
 
-	*o = MetricsSavedSearchSyncDefinition(varMetricsSavedSearchSyncDefinition)
+	varMetricsSavedSearchSyncDefinition := _MetricsSavedSearchSyncDefinition{}
+
+	err = json.Unmarshal(data, &varMetricsSavedSearchSyncDefinition)
+	if err == nil {
+		o.ContentSyncDefinition = varMetricsSavedSearchSyncDefinition.ContentSyncDefinition
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "timeRange")
+		delete(additionalProperties, "logQuery")
+		delete(additionalProperties, "metricsQueries")
+		delete(additionalProperties, "desiredQuantizationInSecs")
+		delete(additionalProperties, "properties")
+
+		// remove fields from embedded structs
+		reflectContentSyncDefinition := reflect.ValueOf(o.ContentSyncDefinition)
+		for i := 0; i < reflectContentSyncDefinition.Type().NumField(); i++ {
+			t := reflectContentSyncDefinition.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

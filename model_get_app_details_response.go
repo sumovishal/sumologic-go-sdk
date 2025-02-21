@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type GetAppDetailsResponse struct {
 	Readme *string `json:"readme,omitempty"`
 	// Content of various files part of app package, as Base64-encoded string.
 	Files *map[string]string `json:"files,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GetAppDetailsResponse GetAppDetailsResponse
@@ -275,6 +275,11 @@ func (o GetAppDetailsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Files) {
 		toSerialize["files"] = o.Files
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -305,15 +310,26 @@ func (o *GetAppDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varGetAppDetailsResponse := _GetAppDetailsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGetAppDetailsResponse)
+	err = json.Unmarshal(data, &varGetAppDetailsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GetAppDetailsResponse(varGetAppDetailsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "uuid")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "baseUrl")
+		delete(additionalProperties, "manifest")
+		delete(additionalProperties, "config")
+		delete(additionalProperties, "readme")
+		delete(additionalProperties, "files")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

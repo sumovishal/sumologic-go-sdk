@@ -12,8 +12,9 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 // checks if the OTCExporterLargeTraceBatchesTracker type satisfies the MappedNullable interface at compile time
@@ -32,6 +33,7 @@ type OTCExporterLargeTraceBatchesTracker struct {
 	ExporterId *string `json:"exporterId,omitempty"`
 	// The failure count.
 	Count *string `json:"count,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OTCExporterLargeTraceBatchesTracker OTCExporterLargeTraceBatchesTracker
@@ -249,6 +251,11 @@ func (o OTCExporterLargeTraceBatchesTracker) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -276,17 +283,72 @@ func (o *OTCExporterLargeTraceBatchesTracker) UnmarshalJSON(data []byte) (err er
 		}
 	}
 
-	varOTCExporterLargeTraceBatchesTracker := _OTCExporterLargeTraceBatchesTracker{}
+	type OTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct struct {
+		// Event type.
+		EventType *string `json:"eventType,omitempty"`
+		// The collector instance ID, e.g. `974b444b-4b45-4f32-aa03-1dbf2a16826d`.
+		InstanceId *string `json:"instanceId,omitempty"`
+		// The collector instance address, e.g. `172.16.1.14`.
+		InstanceAddress *string `json:"instanceAddress,omitempty"`
+		// The collector exporter ID, e.g. `otlphttp`.
+		ExporterId *string `json:"exporterId,omitempty"`
+		// The failure count.
+		Count *string `json:"count,omitempty"`
+	}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOTCExporterLargeTraceBatchesTracker)
+	varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct := OTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct{}
 
-	if err != nil {
+	err = json.Unmarshal(data, &varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct)
+	if err == nil {
+		varOTCExporterLargeTraceBatchesTracker := _OTCExporterLargeTraceBatchesTracker{}
+		varOTCExporterLargeTraceBatchesTracker.EventType = varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct.EventType
+		varOTCExporterLargeTraceBatchesTracker.InstanceId = varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct.InstanceId
+		varOTCExporterLargeTraceBatchesTracker.InstanceAddress = varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct.InstanceAddress
+		varOTCExporterLargeTraceBatchesTracker.ExporterId = varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct.ExporterId
+		varOTCExporterLargeTraceBatchesTracker.Count = varOTCExporterLargeTraceBatchesTrackerWithoutEmbeddedStruct.Count
+		*o = OTCExporterLargeTraceBatchesTracker(varOTCExporterLargeTraceBatchesTracker)
+	} else {
 		return err
 	}
 
-	*o = OTCExporterLargeTraceBatchesTracker(varOTCExporterLargeTraceBatchesTracker)
+	varOTCExporterLargeTraceBatchesTracker := _OTCExporterLargeTraceBatchesTracker{}
+
+	err = json.Unmarshal(data, &varOTCExporterLargeTraceBatchesTracker)
+	if err == nil {
+		o.TrackerIdentity = varOTCExporterLargeTraceBatchesTracker.TrackerIdentity
+	} else {
+		return err
+	}
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eventType")
+		delete(additionalProperties, "instanceId")
+		delete(additionalProperties, "instanceAddress")
+		delete(additionalProperties, "exporterId")
+		delete(additionalProperties, "count")
+
+		// remove fields from embedded structs
+		reflectTrackerIdentity := reflect.ValueOf(o.TrackerIdentity)
+		for i := 0; i < reflectTrackerIdentity.Type().NumField(); i++ {
+			t := reflectTrackerIdentity.Type().Field(i)
+
+			if jsonTag := t.Tag.Get("json"); jsonTag != "" {
+				fieldName := ""
+				if commaIdx := strings.Index(jsonTag, ","); commaIdx > 0 {
+					fieldName = jsonTag[:commaIdx]
+				} else {
+					fieldName = jsonTag
+				}
+				if fieldName != "AdditionalProperties" {
+					delete(additionalProperties, fieldName)
+				}
+			}
+		}
+
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

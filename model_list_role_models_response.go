@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListRoleModelsResponse struct {
 	Data []RoleModel `json:"data"`
 	// Next continuation token.
 	Next *string `json:"next,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListRoleModelsResponse ListRoleModelsResponse
@@ -117,6 +117,11 @@ func (o ListRoleModelsResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Next) {
 		toSerialize["next"] = o.Next
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ListRoleModelsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varListRoleModelsResponse := _ListRoleModelsResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListRoleModelsResponse)
+	err = json.Unmarshal(data, &varListRoleModelsResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListRoleModelsResponse(varListRoleModelsResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "next")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package sumologic
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -48,6 +47,7 @@ type UserModel struct {
 	IsMfaEnabled *bool `json:"isMfaEnabled,omitempty"`
 	// Timestamp of the last login for the user in UTC. Will be null if the user has never logged in.
 	LastLoginTimestamp *time.Time `json:"lastLoginTimestamp,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserModel UserModel
@@ -453,6 +453,11 @@ func (o UserModel) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.LastLoginTimestamp) {
 		toSerialize["lastLoginTimestamp"] = o.LastLoginTimestamp
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -488,15 +493,32 @@ func (o *UserModel) UnmarshalJSON(data []byte) (err error) {
 
 	varUserModel := _UserModel{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserModel)
+	err = json.Unmarshal(data, &varUserModel)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserModel(varUserModel)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "firstName")
+		delete(additionalProperties, "lastName")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "roleIds")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "createdBy")
+		delete(additionalProperties, "modifiedAt")
+		delete(additionalProperties, "modifiedBy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "isActive")
+		delete(additionalProperties, "isLocked")
+		delete(additionalProperties, "isMfaEnabled")
+		delete(additionalProperties, "lastLoginTimestamp")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package sumologic
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type CpcQueryRequest struct {
 	// A list of cpc queries.
 	QueryRows []CpcQueryRow `json:"queryRows"`
 	TimeRange ResolvableTimeRange `json:"timeRange"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CpcQueryRequest CpcQueryRequest
@@ -107,6 +107,11 @@ func (o CpcQueryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["queryRows"] = o.QueryRows
 	toSerialize["timeRange"] = o.TimeRange
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *CpcQueryRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCpcQueryRequest := _CpcQueryRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCpcQueryRequest)
+	err = json.Unmarshal(data, &varCpcQueryRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CpcQueryRequest(varCpcQueryRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "queryRows")
+		delete(additionalProperties, "timeRange")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }
